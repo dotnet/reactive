@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -262,6 +263,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private IEnumerator<TSecond> _rightEnumerator;
 
+                private static readonly IEnumerator<TSecond> DisposedEnumerator = MakeDisposedEnumerator();
+
+                private static IEnumerator<TSecond> MakeDisposedEnumerator()
+                {
+                    yield break;
+                }
+
                 public void Run(IObservable<TFirst> first, IEnumerable<TSecond> second)
                 {
                     //
@@ -273,7 +281,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     //
                     try
                     {
-                        _rightEnumerator = second.GetEnumerator();
+                        var enumerator = second.GetEnumerator();
+                        if (Interlocked.CompareExchange(ref _rightEnumerator, enumerator, null) != null)
+                        {
+                            enumerator.Dispose();
+                            return;
+                        }
                     }
                     catch (Exception exception)
                     {
@@ -282,9 +295,16 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    var leftSubscription = first.SubscribeSafe(this);
+                    base.Run(first);
+                }
 
-                    SetUpstream(StableCompositeDisposable.Create(leftSubscription, _rightEnumerator));
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Interlocked.Exchange(ref _rightEnumerator, DisposedEnumerator)?.Dispose();
+                    }
+                    base.Dispose(disposing);
                 }
 
                 public override void OnNext(TFirst value)

@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -42,6 +43,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private Queue<TSource> _ql;
                 private Queue<TSource> _qr;
 
+                private IDisposable _second;
+
                 public void Run(Observable parent)
                 {
                     _gate = new object();
@@ -50,11 +53,17 @@ namespace System.Reactive.Linq.ObservableImpl
                     _ql = new Queue<TSource>();
                     _qr = new Queue<TSource>();
 
-                    SetUpstream(StableCompositeDisposable.Create
-                    (
-                        parent._first.SubscribeSafe(new FirstObserver(this)),
-                        parent._second.SubscribeSafe(new SecondObserver(this))
-                    ));
+                    SetUpstream(parent._first.SubscribeSafe(new FirstObserver(this)));
+                    Disposable.SetSingle(ref _second, parent._second.SubscribeSafe(new SecondObserver(this)));
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _second);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private sealed class FirstObserver : IObserver<TSource>
@@ -232,6 +241,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private IEnumerator<TSource> _enumerator;
 
+                private static readonly IEnumerator<TSource> DisposedEnumerator = MakeDisposedEnumerator();
+
+                private static IEnumerator<TSource> MakeDisposedEnumerator()
+                {
+                    yield break;
+                }
+
                 public void Run(Enumerable parent)
                 {
                     //
@@ -243,7 +259,13 @@ namespace System.Reactive.Linq.ObservableImpl
                     //
                     try
                     {
-                        _enumerator = parent._second.GetEnumerator();
+                        var enumerator = parent._second.GetEnumerator();
+
+                        if (Interlocked.CompareExchange(ref _enumerator, enumerator, null) != null)
+                        {
+                            enumerator.Dispose();
+                            return;
+                        }
                     }
                     catch (Exception exception)
                     {
@@ -252,10 +274,16 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    SetUpstream(StableCompositeDisposable.Create(
-                        parent._first.SubscribeSafe(this),
-                        _enumerator
-                    ));
+                    SetUpstream(parent._first.SubscribeSafe(this));
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Interlocked.Exchange(ref _enumerator, DisposedEnumerator)?.Dispose();
+                    }
+                    base.Dispose(disposing);
                 }
 
                 public override void OnNext(TSource value)

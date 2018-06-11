@@ -25,27 +25,29 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly Action _finallyAction;
 
+            private IDisposable _sourceDisposable;
+
             public _(Action finallyAction, IObserver<TSource> observer)
                 : base(observer)
             {
                 _finallyAction = finallyAction;
             }
 
-            public void Run(IObservable<TSource> source)
+            public override void Run(IObservable<TSource> source)
             {
-                var subscription = source.SubscribeSafe(this);
+                Disposable.SetSingle(ref _sourceDisposable, source.SubscribeSafe(this));
+            }
 
-                SetUpstream(Disposable.Create(() =>
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
                 {
-                    try
-                    {
-                        subscription.Dispose();
-                    }
-                    finally
+                    if (Disposable.TryDispose(ref _sourceDisposable))
                     {
                         _finallyAction();
                     }
-                }));
+                }
+                base.Dispose(disposing);
             }
         }
     }
