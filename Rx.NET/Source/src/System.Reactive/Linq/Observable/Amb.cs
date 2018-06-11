@@ -18,9 +18,9 @@ namespace System.Reactive.Linq.ObservableImpl
             _right = right;
         }
 
-        protected override AmbCoordinator CreateSink(IObserver<TSource> observer, IDisposable cancel) => new AmbCoordinator(observer);
+        protected override AmbCoordinator CreateSink(IObserver<TSource> observer) => new AmbCoordinator(observer);
 
-        protected override IDisposable Run(AmbCoordinator sink) => sink.Run(_left, _right);
+        protected override void Run(AmbCoordinator sink) => sink.Run(_left, _right);
 
         internal sealed class AmbCoordinator : IDisposable
         {
@@ -36,11 +36,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 rightObserver = new AmbObserver(observer, this, false);
             }
 
-            public IDisposable Run(IObservable<TSource> left, IObservable<TSource> right)
+            public void Run(IObservable<TSource> left, IObservable<TSource> right)
             {
                 leftObserver.OnSubscribe(left.Subscribe(leftObserver));
                 rightObserver.OnSubscribe(right.Subscribe(rightObserver));
-                return this;
             }
 
             public void Dispose()

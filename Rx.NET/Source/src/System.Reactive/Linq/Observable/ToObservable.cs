@@ -19,18 +19,18 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
-            public IDisposable Run(ToObservable<TSource> parent)
+            public void Run(ToObservable<TSource> parent)
             {
                 var e = default(IEnumerator<TSource>);
                 try
@@ -40,7 +40,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 catch (Exception exception)
                 {
                     ForwardOnError(exception);
-                    return Disposable.Empty;
+
+                    return;
                 }
 
                 var longRunning = parent._scheduler.AsLongRunning();
@@ -52,7 +53,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     // to observe the cancellation and perform proper clean-up. In this case,
                     // we're sure Loop will be entered, allowing us to dispose the enumerator.
                     //
-                    return longRunning.ScheduleLongRunning(e, Loop);
+                    SetUpstream(longRunning.ScheduleLongRunning(e, Loop));
                 }
                 else
                 {
@@ -63,7 +64,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     //
                     var flag = new BooleanDisposable();
                     parent._scheduler.Schedule(new State(flag, e), LoopRec);
-                    return flag;
+                    SetUpstream(flag);
                 }
             }
 

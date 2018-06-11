@@ -17,35 +17,37 @@ namespace System.Reactive.Linq.ObservableImpl
             _finallyAction = finallyAction;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_finallyAction, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(_finallyAction, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_source);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<TSource>
         {
             private readonly Action _finallyAction;
 
-            public _(Action finallyAction, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            private IDisposable _sourceDisposable;
+
+            public _(Action finallyAction, IObserver<TSource> observer)
+                : base(observer)
             {
                 _finallyAction = finallyAction;
             }
 
-            public IDisposable Run(IObservable<TSource> source)
+            public override void Run(IObservable<TSource> source)
             {
-                var subscription = source.SubscribeSafe(this);
+                Disposable.SetSingle(ref _sourceDisposable, source.SubscribeSafe(this));
+            }
 
-                return Disposable.Create(() =>
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
                 {
-                    try
-                    {
-                        subscription.Dispose();
-                    }
-                    finally
+                    if (Disposable.TryDispose(ref _sourceDisposable))
                     {
                         _finallyAction();
                     }
-                });
+                }
+                base.Dispose(disposing);
             }
         }
     }

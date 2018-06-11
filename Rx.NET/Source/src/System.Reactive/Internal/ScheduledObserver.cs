@@ -39,7 +39,22 @@ namespace System.Reactive
             if (_longRunning != null)
             {
                 _dispatcherEvent = new SemaphoreSlim(0);
-                _dispatcherEventRelease = Disposable.Create(() => _dispatcherEvent.Release());
+                _dispatcherEventRelease = new SemaphoreSlimRelease(_dispatcherEvent);
+            }
+        }
+
+        sealed class SemaphoreSlimRelease : IDisposable
+        {
+            SemaphoreSlim _dispatcherEvent;
+
+            public SemaphoreSlimRelease(SemaphoreSlim dispatcherEvent)
+            {
+                Volatile.Write(ref _dispatcherEvent, dispatcherEvent);
+            }
+
+            public void Dispose()
+            {
+                Interlocked.Exchange(ref _dispatcherEvent, null)?.Release();
             }
         }
 
@@ -296,12 +311,17 @@ namespace System.Reactive
 
     internal sealed class ObserveOnObserver<T> : ScheduledObserver<T>
     {
-        private IDisposable _cancel;
+        private IDisposable _run;
 
-        public ObserveOnObserver(IScheduler scheduler, IObserver<T> observer, IDisposable cancel)
+        public ObserveOnObserver(IScheduler scheduler, IObserver<T> observer)
             : base(scheduler, observer)
         {
-            _cancel = cancel;
+
+        }
+
+        public void Run(IObservable<T> source)
+        {
+            Disposable.SetSingle(ref _run, source.SubscribeSafe(this));
         }
 
         protected override void OnNextCore(T value)
@@ -328,7 +348,7 @@ namespace System.Reactive
 
             if (disposing)
             {
-                Disposable.TryDispose(ref _cancel);
+                Disposable.TryDispose(ref _run);
             }
         }
     }
@@ -358,10 +378,7 @@ namespace System.Reactive
 
         readonly ConcurrentQueue<T> queue;
 
-        /// <summary>
-        /// The disposable of the upstream source.
-        /// </summary>
-        IDisposable upstream;
+        private IDisposable _run;
 
         /// <summary>
         /// The current task representing a running drain operation.
@@ -389,20 +406,24 @@ namespace System.Reactive
         /// </summary>
         bool disposed;
 
-        public ObserveOnObserverNew(IScheduler scheduler, IObserver<T> downstream, IDisposable upstream)
+        public ObserveOnObserverNew(IScheduler scheduler, IObserver<T> downstream)
         {
             this.downstream = downstream;
             this.scheduler = scheduler;
             this.longRunning = scheduler.AsLongRunning();
             this.queue = new ConcurrentQueue<T>();
-            Volatile.Write(ref this.upstream, upstream);
+        }
+
+        public void Run(IObservable<T> source)
+        {
+            Disposable.SetSingle(ref _run, source.SubscribeSafe(this));
         }
 
         public void Dispose()
         {
             Volatile.Write(ref disposed, true);
-            Disposable.TryDispose(ref upstream);
             Disposable.TryDispose(ref task);
+            Disposable.TryDispose(ref _run);
             Clear();
         }
 

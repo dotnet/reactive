@@ -15,37 +15,42 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : Sink<IObservable<TSource>, TSource> 
         {
             private readonly object _gate = new object();
 
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
-            private IDisposable _subscription;
-            private SerialDisposable _innerSubscription;
+            private IDisposable _sourceDisposable;
+            private IDisposable _innerSerialDisposable;
             private bool _isStopped;
             private ulong _latest;
             private bool _hasLatest;
 
-            public IDisposable Run(Switch<TSource> parent)
+            public void Run(Switch<TSource> parent)
             {
-                _innerSubscription = new SerialDisposable();
                 _isStopped = false;
                 _latest = 0UL;
                 _hasLatest = false;
 
-                var subscription = new SingleAssignmentDisposable();
-                _subscription = subscription;
-                subscription.Disposable = parent._sources.SubscribeSafe(this);
+                Disposable.SetSingle(ref _sourceDisposable, parent._sources.SubscribeSafe(this));
+            }
 
-                return StableCompositeDisposable.Create(_subscription, _innerSubscription);
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _innerSerialDisposable);
+                    Disposable.TryDispose(ref _sourceDisposable);
+                }
+                base.Dispose(disposing);
             }
 
             public override void OnNext(IObservable<TSource> value)
@@ -58,7 +63,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 var d = new SingleAssignmentDisposable();
-                _innerSubscription.Disposable = d;
+                Disposable.TrySetSerial(ref _innerSerialDisposable, d);
                 d.Disposable = value.SubscribeSafe(new InnerObserver(this, id, d));
             }
 
@@ -72,7 +77,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 lock (_gate)
                 {
-                    _subscription.Dispose();
+                    Disposable.TryDispose(ref _sourceDisposable);
 
                     _isStopped = true;
                     if (!_hasLatest)

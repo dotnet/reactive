@@ -23,41 +23,58 @@ namespace System.Reactive.Linq.ObservableImpl
             _connectableSubscription = default(IDisposable);
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer, this);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run();
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            readonly RefCount<TSource> _parent;
+
+            public _(IObserver<TSource> observer, RefCount<TSource> parent)
+                : base(observer)
             {
+                this._parent = parent;
             }
 
-            public IDisposable Run(RefCount<TSource> parent)
+            public void Run()
             {
-                var subscription = parent._source.SubscribeSafe(this);
+                base.Run(_parent._source);
 
-                lock (parent._gate)
+                lock (_parent._gate)
                 {
-                    if (++parent._count == 1)
+                    if (++_parent._count == 1)
                     {
-                        parent._connectableSubscription = parent._source.Connect();
+                        // We need to set _connectableSubscription to something
+                        // before Connect because if Connect terminates synchronously,
+                        // Dispose(bool) gets executed and will try to dispose
+                        // _connectableSubscription of null.
+                        // ?.Dispose() is no good because the dispose action has to be
+                        // executed anyway.
+                        // We can't inline SAD either because the IDisposable of Connect
+                        // may belong to the wrong connection.
+                        var sad = new SingleAssignmentDisposable();
+                        _parent._connectableSubscription = sad;
+
+                        sad.Disposable = _parent._source.Connect();
                     }
                 }
+            }
 
-                return Disposable.Create(() =>
+            protected override void Dispose(bool disposing)
+            {
+                base.Dispose(disposing);
+
+                if (disposing)
                 {
-                    subscription.Dispose();
-
-                    lock (parent._gate)
+                    lock (_parent._gate)
                     {
-                        if (--parent._count == 0)
+                        if (--_parent._count == 0)
                         {
-                            parent._connectableSubscription.Dispose();
+                            _parent._connectableSubscription.Dispose();
                         }
                     }
-                });
+                }
             }
         }
     }

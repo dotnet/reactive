@@ -23,9 +23,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _loopScheduler = loopScheduler;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run();
+            protected override void Run(_ sink) => sink.Run();
 
             internal sealed class _ : IdentitySink<TSource>
             {
@@ -34,24 +34,29 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Count _parent;
                 private Queue<TSource> _queue;
 
-                public _(Count parent, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Count parent, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _parent = parent;
                     _queue = new Queue<TSource>();
                 }
 
-                private SingleAssignmentDisposable _subscription;
-                private SingleAssignmentDisposable _loop;
+                private IDisposable _sourceDisposable;
+                private IDisposable _loopDisposable;
 
-                public IDisposable Run()
+                public void Run()
                 {
-                    _subscription = new SingleAssignmentDisposable();
-                    _loop = new SingleAssignmentDisposable();
+                    Disposable.SetSingle(ref _sourceDisposable, _parent._source.SubscribeSafe(this));
+                }
 
-                    _subscription.Disposable = _parent._source.SubscribeSafe(this);
-
-                    return StableCompositeDisposable.Create(_subscription, _loop);
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _loopDisposable);
+                        Disposable.TryDispose(ref _sourceDisposable);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 public override void OnNext(TSource value)
@@ -63,13 +68,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    _subscription.Dispose();
+                    Disposable.TryDispose(ref _sourceDisposable);
 
                     var longRunning = _parent._loopScheduler.AsLongRunning();
                     if (longRunning != null)
-                        _loop.Disposable = longRunning.ScheduleLongRunning(Loop);
+                        Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(Loop));
                     else
-                        _loop.Disposable = _parent._loopScheduler.Schedule(LoopRec);
+                        Disposable.SetSingle(ref _loopDisposable, _parent._loopScheduler.Schedule(LoopRec));
                 }
 
                 private void LoopRec(Action recurse)
@@ -122,9 +127,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _loopScheduler = loopScheduler;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run();
+            protected override void Run(_ sink) => sink.Run();
 
             internal sealed class _ : IdentitySink<TSource>
             {
@@ -133,26 +138,30 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Time _parent;
                 private Queue<System.Reactive.TimeInterval<TSource>> _queue;
 
-                public _(Time parent, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Time parent, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _parent = parent;
                     _queue = new Queue<System.Reactive.TimeInterval<TSource>>();
                 }
 
-                private SingleAssignmentDisposable _subscription;
-                private SingleAssignmentDisposable _loop;
+                private IDisposable _sourceDisposable;
+                private IDisposable _loopDisposable;
                 private IStopwatch _watch;
 
-                public IDisposable Run()
+                public void Run()
                 {
-                    _subscription = new SingleAssignmentDisposable();
-                    _loop = new SingleAssignmentDisposable();
-
                     _watch = _parent._scheduler.StartStopwatch();
-                    _subscription.Disposable = _parent._source.SubscribeSafe(this);
+                    Disposable.SetSingle(ref _sourceDisposable, _parent._source.SubscribeSafe(this));
+                }
 
-                    return StableCompositeDisposable.Create(_subscription, _loop);
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _sourceDisposable);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 public override void OnNext(TSource value)
@@ -164,16 +173,16 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    _subscription.Dispose();
+                    Disposable.TryDispose(ref _sourceDisposable);
 
                     var now = _watch.Elapsed;
                     Trim(now);
 
                     var longRunning = _parent._loopScheduler.AsLongRunning();
                     if (longRunning != null)
-                        _loop.Disposable = longRunning.ScheduleLongRunning(Loop);
+                        Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(Loop));
                     else
-                        _loop.Disposable = _parent._loopScheduler.Schedule(LoopRec);
+                        Disposable.SetSingle(ref _loopDisposable, _parent._loopScheduler.Schedule(LoopRec));
                 }
 
                 private void LoopRec(Action recurse)
