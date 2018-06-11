@@ -170,7 +170,7 @@ namespace System.Reactive.Concurrency
                 EnsureThread();
             }
 
-            return Disposable.Create(si.Cancel);
+            return si;
         }
 
         /// <summary>
