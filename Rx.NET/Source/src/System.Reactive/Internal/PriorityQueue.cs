@@ -29,51 +29,38 @@ namespace System.Reactive
             return _items[left].CompareTo(_items[right]) < 0;
         }
 
-        private void Percolate(int index)
+        private int Percolate(int index)
         {
             if (index >= _size || index < 0)
-            {
-                return;
-            }
-
+                return index;
             var parent = (index - 1) / 2;
             if (parent < 0 || parent == index)
-            {
-                return;
-            }
+                return index;
 
             if (IsHigherPriority(index, parent))
             {
                 var temp = _items[index];
                 _items[index] = _items[parent];
                 _items[parent] = temp;
-                Percolate(parent);
+                return Percolate(parent);
             }
-        }
 
-        private void Heapify() => Heapify(index: 0);
+            return index;
+        }
 
         private void Heapify(int index)
         {
             if (index >= _size || index < 0)
-            {
                 return;
-            }
 
             var left = 2 * index + 1;
             var right = 2 * index + 2;
             var first = index;
 
             if (left < _size && IsHigherPriority(left, first))
-            {
                 first = left;
-            }
-
             if (right < _size && IsHigherPriority(right, first))
-            {
                 first = right;
-            }
-
             if (first != index)
             {
                 var temp = _items[index];
@@ -98,7 +85,8 @@ namespace System.Reactive
             _items[index] = _items[--_size];
             _items[_size] = default(IndexedItem);
 
-            Heapify();
+            if (Percolate(index) == index)
+                Heapify(index);
 
             if (_size < _items.Length / 4)
             {
@@ -152,10 +140,7 @@ namespace System.Reactive
             {
                 var c = Value.CompareTo(other.Value);
                 if (c == 0)
-                {
                     c = Id.CompareTo(other.Id);
-                }
-
                 return c;
             }
         }
