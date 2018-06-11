@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
 
@@ -576,6 +577,74 @@ namespace ReactiveTests.Tests
 
             d2.Dispose();
             Assert.True(d.IsDisposed);
+        }
+
+        [Fact]
+        public void RefCountDisposable_Throw_On_Disposed()
+        {
+            var d = new BooleanDisposable();
+            var disposable = new RefCountDisposable(d, true);
+
+            disposable.Dispose();
+
+            Assert.True(d.IsDisposed);
+
+            try
+            {
+                disposable.GetDisposable();
+                Assert.True(false, "Should have thrown");
+            }
+            catch (ObjectDisposedException)
+            {
+                // expected
+            }
+        }
+
+        [Fact]
+        public void RefCountDisposable_Race()
+        {
+            var d = new BooleanDisposable();
+            var disposable = new RefCountDisposable(d);
+
+            var sync = 2;
+            var manualReset = new ManualResetEvent(false);
+
+            var first = disposable.GetDisposable();
+
+            Task.Factory.StartNew(() =>
+            {
+                if (Interlocked.Decrement(ref sync) != 0)
+                {
+                    while (Volatile.Read(ref sync) != 0) ;
+                }
+
+                for (int i = 0; i < 1000; i++)
+                {
+                    disposable.GetDisposable().Dispose();
+
+                    disposable.Dispose();
+                }
+
+                manualReset.Set();
+            });
+
+            if (Interlocked.Decrement(ref sync) != 0)
+            {
+                while (Volatile.Read(ref sync) != 0) ;
+            }
+
+            for (int i = 0; i < 1000; i++)
+            {
+                disposable.GetDisposable().Dispose();
+
+                disposable.Dispose();
+            }
+
+            manualReset.WaitOne();
+
+            first.Dispose();
+
+            Assert.True(disposable.IsDisposed);
         }
 
         [Fact]
