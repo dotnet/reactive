@@ -128,24 +128,39 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var state1 = state;
-            var gate = new AsyncLock();
-
-            var cancel = s_cal.StartPeriodicTimer(() =>
-            {
-                gate.Wait(() =>
-                {
-                    state1 = action(state1);
-                });
-            }, period);
-
-            return Disposable.Create(() =>
-            {
-                cancel.Dispose();
-                gate.Dispose();
-                action = Stubs<TState>.I;
-            });
+            return new PeriodicallyScheduledWorkItem<TState>(state, period, action);
         }
+
+        private sealed class PeriodicallyScheduledWorkItem<TState> : IDisposable
+        {
+            private TState _state;
+            private Func<TState, TState> _action;
+            private readonly IDisposable _cancel;
+            private readonly AsyncLock _gate = new AsyncLock();
+
+            public PeriodicallyScheduledWorkItem(TState state, TimeSpan period, Func<TState, TState> action)
+            {
+                _state = state;
+                _action = action;
+                
+                _cancel = s_cal.StartPeriodicTimer(Tick, period);
+            }
+
+            private void Tick()
+            {
+                _gate.Wait(
+                    this,
+                    closureWorkItem => closureWorkItem._state = closureWorkItem._action(closureWorkItem._state));
+            }
+
+            public void Dispose()
+            {
+                _cancel.Dispose();
+                _gate.Dispose();
+                _action = Stubs<TState>.I;
+            }
+        }
+
 
         /// <summary>
         /// Discovers scheduler services by interface type.

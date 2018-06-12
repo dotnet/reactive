@@ -157,26 +157,40 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var state1 = state;
-            var gate = new AsyncLock();
+            return new PeriodicallyScheduledWorkItem<TState>(state, period, action);
+        }
 
-            var res = global::Windows.System.Threading.ThreadPoolTimer.CreatePeriodicTimer(
-                tpt =>
-                {
-                    gate.Wait(() =>
-                    {
-                        state1 = action(state1);
-                    });
-                },
-                period
-            );
+        private sealed class PeriodicallyScheduledWorkItem<TState> : IDisposable
+        {
+            private TState _state;
+            private Func<TState, TState> _action;
 
-            return Disposable.Create(() =>
+            private readonly ThreadPoolTimer _timer;
+            private readonly AsyncLock _gate = new AsyncLock();
+
+            public PeriodicallyScheduledWorkItem(TState state, TimeSpan period, Func<TState, TState> action)
             {
-                res.Cancel();
-                gate.Dispose();
-                action = Stubs<TState>.I;
-            });
+                _state = state;
+                _action = action;
+
+                _timer = global::Windows.System.Threading.ThreadPoolTimer.CreatePeriodicTimer(
+                    Tick,
+                    period);
+            }
+
+            private void Tick(ThreadPoolTimer timer)
+            {
+                _gate.Wait(
+                    this,
+                    @this => @this._state = @this._action(@this._state));
+            }
+
+            public void Dispose()
+            {
+                _timer.Cancel();
+                _gate.Dispose();
+                _action = Stubs<TState>.I;
+            }
         }
     }
 }

@@ -31,8 +31,8 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            private IDisposable _sourceSubscription;
-            private IDisposable _samplerSubscription;
+            private IDisposable _sourceDisposable;
+            private IDisposable _samplerDisposable;
 
             private bool _hasValue;
             private TSource _value;
@@ -41,15 +41,19 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(Sample<TSource, TSample> parent)
             {
-                var sourceSubscription = new SingleAssignmentDisposable();
-                _sourceSubscription = sourceSubscription;
-                sourceSubscription.Disposable = parent._source.SubscribeSafe(this);
+                Disposable.SetSingle(ref _sourceDisposable, parent._source.SubscribeSafe(this));
 
-                var samplerSubscription = new SingleAssignmentDisposable();
-                _samplerSubscription = samplerSubscription;
-                samplerSubscription.Disposable = parent._sampler.SubscribeSafe(new SampleObserver(this));
+                Disposable.SetSingle(ref _samplerDisposable, parent._sampler.SubscribeSafe(new SampleObserver(this)));
+            }
 
-                SetUpstream(StableCompositeDisposable.Create(_sourceSubscription, _samplerSubscription));
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _sourceDisposable);
+                    Disposable.TryDispose(ref _samplerDisposable);
+                }
+                base.Dispose(disposing);
             }
 
             public override void OnNext(TSource value)
@@ -78,7 +82,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (_samplerAtEnd)
                         ForwardOnCompleted();
                     else
-                        _sourceSubscription.Dispose();
+                        Disposable.TryDispose(ref _sourceDisposable);
                 }
             }
 
@@ -134,7 +138,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             _parent.ForwardOnCompleted();
                         }
                         else
-                            _parent._samplerSubscription.Dispose();
+                            Disposable.TryDispose(ref _parent._samplerDisposable);
                     }
                 }
             }
@@ -167,7 +171,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            private IDisposable _sourceSubscription;
+            private IDisposable _sourceDisposable;
 
             private bool _hasValue;
             private TSource _value;
@@ -175,14 +179,18 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(Sample<TSource> parent)
             {
-                var sourceSubscription = new SingleAssignmentDisposable();
-                _sourceSubscription = sourceSubscription;
-                sourceSubscription.Disposable = parent._source.SubscribeSafe(this);
+                Disposable.SetSingle(ref _sourceDisposable, parent._source.SubscribeSafe(this));
 
-                SetUpstream(StableCompositeDisposable.Create(
-                    sourceSubscription,
-                    parent._scheduler.SchedulePeriodic(parent._interval, Tick)
-                ));
+                SetUpstream(parent._scheduler.SchedulePeriodic(parent._interval, Tick));
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _sourceDisposable);
+                }
+                base.Dispose(disposing);
             }
 
             private void Tick()
@@ -224,7 +232,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_gate)
                 {
                     _atEnd = true;
-                    _sourceSubscription.Dispose();
+                    Disposable.TryDispose(ref _sourceDisposable);
                 }
             }
         }
