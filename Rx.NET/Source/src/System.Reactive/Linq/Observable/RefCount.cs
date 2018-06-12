@@ -2,78 +2,159 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class RefCount<TSource> : Producer<TSource, RefCount<TSource>._>
+    internal static class RefCount<TSource>
     {
-        private readonly IConnectableObservable<TSource> _source;
-
-        private readonly object _gate;
-        private int _count;
-        private IDisposable _connectableSubscription;
-
-        public RefCount(IConnectableObservable<TSource> source)
+        internal sealed class Eager : Producer<TSource, Eager._>
         {
-            _source = source;
-            _gate = new object();
-            _count = 0;
-            _connectableSubscription = default(IDisposable);
-        }
+            private readonly IConnectableObservable<TSource> _source;
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer, this);
+            private readonly object _gate;
+            private int _count;
+            private IDisposable _connectableSubscription;
 
-        protected override void Run(_ sink) => sink.Run();
-
-        internal sealed class _ : IdentitySink<TSource>
-        {
-            readonly RefCount<TSource> _parent;
-
-            public _(IObserver<TSource> observer, RefCount<TSource> parent)
-                : base(observer)
+            public Eager(IConnectableObservable<TSource> source)
             {
-                this._parent = parent;
+                _source = source;
+                _gate = new object();
+                _count = 0;
+                _connectableSubscription = default(IDisposable);
             }
 
-            public void Run()
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer, this);
+
+            protected override void Run(_ sink) => sink.Run();
+
+            internal sealed class _ : IdentitySink<TSource>
             {
-                base.Run(_parent._source);
+                readonly Eager _parent;
 
-                lock (_parent._gate)
+                public _(IObserver<TSource> observer, Eager parent)
+                    : base(observer)
                 {
-                    if (++_parent._count == 1)
-                    {
-                        // We need to set _connectableSubscription to something
-                        // before Connect because if Connect terminates synchronously,
-                        // Dispose(bool) gets executed and will try to dispose
-                        // _connectableSubscription of null.
-                        // ?.Dispose() is no good because the dispose action has to be
-                        // executed anyway.
-                        // We can't inline SAD either because the IDisposable of Connect
-                        // may belong to the wrong connection.
-                        var sad = new SingleAssignmentDisposable();
-                        _parent._connectableSubscription = sad;
+                    this._parent = parent;
+                }
 
-                        sad.Disposable = _parent._source.Connect();
+                public void Run()
+                {
+                    base.Run(_parent._source);
+
+                    lock (_parent._gate)
+                    {
+                        if (++_parent._count == 1)
+                        {
+                            // We need to set _connectableSubscription to something
+                            // before Connect because if Connect terminates synchronously,
+                            // Dispose(bool) gets executed and will try to dispose
+                            // _connectableSubscription of null.
+                            // ?.Dispose() is no good because the dispose action has to be
+                            // executed anyway.
+                            // We can't inline SAD either because the IDisposable of Connect
+                            // may belong to the wrong connection.
+                            var sad = new SingleAssignmentDisposable();
+                            _parent._connectableSubscription = sad;
+
+                            sad.Disposable = _parent._source.Connect();
+                        }
+                    }
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    base.Dispose(disposing);
+
+                    if (disposing)
+                    {
+                        lock (_parent._gate)
+                        {
+                            if (--_parent._count == 0)
+                            {
+                                _parent._connectableSubscription.Dispose();
+                            }
+                        }
                     }
                 }
             }
+        }
 
-            protected override void Dispose(bool disposing)
+        internal sealed class Lazy : Producer<TSource, Lazy._>
+        {
+            private readonly object _gate;
+            private readonly IScheduler _scheduler;
+            private readonly TimeSpan _disconnectTime;
+            private readonly IConnectableObservable<TSource> _source;
+            private readonly SerialDisposable _serial = new SerialDisposable();
+
+            private int _count;
+            private IDisposable _connectableSubscription;
+
+            public Lazy(IConnectableObservable<TSource> source, TimeSpan disconnectTime, IScheduler scheduler)
             {
-                base.Dispose(disposing);
+                _source = source;
+                _gate = new object();
+                _disconnectTime = disconnectTime;
+                _scheduler = scheduler;
+                _count = 0;
+                _connectableSubscription = default(IDisposable);
+            }
 
-                if (disposing)
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+
+            protected override void Run(_ sink) => sink.Run(this);
+
+            internal sealed class _ : IdentitySink<TSource>
+            {
+                public _(IObserver<TSource> observer)
+                    : base(observer)
                 {
-                    lock (_parent._gate)
+                }
+
+                public void Run(Lazy parent)
+                {
+                    var subscription = parent._source.SubscribeSafe(this);
+
+                    lock (parent._gate)
                     {
-                        if (--_parent._count == 0)
+                        if (++parent._count == 1)
                         {
-                            _parent._connectableSubscription.Dispose();
+                            if (parent._connectableSubscription == null)
+                                parent._connectableSubscription = parent._source.Connect();
+
+                            parent._serial.Disposable = new SingleAssignmentDisposable();
                         }
                     }
+
+                    SetUpstream(Disposable.Create(() =>
+                    {
+                        subscription.Dispose();
+
+                        lock (parent._gate)
+                        {
+                            if (--parent._count == 0)
+                            {
+                                var cancelable = (SingleAssignmentDisposable)parent._serial.Disposable;
+
+                                cancelable.Disposable = parent._scheduler.Schedule(cancelable, parent._disconnectTime, (self, state) =>
+                                {
+                                    lock (parent._gate)
+                                    {
+                                        if (object.ReferenceEquals(parent._serial.Disposable, state))
+                                        {
+                                            parent._connectableSubscription.Dispose();
+                                            parent._connectableSubscription = null;
+                                        }
+                                    }
+
+                                    return Disposable.Empty;
+                                });
+                            }
+                        }
+                    }));
                 }
             }
         }
