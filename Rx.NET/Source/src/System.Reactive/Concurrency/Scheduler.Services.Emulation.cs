@@ -289,7 +289,7 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        private sealed class SchedulePeriodicStopwatch<TState>
+        private sealed class SchedulePeriodicStopwatch<TState> : IDisposable
         {
             private readonly IScheduler _scheduler;
             private readonly TimeSpan _period;
@@ -341,6 +341,8 @@ namespace System.Reactive.Concurrency
             private const int SUSPENDED = 2;
             private const int DISPOSED = 3;
 
+            private IDisposable _task;
+
             public IDisposable Start()
             {
                 RegisterHostLifecycleEventHandlers();
@@ -349,11 +351,14 @@ namespace System.Reactive.Concurrency
                 _nextDue = _period;
                 _runState = RUNNING;
 
-                return StableCompositeDisposable.Create
-                (
-                    _scheduler.Schedule(_nextDue, Tick),
-                    Disposable.Create(Cancel)
-                );
+                Disposable.TrySetSingle(ref _task, _scheduler.Schedule(_nextDue, Tick));
+                return this;
+            }
+
+            void IDisposable.Dispose()
+            {
+                Disposable.TryDispose(ref _task);
+                Cancel();
             }
 
             private void Tick(Action<TimeSpan> recurse)

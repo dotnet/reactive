@@ -28,24 +28,29 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            private IDisposable _subscription;
-            private SerialDisposable _innerSubscription;
+            private IDisposable _sourceDisposable;
+            private IDisposable _innerSerialDisposable;
             private bool _isStopped;
             private ulong _latest;
             private bool _hasLatest;
 
             public void Run(Switch<TSource> parent)
             {
-                _innerSubscription = new SerialDisposable();
                 _isStopped = false;
                 _latest = 0UL;
                 _hasLatest = false;
 
-                var subscription = new SingleAssignmentDisposable();
-                _subscription = subscription;
-                subscription.Disposable = parent._sources.SubscribeSafe(this);
+                Disposable.SetSingle(ref _sourceDisposable, parent._sources.SubscribeSafe(this));
+            }
 
-                SetUpstream(StableCompositeDisposable.Create(_subscription, _innerSubscription));
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _innerSerialDisposable);
+                    Disposable.TryDispose(ref _sourceDisposable);
+                }
+                base.Dispose(disposing);
             }
 
             public override void OnNext(IObservable<TSource> value)
@@ -58,7 +63,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 var d = new SingleAssignmentDisposable();
-                _innerSubscription.Disposable = d;
+                Disposable.TrySetSerial(ref _innerSerialDisposable, d);
                 d.Disposable = value.SubscribeSafe(new InnerObserver(this, id, d));
             }
 
@@ -72,7 +77,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 lock (_gate)
                 {
-                    _subscription.Dispose();
+                    Disposable.TryDispose(ref _sourceDisposable);
 
                     _isStopped = true;
                     if (!_hasLatest)

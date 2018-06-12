@@ -58,7 +58,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _durationSelector = parent._durationSelector;
             }
 
-            public void Run(IObservable<TSource> source)
+            public override void Run(IObservable<TSource> source)
             {
                 _groupDisposable.Add(source.SubscribeSafe(this));
 

@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private int _n;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _n = 0;
 
@@ -392,7 +392,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private RefCountDisposable _refCountDisposable;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _n = 0;
 
@@ -518,7 +518,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private ISubject<TSource> _window;
                 private RefCountDisposable _refCountDisposable;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _window = new Subject<TSource>();
 
@@ -530,7 +530,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     groupDisposable.Add(source.SubscribeSafe(this));
 
-                    _windowGate.Wait(CreateWindowClose);
+                    _windowGate.Wait(this, @this => @this.CreateWindowClose());
 
                     SetUpstream(_refCountDisposable);
                 }
@@ -569,7 +569,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         ForwardOnNext(window);
                     }
 
-                    _windowGate.Wait(CreateWindowClose);
+                    _windowGate.Wait(this, @this => @this.CreateWindowClose());
                 }
 
                 private sealed class WindowClosingObserver : IObserver<TWindowClosing>

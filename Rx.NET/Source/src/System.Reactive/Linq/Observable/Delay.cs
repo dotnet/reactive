@@ -318,7 +318,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected void ScheduleDrain()
                 {
                     _stop = new CancellationTokenSource();
-                    Disposable.TrySetSerial(ref _cancelable, Disposable.Create(_stop.Cancel));
+                    Disposable.TrySetSerial(ref _cancelable, new CancellationDisposable(_stop));
 
                     _scheduler.AsLongRunning().ScheduleLongRunning(DrainQueue);
                 }
@@ -642,9 +642,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _atEnd = false;
 
-                    _subscription = RunCore(parent);
+                    Disposable.SetSingle(ref _subscription, RunCore(parent));
+                }
 
-                    SetUpstream(StableCompositeDisposable.Create(_subscription, _delays));
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _subscription);
+                        _delays.Dispose();
+                    }
+                    base.Dispose(disposing);
                 }
 
                 protected abstract IDisposable RunCore(TParent parent);

@@ -19,26 +19,23 @@ namespace System.Reactive
 
         protected override void OnNextCore(T value)
         {
-            _gate.Wait(() =>
-            {
-                _observer.OnNext(value);
-            });
+            _gate.Wait(
+                (_observer, value),
+                tuple => tuple._observer.OnNext(tuple.value));
         }
 
         protected override void OnErrorCore(Exception exception)
         {
-            _gate.Wait(() =>
-            {
-                _observer.OnError(exception);
-            });
+            _gate.Wait(
+                (_observer, exception),
+                tuple => tuple._observer.OnError(tuple.exception));
         }
 
         protected override void OnCompletedCore()
         {
-            _gate.Wait(() =>
-            {
-                _observer.OnCompleted();
-            });
+            _gate.Wait(
+                _observer,
+                closureObserver => closureObserver.OnCompleted());
         }
     }
 }

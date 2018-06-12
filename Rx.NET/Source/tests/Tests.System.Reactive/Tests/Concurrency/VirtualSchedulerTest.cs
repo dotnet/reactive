@@ -136,20 +136,36 @@ namespace ReactiveTests.Tests
             {
                 var scheduler = new TestScheduler();
                 var seq = Observable.Never<string>();
+                var d = default(IDisposable);
 
-                Task.Run(()=>
+                var sync = 2;
+
+                Task.Run(() =>
                 {
-                    Task.Delay(50).Wait();
-                    seq.Timeout(TimeSpan.FromSeconds(10), scheduler).Subscribe(s => { });
+                    if (Interlocked.Decrement(ref sync) != 0)
+                    {
+                        while (Volatile.Read(ref sync) != 0) ;
+                    }
+
+                    Task.Delay(10).Wait();
+
+                    d = seq.Timeout(TimeSpan.FromSeconds(5), scheduler).Subscribe(s => { });
                 });
 
                 var watch = scheduler.StartStopwatch();
                 try
                 {
-                    while (watch.Elapsed < TimeSpan.FromSeconds(20))
+                    if (Interlocked.Decrement(ref sync) != 0)
                     {
-                        scheduler.AdvanceBy(10);
+                        while (Volatile.Read(ref sync) != 0) ;
                     }
+
+                    while (watch.Elapsed < TimeSpan.FromSeconds(11))
+                    {
+                        scheduler.AdvanceBy(50);
+                    }
+
+                    throw new Exception("Should have thrown!");
                 }
                 catch (TimeoutException)
                 {
@@ -158,6 +174,7 @@ namespace ReactiveTests.Tests
                 {
                     Assert.True(false, string.Format("Virtual time {0}, exception {1}", watch.Elapsed, ex));
                 }
+                d?.Dispose();
             }
         }
     }

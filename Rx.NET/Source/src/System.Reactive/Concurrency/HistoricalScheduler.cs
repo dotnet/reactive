@@ -148,7 +148,7 @@ namespace System.Reactive.Concurrency
             si = new ScheduledItem<DateTimeOffset, TState>(this, state, run, dueTime, Comparer);
             queue.Enqueue(si);
 
-            return Disposable.Create(si.Cancel);
+            return si;
         }
     }
 }
