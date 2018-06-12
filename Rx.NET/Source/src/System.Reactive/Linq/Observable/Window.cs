@@ -530,7 +530,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     groupDisposable.Add(source.SubscribeSafe(this));
 
-                    _windowGate.Wait(CreateWindowClose);
+                    _windowGate.Wait(this, @this => @this.CreateWindowClose());
 
                     SetUpstream(_refCountDisposable);
                 }
@@ -569,7 +569,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         ForwardOnNext(window);
                     }
 
-                    _windowGate.Wait(CreateWindowClose);
+                    _windowGate.Wait(this, @this => @this.CreateWindowClose());
                 }
 
                 private sealed class WindowClosingObserver : IObserver<TWindowClosing>

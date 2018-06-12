@@ -318,7 +318,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected void ScheduleDrain()
                 {
                     _stop = new CancellationTokenSource();
-                    Disposable.TrySetSerial(ref _cancelable, Disposable.Create(_stop.Cancel));
+                    Disposable.TrySetSerial(ref _cancelable, new CancellationDisposable(_stop));
 
                     _scheduler.AsLongRunning().ScheduleLongRunning(DrainQueue);
                 }

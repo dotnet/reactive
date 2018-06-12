@@ -39,7 +39,22 @@ namespace System.Reactive
             if (_longRunning != null)
             {
                 _dispatcherEvent = new SemaphoreSlim(0);
-                _dispatcherEventRelease = Disposable.Create(() => _dispatcherEvent.Release());
+                _dispatcherEventRelease = new SemaphoreSlimRelease(_dispatcherEvent);
+            }
+        }
+
+        sealed class SemaphoreSlimRelease : IDisposable
+        {
+            SemaphoreSlim _dispatcherEvent;
+
+            public SemaphoreSlimRelease(SemaphoreSlim dispatcherEvent)
+            {
+                Volatile.Write(ref _dispatcherEvent, dispatcherEvent);
+            }
+
+            public void Dispose()
+            {
+                Interlocked.Exchange(ref _dispatcherEvent, null)?.Release();
             }
         }
 

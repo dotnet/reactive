@@ -35,44 +35,61 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
+                private readonly object _gate;
+
+                private readonly FirstObserver _firstObserver;
+                private IDisposable _firstDisposable;
+
+                private readonly SecondObserver _secondObserver;
+                private IDisposable _secondDisposable;
+
                 public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer)
                     : base(observer)
                 {
+                    _gate = new object();
+
+                    _firstObserver = new FirstObserver(this);
+                    _secondObserver = new SecondObserver(this);
+
+                    _firstObserver.Other = _secondObserver;
+                    _secondObserver.Other = _firstObserver;
+
                     _resultSelector = resultSelector;
                 }
 
-                private object _gate;
-
                 public void Run(IObservable<TFirst> first, IObservable<TSecond> second)
                 {
-                    _gate = new object();
+                    Disposable.SetSingle(ref _firstDisposable, first.SubscribeSafe(_firstObserver));
+                    Disposable.SetSingle(ref _secondDisposable, second.SubscribeSafe(_secondObserver));
+                }
 
-                    var fstSubscription = new SingleAssignmentDisposable();
-                    var sndSubscription = new SingleAssignmentDisposable();
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _firstDisposable);
+                        Disposable.TryDispose(ref _secondDisposable);
 
-                    var fstO = new FirstObserver(this, fstSubscription);
-                    var sndO = new SecondObserver(this, sndSubscription);
-
-                    fstO.Other = sndO;
-                    sndO.Other = fstO;
-
-                    fstSubscription.Disposable = first.SubscribeSafe(fstO);
-                    sndSubscription.Disposable = second.SubscribeSafe(sndO);
-
-                    SetUpstream(StableCompositeDisposable.Create(fstSubscription, sndSubscription, fstO, sndO));
+                        // clearing the queue should happen under the lock
+                        // as they are plain Queue<T>s, not concurrent queues.
+                        lock (_gate)
+                        {
+                            _firstObserver.Dispose();
+                            _secondObserver.Dispose();
+                        }
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private sealed class FirstObserver : IObserver<TFirst>, IDisposable
                 {
                     private readonly _ _parent;
-                    private readonly IDisposable _self;
                     private SecondObserver _other;
                     private Queue<TFirst> _queue;
 
-                    public FirstObserver(_ parent, IDisposable self)
+                    public FirstObserver(_ parent)
                     {
                         _parent = parent;
-                        _self = self;
                         _queue = new Queue<TFirst>();
                     }
 
@@ -136,7 +153,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
                             else
                             {
-                                _self.Dispose();
+                                Disposable.TryDispose(ref _parent._firstDisposable);
                             }
                         }
                     }
@@ -150,14 +167,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 private sealed class SecondObserver : IObserver<TSecond>, IDisposable
                 {
                     private readonly _ _parent;
-                    private readonly IDisposable _self;
                     private FirstObserver _other;
                     private Queue<TSecond> _queue;
 
-                    public SecondObserver(_ parent, IDisposable self)
+                    public SecondObserver(_ parent)
                     {
                         _parent = parent;
-                        _self = self;
                         _queue = new Queue<TSecond>();
                     }
 
@@ -221,7 +236,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
                             else
                             {
-                                _self.Dispose();
+                                Disposable.TryDispose(ref _parent._secondDisposable);
                             }
                         }
                     }
@@ -533,16 +548,20 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly Zip<TSource> _parent;
 
+            private readonly object _gate;
+
             public _(Zip<TSource> parent, IObserver<IList<TSource>> observer)
                 : base(observer)
             {
+                _gate = new object();
                 _parent = parent;
             }
 
-            private object _gate;
             private Queue<TSource>[] _queues;
             private bool[] _isDone;
             private IDisposable[] _subscriptions;
+
+            private static readonly IDisposable[] Disposed = new IDisposable[0];
 
             public void Run()
             {
@@ -556,22 +575,40 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 _isDone = new bool[N];
 
-                _subscriptions = new SingleAssignmentDisposable[N];
+                var subscriptions = new IDisposable[N];
 
-                _gate = new object();
-
-                for (int i = 0; i < N; i++)
+                if (Interlocked.CompareExchange(ref _subscriptions, subscriptions, null) == null)
                 {
-                    var j = i;
-
-                    var d = new SingleAssignmentDisposable();
-                    _subscriptions[j] = d;
-
-                    var o = new SourceObserver(this, j);
-                    d.Disposable = srcs[j].SubscribeSafe(o);
+                    for (int i = 0; i < N; i++)
+                    {
+                        var o = new SourceObserver(this, i);
+                        Disposable.SetSingle(ref subscriptions[i], srcs[i].SubscribeSafe(o));
+                    }
                 }
+            }
 
-                SetUpstream(new CompositeDisposable(_subscriptions) { Disposable.Create(() => { foreach (var q in _queues) q.Clear(); }) });
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    var subscriptions = Interlocked.Exchange(ref _subscriptions, Disposed);
+                    if (subscriptions != null)
+                    {
+                        for (int i = 0; i < subscriptions.Length; i++)
+                        {
+                            Disposable.TryDispose(ref subscriptions[i]);
+                        }
+
+                        lock (_gate)
+                        {
+                            foreach (var q in _queues)
+                            {
+                                q.Clear();
+                            }
+                        }
+                    }
+                }
+                base.Dispose(disposing);
             }
 
             private void OnNext(int index, TSource value)

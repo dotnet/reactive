@@ -78,13 +78,15 @@ namespace System.Reactive.Concurrency
                     asyncLock = new AsyncLock();
                 }
 
-                asyncLock.Wait(() =>
-                {
-                    if (!m.IsDisposed)
+                asyncLock.Wait(
+                    (@this: this, m, action, state),
+                    tuple =>
                     {
-                        m.Disposable = action(this, state);
-                    }
-                });
+                        if (!m.IsDisposed)
+                        {
+                            tuple.m.Disposable = tuple.action(tuple.@this, tuple.state);
+                        }
+                    });
 
                 return m;
             }
@@ -113,22 +115,24 @@ namespace System.Reactive.Concurrency
                     asyncLock = new AsyncLock();
                 }
 
-                asyncLock.Wait(() =>
-                {
-                    if (!m.IsDisposed)
+                asyncLock.Wait(
+                    (@this: this, m, state, action, timer, dueTime),
+                    tuple =>
                     {
-                        var sleep = dueTime - timer.Elapsed;
-                        if (sleep.Ticks > 0)
+                        if (!tuple.m.IsDisposed)
                         {
-                            ConcurrencyAbstractionLayer.Current.Sleep(sleep);
-                        }
+                            var sleep = tuple.dueTime - tuple.timer.Elapsed;
+                            if (sleep.Ticks > 0)
+                            {
+                                ConcurrencyAbstractionLayer.Current.Sleep(sleep);
+                            }
 
-                        if (!m.IsDisposed)
-                        {
-                            m.Disposable = action(this, state);
+                            if (!tuple.m.IsDisposed)
+                            {
+                                tuple.m.Disposable = tuple.action(tuple.@this, tuple.state);
+                            }
                         }
-                    }
-                });
+                    });
 
                 return m;
             }

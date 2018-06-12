@@ -179,31 +179,54 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var cancel = new CancellationDisposable();
+            return new PeriodicallyScheduledWorkItem<TState>(state, period, action, taskFactory);
+        }
 
-            var state1 = state;
-            var gate = new AsyncLock();
+        private sealed class PeriodicallyScheduledWorkItem<TState> : IDisposable
+        {
+            private TState _state;
 
-            var moveNext = default(Action);
-            moveNext = () =>
+            private readonly TimeSpan _period;
+            private readonly TaskFactory _taskFactory;
+            private readonly Func<TState, TState> _action;
+            private readonly AsyncLock _gate = new AsyncLock();
+            private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+
+            public PeriodicallyScheduledWorkItem(TState state, TimeSpan period, Func<TState, TState> action, TaskFactory taskFactory)
             {
-                TaskHelpers.Delay(period, cancel.Token).ContinueWith(
-                    _ =>
+                _state = state;
+                _period = period;
+                _action = action;
+                _taskFactory = taskFactory;
+
+                MoveNext();
+            }
+
+            public void Dispose()
+            {
+                _cts.Cancel();
+                _gate.Dispose();
+            }
+
+            private void MoveNext()
+            {
+                TaskHelpers.Delay(_period, _cts.Token).ContinueWith(
+                    (_, thisObject) =>
                     {
-                        moveNext();
+                        var @this = (PeriodicallyScheduledWorkItem<TState>)thisObject;
 
-                        gate.Wait(() =>
-                        {
-                            state1 = action(state1);
-                        });
+                        @this.MoveNext();
+
+                        @this._gate.Wait(
+                            @this,
+                            closureThis => closureThis._state = closureThis._action(closureThis._state));
                     },
-                    CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion, taskFactory.Scheduler
+                    this,
+                    CancellationToken.None,
+                    TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion, 
+                    _taskFactory.Scheduler
                 );
-            };
-
-            moveNext();
-
-            return StableCompositeDisposable.Create(cancel, gate);
+            }
         }
     }
 }

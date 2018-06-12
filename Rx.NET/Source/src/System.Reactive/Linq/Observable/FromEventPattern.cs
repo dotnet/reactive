@@ -5,6 +5,7 @@
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reflection;
+using System.Threading;
 
 //
 // BREAKING CHANGE v2 > v1.x - FromEvent[Pattern] now has an implicit SubscribeOn and Publish operation.
@@ -116,17 +117,29 @@ namespace System.Reactive.Linq.ObservableImpl
                     throw tie.InnerException;
                 }
 
-                return Disposable.Create(() =>
+                return new RemoveHandlerDisposable(removeHandler);
+            }
+
+            sealed class RemoveHandlerDisposable : IDisposable
+            {
+                Action _removeHandler;
+
+                public RemoveHandlerDisposable(Action removeHandler)
+                {
+                    Volatile.Write(ref this._removeHandler, removeHandler);
+                }
+
+                public void Dispose()
                 {
                     try
                     {
-                        removeHandler();
+                        Interlocked.Exchange(ref _removeHandler, null)?.Invoke();
                     }
                     catch (TargetInvocationException tie)
                     {
                         throw tie.InnerException;
                     }
-                });
+                }
             }
 
             private Action AddHandlerCore(Delegate handler)

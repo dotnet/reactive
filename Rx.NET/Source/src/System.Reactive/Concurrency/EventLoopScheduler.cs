@@ -170,7 +170,7 @@ namespace System.Reactive.Concurrency
                 EnsureThread();
             }
 
-            return Disposable.Create(si.Cancel);
+            return si;
         }
 
         /// <summary>
@@ -191,52 +191,48 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var start = _stopwatch.Elapsed;
-            var next = start + period;
-
-            var state1 = state;
-
-            var td = new TernaryDisposable();
-
-            var gate = new AsyncLock();
-            td.Extra = gate;
-
-            var tick = default(Func<IScheduler, object, IDisposable>);
-            tick = (self_, _) =>
-            {
-                next += period;
-
-                td.Next = self_.Schedule(null, next - _stopwatch.Elapsed, tick);
-
-                gate.Wait(() =>
-                {
-                    state1 = action(state1);
-                });
-
-                return Disposable.Empty;
-            };
-
-            td.First = Schedule(null, next - _stopwatch.Elapsed, tick);
-
-            return td;
+            return new PeriodicallyScheduledWorkItem<TState>(this, state, period, action);
         }
 
-        private sealed class TernaryDisposable : IDisposable
+        private sealed class PeriodicallyScheduledWorkItem<TState> : IDisposable
         {
-            private IDisposable _task;
-            private IDisposable _extra;
+            private readonly TimeSpan _period;
+            private readonly Func<TState, TState> _action;
+            private readonly EventLoopScheduler _scheduler;
+            private readonly AsyncLock _gate = new AsyncLock();
 
-            // If Next was called before this assignment is executed, it won't overwrite
-            // a more fresh IDisposable task
-            public IDisposable First { set { Disposable.TrySetSingle(ref _task, value); } }
-            // It is fine to overwrite the first or previous IDisposable task
-            public IDisposable Next { set { Disposable.TrySetMultiple(ref _task, value); } }
-            public IDisposable Extra { set { Disposable.SetSingle(ref _extra, value); } }
+            private TState _state;
+            private TimeSpan _next;
+            private IDisposable _task;
+
+            public PeriodicallyScheduledWorkItem(EventLoopScheduler scheduler, TState state, TimeSpan period, Func<TState, TState> action)
+            {
+                _state = state;
+                _period = period;
+                _action = action;
+                _scheduler = scheduler;
+                _next = scheduler._stopwatch.Elapsed + period;
+
+                Disposable.TrySetSingle(ref _task, scheduler.Schedule(this, _next - scheduler._stopwatch.Elapsed, (_, s) => s.Tick(_)));
+            }
+
+            private IDisposable Tick(IScheduler self)
+            {
+                _next += _period;
+
+                Disposable.TrySetMultiple(ref _task, self.Schedule(this, _next - _scheduler._stopwatch.Elapsed, (_, s) => s.Tick(_)));
+
+                _gate.Wait(
+                    this,
+                    closureWorkItem => closureWorkItem._state = closureWorkItem._action(closureWorkItem._state));
+
+                return Disposable.Empty;
+            }
 
             public void Dispose()
             {
                 Disposable.TryDispose(ref _task);
-                Disposable.TryDispose(ref _extra);
+                _gate.Dispose();
             }
         }
 
