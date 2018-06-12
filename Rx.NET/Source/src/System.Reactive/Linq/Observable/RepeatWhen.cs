@@ -12,13 +12,13 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class RetryWhen<T, U> : IObservable<T>
+    internal sealed class RepeatWhen<T, U> : IObservable<T>
     {
         readonly IObservable<T> source;
 
-        readonly Func<IObservable<Exception>, IObservable<U>> handler;
+        readonly Func<IObservable<object>, IObservable<U>> handler;
 
-        internal RetryWhen(IObservable<T> source, Func<IObservable<Exception>, IObservable<U>> handler)
+        internal RepeatWhen(IObservable<T> source, Func<IObservable<object>, IObservable<U>> handler)
         {
             this.source = source;
             this.handler = handler;
@@ -31,12 +31,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 throw new ArgumentNullException(nameof(observer));
             }
 
-            var errorSignals = new Subject<Exception>();
+            var completeSignals = new Subject<object>();
             var redo = default(IObservable<U>);
 
             try
             {
-                redo = handler(errorSignals);
+                redo = handler(completeSignals);
                 if (redo == null)
                 {
                     throw new NullReferenceException("The handler returned a null IObservable");
@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return Disposable.Empty;
             }
 
-            var parent = new MainObserver(observer, source, new RedoSerializedObserver<Exception>(errorSignals));
+            var parent = new MainObserver(observer, source, new RedoSerializedObserver<object>(completeSignals));
 
             var d = redo.SubscribeSafe(parent.handlerObserver);
             Disposable.SetSingle(ref parent.handlerUpstream, d);
@@ -60,14 +60,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
         sealed class MainObserver : Sink<T>, IObserver<T>
         {
-
             readonly IObserver<Exception> errorSignal;
 
             internal readonly HandlerObserver handlerObserver;
-            
+
             readonly IObservable<T> source;
 
             IDisposable upstream;
+
             internal IDisposable handlerUpstream;
 
             int trampoline;
@@ -88,22 +88,23 @@ namespace System.Reactive.Linq.ObservableImpl
                 if (disposing)
                 {
                     Disposable.TryDispose(ref upstream);
-                    Disposable.TryDispose(ref handlerUpstream); 
+                    Disposable.TryDispose(ref handlerUpstream);
                 }
                 base.Dispose(disposing);
             }
 
             public void OnCompleted()
             {
-                HalfSerializer.ForwardOnCompleted(this, ref halfSerializer, ref this.error);
+                if (Disposable.TrySetSerial(ref upstream, null))
+                {
+                    errorSignal.OnNext(null);
+                }
+
             }
 
             public void OnError(Exception error)
             {
-                if (Disposable.TrySetSerial(ref upstream, null))
-                {
-                    errorSignal.OnNext(error);
-                }
+                HalfSerializer.ForwardOnError(this, error, ref halfSerializer, ref this.error);
             }
 
             public void OnNext(T value)
@@ -128,7 +129,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     do
                     {
                         var sad = new SingleAssignmentDisposable();
-                        if (Disposable.TrySetSingle(ref upstream, sad) != TrySetSingleResult.Success)
+                        if (Interlocked.CompareExchange(ref upstream, sad, null) != null)
                         {
                             return;
                         }
@@ -164,98 +165,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
         }
-    }
 
-    internal sealed class RedoSerializedObserver<X> : IObserver<X>
-    {
-        readonly IObserver<X> downstream;
-
-        int wip;
-
-        Exception terminalException;
-
-        static readonly Exception DONE = new Exception();
-
-        static readonly Exception SIGNALED = new Exception();
-
-        readonly ConcurrentQueue<X> queue;
-
-        internal RedoSerializedObserver(IObserver<X> downstream)
-        {
-            this.downstream = downstream;
-            this.queue = new ConcurrentQueue<X>();
-        }
-
-        public void OnCompleted()
-        {
-            if (Interlocked.CompareExchange(ref terminalException, DONE, null) == null)
-            {
-                Drain();
-            }
-        }
-
-        public void OnError(Exception error)
-        {
-            if (Interlocked.CompareExchange(ref terminalException, error, null) == null)
-            {
-                Drain();
-            }
-        }
-
-        public void OnNext(X value)
-        {
-            queue.Enqueue(value);
-            Drain();
-        }
-
-        void Clear()
-        {
-            while (queue.TryDequeue(out var _)) ;
-        }
-
-        void Drain()
-        {
-            if (Interlocked.Increment(ref wip) != 1)
-            {
-                return;
-            }
-
-            int missed = 1;
-
-            for (; ; )
-            {
-                var ex = Volatile.Read(ref terminalException);
-                if (ex != null)
-                {
-                    if (ex != SIGNALED)
-                    {
-                        Interlocked.Exchange(ref terminalException, SIGNALED);
-                        if (ex != DONE)
-                        {
-                            downstream.OnError(ex);
-                        }
-                        else
-                        {
-                            downstream.OnCompleted();
-                        }
-                    }
-                    Clear();
-                }
-                else
-                {
-                    while (queue.TryDequeue(out var item))
-                    {
-                        downstream.OnNext(item);
-                    }
-                }
-
-
-                missed = Interlocked.Add(ref wip, -missed);
-                if (missed == 0)
-                {
-                    break;
-                }
-            }
-        }
     }
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * WARNING: Auto-generated file (05/28/2018 22:20:18)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
@@ -10843,6 +10843,41 @@ namespace System.Reactive.Linq
 #endif
                     source.Expression,
                     Expression.Constant(repeatCount, typeof(int))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Repeatedly resubscribes to the source observable after a normal completion and when the observable
+        /// returned by a handler produces an arbitrary item.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TSignal">The arbitrary element type signaled by the handler observable.</typeparam>
+        /// <param name="source">Observable sequence to keep repeating when it successfully terminates.</param>
+        /// <param name="handler">The function that is called for each observer and takes an observable sequence objects.
+        /// It should return an observable of arbitrary items that should signal that arbitrary item in
+        /// response to receiving the completion signal from the source observable. If this observable signals
+        /// a terminal event, the sequence is terminated with that signal instead.</param>
+        /// <returns>An observable sequence producing the elements of the given sequence repeatedly while each repetition terminates successfully.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="handler"/> is null.</exception>
+        public static IQbservable<TSource> RepeatWhen<TSource, TSignal>(this IQbservable<TSource> source, Expression<Func<IObservable<object>, IObservable<TSignal>>> handler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
+
+            return source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.RepeatWhen<TSource, TSignal>(default(IQbservable<TSource>), default(Expression<Func<IObservable<object>, IObservable<TSignal>>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TSignal)),
+#endif
+                    source.Expression,
+                    handler
                 )
             );
         }
