@@ -380,6 +380,113 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable().Remove(null));
         }
 
+        [Fact]
+        public void CompositeDisposable_Empty_GetEnumerator()
+        {
+            var composite = new CompositeDisposable();
+
+            Assert.False(composite.GetEnumerator().MoveNext());
+        }
+
+        [Fact]
+        public void CompositeDisposable_NonCollection_Enumerable_Init()
+        {
+            var d = new BooleanDisposable();
+
+            var composite = new CompositeDisposable(Just(d));
+
+            composite.Dispose();
+
+            Assert.True(d.IsDisposed);
+        }
+
+        private static IEnumerable<IDisposable> Just(IDisposable d)
+        {
+            yield return d;
+        }
+
+        [Fact]
+        public void CompositeDisposable_Disposed_Is_NoOp()
+        {
+            var d = new BooleanDisposable();
+
+            var composite = new CompositeDisposable(d);
+
+            composite.Dispose();
+
+            composite.Clear();
+
+            Assert.False(composite.Contains(d));
+
+            var array = new IDisposable[1];
+
+            composite.CopyTo(array, 0);
+
+            Assert.Null(array[0]);
+        }
+
+        [Fact]
+        public void CompositeDisposable_CopyTo_Index_Out_Of_Range()
+        {
+            var d1 = new BooleanDisposable();
+            var d2 = new BooleanDisposable();
+
+            var composite = new CompositeDisposable(d1, d2);
+
+            var array = new IDisposable[2];
+
+            try
+            {
+                composite.CopyTo(array, 1);
+                Assert.False(true, "Should have thrown!");
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                // expected
+            }
+        }
+
+        [Fact]
+        public void CompositeDisposable_GetEnumerator_Reset()
+        {
+            var d = new BooleanDisposable();
+
+            var composite = new CompositeDisposable(d);
+
+            var enumerator = composite.GetEnumerator();
+
+            Assert.True(enumerator.MoveNext());
+            Assert.Equal(d, enumerator.Current);
+            Assert.False(enumerator.MoveNext());
+
+            enumerator.Reset();
+
+            Assert.True(enumerator.MoveNext());
+            Assert.Equal(d, enumerator.Current);
+        }
+
+        [Fact]
+        public void CompositeDisposable_GetEnumerator_Disposed_Entries()
+        {
+            var d1 = new BooleanDisposable();
+            var d2 = new BooleanDisposable();
+            var d3 = new BooleanDisposable();
+
+            var composite = new CompositeDisposable(d1, d2, d3);
+
+            composite.Remove(d2);
+
+            var enumerator = composite.GetEnumerator();
+
+            Assert.True(enumerator.MoveNext());
+            Assert.Equal(d1, enumerator.Current);
+
+            Assert.True(enumerator.MoveNext());
+            Assert.Equal(d3, enumerator.Current);
+
+            Assert.False(enumerator.MoveNext());
+        }
+
 #if NET45 || NET46 
         [Fact]
         public void CancellationDisposable_Ctor_Null()
@@ -579,6 +686,18 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
+        public void RefCountDisposable_Throw_If_Disposed()
+        {
+            var d = new BooleanDisposable();
+            var r = new RefCountDisposable(d, true);
+            r.Dispose();
+
+            Assert.True(d.IsDisposed);
+
+            ReactiveAssert.Throws<ObjectDisposedException>(() => { r.GetDisposable(); });
+        }
+
+        [Fact]
         public void ScheduledDisposable_Null()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledDisposable(null, Disposable.Empty));
@@ -749,6 +868,20 @@ namespace ReactiveTests.Tests
             Assert.True(disp2);
             Assert.True(disp3);
             Assert.True(d.IsDisposed);
+        }
+
+        [Fact]
+        public void Disposable_TryRelease_Already_Disposed()
+        {
+            var field = default(IDisposable);
+
+            Disposable.TryDispose(ref field);
+
+            var count = 0;
+
+            Assert.False(Disposable.TryRelease(ref field, 1, (d, i) => count = i));
+
+            Assert.Equal(0, count);
         }
     }
 }
