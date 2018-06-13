@@ -39,18 +39,18 @@ namespace System.Reactive.Linq.ObservableImpl
                     var longRunning = parent._scheduler.AsLongRunning();
                     if (longRunning != null)
                     {
-                        SetUpstream(longRunning.ScheduleLongRunning(LoopInf));
+                        SetUpstream(longRunning.ScheduleLongRunning(this, (@this, c) => @this.LoopInf(c)));
                     }
                     else
                     {
-                        SetUpstream(parent._scheduler.Schedule(LoopRecInf));
+                        SetUpstream(parent._scheduler.Schedule(this, (@this, a) => @this.LoopRecInf(a)));
                     }
                 }
 
-                private void LoopRecInf(Action recurse)
+                private void LoopRecInf(Action<_> recurse)
                 {
                     ForwardOnNext(_value);
-                    recurse();
+                    recurse(this);
                 }
 
                 private void LoopInf(ICancelable cancel)
