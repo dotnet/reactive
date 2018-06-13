@@ -26,7 +26,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Append_<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
-            return source.Concat(Observable.Return(value, scheduler));
+            return source.Concat(new [] { value }.ToObservable(scheduler));
         }
 
         #endregion

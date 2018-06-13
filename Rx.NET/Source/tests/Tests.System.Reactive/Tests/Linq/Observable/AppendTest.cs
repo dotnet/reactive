@@ -91,7 +91,7 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(220, 2),
                 OnNext(251, 3),
-                OnCompleted<int>(251)
+                OnCompleted<int>(252)
             );
         }
 
@@ -137,9 +137,9 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnNext(220, 2),
                 OnNext(251, 3),
-                OnNext(252, 4),
-                OnNext(253, 5),
-                OnCompleted<int>(253)
+                OnNext(253, 4),
+                OnNext(255, 5),
+                OnCompleted<int>(256)
             );
         }
     }
