@@ -307,6 +307,8 @@ namespace System.Reactive.Linq
         IConnectableObservable<TSource> PublishLast<TSource>(IObservable<TSource> source);
         IObservable<TResult> PublishLast<TSource, TResult>(IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector);
         IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source);
+        IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source, TimeSpan disconnectDelay);
+        IObservable<TSource> RefCount<TSource>(IConnectableObservable<TSource> source, TimeSpan disconnectDelay, IScheduler schedulder);
         IConnectableObservable<TSource> Replay<TSource>(IObservable<TSource> source);
         IConnectableObservable<TSource> Replay<TSource>(IObservable<TSource> source, IScheduler scheduler);
         IObservable<TResult> Replay<TSource, TResult>(IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector);
@@ -580,6 +582,7 @@ namespace System.Reactive.Linq
         IObservable<Notification<TSource>> Materialize<TSource>(IObservable<TSource> source);
         IObservable<TSource> Repeat<TSource>(IObservable<TSource> source);
         IObservable<TSource> Repeat<TSource>(IObservable<TSource> source, int repeatCount);
+        IObservable<TSource> RepeatWhen<TSource, TSignal>(IObservable<TSource> source, Func<IObservable<object>, IObservable<TSignal>> handler);
         IObservable<TSource> Retry<TSource>(IObservable<TSource> source);
         IObservable<TSource> Retry<TSource>(IObservable<TSource> source, int retryCount);
         IObservable<TSource> RetryWhen<TSource, TSignal>(IObservable<TSource> source, Func<IObservable<Exception>, IObservable<TSignal>> handler);

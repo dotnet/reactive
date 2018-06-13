@@ -520,7 +520,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     base.Run(source);
 
-                    _bufferGate.Wait(CreateBufferClose);
+                    _bufferGate.Wait(this, @this => @this.CreateBufferClose());
                 }
 
                 protected override void Dispose(bool disposing)
@@ -564,7 +564,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         ForwardOnNext(res);
                     }
 
-                    _bufferGate.Wait(CreateBufferClose);
+                    _bufferGate.Wait(this, @this => @this.CreateBufferClose());
                 }
 
                 private sealed class BufferClosingObserver : IObserver<TBufferClosing>

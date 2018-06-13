@@ -284,10 +284,12 @@ namespace System.Reactive.Concurrency
 
             private void Tick(object state)
             {
-                _gate.Wait(() =>
-                {
-                    _state = _action(_state);
-                });
+                _gate.Wait(
+                    this,
+                    @this =>
+                    {
+                        @this._state = @this._action(@this._state);
+                    });
             }
 
             public void Dispose()
