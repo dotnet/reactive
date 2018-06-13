@@ -40,8 +40,30 @@ namespace System.Reactive.Concurrency
 
         sealed class SubscribeOnObservable<TSource> : ObservableBase<TSource>
         {
-            readonly IObservable<TSource> source;
+            private sealed class Subscription : IDisposable
+            {
+                private IDisposable _cancel;
 
+                public Subscription(IObservable<TSource> source, IScheduler scheduler, IObserver<TSource> observer)
+                {
+                    Disposable.TrySetSingle(
+                        ref _cancel, 
+                        scheduler.Schedule(
+                            (@this: this, source, observer),
+                            (closureScheduler, state) =>
+                            {
+                                Disposable.TrySetSerial(ref state.@this._cancel, new ScheduledDisposable(closureScheduler, state.source.SubscribeSafe(state.observer)));
+                                return Disposable.Empty;
+                            }));
+                }
+
+                public void Dispose()
+                {
+                    Disposable.TryDispose(ref _cancel);
+                }
+            }
+
+            readonly IObservable<TSource> source;
             readonly IScheduler scheduler;
 
             public SubscribeOnObservable(IObservable<TSource> source, IScheduler scheduler)
@@ -52,18 +74,7 @@ namespace System.Reactive.Concurrency
 
             protected override IDisposable SubscribeCore(IObserver<TSource> observer)
             {
-                var m = new SingleAssignmentDisposable();
-                var d = new SerialDisposable();
-                d.Disposable = m;
-
-                m.Disposable = scheduler.Schedule((source, observer, d),
-                (scheduler, state) =>
-                {
-                    state.d.Disposable = new ScheduledDisposable(scheduler, state.source.SubscribeSafe(state.observer));
-                    return Disposable.Empty;
-                });
-
-                return d;
+                return new Subscription(source, scheduler, observer);
             }
         }
 
