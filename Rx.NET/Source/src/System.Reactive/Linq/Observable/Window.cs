@@ -24,9 +24,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _skip = skip;
             }
 
-            protected override _ CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<IObservable<TSource>> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, IObservable<TSource> > 
             {
@@ -37,8 +37,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly int _count;
                 private readonly int _skip;
 
-                public _(Count parent, IObserver<IObservable<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Count parent, IObserver<IObservable<TSource>> observer)
+                    : base(observer)
                 {
                     _refCountDisposable = new RefCountDisposable(_m);
 
@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private int _n;
 
-                public IDisposable Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _n = 0;
 
@@ -57,7 +57,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     _m.Disposable = source.SubscribeSafe(this);
 
-                    return _refCountDisposable;
+                    SetUpstream(_refCountDisposable);
                 }
 
                 private IObservable<TSource> CreateWindow()
@@ -120,9 +120,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<IObservable<TSource>> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
             internal sealed class _ : Sink<TSource, IObservable<TSource>> 
             {
@@ -133,8 +133,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly IScheduler _scheduler;
                 private readonly TimeSpan _timeShift;
 
-                public _(TimeSliding parent, IObserver<IObservable<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(TimeSliding parent, IObserver<IObservable<TSource>> observer)
+                    : base(observer)
                 {
                     _scheduler = parent._scheduler;
                     _timeShift = parent._timeShift;
@@ -145,7 +145,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private TimeSpan _nextShift;
                 private TimeSpan _nextSpan;
 
-                public IDisposable Run(TimeSliding parent)
+                public void Run(TimeSliding parent)
                 {
                     _totalTime = TimeSpan.Zero;
                     _nextShift = parent._timeShift;
@@ -159,7 +159,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     groupDisposable.Add(parent._source.SubscribeSafe(this));
 
-                    return _refCountDisposable;
+                    SetUpstream(_refCountDisposable);
                 }
 
                 private void CreateWindow()
@@ -277,23 +277,23 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<IObservable<TSource>> observer) => new _(observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
             internal sealed class _ : Sink<TSource, IObservable<TSource>> 
             {
                 private readonly object _gate = new object();
 
-                public _(IObserver<IObservable<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(IObserver<IObservable<TSource>> observer)
+                    : base(observer)
                 {
                 }
 
                 private Subject<TSource> _subject;
                 private RefCountDisposable _refCountDisposable;
 
-                public IDisposable Run(TimeHopping parent)
+                public void Run(TimeHopping parent)
                 {
                     var groupDisposable = new CompositeDisposable(2);
                     _refCountDisposable = new RefCountDisposable(groupDisposable);
@@ -303,7 +303,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     groupDisposable.Add(parent._scheduler.SchedulePeriodic(parent._timeSpan, Tick));
                     groupDisposable.Add(parent._source.SubscribeSafe(this));
 
-                    return _refCountDisposable;
+                    SetUpstream(_refCountDisposable);
                 }
 
                 private void Tick()
@@ -366,9 +366,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<IObservable<TSource>> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, IObservable<TSource>> 
             {
@@ -379,8 +379,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly TimeSpan _timeSpan;
                 private readonly IScheduler _scheduler;
 
-                public _(Ferry parent, IObserver<IObservable<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Ferry parent, IObserver<IObservable<TSource>> observer)
+                    : base(observer)
                 {
                     _count = parent._count;
                     _timeSpan = parent._timeSpan;
@@ -392,7 +392,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private RefCountDisposable _refCountDisposable;
 
-                public IDisposable Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _n = 0;
 
@@ -405,7 +405,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     groupDisposable.Add(source.SubscribeSafe(this));
 
-                    return _refCountDisposable;
+                    SetUpstream(_refCountDisposable);
                 }
 
                 private void CreateTimer(Subject<TSource> window)
@@ -497,9 +497,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _windowClosingSelector = windowClosingSelector;
             }
 
-            protected override _ CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<IObservable<TSource>> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, IObservable<TSource>> 
             {
@@ -509,8 +509,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private readonly Func<IObservable<TWindowClosing>> _windowClosingSelector;
 
-                public _(Selector parent, IObserver<IObservable<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Selector parent, IObserver<IObservable<TSource>> observer)
+                    : base(observer)
                 {
                     _windowClosingSelector = parent._windowClosingSelector;
                 }
@@ -518,7 +518,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private ISubject<TSource> _window;
                 private RefCountDisposable _refCountDisposable;
 
-                public IDisposable Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _window = new Subject<TSource>();
 
@@ -530,9 +530,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     groupDisposable.Add(source.SubscribeSafe(this));
 
-                    _windowGate.Wait(CreateWindowClose);
+                    _windowGate.Wait(this, @this => @this.CreateWindowClose());
 
-                    return _refCountDisposable;
+                    SetUpstream(_refCountDisposable);
                 }
 
                 private void CreateWindowClose()
@@ -569,7 +569,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         ForwardOnNext(window);
                     }
 
-                    _windowGate.Wait(CreateWindowClose);
+                    _windowGate.Wait(this, @this => @this.CreateWindowClose());
                 }
 
                 private sealed class WindowClosingObserver : IObserver<TWindowClosing>
@@ -638,9 +638,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _windowBoundaries = windowBoundaries;
             }
 
-            protected override _ CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<IObservable<TSource>> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
             internal sealed class _ : Sink<TSource, IObservable<TSource>> 
             {
@@ -648,8 +648,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private readonly IObservable<TWindowClosing> _windowBoundaries;
 
-                public _(Boundaries parent, IObserver<IObservable<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Boundaries parent, IObserver<IObservable<TSource>> observer)
+                    : base(observer)
                 {
                     _windowBoundaries = parent._windowBoundaries;
                 }
@@ -657,7 +657,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private ISubject<TSource> _window;
                 private RefCountDisposable _refCountDisposable;
 
-                public IDisposable Run(Boundaries parent)
+                public void Run(Boundaries parent)
                 {
                     _window = new Subject<TSource>();
 
@@ -670,7 +670,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     d.Add(parent._source.SubscribeSafe(this));
                     d.Add(parent._windowBoundaries.SubscribeSafe(new WindowClosingObserver(this)));
 
-                    return _refCountDisposable;
+                    SetUpstream(_refCountDisposable);
                 }
 
                 private sealed class WindowClosingObserver : IObserver<TWindowClosing>

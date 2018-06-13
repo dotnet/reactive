@@ -18,34 +18,46 @@ namespace System.Reactive.Linq.ObservableImpl
             _observableFactory = observableFactory;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
-            public IDisposable Run(Using<TSource, TResource> parent)
+            private IDisposable _disposable;
+
+            public void Run(Using<TSource, TResource> parent)
             {
                 var source = default(IObservable<TSource>);
-                var disposable = Disposable.Empty;
                 try
                 {
                     var resource = parent._resourceFactory();
                     if (resource != null)
-                        disposable = resource;
+                        Disposable.SetSingle(ref _disposable, resource);
                     source = parent._observableFactory(resource);
                 }
                 catch (Exception exception)
                 {
-                    return StableCompositeDisposable.Create(Observable.Throw<TSource>(exception).SubscribeSafe(this), disposable);
+                    SetUpstream(Observable.Throw<TSource>(exception).SubscribeSafe(this));
+
+                    return;
                 }
 
-                return StableCompositeDisposable.Create(source.SubscribeSafe(this), disposable);
+                base.Run(source);
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _disposable);
+                }
+                base.Dispose(disposing);
             }
         }
     }

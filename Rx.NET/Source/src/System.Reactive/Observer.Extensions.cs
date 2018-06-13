@@ -255,7 +255,7 @@ namespace System.Reactive
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new ObserveOnObserver<T>(scheduler, observer, null);
+            return new ObserveOnObserver<T>(scheduler, observer);
         }
 
         /// <summary>
@@ -273,7 +273,7 @@ namespace System.Reactive
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
-            return new ObserveOnObserver<T>(new SynchronizationContextScheduler(context), observer, null);
+            return new ObserveOnObserver<T>(new SynchronizationContextScheduler(context), observer);
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace System.Reactive
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new AnonymousProgress<T>(new ObserveOnObserver<T>(scheduler, observer, null).OnNext);
+            return new AnonymousProgress<T>(new ObserveOnObserver<T>(scheduler, observer).OnNext);
         }
 
         class AnonymousProgress<T> : IProgress<T>

@@ -20,17 +20,17 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_source);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<TSource>
         {
             private readonly TimeSpan _dueTime;
             private readonly IScheduler _scheduler;
 
-            public _(Throttle<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Throttle<TSource> parent, IObserver<TSource> observer)
+                : base(observer)
             {
                 _dueTime = parent._dueTime;
                 _scheduler = parent._scheduler;
@@ -39,20 +39,26 @@ namespace System.Reactive.Linq.ObservableImpl
             private object _gate;
             private TSource _value;
             private bool _hasValue;
-            private SerialDisposable _cancelable;
+            private IDisposable _serialCancelable;
             private ulong _id;
 
-            public IDisposable Run(IObservable<TSource> source)
+            public override void Run(IObservable<TSource> source)
             {
                 _gate = new object();
                 _value = default(TSource);
                 _hasValue = false;
-                _cancelable = new SerialDisposable();
                 _id = 0UL;
 
-                var subscription = source.SubscribeSafe(this);
+                base.Run(source);
+            }
 
-                return StableCompositeDisposable.Create(subscription, _cancelable);
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _serialCancelable);
+                }
+                base.Dispose(disposing);
             }
 
             public override void OnNext(TSource value)
@@ -66,7 +72,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     currentid = _id;
                 }
                 var d = new SingleAssignmentDisposable();
-                _cancelable.Disposable = d;
+                Disposable.TrySetSerial(ref _serialCancelable, d);
                 d.Disposable = _scheduler.Schedule(currentid, _dueTime, Propagate);
             }
 
@@ -84,7 +90,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception error)
             {
-                _cancelable.Dispose();
+                Disposable.TryDispose(ref _serialCancelable);
 
                 lock (_gate)
                 {
@@ -97,7 +103,7 @@ namespace System.Reactive.Linq.ObservableImpl
             
             public override void OnCompleted()
             {
-                _cancelable.Dispose();
+                Disposable.TryDispose(ref _serialCancelable);
 
                 lock (_gate)
                 {
@@ -124,16 +130,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _throttleSelector = throttleSelector;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TSource>
         {
             private readonly Func<TSource, IObservable<TThrottle>> _throttleSelector;
 
-            public _(Throttle<TSource, TThrottle> parent, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Throttle<TSource, TThrottle> parent, IObserver<TSource> observer)
+                : base(observer)
             {
                 _throttleSelector = parent._throttleSelector;
             }
@@ -141,20 +147,26 @@ namespace System.Reactive.Linq.ObservableImpl
             private object _gate;
             private TSource _value;
             private bool _hasValue;
-            private SerialDisposable _cancelable;
+            private IDisposable _serialCancelable;
             private ulong _id;
 
-            public IDisposable Run(Throttle<TSource, TThrottle> parent)
+            public void Run(Throttle<TSource, TThrottle> parent)
             {
                 _gate = new object();
                 _value = default(TSource);
                 _hasValue = false;
-                _cancelable = new SerialDisposable();
                 _id = 0UL;
 
-                var subscription = parent._source.SubscribeSafe(this);
+                base.Run(parent._source);
+            }
 
-                return StableCompositeDisposable.Create(subscription, _cancelable);
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _serialCancelable);
+                }
+                base.Dispose(disposing);
             }
 
             public override void OnNext(TSource value)
@@ -184,13 +196,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 var d = new SingleAssignmentDisposable();
-                _cancelable.Disposable = d;
+                Disposable.TrySetSerial(ref _serialCancelable, d);
                 d.Disposable = throttle.SubscribeSafe(new ThrottleObserver(this, value, currentid, d));
             }
 
             public override void OnError(Exception error)
             {
-                _cancelable.Dispose();
+                Disposable.TryDispose(ref _serialCancelable);
 
                 lock (_gate)
                 {
@@ -203,7 +215,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                _cancelable.Dispose();
+                Disposable.TryDispose(ref _serialCancelable);
 
                 lock (_gate)
                 {

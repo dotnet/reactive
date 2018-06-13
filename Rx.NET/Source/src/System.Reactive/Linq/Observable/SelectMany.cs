@@ -24,9 +24,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult> 
             {
@@ -37,8 +37,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Func<TSource, IObservable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, TCollection, TResult> _resultSelector;
 
-                public _(ObservableSelector parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(ObservableSelector parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _collectionSelector = parent._collectionSelector;
                     _resultSelector = parent._resultSelector;
@@ -48,13 +48,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private bool _isStopped;
 
-                public IDisposable Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _isStopped = false;
 
                     _sourceSubscription.Disposable = source.SubscribeSafe(this);
 
-                    return _group;
+                    SetUpstream(_group);
                 }
 
                 public override void OnNext(TSource value)
@@ -187,9 +187,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult> 
             {
@@ -200,8 +200,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Func<TSource, int, IObservable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, int, TCollection, int, TResult> _resultSelector;
 
-                public _(ObservableSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(ObservableSelectorIndexed parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _collectionSelector = parent._collectionSelector;
                     _resultSelector = parent._resultSelector;
@@ -212,13 +212,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 private bool _isStopped;
                 private int _index;
 
-                public IDisposable Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _isStopped = false;
 
                     _sourceSubscription.Disposable = source.SubscribeSafe(this);
 
-                    return _group;
+                    SetUpstream(_group);
                 }
 
                 public override void OnNext(TSource value)
@@ -356,17 +356,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly Func<TSource, IEnumerable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, TCollection, TResult> _resultSelector;
 
-                public _(EnumerableSelector parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(EnumerableSelector parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _collectionSelector = parent._collectionSelector;
                     _resultSelector = parent._resultSelector;
@@ -442,17 +442,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly Func<TSource, int, IEnumerable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, int, TCollection, int, TResult> _resultSelector;
 
-                public _(EnumerableSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(EnumerableSelectorIndexed parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _collectionSelector = parent._collectionSelector;
                     _resultSelector = parent._resultSelector;
@@ -533,9 +533,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult> 
             {
@@ -545,8 +545,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Func<TSource, CancellationToken, Task<TCollection>> _collectionSelector;
                 private readonly Func<TSource, TCollection, TResult> _resultSelector;
 
-                public _(TaskSelector parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(TaskSelector parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _collectionSelector = parent._collectionSelector;
                     _resultSelector = parent._resultSelector;
@@ -554,11 +554,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private volatile int _count;
 
-                public IDisposable Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _count = 1;
 
-                    return StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel);
+                    base.Run(source);
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        _cancel.Dispose();
+                    }
+                    base.Dispose(disposing);
                 }
 
                 public override void OnNext(TSource value)
@@ -680,9 +689,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult> 
             {
@@ -692,8 +701,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Func<TSource, int, CancellationToken, Task<TCollection>> _collectionSelector;
                 private readonly Func<TSource, int, TCollection, TResult> _resultSelector;
 
-                public _(TaskSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(TaskSelectorIndexed parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _collectionSelector = parent._collectionSelector;
                     _resultSelector = parent._resultSelector;
@@ -702,11 +711,20 @@ namespace System.Reactive.Linq.ObservableImpl
                 private volatile int _count;
                 private int _index;
 
-                public IDisposable Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _count = 1;
 
-                    return StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel);
+                    base.Run(source);
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        _cancel.Dispose();
+                    }
+                    base.Dispose(disposing);
                 }
 
                 public override void OnNext(TSource value)
@@ -831,9 +849,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal class _ : Sink<TSource, TResult> 
             {
@@ -843,8 +861,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private readonly Func<TSource, IObservable<TResult>> _selector;
 
-                public _(ObservableSelector parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(ObservableSelector parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _selector = parent._selector;
 
@@ -853,13 +871,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private bool _isStopped;
 
-                public IDisposable Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _isStopped = false;
 
                     _sourceSubscription.Disposable = source.SubscribeSafe(this);
 
-                    return _group;
+                    SetUpstream(_group);
                 }
 
                 public override void OnNext(TSource value)
@@ -984,15 +1002,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selectorOnCompleted = selectorOnCompleted;
             }
 
-            protected override ObservableSelector._ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override ObservableSelector._ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
             new internal sealed class _ : ObservableSelector._
             {
                 private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
                 private readonly Func<IObservable<TResult>> _selectorOnCompleted;
 
-                public _(ObservableSelectors parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(parent, observer, cancel)
+                public _(ObservableSelectors parent, IObserver<TResult> observer)
+                    : base(parent, observer)
                 {
                     _selectorOnError = parent._selectorOnError;
                     _selectorOnCompleted = parent._selectorOnCompleted;
@@ -1065,9 +1083,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal class _ : Sink<TSource, TResult> 
             {
@@ -1077,8 +1095,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 protected readonly Func<TSource, int, IObservable<TResult>> _selector;
 
-                public _(ObservableSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(ObservableSelectorIndexed parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _selector = parent._selector;
 
@@ -1088,13 +1106,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 private bool _isStopped;
                 private int _index;
 
-                public IDisposable Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _isStopped = false;
 
                     _sourceSubscription.Disposable = source.SubscribeSafe(this);
 
-                    return _group;
+                    SetUpstream(_group);
                 }
 
                 public override void OnNext(TSource value)
@@ -1219,7 +1237,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selectorOnCompleted = selectorOnCompleted;
             }
 
-            protected override ObservableSelectorIndexed._ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override ObservableSelectorIndexed._ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
             new internal sealed class _ : ObservableSelectorIndexed._
             {
@@ -1230,8 +1248,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
                 private readonly Func<IObservable<TResult>> _selectorOnCompleted;
 
-                public _(ObservableSelectorsIndexed parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(parent, observer, cancel)
+                public _(ObservableSelectorsIndexed parent, IObserver<TResult> observer)
+                    : base(parent, observer)
                 {
                     _selectorOnError = parent._selectorOnError;
                     _selectorOnCompleted = parent._selectorOnCompleted;
@@ -1306,16 +1324,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly Func<TSource, IEnumerable<TResult>> _selector;
 
-                public _(EnumerableSelector parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(EnumerableSelector parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _selector = parent._selector;
                 }
@@ -1388,16 +1406,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly Func<TSource, int, IEnumerable<TResult>> _selector;
 
-                public _(EnumerableSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(EnumerableSelectorIndexed parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _selector = parent._selector;
                 }
@@ -1472,9 +1490,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult> 
             {
@@ -1483,19 +1501,28 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private readonly Func<TSource, CancellationToken, Task<TResult>> _selector;
 
-                public _(TaskSelector parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(TaskSelector parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _selector = parent._selector;
                 }
 
                 private volatile int _count;
 
-                public IDisposable Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _count = 1;
 
-                    return StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel);
+                    base.Run(source);
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        _cancel.Dispose();
+                    }
+                    base.Dispose(disposing);
                 }
 
                 public override void OnNext(TSource value)
@@ -1592,9 +1619,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult> 
             {
@@ -1603,8 +1630,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private readonly Func<TSource, int, CancellationToken, Task<TResult>> _selector;
 
-                public _(TaskSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(TaskSelectorIndexed parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _selector = parent._selector;
                 }
@@ -1612,11 +1639,20 @@ namespace System.Reactive.Linq.ObservableImpl
                 private volatile int _count;
                 private int _index;
 
-                public IDisposable Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _count = 1;
 
-                    return StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel);
+                    base.Run(source);
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        _cancel.Dispose();
+                    }
+                    base.Dispose(disposing);
                 }
 
                 public override void OnNext(TSource value)

@@ -15,14 +15,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
             }
 
-            protected override _ CreateSink(IObserver<bool> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<bool> observer) => new _(observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, bool> 
             {
-                public _(IObserver<bool> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(IObserver<bool> observer)
+                    : base(observer)
                 {
                 }
 
@@ -51,16 +51,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 _predicate = predicate;
             }
 
-            protected override _ CreateSink(IObserver<bool> observer, IDisposable cancel) => new _(_predicate, observer, cancel);
+            protected override _ CreateSink(IObserver<bool> observer) => new _(_predicate, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, bool> 
             {
                 private readonly Func<TSource, bool> _predicate;
 
-                public _(Func<TSource, bool> predicate, IObserver<bool> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Func<TSource, bool> predicate, IObserver<bool> observer)
+                    : base(observer)
                 {
                     _predicate = predicate;
                 }

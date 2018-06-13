@@ -52,10 +52,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal void OnSubscribe(IDisposable d)
             {
-                if (Interlocked.CompareExchange(ref upstream, d, null) != null)
-                {
-                    d?.Dispose();
-                }
+                Disposable.SetSingle(ref upstream, d);
             }
 
             public void Dispose()
@@ -178,15 +175,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 readonly ConcatManyOuterObserver parent;
 
-                internal SingleAssignmentDisposable upstream;
-
-                static readonly SingleAssignmentDisposable DISPOSED;
-
-                static InnerObserver()
-                {
-                    DISPOSED = new SingleAssignmentDisposable();
-                    DISPOSED.Dispose();
-                }
+                internal IDisposable upstream;
 
                 internal InnerObserver(ConcatManyOuterObserver parent)
                 {
@@ -195,13 +184,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 internal bool SetDisposable(SingleAssignmentDisposable sad)
                 {
-                    return Interlocked.CompareExchange(ref upstream, sad, null) == null;
+                    return Disposable.TrySetSingle(ref upstream, sad) == TrySetSingleResult.Success;
                 }
 
                 internal bool Finish()
                 {
                     var sad = Volatile.Read(ref upstream);
-                    if (sad != DISPOSED)
+                    if (sad != BooleanDisposable.True)
                     {
                         if (Interlocked.CompareExchange(ref upstream, null, sad) == sad)
                         {
@@ -214,7 +203,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Dispose()
                 {
-                    Interlocked.Exchange(ref upstream, DISPOSED)?.Dispose();
+                    Disposable.TryDispose(ref upstream);
                 }
 
                 public void OnCompleted()

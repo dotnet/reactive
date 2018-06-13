@@ -19,9 +19,9 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : Sink<TSource, IList<TSource>> 
         {
@@ -30,8 +30,8 @@ namespace System.Reactive.Linq.ObservableImpl
             private TKey _lastKey;
             private List<TSource> _list;
 
-            public _(MinBy<TSource, TKey> parent, IObserver<IList<TSource>> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(MinBy<TSource, TKey> parent, IObserver<IList<TSource>> observer)
+                : base(observer)
             {
                 _parent = parent;
 
