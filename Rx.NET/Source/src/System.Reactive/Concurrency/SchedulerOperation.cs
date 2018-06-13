@@ -68,7 +68,7 @@ namespace System.Reactive.Concurrency
 
             if (cancellationToken.CanBeCanceled)
             {
-                _ctr = _cancellationToken.Register(Cancel);
+                _ctr = _cancellationToken.Register(@this => ((SchedulerOperationAwaiter)@this).Cancel(), this);
             }
         }
 
