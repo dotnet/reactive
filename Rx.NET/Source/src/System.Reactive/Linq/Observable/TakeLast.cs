@@ -72,17 +72,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     var longRunning = _parent._loopScheduler.AsLongRunning();
                     if (longRunning != null)
-                        Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(Loop));
+                        Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, (@this, c) => @this.Loop(c)));
                     else
-                        Disposable.SetSingle(ref _loopDisposable, _parent._loopScheduler.Schedule(LoopRec));
+                        Disposable.SetSingle(ref _loopDisposable, _parent._loopScheduler.Schedule(this, (@this, a) => @this.LoopRec(a)));
                 }
 
-                private void LoopRec(Action recurse)
+                private void LoopRec(Action<_> recurse)
                 {
                     if (_queue.Count > 0)
                     {
                         ForwardOnNext(_queue.Dequeue());
-                        recurse();
+                        recurse(this);
                     }
                     else
                     {
@@ -180,17 +180,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     var longRunning = _parent._loopScheduler.AsLongRunning();
                     if (longRunning != null)
-                        Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(Loop));
+                        Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, (@this, c) => @this.Loop(c)));
                     else
-                        Disposable.SetSingle(ref _loopDisposable, _parent._loopScheduler.Schedule(LoopRec));
+                        Disposable.SetSingle(ref _loopDisposable, _parent._loopScheduler.Schedule(this, (@this, a) => @this.LoopRec(a)));
                 }
 
-                private void LoopRec(Action recurse)
+                private void LoopRec(Action<_> recurse)
                 {
                     if (_queue.Count > 0)
                     {
                         ForwardOnNext(_queue.Dequeue().Value);
-                        recurse();
+                        recurse(this);
                     }
                     else
                     {
