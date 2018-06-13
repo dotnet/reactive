@@ -134,7 +134,7 @@ namespace System.Reactive.Concurrency
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new ObserveOn<TSource>.SchedulerNew(source, scheduler);
+            return new ObserveOn<TSource>.Scheduler(source, scheduler);
         }
 
         /// <summary>
