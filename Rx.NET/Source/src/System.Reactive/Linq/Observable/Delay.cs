@@ -106,7 +106,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (shouldRun)
                     {
-                        Disposable.TrySetSerial(ref _cancelable, _scheduler.Schedule(_delay, DrainQueue));
+                        Disposable.TrySetSerial(ref _cancelable, _scheduler.Schedule(this, _delay, (@this, a) => @this.DrainQueue(a)));
                     }
                 }
 
@@ -151,11 +151,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (shouldRun)
                     {
-                        Disposable.TrySetSerial(ref _cancelable, _scheduler.Schedule(_delay, DrainQueue));
+                        Disposable.TrySetSerial(ref _cancelable, _scheduler.Schedule(this, _delay, (@this, a) => @this.DrainQueue(a)));
                     }
                 }
 
-                protected void DrainQueue(Action<TimeSpan> recurse)
+                protected void DrainQueue(Action<S, TimeSpan> recurse)
                 {
                     lock (_gate)
                     {
@@ -253,7 +253,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
                             else if (shouldRecurse)
                             {
-                                recurse(recurseDueTime);
+                                recurse(this, recurseDueTime);
                             }
 
                             return;
@@ -524,7 +524,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (shouldRun)
                     {
-                        Disposable.TrySetSerial(ref _cancelable, _scheduler.Schedule(next, DrainQueue));
+                        Disposable.TrySetSerial(ref _cancelable, _scheduler.Schedule((Base<Absolute>.S)this, next, (@this, a) => DrainQueue(a)));
                     }
                 }
             }
