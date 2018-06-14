@@ -82,7 +82,7 @@ namespace System.Reactive.Concurrency
                     (@this: this, m, action, state),
                     tuple =>
                     {
-                        if (!m.IsDisposed)
+                        if (!tuple.m.IsDisposed)
                         {
                             tuple.m.Disposable = tuple.action(tuple.@this, tuple.state);
                         }

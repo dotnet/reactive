@@ -53,11 +53,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     var longRunning = _parent._scheduler.AsLongRunning();
                     if (longRunning != null)
                     {
-                        SetUpstream(longRunning.ScheduleLongRunning(Loop));
+                        SetUpstream(longRunning.ScheduleLongRunning(this, (@this, c) => @this.Loop(c)));
                     }
                     else
                     {
-                        SetUpstream(_parent._scheduler.Schedule(LoopRec));
+                        SetUpstream(_parent._scheduler.Schedule(this, (@this, a) => @this.LoopRec(a)));
                     }
                 }
 
@@ -107,7 +107,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                private void LoopRec(Action recurse)
+                private void LoopRec(Action<_> recurse)
                 {
                     var hasResult = false;
                     var result = default(TResult);
@@ -138,7 +138,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (hasResult)
                     {
                         ForwardOnNext(result);
-                        recurse();
+                        recurse(this);
                     }
                     else
                     {

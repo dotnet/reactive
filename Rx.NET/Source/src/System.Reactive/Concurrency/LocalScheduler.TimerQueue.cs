@@ -195,7 +195,7 @@ namespace System.Reactive.Concurrency
                 // (though it should).
                 //
                 var dueTime = Scheduler.Normalize(item.DueTime - item.Scheduler.Now);
-                d.Disposable = item.Scheduler.Schedule(d, dueTime, ExecuteNextShortTermWorkItem);
+                d.Disposable = item.Scheduler.Schedule((@this: this, d), dueTime, (self, tuple) => tuple.@this.ExecuteNextShortTermWorkItem(self, tuple.d));
             }
         }
 
@@ -329,7 +329,7 @@ namespace System.Reactive.Concurrency
                 var dueCapped = TimeSpan.FromTicks(Math.Min(dueEarly.Ticks, MAXSUPPORTEDTIMER.Ticks));
 
                 s_nextLongTermWorkItem = next;
-                s_nextLongTermTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(EvaluateLongTermQueue, null, dueCapped);
+                s_nextLongTermTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(_ => EvaluateLongTermQueue(_), null, dueCapped);
             }
         }
 

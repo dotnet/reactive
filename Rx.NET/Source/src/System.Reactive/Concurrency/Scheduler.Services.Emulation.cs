@@ -351,7 +351,7 @@ namespace System.Reactive.Concurrency
                 _nextDue = _period;
                 _runState = RUNNING;
 
-                Disposable.TrySetSingle(ref _task, _scheduler.Schedule(_nextDue, Tick));
+                Disposable.TrySetSingle(ref _task, _scheduler.Schedule(this, _nextDue, (@this, a) => @this.Tick(a)));
                 return this;
             }
 
@@ -361,7 +361,7 @@ namespace System.Reactive.Concurrency
                 Cancel();
             }
 
-            private void Tick(Action<TimeSpan> recurse)
+            private void Tick(Action<SchedulePeriodicStopwatch<TState>, TimeSpan> recurse)
             {
                 _nextDue += _period;
                 _state = _action(_state);
@@ -421,7 +421,7 @@ namespace System.Reactive.Concurrency
                     }
                 }
 
-                recurse(next);
+                recurse(this, next);
             }
 
             private void Cancel()

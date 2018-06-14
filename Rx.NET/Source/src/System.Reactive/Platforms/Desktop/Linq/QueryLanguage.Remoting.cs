@@ -85,36 +85,14 @@ namespace System.Reactive.Linq
 
             public IDisposable Subscribe(IObserver<T> observer)
             {
-                var d = new SingleAssignmentDisposable();
-
-                var o = Observer.Create<T>(
-                    observer.OnNext,
-                    ex =>
-                    {
-                        //
-                        // Make call to the remote subscription, causing lease renewal to be stopped.
-                        //
-                        using (d)
-                        {
-                            observer.OnError(ex);
-                        }
-                    },
-                    () =>
-                    {
-                        //
-                        // Make call to the remote subscription, causing lease renewal to be stopped.
-                        //
-                        using (d)
-                        {
-                            observer.OnCompleted();
-                        }
-                    }
-                );
+                var consumer = new ObserverWithToken<T>(observer);
 
                 //
                 // [OK] Use of unsafe Subscribe: non-pretentious transparent wrapping through remoting; exception coming from the remote object is not re-routed.
                 //
-                d.Disposable = remotableObservable.Subscribe/*Unsafe*/(new RemotableObserver<T>(o));
+                var d = remotableObservable.Subscribe/*Unsafe*/(new RemotableObserver<T>(consumer));
+
+                consumer.SetTokenDisposable(d);
 
                 return d;
             }
