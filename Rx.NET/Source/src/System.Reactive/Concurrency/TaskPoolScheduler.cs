@@ -111,6 +111,42 @@ namespace System.Reactive.Concurrency
             }
         }
 
+        private sealed class LongScheduledWorkItem<TState> : ICancelable
+        {
+            private readonly TState _state;
+            private readonly Action<TState, ICancelable> _action;
+
+            private IDisposable _cancel;
+
+            public LongScheduledWorkItem(TaskPoolScheduler scheduler, TState state, Action<TState, ICancelable> action)
+            {
+                _state = state;
+                _action = action;
+
+                scheduler.taskFactory.StartNew(
+                    @thisObject =>
+                    {
+                        var @this = (LongScheduledWorkItem<TState>) thisObject;
+
+                        //
+                        // Notice we don't check _cancel.IsDisposed. The contract for ISchedulerLongRunning
+                        // requires us to ensure the scheduled work gets an opportunity to observe
+                        // the cancellation request.
+                        //
+                        @this._action(@this._state, @this);
+                    },
+                    this,
+                    TaskCreationOptions.LongRunning);
+            }
+
+            public void Dispose()
+            {
+                Disposable.TryDispose(ref _cancel);
+            }
+
+            public bool IsDisposed => Disposable.GetIsDisposed(ref _cancel);
+        }
+
         private static readonly Lazy<TaskPoolScheduler> s_instance = new Lazy<TaskPoolScheduler>(() => new TaskPoolScheduler(new TaskFactory(TaskScheduler.Default)));
         private readonly TaskFactory taskFactory;
 
@@ -186,19 +222,7 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
         {
-            var d = new BooleanDisposable();
-
-            taskFactory.StartNew(() =>
-            {
-                //
-                // Notice we don't check d.IsDisposed. The contract for ISchedulerLongRunning
-                // requires us to ensure the scheduled work gets an opportunity to observe
-                // the cancellation request.
-                //
-                action(state, d);
-            }, TaskCreationOptions.LongRunning);
-
-            return d;
+            return new LongScheduledWorkItem<TState>(this, state, action);
         }
 
         /// <summary>
