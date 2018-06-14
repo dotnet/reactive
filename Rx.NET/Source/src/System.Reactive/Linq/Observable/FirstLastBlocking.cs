@@ -40,7 +40,7 @@ namespace System.Reactive.Linq.ObservableImpl
         public virtual void OnError(Exception error)
         {
             _value = default;
-            this._error = error;
+            _error = error;
             Unblock();
         }
         public abstract void OnNext(T value);
@@ -81,8 +81,8 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             if (!_hasValue)
             {
-                this._value = value;
-                this._hasValue = true;
+                _value = value;
+                _hasValue = true;
                 Disposable.TryDispose(ref _upstream);
                 Unblock();
             }
@@ -107,8 +107,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public override void OnNext(T value)
         {
-            this._value = value;
-            this._hasValue = true;
+            _value = value;
+            _hasValue = true;
         }
 
     }
