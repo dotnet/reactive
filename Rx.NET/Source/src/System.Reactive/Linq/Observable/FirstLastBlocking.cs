@@ -37,7 +37,12 @@ namespace System.Reactive.Linq.ObservableImpl
         }
 
         public abstract void OnCompleted();
-        public abstract void OnError(Exception error);
+        public virtual void OnError(Exception error)
+        {
+            _value = default;
+            this._error = error;
+            Unblock();
+        }
         public abstract void OnNext(T value);
     }
 
@@ -56,9 +61,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public override void OnError(Exception error)
         {
-            _value = default;
-            this._error = error;
-            Unblock();
+            base.OnError(error);  
             if (!Disposable.GetIsDisposed(ref _upstream))
             {
                 Disposable.TryDispose(ref _upstream);
@@ -89,9 +92,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public override void OnError(Exception error)
         {
-            _value = default;
-            this._error = error;
-            Unblock();
+            base.OnError(error);
             Disposable.TryDispose(ref _upstream);
         }
 
