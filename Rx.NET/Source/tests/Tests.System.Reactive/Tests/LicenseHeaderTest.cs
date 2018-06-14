@@ -64,6 +64,8 @@ namespace Tests.System.Reactive.Tests
                     || file.Contains(".Designer.cs")
                     || file.Contains(".Generated.cs")
                     || file.Contains("Uwp.DeviceRunner")
+                    || file.Contains(@"obj\Release")
+                    || file.Contains("obj/Release")
                 )
                 {
                     continue;
