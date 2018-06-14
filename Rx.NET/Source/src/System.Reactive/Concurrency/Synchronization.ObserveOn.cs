@@ -2,39 +2,21 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Reactive.Disposables;
 using System.Threading;
 
 namespace System.Reactive.Concurrency
 {
     internal static class ObserveOn<TSource>
     {
-        internal sealed class Scheduler : Producer<TSource, ObserveOnObserver<TSource>>
+        /// <summary>
+        /// The new ObserveOn operator run with an IScheduler in a lock-free manner.
+        /// </summary>
+        internal sealed class Scheduler : Producer<TSource, ObserveOnObserverNew<TSource>>
         {
             private readonly IObservable<TSource> _source;
             private readonly IScheduler _scheduler;
 
             public Scheduler(IObservable<TSource> source, IScheduler scheduler)
-            {
-                _source = source;
-                _scheduler = scheduler;
-            }
-
-            protected override ObserveOnObserver<TSource> CreateSink(IObserver<TSource> observer) => new ObserveOnObserver<TSource>(_scheduler, observer);
-
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
-            protected override void Run(ObserveOnObserver<TSource> sink) => sink.Run(_source);
-        }
-
-        /// <summary>
-        /// The new ObserveOn operator run with an IScheduler in a lock-free manner.
-        /// </summary>
-        internal sealed class SchedulerNew : Producer<TSource, ObserveOnObserverNew<TSource>>
-        {
-            private readonly IObservable<TSource> _source;
-            private readonly IScheduler _scheduler;
-
-            public SchedulerNew(IObservable<TSource> source, IScheduler scheduler)
             {
                 _source = source;
                 _scheduler = scheduler;
