@@ -14,6 +14,64 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="TaskPoolScheduler.Default">Instance of this type using the default TaskScheduler to schedule work on the TPL task pool.</seealso>
     public sealed class TaskPoolScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
+        private sealed class ScheduledWorkItem<TState> : IDisposable
+        {
+            private readonly TState _state;
+            private readonly TaskPoolScheduler _scheduler;
+            private readonly Func<IScheduler, TState, IDisposable> _action;
+
+            private IDisposable _cancel;
+
+            public ScheduledWorkItem(TaskPoolScheduler scheduler, TState state, Func<IScheduler, TState, IDisposable> action)
+            {
+                _state = state;
+                _action = action;
+                _scheduler = scheduler;
+
+                var cancelable = new CancellationDisposable();
+
+                Disposable.SetSingle(ref _cancel, cancelable);
+
+                scheduler.taskFactory.StartNew(
+                    @thisObject =>
+                    {
+                        var @this = (ScheduledWorkItem<TState>)@thisObject;
+                        //
+                        // BREAKING CHANGE v2.0 > v1.x - No longer escalating exceptions using a throwing
+                        //                               helper thread.
+                        //
+                        // Our manual escalation based on the creation of a throwing thread was merely to
+                        // expedite the process of throwing the exception that would otherwise occur on the
+                        // finalizer thread at a later point during the app's lifetime.
+                        //
+                        // However, it also prevented applications from observing the exception through
+                        // the TaskScheduler.UnobservedTaskException static event. Also, starting form .NET
+                        // 4.5, the default behavior of the task pool is not to take down the application
+                        // when an exception goes unobserved (done as part of the async/await work). It'd
+                        // be weird for Rx not to follow the platform defaults.
+                        //
+                        // General implementation guidelines for schedulers (in order of importance):
+                        //
+                        //    1. Always thunk through to the underlying infrastructure with a wrapper that's as tiny as possible.
+                        //    2. Global exception notification/handling mechanisms shouldn't be bypassed.
+                        //    3. Escalation behavior for exceptions is left to the underlying infrastructure.
+                        //
+                        // The Catch extension method for IScheduler (added earlier) allows to re-route
+                        // exceptions at stage 2. If the exception isn't handled at the Rx level, it
+                        // propagates by means of a rethrow, falling back to behavior in 3.
+                        //
+                        Disposable.TrySetSerial(ref @this._cancel, @this._action(@this._scheduler, @this._state));
+                    },
+                    this,
+                    cancelable.Token);
+            }
+
+            public void Dispose()
+            {
+                Disposable.TryDispose(ref _cancel);
+            }
+        }
+
         private static readonly Lazy<TaskPoolScheduler> s_instance = new Lazy<TaskPoolScheduler>(() => new TaskPoolScheduler(new TaskFactory(TaskScheduler.Default)));
         private readonly TaskFactory taskFactory;
 
@@ -48,38 +106,7 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var d = new SerialDisposable();
-            var cancelable = new CancellationDisposable();
-            d.Disposable = cancelable;
-            taskFactory.StartNew(() =>
-            {
-                //
-                // BREAKING CHANGE v2.0 > v1.x - No longer escalating exceptions using a throwing
-                //                               helper thread.
-                //
-                // Our manual escalation based on the creation of a throwing thread was merely to
-                // expedite the process of throwing the exception that would otherwise occur on the
-                // finalizer thread at a later point during the app's lifetime.
-                //
-                // However, it also prevented applications from observing the exception through
-                // the TaskScheduler.UnobservedTaskException static event. Also, starting form .NET
-                // 4.5, the default behavior of the task pool is not to take down the application
-                // when an exception goes unobserved (done as part of the async/await work). It'd
-                // be weird for Rx not to follow the platform defaults.
-                //
-                // General implementation guidelines for schedulers (in order of importance):
-                //
-                //    1. Always thunk through to the underlying infrastructure with a wrapper that's as tiny as possible.
-                //    2. Global exception notification/handling mechanisms shouldn't be bypassed.
-                //    3. Escalation behavior for exceptions is left to the underlying infrastructure.
-                //
-                // The Catch extension method for IScheduler (added earlier) allows to re-route
-                // exceptions at stage 2. If the exception isn't handled at the Rx level, it
-                // propagates by means of a rethrow, falling back to behavior in 3.
-                //
-                d.Disposable = action(this, state);
-            }, cancelable.Token);
-            return d;
+            return new ScheduledWorkItem<TState>(this, state, action);
         }
 
         /// <summary>
