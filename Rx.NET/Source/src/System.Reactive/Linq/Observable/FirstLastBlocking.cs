@@ -10,9 +10,10 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class FirstBlocking<T> : CountdownEvent, IObserver<T>
+
+    internal abstract class BaseBlocking<T> : CountdownEvent, IObserver<T>
     {
-        IDisposable _upstream;
+        protected IDisposable _upstream;
 
         internal T _value;
         internal bool _hasValue;
@@ -20,14 +21,31 @@ namespace System.Reactive.Linq.ObservableImpl
 
         int once;
 
-        internal FirstBlocking() : base(1) { }
+        internal BaseBlocking() : base(1) { }
 
         internal void SetUpstream(IDisposable d)
         {
             Disposable.SetSingle(ref _upstream, d);
         }
 
-        public void OnCompleted()
+        protected void Unblock()
+        {
+            if (Interlocked.CompareExchange(ref once, 1, 0) == 0)
+            {
+                Signal();
+            }
+        }
+
+        public abstract void OnCompleted();
+        public abstract void OnError(Exception error);
+        public abstract void OnNext(T value);
+    }
+
+    internal sealed class FirstBlocking<T> : BaseBlocking<T>
+    {
+        internal FirstBlocking() : base() { }
+
+        public override void OnCompleted()
         {
             Unblock();
             if (!Disposable.GetIsDisposed(ref _upstream))
@@ -36,7 +54,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        public void OnError(Exception error)
+        public override void OnError(Exception error)
         {
             _value = default;
             this._error = error;
@@ -47,7 +65,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        public void OnNext(T value)
+        public override void OnNext(T value)
         {
             if (!_hasValue)
             {
@@ -57,13 +75,31 @@ namespace System.Reactive.Linq.ObservableImpl
                 Unblock();
             }
         }
+    }
 
-        void Unblock()
+    internal sealed class LastBlocking<T> : BaseBlocking<T>
+    {
+        internal LastBlocking() : base() { }
+
+        public override void OnCompleted()
         {
-            if (Interlocked.CompareExchange(ref once, 1, 0) == 0)
-            {
-                Signal();
-            }
+            Unblock();
+            Disposable.TryDispose(ref _upstream);
         }
+
+        public override void OnError(Exception error)
+        {
+            _value = default;
+            this._error = error;
+            Unblock();
+            Disposable.TryDispose(ref _upstream);
+        }
+
+        public override void OnNext(T value)
+        {
+            this._value = value;
+            this._hasValue = true;
+        }
+
     }
 }
