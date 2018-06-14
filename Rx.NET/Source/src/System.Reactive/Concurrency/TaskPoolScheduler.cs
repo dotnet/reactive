@@ -72,6 +72,45 @@ namespace System.Reactive.Concurrency
             }
         }
 
+        private sealed class SlowlyScheduledWorkItem<TState> : IDisposable
+        {
+            private readonly TState _state;
+            private readonly TaskPoolScheduler _scheduler;
+            private readonly Func<IScheduler, TState, IDisposable> _action;
+
+            private IDisposable _cancel;
+
+            public SlowlyScheduledWorkItem(TaskPoolScheduler scheduler, TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
+            {
+                _state = state;
+                _action = action;
+                _scheduler = scheduler;
+
+                var ct = new CancellationDisposable();
+                Disposable.SetSingle(ref _cancel, ct);
+
+                TaskHelpers.Delay(dueTime, ct.Token).ContinueWith(
+                    (_, @thisObject) =>
+                    {
+                        var @this = (SlowlyScheduledWorkItem<TState>)thisObject;
+
+                        if (!Disposable.GetIsDisposed(ref @this._cancel))
+                        {
+                            Disposable.TrySetMultiple(ref @this._cancel, @this._action(@this._scheduler, @this._state));
+                        }
+                    },
+                    this,
+                    CancellationToken.None,
+                    TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion,
+                    scheduler.taskFactory.Scheduler);
+            }
+
+            public void Dispose()
+            {
+                Disposable.TryDispose(ref _cancel);
+            }
+        }
+
         private static readonly Lazy<TaskPoolScheduler> s_instance = new Lazy<TaskPoolScheduler>(() => new TaskPoolScheduler(new TaskFactory(TaskScheduler.Default)));
         private readonly TaskFactory taskFactory;
 
@@ -134,20 +173,7 @@ namespace System.Reactive.Concurrency
 
         private IDisposable ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
-            var d = new MultipleAssignmentDisposable();
-
-            var ct = new CancellationDisposable();
-            d.Disposable = ct;
-
-            TaskHelpers.Delay(dueTime, ct.Token).ContinueWith(_ =>
-            {
-                if (!d.IsDisposed)
-                {
-                    d.Disposable = action(this, state);
-                }
-            }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion, taskFactory.Scheduler);
-
-            return d;
+            return new SlowlyScheduledWorkItem<TState>(this, state, dueTime, action);
         }
 
         /// <summary>
