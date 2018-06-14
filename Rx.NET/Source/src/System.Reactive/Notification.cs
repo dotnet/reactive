@@ -337,9 +337,15 @@ namespace System.Reactive
         internal sealed class OnCompletedNotification : Notification<T>
         {
             /// <summary>
+            /// Complete notifications are stateless thus only one instance
+            /// can ever exist per type <see cref="T"/>.
+            /// </summary>
+            internal static readonly Notification<T> Instance = new OnCompletedNotification();
+
+            /// <summary>
             /// Constructs a notification of the end of a sequence.
             /// </summary>
-            public OnCompletedNotification()
+            private OnCompletedNotification()
             {
             }
 
@@ -628,7 +634,7 @@ namespace System.Reactive
         /// <returns>The OnCompleted notification.</returns>
         public static Notification<T> CreateOnCompleted<T>()
         {
-            return new Notification<T>.OnCompletedNotification();
+            return Notification<T>.OnCompletedNotification.Instance;
         }
     }
 }
