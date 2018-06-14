@@ -67,25 +67,26 @@ namespace System.Reactive.Linq
 
         private static TSource FirstOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
         {
-            var consumer = new FirstBlocking<TSource>();
-
-            using (var d = source.Subscribe(consumer))
+            using (var consumer = new FirstBlocking<TSource>())
             {
-                consumer.SetUpstream(d);
-
-                if (consumer.CurrentCount != 0)
+                using (var d = source.Subscribe(consumer))
                 {
-                    consumer.Wait();
+                    consumer.SetUpstream(d);
+
+                    if (consumer.CurrentCount != 0)
+                    {
+                        consumer.Wait();
+                    }
                 }
-            }
 
-            consumer._error.ThrowIfNotNull();
+                consumer._error.ThrowIfNotNull();
 
-            if (throwOnEmpty && !consumer._hasValue)
-            {
-                throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                if (throwOnEmpty && !consumer._hasValue)
+                {
+                    throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                }
+                return consumer._value;
             }
-            return consumer._value;
         }
 
         #endregion
@@ -162,25 +163,27 @@ namespace System.Reactive.Linq
 
         private static TSource LastOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
         {
-            var consumer = new LastBlocking<TSource>();
-
-            using (var d = source.Subscribe(consumer))
+            using (var consumer = new LastBlocking<TSource>())
             {
-                consumer.SetUpstream(d);
 
-                if (consumer.CurrentCount != 0)
+                using (var d = source.Subscribe(consumer))
                 {
-                    consumer.Wait();
+                    consumer.SetUpstream(d);
+
+                    if (consumer.CurrentCount != 0)
+                    {
+                        consumer.Wait();
+                    }
                 }
-            }
 
-            consumer._error.ThrowIfNotNull();
+                consumer._error.ThrowIfNotNull();
 
-            if (throwOnEmpty && !consumer._hasValue)
-            {
-                throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                if (throwOnEmpty && !consumer._hasValue)
+                {
+                    throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                }
+                return consumer._value;
             }
-            return consumer._value;
         }
 
         #endregion

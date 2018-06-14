@@ -44,6 +44,15 @@ namespace System.Reactive.Linq.ObservableImpl
             Unblock();
         }
         public abstract void OnNext(T value);
+
+        public new void Dispose()
+        {
+            base.Dispose();
+            if (!Disposable.GetIsDisposed(ref _upstream))
+            {
+                Disposable.TryDispose(ref _upstream);
+            }
+        }
     }
 
     internal sealed class FirstBlocking<T> : BaseBlocking<T>
