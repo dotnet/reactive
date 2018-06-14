@@ -120,6 +120,28 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
+        public void Append_Many_Take()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(150, 1),
+                OnNext(220, 2),
+                OnCompleted<int>(250)
+            );
+
+            var res = scheduler.Start(() =>
+                xs.Append(3).Append(4).Append(5).Take(2)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, 2),
+                OnNext(250, 3),
+                OnCompleted<int>(250)
+            );
+        }
+
+        [Fact]
         public void Append_Many_Scheduler()
         {
             var scheduler = new TestScheduler();
@@ -140,6 +162,28 @@ namespace ReactiveTests.Tests
                 OnNext(253, 4),
                 OnNext(255, 5),
                 OnCompleted<int>(256)
+            );
+        }
+
+        [Fact]
+        public void Append_Many_Take_Scheduler()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(150, 1),
+                OnNext(220, 2),
+                OnCompleted<int>(250)
+            );
+
+            var res = scheduler.Start(() =>
+                xs.Append(3, scheduler).Append(4, scheduler).Append(5, scheduler).Take(2)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, 2),
+                OnNext(251, 3),
+                OnCompleted<int>(251)
             );
         }
     }
