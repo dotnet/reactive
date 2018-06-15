@@ -856,7 +856,6 @@ namespace System.Reactive.Linq.ObservableImpl
             internal class _ : Sink<TSource, TResult> 
             {
                 protected readonly object _gate = new object();
-                private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
                 private readonly CompositeDisposable _group = new CompositeDisposable();
 
                 private readonly Func<TSource, IObservable<TResult>> _selector;
@@ -865,8 +864,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     : base(observer)
                 {
                     _selector = parent._selector;
-
-                    _group.Add(_sourceSubscription);
                 }
 
                 private bool _isStopped;
@@ -875,9 +872,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _isStopped = false;
 
-                    _sourceSubscription.Disposable = source.SubscribeSafe(this);
-
-                    SetUpstream(_group);
+                    base.Run(source);
                 }
 
                 public override void OnNext(TSource value)
@@ -913,14 +908,22 @@ namespace System.Reactive.Linq.ObservableImpl
                     Final();
                 }
 
+                protected override void Dispose(bool disposing)
+                {
+                    base.Dispose(disposing);
+
+                    if (disposing)
+                        _group.Dispose();
+                }
+
                 protected void Final()
                 {
                     _isStopped = true;
-                    if (_group.Count == 1)
+                    if (_group.Count == 0)
                     {
                         //
                         // Notice there can be a race between OnCompleted of the source and any
-                        // of the inner sequences, where both see _group.Count == 1, and one is
+                        // of the inner sequences, where both see _group.Count == 0, and one is
                         // waiting for the lock. There won't be a double OnCompleted observation
                         // though, because the call to Dispose silences the observer by swapping
                         // in a NopObserver<T>.
@@ -932,7 +935,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        _sourceSubscription.Dispose();
+                        DisposeUpstream();
                     }
                 }
 
@@ -971,7 +974,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     public void OnCompleted()
                     {
                         _parent._group.Remove(_self);
-                        if (_parent._isStopped && _parent._group.Count == 1)
+                        if (_parent._isStopped && _parent._group.Count == 0)
                         {
                             //
                             // Notice there can be a race between OnCompleted of the source and any
