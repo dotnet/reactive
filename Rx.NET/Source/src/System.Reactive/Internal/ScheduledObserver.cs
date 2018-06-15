@@ -28,7 +28,7 @@ namespace System.Reactive
         private readonly IObserver<T> _observer;
         private readonly IScheduler _scheduler;
         private readonly ISchedulerLongRunning _longRunning;
-        private readonly SerialDisposable _disposable = new SerialDisposable();
+        private IDisposable _disposable;
 
         public ScheduledObserver(IScheduler scheduler, IObserver<T> observer)
         {
@@ -73,11 +73,11 @@ namespace System.Reactive
                     {
                         _dispatcherJob = _longRunning.ScheduleLongRunning(Dispatch);
 
-                        _disposable.Disposable = StableCompositeDisposable.Create
+                        Disposable.TrySetSerial(ref _disposable, StableCompositeDisposable.Create
                         (
                             _dispatcherJob,
                             _dispatcherEventRelease
-                        );
+                        ));
                     }
                 }
             }
@@ -192,7 +192,7 @@ namespace System.Reactive
 
             if (isOwner)
             {
-                _disposable.Disposable = _scheduler.Schedule<object>(null, Run);
+                Disposable.TrySetSerial(ref _disposable, _scheduler.Schedule<object>(null, Run));
             }
         }
 
@@ -304,7 +304,7 @@ namespace System.Reactive
 
             if (disposing)
             {
-                _disposable.Dispose();
+                Disposable.TryDispose(ref _disposable);
             }
         }
     }
