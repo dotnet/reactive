@@ -5,6 +5,7 @@
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
+using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -88,7 +89,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly IScheduler _scheduler;
             private readonly TimeSpan _disconnectTime;
             private readonly IConnectableObservable<TSource> _source;
-            private readonly SerialDisposable _serial = new SerialDisposable();
+            private IDisposable _serial;
 
             private int _count;
             private IDisposable _connectableSubscription;
@@ -125,7 +126,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             if (parent._connectableSubscription == null)
                                 parent._connectableSubscription = parent._source.Connect();
 
-                            parent._serial.Disposable = new SingleAssignmentDisposable();
+                            Disposable.TrySetSerial(ref parent._serial, new SingleAssignmentDisposable());
                         }
                     }
 
@@ -137,13 +138,13 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             if (--parent._count == 0)
                             {
-                                var cancelable = (SingleAssignmentDisposable)parent._serial.Disposable;
+                                var cancelable = (SingleAssignmentDisposable)Volatile.Read(ref parent._serial);
 
                                 cancelable.Disposable = parent._scheduler.Schedule(cancelable, parent._disconnectTime, (self, state) =>
                                 {
                                     lock (parent._gate)
                                     {
-                                        if (object.ReferenceEquals(parent._serial.Disposable, state))
+                                        if (object.ReferenceEquals(Volatile.Read(ref parent._serial), state))
                                         {
                                             parent._connectableSubscription.Dispose();
                                             parent._connectableSubscription = null;

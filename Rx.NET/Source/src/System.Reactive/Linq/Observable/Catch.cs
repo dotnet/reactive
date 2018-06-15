@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -89,22 +90,27 @@ namespace System.Reactive.Linq.ObservableImpl
                 _handler = handler;
             }
 
-            private SerialDisposable _subscription;
+            bool _once;
+
+            private IDisposable _subscription;
 
             public override void Run(IObservable<TSource> source)
             {
-                _subscription = new SerialDisposable();
+                Disposable.TrySetSingle(ref _subscription, source.SubscribeSafe(this));
+            }
 
-                var d1 = new SingleAssignmentDisposable();
-                _subscription.Disposable = d1;
-                d1.Disposable = source.SubscribeSafe(this);
-
-                SetUpstream(_subscription);
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _subscription);
+                }
+                base.Dispose(disposing);
             }
 
             public override void OnError(Exception error)
             {
-                if (error is TException e)
+                if (!Volatile.Read(ref _once) && error is TException e)
                 {
                     var result = default(IObservable<TSource>);
                     try
@@ -117,38 +123,12 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    var d = new SingleAssignmentDisposable();
-                    _subscription.Disposable = d;
-                    d.Disposable = result.SubscribeSafe(new HandlerObserver(this));
+                    Volatile.Write(ref _once, true);
+                    Disposable.TrySetSerial(ref _subscription, result.SubscribeSafe(this));
                 }
                 else
                 {
                     ForwardOnError(error);
-                }
-            }
-
-            private sealed class HandlerObserver : IObserver<TSource>
-            {
-                private readonly _ _parent;
-
-                public HandlerObserver(_ parent)
-                {
-                    _parent = parent;
-                }
-
-                public void OnNext(TSource value)
-                {
-                    _parent.ForwardOnNext(value);
-                }
-
-                public void OnError(Exception error)
-                {
-                    _parent.ForwardOnError(error);
-                }
-
-                public void OnCompleted()
-                {
-                    _parent.ForwardOnCompleted();
                 }
             }
         }
