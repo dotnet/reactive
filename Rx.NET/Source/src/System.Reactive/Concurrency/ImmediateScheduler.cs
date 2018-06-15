@@ -49,7 +49,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">The action to execute on this scheduler.</param>
         /// <returns>The disposable instance that allows canceling the action before it runs.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
-        public IDisposable ScheduleDirect<TState>(TState state, Action<TState> action)
+        IDisposable IOneTimeScheduler.ScheduleDirect<TState>(TState state, Action<TState> action)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
@@ -68,7 +68,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">The action to execute on this scheduler.</param>
         /// <returns>The disposable instance that allows canceling the action before it runs.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
-        public IDisposable ScheduleDirect<TState>(TState state, TimeSpan dueTime, Action<TState> action)
+        IDisposable IOneTimeScheduler.ScheduleDirect<TState>(TState state, TimeSpan dueTime, Action<TState> action)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
