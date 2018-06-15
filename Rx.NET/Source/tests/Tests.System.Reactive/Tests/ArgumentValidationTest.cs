@@ -282,10 +282,10 @@ namespace ReactiveTests.Tests
         /// check for nulls in their arguments as
         /// well as when invoking Subscribe with null.
         /// </summary>
-        /// <param name="clazz">The class to verify.</param>
-        static void VerifyClass(Type clazz)
+        /// <param name="type">The type to verify.</param>
+        static void VerifyClass(Type type)
         {
-            foreach (var method in clazz.GetMethods())
+            foreach (var method in type.GetMethods())
             {
                 // public static only (skip methods like Equals)
 
@@ -319,13 +319,11 @@ namespace ReactiveTests.Tests
                         {
                             targs[k] = typeof(int);
                         }
-                        else
-                        if (gac[0] == typeof(Exception))
+                        else if (gac[0] == typeof(Exception))
                         {
                             targs[k] = typeof(Exception);
                         }
-                        else
-                        if (gac[0] == typeof(IDisposable))
+                        else if (gac[0] == typeof(IDisposable))
                         {
                             targs[k] = typeof(IDisposable);
                         }
