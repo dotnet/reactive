@@ -9,6 +9,45 @@ namespace System.Reactive.Linq
 {
     public static partial class Observable
     {
+        #region + Append +
+
+        /// <summary>
+        /// Append a value to an observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence to append the value to.</param>
+        /// <param name="value">Value to append to the specified sequence.</param>
+        /// <returns>The source sequence appended with the specified value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static IObservable<TSource> Append<TSource>(this IObservable<TSource> source, TSource value)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return s_impl.Append<TSource>(source, value);
+        }
+
+        /// <summary>
+        /// Append a value to an observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence to append the value to.</param>
+        /// <param name="value">Value to append to the specified sequence.</param>
+        /// <param name="scheduler">Scheduler to emit the append values on.</param>
+        /// <returns>The source sequence appended with the specified value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static IObservable<TSource> Append<TSource>(this IObservable<TSource> source, TSource value, IScheduler scheduler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return s_impl.Append<TSource>(source, value, scheduler);
+        }
+
+        #endregion
+
         #region + AsObservable +
 
         /// <summary>
@@ -341,6 +380,44 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + Prepend +
+
+        /// <summary>
+        /// Prepend a value to an observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence to prepend the value to.</param>
+        /// <param name="value">Value to prepend to the specified sequence.</param>
+        /// <returns>The source sequence prepended with the specified value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static IObservable<TSource> Prepend<TSource>(this IObservable<TSource> source, TSource value)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return s_impl.Prepend<TSource>(source, value);
+        }
+
+        /// <summary>
+        /// Prepend a value to an observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence to prepend the value to.</param>
+        /// <param name="value">Value to prepend to the specified sequence.</param>
+        /// <param name="scheduler">Scheduler to emit the prepend values on.</param>
+        /// <returns>The source sequence prepended with the specified value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static IObservable<TSource> Prepend<TSource>(this IObservable<TSource> source, TSource value, IScheduler scheduler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return s_impl.Prepend<TSource>(source, value, scheduler);
+        }
+
+        #endregion
         #region + Repeat +
 
         /// <summary>
