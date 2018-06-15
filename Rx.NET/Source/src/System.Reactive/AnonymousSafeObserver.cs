@@ -28,12 +28,11 @@ namespace System.Reactive
 
         private int isStopped;
 
-        public AnonymousSafeObserver(Action<T> onNext, Action<Exception> onError, Action onCompleted, IDisposable disposable)
+        public AnonymousSafeObserver(Action<T> onNext, Action<Exception> onError, Action onCompleted)
         {
             _onNext = onNext;
             _onError = onError;
             _onCompleted = onCompleted;
-            SetResource(disposable);
         }
 
         public void OnNext(T value)
