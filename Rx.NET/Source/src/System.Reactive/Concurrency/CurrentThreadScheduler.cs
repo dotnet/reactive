@@ -64,7 +64,7 @@ namespace System.Reactive.Concurrency
         /// Gets a value that indicates whether the caller must call a Schedule method.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static bool IsScheduleRequired => !running && GetQueue() == null;
+        public static bool IsScheduleRequired => !running;
 
         /// <summary>
         /// Schedules an action to be executed immediately.
