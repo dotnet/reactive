@@ -10,7 +10,7 @@ namespace System.Reactive.Concurrency
     /// Represents an object that schedules units of work to run immediately on the current thread.
     /// </summary>
     /// <seealso cref="Scheduler.Immediate">Singleton instance of this type exposed through this static property.</seealso>
-    public sealed class ImmediateScheduler : LocalScheduler
+    public sealed class ImmediateScheduler : LocalScheduler, IOneTimeScheduler
     {
         private static readonly Lazy<ImmediateScheduler> s_instance = new Lazy<ImmediateScheduler>(() => new ImmediateScheduler());
 
@@ -37,6 +37,49 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
 
             return action(new AsyncLockScheduler(), state);
+        }
+
+        /// <summary>
+        /// Schedule the immediate execution of an action with the
+        /// given associated state.
+        /// </summary>
+        /// <typeparam name="TState">The type of the state instance.</typeparam>
+        /// <param name="state">The state to be handed to the action when run
+        /// by this scheduler.</param>
+        /// <param name="action">The action to execute on this scheduler.</param>
+        /// <returns>The disposable instance that allows canceling the action before it runs.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        public IDisposable ScheduleDirect<TState>(TState state, Action<TState> action)
+        {
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+            action(state);
+            return Disposable.Empty;
+        }
+
+        /// <summary>
+        /// Schedule the delayed execution of an action
+        /// with the given associated state.
+        /// </summary>
+        /// <typeparam name="TState">The type of the state instance.</typeparam>
+        /// <param name="state">The state to be handed to the action when run
+        /// by this scheduler.</param>
+        /// <param name="dueTime">The time delay before the action executes.</param>
+        /// <param name="action">The action to execute on this scheduler.</param>
+        /// <returns>The disposable instance that allows canceling the action before it runs.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        public IDisposable ScheduleDirect<TState>(TState state, TimeSpan dueTime, Action<TState> action)
+        {
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            var dt = Scheduler.Normalize(dueTime);
+            if (dt.Ticks > 0)
+            {
+                ConcurrencyAbstractionLayer.Current.Sleep(dt);
+            }
+            action(state);
+            return Disposable.Empty;
         }
 
         /// <summary>
