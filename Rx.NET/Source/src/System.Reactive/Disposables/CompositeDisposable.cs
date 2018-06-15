@@ -110,7 +110,7 @@ namespace System.Reactive.Disposables
             _disposables = list;
             // _count can be read by other threads and thus should be properly visible
             // also releases the _disposables contents so it becomes thread-safe
-            Volatile.Write(ref _count, _disposables.Count());
+            Volatile.Write(ref _count, _disposables.Count);
         }
 
         /// <summary>
