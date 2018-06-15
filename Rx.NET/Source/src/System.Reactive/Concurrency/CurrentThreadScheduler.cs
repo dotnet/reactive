@@ -31,6 +31,9 @@ namespace System.Reactive.Concurrency
         [ThreadStatic]
         private static IStopwatch s_clock;
 
+        [ThreadStatic]
+        private static bool running;
+
         private static SchedulerQueue<TimeSpan> GetQueue() => s_threadLocalQueue;
 
         private static void SetQueue(SchedulerQueue<TimeSpan> newQueue)
@@ -61,7 +64,79 @@ namespace System.Reactive.Concurrency
         /// Gets a value that indicates whether the caller must call a Schedule method.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static bool IsScheduleRequired => GetQueue() == null;
+        public static bool IsScheduleRequired => !running && GetQueue() == null;
+
+        /// <summary>
+        /// Schedules an action to be executed immediately.
+        /// </summary>
+        /// <typeparam name="TState">The type of the state passed to the scheduled action.</typeparam>
+        /// <param name="state">State passed to the action to be executed.</param>
+        /// <param name="action">Action to be executed.</param>
+        /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
+        public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
+        {
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            var queue = default(SchedulerQueue<TimeSpan>);
+
+            // There is no timed task and no task is currently running
+            if (!running)
+            {
+                running = true;
+
+                // execute directly without queueing
+                IDisposable d;
+                try
+                {
+                    d = action(this, state);
+                }
+                catch
+                {
+                    SetQueue(null);
+                    running = false;
+                    throw;
+                }
+
+                // did recursive tasks arrive?
+                queue = GetQueue();
+
+                // yes, run those in the queue as well
+                if (queue != null)
+                {
+                    try
+                    {
+                        Trampoline.Run(queue);
+                    }
+                    finally
+                    {
+                        SetQueue(null);
+                        running = false;
+                    }
+                }
+                else
+                {
+                    running = false;
+                }
+
+                return d;
+            }
+
+            queue = GetQueue();
+
+            // if there is a task running or there is a queue
+            if (queue == null)
+            {
+                queue = new SchedulerQueue<TimeSpan>(4);
+                SetQueue(queue);
+            }
+
+            // queue up more work
+            var si = new ScheduledItem<TimeSpan, TState>(this, state, action, Time);
+            queue.Enqueue(si);
+            return si;
+        }
 
         /// <summary>
         /// Schedules an action to be executed after dueTime.
@@ -86,9 +161,13 @@ namespace System.Reactive.Concurrency
             if (queue == null)
             {
                 queue = new SchedulerQueue<TimeSpan>(4);
-                queue.Enqueue(si);
-
                 SetQueue(queue);
+            }
+            queue.Enqueue(si);
+
+            if (!running)
+            {
+                running = true;
                 try
                 {
                     Trampoline.Run(queue);
@@ -96,11 +175,8 @@ namespace System.Reactive.Concurrency
                 finally
                 {
                     SetQueue(null);
+                    running = false;
                 }
-            }
-            else
-            {
-                queue.Enqueue(si);
             }
 
             return si;
