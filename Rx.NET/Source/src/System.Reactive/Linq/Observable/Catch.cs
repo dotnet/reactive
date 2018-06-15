@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -109,7 +110,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception error)
             {
-                if (!_once && error is TException e)
+                if (!Volatile.Read(ref _once) && error is TException e)
                 {
                     var result = default(IObservable<TSource>);
                     try
@@ -122,7 +123,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    _once = true;
+                    Volatile.Write(ref _once, true);
                     Disposable.TrySetSerial(ref _subscription, result.SubscribeSafe(this));
                 }
                 else
