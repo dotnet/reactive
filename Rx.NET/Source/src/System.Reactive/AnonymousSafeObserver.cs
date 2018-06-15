@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Disposables;
 using System.Threading;
 
 namespace System.Reactive
@@ -18,12 +19,12 @@ namespace System.Reactive
     /// that accept delegates for the On* handlers. By doing the fusion, we make the call stack depth shorter which
     /// helps debugging and some performance.
     /// </summary>
-    internal sealed class AnonymousSafeObserver<T> : IObserver<T>
+    internal sealed class AnonymousSafeObserver<T> : ISafeObserver<T>
     {
         private readonly Action<T> _onNext;
         private readonly Action<Exception> _onError;
         private readonly Action _onCompleted;
-        private readonly IDisposable _disposable;
+        private IDisposable _disposable;
 
         private int isStopped;
 
@@ -32,7 +33,7 @@ namespace System.Reactive
             _onNext = onNext;
             _onError = onError;
             _onCompleted = onCompleted;
-            _disposable = disposable;
+            SetResource(disposable);
         }
 
         public void OnNext(T value)
@@ -48,7 +49,7 @@ namespace System.Reactive
                 finally
                 {
                     if (!__noError)
-                        _disposable.Dispose();
+                        Dispose();
                 }
             }
         }
@@ -57,13 +58,9 @@ namespace System.Reactive
         {
             if (Interlocked.Exchange(ref isStopped, 1) == 0)
             {
-                try
+                using (this)
                 {
                     _onError(error);
-                }
-                finally
-                {
-                    _disposable.Dispose();
                 }
             }
         }
@@ -72,15 +69,21 @@ namespace System.Reactive
         {
             if (Interlocked.Exchange(ref isStopped, 1) == 0)
             {
-                try
+                using (this)
                 {
                     _onCompleted();
                 }
-                finally
-                {
-                    _disposable.Dispose();
-                }
             }
+        }
+
+        public void SetResource(IDisposable resource)
+        {
+            Disposable.SetSingle(ref _disposable, resource);
+        }
+
+        public void Dispose()
+        {
+            Disposable.TryDispose(ref _disposable);
         }
     }
 }

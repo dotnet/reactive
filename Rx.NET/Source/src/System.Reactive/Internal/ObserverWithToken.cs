@@ -15,7 +15,7 @@ namespace System.Reactive
     /// to be disposed upon termination.
     /// </summary>
     /// <typeparam name="T">The element type of the sequence.</typeparam>
-    internal sealed class ObserverWithToken<T> : IObserver<T>
+    internal sealed class ObserverWithToken<T> : ISafeObserver<T>
     {
         readonly IObserver<T> _downstream;
 
@@ -23,41 +23,38 @@ namespace System.Reactive
 
         public ObserverWithToken(IObserver<T> downstream)
         {
-            this._downstream = downstream;
-        }
-
-        internal void SetTokenDisposable(IDisposable d)
-        {
-            Disposable.SetSingle(ref _tokenDisposable, d);
+            _downstream = downstream;
         }
 
         public void OnCompleted()
         {
-            try
+            using (this)
             {
                 _downstream.OnCompleted();
-            }
-            finally
-            {
-                Disposable.TryDispose(ref _tokenDisposable);    
             }
         }
 
         public void OnError(Exception error)
         {
-            try
+            using (this)
             {
                 _downstream.OnError(error);
-            }
-            finally
-            {
-                Disposable.TryDispose(ref _tokenDisposable);
             }
         }
 
         public void OnNext(T value)
         {
             _downstream.OnNext(value);
+        }
+
+        public void SetResource(IDisposable resource)
+        {
+            Disposable.SetSingle(ref _tokenDisposable, resource);
+        }
+
+        public void Dispose()
+        {
+            Disposable.TryDispose(ref _tokenDisposable);
         }
     }
 }
