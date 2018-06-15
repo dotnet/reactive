@@ -13,6 +13,36 @@ $signClientSettings = Join-Path (Join-Path (Get-Item $scriptPath).Parent.Parent.
 $hasSignClientSecret = !([string]::IsNullOrEmpty($env:SignClientSecret))
 $signClientAppPath = ".\packages\SignClient\tools\netcoreapp2.0\SignClient.dll"
 
+$licenseHeader = "// Licensed to the .NET Foundation under one or more agreements.// The .NET Foundation licenses this file to you under the Apache 2.0 License.// See the LICENSE file in the project root for more information."
+
+$hasValidHeaders = Get-ChildItem $scriptPath -Recurse -File | ? { $_.Extension -match "[a-zA-Z]*\.cs$" } | ? { $_.DirectoryName -notmatch ".*\\obj\\(.*\\)?(Debug|Release)" } | ? { $_.Name -notmatch "^AssemblyInfo.cs$|.*Designer.cs$|.*Generated.cs$" } | % `
+{
+    $content = Get-Content $_.FullName -TotalCount 3
+    
+    if ($content)
+    {
+        $containsWord = ([string]::Join("", $content)) | %{$_ -match $licenseHeader}
+
+        if ($containsWord -match $true)
+        {
+            $true;
+            return;
+        }
+    }
+    
+    Write-Host ($_.FullName + " does not have a valid license header.") -Foreground Red
+    $false;
+}
+
+if ($hasValidHeaders -contains $false)
+{
+    Write-Host ("Some license headers were missing.") -Foreground Red
+    if($isCloudBuild) {
+        $host.SetShouldExit(1)
+        exit 1
+    }  
+}
+
 #remove any old coverage file
 md -Force $outputLocation | Out-Null
 $outputPath = (Resolve-Path $outputLocation).Path
