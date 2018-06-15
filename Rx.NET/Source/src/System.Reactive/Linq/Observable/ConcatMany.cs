@@ -19,6 +19,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public IDisposable Subscribe(IObserver<T> observer)
         {
+            if (observer == null)
+            {
+                throw new ArgumentNullException(nameof(observer));
+            }
             var parent = new ConcatManyOuterObserver(observer);
             var d = sources.SubscribeSafe(parent);
             parent.OnSubscribe(d);
