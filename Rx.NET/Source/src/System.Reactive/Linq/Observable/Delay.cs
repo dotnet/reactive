@@ -802,29 +802,33 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 protected override IDisposable RunCore(SelectorWithSubscriptionDelay parent)
                 {
-                    var subscription = new SerialDisposable();
+                    var delayConsumer = new SubscriptionDelayObserver(this, parent._source);
 
-                    subscription.Disposable = parent._subscriptionDelay.SubscribeSafe(new SubscriptionDelayObserver(this, parent._source, subscription));
+                    delayConsumer.SetFirst(parent._subscriptionDelay.SubscribeSafe(delayConsumer));
 
-                    return subscription;
+                    return delayConsumer;
                 }
 
-                private sealed class SubscriptionDelayObserver : IObserver<TDelay>
+                private sealed class SubscriptionDelayObserver : IObserver<TDelay>, IDisposable
                 {
                     private readonly _ _parent;
                     private readonly IObservable<TSource> _source;
-                    private readonly SerialDisposable _subscription;
+                    private IDisposable _subscription;
 
-                    public SubscriptionDelayObserver(_ parent, IObservable<TSource> source, SerialDisposable subscription)
+                    public SubscriptionDelayObserver(_ parent, IObservable<TSource> source)
                     {
                         _parent = parent;
                         _source = source;
-                        _subscription = subscription;
+                    }
+
+                    internal void SetFirst(IDisposable d)
+                    {
+                        Disposable.TrySetSingle(ref _subscription, d);
                     }
 
                     public void OnNext(TDelay value)
                     {
-                        _subscription.Disposable = _source.SubscribeSafe(_parent);
+                        Disposable.TrySetSerial(ref _subscription, _source.SubscribeSafe(_parent));
                     }
 
                     public void OnError(Exception error)
@@ -834,7 +838,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     public void OnCompleted()
                     {
-                        _subscription.Disposable = _source.SubscribeSafe(_parent);
+                        Disposable.TrySetSerial(ref _subscription, _source.SubscribeSafe(_parent));
+                    }
+
+                    public void Dispose()
+                    {
+                        Disposable.TryDispose(ref _subscription);
                     }
                 }
             }
