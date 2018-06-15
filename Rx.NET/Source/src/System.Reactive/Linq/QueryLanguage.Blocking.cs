@@ -67,45 +67,26 @@ namespace System.Reactive.Linq
 
         private static TSource FirstOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
         {
-            var value = default(TSource);
-            var seenValue = false;
-            var ex = default(Exception);
-
-            using (var evt = new WaitAndSetOnce())
+            using (var consumer = new FirstBlocking<TSource>())
             {
-                //
-                // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
-                //
-                using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
-                    v =>
-                    {
-                        if (!seenValue)
-                        {
-                            value = v;
-                        }
-                        seenValue = true;
-                        evt.Set();
-                    },
-                    e =>
-                    {
-                        ex = e;
-                        evt.Set();
-                    },
-                    () =>
-                    {
-                        evt.Set();
-                    })))
+                using (var d = source.Subscribe(consumer))
                 {
-                    evt.WaitOne();
+                    consumer.SetUpstream(d);
+
+                    if (consumer.CurrentCount != 0)
+                    {
+                        consumer.Wait();
+                    }
                 }
+
+                consumer._error.ThrowIfNotNull();
+
+                if (throwOnEmpty && !consumer._hasValue)
+                {
+                    throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                }
+                return consumer._value;
             }
-
-            ex.ThrowIfNotNull();
-
-            if (throwOnEmpty && !seenValue)
-                throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
-
-            return value;
         }
 
         #endregion
@@ -182,41 +163,27 @@ namespace System.Reactive.Linq
 
         private static TSource LastOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
         {
-            var value = default(TSource);
-            var seenValue = false;
-            var ex = default(Exception);
-
-            using (var evt = new WaitAndSetOnce())
+            using (var consumer = new LastBlocking<TSource>())
             {
-                //
-                // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
-                //
-                using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
-                    v =>
-                    {
-                        seenValue = true;
-                        value = v;
-                    },
-                    e =>
-                    {
-                        ex = e;
-                        evt.Set();
-                    },
-                    () =>
-                    {
-                        evt.Set();
-                    })))
+
+                using (var d = source.Subscribe(consumer))
                 {
-                    evt.WaitOne();
+                    consumer.SetUpstream(d);
+
+                    if (consumer.CurrentCount != 0)
+                    {
+                        consumer.Wait();
+                    }
                 }
+
+                consumer._error.ThrowIfNotNull();
+
+                if (throwOnEmpty && !consumer._hasValue)
+                {
+                    throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                }
+                return consumer._value;
             }
-
-            ex.ThrowIfNotNull();
-
-            if (throwOnEmpty && !seenValue)
-                throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
-
-            return value;
         }
 
         #endregion

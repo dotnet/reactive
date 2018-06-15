@@ -1,5 +1,5 @@
 /*
- * WARNING: Auto-generated file (06/12/2018 13:00:48)
+ * WARNING: Auto-generated file (merged on 06/13/2018)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 
@@ -306,6 +306,66 @@ namespace System.Reactive.Linq
 #endif
                     source.Expression,
                     predicate
+                )
+            );
+        }
+
+        /// <summary>
+        /// Append a value to an observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence to append the value to.</param>
+        /// <param name="value">Value to append to the specified sequence.</param>
+        /// <returns>The source sequence appended with the specified value.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> is null.</exception>
+        public static IQbservable<TSource> Append<TSource>(this IQbservable<TSource> source, TSource value)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Append<TSource>(default(IQbservable<TSource>), default(TSource))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    source.Expression,
+                    Expression.Constant(value, typeof(TSource))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Append a value to an observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence to append the value to.</param>
+        /// <param name="value">Value to append to the specified sequence.</param>
+        /// <param name="scheduler">Scheduler to emit the append values on.</param>
+        /// <returns>The source sequence appended with the specified value.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> is null.</exception>
+        public static IQbservable<TSource> Append<TSource>(this IQbservable<TSource> source, TSource value, IScheduler scheduler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Append<TSource>(default(IQbservable<TSource>), default(TSource), default(IScheduler))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    source.Expression,
+                    Expression.Constant(value, typeof(TSource)),
+                    Expression.Constant(scheduler, typeof(IScheduler))
                 )
             );
         }
@@ -10468,6 +10528,66 @@ namespace System.Reactive.Linq
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     GetSourceExpression(sources)
+                )
+            );
+        }
+
+        /// <summary>
+        /// Prepend a value to an observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence to prepend the value to.</param>
+        /// <param name="value">Value to prepend to the specified sequence.</param>
+        /// <returns>The source sequence prepended with the specified value.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> is null.</exception>
+        public static IQbservable<TSource> Prepend<TSource>(this IQbservable<TSource> source, TSource value)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Prepend<TSource>(default(IQbservable<TSource>), default(TSource))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    source.Expression,
+                    Expression.Constant(value, typeof(TSource))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Prepend a value to an observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence to prepend the value to.</param>
+        /// <param name="value">Value to prepend to the specified sequence.</param>
+        /// <param name="scheduler">Scheduler to emit the prepend values on.</param>
+        /// <returns>The source sequence prepended with the specified value.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> is null.</exception>
+        public static IQbservable<TSource> Prepend<TSource>(this IQbservable<TSource> source, TSource value, IScheduler scheduler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Prepend<TSource>(default(IQbservable<TSource>), default(TSource), default(IScheduler))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    source.Expression,
+                    Expression.Constant(value, typeof(TSource)),
+                    Expression.Constant(scheduler, typeof(IScheduler))
                 )
             );
         }

@@ -37,6 +37,7 @@ namespace System.Reactive.Concurrency
         /// processed by the owner.
         /// </summary>
         /// <param name="action">Action to queue for execution.</param>
+        /// <param name="state">The state to pass to the action when it gets invoked under the lock.</param>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         /// <remarks>In case TState is a value type, this operation will involve boxing of <paramref name="state"/>.
         /// However, this is often an improvement over the allocation of a closure object and a delegate.</remarks>

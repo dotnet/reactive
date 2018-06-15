@@ -259,30 +259,14 @@ namespace System
             {
                 if (!token.IsCancellationRequested)
                 {
-                    var r = new SingleAssignmentDisposable();
+                    var consumer = new ObserverWithToken<T>(observer);
 
                     //
                     // [OK] Use of unsafe Subscribe: exception during Subscribe doesn't orphan CancellationTokenRegistration.
                     //
-                    var d = source.Subscribe/*Unsafe*/(
-                        observer.OnNext,
-                        ex =>
-                        {
-                            using (r)
-                            {
-                                observer.OnError(ex);
-                            }
-                        },
-                        () =>
-                        {
-                            using (r)
-                            {
-                                observer.OnCompleted();
-                            }
-                        }
-                    );
+                    var d = source.Subscribe/*Unsafe*/(consumer);
 
-                    r.Disposable = token.Register(d.Dispose);
+                    consumer.SetTokenDisposable(token.Register(state => ((IDisposable)state).Dispose(), d));
                 }
             }
             else
