@@ -26,7 +26,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Append_<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
-            return source.Concat(new [] { value }.ToObservable(scheduler));
+            return new Append<TSource>(source, value, scheduler);
         }
 
         #endregion
@@ -187,7 +187,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Prepend_<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
-            return StartWith_(source, scheduler, new[] { value });
+            return new Prepend<TSource>(source, value, scheduler);
         }
 
         #endregion
