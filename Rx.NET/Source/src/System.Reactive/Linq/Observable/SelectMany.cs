@@ -1549,7 +1549,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        task.ContinueWith(OnCompletedTask);
+                        task.ContinueWith((closureTask, @thisObject) => ((_)@thisObject).OnCompletedTask(closureTask), this);
                     }
                 }
 
