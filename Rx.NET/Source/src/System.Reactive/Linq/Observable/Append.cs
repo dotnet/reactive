@@ -26,7 +26,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private readonly IObservable<TSource> _source;
             private readonly TSource _value;
             private readonly IScheduler _scheduler;
             private IDisposable _schedulerDisposable;
@@ -47,19 +46,17 @@ namespace System.Reactive.Linq.ObservableImpl
             private static IDisposable ForwardValue(IScheduler scheduler, _ sink)
             {
                 sink.ForwardOnNext(sink._value);
-                return scheduler.Schedule(sink, ForwardOnCompleted);
-            }
-
-            private static IDisposable ForwardOnCompleted(IScheduler _unused, _ sink)
-            {
                 sink.ForwardOnCompleted();
-                return BooleanDisposable.True;
+                return Disposable.Empty;
             }
 
-            protected override void Dispose(bool val)
+            protected override void Dispose(bool disposing)
             {
-                base.Dispose(val);
-                Disposable.TryDispose(ref _schedulerDisposable);
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _schedulerDisposable);
+                }
+                base.Dispose(disposing);
             }
         }
     }

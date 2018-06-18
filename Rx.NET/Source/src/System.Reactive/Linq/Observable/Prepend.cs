@@ -43,10 +43,8 @@ namespace System.Reactive.Linq.ObservableImpl
             private static IDisposable ForwardValue(IScheduler scheduler, _ sink)
             {
                 sink.ForwardOnNext(sink._value);
-                return scheduler.Schedule(sink, ForwardSource);
+                return sink._source.SubscribeSafe(sink);
             }
-
-            private static IDisposable ForwardSource(IScheduler _unused, _ sink) => sink._source.SubscribeSafe(sink);
         }
     }
 }
