@@ -856,23 +856,15 @@ namespace System.Reactive.Linq.ObservableImpl
             internal class _ : Sink<TSource, TResult> 
             {
                 protected readonly object _gate = new object();
-                private readonly CompositeDisposable _group = new CompositeDisposable();
-
                 private readonly Func<TSource, IObservable<TResult>> _selector;
+                private readonly CompositeDisposable _group = new CompositeDisposable();
+                
+                private bool _isStopped;
 
                 public _(ObservableSelector parent, IObserver<TResult> observer)
                     : base(observer)
                 {
                     _selector = parent._selector;
-                }
-
-                private bool _isStopped;
-
-                public override void Run(IObservable<TSource> source)
-                {
-                    _isStopped = false;
-
-                    base.Run(source);
                 }
 
                 public override void OnNext(TSource value)
@@ -1096,20 +1088,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 protected readonly Func<TSource, int, IObservable<TResult>> _selector;
 
+                private int _index;
+                private bool _isStopped;
+
                 public _(ObservableSelectorIndexed parent, IObserver<TResult> observer)
                     : base(observer)
                 {
                     _selector = parent._selector;
-                }
-
-                private bool _isStopped;
-                private int _index;
-
-                public override void Run(IObservable<TSource> source)
-                {
-                    _isStopped = false;
-
-                    base.Run(source);
                 }
 
                 public override void OnNext(TSource value)
