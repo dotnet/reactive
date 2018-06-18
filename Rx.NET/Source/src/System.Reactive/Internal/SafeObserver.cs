@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Disposables;
+
 namespace System.Reactive
 {
     //
@@ -9,68 +11,85 @@ namespace System.Reactive
     // its implementation aspects.
     //
 
-    internal sealed class SafeObserver<TSource> : IObserver<TSource>
+    internal abstract class SafeObserver<TSource> : ISafeObserver<TSource>
     {
-        private readonly IObserver<TSource> _observer;
-        private readonly IDisposable _disposable;
-
-        public static IObserver<TSource> Create(IObserver<TSource> observer, IDisposable disposable)
+        private sealed class WrappingSafeObserver : SafeObserver<TSource>
         {
-            if (observer is AnonymousObserver<TSource> a)
-            {
-                return a.MakeSafe(disposable);
-            }
-            else
-            {
-                return new SafeObserver<TSource>(observer, disposable);
-            }
-        }
+            private readonly IObserver<TSource> _observer;
 
-        private SafeObserver(IObserver<TSource> observer, IDisposable disposable)
-        {
-            _observer = observer;
-            _disposable = disposable;
-        }
-
-        public void OnNext(TSource value)
-        {
-            var __noError = false;
-            try
+            public WrappingSafeObserver(IObserver<TSource> observer)
             {
-                _observer.OnNext(value);
-                __noError = true;
+                _observer = observer;
             }
-            finally
+
+            public override void OnNext(TSource value)
             {
-                if (!__noError)
+                var __noError = false;
+                try
                 {
-                    _disposable.Dispose();
+                    _observer.OnNext(value);
+                    __noError = true;
+                }
+                finally
+                {
+                    if (!__noError)
+                    {
+                        Dispose();
+                    }
+                }
+            }
+
+            public override void OnError(Exception error)
+            {
+                using (this)
+                {
+                    _observer.OnError(error);
+                }
+            }
+
+            public override void OnCompleted()
+            {
+                using (this)
+                {
+                    _observer.OnCompleted();
                 }
             }
         }
 
-        public void OnError(Exception error)
+        public static ISafeObserver<TSource> Wrap(IObserver<TSource> observer)
         {
-            try
+            if (observer is AnonymousObserver<TSource> a)
             {
-                _observer.OnError(error);
+                return a.MakeSafe();
             }
-            finally
+            else
             {
-                _disposable.Dispose();
+                return new WrappingSafeObserver(observer);
             }
         }
 
-        public void OnCompleted()
+        private IDisposable _disposable;
+        
+        public abstract void OnNext(TSource value);
+
+        public abstract void OnError(Exception error);
+
+        public abstract void OnCompleted();
+
+        public void SetResource(IDisposable resource)
         {
-            try
-            {
-                _observer.OnCompleted();
-            }
-            finally
-            {
-                _disposable.Dispose();
-            }
+            Disposable.SetSingle(ref _disposable, resource);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                Disposable.TryDispose(ref _disposable);
         }
     }
 }
