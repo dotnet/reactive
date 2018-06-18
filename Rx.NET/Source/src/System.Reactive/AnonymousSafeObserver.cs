@@ -19,12 +19,11 @@ namespace System.Reactive
     /// that accept delegates for the On* handlers. By doing the fusion, we make the call stack depth shorter which
     /// helps debugging and some performance.
     /// </summary>
-    internal sealed class AnonymousSafeObserver<T> : ISafeObserver<T>
+    internal sealed class AnonymousSafeObserver<T> : SafeObserver<T>
     {
         private readonly Action<T> _onNext;
         private readonly Action<Exception> _onError;
         private readonly Action _onCompleted;
-        private IDisposable _disposable;
 
         private int isStopped;
 
@@ -35,7 +34,7 @@ namespace System.Reactive
             _onCompleted = onCompleted;
         }
 
-        public void OnNext(T value)
+        public override void OnNext(T value)
         {
             if (isStopped == 0)
             {
@@ -53,7 +52,7 @@ namespace System.Reactive
             }
         }
 
-        public void OnError(Exception error)
+        public override void OnError(Exception error)
         {
             if (Interlocked.Exchange(ref isStopped, 1) == 0)
             {
@@ -64,7 +63,7 @@ namespace System.Reactive
             }
         }
 
-        public void OnCompleted()
+        public override void OnCompleted()
         {
             if (Interlocked.Exchange(ref isStopped, 1) == 0)
             {
@@ -73,16 +72,6 @@ namespace System.Reactive
                     _onCompleted();
                 }
             }
-        }
-
-        public void SetResource(IDisposable resource)
-        {
-            Disposable.SetSingle(ref _disposable, resource);
-        }
-
-        public void Dispose()
-        {
-            Disposable.TryDispose(ref _disposable);
         }
     }
 }
