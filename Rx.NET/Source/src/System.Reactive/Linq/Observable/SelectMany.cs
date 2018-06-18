@@ -941,20 +941,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 protected void SubscribeInner(IObservable<TResult> inner)
                 {
-                    var innerSubscription = new SingleAssignmentDisposable();
-                    _group.Add(innerSubscription);
-                    innerSubscription.Disposable = inner.SubscribeSafe(new InnerObserver(this, innerSubscription));
+                    var innerObserver = new InnerObserver(this);
+
+                    _group.Add(innerObserver);
+                    innerObserver.SetResource(inner.SubscribeSafe(innerObserver));
                 }
 
-                private sealed class InnerObserver : IObserver<TResult>
+                private sealed class InnerObserver : ISafeObserver<TResult>
                 {
                     private readonly _ _parent;
-                    private readonly IDisposable _self;
+                    private IDisposable _self;
 
-                    public InnerObserver(_ parent, IDisposable self)
+                    public InnerObserver(_ parent)
                     {
                         _parent = parent;
-                        _self = self;
                     }
 
                     public void OnNext(TResult value)
@@ -973,7 +973,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     public void OnCompleted()
                     {
-                        _parent._group.Remove(_self);
+                        _parent._group.Remove(this);
                         if (_parent._isStopped && _parent._group.Count == 0)
                         {
                             //
@@ -988,6 +988,16 @@ namespace System.Reactive.Linq.ObservableImpl
                                 _parent.ForwardOnCompleted();
                             }
                         }
+                    }
+
+                    public void SetResource(IDisposable resource)
+                    {
+                        Disposable.SetSingle(ref _self, resource);
+                    }
+
+                    public void Dispose()
+                    {
+                        Disposable.TryDispose(ref _self);
                     }
                 }
             }
