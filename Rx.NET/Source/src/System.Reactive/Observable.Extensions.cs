@@ -266,7 +266,7 @@ namespace System
                     //
                     var d = source.Subscribe/*Unsafe*/(consumer);
 
-                    consumer.SetTokenDisposable(token.Register(state => ((IDisposable)state).Dispose(), d));
+                    consumer.SetResource(token.Register(state => ((IDisposable)state).Dispose(), d));
                 }
             }
             else

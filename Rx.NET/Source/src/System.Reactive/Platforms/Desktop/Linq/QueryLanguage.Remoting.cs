@@ -92,7 +92,7 @@ namespace System.Reactive.Linq
                 //
                 var d = remotableObservable.Subscribe/*Unsafe*/(new RemotableObserver<T>(consumer));
 
-                consumer.SetTokenDisposable(d);
+                consumer.SetResource(d);
 
                 return d;
             }

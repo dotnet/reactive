@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Disposables;
+
 namespace System.Reactive
 {
     //
@@ -9,27 +11,27 @@ namespace System.Reactive
     // its implementation aspects.
     //
 
-    internal sealed class SafeObserver<TSource> : IObserver<TSource>
+    internal sealed class SafeObserver<TSource> : ISafeObserver<TSource>
     {
         private readonly IObserver<TSource> _observer;
-        private readonly IDisposable _disposable;
 
-        public static IObserver<TSource> Create(IObserver<TSource> observer, IDisposable disposable)
+        private IDisposable _disposable;
+
+        public static ISafeObserver<TSource> Create(IObserver<TSource> observer)
         {
             if (observer is AnonymousObserver<TSource> a)
             {
-                return a.MakeSafe(disposable);
+                return a.MakeSafe();
             }
             else
             {
-                return new SafeObserver<TSource>(observer, disposable);
+                return new SafeObserver<TSource>(observer);
             }
         }
 
-        private SafeObserver(IObserver<TSource> observer, IDisposable disposable)
+        private SafeObserver(IObserver<TSource> observer)
         {
             _observer = observer;
-            _disposable = disposable;
         }
 
         public void OnNext(TSource value)
@@ -44,33 +46,35 @@ namespace System.Reactive
             {
                 if (!__noError)
                 {
-                    _disposable.Dispose();
+                    Dispose();
                 }
             }
         }
 
         public void OnError(Exception error)
         {
-            try
+            using (this)
             {
                 _observer.OnError(error);
-            }
-            finally
-            {
-                _disposable.Dispose();
             }
         }
 
         public void OnCompleted()
         {
-            try
+            using (this)
             {
                 _observer.OnCompleted();
             }
-            finally
-            {
-                _disposable.Dispose();
-            }
+        }
+
+        public void SetResource(IDisposable resource)
+        {
+            Disposable.SetSingle(ref _disposable, resource);
+        }
+
+        public void Dispose()
+        {
+            Disposable.TryDispose(ref _disposable);
         }
     }
 }
