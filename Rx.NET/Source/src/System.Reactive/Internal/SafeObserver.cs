@@ -17,7 +17,7 @@ namespace System.Reactive
 
         private IDisposable _disposable;
 
-        public static ISafeObserver<TSource> Create(IObserver<TSource> observer)
+        public static ISafeObserver<TSource> Wrap(IObserver<TSource> observer)
         {
             if (observer is AnonymousObserver<TSource> a)
             {

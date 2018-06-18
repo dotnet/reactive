@@ -46,7 +46,7 @@ namespace System.Reactive
             //
             if (enableSafeguard)
             {
-                var safeObserver = SafeObserver<TSource>.Create(observer);
+                var safeObserver = SafeObserver<TSource>.Wrap(observer);
                 safeObserver.SetResource(subscription);
                 observer = safeObserver;
             }
@@ -100,7 +100,7 @@ namespace System.Reactive
             //
             if (enableSafeguard)
             {
-                observer = safeObserver = SafeObserver<TTarget>.Create(observer);
+                observer = safeObserver = SafeObserver<TTarget>.Wrap(observer);
             }
 
             var sink = CreateSink(observer);
