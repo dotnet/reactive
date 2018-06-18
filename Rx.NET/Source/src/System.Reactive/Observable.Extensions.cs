@@ -259,7 +259,7 @@ namespace System
             {
                 if (!token.IsCancellationRequested)
                 {
-                    var consumer = new ObserverWithToken<T>(observer);
+                    var consumer = SafeObserver<T>.Create(observer);
 
                     //
                     // [OK] Use of unsafe Subscribe: exception during Subscribe doesn't orphan CancellationTokenRegistration.
