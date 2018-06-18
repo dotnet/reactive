@@ -11,11 +11,50 @@ namespace System.Reactive
     // its implementation aspects.
     //
 
-    internal sealed class SafeObserver<TSource> : ISafeObserver<TSource>
+    internal abstract class SafeObserver<TSource> : ISafeObserver<TSource>
     {
-        private readonly IObserver<TSource> _observer;
+        private sealed class WrappingSafeObserver : SafeObserver<TSource>
+        {
+            private readonly IObserver<TSource> _observer;
 
-        private IDisposable _disposable;
+            public WrappingSafeObserver(IObserver<TSource> observer)
+            {
+                _observer = observer;
+            }
+
+            public override void OnNext(TSource value)
+            {
+                var __noError = false;
+                try
+                {
+                    _observer.OnNext(value);
+                    __noError = true;
+                }
+                finally
+                {
+                    if (!__noError)
+                    {
+                        Dispose();
+                    }
+                }
+            }
+
+            public override void OnError(Exception error)
+            {
+                using (this)
+                {
+                    _observer.OnError(error);
+                }
+            }
+
+            public override void OnCompleted()
+            {
+                using (this)
+                {
+                    _observer.OnCompleted();
+                }
+            }
+        }
 
         public static ISafeObserver<TSource> Wrap(IObserver<TSource> observer)
         {
@@ -25,47 +64,17 @@ namespace System.Reactive
             }
             else
             {
-                return new SafeObserver<TSource>(observer);
+                return new WrappingSafeObserver(observer);
             }
         }
 
-        private SafeObserver(IObserver<TSource> observer)
-        {
-            _observer = observer;
-        }
+        private IDisposable _disposable;
+        
+        public abstract void OnNext(TSource value);
 
-        public void OnNext(TSource value)
-        {
-            var __noError = false;
-            try
-            {
-                _observer.OnNext(value);
-                __noError = true;
-            }
-            finally
-            {
-                if (!__noError)
-                {
-                    Dispose();
-                }
-            }
-        }
+        public abstract void OnError(Exception error);
 
-        public void OnError(Exception error)
-        {
-            using (this)
-            {
-                _observer.OnError(error);
-            }
-        }
-
-        public void OnCompleted()
-        {
-            using (this)
-            {
-                _observer.OnCompleted();
-            }
-        }
+        public abstract void OnCompleted();
 
         public void SetResource(IDisposable resource)
         {
@@ -74,7 +83,13 @@ namespace System.Reactive
 
         public void Dispose()
         {
-            Disposable.TryDispose(ref _disposable);
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                Disposable.TryDispose(ref _disposable);
         }
     }
 }
