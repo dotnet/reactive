@@ -947,23 +947,22 @@ namespace System.Reactive.Linq.ObservableImpl
                     innerObserver.SetResource(inner.SubscribeSafe(innerObserver));
                 }
 
-                private sealed class InnerObserver : ISafeObserver<TResult>
+                private sealed class InnerObserver : SafeObserver<TResult>
                 {
                     private readonly _ _parent;
-                    private IDisposable _self;
 
                     public InnerObserver(_ parent)
                     {
                         _parent = parent;
                     }
 
-                    public void OnNext(TResult value)
+                    public override void OnNext(TResult value)
                     {
                         lock (_parent._gate)
                             _parent.ForwardOnNext(value);
                     }
 
-                    public void OnError(Exception error)
+                    public override void OnError(Exception error)
                     {
                         lock (_parent._gate)
                         {
@@ -971,7 +970,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                     }
 
-                    public void OnCompleted()
+                    public override void OnCompleted()
                     {
                         _parent._group.Remove(this);
                         if (_parent._isStopped && _parent._group.Count == 0)
@@ -988,16 +987,6 @@ namespace System.Reactive.Linq.ObservableImpl
                                 _parent.ForwardOnCompleted();
                             }
                         }
-                    }
-
-                    public void SetResource(IDisposable resource)
-                    {
-                        Disposable.SetSingle(ref _self, resource);
-                    }
-
-                    public void Dispose()
-                    {
-                        Disposable.TryDispose(ref _self);
                     }
                 }
             }
