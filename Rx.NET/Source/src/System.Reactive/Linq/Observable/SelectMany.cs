@@ -1246,8 +1246,6 @@ namespace System.Reactive.Linq.ObservableImpl
             new internal sealed class _ : ObservableSelectorIndexed._
             {
                 private readonly object _gate = new object();
-                private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
-                private readonly CompositeDisposable _group = new CompositeDisposable();
 
                 private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
                 private readonly Func<IObservable<TResult>> _selectorOnCompleted;
@@ -1257,8 +1255,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _selectorOnError = parent._selectorOnError;
                     _selectorOnCompleted = parent._selectorOnCompleted;
-
-                    _group.Add(_sourceSubscription);
                 }
 
                 public override void OnError(Exception error)
