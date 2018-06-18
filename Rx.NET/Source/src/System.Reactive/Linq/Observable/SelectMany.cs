@@ -1497,7 +1497,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
-                private readonly CancellationDisposable _cancel = new CancellationDisposable();
+                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 
                 private readonly Func<TSource, CancellationToken, Task<TResult>> _selector;
 
@@ -1520,7 +1520,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        _cancel.Dispose();
+                        _cts.Cancel();
                     }
                     base.Dispose(disposing);
                 }
@@ -1531,7 +1531,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     try
                     {
                         Interlocked.Increment(ref _count);
-                        task = _selector(value, _cancel.Token);
+                        task = _selector(value, _cts.Token);
                     }
                     catch (Exception ex)
                     {
@@ -1575,7 +1575,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             break;
                         case TaskStatus.Canceled:
                             {
-                                if (!_cancel.IsDisposed)
+                                if (!_cts.IsCancellationRequested)
                                 {
                                     lock (_gate)
                                     {
