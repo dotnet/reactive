@@ -234,7 +234,6 @@ namespace System.Reactive.Concurrency
         [System.ObsoleteAttribute("This instance property is no longer supported. Use CurrentThreadScheduler.IsSched" +
             "uleRequired instead.")]
         public bool ScheduleRequired { get; }
-        public override System.IDisposable Schedule<TState>(TState state, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
         public override System.IDisposable Schedule<TState>(TState state, System.TimeSpan dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
     }
     public sealed class DefaultScheduler : System.Reactive.Concurrency.LocalScheduler, System.Reactive.Concurrency.ISchedulerPeriodic

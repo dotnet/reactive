@@ -67,14 +67,15 @@ namespace System.Reactive.Concurrency
         public static bool IsScheduleRequired => !running;
 
         /// <summary>
-        /// Schedules an action to be executed immediately.
+        /// Schedules an action to be executed after dueTime.
         /// </summary>
         /// <typeparam name="TState">The type of the state passed to the scheduled action.</typeparam>
         /// <param name="state">State passed to the action to be executed.</param>
         /// <param name="action">Action to be executed.</param>
+        /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
-        public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
+        public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
@@ -85,6 +86,11 @@ namespace System.Reactive.Concurrency
             if (!running)
             {
                 running = true;
+
+                if (dueTime > TimeSpan.Zero)
+                {
+                    ConcurrencyAbstractionLayer.Current.Sleep(dueTime);
+                }
 
                 // execute directly without queueing
                 IDisposable d;
@@ -132,53 +138,11 @@ namespace System.Reactive.Concurrency
                 SetQueue(queue);
             }
 
-            // queue up more work
-            var si = new ScheduledItem<TimeSpan, TState>(this, state, action, Time);
-            queue.Enqueue(si);
-            return si;
-        }
-
-        /// <summary>
-        /// Schedules an action to be executed after dueTime.
-        /// </summary>
-        /// <typeparam name="TState">The type of the state passed to the scheduled action.</typeparam>
-        /// <param name="state">State passed to the action to be executed.</param>
-        /// <param name="action">Action to be executed.</param>
-        /// <param name="dueTime">Relative time after which to execute the action.</param>
-        /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
-        public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
-        {
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
-
             var dt = Time + Scheduler.Normalize(dueTime);
 
+            // queue up more work
             var si = new ScheduledItem<TimeSpan, TState>(this, state, action, dt);
-
-            var queue = GetQueue();
-
-            if (queue == null)
-            {
-                queue = new SchedulerQueue<TimeSpan>(4);
-                SetQueue(queue);
-            }
             queue.Enqueue(si);
-
-            if (!running)
-            {
-                running = true;
-                try
-                {
-                    Trampoline.Run(queue);
-                }
-                finally
-                {
-                    SetQueue(null);
-                    running = false;
-                }
-            }
-
             return si;
         }
 
