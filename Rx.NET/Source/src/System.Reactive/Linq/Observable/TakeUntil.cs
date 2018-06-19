@@ -99,11 +99,6 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal static class TakeUntilTerminalException
-    {
-        internal static readonly Exception Instance = new Exception("No further exceptions");
-    }
-
     internal sealed class TakeUntil<TSource> : Producer<TSource, TakeUntil<TSource>._>
     {
         private readonly IObservable<TSource> _source;
@@ -140,14 +135,16 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private readonly object _gate = new object();
+            private IDisposable _sourceDisposable;
+
+            private int _wip;
+
+            private Exception _error;
 
             public _(IObserver<TSource> observer)
                 : base(observer)
             {
             }
-
-            private IDisposable _sourceDisposable;
 
             public void Run(TakeUntil<TSource> parent)
             {
@@ -166,35 +163,23 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private IDisposable Tick()
             {
-                lock (_gate)
-                {
-                    ForwardOnCompleted();
-                }
+                OnCompleted();
                 return Disposable.Empty;
             }
 
             public override void OnNext(TSource value)
             {
-                lock (_gate)
-                {
-                    ForwardOnNext(value);
-                }
+                HalfSerializer.ForwardOnNext(this, value, ref _wip, ref _error);
             }
 
             public override void OnError(Exception error)
             {
-                lock (_gate)
-                {
-                    ForwardOnError(error);
-                }
+                HalfSerializer.ForwardOnError(this, error, ref _wip, ref _error);
             }
 
             public override void OnCompleted()
             {
-                lock (_gate)
-                {
-                    ForwardOnCompleted();
-                }
+                HalfSerializer.ForwardOnCompleted(this, ref _wip, ref _error);
             }
         }
     }
