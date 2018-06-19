@@ -5,7 +5,6 @@ $configuration = $Env:BuildConfiguration
 $isCloudBuild = Test-Path -Path env:\TF_BUILD
 $outputLocation = Join-Path $scriptPath "testResults"
 $openCoverPath = ".\packages\OpenCover\tools\OpenCover.Console.exe"
-$xUnitConsolePath = ".\packages\xunit.runner.console\tools\net452\xunit.console.exe"
 $rootPath = (Resolve-Path .).Path
 $artifacts = Join-Path $rootPath "artifacts"
 
@@ -28,7 +27,6 @@ if (!(Test-Path .\nuget.exe)) {
 .\nuget.exe install -excludeversion SignClient -Version 0.9.1 -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -version 2017.3.5 -outputdirectory packages
 .\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.1.23 -outputdirectory packages
-.\nuget.exe install -excludeversion xunit.runner.console -outputdirectory packages
 #.\nuget.exe install -excludeversion OpenCover -Version 4.6.519 -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
 #.\nuget.exe install -excludeversion coveralls.io -outputdirectory packages
@@ -97,7 +95,7 @@ if ($LastExitCode -ne 0) {
 	}  
 }
 
-.\packages\xunit.runner.console\tools\net452\xunit.console.exe tests\Tests.System.Reactive.ApiApprovals\bin\$configuration\net46\Tests.System.Reactive.ApiApprovals.dll
+& dotnet test tests\Tests.System.Reactive.ApiApprovals\Tests.System.Reactive.ApiApprovals.csproj -c $configuration --no-build --no-restore 
 
 if ($LastExitCode -ne 0) { 
 	Write-Host "Error with API approval tests" -Foreground Red
