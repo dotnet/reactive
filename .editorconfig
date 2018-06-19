@@ -3,19 +3,14 @@
 # top-most EditorConfig file
 root = true
 
-# Default settings:
-# A newline ending every file
-# Use 4 spaces as indentation
-[*]
-insert_final_newline = true
-indent_style = space
-indent_size = 4
-
 [project.json]
 indent_size = 2
 
 # C# files
 [*.cs]
+insert_final_newline = true
+indent_style = space
+indent_size = 4
 # New line preferences
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
