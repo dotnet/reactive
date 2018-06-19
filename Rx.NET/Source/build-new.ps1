@@ -28,7 +28,7 @@ if (!(Test-Path .\nuget.exe)) {
 .\nuget.exe install -excludeversion SignClient -Version 0.9.1 -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -version 2017.3.5 -outputdirectory packages
 .\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.1.23 -outputdirectory packages
-.\nuget.exe install -excludeversion xunit.runner.console -outputdirectory packages
+.\nuget.exe install -excludeversion xunit.runner.console -version 2.4.0-beta.2.build4010 -outputdirectory packages
 #.\nuget.exe install -excludeversion OpenCover -Version 4.6.519 -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
 #.\nuget.exe install -excludeversion coveralls.io -outputdirectory packages
@@ -97,7 +97,7 @@ if ($LastExitCode -ne 0) {
 	}  
 }
 
-.\packages\xunit.runner.console\tools\net452\xunit.console.exe tests\Tests.System.Reactive.ApiApprovals\bin\$configuration\net46\Tests.System.Reactive.ApiApprovals.dll
+.\packages\xunit.runner.console\tools\net46\xunit.console.exe tests\Tests.System.Reactive.ApiApprovals\bin\$configuration\net46\Tests.System.Reactive.ApiApprovals.dll
 
 if ($LastExitCode -ne 0) { 
 	Write-Host "Error with API approval tests" -Foreground Red
