@@ -25,7 +25,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private IDisposable _mainDisposable;
             private IDisposable _otherDisposable;
             private int _halfSerializer;
             private Exception _error;
@@ -38,16 +37,15 @@ namespace System.Reactive.Linq.ObservableImpl
             public void Run(TakeUntil<TSource, TOther> parent)
             {
                 Disposable.SetSingle(ref _otherDisposable, parent._other.Subscribe(new OtherObserver(this)));
-                Disposable.SetSingle(ref _mainDisposable, parent._source.Subscribe(this));
+                base.Run(parent._source);
             }
 
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
                 {
-                    if (!Disposable.GetIsDisposed(ref _mainDisposable))
+                    if (!Disposable.GetIsDisposed(ref _otherDisposable))
                     {
-                        Disposable.TryDispose(ref _mainDisposable);
                         Disposable.TryDispose(ref _otherDisposable);
                     }
                 }
@@ -135,7 +133,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private IDisposable _sourceDisposable;
+            private IDisposable _timerDisposable;
 
             private int _wip;
 
@@ -148,15 +146,15 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(TakeUntil<TSource> parent)
             {
-                SetUpstream(parent._scheduler.Schedule(this, parent._endTime, (_, state) => state.Tick()));
-                Disposable.SetSingle(ref _sourceDisposable, parent._source.SubscribeSafe(this));
+                Disposable.SetSingle(ref _timerDisposable, parent._scheduler.Schedule(this, parent._endTime, (_, state) => state.Tick()));
+                base.Run(parent._source);
             }
 
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref _sourceDisposable);
+                    Disposable.TryDispose(ref _timerDisposable);
                 }
                 base.Dispose(disposing);
             }
