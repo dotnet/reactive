@@ -393,12 +393,12 @@ namespace Tests
             Assert.True(b);
         }
 
-        //[Fact]
+        [Fact]
         public void Finally6()
         {
             var b = false;
 
-            var xs = new[] { 1, 2 }.ToAsyncEnumerable().Finally(() => { b = true; });
+            var xs = new[] { 1, 2 }.ToAsyncEnumerable().Finally(() => { Volatile.Write(ref b, true); });
 
             var e = xs.GetEnumerator();
 
@@ -408,7 +408,16 @@ namespace Tests
             cts.Cancel();
             t.Wait(WaitTimeoutMs);
 
-            Assert.True(b);
+            for (int i = 0; i < WaitTimeoutMs / 100; i++)
+            {
+                if (Volatile.Read(ref b))
+                {
+                    return;
+                }
+                Thread.Sleep(100);
+            }
+
+            Assert.True(true, "Timeout while waiting for b to become true.");
         }
 
         [Fact]

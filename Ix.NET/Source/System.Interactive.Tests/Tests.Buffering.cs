@@ -65,7 +65,7 @@ namespace Tests
             NoNext(e1);
         }
 
-        //[Fact]
+        [Fact]
         public void Share4()
         {
             var rng = Enumerable.Range(0, 5).Share();
