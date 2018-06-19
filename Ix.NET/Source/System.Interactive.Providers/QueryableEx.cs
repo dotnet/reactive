@@ -2125,6 +2125,7 @@ namespace System.Linq
         }
 #pragma warning restore 1591
 
+#if !BUILT_IN_QUERYABLE_METHODS
         /// <summary>
         /// Returns a specified number of contiguous elements from the end of the sequence.
         /// </summary>
@@ -2193,6 +2194,7 @@ namespace System.Linq
         }
 #pragma warning restore 1591
 
+#endif
         /// <summary>
         /// Repeats and concatenates the source sequence infinitely.
         /// </summary>
