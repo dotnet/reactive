@@ -8,7 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B733D97A-F1ED-4FC3-BF8E-9AC47A89DE96}"
 	ProjectSection(SolutionItems) = preProject
 		build-new.ps1 = build-new.ps1
-		CodeCoverage.testsettings = CodeCoverage.testsettings
+		CodeCoverage.runsettings = CodeCoverage.runsettings
 		Directory.build.props = Directory.build.props
 		Directory.build.targets = Directory.build.targets
 		NuGet.Config = NuGet.Config
