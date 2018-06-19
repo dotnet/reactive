@@ -437,7 +437,7 @@ namespace Tests
 #if NETCOREAPP2_1 || WINDOWS_UWP
             var r = EnumerableEx.SkipLast(e, 3).ToList();
 #else
-            var r = e.SkipLast(31).ToList();
+            var r = e.SkipLast(3).ToList();
 #endif
             Assert.True(Enumerable.SequenceEqual(r, e.Take(2)));
         }
