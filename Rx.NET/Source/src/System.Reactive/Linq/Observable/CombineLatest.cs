@@ -504,35 +504,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            private static bool All(bool[] values)
-            {
-                foreach (var value in values)
-                {
-                    if (!value)
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            private static bool AllExcept(bool[] values, int index)
-            {
-                for (var i = 0; i < values.Length; i++)
-                {
-                    if (i != index)
-                    {
-                        if (!values[i])
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                return true;
-            }
-
             private sealed class SourceObserver : IObserver<TSource>
             {
                 private readonly _ _parent;
