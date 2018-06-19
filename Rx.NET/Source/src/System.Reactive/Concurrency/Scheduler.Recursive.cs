@@ -144,81 +144,23 @@ namespace System.Reactive.Concurrency
 
         abstract class InvokeRecBaseState<TState> : IDisposable
         {
-            readonly object gate;
-
             protected readonly IScheduler scheduler;
 
-            Dictionary<long, IDisposable> group;
+            protected readonly CompositeDisposable group;
 
             protected long index;
 
             public InvokeRecBaseState(IScheduler scheduler)
             {
                 this.scheduler = scheduler;
-                group = new Dictionary<long, IDisposable>(1);
-                gate = new object();
+                group = new CompositeDisposable();
             }
 
             public void Dispose()
             {
-                var g = default(Dictionary<long, IDisposable>);
-                lock (gate)
-                {
-                    g = group;
-                    if (g == null)
-                    {
-                        return;
-                    }
-                    group = null;
-                }
-
-                foreach (var d in g.Values)
-                {
-                    d?.Dispose();
-                }
+                group.Dispose();
             }
 
-            protected long Prepare()
-            {
-                lock (gate)
-                {
-                    var g = group;
-                    if (g == null)
-                    {
-                        return -1;
-                    }
-                    var idx = ++index;
-                    g.Add(idx, Disposable.Empty);
-                    return idx;
-                }
-            }
-
-            protected void SetDisposable(long idx, IDisposable d)
-            {
-                lock (gate)
-                {
-                    var g = group;
-                    if (g != null && g.ContainsKey(idx))
-                    {
-                        g[idx] = d;
-                        return;
-                    }
-                }
-                d?.Dispose();
-            }
-
-            protected void RemoveDisposable(long idx)
-            {
-                lock (gate)
-                {
-                    var g = group;
-                    if (g != null)
-                    {
-                        g.Remove(idx);
-                        return;
-                    }
-                }
-            }
         }
 
         sealed class InvokeRec1State<TState> : InvokeRecBaseState<TState>
@@ -235,13 +177,13 @@ namespace System.Reactive.Concurrency
 
             internal void InvokeNext(TState state)
             {
-                var idx = Prepare();
-                var d = scheduler.Schedule((state, idx, @this: this), (_, nextState) => {
-                    nextState.@this.RemoveDisposable(nextState.idx);
+                var sad = new SingleAssignmentDisposable();
+                group.Add(sad);
+                sad.Disposable = scheduler.Schedule((state, sad, @this: this), (_, nextState) => {
+                    nextState.@this.group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
                     return Disposable.Empty;
                 });
-                SetDisposable(idx, d);
             }
 
             internal void InvokeFirst(TState state)
@@ -264,13 +206,13 @@ namespace System.Reactive.Concurrency
 
             internal void InvokeNext(TState state, TimeSpan time)
             {
-                var idx = Prepare();
-                var d = scheduler.Schedule((state, idx, @this: this), time, (_, nextState) => {
-                    nextState.@this.RemoveDisposable(nextState.idx);
+                var sad = new SingleAssignmentDisposable();
+                group.Add(sad);
+                sad.Disposable = scheduler.Schedule((state, sad, @this: this), time, (_, nextState) => {
+                    nextState.@this.group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
                     return Disposable.Empty;
                 });
-                SetDisposable(idx, d);
             }
 
             internal void InvokeFirst(TState state)
@@ -293,13 +235,13 @@ namespace System.Reactive.Concurrency
 
             internal void InvokeNext(TState state, DateTimeOffset dtOffset)
             {
-                var idx = Prepare();
-                var d = scheduler.Schedule((state, idx, @this: this), dtOffset, (_, nextState) => {
-                    nextState.@this.RemoveDisposable(nextState.idx);
+                var sad = new SingleAssignmentDisposable();
+                group.Add(sad);
+                sad.Disposable = scheduler.Schedule((state, sad, @this: this), dtOffset, (_, nextState) => {
+                    nextState.@this.group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
                     return Disposable.Empty;
                 });
-                SetDisposable(idx, d);
             }
 
             internal void InvokeFirst(TState state)
