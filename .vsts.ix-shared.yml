@@ -1,0 +1,36 @@
+parameters: 
+  signStep: []
+    
+steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: Ix.NET/Source/build/setversion.csproj
+    arguments: -c $(BuildConfiguration)   
+  displayName: Set Version
+  condition: eq(variables['system.pullrequest.isfork'], false)
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: pack
+    packagesToPack: Ix.NET/Source/**/*.Providers.csproj
+    configuration: $(BuildConfiguration)
+    packDirectory: $(Build.ArtifactStagingDirectory)\artifacts    
+    verbosityPack: Minimal
+  displayName: Pack
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: test
+    projects: Ix.NET/Source/**/*.Tests.csproj
+    arguments: -c $(BuildConfiguration)
+  displayName: Run Tests
+  
+- ${{ parameters.signStep }}
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: $(Build.ArtifactStagingDirectory)\artifacts
+    ArtifactName: artifacts
+    publishLocation: Container
+  condition: eq(variables['system.pullrequest.isfork'], false)
