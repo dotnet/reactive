@@ -3,11 +3,10 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Disposables;
-using System.Threading;
 
 namespace System.Reactive
 {
-    internal sealed class AutoDetachObserver<T> : ObserverBase<T>
+    internal sealed class AutoDetachObserver<T> : ObserverBase<T>, ISafeObserver<T>
     {
         private readonly IObserver<T> _observer;
 
@@ -18,9 +17,9 @@ namespace System.Reactive
             _observer = observer;
         }
 
-        public IDisposable Disposable
+        public void SetResource(IDisposable resource)
         {
-            set => Disposables.Disposable.SetSingle(ref _disposable, value);
+            Disposable.SetSingle(ref _disposable, resource);
         }
 
         protected override void OnNextCore(T value)

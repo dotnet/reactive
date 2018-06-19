@@ -85,14 +85,14 @@ namespace System.Reactive.Linq
 
             public IDisposable Subscribe(IObserver<T> observer)
             {
-                var consumer = new ObserverWithToken<T>(observer);
+                var consumer = SafeObserver<T>.Wrap(observer);
 
                 //
                 // [OK] Use of unsafe Subscribe: non-pretentious transparent wrapping through remoting; exception coming from the remote object is not re-routed.
                 //
                 var d = remotableObservable.Subscribe/*Unsafe*/(new RemotableObserver<T>(consumer));
 
-                consumer.SetTokenDisposable(d);
+                consumer.SetResource(d);
 
                 return d;
             }

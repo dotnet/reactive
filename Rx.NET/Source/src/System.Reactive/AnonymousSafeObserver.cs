@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Disposables;
 using System.Threading;
 
 namespace System.Reactive
@@ -18,24 +19,22 @@ namespace System.Reactive
     /// that accept delegates for the On* handlers. By doing the fusion, we make the call stack depth shorter which
     /// helps debugging and some performance.
     /// </summary>
-    internal sealed class AnonymousSafeObserver<T> : IObserver<T>
+    internal sealed class AnonymousSafeObserver<T> : SafeObserver<T>
     {
         private readonly Action<T> _onNext;
         private readonly Action<Exception> _onError;
         private readonly Action _onCompleted;
-        private readonly IDisposable _disposable;
 
         private int isStopped;
 
-        public AnonymousSafeObserver(Action<T> onNext, Action<Exception> onError, Action onCompleted, IDisposable disposable)
+        public AnonymousSafeObserver(Action<T> onNext, Action<Exception> onError, Action onCompleted)
         {
             _onNext = onNext;
             _onError = onError;
             _onCompleted = onCompleted;
-            _disposable = disposable;
         }
 
-        public void OnNext(T value)
+        public override void OnNext(T value)
         {
             if (isStopped == 0)
             {
@@ -48,37 +47,29 @@ namespace System.Reactive
                 finally
                 {
                     if (!__noError)
-                        _disposable.Dispose();
+                        Dispose();
                 }
             }
         }
 
-        public void OnError(Exception error)
+        public override void OnError(Exception error)
         {
             if (Interlocked.Exchange(ref isStopped, 1) == 0)
             {
-                try
+                using (this)
                 {
                     _onError(error);
                 }
-                finally
-                {
-                    _disposable.Dispose();
-                }
             }
         }
 
-        public void OnCompleted()
+        public override void OnCompleted()
         {
             if (Interlocked.Exchange(ref isStopped, 1) == 0)
             {
-                try
+                using (this)
                 {
                     _onCompleted();
-                }
-                finally
-                {
-                    _disposable.Dispose();
                 }
             }
         }
