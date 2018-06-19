@@ -13,7 +13,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: pack
-    packagesToPack: Ix.NET/Source/**/*.Providers.csproj
+    packagesToPack: Ix.NET/Source/**/System.Interactive*.csproj;!Ix.NET/Source/**/*.Tests*.csproj
     configuration: $(BuildConfiguration)
     packDirectory: $(Build.ArtifactStagingDirectory)\artifacts    
     verbosityPack: Minimal
