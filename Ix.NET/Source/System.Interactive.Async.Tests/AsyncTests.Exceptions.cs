@@ -394,7 +394,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Finally6()
+        public async Task Finally6()
         {
             var b = false;
 
@@ -408,13 +408,13 @@ namespace Tests
             cts.Cancel();
             t.Wait(WaitTimeoutMs);
 
-            for (int i = 0; i < WaitTimeoutMs / 100; i++)
+            for (var i = 0; i < WaitTimeoutMs / 100; i++)
             {
                 if (Volatile.Read(ref b))
                 {
                     return;
                 }
-                Thread.Sleep(100);
+                await Task.Delay(100);
             }
 
             Assert.True(true, "Timeout while waiting for b to become true.");

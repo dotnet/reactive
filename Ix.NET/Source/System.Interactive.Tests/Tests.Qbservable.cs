@@ -132,7 +132,7 @@ namespace Tests
         [Fact]
         public void QueryableRetarget3()
         {
-#if NETCOREAPP2_1
+#if NETCOREAPP2_1 || WINDOWS_UWP
             var res = QueryableEx.TakeLast(Enumerable.Range(0, 10).AsQueryable(), 2).AsEnumerable().ToList();
 #else
             var res = Enumerable.Range(0, 10).AsQueryable().TakeLast(2).AsEnumerable().ToList();
