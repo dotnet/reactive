@@ -135,11 +135,14 @@ namespace System.Reactive
                                     // be unambiguous
                                     var u = Interlocked.CompareExchange(ref _currentSubscription, d, sad);
                                     
-                                    // sequence disposed
-                                    if (u == BooleanDisposable.True)
+                                    // sequence disposed or completed synchronously
+                                    if (u != sad)
                                     {
                                         d.Dispose();
-                                        continue;
+                                        if (u == BooleanDisposable.True)
+                                        {
+                                            continue;
+                                        }
                                     }
                                 }   
                                 else
@@ -217,7 +220,7 @@ namespace System.Reactive
     /// <summary>
     /// Holds onto a singleton IDisposable indicating a ready state.
     /// </summary>
-    internal static class ReadyToken
+    static class ReadyToken
     {
         /// <summary>
         /// This indicates the operation has been prepared and ready for
