@@ -27,7 +27,7 @@ steps:
   inputs:
     command: test
     projects: Ix.NET/Source/**/*.Tests.csproj
-    arguments: -c $(BuildConfiguration) --collect:"Code Coverage" /p:DebugType=portable
+    arguments: -c $(BuildConfiguration) --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Ix.NET/Source/CodeCoverage.runsettings /p:DebugType=portable 
   displayName: Run Tests
   
 - ${{ parameters.signStep }}
