@@ -352,7 +352,11 @@ namespace Tests
         public void TakeLast_TakeZero()
         {
             var e = Enumerable.Range(1, 5) ;
+#if NETCOREAPP2_1 || WINDOWS_UWP
+            var r = EnumerableEx.TakeLast(e, 0).ToList();
+#else
             var r = e.TakeLast(0).ToList();
+#endif
             Assert.True(Enumerable.SequenceEqual(r, Enumerable.Empty<int>()));
         }
 
@@ -360,7 +364,12 @@ namespace Tests
         public void TakeLast_Empty()
         {
             var e = Enumerable.Empty<int>();
+
+#if NETCOREAPP2_1 || WINDOWS_UWP
+            var r = EnumerableEx.TakeLast(e, 1).ToList();
+#else
             var r = e.TakeLast(1).ToList();
+#endif
             Assert.True(Enumerable.SequenceEqual(r, e));
         }
 
@@ -368,7 +377,13 @@ namespace Tests
         public void TakeLast_All()
         {
             var e = Enumerable.Range(0, 5);
+
+#if NETCOREAPP2_1 || WINDOWS_UWP
+            var r = EnumerableEx.TakeLast(e, 5).ToList();
+#else
             var r = e.TakeLast(5).ToList();
+#endif
+            
             Assert.True(Enumerable.SequenceEqual(r, e));
         }
 
@@ -376,7 +391,11 @@ namespace Tests
         public void TakeLast_Part()
         {
             var e = Enumerable.Range(0, 5);
+#if NETCOREAPP2_1 || WINDOWS_UWP
+            var r = EnumerableEx.TakeLast(e, 3).ToList();
+#else
             var r = e.TakeLast(3).ToList();
+#endif
             Assert.True(Enumerable.SequenceEqual(r, e.Skip(2)));
         }
 
@@ -391,7 +410,11 @@ namespace Tests
         public void SkipLast_Empty()
         {
             var e = Enumerable.Empty<int>();
+#if NETCOREAPP2_1 || WINDOWS_UWP
+            var r = EnumerableEx.SkipLast(e, 1).ToList();
+#else
             var r = e.SkipLast(1).ToList();
+#endif
             Assert.True(Enumerable.SequenceEqual(r, e));
         }
 
@@ -399,7 +422,11 @@ namespace Tests
         public void SkipLast_All()
         {
             var e = Enumerable.Range(0, 5);
+#if NETCOREAPP2_1 || WINDOWS_UWP
+            var r = EnumerableEx.SkipLast(e, 0).ToList();
+#else
             var r = e.SkipLast(0).ToList();
+#endif
             Assert.True(Enumerable.SequenceEqual(r, e));
         }
 
@@ -407,7 +434,11 @@ namespace Tests
         public void SkipLast_Part()
         {
             var e = Enumerable.Range(0, 5);
+#if NETCOREAPP2_1 || WINDOWS_UWP
+            var r = EnumerableEx.SkipLast(e, 3).ToList();
+#else
             var r = e.SkipLast(3).ToList();
+#endif
             Assert.True(Enumerable.SequenceEqual(r, e.Take(2)));
         }
 

@@ -28,7 +28,7 @@
   </Resources>
 
   <Applications>
-    <Application Id="App"
+    <Application Id="vstest.executionengine.universal.App"
       Executable="$targetnametoken$.exe"
       EntryPoint="System.Interactive.Tests.Uwp.DeviceRunner.App">
       <uap:VisualElements
