@@ -265,7 +265,7 @@ namespace Tests
 
         class MyObservable<T> : IObservable<T>
         {
-            private Func<IObserver<T>, IDisposable> _subscribe;
+            private readonly Func<IObserver<T>, IDisposable> _subscribe;
 
             public MyObservable(Func<IObserver<T>, IDisposable> subscribe)
             {
@@ -280,7 +280,7 @@ namespace Tests
 
         class MyDisposable : IDisposable
         {
-            private Action _dispose;
+            private readonly Action _dispose;
 
             public MyDisposable(Action dispose)
             {
@@ -563,9 +563,9 @@ namespace Tests
 
         class MyObserver<T> : IObserver<T>
         {
-            private Action<T> _onNext;
-            private Action<Exception> _onError;
-            private Action _onCompleted;
+            readonly Action<T> _onNext;
+            readonly Action<Exception> _onError;
+            readonly Action _onCompleted;
 
             public MyObserver(Action<T> onNext, Action<Exception> onError, Action onCompleted)
             {

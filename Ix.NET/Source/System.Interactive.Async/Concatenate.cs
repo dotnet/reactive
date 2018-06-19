@@ -18,8 +18,7 @@ namespace System.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            var concatFirst = first as ConcatAsyncIterator<TSource>;
-            return concatFirst != null ?
+            return first is ConcatAsyncIterator<TSource> concatFirst ?
                        concatFirst.Concat(second) :
                        new Concat2AsyncIterator<TSource>(first, second);
         }
@@ -47,41 +46,41 @@ namespace System.Linq
 
         private sealed class ConcatEnumerableAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly IEnumerable<IAsyncEnumerable<TSource>> source;
+            private readonly IEnumerable<IAsyncEnumerable<TSource>> _source;
 
             public ConcatEnumerableAsyncIterator(IEnumerable<IAsyncEnumerable<TSource>> source)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
+                _source = source;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new ConcatEnumerableAsyncIterator<TSource>(source);
+                return new ConcatEnumerableAsyncIterator<TSource>(_source);
             }
 
             public override void Dispose()
             {
-                if (outerEnumerator != null)
+                if (_outerEnumerator != null)
                 {
-                    outerEnumerator.Dispose();
-                    outerEnumerator = null;
+                    _outerEnumerator.Dispose();
+                    _outerEnumerator = null;
                 }
 
-                if (currentEnumerator != null)
+                if (_currentEnumerator != null)
                 {
-                    currentEnumerator.Dispose();
-                    currentEnumerator = null;
+                    _currentEnumerator.Dispose();
+                    _currentEnumerator = null;
                 }
 
                 base.Dispose();
             }
 
             // State machine vars
-            private IEnumerator<IAsyncEnumerable<TSource>> outerEnumerator;
-            private IAsyncEnumerator<TSource> currentEnumerator;
-            private int mode;
+            private IEnumerator<IAsyncEnumerable<TSource>> _outerEnumerator;
+            private IAsyncEnumerator<TSource> _currentEnumerator;
+            private int _mode;
 
             const int State_OuterNext = 1;
             const int State_While = 4;
@@ -92,31 +91,31 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        outerEnumerator = source.GetEnumerator();
-                        mode = State_OuterNext;
+                        _outerEnumerator = _source.GetEnumerator();
+                        _mode = State_OuterNext;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case State_OuterNext:
-                                if (outerEnumerator.MoveNext())
+                                if (_outerEnumerator.MoveNext())
                                 {
                                     // make sure we dispose the previous one if we're about to replace it
-                                    currentEnumerator?.Dispose();
-                                    currentEnumerator = outerEnumerator.Current.GetEnumerator();
+                                    _currentEnumerator?.Dispose();
+                                    _currentEnumerator = _outerEnumerator.Current.GetEnumerator();
                                    
-                                    mode = State_While;
+                                    _mode = State_While;
                                     goto case State_While;
                                 }
 
                                 break;
                             case State_While:
-                                if (await currentEnumerator.MoveNext(cancellationToken)
+                                if (await _currentEnumerator.MoveNext(cancellationToken)
                                                            .ConfigureAwait(false))
                                 {
-                                    current = currentEnumerator.Current;
+                                    current = _currentEnumerator.Current;
                                     return true;
                                 }
 
@@ -135,21 +134,21 @@ namespace System.Linq
 
         private sealed class Concat2AsyncIterator<TSource> : ConcatAsyncIterator<TSource>
         {
-            private readonly IAsyncEnumerable<TSource> first;
-            private readonly IAsyncEnumerable<TSource> second;
+            private readonly IAsyncEnumerable<TSource> _first;
+            private readonly IAsyncEnumerable<TSource> _second;
 
             internal Concat2AsyncIterator(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
             {
                 Debug.Assert(first != null);
                 Debug.Assert(second != null);
 
-                this.first = first;
-                this.second = second;
+                _first = first;
+                _second = second;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new Concat2AsyncIterator<TSource>(first, second);
+                return new Concat2AsyncIterator<TSource>(_first, _second);
             }
 
             internal override ConcatAsyncIterator<TSource> Concat(IAsyncEnumerable<TSource> next)
@@ -162,9 +161,9 @@ namespace System.Linq
                 switch (index)
                 {
                     case 0:
-                        return first;
+                        return _first;
                     case 1:
-                        return second;
+                        return _second;
                     default:
                         return null;
                 }
@@ -173,8 +172,8 @@ namespace System.Linq
 
         private abstract class ConcatAsyncIterator<TSource> : AsyncIterator<TSource>, IIListProvider<TSource>
         {
-            private int counter;
-            private IAsyncEnumerator<TSource> enumerator;
+            private int _counter;
+            private IAsyncEnumerator<TSource> _enumerator;
 
             public Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
@@ -231,10 +230,10 @@ namespace System.Linq
 
             public override void Dispose()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    enumerator.Dispose();
-                    enumerator = null;
+                    _enumerator.Dispose();
+                    _enumerator = null;
                 }
 
                 base.Dispose();
@@ -244,29 +243,29 @@ namespace System.Linq
             {
                 if (state == AsyncIteratorState.Allocated)
                 {
-                    enumerator = GetAsyncEnumerable(0)
+                    _enumerator = GetAsyncEnumerable(0)
                         .GetEnumerator();
                     state = AsyncIteratorState.Iterating;
-                    counter = 2;
+                    _counter = 2;
                 }
 
                 if (state == AsyncIteratorState.Iterating)
                 {
                     while (true)
                     {
-                        if (await enumerator.MoveNext(cancellationToken)
+                        if (await _enumerator.MoveNext(cancellationToken)
                                             .ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
                         // note, this is simply to match the logic of 
                         // https://github.com/dotnet/corefx/blob/ec2685715b01d12f16b08d0dfa326649b12db8ec/src/system.linq/src/system/linq/concatenate.cs#L173-L173
-                        var next = GetAsyncEnumerable(counter++ - 1);
+                        var next = GetAsyncEnumerable(_counter++ - 1);
                         if (next != null)
                         {
-                            enumerator.Dispose();
-                            enumerator = next.GetEnumerator();
+                            _enumerator.Dispose();
+                            _enumerator = next.GetEnumerator();
                             continue;
                         }
 
@@ -291,9 +290,9 @@ namespace System.Linq
         // a much better memory profile and without much additional run-time cost.
         private sealed class ConcatNAsyncIterator<TSource> : ConcatAsyncIterator<TSource>
         {
-            private readonly IAsyncEnumerable<TSource> next;
-            private readonly int nextIndex;
-            private readonly ConcatAsyncIterator<TSource> previousConcat;
+            private readonly IAsyncEnumerable<TSource> _next;
+            private readonly int _nextIndex;
+            private readonly ConcatAsyncIterator<TSource> _previousConcat;
 
             internal ConcatNAsyncIterator(ConcatAsyncIterator<TSource> previousConcat, IAsyncEnumerable<TSource> next, int nextIndex)
             {
@@ -301,19 +300,19 @@ namespace System.Linq
                 Debug.Assert(next != null);
                 Debug.Assert(nextIndex >= 2);
 
-                this.previousConcat = previousConcat;
-                this.next = next;
-                this.nextIndex = nextIndex;
+                _previousConcat = previousConcat;
+                _next = next;
+                _nextIndex = nextIndex;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new ConcatNAsyncIterator<TSource>(previousConcat, next, nextIndex);
+                return new ConcatNAsyncIterator<TSource>(_previousConcat, _next, _nextIndex);
             }
 
             internal override ConcatAsyncIterator<TSource> Concat(IAsyncEnumerable<TSource> next)
             {
-                if (nextIndex == int.MaxValue - 2)
+                if (_nextIndex == int.MaxValue - 2)
                 {
                     // In the unlikely case of this many concatenations, if we produced a ConcatNIterator
                     // with int.MaxValue then state would overflow before it matched it's index.
@@ -321,12 +320,12 @@ namespace System.Linq
                     return new Concat2AsyncIterator<TSource>(this, next);
                 }
 
-                return new ConcatNAsyncIterator<TSource>(this, next, nextIndex + 1);
+                return new ConcatNAsyncIterator<TSource>(this, next, _nextIndex + 1);
             }
 
             internal override IAsyncEnumerable<TSource> GetAsyncEnumerable(int index)
             {
-                if (index > nextIndex)
+                if (index > _nextIndex)
                 {
                     return null;
                 }
@@ -338,20 +337,20 @@ namespace System.Linq
                 var current = this;
                 while (true)
                 {
-                    if (index == current.nextIndex)
+                    if (index == current._nextIndex)
                     {
-                        return current.next;
+                        return current._next;
                     }
 
-                    if (current.previousConcat is ConcatNAsyncIterator<TSource> prevN)
+                    if (current._previousConcat is ConcatNAsyncIterator<TSource> prevN)
                     {
                         current = prevN;
                         continue;
                     }
 
-                    Debug.Assert(current.previousConcat is Concat2AsyncIterator<TSource>);
+                    Debug.Assert(current._previousConcat is Concat2AsyncIterator<TSource>);
                     Debug.Assert(index == 0 || index == 1);
-                    return current.previousConcat.GetAsyncEnumerable(index);
+                    return current._previousConcat.GetAsyncEnumerable(index);
                 }
             }
         }
