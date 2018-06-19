@@ -5,4 +5,4 @@ variables:
   BuildConfiguration: Release
   
 steps:
-- template: .vsts-shared.yml
+- template: .vsts.ix-shared.yml

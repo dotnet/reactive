@@ -15,7 +15,7 @@ variables:
   BuildConfiguration: Release
   
 steps:
-- template: .vsts-shared.yml
+- template: .vsts.ix-shared.yml
   parameters:
     signStep:
     - task: PowerShell@2
