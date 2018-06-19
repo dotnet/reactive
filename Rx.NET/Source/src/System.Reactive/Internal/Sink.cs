@@ -56,6 +56,11 @@ namespace System.Reactive
         {
             Disposable.SetSingle(ref _upstream, upstream);
         }
+
+        protected void DisposeUpstream()
+        {
+            Disposable.TryDispose(ref _upstream);
+        }
     }
 
     /// <summary>
