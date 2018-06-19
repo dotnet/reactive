@@ -93,7 +93,7 @@ namespace Tests
             var rng = Enumerable.Empty<int>();
 
             var res = rng.Buffer(5).ToList();
-            Assert.Equal(0, res.Count);
+            Assert.Empty(res);
         }
 
         [Fact]

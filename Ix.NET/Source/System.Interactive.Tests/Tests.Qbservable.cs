@@ -35,7 +35,7 @@ namespace Tests
                         select new { Name = o.Key, Enumerable = o.ToList(), Queryable = q.ToList() })
                        .ToList();
 
-            Func<Type, bool> filterReturn = t =>
+            bool filterReturn(Type t)
             {
                 if (t.GetTypeInfo().IsGenericType)
                 {
@@ -44,12 +44,12 @@ namespace Tests
                         return false;
                 }
                 return true;
-            };
+            }
 
-            Func<MethodInfo, bool> filterHelper = m =>
+            bool filterHelper(MethodInfo m)
             {
                 return !m.IsDefined(typeof(EditorBrowsableAttribute), false);
-            };
+            }
 
             foreach (var group in mtch)
             {
