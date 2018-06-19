@@ -346,12 +346,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }   
 
-            private sealed class TimeoutObserver : ISafeObserver<TTimeout>
+            private sealed class TimeoutObserver : SafeObserver<TTimeout>
             {
                 private readonly _ _parent;
                 private readonly long _id;
-
-                IDisposable _upstream;
 
                 public TimeoutObserver(_ parent, long id)
                 {
@@ -359,35 +357,26 @@ namespace System.Reactive.Linq.ObservableImpl
                     _id = id;
                 }
 
-                public void SetResource(IDisposable d)
-                {
-                    Disposable.TrySetSingle(ref _upstream, d);
-                }
-
-                public void OnNext(TTimeout value)
+                public override void OnNext(TTimeout value)
                 {
                     OnCompleted();
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     if (!_parent.TimeoutError(_id, error))
                     {
-                        Disposable.TryDispose(ref _upstream);
+                        Dispose();
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     _parent.Timeout(_id);
 
-                    Disposable.TryDispose(ref _upstream);
+                    Dispose();
                 }
 
-                public void Dispose()
-                {
-                    Disposable.TryDispose(ref _upstream);
-                }
             }
         }
     }
