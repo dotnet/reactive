@@ -11,6 +11,12 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
     <DefineConstants>$(DefineConstants);NO_CODE_COVERAGE_ATTRIBUTE;CRIPPLED_REFLECTION;PLIB;SIGNED</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <DefineConstants>$(DefineConstants);NO_CODE_COVERAGE_ATTRIBUTE;PLIB;SIGNED</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
+    <DefineConstants>$(DefineConstants);BUILT_IN_QUERYABLE_METHODS;NO_CODE_COVERAGE_ATTRIBUTE;PLIB;SIGNED</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
     <DefineConstants>$(DefineConstants);HAS_APTCA;NO_ARRAY_EMPTY;DESKTOPCLR;DESKTOPCLR45;SIGNED</DefineConstants>
   </PropertyGroup>

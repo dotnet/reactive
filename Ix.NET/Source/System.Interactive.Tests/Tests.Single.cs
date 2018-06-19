@@ -341,6 +341,7 @@ namespace Tests
             Assert.Equal(10, n);
         }
 
+#if !BUILT_IN_QUERYABLE_METHODS
         [Fact]
         public void TakeLast_Arguments()
         {
@@ -410,7 +411,7 @@ namespace Tests
             var r = e.SkipLast(3).ToList();
             Assert.True(Enumerable.SequenceEqual(r, e.Take(2)));
         }
-
+#endif
         [Fact]
         public void Scan_Arguments()
         {

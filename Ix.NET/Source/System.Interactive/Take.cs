@@ -11,6 +11,7 @@ namespace System.Linq
 {
     public static partial class EnumerableEx
     {
+#if !BUILT_IN_QUERYABLE_METHODS
         /// <summary>
         ///     Returns a specified number of contiguous elements from the end of the sequence.
         /// </summary>
@@ -47,5 +48,6 @@ namespace System.Linq
             while (q.Count > 0)
                 yield return q.Dequeue();
         }
+#endif
     }
 }
