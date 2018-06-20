@@ -76,7 +76,7 @@ for (var j = 1; j <= i; j++)
 
             public void Run(<#=os#>)
             {
-                var disposables = new IDisposable[<#=i + 1#>];
+                var disposables = new IDisposable[<#=i#>];
 
 <#
 for (var j = 1; j <= i; j++)
@@ -96,18 +96,6 @@ for (var j = 1; j <= i; j++)
 <#
 }
 #>
-
-                disposables[<#=i#>] = Disposable.Create(() =>
-                {
-<#
-for (var j = 1; j <= i; j++)
-{
-#>
-                    _observer<#=j#>.Values.Clear();
-<#
-}
-#>
-                });
 
                 SetUpstream(StableCompositeDisposable.Create(disposables));
             }

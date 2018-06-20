@@ -493,6 +493,19 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public Queue<T> Values => _values;
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing)
+            {
+                lock (_gate)
+                {
+                    _values.Clear();
+                }
+            }
+        }
+
         public override void OnNext(T value)
         {
             lock (_gate)
