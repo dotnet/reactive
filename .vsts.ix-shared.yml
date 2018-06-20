@@ -2,6 +2,10 @@ parameters:
   signStep: []
     
 steps:
+- task: DotNetCoreInstaller@0
+  inputs:
+    version: '2.1.400-preview-008975'
+
 - task: DotNetCoreCLI@2
   inputs:
     command: build
@@ -23,7 +27,7 @@ steps:
   inputs:
     command: test
     projects: Ix.NET/Source/**/*.Tests.csproj
-    arguments: -c $(BuildConfiguration)
+    arguments: -c $(BuildConfiguration) --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Ix.NET/Source/CodeCoverage.runsettings /p:DebugType=portable 
   displayName: Run Tests
   
 - ${{ parameters.signStep }}
