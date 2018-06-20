@@ -18,8 +18,7 @@ steps:
     arguments: -c $(BuildConfiguration)   
   displayName: Set Version
   condition: eq(variables['system.pullrequest.isfork'], false)
-
-steps:
+  
 - task: VSBuild@1
   displayName: Build System.Reactive.sln
   inputs:
