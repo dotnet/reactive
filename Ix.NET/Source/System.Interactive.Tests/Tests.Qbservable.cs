@@ -35,7 +35,7 @@ namespace Tests
                         select new { Name = o.Key, Enumerable = o.ToList(), Queryable = q.ToList() })
                        .ToList();
 
-            Func<Type, bool> filterReturn = t =>
+            bool filterReturn(Type t)
             {
                 if (t.GetTypeInfo().IsGenericType)
                 {
@@ -44,12 +44,12 @@ namespace Tests
                         return false;
                 }
                 return true;
-            };
+            }
 
-            Func<MethodInfo, bool> filterHelper = m =>
+            bool filterHelper(MethodInfo m)
             {
                 return !m.IsDefined(typeof(EditorBrowsableAttribute), false);
-            };
+            }
 
             foreach (var group in mtch)
             {
@@ -132,7 +132,11 @@ namespace Tests
         [Fact]
         public void QueryableRetarget3()
         {
+#if NETCOREAPP2_1 || WINDOWS_UWP
+            var res = QueryableEx.TakeLast(Enumerable.Range(0, 10).AsQueryable(), 2).AsEnumerable().ToList();
+#else
             var res = Enumerable.Range(0, 10).AsQueryable().TakeLast(2).AsEnumerable().ToList();
+#endif
             Assert.True(res.SequenceEqual(new[] { 8, 9 }));
         }
 
