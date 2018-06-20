@@ -65,7 +65,7 @@ namespace Tests
             NoNext(e1);
         }
 
-        //[Fact]
+        [Fact]
         public void Share4()
         {
             var rng = Enumerable.Range(0, 5).Share();
@@ -550,12 +550,12 @@ namespace Tests
             Assert.True(rnd.Zip(rnd, (l, r) => l == r).All(x => x));
         }
 
-        static Random s_rand = new Random();
+        static Random Random = new Random();
 
         static IEnumerable<int> Rand()
         {
             while (true)
-                yield return s_rand.Next();
+                yield return Random.Next();
         }
 
         [Fact]

@@ -215,26 +215,26 @@ namespace Tests
         /// </summary>
         internal sealed class CancellationTestAsyncEnumerable : IAsyncEnumerable<int>
         {
-            private readonly int iterationsBeforeDelay;
+            private readonly int _iterationsBeforeDelay;
 
             public CancellationTestAsyncEnumerable(int iterationsBeforeDelay = 0)
             {
-                this.iterationsBeforeDelay = iterationsBeforeDelay;
+                _iterationsBeforeDelay = iterationsBeforeDelay;
             }
             IAsyncEnumerator<int> IAsyncEnumerable<int>.GetEnumerator() => GetEnumerator();
 
-            public TestEnumerator GetEnumerator() => new TestEnumerator(iterationsBeforeDelay);
+            public TestEnumerator GetEnumerator() => new TestEnumerator(_iterationsBeforeDelay);
 
 
             internal sealed class TestEnumerator : IAsyncEnumerator<int>
             {
-                private readonly int iterationsBeforeDelay;
+                private readonly int _iterationsBeforeDelay;
 
                 public TestEnumerator(int iterationsBeforeDelay)
                 {
-                    this.iterationsBeforeDelay = iterationsBeforeDelay;
+                    _iterationsBeforeDelay = iterationsBeforeDelay;
                 }
-                int i = -1;
+                int _i = -1;
                 public void Dispose()
                 {
                 }
@@ -242,15 +242,15 @@ namespace Tests
                 public CancellationToken LastToken { get; private set; }
                 public bool MoveNextWasCalled { get; private set; }
 
-                public int Current => i;
+                public int Current => _i;
                 
                 public async Task<bool> MoveNext(CancellationToken cancellationToken)
                 {
                     LastToken = cancellationToken;
                     MoveNextWasCalled = true;
                   
-                    i++;
-                    if (Current >= iterationsBeforeDelay)
+                    _i++;
+                    if (Current >= _iterationsBeforeDelay)
                     {
                         await Task.Delay(WaitTimeoutMs, cancellationToken);
                     }
@@ -272,15 +272,15 @@ namespace Tests
 
             private sealed class TestEnumerator : IEnumerator<T>
             {
-                private readonly CancellationTokenSource cancellationTokenSource;
+                private readonly CancellationTokenSource _cancellationTokenSource;
 
                 public TestEnumerator()
                 {
-                    cancellationTokenSource = new CancellationTokenSource();
+                    _cancellationTokenSource = new CancellationTokenSource();
                 }
                 public void Dispose()
                 {
-                    cancellationTokenSource.Cancel();
+                    _cancellationTokenSource.Cancel();
                 }
 
                 public void Reset()
@@ -294,8 +294,8 @@ namespace Tests
 
                 public bool MoveNext()
                 {
-                    Task.Delay(WaitTimeoutMs, cancellationTokenSource.Token).Wait();
-                    cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                    Task.Delay(WaitTimeoutMs, _cancellationTokenSource.Token).Wait();
+                    _cancellationTokenSource.Token.ThrowIfCancellationRequested();
                     return true;
                 }
             }
@@ -371,7 +371,7 @@ namespace Tests
 
             var result = AsyncEnumerable.Return(1).SelectMany(i => disposeCounter).Select(i => i).ToList().Result;
 
-            Assert.Equal(0, result.Count);
+            Assert.Empty(result);
             Assert.Equal(1, disposeCounter.DisposeCount);
         }
 
@@ -382,7 +382,7 @@ namespace Tests
 
             var result = AsyncEnumerable.Range(0, 10).SelectMany(i => disposes[i]).Select(i => i).ToList().Result;
 
-            Assert.Equal(0, result.Count);
+            Assert.Empty(result);
             Assert.True(disposes.All(d => d.DisposeCount == 1));
         }
 

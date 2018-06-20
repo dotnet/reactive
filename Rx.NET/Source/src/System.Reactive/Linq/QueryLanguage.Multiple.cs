@@ -353,6 +353,11 @@ namespace System.Reactive.Linq
             return new TakeUntil<TSource, TOther>(source, other);
         }
 
+        public virtual IObservable<TSource> TakeUntil<TSource>(IObservable<TSource> source, Func<TSource, bool> stopPredicate)
+        {
+            return new TakeUntilPredicate<TSource>(source, stopPredicate);
+        }
+
         #endregion
 
         #region + Window +
