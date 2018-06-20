@@ -461,6 +461,7 @@ namespace Tests
             var en = AsyncEnumerable.CreateEnumerable(() =>
                 AsyncEnumerable.CreateEnumerator(async ct =>
                 {
+                    await Task.Delay(0);
                     return ++count < 3;
                 }
                 , () => 1,

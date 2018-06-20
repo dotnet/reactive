@@ -5,25 +5,23 @@ trigger:
       - rel/*
   paths:
     include:
-      - Rx.NET/Source/*
+      - Ix.NET/Source/*
       - .editorconfig
-      - .vsts.rx-ci.yml
-      - .vsts.rx-shared.yml
+      - .vsts.ix-ci.yml
+      - NuGet.Config
 
 queue: Hosted VS2017
-
 variables: 
   BuildConfiguration: Release
-  BuildPlatform: Any CPU
-    
+  
 steps:
-- template: .vsts.rx-shared.yml
+- template: .vsts.ix-shared.yml
   parameters:
     signStep:
     - task: PowerShell@2
       displayName: Authenticode Sign Packages
       inputs:
-        filePath: Rx.NET/Source/build/Sign-Package.ps1
+        filePath: Ix.NET/Source/build/Sign-Package.ps1
       env:
         SignClientUser: $(SignClientUser)
         SignClientSecret: $(SignClientSecret)
