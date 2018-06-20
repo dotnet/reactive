@@ -102,25 +102,64 @@ namespace System.Linq
 
             private IEnumerator<T> GetEnumerator_()
             {
-                while (true)
+                return new ShareEnumerator(this);
+            }
+
+            sealed class ShareEnumerator : IEnumerator<T>
+            {
+                readonly SharedBuffer<T> _parent;
+
+                T _current;
+
+                bool _disposed;
+
+                public ShareEnumerator(SharedBuffer<T> parent)
+                {
+                    _parent = parent;
+                }
+
+                public T Current => _current;
+
+                object IEnumerator.Current => _current;
+
+                public void Dispose()
+                {
+                    _disposed = true;
+                }
+
+                public bool MoveNext()
                 {
                     if (_disposed)
-                        throw new ObjectDisposedException("");
-
-                    var hasValue = default(bool);
-                    var current = default(T);
-
-                    lock (_source)
                     {
-                        hasValue = _source.MoveNext();
-                        if (hasValue)
-                            current = _source.Current;
+                        return false;
+                    }
+                    if (_parent._disposed)
+                    {
+                        throw new ObjectDisposedException("");
                     }
 
+                    var hasValue = false;
+                    var src = _parent._source;
+                    lock (src)
+                    {
+                        hasValue = src.MoveNext();
+                        if (hasValue)
+                        {
+                            _current = src.Current;
+                        }
+                    }
                     if (hasValue)
-                        yield return current;
-                    else
-                        break;
+                    {
+                        return true;
+                    }
+                    _disposed = true;
+                    _current = default(T);
+                    return false;
+                }
+
+                public void Reset()
+                {
+                    throw new NotSupportedException();
                 }
             }
         }
