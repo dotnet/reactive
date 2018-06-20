@@ -1,0 +1,70 @@
+parameters: 
+  signStep: []
+    
+steps:
+- task: DotNetCoreInstaller@0
+  inputs:
+    version: '2.1.400-preview-008975'
+
+- task: NuGetToolInstaller@0
+  displayName: Use NuGet 4.7.0
+  inputs:
+    versionSpec: 4.7.0
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: Rx.NET/Source/build/setversion.csproj
+    arguments: -c $(BuildConfiguration)   
+  displayName: Set Version
+  condition: eq(variables['system.pullrequest.isfork'], false)
+
+- task: VSBuild@1
+  displayName: Build System.Reactive.sln
+  inputs:
+    solution: Rx.NET/Source/System.Reactive.sln
+    vsVersion: 15.0
+    msbuildArgs: /restore /t:build /p:CreatePackage=true /p:NoPackageAnalysis=true /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
+    platform: $(BuildPlatform)
+    configuration: $(BuildConfiguration)
+    maximumCpuCount: true
+
+- task: NuGetCommand@2
+  displayName: Pack compatibility package
+  inputs:
+    command: custom
+    arguments: pack Rx.NET/Source/facades/System.Reactive.Compatibility.nuspec -Version $(NBGV_NuGetPackageVersion) -MinClientVersion 2.12 -NoPackageAnalysis -outputdirectory $(Build.ArtifactStagingDirectory)\artifacts
+  condition: eq(variables['system.pullrequest.isfork'], false)
+
+- task: VSBuild@1
+  displayName: Build for Test (ppdb) workaround
+  inputs:
+    solution: Rx.NET/Source/System.Reactive.sln
+    vsVersion: 15.0
+    msbuildArgs: /t:build /p:DebugType=portable
+    platform: $(BuildPlatform)
+    configuration: $(BuildConfiguration)
+    maximumCpuCount: true
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: test
+    projects: Rx.NET/Source/tests/Tests.System.Reactive/*.csproj
+    arguments: -c $(BuildConfiguration) --no-build --no-restore --filter "SkipCI!=true" --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Rx.NET/Source/CodeCoverage.runsettings
+  displayName: Run Unit Tests
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: test
+    projects: Rx.NET/Source/tests/Tests.System.Reactive.ApiApprovals/Tests.System.Reactive.ApiApprovals.csproj
+    arguments: -c $(BuildConfiguration) --no-build --no-restore 
+  displayName: Run Api Approvals Tests
+  
+- ${{ parameters.signStep }}
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: $(Build.ArtifactStagingDirectory)\artifacts
+    ArtifactName: artifacts
+    publishLocation: Container
+  condition: eq(variables['system.pullrequest.isfork'], false)
