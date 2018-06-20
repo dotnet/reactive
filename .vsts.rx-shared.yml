@@ -18,7 +18,7 @@ steps:
     arguments: -c $(BuildConfiguration)   
   displayName: Set Version
   condition: eq(variables['system.pullrequest.isfork'], false)
-  
+
 - task: VSBuild@1
   displayName: Build System.Reactive.sln
   inputs:
@@ -49,8 +49,8 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: test
-    projects: Rx.NET/Source/tests/**/Tests.*.csproj;!Rx.NET/Source/tests/**/*.Uwp.*.csproj
-    arguments: -c $(BuildConfiguration) --no-build --no-restore --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Rx.NET/Source/CodeCoverage.runsettings
+    projects: Rx.NET/Source/tests/**/Tests.*.csproj;-:Rx.NET/Source/tests/**/*.Uwp.*.csproj
+    arguments: -c $(BuildConfiguration) --no-build --no-restore --filter "SkipCI!=true" --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Rx.NET/Source/CodeCoverage.runsettings
   displayName: Run Unit Tests
 
 - task: DotNetCoreCLI@2
