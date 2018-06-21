@@ -38,7 +38,8 @@ namespace System.Reactive
 
         public IDisposable SubscribeRaw(IObserver<TSource> observer, bool enableSafeguard)
         {
-            var subscription = new SingleAssignmentDisposable();
+            IDisposable run;
+            ISafeObserver<TSource> safeObserver = null;
 
             //
             // See AutoDetachObserver.cs for more information on the safeguarding requirement and
@@ -46,23 +47,26 @@ namespace System.Reactive
             //
             if (enableSafeguard)
             {
-                var safeObserver = SafeObserver<TSource>.Wrap(observer);
-                safeObserver.SetResource(subscription);
-                observer = safeObserver;
+                observer = safeObserver = SafeObserver<TSource>.Wrap(observer);
             }
 
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
+                var runAssignable = new SingleAssignmentDisposable();
+                
                 CurrentThreadScheduler.Instance.ScheduleAction(
-                    (@this: this, subscription, observer),
-                    tuple => tuple.subscription.Disposable = tuple.@this.Run(tuple.observer));
+                    (@this: this, runAssignable, observer),
+                    tuple => tuple.runAssignable.Disposable = tuple.@this.Run(tuple.observer));
+
+                run = runAssignable;
             }
             else
             {
-                subscription.Disposable = Run(observer);
+                run = Run(observer);
             }
 
-            return subscription;
+            safeObserver?.SetResource(run);
+            return run;
         }
 
         /// <summary>

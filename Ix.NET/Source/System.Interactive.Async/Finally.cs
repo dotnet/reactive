@@ -28,6 +28,10 @@ namespace System.Linq
 
             private IAsyncEnumerator<TSource> enumerator;
 
+            CancellationTokenRegistration _tokenRegistration;
+
+            int _once;
+
             public FinallyAsyncIterator(IAsyncEnumerable<TSource> source, Action finallyAction)
             {
                 Debug.Assert(source != null);
@@ -44,15 +48,24 @@ namespace System.Linq
 
             public override void Dispose()
             {
-                if (enumerator != null)
+                // This could now be executed by either MoveNextCore
+                // or the trigger from a CancellationToken
+                // make sure this happens at most once.
+                if (Interlocked.CompareExchange(ref _once, 1, 0) == 0)
                 {
-                    enumerator.Dispose();
-                    enumerator = null;
+                    if (enumerator != null)
+                    {
+                        enumerator.Dispose();
+                        // make sure the clearing of the enumerator
+                        // becomes visible to MoveNextCore
+                        Volatile.Write(ref enumerator, null);
 
-                    finallyAction();
+                        finallyAction();
+                    }
+
+                    base.Dispose();
+                    _tokenRegistration.Dispose();
                 }
-
-                base.Dispose();
             }
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
@@ -65,14 +78,31 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNext(cancellationToken)
-                                            .ConfigureAwait(false))
-                        {
-                            current = enumerator.Current;
-                            return true;
-                        }
+                        // clear any previous registration
+                        _tokenRegistration.Dispose();
+                        // and setup a new registration
+                        // we can't know if the token is the same as last time
+                        // note that the registration extends the lifetime of "this"
+                        // so the current AsyncIterator better not be just abandoned
+                        _tokenRegistration = cancellationToken.Register(
+                            state => ((FinallyAsyncIterator<TSource>)state).Dispose(), this);
 
-                        Dispose();
+                        // Now that the CancellationToken may call Dispose
+                        // from any thread while the current thread is in
+                        // MoveNextCore, we must make sure the enumerator
+                        // hasn't been cleared out in the meantime
+                        var en = Volatile.Read(ref enumerator);
+                        if (en != null)
+                        {
+                            if (await en.MoveNext(cancellationToken)
+                                                .ConfigureAwait(false))
+                            {
+                                current = enumerator.Current;
+                                return true;
+                            }
+
+                            Dispose();
+                        }
                         break;
                 }
 
