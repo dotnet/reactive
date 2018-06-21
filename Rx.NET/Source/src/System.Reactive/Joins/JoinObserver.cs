@@ -21,7 +21,7 @@ namespace System.Reactive.Joins
         private readonly Action<Exception> onError;
         private List<ActivePlan> activePlans;
         public Queue<Notification<T>> Queue { get; private set; }
-        private readonly SingleAssignmentDisposable subscription;
+        private IDisposable subscription;
         private bool isDisposed;
 
         public JoinObserver(IObservable<T> source, Action<Exception> onError)
@@ -29,7 +29,6 @@ namespace System.Reactive.Joins
             this.source = source;
             this.onError = onError;
             Queue = new Queue<Notification<T>>();
-            subscription = new SingleAssignmentDisposable();
             activePlans = new List<ActivePlan>();
         }
 
@@ -41,7 +40,7 @@ namespace System.Reactive.Joins
         public void Subscribe(object gate)
         {
             this.gate = gate;
-            subscription.Disposable = source.Materialize().SubscribeSafe(this);
+            Disposable.SetSingle(ref subscription, source.Materialize().SubscribeSafe(this));
         }
 
         public void Dequeue()
@@ -90,7 +89,7 @@ namespace System.Reactive.Joins
             if (!isDisposed)
             {
                 if (disposing)
-                    subscription.Dispose();
+                    Disposable.TryDispose(ref subscription);
 
                 isDisposed = true;
             }
