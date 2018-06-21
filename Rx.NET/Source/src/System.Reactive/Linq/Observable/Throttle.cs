@@ -176,9 +176,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     currentid = _id;
                 }
 
-                var d = new SingleAssignmentDisposable();
-                Disposable.TrySetSerial(ref _serialCancelable, d);
-                d.Disposable = throttle.SubscribeSafe(new ThrottleObserver(this, value, currentid, d));
+                Disposable.TrySetSerial(ref _serialCancelable, null);
+
+                var newInnerObserver = new ThrottleObserver(this, value, currentid);
+                newInnerObserver.SetResource(throttle.SubscribeSafe(newInnerObserver));
+
+                Disposable.TrySetSerial(ref _serialCancelable, newInnerObserver);
             }
 
             public override void OnError(Exception error)
@@ -210,22 +213,20 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            private sealed class ThrottleObserver : IObserver<TThrottle>
+            private sealed class ThrottleObserver : SafeObserver<TThrottle>
             {
                 private readonly _ _parent;
                 private readonly TSource _value;
                 private readonly ulong _currentid;
-                private readonly IDisposable _self;
 
-                public ThrottleObserver(_ parent, TSource value, ulong currentid, IDisposable self)
+                public ThrottleObserver(_ parent, TSource value, ulong currentid)
                 {
                     _parent = parent;
                     _value = value;
                     _currentid = currentid;
-                    _self = self;
                 }
 
-                public void OnNext(TThrottle value)
+                public override void OnNext(TThrottle value)
                 {
                     lock (_parent._gate)
                     {
@@ -233,11 +234,11 @@ namespace System.Reactive.Linq.ObservableImpl
                             _parent.ForwardOnNext(_value);
 
                         _parent._hasValue = false;
-                        _self.Dispose();
+                        Dispose();
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_parent._gate)
                     {
@@ -245,7 +246,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_parent._gate)
                     {
@@ -253,7 +254,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             _parent.ForwardOnNext(_value);
 
                         _parent._hasValue = false;
-                        _self.Dispose();
+                        Dispose();
                     }
                 }
             }
