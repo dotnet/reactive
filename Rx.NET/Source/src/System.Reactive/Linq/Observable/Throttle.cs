@@ -36,21 +36,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = parent._scheduler;
             }
 
-            private object _gate;
+            private readonly object _gate = new object();
             private TSource _value;
             private bool _hasValue;
             private IDisposable _serialCancelable;
             private ulong _id;
-
-            public override void Run(IObservable<TSource> source)
-            {
-                _gate = new object();
-                _value = default(TSource);
-                _hasValue = false;
-                _id = 0UL;
-
-                base.Run(source);
-            }
 
             protected override void Dispose(bool disposing)
             {
