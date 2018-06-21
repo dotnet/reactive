@@ -63,10 +63,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 var d = new SingleAssignmentDisposable();
                 Disposable.TrySetSerial(ref _serialCancelable, d);
-                d.Disposable = _scheduler.Schedule(currentid, _dueTime, Propagate);
+                d.Disposable = _scheduler.Schedule((@this: this, currentid), _dueTime, (_, tuple) => tuple.@this.Propagate(tuple.currentid));
             }
 
-            private IDisposable Propagate(IScheduler self, ulong currentid)
+            private IDisposable Propagate(ulong currentid)
             {
                 lock (_gate)
                 {
