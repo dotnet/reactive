@@ -34,8 +34,8 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly object _gate = new object();
             private readonly CompositeDisposable _group = new CompositeDisposable();
             private readonly RefCountDisposable _refCount;
-            private readonly SortedDictionary<int, IObserver<TRight>> _leftMap = new SortedDictionary<int, IObserver<TRight>>();
-            private readonly SortedDictionary<int, TRight> _rightMap = new SortedDictionary<int, TRight>();
+            private readonly SortedDictionary<int, IObserver<TRight>> _leftMap;
+            private readonly SortedDictionary<int, TRight> _rightMap;
 
             private readonly Func<TLeft, IObservable<TLeftDuration>> _leftDurationSelector;
             private readonly Func<TRight, IObservable<TRightDuration>> _rightDurationSelector;
