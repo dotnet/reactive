@@ -123,7 +123,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
 
-        protected override void Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<TSource>
         {
@@ -135,21 +135,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _throttleSelector = parent._throttleSelector;
             }
 
-            private object _gate;
+            private readonly object _gate = new object();
             private TSource _value;
             private bool _hasValue;
             private IDisposable _serialCancelable;
             private ulong _id;
-
-            public void Run(Throttle<TSource, TThrottle> parent)
-            {
-                _gate = new object();
-                _value = default(TSource);
-                _hasValue = false;
-                _id = 0UL;
-
-                base.Run(parent._source);
-            }
 
             protected override void Dispose(bool disposing)
             {
