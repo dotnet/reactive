@@ -268,7 +268,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-            protected override void Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(_sources);
 
             internal sealed class _ : Sink<Task<TSource>, TSource> 
             {
@@ -277,16 +277,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                 }
 
-                private object _gate;
-                private volatile int _count;
-
-                public void Run(Tasks parent)
-                {
-                    _gate = new object();
-                    _count = 1;
-
-                    SetUpstream(parent._sources.SubscribeSafe(this));
-                }
+                private object _gate = new object();
+                private volatile int _count = 1;
 
                 public override void OnNext(Task<TSource> value)
                 {
