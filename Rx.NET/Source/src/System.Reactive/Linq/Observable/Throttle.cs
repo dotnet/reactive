@@ -48,6 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     Disposable.TryDispose(ref _serialCancelable);
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -61,9 +62,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     _id = unchecked(_id + 1);
                     currentid = _id;
                 }
-                var d = new SingleAssignmentDisposable();
-                Disposable.TrySetSerial(ref _serialCancelable, d);
-                d.Disposable = _scheduler.Schedule((@this: this, currentid), _dueTime, (_, tuple) => tuple.@this.Propagate(tuple.currentid));
+
+                Disposable.TrySetSerial(ref _serialCancelable, null);
+                Disposable.TrySetSerial(ref _serialCancelable, _scheduler.Schedule((@this: this, currentid), _dueTime, (_, tuple) => tuple.@this.Propagate(tuple.currentid)));
             }
 
             private IDisposable Propagate(ulong currentid)
