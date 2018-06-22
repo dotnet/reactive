@@ -133,18 +133,18 @@ namespace System.Reactive.Concurrency
                 }
             }
 
-            readonly IObservable<TSource> source;
-            readonly SynchronizationContext context;
+            readonly IObservable<TSource> _source;
+            readonly SynchronizationContext _context;
 
             public SubscribeOnCtxObservable(IObservable<TSource> source, SynchronizationContext context)
             {
-                this.source = source;
-                this.context = context;
+                this._source = source;
+                this._context = context;
             }
 
             protected override IDisposable SubscribeCore(IObserver<TSource> observer)
             {
-                return new Subscription(source, context, observer);
+                return new Subscription(_source, _context, observer);
             }
         }
 
