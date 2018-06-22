@@ -190,8 +190,8 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Prepend_<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
-            if (source is AppendPrepend.IAppendPrepend<TSource> ap)
-                return ap.Prepend(value, scheduler);
+            if (source is AppendPrepend.IAppendPrepend<TSource> ap && ap.Scheduler == scheduler)
+                return ap.Prepend(value);
 
             return new AppendPrepend.AppendPrependSingle<TSource>(source, value, scheduler, append: false);
         }

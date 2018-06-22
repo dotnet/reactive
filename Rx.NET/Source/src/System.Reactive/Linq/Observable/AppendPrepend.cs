@@ -53,7 +53,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         new Node<TSource>(value), prev, Scheduler);
                 else
                     return new AppendPrependMultiple<TSource>(_source,
-                        null, new Node<TSource>(prev, value), Scheduler);
+                        new Node<TSource>(prev, value), null, Scheduler);
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
@@ -174,22 +174,22 @@ namespace System.Reactive.Linq.ObservableImpl
                     _scheduler = parent.Scheduler;
 
                     if (parent._prepends != null)
-                        _prepends = parent._prepends.ToReverseArray();
+                        _prepends = parent._prepends.ToArray();
 
                     if (parent._appends != null)
-                        _appends = parent._appends.ToArray();
+                        _appends = parent._appends.ToReverseArray();
                 }
 
                 public void Run()
                 {
                     if (_prepends != null)
                     {
-                        SetUpstream(_source.SubscribeSafe(this));
+                        var disposable = Schedule(_prepends, s => s.SetUpstream(s._source.SubscribeSafe(s)));
+                        Disposable.TrySetSerial(ref _schedulerDisposable, disposable);
                     }
                     else
                     {
-                        var disposable = Schedule(_prepends, s => s.SetUpstream(s._source.SubscribeSafe(s)));
-                        Disposable.TrySetSingle(ref _schedulerDisposable, disposable);
+                        SetUpstream(_source.SubscribeSafe(this));
                     }
                 }
 
@@ -198,7 +198,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (_appends != null)
                     {
                         var disposable = Schedule(_appends, s => s.ForwardOnCompleted());
-                        Disposable.TrySetSingle(ref _schedulerDisposable, disposable);
+                        Disposable.TrySetSerial(ref _schedulerDisposable, disposable);
                     }
                     else
                     {
@@ -263,12 +263,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (state._flag.IsDisposed)
                         return;
 
-                    if (state._current < state._array.Length)
-                    {
-                        var current = state._array[state._current];
-                        ForwardOnNext(current);
-                    }
-                    else
+                    var current = state._array[state._current];
+                    ForwardOnNext(current);
+
+                    state._current++;
+
+                    if (state._current == state._array.Length)
                     {
                         state._continue(state._sink);
                         return;
@@ -284,17 +284,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     while (!cancel.IsDisposed)
                     {
-                        if (i < array.Length)
-                        {
-                            var current = array[i];
-                            ForwardOnNext(current);
-                        }
-                        else
+                        ForwardOnNext(array[i]);
+                        i++;
+
+                        if (i == array.Length)
                         {
                             state._continue(state._sink);
                             break;
                         }
-                        i++;
                     }
 
                     base.Dispose();
