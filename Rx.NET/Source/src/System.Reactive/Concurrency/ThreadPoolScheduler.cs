@@ -279,10 +279,10 @@ namespace System.Reactive.Concurrency
                 // Rooting of the timer happens through the this.Tick delegate's target object,
                 // which is the current instance and has a field to store the Timer instance.
                 //
-                _timer = new System.Threading.Timer(this.Tick, null, period, period);
+                _timer = new System.Threading.Timer(@this => ((PeriodicTimer<TState>)@this).Tick(), this, period, period);
             }
 
-            private void Tick(object state)
+            private void Tick()
             {
                 _gate.Wait(
                     this,
