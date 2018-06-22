@@ -25,7 +25,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            IDisposable _mainDisposable;
             IDisposable _otherDisposable;
             volatile bool _forward;
             int _halfSerializer;
@@ -39,14 +38,13 @@ namespace System.Reactive.Linq.ObservableImpl
             public void Run(SkipUntil<TSource, TOther> parent)
             {
                 Disposable.TrySetSingle(ref _otherDisposable, parent._other.Subscribe(new OtherObserver(this)));
-                Disposable.TrySetSingle(ref _mainDisposable, parent._source.Subscribe(this));
+                base.Run(parent._source);
             }
 
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
                 {
-                    DisposeMain();
                     if (!Disposable.GetIsDisposed(ref _otherDisposable))
                     {
                         Disposable.TryDispose(ref _otherDisposable);
@@ -54,14 +52,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 base.Dispose(disposing);
-            }
-
-            void DisposeMain()
-            {
-                if (!Disposable.GetIsDisposed(ref _mainDisposable))
-                {
-                    Disposable.TryDispose(ref _mainDisposable);
-                }
             }
 
             public override void OnNext(TSource value)
@@ -80,7 +70,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 if (_forward)
                     HalfSerializer.ForwardOnCompleted(this, ref _halfSerializer, ref _error);
                 else
-                    DisposeMain();
+                    DisposeUpstream();
             }
 
             void OtherComplete()
