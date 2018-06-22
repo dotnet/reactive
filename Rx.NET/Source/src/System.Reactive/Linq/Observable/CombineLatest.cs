@@ -328,25 +328,23 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class CombineLatestObserver<T> : IObserver<T>
+    internal sealed class CombineLatestObserver<T> : SafeObserver<T>
     {
         private readonly object _gate;
         private readonly ICombineLatest _parent;
         private readonly int _index;
-        private readonly IDisposable _self;
         private T _value;
 
-        public CombineLatestObserver(object gate, ICombineLatest parent, int index, IDisposable self)
+        public CombineLatestObserver(object gate, ICombineLatest parent, int index)
         {
             _gate = gate;
             _parent = parent;
             _index = index;
-            _self = self;
         }
 
         public T Value => _value;
 
-        public void OnNext(T value)
+        public override void OnNext(T value)
         {
             lock (_gate)
             {
@@ -355,9 +353,9 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        public void OnError(Exception error)
+        public override void OnError(Exception error)
         {
-            _self.Dispose();
+            Dispose();
 
             lock (_gate)
             {
@@ -365,10 +363,9 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        public void OnCompleted()
+        public override void OnCompleted()
         {
-            _self.Dispose();
-
+            Dispose();
             lock (_gate)
             {
                 _parent.Done(_index);

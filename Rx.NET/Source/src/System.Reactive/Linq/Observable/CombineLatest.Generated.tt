@@ -76,15 +76,13 @@ for (var j = 1; j <= i; j++)
 
             public void Run(<#=os#>)
             {
-                var subscriptions = new SingleAssignmentDisposable[<#=i#>];
-                for (int i = 0; i < <#=i#>; i++)
-                    subscriptions[i] = new SingleAssignmentDisposable();
+                var subscriptions = new IDisposable[<#=i#>];
 
 <#
 for (var j = 1; j <= i; j++)
 {
 #>
-                _observer<#=j#> = new CombineLatestObserver<T<#=j#>>(_gate, this, <#=j - 1#>, subscriptions[<#=j - 1#>]);
+                subscriptions[<#=j - 1#>] = _observer<#=j#> = new CombineLatestObserver<T<#=j#>>(_gate, this, <#=j - 1#>);
 <#
 }
 #>
@@ -93,7 +91,7 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                subscriptions[<#=j - 1#>].Disposable = source<#=j#>.SubscribeSafe(_observer<#=j#>);
+                _observer<#=j#>.SetResource(source<#=j#>.SubscribeSafe(_observer<#=j#>));
 <#
 }
 #>
