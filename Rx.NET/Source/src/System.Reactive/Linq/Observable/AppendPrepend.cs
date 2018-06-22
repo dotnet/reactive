@@ -241,7 +241,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                private sealed class State
+                private struct State
                 {
                     public readonly _ _sink;
                     public readonly ICancelable _flag;
@@ -255,6 +255,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         _flag = flag;
                         _continue = c;
                         _array = array;
+                        _current = 0;
                     }
                 }
 
