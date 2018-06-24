@@ -35,7 +35,7 @@ namespace Tests.System.Reactive.Tests
 
             Assert.False(idx < 0, $"Could not locate sources directory: {dir}");
 
-            var newDir = dir.Substring(0, idx) + "Rx.NET/Source";
+            var newDir = Path.Combine(dir.Substring(0, idx), "Rx.NET", "Source");
 
             var error = new StringBuilder();
 
