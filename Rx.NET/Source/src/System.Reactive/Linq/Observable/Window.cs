@@ -195,16 +195,10 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (isShift)
                         _nextShift += _timeShift;
 
-                    m.Disposable = _scheduler.Schedule(new State { isSpan = isSpan, isShift = isShift }, ts, Tick);
+                    m.Disposable = _scheduler.Schedule((@this: this, isSpan, isShift), ts, (_, tuple) => tuple.@this.Tick(tuple.isSpan, tuple.isShift));
                 }
 
-                struct State
-                {
-                    public bool isSpan;
-                    public bool isShift;
-                }
-
-                private IDisposable Tick(IScheduler self, State state)
+                private IDisposable Tick(bool isSpan, bool isShift)
                 {
                     lock (_gate)
                     {
@@ -214,13 +208,13 @@ namespace System.Reactive.Linq.ObservableImpl
                         //                             overloads of Window and Buffer. Before v2, the two
                         //                             operations below were reversed.
                         //
-                        if (state.isSpan)
+                        if (isSpan)
                         {
                             var s = _q.Dequeue();
                             s.OnCompleted();
                         }
 
-                        if (state.isShift)
+                        if (isShift)
                         {
                             CreateWindow();
                         }
@@ -300,7 +294,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     CreateWindow();
 
-                    groupDisposable.Add(parent._scheduler.SchedulePeriodic(parent._timeSpan, Tick));
+                    groupDisposable.Add(parent._scheduler.SchedulePeriodic(this, parent._timeSpan, @this => @this.Tick()));
                     groupDisposable.Add(parent._source.SubscribeSafe(this));
 
                     SetUpstream(_refCountDisposable);
@@ -413,10 +407,10 @@ namespace System.Reactive.Linq.ObservableImpl
                     var m = new SingleAssignmentDisposable();
                     _timerD.Disposable = m;
 
-                    m.Disposable = _scheduler.Schedule(window, _timeSpan, Tick);
+                    m.Disposable = _scheduler.Schedule((@this: this, window), _timeSpan, (_, tuple) => tuple.@this.Tick(tuple.window));
                 }
 
-                private IDisposable Tick(IScheduler self, Subject<TSource> window)
+                private IDisposable Tick(Subject<TSource> window)
                 {
                     var d = Disposable.Empty;
 
