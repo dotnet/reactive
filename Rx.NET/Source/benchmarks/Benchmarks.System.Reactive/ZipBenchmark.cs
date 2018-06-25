@@ -77,7 +77,7 @@ namespace Benchmarks.System.Reactive
         {
             _zipTest.Zip_AllCompleted7();
         }
-        
+
         [Benchmark]
         public void Zip_AllCompleted8()
         {
