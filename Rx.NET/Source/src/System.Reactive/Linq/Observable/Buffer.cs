@@ -548,9 +548,9 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    var closingSubscription = new SingleAssignmentDisposable();
-                    Disposable.TrySetSerial(ref _bufferClosingSerialDisposable, closingSubscription);
-                    closingSubscription.Disposable = bufferClose.SubscribeSafe(new BufferClosingObserver(this, closingSubscription));
+                    var closingObserver = new BufferClosingObserver(this);
+                    Disposable.TrySetSerial(ref _bufferClosingSerialDisposable, closingObserver);
+                    closingObserver.SetResource(bufferClose.SubscribeSafe(closingObserver));
                 }
 
                 private void CloseBuffer(IDisposable closingSubscription)
@@ -567,30 +567,28 @@ namespace System.Reactive.Linq.ObservableImpl
                     _bufferGate.Wait(this, @this => @this.CreateBufferClose());
                 }
 
-                private sealed class BufferClosingObserver : IObserver<TBufferClosing>
+                private sealed class BufferClosingObserver : SafeObserver<TBufferClosing>
                 {
                     private readonly _ _parent;
-                    private readonly IDisposable _self;
 
-                    public BufferClosingObserver(_ parent, IDisposable self)
+                    public BufferClosingObserver(_ parent)
                     {
                         _parent = parent;
-                        _self = self;
                     }
 
-                    public void OnNext(TBufferClosing value)
+                    public override void OnNext(TBufferClosing value)
                     {
-                        _parent.CloseBuffer(_self);
+                        _parent.CloseBuffer(this);
                     }
 
-                    public void OnError(Exception error)
+                    public override void OnError(Exception error)
                     {
                         _parent.OnError(error);
                     }
 
-                    public void OnCompleted()
+                    public override void OnCompleted()
                     {
-                        _parent.CloseBuffer(_self);
+                        _parent.CloseBuffer(this);
                     }
                 }
 
