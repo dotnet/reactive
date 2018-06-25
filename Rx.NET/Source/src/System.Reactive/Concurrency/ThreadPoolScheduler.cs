@@ -175,7 +175,7 @@ namespace System.Reactive.Concurrency
             private Func<TState, TState> _action;
 
             private readonly AsyncLock _gate;
-            private volatile System.Threading.Timer _timer;
+            private volatile Timer _timer;
 
             public PeriodicTimer(TState state, TimeSpan period, Func<TState, TState> action)
             {
@@ -188,7 +188,7 @@ namespace System.Reactive.Concurrency
                 // Rooting of the timer happens through the this.Tick delegate's target object,
                 // which is the current instance and has a field to store the Timer instance.
                 //
-                _timer = new System.Threading.Timer(@this => ((PeriodicTimer<TState>)@this).Tick(), this, period, period);
+                _timer = new Timer(@this => ((PeriodicTimer<TState>)@this).Tick(), this, period, period);
             }
 
             private void Tick()

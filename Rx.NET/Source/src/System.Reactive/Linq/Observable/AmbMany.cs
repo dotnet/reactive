@@ -146,7 +146,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public InnerObserver(AmbCoordinator<T> parent, int index)
             {
-                this.downstream = parent.downstream;
+                downstream = parent.downstream;
                 this.parent = parent;
                 this.index = index;
             }

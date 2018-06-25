@@ -59,7 +59,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     while (!cancel.IsDisposed)
                         ForwardOnNext(value);
 
-                    base.Dispose();
+                    Dispose();
                 }
             }
         }

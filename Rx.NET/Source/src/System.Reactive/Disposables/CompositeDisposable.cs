@@ -12,7 +12,7 @@ namespace System.Reactive.Disposables
     /// <summary>
     /// Represents a group of disposable resources that are disposed together.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Backward compat + ideally want to get rid of the ICollection nature of the type.")]
+    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Backward compat + ideally want to get rid of the ICollection nature of the type.")]
     public sealed class CompositeDisposable : ICollection<IDisposable>, ICancelable
     {
         private readonly object _gate = new object();
@@ -382,7 +382,7 @@ namespace System.Reactive.Disposables
             public CompositeEnumerator(IDisposable[] disposables)
             {
                 this.disposables = disposables;
-                this.index = -1;
+                index = -1;
             }
 
             public IDisposable Current => disposables[index];

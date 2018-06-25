@@ -77,7 +77,7 @@ namespace System.Reactive.Subjects
         {
             for (; ; )
             {
-                var observers = Volatile.Read(ref this._observers);
+                var observers = Volatile.Read(ref _observers);
                 if (observers == DISPOSED)
                 {
                     _exception = null;
@@ -90,10 +90,10 @@ namespace System.Reactive.Subjects
                 }
                 if (Interlocked.CompareExchange(ref _observers, TERMINATED, observers) == observers)
                 {
-                    var hasValue = this._hasValue;
+                    var hasValue = _hasValue;
                     if (hasValue)
                     {
-                        var value = this._value;
+                        var value = _value;
 
                         foreach (var o in observers)
                         {
@@ -130,7 +130,7 @@ namespace System.Reactive.Subjects
 
             for (; ; )
             {
-                var observers = Volatile.Read(ref this._observers);
+                var observers = Volatile.Read(ref _observers);
                 if (observers == DISPOSED)
                 {
                     _exception = null;
@@ -142,10 +142,10 @@ namespace System.Reactive.Subjects
                 {
                     break;
                 }
-                this._exception = error;
+                _exception = error;
                 if (Interlocked.CompareExchange(ref _observers, TERMINATED, observers) == observers)
                 {
-                    var ex = this._exception;
+                    var ex = _exception;
                     foreach (var o in observers)
                     {
                         if (!o.IsDisposed())
@@ -164,7 +164,7 @@ namespace System.Reactive.Subjects
         /// <param name="value">The value to store in the subject.</param>
         public override void OnNext(T value)
         {
-            var observers = Volatile.Read(ref this._observers);
+            var observers = Volatile.Read(ref _observers);
             if (observers == DISPOSED)
             {
                 _value = default(T);
@@ -424,7 +424,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         /// <returns>The last element of the subject. Throws an InvalidOperationException if no element was received.</returns>
         /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Await pattern for C# and VB compilers.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Await pattern for C# and VB compilers.")]
         public T GetResult()
         {
             if (Volatile.Read(ref _observers) != TERMINATED)

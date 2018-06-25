@@ -44,7 +44,7 @@ namespace System.Reactive
         /// <param name="first">The first <see cref="Unit"/> value to compare.</param>
         /// <param name="second">The second <see cref="Unit"/> value to compare.</param>
         /// <returns>Because <see cref="Unit"/> has a single value, this always returns <c>true</c>.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "first", Justification = "Parameter required for operator overloading."), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "second", Justification = "Parameter required for operator overloading.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "first", Justification = "Parameter required for operator overloading."), Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "second", Justification = "Parameter required for operator overloading.")]
         public static bool operator ==(Unit first, Unit second) => true;
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace System.Reactive
         /// <param name="first">The first <see cref="Unit"/> value to compare.</param>
         /// <param name="second">The second <see cref="Unit"/> value to compare.</param>
         /// <returns>Because <see cref="Unit"/> has a single value, this always returns <c>false</c>.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "first", Justification = "Parameter required for operator overloading."), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "second", Justification = "Parameter required for operator overloading.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "first", Justification = "Parameter required for operator overloading."), Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "second", Justification = "Parameter required for operator overloading.")]
         public static bool operator !=(Unit first, Unit second) => false;
 
         /// <summary>

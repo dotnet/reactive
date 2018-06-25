@@ -19,7 +19,7 @@ namespace System.Reactive.Disposables
         /// <param name="dispose">Disposal action which will be run upon calling Dispose.</param>
         public AnonymousDisposable(Action dispose)
         {
-            System.Diagnostics.Debug.Assert(dispose != null);
+            Diagnostics.Debug.Assert(dispose != null);
 
             _dispose = dispose;
         }
@@ -53,7 +53,7 @@ namespace System.Reactive.Disposables
         /// <param name="dispose">Disposal action which will be run upon calling Dispose.</param>
         public AnonymousDisposable(TState state, Action<TState> dispose)
         {
-            System.Diagnostics.Debug.Assert(dispose != null);
+            Diagnostics.Debug.Assert(dispose != null);
 
             _state = state;
             _dispose = dispose;

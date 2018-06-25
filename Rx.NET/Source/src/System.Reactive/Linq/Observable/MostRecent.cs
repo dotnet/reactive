@@ -40,7 +40,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception error)
             {
-                base.Dispose();
+                Dispose();
 
                 _error = error;
                 _kind = NotificationKind.OnError;      // Write last!
@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                base.Dispose();
+                Dispose();
 
                 _kind = NotificationKind.OnCompleted;  // Write last!
             }
