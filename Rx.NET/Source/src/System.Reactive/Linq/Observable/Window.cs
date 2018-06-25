@@ -636,7 +636,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _windowBoundaries = windowBoundaries;
             }
 
-            protected override _ CreateSink(IObserver<IObservable<TSource>> observer) => new _(this, observer);
+            protected override _ CreateSink(IObserver<IObservable<TSource>> observer) => new _(observer);
 
             protected override void Run(_ sink) => sink.Run(this);
 
@@ -644,12 +644,9 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly object _gate = new object();
 
-                private readonly IObservable<TWindowClosing> _windowBoundaries;
-
-                public _(Boundaries parent, IObserver<IObservable<TSource>> observer)
+                public _(IObserver<IObservable<TSource>> observer)
                     : base(observer)
                 {
-                    _windowBoundaries = parent._windowBoundaries;
                 }
 
                 private ISubject<TSource> _window;
