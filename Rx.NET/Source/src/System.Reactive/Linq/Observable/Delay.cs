@@ -483,10 +483,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _ready = false;
 
-                    Disposable.TrySetSingle(ref _cancelable, parent._scheduler.Schedule(parent._dueTime, Start));
+                    Disposable.TrySetSingle(ref _cancelable, parent._scheduler.Schedule(this, parent._dueTime, (_, @this) => @this.Start()));
                 }
 
-                private void Start()
+                private IDisposable Start()
                 {
                     var next = default(TimeSpan);
                     var shouldRun = false;
@@ -519,6 +519,8 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         Disposable.TrySetSerial(ref _cancelable, _scheduler.Schedule((Base<Absolute>.S)this, next, (@this, a) => DrainQueue(a)));
                     }
+
+                    return Disposable.Empty;
                 }
             }
 
@@ -534,10 +536,10 @@ namespace System.Reactive.Linq.ObservableImpl
                     // ScheduleDrain might have already set a newer disposable
                     // using TrySetSerial would cancel it, stopping the emission
                     // and hang the consumer
-                    Disposable.TrySetSingle(ref _cancelable, parent._scheduler.Schedule(parent._dueTime, Start));
+                    Disposable.TrySetSingle(ref _cancelable, parent._scheduler.Schedule(this, parent._dueTime, (_, @this) => @this.Start()));
                 }
 
-                private void Start()
+                private IDisposable Start()
                 {
                     lock (_gate)
                     {
@@ -554,6 +556,8 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     ScheduleDrain();
+
+                    return Disposable.Empty;
                 }
             }
         }
