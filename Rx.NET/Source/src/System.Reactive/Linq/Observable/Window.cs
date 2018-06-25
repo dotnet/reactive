@@ -551,9 +551,9 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    var closingSubscription = new SingleAssignmentDisposable();
-                    _m.Disposable = closingSubscription;
-                    closingSubscription.Disposable = windowClose.SubscribeSafe(new WindowClosingObserver(this, closingSubscription));
+                    var observer = new WindowClosingObserver(this);
+                    _m.Disposable = observer;
+                    observer.SetResource(windowClose.SubscribeSafe(observer));
                 }
 
                 private void CloseWindow(IDisposable closingSubscription)
@@ -572,30 +572,28 @@ namespace System.Reactive.Linq.ObservableImpl
                     _windowGate.Wait(this, @this => @this.CreateWindowClose());
                 }
 
-                private sealed class WindowClosingObserver : IObserver<TWindowClosing>
+                private sealed class WindowClosingObserver : SafeObserver<TWindowClosing>
                 {
                     private readonly _ _parent;
-                    private readonly IDisposable _self;
 
-                    public WindowClosingObserver(_ parent, IDisposable self)
+                    public WindowClosingObserver(_ parent)
                     {
                         _parent = parent;
-                        _self = self;
                     }
 
-                    public void OnNext(TWindowClosing value)
+                    public override void OnNext(TWindowClosing value)
                     {
-                        _parent.CloseWindow(_self);
+                        _parent.CloseWindow(this);
                     }
 
-                    public void OnError(Exception error)
+                    public override void OnError(Exception error)
                     {
                         _parent.OnError(error);
                     }
 
-                    public void OnCompleted()
+                    public override void OnCompleted()
                     {
-                        _parent.CloseWindow(_self);
+                        _parent.CloseWindow(this);
                     }
                 }
 
