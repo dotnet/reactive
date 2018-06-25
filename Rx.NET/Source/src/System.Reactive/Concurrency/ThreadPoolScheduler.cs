@@ -15,35 +15,6 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="ThreadPoolScheduler.Instance">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
-        private sealed class UserWorkItem<TState> : IDisposable
-        {
-            private IDisposable _cancelRunDisposable;
-
-            private readonly TState _state;
-            private readonly IScheduler _scheduler;
-            private readonly Func<IScheduler, TState, IDisposable> _action;
-
-            public UserWorkItem(IScheduler scheduler, TState state, Func<IScheduler, TState, IDisposable> action)
-            {
-                _state = state;
-                _action = action;
-                _scheduler = scheduler;
-            }
-
-            public void Run()
-            {
-                if (!Disposable.GetIsDisposed(ref _cancelRunDisposable))
-                {
-                    Disposable.SetSingle(ref _cancelRunDisposable, _action(_scheduler, _state));
-                }
-            }
-
-            public void Dispose()
-            {
-                Disposable.TryDispose(ref _cancelRunDisposable);
-            }
-        }
-
         private static readonly Lazy<ThreadPoolScheduler> s_instance = new Lazy<ThreadPoolScheduler>(() => new ThreadPoolScheduler());
         private static readonly Lazy<NewThreadScheduler> s_newBackgroundThread = new Lazy<NewThreadScheduler>(() => new NewThreadScheduler(action => new Thread(action) { IsBackground = true }));
 
@@ -279,10 +250,10 @@ namespace System.Reactive.Concurrency
                 // Rooting of the timer happens through the this.Tick delegate's target object,
                 // which is the current instance and has a field to store the Timer instance.
                 //
-                _timer = new System.Threading.Timer(this.Tick, null, period, period);
+                _timer = new System.Threading.Timer(@this => ((PeriodicTimer<TState>)@this).Tick(), this, period, period);
             }
 
-            private void Tick(object state)
+            private void Tick()
             {
                 _gate.Wait(
                     this,
