@@ -12,43 +12,6 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.Default">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class DefaultScheduler : LocalScheduler, ISchedulerPeriodic
     {
-        private sealed class UserWorkItem<TState> : IDisposable
-        {
-            private IDisposable _cancelRunDisposable;
-            private IDisposable _cancelQueueDisposable;
-
-            private readonly TState _state;
-            private readonly IScheduler _scheduler;
-            private readonly Func<IScheduler, TState, IDisposable> _action;
-
-            public UserWorkItem(IScheduler scheduler, TState state, Func<IScheduler, TState, IDisposable> action)
-            {
-                _state = state;
-                _action = action;
-                _scheduler = scheduler;
-            }
-
-            public void Run()
-            {
-                if (!Disposable.GetIsDisposed(ref _cancelRunDisposable))
-                {
-                    Disposable.SetSingle(ref _cancelRunDisposable, _action(_scheduler, _state));
-                }
-            }
-
-            public IDisposable CancelQueueDisposable
-            {
-                get => Disposable.GetValue(ref _cancelQueueDisposable);
-                set => Disposable.SetSingle(ref _cancelQueueDisposable, value);
-            }
-
-            public void Dispose()
-            {
-                Disposable.TryDispose(ref _cancelQueueDisposable);
-                Disposable.TryDispose(ref _cancelRunDisposable);
-            }
-        }
-
         private static readonly Lazy<DefaultScheduler> s_instance = new Lazy<DefaultScheduler>(() => new DefaultScheduler());
         private static IConcurrencyAbstractionLayer s_cal = ConcurrencyAbstractionLayer.Current;
 
