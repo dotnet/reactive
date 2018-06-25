@@ -46,8 +46,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     _scheduler = parent._scheduler;
                 }
 
-                private IDisposable _sourceSubscription;
-
                 protected IStopwatch _watch;
                 protected TimeSpan _delay;
                 protected bool _ready;
@@ -74,18 +72,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     RunCore(parent);
 
-                    Disposable.SetSingle(ref _sourceSubscription, parent._source.SubscribeSafe(this));
+                    base.Run(parent._source);
                 }
 
                 protected override void Dispose(bool disposing)
                 {
+                    base.Dispose(disposing);
+
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _sourceSubscription);
                         Disposable.TryDispose(ref _cancelable);
                     }
-
-                    base.Dispose(disposing);
                 }
 
                 protected abstract void RunCore(TParent parent);
@@ -112,7 +109,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnError(Exception error)
                 {
-                    Disposable.TryDispose(ref _sourceSubscription);
+                    DisposeUpstream();
 
                     var shouldRun = false;
 
@@ -134,7 +131,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    Disposable.TryDispose(ref _sourceSubscription);
+                    DisposeUpstream();
 
                     var shouldRun = false;
 
@@ -276,8 +273,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     _scheduler = parent._scheduler;
                 }
 
-                private IDisposable _sourceSubscription;
-
                 protected IStopwatch _watch;
                 protected TimeSpan _delay;
                 protected Queue<System.Reactive.TimeInterval<TSource>> _queue;
@@ -300,17 +295,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     RunCore(parent);
 
-                    Disposable.SetSingle(ref _sourceSubscription, parent._source.SubscribeSafe(this));
+                    base.Run(parent._source);
                 }
 
                 protected override void Dispose(bool disposing)
                 {
+                    base.Dispose(disposing);
+
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _sourceSubscription);
                         Disposable.TryDispose(ref _cancelable);
                     }
-                    base.Dispose(disposing);
                 }
 
                 protected abstract void RunCore(TParent parent);
@@ -325,7 +320,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-
                     lock (_gate)
                     {
                         var next = _watch.Elapsed.Add(_delay);
@@ -338,7 +332,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnError(Exception error)
                 {
-                    Disposable.TryDispose(ref _sourceSubscription);
+                    DisposeUpstream();
 
                     lock (_gate)
                     {
@@ -353,8 +347,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    Disposable.TryDispose(ref _sourceSubscription);
-
+                    DisposeUpstream();
 
                     lock (_gate)
                     {
