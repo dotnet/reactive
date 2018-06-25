@@ -667,9 +667,9 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    var d = new SingleAssignmentDisposable();
-                    _delays.Add(d);
-                    d.Disposable = delay.SubscribeSafe(new DelayObserver(this, value, d));
+                    var observer = new DelayObserver(this, value);
+                    _delays.Add(observer);
+                    observer.SetResource(delay.SubscribeSafe(observer));
                 }
 
                 public override void OnError(Exception error)
@@ -699,31 +699,29 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                private sealed class DelayObserver : IObserver<TDelay>
+                private sealed class DelayObserver : SafeObserver<TDelay>
                 {
                     private readonly _ _parent;
                     private readonly TSource _value;
-                    private readonly IDisposable _self;
 
-                    public DelayObserver(_ parent, TSource value, IDisposable self)
+                    public DelayObserver(_ parent, TSource value)
                     {
                         _parent = parent;
                         _value = value;
-                        _self = self;
                     }
 
-                    public void OnNext(TDelay value)
+                    public override void OnNext(TDelay value)
                     {
                         lock (_parent._gate)
                         {
                             _parent.ForwardOnNext(_value);
 
-                            _parent._delays.Remove(_self);
+                            _parent._delays.Remove(this);
                             _parent.CheckDone();
                         }
                     }
 
-                    public void OnError(Exception error)
+                    public override void OnError(Exception error)
                     {
                         lock (_parent._gate)
                         {
@@ -731,13 +729,13 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                     }
 
-                    public void OnCompleted()
+                    public override void OnCompleted()
                     {
                         lock (_parent._gate)
                         {
                             _parent.ForwardOnNext(_value);
 
-                            _parent._delays.Remove(_self);
+                            _parent._delays.Remove(this);
                             _parent.CheckDone();
                         }
                     }
