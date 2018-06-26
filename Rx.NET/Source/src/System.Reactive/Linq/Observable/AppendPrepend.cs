@@ -198,7 +198,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (_appends != null)
                     {
                         var disposable = Schedule(_appends, s => s.ForwardOnCompleted());
-                        Disposable.TrySetSingle(ref _schedulerDisposable, disposable);
+                        Disposable.TrySetSerial(ref _schedulerDisposable, disposable);
                     }
                     else
                     {
