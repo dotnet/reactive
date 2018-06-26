@@ -715,8 +715,8 @@ namespace System.Reactive.Linq
         IObservable<TSource> Throttle<TSource>(IObservable<TSource> source, TimeSpan dueTime);
         IObservable<TSource> Throttle<TSource>(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler);
         IObservable<TSource> Throttle<TSource, TThrottle>(IObservable<TSource> source, Func<TSource, IObservable<TThrottle>> throttleDurationSelector);
-        IObservable<System.Reactive.TimeInterval<TSource>> TimeInterval<TSource>(IObservable<TSource> source);
-        IObservable<System.Reactive.TimeInterval<TSource>> TimeInterval<TSource>(IObservable<TSource> source, IScheduler scheduler);
+        IObservable<TimeInterval<TSource>> TimeInterval<TSource>(IObservable<TSource> source);
+        IObservable<TimeInterval<TSource>> TimeInterval<TSource>(IObservable<TSource> source, IScheduler scheduler);
         IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, TimeSpan dueTime);
         IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler);
         IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, TimeSpan dueTime, IObservable<TSource> other);

@@ -63,14 +63,14 @@ namespace System.Reactive.Linq.ObservableImpl
                         _error = ex;
                         _hasFailed = true;
 
-                        base.Dispose();
+                        Dispose();
                     }
                 }
             }
 
             public override void OnError(Exception error)
             {
-                base.Dispose();
+                Dispose();
 
                 lock (_gate)
                 {
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                base.Dispose();
+                Dispose();
 
                 lock (_gate)
                 {
@@ -121,7 +121,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
                             catch
                             {
-                                base.Dispose();
+                                Dispose();
                                 throw;
                             }
                         }

@@ -1248,7 +1248,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to record time intervals for.</param>
         /// <returns>An observable sequence with time interval information on elements.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        public static IObservable<System.Reactive.TimeInterval<TSource>> TimeInterval<TSource>(this IObservable<TSource> source)
+        public static IObservable<TimeInterval<TSource>> TimeInterval<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -1264,7 +1264,7 @@ namespace System.Reactive.Linq
         /// <param name="scheduler">Scheduler used to compute time intervals.</param>
         /// <returns>An observable sequence with time interval information on elements.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="scheduler"/> is null.</exception>
-        public static IObservable<System.Reactive.TimeInterval<TSource>> TimeInterval<TSource>(this IObservable<TSource> source, IScheduler scheduler)
+        public static IObservable<TimeInterval<TSource>> TimeInterval<TSource>(this IObservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
