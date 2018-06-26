@@ -1115,7 +1115,7 @@ namespace System.Reactive.Linq
         /// Concatenates a sequence of observables eagerly by running some
         /// or all of them at once and emitting their items in order.
         /// </summary>
-        /// <typeparam name="T">The value type of the inner observables.</typeparam>
+        /// <typeparam name="TSource">The value type of the inner observables.</typeparam>
         /// <param name="sources">The sequence of observables to concatenate eagerly.</param>
         /// <param name="maxConcurrency">The maximum number of observables to run at a time.</param>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
@@ -1141,8 +1141,8 @@ namespace System.Reactive.Linq
         /// Maps the upstream items into observables, runs some or all of them at once, emits items from one
         /// of the observables until it completes, then switches to the next observable.
         /// </summary>
-        /// <typeparam name="T">The value type of the upstream.</typeparam>
-        /// <typeparam name="R">The output value type.</typeparam>
+        /// <typeparam name="TSource">The value type of the upstream.</typeparam>
+        /// <typeparam name="TResult">The output value type.</typeparam>
         /// <param name="source">The source observable to be mapper and concatenated eagerly.</param>
         /// <param name="mapper">The function that returns an observable for an upstream item.</param>
         /// <param name="maxConcurrency">The maximum number of observables to run at a time.</param>
