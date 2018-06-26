@@ -130,32 +130,36 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                     }
 
-                    SetUpstream(Disposable.Create(() =>
-                    {
-                        subscription.Dispose();
-
-                        lock (parent._gate)
+                    SetUpstream(Disposable.Create(
+                        (parent, subscription),
+                        tuple =>
                         {
-                            if (--parent._count == 0)
+                            var (closureParent, closureSubscription) = tuple;
+
+                            closureSubscription.Dispose();
+
+                            lock (closureParent._gate)
                             {
-                                var cancelable = (SingleAssignmentDisposable)Volatile.Read(ref parent._serial);
-
-                                cancelable.Disposable = parent._scheduler.Schedule(cancelable, parent._disconnectTime, (self, state) =>
+                                if (--closureParent._count == 0)
                                 {
-                                    lock (parent._gate)
-                                    {
-                                        if (object.ReferenceEquals(Volatile.Read(ref parent._serial), state))
-                                        {
-                                            parent._connectableSubscription.Dispose();
-                                            parent._connectableSubscription = null;
-                                        }
-                                    }
+                                    var cancelable = (SingleAssignmentDisposable)Volatile.Read(ref closureParent._serial);
 
-                                    return Disposable.Empty;
-                                });
+                                    cancelable.Disposable = closureParent._scheduler.Schedule((cancelable, closureParent), closureParent._disconnectTime, (self, tuple2) =>
+                                    {
+                                        lock (tuple2.closureParent._gate)
+                                        {
+                                            if (object.ReferenceEquals(Volatile.Read(ref tuple2.closureParent._serial), tuple2.cancelable))
+                                            {
+                                                tuple2.closureParent._connectableSubscription.Dispose();
+                                                tuple2.closureParent._connectableSubscription = null;
+                                            }
+                                        }
+
+                                        return Disposable.Empty;
+                                    });
+                                }
                             }
-                        }
-                    }));
+                        }));
                 }
             }
         }
