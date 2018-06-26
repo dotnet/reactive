@@ -43,7 +43,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _resultSelector = parent._resultSelector;
                 }
 
-                private bool _isStopped;
+                private volatile bool _isStopped;
 
                 public override void OnNext(TSource value)
                 {
@@ -203,7 +203,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _group.Add(_sourceSubscription);
                 }
 
-                private bool _isStopped;
+                private volatile bool _isStopped;
                 private int _index;
 
                 public override void Run(IObservable<TSource> source)
@@ -853,7 +853,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Func<TSource, IObservable<TResult>> _selector;
                 private readonly CompositeDisposable _group = new CompositeDisposable();
                 
-                private bool _isStopped;
+                private volatile bool _isStopped;
 
                 public _(ObservableSelector parent, IObserver<TResult> observer)
                     : base(observer)
@@ -1083,7 +1083,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected readonly Func<TSource, int, IObservable<TResult>> _selector;
 
                 private int _index;
-                private bool _isStopped;
+                private volatile bool _isStopped;
 
                 public _(ObservableSelectorIndexed parent, IObserver<TResult> observer)
                     : base(observer)
