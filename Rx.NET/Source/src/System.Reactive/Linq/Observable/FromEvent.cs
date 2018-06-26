@@ -276,19 +276,23 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                     }
 
-                    return Disposable.Create(() =>
-                    {
-                        connection.Dispose();
-
-                        lock (_parent._gate)
+                    return Disposable.Create(
+                        (this, _parent, connection),
+                        tuple =>
                         {
-                            if (--_count == 0)
+                            var (@this, closureParent, closureConnection) = tuple;
+
+                            closureConnection.Dispose();
+
+                            lock (closureParent._gate)
                             {
-                                _parent._scheduler.ScheduleAction(_removeHandler, handler => handler.Dispose());
-                                _parent._session = null;
+                                if (--@this._count == 0)
+                                {
+                                    closureParent._scheduler.ScheduleAction(@this._removeHandler, handler => handler.Dispose());
+                                    closureParent._session = null;
+                                }
                             }
-                        }
-                    });
+                        });
                 }
 
             }
@@ -362,7 +366,9 @@ namespace System.Reactive.Linq.ObservableImpl
         protected override IDisposable AddHandler(TDelegate handler)
         {
             _addHandler(handler);
-            return Disposable.Create(() => _removeHandler(handler));
+            return Disposable.Create(
+                (_removeHandler, handler),
+                tuple => tuple._removeHandler(tuple.handler));
         }
     }
 }

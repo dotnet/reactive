@@ -9,8 +9,8 @@ using System.Threading;
 
 namespace System.Reactive
 {
-    using System.Collections.Concurrent;
-    using System.Diagnostics;
+    using Collections.Concurrent;
+    using Diagnostics;
 
     internal class ScheduledObserver<T> : ObserverBase<T>, IScheduledObserver<T>
     {
@@ -410,8 +410,8 @@ namespace System.Reactive
         {
             this.downstream = downstream;
             this.scheduler = scheduler;
-            this.longRunning = scheduler.AsLongRunning();
-            this.queue = new ConcurrentQueue<T>();
+            longRunning = scheduler.AsLongRunning();
+            queue = new ConcurrentQueue<T>();
         }
 
         public void Run(IObservable<T> source)

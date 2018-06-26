@@ -66,7 +66,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             this.downstream = downstream;
             var o = new InnerObserver[n];
-            for (int i = 0; i < n; i++)
+            for (var i = 0; i < n; i++)
             {
                 o[i] = new InnerObserver(this, i);
             }
@@ -146,7 +146,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public InnerObserver(AmbCoordinator<T> parent, int index)
             {
-                this.downstream = parent.downstream;
+                downstream = parent.downstream;
                 this.parent = parent;
                 this.index = index;
             }

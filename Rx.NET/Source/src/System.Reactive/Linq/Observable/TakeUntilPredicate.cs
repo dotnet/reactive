@@ -21,8 +21,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public TakeUntilPredicate(IObservable<TSource> source, Func<TSource, bool> stopPredicate)
         {
-            this._source = source;
-            this._stopPredicate = stopPredicate;
+            _source = source;
+            _stopPredicate = stopPredicate;
         }
 
         protected override TakeUntilPredicateObserver CreateSink(IObserver<TSource> observer) => new TakeUntilPredicateObserver(observer, _stopPredicate);
@@ -36,7 +36,7 @@ namespace System.Reactive.Linq.ObservableImpl
             public TakeUntilPredicateObserver(IObserver<TSource> downstream, 
                 Func<TSource, bool> predicate) : base (downstream)
             {
-                this._stopPredicate = predicate;
+                _stopPredicate = predicate;
             }
 
             public override void OnCompleted()

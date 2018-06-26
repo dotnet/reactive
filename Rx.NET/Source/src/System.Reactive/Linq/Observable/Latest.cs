@@ -52,7 +52,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception error)
             {
-                base.Dispose();
+                Dispose();
 
                 var lackedValue = false;
                 lock (_gate)
@@ -69,7 +69,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                base.Dispose();
+                Dispose();
 
                 var lackedValue = false;
                 lock (_gate)

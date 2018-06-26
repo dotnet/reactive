@@ -283,7 +283,7 @@ namespace System.Reactive.Linq.ObservableImpl
             else
             {
                 var allOthersDone = true;
-                for (int i = 0; i < _isDone.Length; i++)
+                for (var i = 0; i < _isDone.Length; i++)
                 {
                     if (i != index && !_isDone[i])
                     {
@@ -421,7 +421,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _hasValueAll = false;
 
                 _values = new List<TSource>(N);
-                for (int i = 0; i < N; i++)
+                for (var i = 0; i < N; i++)
                     _values.Add(default(TSource));
 
                 _isDone = new bool[N];
@@ -430,7 +430,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 _gate = new object();
 
-                for (int i = 0; i < N; i++)
+                for (var i = 0; i < N; i++)
                 {
                     var j = i;
 

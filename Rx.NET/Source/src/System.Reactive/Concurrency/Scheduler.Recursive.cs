@@ -148,8 +148,6 @@ namespace System.Reactive.Concurrency
 
             protected readonly CompositeDisposable group;
 
-            protected long index;
-
             public InvokeRecBaseState(IScheduler scheduler)
             {
                 this.scheduler = scheduler;

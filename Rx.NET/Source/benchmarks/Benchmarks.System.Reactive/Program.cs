@@ -13,7 +13,8 @@ namespace Benchmarks.System.Reactive
         {
             var switcher = new BenchmarkSwitcher(new[] {
                 typeof(ZipBenchmark),
-                typeof(CombineLatestBenchmark)
+                typeof(CombineLatestBenchmark),
+                typeof(SwitchBenchmark)
             });
 
             switcher.Run();
