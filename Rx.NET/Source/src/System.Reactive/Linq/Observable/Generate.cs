@@ -193,7 +193,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _hasResult = false;
                     _result = default(TResult);
 
-                    SetUpstream(_parent._scheduler.Schedule(_parent._initialState, InvokeRec));
+                    SetUpstream(_parent._scheduler.Schedule((@this: this, _parent._initialState), (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple._initialState)));
                 }
 
                 private IDisposable InvokeRec(IScheduler self, TState state)
@@ -236,7 +236,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return Disposable.Empty;
                     }
 
-                    return self.Schedule(state, time, InvokeRec);
+                    return self.Schedule((@this: this, state), time, (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.state));
                 }
             }
         }
@@ -286,7 +286,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _hasResult = false;
                     _result = default(TResult);
 
-                    SetUpstream(_parent._scheduler.Schedule(_parent._initialState, InvokeRec));
+                    SetUpstream(_parent._scheduler.Schedule((@this: this, _parent._initialState), (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple._initialState)));
                 }
 
                 private IDisposable InvokeRec(IScheduler self, TState state)
@@ -329,9 +329,10 @@ namespace System.Reactive.Linq.ObservableImpl
                         return Disposable.Empty;
                     }
 
-                    return self.Schedule(state, time, InvokeRec);
+                    return self.Schedule((@this: this, state), time, (scheduler, tuple) => tuple.@this.InvokeRec(scheduler, tuple.state));
                 }
             }
         }
     }
 }
+
