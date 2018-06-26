@@ -60,14 +60,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void Run(TParent parent)
                 {
-                    _active = false;
-                    _running = false;
-                    _queue = new Queue<System.Reactive.TimeInterval<TSource>>();
-                    _hasCompleted = false;
-                    _completeAt = default(TimeSpan);
-                    _hasFailed = false;
-                    _exception = default(Exception);
-
                     _watch = _scheduler.StartStopwatch();
 
                     RunCore(parent);
@@ -275,7 +267,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 protected IStopwatch _watch;
                 protected TimeSpan _delay;
-                protected Queue<System.Reactive.TimeInterval<TSource>> _queue;
+                protected Queue<System.Reactive.TimeInterval<TSource>> _queue = new Queue<System.Reactive.TimeInterval<TSource>>();
 
                 private CancellationTokenSource _stop;
                 private bool _hasCompleted;
@@ -285,12 +277,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void Run(TParent parent)
                 {
-                    _queue = new Queue<System.Reactive.TimeInterval<TSource>>();
-                    _hasCompleted = false;
-                    _completeAt = default(TimeSpan);
-                    _hasFailed = false;
-                    _exception = default(Exception);
-
                     _watch = _scheduler.StartStopwatch();
 
                     RunCore(parent);
