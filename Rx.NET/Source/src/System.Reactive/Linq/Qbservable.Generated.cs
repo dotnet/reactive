@@ -3083,6 +3083,76 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
+        /// Concatenates a sequence of observables eagerly by running some
+        /// or all of them at once and emitting their items in order.
+        /// </summary>
+        /// <typeparam name="T">The value type of the inner observables.</typeparam>
+        /// <param name="sources">The sequence of observables to concatenate eagerly.</param>
+        /// <param name="maxConcurrency">The maximum number of observables to run at a time.</param>
+        /// <param name="capacityHint">The number of items expected from each observable.</param>
+        /// <returns>An observable sequence that eagerly runs some or all inner sources but relays
+        /// their elements still in order.</returns>
+        public static IQbservable<TSource> ConcatEager<TSource>(this IQbservable<IObservable<TSource>> sources, bool delayErrors = false, int maxConcurrency = int.MaxValue)
+        {
+            if (sources == null)
+                throw new ArgumentNullException(nameof(sources));
+
+            return sources.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.ConcatEager<TSource>(default(IQbservable<IObservable<TSource>>), default(bool), default(int))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    sources.Expression,
+                    Expression.Constant(delayErrors, typeof(bool)),
+                    Expression.Constant(maxConcurrency, typeof(int))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Maps the upstream items into observables, runs some or all of them at once, emits items from one
+        /// of the observables until it completes, then switches to the next observable.
+        /// </summary>
+        /// <typeparam name="T">The value type of the upstream.</typeparam>
+        /// <typeparam name="R">The output value type.</typeparam>
+        /// <param name="source">The source observable to be mapper and concatenated eagerly.</param>
+        /// <param name="mapper">The function that returns an observable for an upstream item.</param>
+        /// <param name="maxConcurrency">The maximum number of observables to run at a time.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="mapper"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="maxConcurrency"/> is non-positive.</exception>
+        /// <returns>An observable sequence that eagerly runs some or all mapped-in sources but relays
+        /// their elements still in order.</returns>
+        public static IQbservable<TResult> ConcatManyEager<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TResult>>> mapper, bool delayErrors = false, int maxConcurrency = int.MaxValue)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            if (mapper == null)
+                throw new ArgumentNullException(nameof(mapper));
+
+            if (maxConcurrency <= 0)
+                throw new ArgumentOutOfRangeException(nameof(maxConcurrency));
+
+            return source.Provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.ConcatManyEager<TSource, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, IObservable<TResult>>>), default(bool), default(int))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+#endif
+                    source.Expression,
+                    mapper,
+                    Expression.Constant(delayErrors, typeof(bool)),
+                    Expression.Constant(maxConcurrency, typeof(int))
+                )
+            );
+        }
+
+        /// <summary>
         /// Determines whether an observable sequence contains a specified element by using the default equality comparer.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>

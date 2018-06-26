@@ -59,6 +59,7 @@ namespace ReactiveTests.Tests
             _defaultValues.Add("IObservable`1[][Int32]", new[] { Observable.Return(1) });
 
             _defaultValues.Add("IConnectableObservable`1[Int32]", Observable.Return(1).Publish());
+            _defaultValues.Add("Boolean", false);
             _defaultValues.Add("Int32", 1);
             _defaultValues.Add("Int64", 1L);
             _defaultValues.Add("IScheduler", Scheduler.Immediate);

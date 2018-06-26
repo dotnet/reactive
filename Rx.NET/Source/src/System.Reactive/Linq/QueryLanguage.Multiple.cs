@@ -225,6 +225,29 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + ConcatEager +
+
+        public IObservable<TSource> ConcatEager<TSource>(IObservable<IObservable<TSource>> sources, bool delayErrors, int maxConcurrency)
+        {
+            return ConcatManyEager(sources, v => v, delayErrors, maxConcurrency);
+        }
+
+        #endregion
+
+        #region + ConcatManyEager +
+
+        public IObservable<TResult> ConcatManyEager<TSource, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TResult>> mapper, bool delayErrors, int maxConcurrency)
+        {
+            if (maxConcurrency == int.MaxValue)
+            {
+                return new ConcatManyEager.All<TSource, TResult>(source, mapper, delayErrors);
+            }
+
+            return new ConcatManyEager.Some<TSource, TResult>(source, mapper, delayErrors, maxConcurrency);
+        }
+
+        #endregion
+
         #region + Merge +
 
         public virtual IObservable<TSource> Merge<TSource>(IObservable<IObservable<TSource>> sources)
