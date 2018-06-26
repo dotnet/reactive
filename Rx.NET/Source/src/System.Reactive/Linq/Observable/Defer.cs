@@ -45,7 +45,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return;
                 }
 
-                SetUpstream(result.SubscribeSafe(this));
+                base.Run(result);
             }
         }
     }
