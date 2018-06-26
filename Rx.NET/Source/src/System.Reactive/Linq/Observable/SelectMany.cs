@@ -188,7 +188,6 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
-                private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
                 private readonly CompositeDisposable _group = new CompositeDisposable();
 
                 private readonly Func<TSource, int, IObservable<TCollection>> _collectionSelector;
@@ -199,21 +198,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _collectionSelector = parent._collectionSelector;
                     _resultSelector = parent._resultSelector;
-
-                    _group.Add(_sourceSubscription);
                 }
 
                 private volatile bool _isStopped;
                 private int _index;
-
-                public override void Run(IObservable<TSource> source)
-                {
-                    _isStopped = false;
-
-                    _sourceSubscription.Disposable = source.SubscribeSafe(this);
-
-                    SetUpstream(_group);
-                }
 
                 public override void OnNext(TSource value)
                 {
@@ -249,7 +237,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnCompleted()
                 {
                     _isStopped = true;
-                    if (_group.Count == 1)
+                    if (_group.Count == 0)
                     {
                         //
                         // Notice there can be a race between OnCompleted of the source and any
@@ -265,8 +253,16 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        _sourceSubscription.Dispose();
+                        DisposeUpstream();
                     }
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    base.Dispose(disposing);
+
+                    if (disposing)
+                        _group.Dispose();
                 }
 
                 private sealed class InnerObserver : SafeObserver<TCollection>
@@ -316,7 +312,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     public override void OnCompleted()
                     {
                         _parent._group.Remove(this);
-                        if (_parent._isStopped && _parent._group.Count == 1)
+                        if (_parent._isStopped && _parent._group.Count == 0)
                         {
                             //
                             // Notice there can be a race between OnCompleted of the source and any
