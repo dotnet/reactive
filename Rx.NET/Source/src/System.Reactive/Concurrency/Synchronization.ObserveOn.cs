@@ -24,7 +24,7 @@ namespace System.Reactive.Concurrency
 
             protected override ObserveOnObserverNew<TSource> CreateSink(IObserver<TSource> observer) => new ObserveOnObserverNew<TSource>(_scheduler, observer);
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
+            [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
             protected override void Run(ObserveOnObserverNew<TSource> sink) => sink.Run(_source);
         }
 
@@ -41,7 +41,7 @@ namespace System.Reactive.Concurrency
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(_context, observer);
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
+            [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
             protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : IdentitySink<TSource>

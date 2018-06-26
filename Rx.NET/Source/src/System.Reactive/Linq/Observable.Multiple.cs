@@ -21,7 +21,7 @@ namespace System.Reactive.Linq
         /// <param name="second">Second observable sequence.</param>
         /// <returns>An observable sequence that surfaces either of the given sequences, whichever reacted first.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Amb", Justification = "In honor of McCarthy.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Amb", Justification = "In honor of McCarthy.")]
         public static IObservable<TSource> Amb<TSource>(this IObservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq
         /// <param name="sources">Observable sources competing to react first.</param>
         /// <returns>An observable sequence that surfaces any of the given sequences, whichever reacted first.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Amb", Justification = "In honor of McCarthy.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Amb", Justification = "In honor of McCarthy.")]
         public static IObservable<TSource> Amb<TSource>(params IObservable<TSource>[] sources)
         {
             if (sources == null)
@@ -55,7 +55,7 @@ namespace System.Reactive.Linq
         /// <param name="sources">Observable sources competing to react first.</param>
         /// <returns>An observable sequence that surfaces any of the given sequences, whichever reacted first.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Amb", Justification = "In honor of McCarthy.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Amb", Justification = "In honor of McCarthy.")]
         public static IObservable<TSource> Amb<TSource>(this IEnumerable<IObservable<TSource>> sources)
         {
             if (sources == null)

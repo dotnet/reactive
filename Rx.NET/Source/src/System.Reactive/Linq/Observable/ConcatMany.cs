@@ -50,8 +50,8 @@ namespace System.Reactive.Linq.ObservableImpl
             internal ConcatManyOuterObserver(IObserver<T> downstream)
             {
                 this.downstream = downstream;
-                this.queue = new ConcurrentQueue<IObservable<T>>();
-                this.innerObserver = new InnerObserver(this);
+                queue = new ConcurrentQueue<IObservable<T>>();
+                innerObserver = new InnerObserver(this);
             }
 
             internal void OnSubscribe(IDisposable d)

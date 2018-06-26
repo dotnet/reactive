@@ -9,7 +9,7 @@ namespace System.Reactive.Concurrency
     /// </summary>
     /// <typeparam name="TAbsolute">Absolute time representation type.</typeparam>
     /// <remarks>This type is not thread safe; users should ensure proper synchronization.</remarks>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "But it *is* a queue!")]
+    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "But it *is* a queue!")]
     public class SchedulerQueue<TAbsolute>
         where TAbsolute : IComparable<TAbsolute>
     {

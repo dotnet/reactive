@@ -568,6 +568,7 @@ namespace System.Reactive.Disposables
     {
         public static System.IDisposable Empty { get; }
         public static System.IDisposable Create(System.Action dispose) { }
+        public static System.IDisposable Create<TState>(TState state, System.Action<TState> dispose) { }
     }
     public interface ICancelable : System.IDisposable
     {
