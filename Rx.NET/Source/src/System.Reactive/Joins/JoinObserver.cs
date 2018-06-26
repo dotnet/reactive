@@ -61,7 +61,7 @@ namespace System.Reactive.Joins
                     }
 
                     Queue.Enqueue(notification);
-                    foreach (var activePlan in _activePlans.ToArray())
+                    foreach (var activePlan in _activePlans.ToArray()) // Working on a copy since _activePlans might change while iterating.
                         activePlan.Match();
                 }
             }
