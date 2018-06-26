@@ -3089,7 +3089,8 @@ namespace System.Reactive.Linq
         /// <typeparam name="T">The value type of the inner observables.</typeparam>
         /// <param name="sources">The sequence of observables to concatenate eagerly.</param>
         /// <param name="maxConcurrency">The maximum number of observables to run at a time.</param>
-        /// <param name="capacityHint">The number of items expected from each observable.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="maxConcurrency"/> is non-positive.</exception>
         /// <returns>An observable sequence that eagerly runs some or all inner sources but relays
         /// their elements still in order.</returns>
         public static IQbservable<TSource> ConcatEager<TSource>(this IQbservable<IObservable<TSource>> sources, bool delayErrors = false, int maxConcurrency = int.MaxValue)
