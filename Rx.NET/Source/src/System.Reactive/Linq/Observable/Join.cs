@@ -59,12 +59,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var rightObserver = new RightObserver(this);
 
                 _group.Add(leftObserver);
-                _leftDone = false;
-                _leftID = 0;
-
                 _group.Add(rightObserver);
-                _rightDone = false;
-                _rightID = 0;
 
                 leftObserver.SetResource(parent._left.SubscribeSafe(leftObserver));
                 rightObserver.SetResource(parent._right.SubscribeSafe(rightObserver));
