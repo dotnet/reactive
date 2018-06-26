@@ -431,7 +431,7 @@ namespace System.Reactive.Linq.ObservableImpl
             else
             {
                 var allOthersDone = true;
-                for (int i = 0; i < _isDone.Length; i++)
+                for (var i = 0; i < _isDone.Length; i++)
                 {
                     if (i != index && !_isDone[i])
                     {
@@ -581,7 +581,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var N = srcs.Length;
 
                 _queues = new Queue<TSource>[N];
-                for (int i = 0; i < N; i++)
+                for (var i = 0; i < N; i++)
                     _queues[i] = new Queue<TSource>();
 
                 _isDone = new bool[N];
@@ -590,7 +590,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 if (Interlocked.CompareExchange(ref _subscriptions, subscriptions, null) == null)
                 {
-                    for (int i = 0; i < N; i++)
+                    for (var i = 0; i < N; i++)
                     {
                         var o = new SourceObserver(this, i);
                         Disposable.SetSingle(ref subscriptions[i], srcs[i].SubscribeSafe(o));
@@ -605,7 +605,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var subscriptions = Interlocked.Exchange(ref _subscriptions, Disposed);
                     if (subscriptions != null)
                     {
-                        for (int i = 0; i < subscriptions.Length; i++)
+                        for (var i = 0; i < subscriptions.Length; i++)
                         {
                             Disposable.TryDispose(ref subscriptions[i]);
                         }
