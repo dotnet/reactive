@@ -61,6 +61,21 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
+        /// Creates a disposable object that invokes the specified action when disposed.
+        /// </summary>
+        /// <param name="state">The state to be passed to the action.</param>
+        /// <param name="dispose">Action to run during the first call to <see cref="IDisposable.Dispose"/>. The action is guaranteed to be run at most once.</param>
+        /// <returns>The disposable object that runs the given action upon disposal.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="dispose"/> is <c>null</c>.</exception>
+        public static IDisposable Create<TState>(TState state, Action<TState> dispose)
+        {
+            if (dispose == null)
+                throw new ArgumentNullException(nameof(dispose));
+
+            return new AnonymousDisposable<TState>(state, dispose);
+        }
+
+        /// <summary>
         /// Gets the value stored in <paramref name="fieldRef" /> or a null if
         /// <paramref name="fieldRef" /> was already disposed.
         /// </summary>
