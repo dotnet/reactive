@@ -38,7 +38,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private object _gate = new object();
                 private Queue<IObservable<TSource>> _q = new Queue<IObservable<TSource>>();
-                private bool _isStopped;
+                private volatile bool _isStopped;
                 private CompositeDisposable _group = new CompositeDisposable();
                 private int _activeCount = 0;
 
@@ -163,7 +163,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 private object _gate = new object();
-                private bool _isStopped;
+                private volatile bool _isStopped;
                 private CompositeDisposable _group = new CompositeDisposable();
 
                 public override void OnNext(IObservable<TSource> value)
