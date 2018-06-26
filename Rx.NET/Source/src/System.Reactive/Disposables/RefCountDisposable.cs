@@ -107,7 +107,7 @@ namespace System.Reactive.Disposables
                 }
 
                 // how many active disposables are there?
-                int active = cnt & 0x7FFFFFFF;
+                var active = cnt & 0x7FFFFFFF;
 
                 // keep the active count but set the dispose marker of bit 31
                 var u = int.MinValue | active;
