@@ -80,7 +80,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 this.source = source;
                 this.errorSignal = errorSignal;
-                this.handlerObserver = new HandlerObserver(this);
+                handlerObserver = new HandlerObserver(this);
             }
 
             protected override void Dispose(bool disposing)
@@ -109,7 +109,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnNext(T value)
             {
-                HalfSerializer.ForwardOnNext(this, value, ref halfSerializer, ref this.error);
+                HalfSerializer.ForwardOnNext(this, value, ref halfSerializer, ref error);
             }
 
             internal void HandlerError(Exception error)
@@ -119,7 +119,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal void HandlerComplete()
             {
-                HalfSerializer.ForwardOnCompleted(this, ref halfSerializer, ref this.error);
+                HalfSerializer.ForwardOnCompleted(this, ref halfSerializer, ref error);
             }
 
             internal void HandlerNext()

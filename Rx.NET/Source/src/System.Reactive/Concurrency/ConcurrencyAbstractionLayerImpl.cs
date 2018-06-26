@@ -20,8 +20,8 @@ namespace System.Reactive.Concurrency
         {
             public WorkItem(Action<object> action, object state)
             {
-                this.Action = action;
-                this.State = state;
+                Action = action;
+                State = state;
             }
 
             public Action<object> Action { get; }
@@ -51,7 +51,7 @@ namespace System.Reactive.Concurrency
 
         public IDisposable QueueUserWorkItem(Action<object> action, object state)
         {
-            System.Threading.ThreadPool.QueueUserWorkItem(itemObject =>
+            ThreadPool.QueueUserWorkItem(itemObject =>
             {
                 var item = (WorkItem)itemObject;
 
@@ -61,7 +61,7 @@ namespace System.Reactive.Concurrency
             return Disposable.Empty;
         }
 
-        public void Sleep(TimeSpan timeout) => System.Threading.Thread.Sleep(Normalize(timeout));
+        public void Sleep(TimeSpan timeout) => Thread.Sleep(Normalize(timeout));
 
         public IStopwatch StartStopwatch() => new StopwatchImpl();
 
@@ -163,7 +163,7 @@ namespace System.Reactive.Concurrency
                 _state = state;
                 _action = action;
 
-                Disposable.SetSingle(ref _timer, new System.Threading.Timer(_ => Tick(_), this, dueTime, TimeSpan.FromMilliseconds(System.Threading.Timeout.Infinite)));
+                Disposable.SetSingle(ref _timer, new System.Threading.Timer(_ => Tick(_), this, dueTime, TimeSpan.FromMilliseconds(Timeout.Infinite)));
             }
 
             private static void Tick(object state)
@@ -239,7 +239,7 @@ namespace System.Reactive.Concurrency
             {
                 _action = action;
                 
-                new System.Threading.Thread(_ => Loop(_))
+                new Thread(_ => Loop(_))
                 {
                     Name = "Rx-FastPeriodicTimer",
                     IsBackground = true

@@ -100,7 +100,7 @@ namespace System.Reactive
 
             if (disposing)
             {
-                Disposables.Disposable.TryDispose(ref _disposable);
+                Disposable.TryDispose(ref _disposable);
             }
         }
     }

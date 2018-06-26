@@ -38,7 +38,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public _(IObserver<TSource> observer, Eager parent)
                     : base(observer)
                 {
-                    this._parent = parent;
+                    _parent = parent;
                 }
 
                 public void Run()
@@ -148,7 +148,7 @@ namespace System.Reactive.Linq.ObservableImpl
                                     {
                                         lock (tuple2.closureParent._gate)
                                         {
-                                            if (object.ReferenceEquals(Volatile.Read(ref tuple2.closureParent._serial), tuple2.cancelable))
+                                            if (ReferenceEquals(Volatile.Read(ref tuple2.closureParent._serial), tuple2.cancelable))
                                             {
                                                 tuple2.closureParent._connectableSubscription.Dispose();
                                                 tuple2.closureParent._connectableSubscription = null;
