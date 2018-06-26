@@ -220,7 +220,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return;
             }
 
-            int missed = 1;
+            var missed = 1;
 
             for (; ; )
             {
