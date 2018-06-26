@@ -9,7 +9,7 @@ namespace System.Reactive.Linq
     /// <summary>
     /// Defines methods to create and execute queries that are described by an IQbservable object.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Qbservable", Justification = "What a pleasure to write 'by design' here.")]
+    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Qbservable", Justification = "What a pleasure to write 'by design' here.")]
     public interface IQbservableProvider
     {
         /// <summary>

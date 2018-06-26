@@ -160,7 +160,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 enumerator.Dispose();
-                base.Dispose();
+                Dispose();
             }
         }
     }

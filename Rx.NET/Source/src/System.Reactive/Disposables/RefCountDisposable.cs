@@ -55,7 +55,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         /// <returns>A dependent disposable contributing to the reference count that manages the underlying disposable's lifetime.</returns>
         /// <exception cref="ObjectDisposedException">This instance has been disposed and is configured to throw in this case by <see cref="RefCountDisposable(IDisposable, bool)"/>.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Backward compat + non-trivial work for a property getter.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Backward compat + non-trivial work for a property getter.")]
         public IDisposable GetDisposable()
         {
             // the current state
@@ -142,7 +142,7 @@ namespace System.Reactive.Disposables
                 // keep the main disposed state but decrement the counter
                 // in theory, active should be always > 0 at this point,
                 // guaranteed by the InnerDisposable.Dispose's Exchange operation.
-                System.Diagnostics.Debug.Assert(active > 0);
+                Diagnostics.Debug.Assert(active > 0);
                 var u = main | (active - 1);
 
                 var b = Interlocked.CompareExchange(ref _count, u, cnt);

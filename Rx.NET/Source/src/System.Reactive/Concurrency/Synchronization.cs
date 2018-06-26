@@ -138,8 +138,8 @@ namespace System.Reactive.Concurrency
 
             public SubscribeOnCtxObservable(IObservable<TSource> source, SynchronizationContext context)
             {
-                this._source = source;
-                this._context = context;
+                _source = source;
+                _context = context;
             }
 
             protected override IDisposable SubscribeCore(IObserver<TSource> observer)
