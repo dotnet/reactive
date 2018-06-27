@@ -126,7 +126,7 @@ namespace System.Reactive.Concurrency
 
             return new CompositeDisposable(
                 d,
-                Disposable.Create(res.Cancel)
+                res.AsDisposable()
             );
         }
 

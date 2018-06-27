@@ -80,7 +80,7 @@ namespace System.Reactive.Concurrency
                 Priority,
                 Options);
 
-            userWorkItem.CancelQueueDisposable = Disposable.Create(res.Cancel);
+            userWorkItem.CancelQueueDisposable = res.AsDisposable();
 
             return userWorkItem;
         }
@@ -117,7 +117,7 @@ namespace System.Reactive.Concurrency
                 tpt => userWorkItem.Run(),
                 dueTime);
 
-            userWorkItem.CancelQueueDisposable = Disposable.Create(res.Cancel);
+            userWorkItem.CancelQueueDisposable = res.AsDisposable();
 
             return userWorkItem;
         }
