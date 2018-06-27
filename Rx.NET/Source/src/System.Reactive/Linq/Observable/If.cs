@@ -36,7 +36,6 @@ namespace System.Reactive.Linq.ObservableImpl
             }
 
             return result.SubscribeSafe(observer);
-
         }
     }
 }
