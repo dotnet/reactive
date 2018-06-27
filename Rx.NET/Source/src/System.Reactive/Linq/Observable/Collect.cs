@@ -18,37 +18,27 @@ namespace System.Reactive.Linq.ObservableImpl
             _getNewCollector = getNewCollector;
         }
 
-        protected override PushToPullSink<TSource, TResult> Run(IDisposable subscription)
-        {
-            var sink = new _(this, subscription);
-            sink.Initialize();
-            return sink;
-        }
+        protected override PushToPullSink<TSource, TResult> Run(IDisposable subscription) => new _(_merge, _getNewCollector, _getInitialCollector(), subscription);
 
         private sealed class _ : PushToPullSink<TSource, TResult>
         {
-            // CONSIDER: This sink has a parent reference that can be considered for removal.
+            readonly object _gate;
+            readonly Func<TResult, TSource, TResult> _merge;
+            readonly Func<TResult, TResult> _getNewCollector;
 
-            private readonly Collect<TSource, TResult> _parent;
-
-            public _(Collect<TSource, TResult> parent, IDisposable subscription)
+            public _(Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector, TResult collector, IDisposable subscription)
                 : base(subscription)
             {
-                _parent = parent;
+                _gate = new object();
+                _merge = merge;
+                _getNewCollector = getNewCollector;
+                _collector = collector;
             }
 
-            private object _gate;
             private TResult _collector;
-            private bool _hasFailed;
             private Exception _error;
             private bool _hasCompleted;
             private bool _done;
-
-            public void Initialize()
-            {
-                _gate = new object();
-                _collector = _parent._getInitialCollector();
-            }
 
             public override void OnNext(TSource value)
             {
@@ -56,12 +46,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     try
                     {
-                        _collector = _parent._merge(_collector, value);
+                        _collector = _merge(_collector, value);
                     }
                     catch (Exception ex)
                     {
                         _error = ex;
-                        _hasFailed = true;
 
                         Dispose();
                     }
@@ -75,7 +64,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_gate)
                 {
                     _error = error;
-                    _hasFailed = true;
                 }
             }
 
@@ -93,10 +81,11 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 lock (_gate)
                 {
-                    if (_hasFailed)
+                    var error = _error;
+                    if (error != null)
                     {
-                        current = default(TResult);
-                        _error.Throw();
+                        current = default;
+                        error.Throw();
                     }
                     else
                     {
@@ -104,7 +93,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             if (_done)
                             {
-                                current = default(TResult);
+                                current = default;
                                 return false;
                             }
 
@@ -117,7 +106,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                             try
                             {
-                                _collector = _parent._getNewCollector(current);
+                                _collector = _getNewCollector(current);
                             }
                             catch
                             {
