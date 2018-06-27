@@ -532,6 +532,7 @@ namespace System.Reactive.Linq
         IObservable<TSource> SkipUntil<TSource, TOther>(IObservable<TSource> source, IObservable<TOther> other);
         IObservable<TSource> Switch<TSource>(IObservable<IObservable<TSource>> sources);
         IObservable<TSource> TakeUntil<TSource, TOther>(IObservable<TSource> source, IObservable<TOther> other);
+        IObservable<TSource> TakeUntil<TSource>(IObservable<TSource> source, Func<TSource, bool> stopPredicate);
         IObservable<IObservable<TSource>> Window<TSource, TWindowClosing>(IObservable<TSource> source, Func<IObservable<TWindowClosing>> windowClosingSelector);
         IObservable<IObservable<TSource>> Window<TSource, TWindowOpening, TWindowClosing>(IObservable<TSource> source, IObservable<TWindowOpening> windowOpenings, Func<TWindowOpening, IObservable<TWindowClosing>> windowClosingSelector);
         IObservable<IObservable<TSource>> Window<TSource, TWindowBoundary>(IObservable<TSource> source, IObservable<TWindowBoundary> windowBoundaries);
@@ -712,8 +713,8 @@ namespace System.Reactive.Linq
         IObservable<TSource> Throttle<TSource>(IObservable<TSource> source, TimeSpan dueTime);
         IObservable<TSource> Throttle<TSource>(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler);
         IObservable<TSource> Throttle<TSource, TThrottle>(IObservable<TSource> source, Func<TSource, IObservable<TThrottle>> throttleDurationSelector);
-        IObservable<System.Reactive.TimeInterval<TSource>> TimeInterval<TSource>(IObservable<TSource> source);
-        IObservable<System.Reactive.TimeInterval<TSource>> TimeInterval<TSource>(IObservable<TSource> source, IScheduler scheduler);
+        IObservable<TimeInterval<TSource>> TimeInterval<TSource>(IObservable<TSource> source);
+        IObservable<TimeInterval<TSource>> TimeInterval<TSource>(IObservable<TSource> source, IScheduler scheduler);
         IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, TimeSpan dueTime);
         IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler);
         IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, TimeSpan dueTime, IObservable<TSource> other);

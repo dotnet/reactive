@@ -38,7 +38,8 @@ namespace System.Reactive
 
         public IDisposable SubscribeRaw(IObserver<TSource> observer, bool enableSafeguard)
         {
-            var subscription = new SingleAssignmentDisposable();
+            IDisposable run;
+            ISafeObserver<TSource> safeObserver = null;
 
             //
             // See AutoDetachObserver.cs for more information on the safeguarding requirement and
@@ -46,21 +47,26 @@ namespace System.Reactive
             //
             if (enableSafeguard)
             {
-                observer = SafeObserver<TSource>.Create(observer, subscription);
+                observer = safeObserver = SafeObserver<TSource>.Wrap(observer);
             }
 
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
+                var runAssignable = new SingleAssignmentDisposable();
+                
                 CurrentThreadScheduler.Instance.ScheduleAction(
-                    (@this: this, subscription, observer),
-                    tuple => tuple.subscription.Disposable = tuple.@this.Run(tuple.observer));
+                    (@this: this, runAssignable, observer),
+                    tuple => tuple.runAssignable.Disposable = tuple.@this.Run(tuple.observer));
+
+                run = runAssignable;
             }
             else
             {
-                subscription.Disposable = Run(observer);
+                run = Run(observer);
             }
 
-            return subscription;
+            safeObserver?.SetResource(run);
+            return run;
         }
 
         /// <summary>
@@ -90,7 +96,7 @@ namespace System.Reactive
 
         public IDisposable SubscribeRaw(IObserver<TTarget> observer, bool enableSafeguard)
         {
-            SingleAssignmentDisposable subscription = null;
+            ISafeObserver<TTarget> safeObserver = null;
 
             //
             // See AutoDetachObserver.cs for more information on the safeguarding requirement and
@@ -98,14 +104,12 @@ namespace System.Reactive
             //
             if (enableSafeguard)
             {
-                subscription = new SingleAssignmentDisposable();
-                observer = SafeObserver<TTarget>.Create(observer, subscription);
+                observer = safeObserver = SafeObserver<TTarget>.Wrap(observer);
             }
 
             var sink = CreateSink(observer);
 
-            if (subscription != null)
-                subscription.Disposable = sink;
+            safeObserver?.SetResource(sink);
 
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
@@ -118,7 +122,7 @@ namespace System.Reactive
                 Run(sink);
             }
 
-            return (IDisposable)subscription ?? sink;
+            return sink;
         }
 
         /// <summary>

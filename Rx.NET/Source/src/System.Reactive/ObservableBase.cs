@@ -54,7 +54,7 @@ namespace System.Reactive
             {
                 try
                 {
-                    autoDetachObserver.Disposable = SubscribeCore(autoDetachObserver);
+                    autoDetachObserver.SetResource(SubscribeCore(autoDetachObserver));
                 }
                 catch (Exception exception)
                 {
@@ -79,7 +79,7 @@ namespace System.Reactive
         {
             try
             {
-                autoDetachObserver.Disposable = SubscribeCore(autoDetachObserver);
+                autoDetachObserver.SetResource(SubscribeCore(autoDetachObserver));
             }
             catch (Exception exception)
             {

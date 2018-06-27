@@ -21,7 +21,7 @@ namespace System.Reactive.Linq
         /// <param name="second">Second observable sequence.</param>
         /// <returns>An observable sequence that surfaces either of the given sequences, whichever reacted first.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Amb", Justification = "In honor of McCarthy.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Amb", Justification = "In honor of McCarthy.")]
         public static IObservable<TSource> Amb<TSource>(this IObservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq
         /// <param name="sources">Observable sources competing to react first.</param>
         /// <returns>An observable sequence that surfaces any of the given sequences, whichever reacted first.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Amb", Justification = "In honor of McCarthy.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Amb", Justification = "In honor of McCarthy.")]
         public static IObservable<TSource> Amb<TSource>(params IObservable<TSource>[] sources)
         {
             if (sources == null)
@@ -55,7 +55,7 @@ namespace System.Reactive.Linq
         /// <param name="sources">Observable sources competing to react first.</param>
         /// <returns>An observable sequence that surfaces any of the given sequences, whichever reacted first.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Amb", Justification = "In honor of McCarthy.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Amb", Justification = "In honor of McCarthy.")]
         public static IObservable<TSource> Amb<TSource>(this IEnumerable<IObservable<TSource>> sources)
         {
             if (sources == null)
@@ -1445,6 +1445,35 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(other));
 
             return s_impl.TakeUntil<TSource, TOther>(source, other);
+        }
+
+        /// <summary>
+        /// Relays elements from the source observable sequence and calls the predicate after an
+        /// emission to check if the sequence should stop after that specific item.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source and result sequences.</typeparam>
+        /// <param name="source">The source sequence to relay elements of.</param>
+        /// <param name="stopPredicate">Called after each upstream item has been emitted with
+        /// that upstream item and should return <code>true</code> to indicate the sequence should
+        /// complete.</param>
+        /// <returns>The observable sequence with the source elements until the stop predicate returns true.</returns>
+        /// <example>
+        /// The following sequence will stop after the value 5 has been encountered:
+        /// <code>
+        /// Observable.Range(1, 10)
+        ///     .TakeUntil(item =&gt; item == 5)
+        ///     .Subscribe(Console.WriteLine);
+        /// </code>
+        /// </example>
+        /// <exception cref="ArgumentException">If <typeparamref name="TSource"/> or <paramref name="stopPredicate"/> is <code>null</code>.</exception>
+        public static IObservable<TSource> TakeUntil<TSource>(this IObservable<TSource> source, Func<TSource, bool> stopPredicate)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (stopPredicate == null)
+                throw new ArgumentNullException(nameof(stopPredicate));
+
+            return s_impl.TakeUntil(source, stopPredicate);
         }
 
         #endregion

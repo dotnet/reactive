@@ -53,7 +53,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     // to observe the cancellation and perform proper clean-up. In this case,
                     // we're sure Loop will be entered, allowing us to dispose the enumerator.
                     //
-                    SetUpstream(longRunning.ScheduleLongRunning(e, Loop));
+                    SetUpstream(longRunning.ScheduleLongRunning((@this: this, e), (tuple, cancelable) => tuple.@this.Loop(tuple.e, cancelable)));
                 }
                 else
                 {
@@ -63,18 +63,20 @@ namespace System.Reactive.Linq.ObservableImpl
                     // enumerator.
                     //
                     var flag = new BooleanDisposable();
-                    parent._scheduler.Schedule(new State(flag, e), LoopRec);
+                    parent._scheduler.Schedule(new State(this, flag, e), (state, action) => state.sink.LoopRec(state, action));
                     SetUpstream(flag);
                 }
             }
 
-            private sealed class State
+            private struct State
             {
+                public readonly _ sink;
                 public readonly ICancelable flag;
                 public readonly IEnumerator<TSource> enumerator;
 
-                public State(ICancelable flag, IEnumerator<TSource> enumerator)
+                public State(_ sink, ICancelable flag, IEnumerator<TSource> enumerator)
                 {
+                    this.sink = sink;
                     this.flag = flag;
                     this.enumerator = enumerator;
                 }
@@ -158,7 +160,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 enumerator.Dispose();
-                base.Dispose();
+                Dispose();
             }
         }
     }

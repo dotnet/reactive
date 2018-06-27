@@ -31,6 +31,9 @@ namespace System.Reactive.Concurrency
         [ThreadStatic]
         private static IStopwatch s_clock;
 
+        [ThreadStatic]
+        private static bool running;
+
         private static SchedulerQueue<TimeSpan> GetQueue() => s_threadLocalQueue;
 
         private static void SetQueue(SchedulerQueue<TimeSpan> newQueue)
@@ -52,7 +55,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets a value that indicates whether the caller must call a Schedule method.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Now marked as obsolete.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Now marked as obsolete.")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete(Constants_Core.OBSOLETE_SCHEDULEREQUIRED)] // Preferring static method call over instance method call.
         public bool ScheduleRequired => IsScheduleRequired;
@@ -61,7 +64,7 @@ namespace System.Reactive.Concurrency
         /// Gets a value that indicates whether the caller must call a Schedule method.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static bool IsScheduleRequired => GetQueue() == null;
+        public static bool IsScheduleRequired => !running;
 
         /// <summary>
         /// Schedules an action to be executed after dueTime.
@@ -77,32 +80,69 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var dt = Time + Scheduler.Normalize(dueTime);
+            var queue = default(SchedulerQueue<TimeSpan>);
 
-            var si = new ScheduledItem<TimeSpan, TState>(this, state, action, dt);
+            // There is no timed task and no task is currently running
+            if (!running)
+            {
+                running = true;
 
-            var queue = GetQueue();
+                if (dueTime > TimeSpan.Zero)
+                {
+                    ConcurrencyAbstractionLayer.Current.Sleep(dueTime);
+                }
 
+                // execute directly without queueing
+                IDisposable d;
+                try
+                {
+                    d = action(this, state);
+                }
+                catch
+                {
+                    SetQueue(null);
+                    running = false;
+                    throw;
+                }
+
+                // did recursive tasks arrive?
+                queue = GetQueue();
+
+                // yes, run those in the queue as well
+                if (queue != null)
+                {
+                    try
+                    {
+                        Trampoline.Run(queue);
+                    }
+                    finally
+                    {
+                        SetQueue(null);
+                        running = false;
+                    }
+                }
+                else
+                {
+                    running = false;
+                }
+
+                return d;
+            }
+
+            queue = GetQueue();
+
+            // if there is a task running or there is a queue
             if (queue == null)
             {
                 queue = new SchedulerQueue<TimeSpan>(4);
-                queue.Enqueue(si);
-
                 SetQueue(queue);
-                try
-                {
-                    Trampoline.Run(queue);
-                }
-                finally
-                {
-                    SetQueue(null);
-                }
-            }
-            else
-            {
-                queue.Enqueue(si);
             }
 
+            var dt = Time + Scheduler.Normalize(dueTime);
+
+            // queue up more work
+            var si = new ScheduledItem<TimeSpan, TState>(this, state, action, dt);
+            queue.Enqueue(si);
             return si;
         }
 

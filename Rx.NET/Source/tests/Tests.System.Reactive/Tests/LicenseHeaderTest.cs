@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information.
 
@@ -31,24 +31,19 @@ namespace Tests.System.Reactive.Tests
         public void ScanFiles()
         {
             var dir = Directory.GetCurrentDirectory();
-            var idx = dir.IndexOf("Rx.NET");
-            if (idx < 0)
+            var idx = dir.LastIndexOf("Rx.NET");
+
+            Assert.False(idx < 0, $"Could not locate sources directory: {dir}");
+
+            var newDir = Path.Combine(dir.Substring(0, idx), "Rx.NET", "Source");
+
+            var error = new StringBuilder();
+
+            var count = ScanPath(newDir, error);
+
+            if (error.Length != 0)
             {
-                Console.WriteLine($"Could not locate sources directory: {dir}");
-            }
-            else
-            {
-                var newDir = dir.Substring(0, idx) + "Rx.NET/Source";
-
-                var error = new StringBuilder();
-
-                var count = ScanPath(newDir, error);
-
-                if (error.Length != 0)
-                {
-
-                    Assert.False(true, $"Files with no license header: {count}\r\n{error.ToString()}");
-                }
+                Assert.False(true, $"Files with no license header: {count}\r\n{error.ToString()}");
             }
         }
 

@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override void Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(_sources);
 
         internal sealed class _ : Sink<IObservable<TSource>, TSource> 
         {
@@ -28,28 +28,16 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
-            private IDisposable _sourceDisposable;
             private IDisposable _innerSerialDisposable;
             private bool _isStopped;
             private ulong _latest;
             private bool _hasLatest;
 
-            public void Run(Switch<TSource> parent)
-            {
-                _isStopped = false;
-                _latest = 0UL;
-                _hasLatest = false;
-
-                Disposable.SetSingle(ref _sourceDisposable, parent._sources.SubscribeSafe(this));
-            }
-
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
-                {
                     Disposable.TryDispose(ref _innerSerialDisposable);
-                    Disposable.TryDispose(ref _sourceDisposable);
-                }
+
                 base.Dispose(disposing);
             }
 
@@ -62,9 +50,10 @@ namespace System.Reactive.Linq.ObservableImpl
                     _hasLatest = true;
                 }
 
-                var d = new SingleAssignmentDisposable();
-                Disposable.TrySetSerial(ref _innerSerialDisposable, d);
-                d.Disposable = value.SubscribeSafe(new InnerObserver(this, id, d));
+                var innerObserver = new InnerObserver(this, id);
+
+                Disposable.TrySetSerial(ref _innerSerialDisposable, innerObserver);
+                innerObserver.SetResource(value.SubscribeSafe(innerObserver));
             }
 
             public override void OnError(Exception error)
@@ -77,7 +66,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 lock (_gate)
                 {
-                    Disposable.TryDispose(ref _sourceDisposable);
+                    DisposeUpstream();
 
                     _isStopped = true;
                     if (!_hasLatest)
@@ -87,20 +76,18 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            private sealed class InnerObserver : IObserver<TSource>
+            private sealed class InnerObserver : SafeObserver<TSource>
             {
                 private readonly _ _parent;
                 private readonly ulong _id;
-                private readonly IDisposable _self;
 
-                public InnerObserver(_ parent, ulong id, IDisposable self)
+                public InnerObserver(_ parent, ulong id)
                 {
                     _parent = parent;
                     _id = id;
-                    _self = self;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_parent._gate)
                     {
@@ -111,11 +98,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_parent._gate)
                     {
-                        _self.Dispose();
+                        Dispose();
 
                         if (_parent._latest == _id)
                         {
@@ -124,11 +111,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_parent._gate)
                     {
-                        _self.Dispose();
+                        Dispose();
 
                         if (_parent._latest == _id)
                         {

@@ -126,7 +126,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public RemoveHandlerDisposable(Action removeHandler)
                 {
-                    Volatile.Write(ref this._removeHandler, removeHandler);
+                    Volatile.Write(ref _removeHandler, removeHandler);
                 }
 
                 public void Dispose()

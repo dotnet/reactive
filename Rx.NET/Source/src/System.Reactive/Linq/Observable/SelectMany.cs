@@ -31,7 +31,6 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
-                private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
                 private readonly CompositeDisposable _group = new CompositeDisposable();
 
                 private readonly Func<TSource, IObservable<TCollection>> _collectionSelector;
@@ -42,20 +41,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _collectionSelector = parent._collectionSelector;
                     _resultSelector = parent._resultSelector;
-
-                    _group.Add(_sourceSubscription);
                 }
 
-                private bool _isStopped;
-
-                public override void Run(IObservable<TSource> source)
-                {
-                    _isStopped = false;
-
-                    _sourceSubscription.Disposable = source.SubscribeSafe(this);
-
-                    SetUpstream(_group);
-                }
+                private volatile bool _isStopped;
 
                 public override void OnNext(TSource value)
                 {
@@ -74,9 +62,9 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    var innerSubscription = new SingleAssignmentDisposable();
-                    _group.Add(innerSubscription);
-                    innerSubscription.Disposable = collection.SubscribeSafe(new InnerObserver(this, value, innerSubscription));
+                    var innerObserver = new InnerObserver(this, value);
+                    _group.Add(innerObserver);
+                    innerObserver.SetResource(collection.SubscribeSafe(innerObserver));
                 }
 
                 public override void OnError(Exception error)
@@ -90,7 +78,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnCompleted()
                 {
                     _isStopped = true;
-                    if (_group.Count == 1)
+                    if (_group.Count == 0)
                     {
                         //
                         // Notice there can be a race between OnCompleted of the source and any
@@ -106,24 +94,30 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        _sourceSubscription.Dispose();
+                        DisposeUpstream();
                     }
                 }
 
-                private sealed class InnerObserver : IObserver<TCollection>
+                protected override void Dispose(bool disposing)
+                {
+                    base.Dispose(disposing);
+
+                    if (disposing)
+                        _group.Dispose();
+                }
+
+                private sealed class InnerObserver : SafeObserver<TCollection>
                 {
                     private readonly _ _parent;
                     private readonly TSource _value;
-                    private readonly IDisposable _self;
 
-                    public InnerObserver(_ parent, TSource value, IDisposable self)
+                    public InnerObserver(_ parent, TSource value)
                     {
                         _parent = parent;
                         _value = value;
-                        _self = self;
                     }
 
-                    public void OnNext(TCollection value)
+                    public override void OnNext(TCollection value)
                     {
                         var res = default(TResult);
 
@@ -144,7 +138,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             _parent.ForwardOnNext(res);
                     }
 
-                    public void OnError(Exception error)
+                    public override void OnError(Exception error)
                     {
                         lock (_parent._gate)
                         {
@@ -152,10 +146,10 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                     }
 
-                    public void OnCompleted()
+                    public override void OnCompleted()
                     {
-                        _parent._group.Remove(_self);
-                        if (_parent._isStopped && _parent._group.Count == 1)
+                        _parent._group.Remove(this);
+                        if (_parent._isStopped && _parent._group.Count == 0)
                         {
                             //
                             // Notice there can be a race between OnCompleted of the source and any
@@ -194,7 +188,6 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
-                private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
                 private readonly CompositeDisposable _group = new CompositeDisposable();
 
                 private readonly Func<TSource, int, IObservable<TCollection>> _collectionSelector;
@@ -205,21 +198,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _collectionSelector = parent._collectionSelector;
                     _resultSelector = parent._resultSelector;
-
-                    _group.Add(_sourceSubscription);
                 }
 
-                private bool _isStopped;
+                private volatile bool _isStopped;
                 private int _index;
-
-                public override void Run(IObservable<TSource> source)
-                {
-                    _isStopped = false;
-
-                    _sourceSubscription.Disposable = source.SubscribeSafe(this);
-
-                    SetUpstream(_group);
-                }
 
                 public override void OnNext(TSource value)
                 {
@@ -239,9 +221,9 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    var innerSubscription = new SingleAssignmentDisposable();
-                    _group.Add(innerSubscription);
-                    innerSubscription.Disposable = collection.SubscribeSafe(new InnerObserver(this, value, index, innerSubscription));
+                    var innerObserver = new InnerObserver(this, value, index);
+                    _group.Add(innerObserver);
+                    innerObserver.SetResource(collection.SubscribeSafe(innerObserver));
                 }
 
                 public override void OnError(Exception error)
@@ -255,7 +237,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnCompleted()
                 {
                     _isStopped = true;
-                    if (_group.Count == 1)
+                    if (_group.Count == 0)
                     {
                         //
                         // Notice there can be a race between OnCompleted of the source and any
@@ -271,28 +253,34 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        _sourceSubscription.Dispose();
+                        DisposeUpstream();
                     }
                 }
 
-                private sealed class InnerObserver : IObserver<TCollection>
+                protected override void Dispose(bool disposing)
+                {
+                    base.Dispose(disposing);
+
+                    if (disposing)
+                        _group.Dispose();
+                }
+
+                private sealed class InnerObserver : SafeObserver<TCollection>
                 {
                     private readonly _ _parent;
                     private readonly TSource _value;
                     private readonly int _valueIndex;
-                    private readonly IDisposable _self;
 
-                    public InnerObserver(_ parent, TSource value, int index, IDisposable self)
+                    public InnerObserver(_ parent, TSource value, int index)
                     {
                         _parent = parent;
                         _value = value;
                         _valueIndex = index;
-                        _self = self;
                     }
 
                     private int _index;
 
-                    public void OnNext(TCollection value)
+                    public override void OnNext(TCollection value)
                     {
                         var res = default(TResult);
 
@@ -313,7 +301,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             _parent.ForwardOnNext(res);
                     }
 
-                    public void OnError(Exception error)
+                    public override void OnError(Exception error)
                     {
                         lock (_parent._gate)
                         {
@@ -321,10 +309,10 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                     }
 
-                    public void OnCompleted()
+                    public override void OnCompleted()
                     {
-                        _parent._group.Remove(_self);
-                        if (_parent._isStopped && _parent._group.Count == 1)
+                        _parent._group.Remove(this);
+                        if (_parent._isStopped && _parent._group.Count == 0)
                         {
                             //
                             // Notice there can be a race between OnCompleted of the source and any
@@ -856,28 +844,15 @@ namespace System.Reactive.Linq.ObservableImpl
             internal class _ : Sink<TSource, TResult> 
             {
                 protected readonly object _gate = new object();
-                private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
-                private readonly CompositeDisposable _group = new CompositeDisposable();
-
                 private readonly Func<TSource, IObservable<TResult>> _selector;
+                private readonly CompositeDisposable _group = new CompositeDisposable();
+                
+                private volatile bool _isStopped;
 
                 public _(ObservableSelector parent, IObserver<TResult> observer)
                     : base(observer)
                 {
                     _selector = parent._selector;
-
-                    _group.Add(_sourceSubscription);
-                }
-
-                private bool _isStopped;
-
-                public override void Run(IObservable<TSource> source)
-                {
-                    _isStopped = false;
-
-                    _sourceSubscription.Disposable = source.SubscribeSafe(this);
-
-                    SetUpstream(_group);
                 }
 
                 public override void OnNext(TSource value)
@@ -913,14 +888,22 @@ namespace System.Reactive.Linq.ObservableImpl
                     Final();
                 }
 
+                protected override void Dispose(bool disposing)
+                {
+                    base.Dispose(disposing);
+
+                    if (disposing)
+                        _group.Dispose();
+                }
+
                 protected void Final()
                 {
                     _isStopped = true;
-                    if (_group.Count == 1)
+                    if (_group.Count == 0)
                     {
                         //
                         // Notice there can be a race between OnCompleted of the source and any
-                        // of the inner sequences, where both see _group.Count == 1, and one is
+                        // of the inner sequences, where both see _group.Count == 0, and one is
                         // waiting for the lock. There won't be a double OnCompleted observation
                         // though, because the call to Dispose silences the observer by swapping
                         // in a NopObserver<T>.
@@ -932,35 +915,34 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        _sourceSubscription.Dispose();
+                        DisposeUpstream();
                     }
                 }
 
                 protected void SubscribeInner(IObservable<TResult> inner)
                 {
-                    var innerSubscription = new SingleAssignmentDisposable();
-                    _group.Add(innerSubscription);
-                    innerSubscription.Disposable = inner.SubscribeSafe(new InnerObserver(this, innerSubscription));
+                    var innerObserver = new InnerObserver(this);
+
+                    _group.Add(innerObserver);
+                    innerObserver.SetResource(inner.SubscribeSafe(innerObserver));
                 }
 
-                private sealed class InnerObserver : IObserver<TResult>
+                private sealed class InnerObserver : SafeObserver<TResult>
                 {
                     private readonly _ _parent;
-                    private readonly IDisposable _self;
 
-                    public InnerObserver(_ parent, IDisposable self)
+                    public InnerObserver(_ parent)
                     {
                         _parent = parent;
-                        _self = self;
                     }
 
-                    public void OnNext(TResult value)
+                    public override void OnNext(TResult value)
                     {
                         lock (_parent._gate)
                             _parent.ForwardOnNext(value);
                     }
 
-                    public void OnError(Exception error)
+                    public override void OnError(Exception error)
                     {
                         lock (_parent._gate)
                         {
@@ -968,10 +950,10 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                     }
 
-                    public void OnCompleted()
+                    public override void OnCompleted()
                     {
-                        _parent._group.Remove(_self);
-                        if (_parent._isStopped && _parent._group.Count == 1)
+                        _parent._group.Remove(this);
+                        if (_parent._isStopped && _parent._group.Count == 0)
                         {
                             //
                             // Notice there can be a race between OnCompleted of the source and any
@@ -1090,29 +1072,17 @@ namespace System.Reactive.Linq.ObservableImpl
             internal class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
-                private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
                 private readonly CompositeDisposable _group = new CompositeDisposable();
 
                 protected readonly Func<TSource, int, IObservable<TResult>> _selector;
+
+                private int _index;
+                private volatile bool _isStopped;
 
                 public _(ObservableSelectorIndexed parent, IObserver<TResult> observer)
                     : base(observer)
                 {
                     _selector = parent._selector;
-
-                    _group.Add(_sourceSubscription);
-                }
-
-                private bool _isStopped;
-                private int _index;
-
-                public override void Run(IObservable<TSource> source)
-                {
-                    _isStopped = false;
-
-                    _sourceSubscription.Disposable = source.SubscribeSafe(this);
-
-                    SetUpstream(_group);
                 }
 
                 public override void OnNext(TSource value)
@@ -1148,10 +1118,18 @@ namespace System.Reactive.Linq.ObservableImpl
                     Final();
                 }
 
+                protected override void Dispose(bool disposing)
+                {
+                    base.Dispose(disposing);
+
+                    if (disposing)
+                        _group.Dispose();
+                }
+
                 protected void Final()
                 {
                     _isStopped = true;
-                    if (_group.Count == 1)
+                    if (_group.Count == 0)
                     {
                         //
                         // Notice there can be a race between OnCompleted of the source and any
@@ -1167,35 +1145,34 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        _sourceSubscription.Dispose();
+                        DisposeUpstream();
                     }
                 }
 
                 protected void SubscribeInner(IObservable<TResult> inner)
                 {
-                    var innerSubscription = new SingleAssignmentDisposable();
-                    _group.Add(innerSubscription);
-                    innerSubscription.Disposable = inner.SubscribeSafe(new InnerObserver(this, innerSubscription));
+                    var innerObserver = new InnerObserver(this);
+
+                    _group.Add(innerObserver);
+                    innerObserver.SetResource(inner.SubscribeSafe(innerObserver));
                 }
 
-                private sealed class InnerObserver : IObserver<TResult>
+                private sealed class InnerObserver : SafeObserver<TResult>
                 {
                     private readonly _ _parent;
-                    private readonly IDisposable _self;
 
-                    public InnerObserver(_ parent, IDisposable self)
+                    public InnerObserver(_ parent)
                     {
                         _parent = parent;
-                        _self = self;
                     }
 
-                    public void OnNext(TResult value)
+                    public override void OnNext(TResult value)
                     {
                         lock (_parent._gate)
                             _parent.ForwardOnNext(value);
                     }
 
-                    public void OnError(Exception error)
+                    public override void OnError(Exception error)
                     {
                         lock (_parent._gate)
                         {
@@ -1203,10 +1180,10 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                     }
 
-                    public void OnCompleted()
+                    public override void OnCompleted()
                     {
-                        _parent._group.Remove(_self);
-                        if (_parent._isStopped && _parent._group.Count == 1)
+                        _parent._group.Remove(this);
+                        if (_parent._isStopped && _parent._group.Count == 0)
                         {
                             //
                             // Notice there can be a race between OnCompleted of the source and any
@@ -1242,8 +1219,6 @@ namespace System.Reactive.Linq.ObservableImpl
             new internal sealed class _ : ObservableSelectorIndexed._
             {
                 private readonly object _gate = new object();
-                private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
-                private readonly CompositeDisposable _group = new CompositeDisposable();
 
                 private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
                 private readonly Func<IObservable<TResult>> _selectorOnCompleted;
@@ -1253,8 +1228,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _selectorOnError = parent._selectorOnError;
                     _selectorOnCompleted = parent._selectorOnCompleted;
-
-                    _group.Add(_sourceSubscription);
                 }
 
                 public override void OnError(Exception error)
@@ -1497,7 +1470,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
-                private readonly CancellationDisposable _cancel = new CancellationDisposable();
+                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 
                 private readonly Func<TSource, CancellationToken, Task<TResult>> _selector;
 
@@ -1520,7 +1493,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        _cancel.Dispose();
+                        _cts.Cancel();
                     }
                     base.Dispose(disposing);
                 }
@@ -1531,7 +1504,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     try
                     {
                         Interlocked.Increment(ref _count);
-                        task = _selector(value, _cancel.Token);
+                        task = _selector(value, _cts.Token);
                     }
                     catch (Exception ex)
                     {
@@ -1549,7 +1522,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        task.ContinueWith(OnCompletedTask);
+                        task.ContinueWith((closureTask, @thisObject) => ((_)@thisObject).OnCompletedTask(closureTask), this);
                     }
                 }
 
@@ -1575,7 +1548,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             break;
                         case TaskStatus.Canceled:
                             {
-                                if (!_cancel.IsDisposed)
+                                if (!_cts.IsCancellationRequested)
                                 {
                                     lock (_gate)
                                     {
@@ -1626,7 +1599,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly object _gate = new object();
-                private readonly CancellationDisposable _cancel = new CancellationDisposable();
+                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 
                 private readonly Func<TSource, int, CancellationToken, Task<TResult>> _selector;
 
@@ -1650,7 +1623,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        _cancel.Dispose();
+                        _cts.Cancel();
                     }
                     base.Dispose(disposing);
                 }
@@ -1661,7 +1634,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     try
                     {
                         Interlocked.Increment(ref _count);
-                        task = _selector(value, checked(_index++), _cancel.Token);
+                        task = _selector(value, checked(_index++), _cts.Token);
                     }
                     catch (Exception ex)
                     {
@@ -1679,7 +1652,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        task.ContinueWith(OnCompletedTask);
+                        task.ContinueWith((closureTask, @thisObject) => ((_)@thisObject).OnCompletedTask(closureTask), this);
                     }
                 }
 
@@ -1705,7 +1678,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             break;
                         case TaskStatus.Canceled:
                             {
-                                if (!_cancel.IsDisposed)
+                                if (!_cts.IsCancellationRequested)
                                 {
                                     lock (_gate)
                                     {

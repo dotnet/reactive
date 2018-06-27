@@ -431,7 +431,7 @@ namespace System.Reactive.Linq.ObservableImpl
             else
             {
                 var allOthersDone = true;
-                for (int i = 0; i < _isDone.Length; i++)
+                for (var i = 0; i < _isDone.Length; i++)
                 {
                     if (i != index && !_isDone[i])
                     {
@@ -476,26 +476,37 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class ZipObserver<T> : IObserver<T>
+    internal sealed class ZipObserver<T> : SafeObserver<T>
     {
         private readonly object _gate;
         private readonly IZip _parent;
         private readonly int _index;
-        private readonly IDisposable _self;
         private readonly Queue<T> _values;
 
-        public ZipObserver(object gate, IZip parent, int index, IDisposable self)
+        public ZipObserver(object gate, IZip parent, int index)
         {
             _gate = gate;
             _parent = parent;
             _index = index;
-            _self = self;
             _values = new Queue<T>();
         }
 
         public Queue<T> Values => _values;
 
-        public void OnNext(T value)
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing)
+            {
+                lock (_gate)
+                {
+                    _values.Clear();
+                }
+            }
+        }
+
+        public override void OnNext(T value)
         {
             lock (_gate)
             {
@@ -504,9 +515,9 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        public void OnError(Exception error)
+        public override void OnError(Exception error)
         {
-            _self.Dispose();
+            Dispose();
 
             lock (_gate)
             {
@@ -514,9 +525,9 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        public void OnCompleted()
+        public override void OnCompleted()
         {
-            _self.Dispose();
+            Dispose();
 
             lock (_gate)
             {
@@ -570,7 +581,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var N = srcs.Length;
 
                 _queues = new Queue<TSource>[N];
-                for (int i = 0; i < N; i++)
+                for (var i = 0; i < N; i++)
                     _queues[i] = new Queue<TSource>();
 
                 _isDone = new bool[N];
@@ -579,7 +590,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 if (Interlocked.CompareExchange(ref _subscriptions, subscriptions, null) == null)
                 {
-                    for (int i = 0; i < N; i++)
+                    for (var i = 0; i < N; i++)
                     {
                         var o = new SourceObserver(this, i);
                         Disposable.SetSingle(ref subscriptions[i], srcs[i].SubscribeSafe(o));
@@ -594,7 +605,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var subscriptions = Interlocked.Exchange(ref _subscriptions, Disposed);
                     if (subscriptions != null)
                     {
-                        for (int i = 0; i < subscriptions.Length; i++)
+                        for (var i = 0; i < subscriptions.Length; i++)
                         {
                             Disposable.TryDispose(ref subscriptions[i]);
                         }

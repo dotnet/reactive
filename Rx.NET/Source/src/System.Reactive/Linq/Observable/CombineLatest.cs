@@ -283,7 +283,7 @@ namespace System.Reactive.Linq.ObservableImpl
             else
             {
                 var allOthersDone = true;
-                for (int i = 0; i < _isDone.Length; i++)
+                for (var i = 0; i < _isDone.Length; i++)
                 {
                     if (i != index && !_isDone[i])
                     {
@@ -328,25 +328,23 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class CombineLatestObserver<T> : IObserver<T>
+    internal sealed class CombineLatestObserver<T> : SafeObserver<T>
     {
         private readonly object _gate;
         private readonly ICombineLatest _parent;
         private readonly int _index;
-        private readonly IDisposable _self;
         private T _value;
 
-        public CombineLatestObserver(object gate, ICombineLatest parent, int index, IDisposable self)
+        public CombineLatestObserver(object gate, ICombineLatest parent, int index)
         {
             _gate = gate;
             _parent = parent;
             _index = index;
-            _self = self;
         }
 
         public T Value => _value;
 
-        public void OnNext(T value)
+        public override void OnNext(T value)
         {
             lock (_gate)
             {
@@ -355,9 +353,9 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        public void OnError(Exception error)
+        public override void OnError(Exception error)
         {
-            _self.Dispose();
+            Dispose();
 
             lock (_gate)
             {
@@ -365,10 +363,9 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        public void OnCompleted()
+        public override void OnCompleted()
         {
-            _self.Dispose();
-
+            Dispose();
             lock (_gate)
             {
                 _parent.Done(_index);
@@ -424,7 +421,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _hasValueAll = false;
 
                 _values = new List<TSource>(N);
-                for (int i = 0; i < N; i++)
+                for (var i = 0; i < N; i++)
                     _values.Add(default(TSource));
 
                 _isDone = new bool[N];
@@ -433,7 +430,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 _gate = new object();
 
-                for (int i = 0; i < N; i++)
+                for (var i = 0; i < N; i++)
                 {
                     var j = i;
 
@@ -502,35 +499,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         _subscriptions[index].Dispose();
                     }
                 }
-            }
-
-            private static bool All(bool[] values)
-            {
-                foreach (var value in values)
-                {
-                    if (!value)
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            private static bool AllExcept(bool[] values, int index)
-            {
-                for (var i = 0; i < values.Length; i++)
-                {
-                    if (i != index)
-                    {
-                        if (!values[i])
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                return true;
             }
 
             private sealed class SourceObserver : IObserver<TSource>

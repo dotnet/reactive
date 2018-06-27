@@ -685,5 +685,182 @@ namespace ReactiveTests.Tests
 
         #endregion
 
+        #region + Predicate +
+
+        [Fact]
+        public void TakeUntil_Predicate_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TakeUntil<int>(null, v => true));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TakeUntil<int>(DummyObservable<int>.Instance, null));
+        }
+
+        [Fact]
+        public void TakeUntil_Predicate_Basic()
+        {
+            var scheduler = new TestScheduler();
+
+            var source = scheduler.CreateColdObservable(
+                    OnNext(10, 1),
+                    OnNext(20, 2),
+                    OnNext(30, 3),
+                    OnNext(40, 4),
+                    OnNext(50, 5),
+                    OnNext(60, 6),
+                    OnNext(70, 7),
+                    OnNext(80, 8),
+                    OnNext(90, 9),
+                    OnCompleted<int>(100)
+                );
+
+            var result = scheduler.Start(() => source.TakeUntil(v => v == 5));
+
+            result.Messages.AssertEqual(
+                OnNext(210, 1),
+                OnNext(220, 2),
+                OnNext(230, 3),
+                OnNext(240, 4),
+                OnNext(250, 5),
+                OnCompleted<int>(250)
+            );
+
+            source.Subscriptions.AssertEqual(
+                Subscribe(200, 250)
+            );
+        }
+
+        [Fact]
+        public void TakeUntil_Predicate_True()
+        {
+            var scheduler = new TestScheduler();
+
+            var source = scheduler.CreateColdObservable(
+                    OnNext(10, 1),
+                    OnNext(20, 2),
+                    OnNext(30, 3),
+                    OnNext(40, 4),
+                    OnNext(50, 5),
+                    OnNext(60, 6),
+                    OnNext(70, 7),
+                    OnNext(80, 8),
+                    OnNext(90, 9),
+                    OnCompleted<int>(100)
+                );
+
+            var result = scheduler.Start(() => source.TakeUntil(v => true));
+
+            result.Messages.AssertEqual(
+                OnNext(210, 1),
+                OnCompleted<int>(210)
+            );
+
+            source.Subscriptions.AssertEqual(
+                Subscribe(200, 210)
+            );
+        }
+
+        [Fact]
+        public void TakeUntil_Predicate_False()
+        {
+            var scheduler = new TestScheduler();
+
+            var source = scheduler.CreateColdObservable(
+                    OnNext(10, 1),
+                    OnNext(20, 2),
+                    OnNext(30, 3),
+                    OnNext(40, 4),
+                    OnNext(50, 5),
+                    OnNext(60, 6),
+                    OnNext(70, 7),
+                    OnNext(80, 8),
+                    OnNext(90, 9),
+                    OnCompleted<int>(100)
+                );
+
+            var result = scheduler.Start(() => source.TakeUntil(v => false));
+
+            result.Messages.AssertEqual(
+                OnNext(210, 1),
+                OnNext(220, 2),
+                OnNext(230, 3),
+                OnNext(240, 4),
+                OnNext(250, 5),
+                OnNext(260, 6),
+                OnNext(270, 7),
+                OnNext(280, 8),
+                OnNext(290, 9),
+                OnCompleted<int>(300)
+            );
+
+            source.Subscriptions.AssertEqual(
+                Subscribe(200, 300)
+            );
+        }
+
+        [Fact]
+        public void TakeUntil_Predicate_Error()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new InvalidOperationException();
+
+            var source = scheduler.CreateColdObservable(
+                    OnNext(10, 1),
+                    OnNext(20, 2),
+                    OnNext(30, 3),
+                    OnError<int>(40, ex)
+                );
+
+            var result = scheduler.Start(() => source.TakeUntil(v => false));
+
+            result.Messages.AssertEqual(
+                OnNext(210, 1),
+                OnNext(220, 2),
+                OnNext(230, 3),
+                OnError<int>(240, ex)
+            );
+
+            source.Subscriptions.AssertEqual(
+                Subscribe(200, 240)
+            );
+        }
+
+        [Fact]
+        public void TakeUntil_Predicate_Crash()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new InvalidOperationException();
+
+            var source = scheduler.CreateColdObservable(
+                    OnNext(10, 1),
+                    OnNext(20, 2),
+                    OnNext(30, 3),
+                    OnNext(240, 4),
+                    OnNext(250, 5),
+                    OnCompleted<int>(260)
+                );
+
+            var result = scheduler.Start(() => source.TakeUntil(v => {
+                if (v == 3)
+                {
+                    throw ex;
+                }
+                return false;
+            }));
+
+            result.Messages.AssertEqual(
+                OnNext(210, 1),
+                OnNext(220, 2),
+                OnNext(230, 3),
+                OnError<int>(230, ex)
+            );
+
+            source.Subscriptions.AssertEqual(
+                Subscribe(200, 230)
+            );
+        }
+
+        #endregion
+
     }
 }

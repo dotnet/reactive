@@ -15,35 +15,6 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="ThreadPoolScheduler.Instance">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
-        private sealed class UserWorkItem<TState> : IDisposable
-        {
-            private IDisposable _cancelRunDisposable;
-
-            private readonly TState _state;
-            private readonly IScheduler _scheduler;
-            private readonly Func<IScheduler, TState, IDisposable> _action;
-
-            public UserWorkItem(IScheduler scheduler, TState state, Func<IScheduler, TState, IDisposable> action)
-            {
-                _state = state;
-                _action = action;
-                _scheduler = scheduler;
-            }
-
-            public void Run()
-            {
-                if (!Disposable.GetIsDisposed(ref _cancelRunDisposable))
-                {
-                    Disposable.SetSingle(ref _cancelRunDisposable, _action(_scheduler, _state));
-                }
-            }
-
-            public void Dispose()
-            {
-                Disposable.TryDispose(ref _cancelRunDisposable);
-            }
-        }
-
         private static readonly Lazy<ThreadPoolScheduler> s_instance = new Lazy<ThreadPoolScheduler>(() => new ThreadPoolScheduler());
         private static readonly Lazy<NewThreadScheduler> s_newBackgroundThread = new Lazy<NewThreadScheduler>(() => new NewThreadScheduler(action => new Thread(action) { IsBackground = true }));
 
@@ -98,7 +69,15 @@ namespace System.Reactive.Concurrency
                 return Schedule(state, action);
             }
 
-            return new Timer<TState>(this, state, dt, action);
+            var workItem = new UserWorkItem<TState>(this, state, action);
+
+            workItem.CancelQueueDisposable = new Timer(
+                closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
+                workItem,
+                dt,
+                Timeout.InfiniteTimeSpan);
+
+            return workItem;
         }
 
         /// <summary>
@@ -190,83 +169,13 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        //
-        // See ConcurrencyAbstractionLayerImpl.cs for more information about the code
-        // below and its timer rooting behavior.
-        //
-
-        private sealed class Timer<TState> : IDisposable
-        {
-            private readonly MultipleAssignmentDisposable _disposable;
-
-            private readonly IScheduler _parent;
-            private readonly TState _state;
-            private Func<IScheduler, TState, IDisposable> _action;
-
-            private volatile System.Threading.Timer _timer;
-
-            public Timer(IScheduler parent, TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
-            {
-                _parent = parent;
-                _state = state;
-                _action = action;
-
-                _disposable = new MultipleAssignmentDisposable();
-                _disposable.Disposable = Disposable.Create(Stop);
-
-                // Don't want the spin wait in Tick to get stuck if this thread gets aborted.
-                try { }
-                finally
-                {
-                    //
-                    // Rooting of the timer happens through the passed state,
-                    // which is the current instance and has a field to store the Timer instance.
-                    //
-                    _timer = new System.Threading.Timer(_ => Tick(_) /* Don't convert to method group until Roslyn catches up */, this, dueTime, TimeSpan.FromMilliseconds(System.Threading.Timeout.Infinite));
-                }
-            }
-
-            private static void Tick(object state)
-            {
-                var timer = (Timer<TState>)state;
-
-                try
-                {
-                    timer._disposable.Disposable = timer._action(timer._parent, timer._state);
-                }
-                finally
-                {
-                    SpinWait.SpinUntil(timer.IsTimerAssigned);
-                    timer.Stop();
-                }
-            }
-
-            private bool IsTimerAssigned() => _timer != null;
-
-            public void Dispose() => _disposable.Dispose();
-
-            private void Stop()
-            {
-                var timer = _timer;
-                if (timer != TimerStubs.Never)
-                {
-                    _action = Nop;
-                    _timer = TimerStubs.Never;
-
-                    timer.Dispose();
-                }
-            }
-
-            private IDisposable Nop(IScheduler scheduler, TState state) => Disposable.Empty;
-        }
-
         private sealed class PeriodicTimer<TState> : IDisposable
         {
             private TState _state;
             private Func<TState, TState> _action;
 
             private readonly AsyncLock _gate;
-            private volatile System.Threading.Timer _timer;
+            private volatile Timer _timer;
 
             public PeriodicTimer(TState state, TimeSpan period, Func<TState, TState> action)
             {
@@ -279,10 +188,10 @@ namespace System.Reactive.Concurrency
                 // Rooting of the timer happens through the this.Tick delegate's target object,
                 // which is the current instance and has a field to store the Timer instance.
                 //
-                _timer = new System.Threading.Timer(this.Tick, null, period, period);
+                _timer = new Timer(@this => ((PeriodicTimer<TState>)@this).Tick(), this, period, period);
             }
 
-            private void Tick(object state)
+            private void Tick()
             {
                 _gate.Wait(
                     this,

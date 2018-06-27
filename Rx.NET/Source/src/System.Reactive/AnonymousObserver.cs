@@ -84,6 +84,6 @@ namespace System.Reactive
         /// </summary>
         protected override void OnCompletedCore() => _onCompleted();
 
-        internal IObserver<T> MakeSafe(IDisposable disposable) => new AnonymousSafeObserver<T>(_onNext, _onError, _onCompleted, disposable);
+        internal ISafeObserver<T> MakeSafe() => new AnonymousSafeObserver<T>(_onNext, _onError, _onCompleted);
     }
 }
