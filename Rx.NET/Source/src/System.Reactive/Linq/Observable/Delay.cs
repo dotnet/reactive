@@ -437,7 +437,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _dueTime = dueTime;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => _scheduler.AsLongRunning() != null ? (Base<Absolute>._)new L(this, observer) : new S(this, observer);
+            protected override _ CreateSink(IObserver<TSource> observer) => _scheduler.AsLongRunning() != null ? (_)new L(this, observer) : new S(this, observer);
 
             protected override void Run(_ sink) => sink.Run(this);
 
@@ -541,7 +541,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _dueTime = dueTime;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => _scheduler.AsLongRunning() != null ? (Base<Relative>._)new L(this, observer) : new S(this, observer);
+            protected override _ CreateSink(IObserver<TSource> observer) => _scheduler.AsLongRunning() != null ? (_)new L(this, observer) : new S(this, observer);
 
             protected override void Run(_ sink) => sink.Run(this);
 

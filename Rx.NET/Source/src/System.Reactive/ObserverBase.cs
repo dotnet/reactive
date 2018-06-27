@@ -63,7 +63,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="error">The error that has occurred.</param>
         /// <remarks>This method only gets called when the observer hasn't stopped yet, and causes the observer to stop.</remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Error", Justification = "Same name as in the IObserver<T> definition of OnError in the BCL.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Error", Justification = "Same name as in the IObserver<T> definition of OnError in the BCL.")]
         protected abstract void OnErrorCore(Exception error);
 
         /// <summary>

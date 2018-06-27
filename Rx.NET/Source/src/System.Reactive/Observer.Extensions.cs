@@ -38,7 +38,7 @@ namespace System.Reactive
         /// <param name="observer">Observer object.</param>
         /// <returns>The action that forwards its input notification to the underlying observer.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="observer"/> is null.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Notifier", Justification = "Backward compat.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Notifier", Justification = "Backward compat.")]
         public static Action<Notification<T>> ToNotifier<T>(this IObserver<T> observer)
         {
             if (observer == null)

@@ -157,7 +157,7 @@ namespace System.Reactive.Concurrency
                     _state = state;
                     _action = action;
 
-                    DefaultScheduler.s_cal.StartThread(
+                    s_cal.StartThread(
                         @thisObject =>
                         {
                             var @this = (LongScheduledWorkItem<TState>)@thisObject;

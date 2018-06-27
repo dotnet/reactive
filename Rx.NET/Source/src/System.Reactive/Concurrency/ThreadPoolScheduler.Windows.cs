@@ -73,20 +73,16 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var d = new SingleAssignmentDisposable();
+            var userWorkItem = new UserWorkItem<TState>(this, state, action);
+            
+            var res = global::Windows.System.Threading.ThreadPool.RunAsync(
+                iaa => userWorkItem.Run(),
+                Priority,
+                Options);
 
-            var res = global::Windows.System.Threading.ThreadPool.RunAsync(iaa =>
-            {
-                if (!d.IsDisposed)
-                {
-                    d.Disposable = action(this, state);
-                }
-            }, Priority, Options);
+            userWorkItem.CancelQueueDisposable = Disposable.Create(res.Cancel);
 
-            return new CompositeDisposable(
-                d,
-                Disposable.Create(res.Cancel)
-            );
+            return userWorkItem;
         }
 
         /// <summary>
@@ -115,23 +111,15 @@ namespace System.Reactive.Concurrency
 
         private IDisposable ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
-            var d = new SingleAssignmentDisposable();
+            var userWorkItem = new UserWorkItem<TState>(this, state, action);
 
             var res = global::Windows.System.Threading.ThreadPoolTimer.CreateTimer(
-                tpt =>
-                {
-                    if (!d.IsDisposed)
-                    {
-                        d.Disposable = action(this, state);
-                    }
-                },
-                dueTime
-            );
+                tpt => userWorkItem.Run(),
+                dueTime);
 
-            return new CompositeDisposable(
-                d,
-                Disposable.Create(res.Cancel)
-            );
+            userWorkItem.CancelQueueDisposable = Disposable.Create(res.Cancel);
+
+            return userWorkItem;
         }
 
         /// <summary>
