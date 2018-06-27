@@ -6,7 +6,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class If<TResult> : Producer<TResult, If<TResult>._>, IEvaluatableObservable<TResult>
+    internal sealed class If<TResult> : BasicProducer<TResult>, IEvaluatableObservable<TResult>
     {
         private readonly Func<bool> _condition;
         private readonly IObservable<TResult> _thenSource;
@@ -21,36 +21,22 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public IObservable<TResult> Eval() => _condition() ? _thenSource : _elseSource;
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
-
-        protected override void Run(_ sink) => sink.Run();
-
-        internal sealed class _ : IdentitySink<TResult>
+        protected override IDisposable Run(IObserver<TResult> observer)
         {
-            private readonly If<TResult> _parent;
-
-            public _(If<TResult> parent, IObserver<TResult> observer)
-                : base(observer)
+            var result = default(IObservable<TResult>);
+            try
             {
-                _parent = parent;
+                result = Eval();
+            }
+            catch (Exception exception)
+            {
+                observer.OnError(exception);
+
+                return Disposable.Empty;
             }
 
-            public void Run()
-            {
-                var result = default(IObservable<TResult>);
-                try
-                {
-                    result = _parent.Eval();
-                }
-                catch (Exception exception)
-                {
-                    ForwardOnError(exception);
+            return result.SubscribeSafe(observer);
 
-                    return;
-                }
-
-                SetUpstream(result.SubscribeSafe(this));
-            }
         }
     }
 }
