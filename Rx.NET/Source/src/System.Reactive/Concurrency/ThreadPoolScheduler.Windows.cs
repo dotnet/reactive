@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 #if WINDOWS
-using System.Reactive.Disposables;
 using Windows.System.Threading;
 
 namespace System.Reactive.Concurrency
@@ -75,12 +74,12 @@ namespace System.Reactive.Concurrency
 
             var userWorkItem = new UserWorkItem<TState>(this, state, action);
             
-            var res = global::Windows.System.Threading.ThreadPool.RunAsync(
+            var res = ThreadPool.RunAsync(
                 iaa => userWorkItem.Run(),
                 Priority,
                 Options);
 
-            userWorkItem.CancelQueueDisposable = Disposable.Create(res.Cancel);
+            userWorkItem.CancelQueueDisposable = res.AsDisposable();
 
             return userWorkItem;
         }
@@ -113,11 +112,11 @@ namespace System.Reactive.Concurrency
         {
             var userWorkItem = new UserWorkItem<TState>(this, state, action);
 
-            var res = global::Windows.System.Threading.ThreadPoolTimer.CreateTimer(
+            var res = ThreadPoolTimer.CreateTimer(
                 tpt => userWorkItem.Run(),
                 dueTime);
 
-            userWorkItem.CancelQueueDisposable = Disposable.Create(res.Cancel);
+            userWorkItem.CancelQueueDisposable = res.AsDisposable();
 
             return userWorkItem;
         }
@@ -161,7 +160,7 @@ namespace System.Reactive.Concurrency
                 _state = state;
                 _action = action;
 
-                _timer = global::Windows.System.Threading.ThreadPoolTimer.CreatePeriodicTimer(
+                _timer = ThreadPoolTimer.CreatePeriodicTimer(
                     Tick,
                     period);
             }
