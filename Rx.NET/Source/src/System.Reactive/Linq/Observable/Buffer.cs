@@ -229,8 +229,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnError(Exception error)
                 {
                     // just drop the ILists on the GC floor, no reason to clear them
-                    while (_queue.Count > 0)
-                        _queue.Dequeue();
+                    _queue.Clear();
 
                     ForwardOnError(error);
                 }
