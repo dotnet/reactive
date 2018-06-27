@@ -10,45 +10,196 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Buffer<TSource>
     {
-        internal sealed class Count : Producer<IList<TSource>, Count._>
+        internal sealed class CountExact : Producer<IList<TSource>, CountExact.ExactSink>
         {
-            private readonly IObservable<TSource> _source;
-            private readonly int _count;
-            private readonly int _skip;
+            readonly IObservable<TSource> _source;
 
-            public Count(IObservable<TSource> source, int count, int skip)
+            readonly int _count;
+
+            public CountExact(IObservable<TSource> source, int count)
+            {
+                _source = source;
+                _count = count;
+            }
+
+            protected override ExactSink CreateSink(IObserver<IList<TSource>> observer) => new ExactSink(observer, _count);
+
+            protected override void Run(ExactSink sink) => sink.Run(_source);
+
+            internal sealed class ExactSink : Sink<TSource, IList<TSource>>
+            {
+                readonly int _count;
+
+                int _index;
+
+                IList<TSource> _buffer;
+
+                internal ExactSink(IObserver<IList<TSource>> observer, int count) : base(observer)
+                {
+                    _count = count;
+                }
+
+                public override void OnNext(TSource value)
+                {
+                    var idx = _index;
+                    var buffer = _buffer;
+                    if (idx == 0)
+                    {
+                        buffer = new List<TSource>();
+                        _buffer = buffer;
+                    }
+
+                    buffer.Add(value);
+
+                    if (++idx == _count)
+                    {
+                        _buffer = null;
+                        ForwardOnNext(buffer);
+                        _index = 0;
+                    }
+                    else
+                    {
+                        _index = idx;
+                    }
+                }
+
+                public override void OnError(Exception error)
+                {
+                    _buffer = null;
+                    ForwardOnError(error);
+                }
+
+                public override void OnCompleted()
+                {
+                    var buffer = _buffer;
+                    _buffer = null;
+
+                    if (buffer != null)
+                    {
+                        ForwardOnNext(buffer);
+                    }
+                    ForwardOnCompleted();
+                }   
+            }
+        }
+
+        internal sealed class CountSkip : Producer<IList<TSource>, CountSkip.SkipSink>
+        {
+            readonly IObservable<TSource> _source;
+
+            readonly int _count;
+
+            readonly int _skip;
+
+            public CountSkip(IObservable<TSource> source, int count, int skip)
             {
                 _source = source;
                 _count = count;
                 _skip = skip;
             }
 
-            protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(this, observer);
+            protected override SkipSink CreateSink(IObserver<IList<TSource>> observer) => new SkipSink(observer, _count, _skip);
 
-            protected override void Run(_ sink) => sink.Run(_source);
+            protected override void Run(SkipSink sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, IList<TSource>> 
+            internal sealed class SkipSink : Sink<TSource, IList<TSource>>
             {
-                private readonly Queue<IList<TSource>> _queue = new Queue<IList<TSource>>();
+                readonly int _count;
+
+                readonly int _skip;
+
+                int _index;
+
+                IList<TSource> _buffer;
+
+                internal SkipSink(IObserver<IList<TSource>> observer, int count, int skip) : base(observer)
+                {
+                    _count = count;
+                    _skip = skip;
+                }
+
+                public override void OnNext(TSource value)
+                {
+                    var idx = _index;
+                    var buffer = _buffer;
+                    if (idx == 0)
+                    {
+                        buffer = new List<TSource>();
+                        _buffer = buffer;
+                    }
+
+                    buffer?.Add(value);
+
+                    if (++idx == _count)
+                    {
+                        _buffer = null;
+                        ForwardOnNext(buffer);
+                    }
+
+                    if (idx == _skip)
+                    {
+                        _index = 0;
+                    }
+                    else
+                    {
+                        _index = idx;
+                    }
+                }
+
+                public override void OnError(Exception error)
+                {
+                    _buffer = null;
+                    ForwardOnError(error);
+                }
+
+                public override void OnCompleted()
+                {
+                    var buffer = _buffer;
+                    _buffer = null;
+
+                    if (buffer != null)
+                    {
+                        ForwardOnNext(buffer);
+                    }
+                    ForwardOnCompleted();
+                }
+            }
+        }
+
+        internal sealed class CountOverlap : Producer<IList<TSource>, CountOverlap.OverlapSink>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly int _count;
+            private readonly int _skip;
+
+            public CountOverlap(IObservable<TSource> source, int count, int skip)
+            {
+                _source = source;
+                _count = count;
+                _skip = skip;
+            }
+
+            protected override OverlapSink CreateSink(IObserver<IList<TSource>> observer) => new OverlapSink(observer, _count, _skip);
+
+            protected override void Run(OverlapSink sink) => sink.Run(_source);
+
+            internal sealed class OverlapSink : Sink<TSource, IList<TSource>> 
+            {
+                private readonly Queue<IList<TSource>> _queue;
 
                 private readonly int _count;
                 private readonly int _skip;
 
-                public _(Count parent, IObserver<IList<TSource>> observer)
+                int _index;
+                int _n;
+
+                public OverlapSink(IObserver<IList<TSource>> observer, int count, int skip)
                     : base(observer)
                 {
-                    _count = parent._count;
-                    _skip = parent._skip;
-                }
-
-                private int _n;
-
-                public override void Run(IObservable<TSource> source)
-                {
-                    _n = 0;
-
+                    _queue = new Queue<IList<TSource>>();
+                    _count = count;
+                    _skip = skip;
                     CreateWindow();
-                    base.Run(source);
                 }
 
                 private void CreateWindow()
@@ -77,8 +228,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnError(Exception error)
                 {
+                    // just drop the ILists on the GC floor, no reason to clear them
                     while (_queue.Count > 0)
-                        _queue.Dequeue().Clear();
+                        _queue.Dequeue();
 
                     ForwardOnError(error);
                 }
