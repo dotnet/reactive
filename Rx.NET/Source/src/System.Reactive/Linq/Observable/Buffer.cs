@@ -41,9 +41,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var idx = _index;
                     var buffer = _buffer;
-                    if (idx == 0)
+                    if (buffer == null)
                     {
                         buffer = new List<TSource>();
                         _buffer = buffer;
@@ -51,11 +50,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     buffer.Add(value);
 
-                    if (++idx == _count)
+                    var idx = _index + 1;
+                    if (idx == _count)
                     {
                         _buffer = null;
-                        ForwardOnNext(buffer);
                         _index = 0;
+                        ForwardOnNext(buffer);
                     }
                     else
                     {
