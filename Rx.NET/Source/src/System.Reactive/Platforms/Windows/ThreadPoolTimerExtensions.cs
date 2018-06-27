@@ -4,17 +4,19 @@
 
 #if WINDOWS
 using System.Reactive.Disposables;
+using Windows.System.Threading;
+using Windows.Foundation;
 
 namespace System.Reactive.Concurrency
 {
     internal static class ThreadPoolTimerExtensions
     {
-        public static IDisposable AsDisposable(this global::Windows.System.Threading.ThreadPoolTimer threadPoolTimer)
+        public static IDisposable AsDisposable(this ThreadPoolTimer threadPoolTimer)
         {
             return Disposable.Create(threadPoolTimer, _ => _.Cancel());
         }
 
-        public static IDisposable AsDisposable(this global::Windows.Foundation.IAsyncInfo asyncInfo)
+        public static IDisposable AsDisposable(this IAsyncInfo asyncInfo)
         {
             return Disposable.Create(asyncInfo, _ => _.Cancel());
         }
