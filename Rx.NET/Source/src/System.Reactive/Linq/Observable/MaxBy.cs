@@ -49,6 +49,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception ex)
                 {
+                    _list = null;
+                    _lastKey = default;
                     ForwardOnError(ex);
                     return;
                 }
@@ -68,8 +70,8 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        _lastKey = default;
                         _list = null;
+                        _lastKey = default;
                         ForwardOnError(ex);
                         return;
                     }
