@@ -36,7 +36,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (scheduler is IOneTimeScheduler ot)
                 {
-                    SetUpstream(ot.ScheduleDirect(this, @this => @this.Invoke()));
+                    SetUpstream(ot.ScheduleAction(this, @this => @this.Invoke()));
                 }
                 else
                 {
