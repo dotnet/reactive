@@ -190,7 +190,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly int _count;
                 private readonly int _skip;
 
-                int _index;
                 int _n;
 
                 public OverlapSink(IObserver<IList<TSource>> observer, int count, int skip)
