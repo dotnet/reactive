@@ -73,7 +73,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     : base(observer)
                 {
                     _selector = selector;
-                    _index = 0;
                 }
 
                 public override void OnNext(TSource value)
