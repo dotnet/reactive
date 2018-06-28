@@ -21,6 +21,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class _ : IdentitySink<TSource>
             {
+                bool _found;
+
                 public _(IObserver<TSource> observer)
                     : base(observer)
                 {
@@ -28,13 +30,15 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
+                    _found = true;
                     ForwardOnNext(value);
                     ForwardOnCompleted();
                 }
 
                 public override void OnCompleted()
                 {
-                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    if (!_found)
+                        ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
             }
         }
@@ -58,6 +62,8 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly Func<TSource, bool> _predicate;
 
+                bool _found;
+
                 public _(Func<TSource, bool> predicate, IObserver<TSource> observer)
                     : base(observer)
                 {
@@ -80,6 +86,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (b)
                     {
+                        _found = true;
                         ForwardOnNext(value);
                         ForwardOnCompleted();
                     }
@@ -87,7 +94,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_MATCHING_ELEMENTS));
+                    if (!_found)
+                        ForwardOnError(new InvalidOperationException(Strings_Linq.NO_MATCHING_ELEMENTS));
                 }
             }
         }

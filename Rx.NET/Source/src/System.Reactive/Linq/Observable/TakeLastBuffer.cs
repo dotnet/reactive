@@ -70,7 +70,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(_duration, observer);
 
-            protected override void Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(_source, _scheduler);
 
             internal sealed class _ : Sink<TSource, IList<TSource>> 
             {
@@ -86,11 +86,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private IStopwatch _watch;
 
-                public void Run(Time parent)
+                public void Run(IObservable<TSource> source, IScheduler scheduler)
                 {
-                    _watch = parent._scheduler.StartStopwatch();
+                    _watch = scheduler.StartStopwatch();
 
-                    SetUpstream(parent._source.SubscribeSafe(this));
+                    base.Run(source);
                 }
 
                 public override void OnNext(TSource value)
