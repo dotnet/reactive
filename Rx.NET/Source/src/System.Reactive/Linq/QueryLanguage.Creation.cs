@@ -347,22 +347,42 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Repeat<TResult>(TResult value)
         {
-            return new Repeat<TResult>.Forever(value, SchedulerDefaults.Iteration);
+            return Repeat_(value, SchedulerDefaults.Iteration);
         }
 
         public virtual IObservable<TResult> Repeat<TResult>(TResult value, IScheduler scheduler)
         {
-            return new Repeat<TResult>.Forever(value, scheduler);
+            return Repeat_(value, scheduler);
+        }
+
+        private IObservable<TResult> Repeat_<TResult>(TResult value, IScheduler scheduler)
+        {
+            var longRunning = scheduler.AsLongRunning();
+            if (longRunning != null)
+            {
+                return new Repeat<TResult>.ForeverLongRunning(value, longRunning);
+            }
+            return new Repeat<TResult>.ForeverRecursive(value, scheduler);
         }
 
         public virtual IObservable<TResult> Repeat<TResult>(TResult value, int repeatCount)
         {
-            return new Repeat<TResult>.Count(value, repeatCount, SchedulerDefaults.Iteration);
+            return Repeat_(value, repeatCount, SchedulerDefaults.Iteration);
         }
 
         public virtual IObservable<TResult> Repeat<TResult>(TResult value, int repeatCount, IScheduler scheduler)
         {
-            return new Repeat<TResult>.Count(value, repeatCount, scheduler);
+            return Repeat_(value, repeatCount, scheduler);
+        }
+
+        private IObservable<TResult> Repeat_<TResult>(TResult value, int repeatCount, IScheduler scheduler)
+        {
+            var longRunning = scheduler.AsLongRunning();
+            if (longRunning != null)
+            {
+                return new Repeat<TResult>.CountLongRunning(value, repeatCount, longRunning);
+            }
+            return new Repeat<TResult>.CountRecursive(value, repeatCount, scheduler);
         }
 
         #endregion
