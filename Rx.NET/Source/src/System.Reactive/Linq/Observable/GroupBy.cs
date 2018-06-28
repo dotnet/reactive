@@ -25,7 +25,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer) => new _(this, observer);
+        protected override _ CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer) => new _(_keySelector, _elementSelector, _capacity, _comparer, observer);
 
         protected override void Run(_ sink) => sink.Run(_source);
 
@@ -38,19 +38,19 @@ namespace System.Reactive.Linq.ObservableImpl
             private RefCountDisposable _refCountDisposable;
             private Subject<TElement> _null;
 
-            public _(GroupBy<TSource, TKey, TElement> parent, IObserver<IGroupedObservable<TKey, TElement>> observer)
+            public _(Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, int? capacity, IEqualityComparer<TKey> comparer, IObserver<IGroupedObservable<TKey, TElement>> observer)
                 : base(observer)
             {
-                _keySelector = parent._keySelector;
-                _elementSelector = parent._elementSelector;
+                _keySelector = keySelector;
+                _elementSelector = elementSelector;
 
-                if (parent._capacity.HasValue)
+                if (capacity.HasValue)
                 {
-                    _map = new Dictionary<TKey, Subject<TElement>>(parent._capacity.Value, parent._comparer);
+                    _map = new Dictionary<TKey, Subject<TElement>>(capacity.Value, comparer);
                 }
                 else
                 {
-                    _map = new Dictionary<TKey, Subject<TElement>>(parent._comparer);
+                    _map = new Dictionary<TKey, Subject<TElement>>(comparer);
                 }
             }
 

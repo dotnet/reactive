@@ -4,7 +4,7 @@
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>       
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <Description>Reactive Extensions (Rx) for .NET</Description>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
 
