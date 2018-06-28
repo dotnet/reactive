@@ -40,8 +40,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public NonNull(IComparer<TSource> comparer, IObserver<TSource> observer)
                 : base(comparer, observer)
             {
-                _hasValue = false;
-                _lastValue = default(TSource);
             }
 
             public override void OnNext(TSource value)
@@ -93,7 +91,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public Null(IComparer<TSource> comparer, IObserver<TSource> observer)
                 : base(comparer, observer)
             {
-                _lastValue = default(TSource);
             }
 
             public override void OnNext(TSource value)
@@ -160,8 +157,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<double> observer)
                 : base(observer)
             {
-                _hasValue = false;
-                _lastValue = default(double);
             }
 
             public override void OnNext(double value)
@@ -216,8 +211,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<float> observer)
                 : base(observer)
             {
-                _hasValue = false;
-                _lastValue = default(float);
             }
 
             public override void OnNext(float value)
@@ -272,8 +265,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<decimal> observer)
                 : base(observer)
             {
-                _hasValue = false;
-                _lastValue = default(decimal);
             }
 
             public override void OnNext(decimal value)
@@ -328,8 +319,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<int> observer)
                 : base(observer)
             {
-                _hasValue = false;
-                _lastValue = default(int);
             }
 
             public override void OnNext(int value)
@@ -384,8 +373,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<long> observer)
                 : base(observer)
             {
-                _hasValue = false;
-                _lastValue = default(long);
             }
 
             public override void OnNext(long value)
@@ -439,7 +426,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<double?> observer)
                 : base(observer)
             {
-                _lastValue = default(double?);
             }
 
             public override void OnNext(double? value)
@@ -488,7 +474,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<float?> observer)
                 : base(observer)
             {
-                _lastValue = default(float?);
             }
 
             public override void OnNext(float? value)
@@ -537,7 +522,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<decimal?> observer)
                 : base(observer)
             {
-                _lastValue = default(decimal?);
             }
 
             public override void OnNext(decimal? value)
@@ -586,7 +570,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<int?> observer)
                 : base(observer)
             {
-                _lastValue = default(int?);
             }
 
             public override void OnNext(int? value)
@@ -635,7 +618,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<long?> observer)
                 : base(observer)
             {
-                _lastValue = default(long?);
             }
 
             public override void OnNext(long? value)
