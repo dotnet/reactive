@@ -50,8 +50,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void Run(IObservable<TSource> source)
                 {
-                    _n = 0;
-
                     var firstWindow = CreateWindow();
                     ForwardOnNext(firstWindow);
 
@@ -388,8 +386,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void Run(IObservable<TSource> source)
                 {
-                    _n = 0;
-
                     var groupDisposable = new CompositeDisposable(2) { _timerD };
                     _refCountDisposable = new RefCountDisposable(groupDisposable);
 
