@@ -38,7 +38,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var shouldRun = default(bool);
+                    var shouldRun = false;
                     try
                     {
                         shouldRun = _predicate(value);
@@ -81,12 +81,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     : base(observer)
                 {
                     _predicate = predicate;
-                    _index = 0;
                 }
 
                 public override void OnNext(TSource value)
                 {
-                    var shouldRun = default(bool);
+                    var shouldRun = false;
                     try
                     {
                         shouldRun = _predicate(value, checked(_index++));
