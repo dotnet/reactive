@@ -84,6 +84,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (error != null)
                     {
                         current = default;
+                        _collector = default;
                         error.Throw();
                     }
                     else
@@ -93,6 +94,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             if (_done)
                             {
                                 current = default;
+                                _collector = default;
                                 return false;
                             }
 
