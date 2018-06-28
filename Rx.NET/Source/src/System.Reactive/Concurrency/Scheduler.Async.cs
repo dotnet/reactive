@@ -389,8 +389,7 @@ namespace System.Reactive.Concurrency
 
         private static CancellationToken GetCancellationToken(this IScheduler scheduler)
         {
-            var cs = scheduler as CancelableScheduler;
-            return cs != null ? cs.Token : CancellationToken.None;
+            return scheduler is CancelableScheduler cs ? cs.Token : CancellationToken.None;
         }
 
         private sealed class CancelableScheduler : IScheduler

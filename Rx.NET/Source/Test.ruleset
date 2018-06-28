@@ -2,6 +2,13 @@
 <RuleSet Name="Test Rule Set" Description=" " ToolsVersion="10.0">
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CA2212" Action="Warning" />
+    <!--
+    <Rule Id="IDE0001" Action="Warning" />
+    <Rule Id="IDE0003" Action="Warning" />
+    <Rule Id="IDE0004" Action="Warning" />
+    <Rule Id="IDE0005" Action="Warning" />
+    <Rule Id="IDE0034" Action="Warning" />
+    -->
   </Rules>
   <Rules AnalyzerId="xunit.analyzers" RuleNamespace="xunit.analyzers">
     <Rule Id="xUnit1004" Action="None" />

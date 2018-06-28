@@ -5,17 +5,14 @@
 
 #pragma warning disable 1591
 
-using System;
 using System.Reactive.Concurrency;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Reactive.Joins;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq

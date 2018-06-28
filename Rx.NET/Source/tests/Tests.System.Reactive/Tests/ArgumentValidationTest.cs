@@ -308,7 +308,7 @@ namespace ReactiveTests.Tests
                     var targs = new Type[ga.Length];
 
                     // fill in the type arguments
-                    for (int k = 0; k < targs.Length; k++)
+                    for (var k = 0; k < targs.Length; k++)
                     {
                         // watch out for type constrains
                         // the default typeof(int) will not work when
@@ -353,7 +353,7 @@ namespace ReactiveTests.Tests
                 var args = m.GetParameters();
 
                 // for each parameter of the (generic) method
-                for (int i = 0; i < args.Length; i++)
+                for (var i = 0; i < args.Length; i++)
                 {
                     // prepare a pattern for the method invocation
                     var margs = new object[args.Length];
@@ -364,7 +364,7 @@ namespace ReactiveTests.Tests
 
                     // for each argument index
                     // with the loop i, this creates an N x N matrix where in each row, one argument is null
-                    for (int j = 0; j < args.Length; j++)
+                    for (var j = 0; j < args.Length; j++)
                     {
                         // figure out the type of the argument
                         var pt = args[j].ParameterType;
@@ -443,7 +443,7 @@ namespace ReactiveTests.Tests
                     // prepare method arguments
                     var margs = new object[args.Length];
 
-                    for (int j = 0; j < args.Length; j++)
+                    for (var j = 0; j < args.Length; j++)
                     {
                         var pt = args[j].ParameterType;
                         var paramTypeName = TypeNameOf(pt);
@@ -469,11 +469,10 @@ namespace ReactiveTests.Tests
                     var thrown = true;
                     try
                     {
-                        var o = m.Invoke(null, margs) as IObservable<int>;
-
                         // Should not return null, but would be mistaken for
                         // throwing because of Subscribe(null)
-                        if (o != null) {
+                        if (m.Invoke(null, margs) is IObservable<int> o)
+                        {
                             o.Subscribe(null);
 
                             thrown = false;

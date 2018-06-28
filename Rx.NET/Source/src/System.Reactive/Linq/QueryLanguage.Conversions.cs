@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq
 {
@@ -16,12 +15,12 @@ namespace System.Reactive.Linq
 
         public virtual IDisposable Subscribe<TSource>(IEnumerable<TSource> source, IObserver<TSource> observer)
         {
-            return Subscribe_<TSource>(source, observer, SchedulerDefaults.Iteration);
+            return Subscribe_(source, observer, SchedulerDefaults.Iteration);
         }
 
         public virtual IDisposable Subscribe<TSource>(IEnumerable<TSource> source, IObserver<TSource> observer, IScheduler scheduler)
         {
-            return Subscribe_<TSource>(source, observer, scheduler);
+            return Subscribe_(source, observer, scheduler);
         }
 
         private static IDisposable Subscribe_<TSource>(IEnumerable<TSource> source, IObserver<TSource> observer, IScheduler scheduler)

@@ -75,13 +75,13 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, IList<TSource>> 
             {
                 private readonly TimeSpan _duration;
-                private Queue<System.Reactive.TimeInterval<TSource>> _queue;
+                private Queue<Reactive.TimeInterval<TSource>> _queue;
 
                 public _(TimeSpan duration, IObserver<IList<TSource>> observer)
                     : base(observer)
                 {
                     _duration = duration;
-                    _queue = new Queue<System.Reactive.TimeInterval<TSource>>();
+                    _queue = new Queue<Reactive.TimeInterval<TSource>>();
                 }
 
                 private IStopwatch _watch;
@@ -96,7 +96,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnNext(TSource value)
                 {
                     var now = _watch.Elapsed;
-                    _queue.Enqueue(new System.Reactive.TimeInterval<TSource>(value, now));
+                    _queue.Enqueue(new Reactive.TimeInterval<TSource>(value, now));
                     Trim(now);
                 }
 

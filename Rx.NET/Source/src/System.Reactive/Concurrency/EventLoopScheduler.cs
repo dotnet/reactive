@@ -306,7 +306,7 @@ namespace System.Reactive.Concurrency
                     //
                     if (_disposed)
                     {
-                        ((IDisposable)_evt).Dispose();
+                        _evt.Dispose();
                         return;
                     }
 

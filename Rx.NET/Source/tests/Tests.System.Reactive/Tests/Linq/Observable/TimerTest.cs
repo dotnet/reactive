@@ -792,21 +792,21 @@ namespace ReactiveTests.Tests
 
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
-            var run = new TimerRun(this.Clock);
+            var run = new TimerRun(Clock);
             _timers.Add(run);
 
             var x = state;
 
             var d = this.Schedule(period, self =>
             {
-                run.Add(this.Clock);
+                run.Add(Clock);
 
                 x = action(x);
                 self(period);
             });
 
             return new CompositeDisposable(
-                Disposable.Create(() => { run.Stop(this.Clock); }),
+                Disposable.Create(() => { run.Stop(Clock); }),
                 d
             );
         }
@@ -853,8 +853,7 @@ namespace ReactiveTests.Tests
 
         public override bool Equals(object obj)
         {
-            var other = obj as TimerRun;
-            if (other == null)
+            if (!(obj is TimerRun other))
                 return false;
 
             return _started == other._started && _stopped == other._stopped && _ticks.SequenceEqual(other._ticks);

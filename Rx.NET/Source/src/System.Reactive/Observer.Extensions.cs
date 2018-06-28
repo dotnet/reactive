@@ -25,7 +25,7 @@ namespace System.Reactive
                 throw new ArgumentNullException(nameof(handler));
 
             return new AnonymousObserver<T>(
-                x => handler(Notification.CreateOnNext<T>(x)),
+                x => handler(Notification.CreateOnNext(x)),
                 exception => handler(Notification.CreateOnError<T>(exception)),
                 () => handler(Notification.CreateOnCompleted<T>())
             );
@@ -159,7 +159,7 @@ namespace System.Reactive
         /// <returns>An observer that delivers callbacks to the specified observer in a synchronized manner.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="observer"/> is null.</exception>
         /// <remarks>
-        /// Because a <see cref="System.Threading.Monitor">Monitor</see> is used to perform the synchronization, there's no protection against reentrancy from the same thread.
+        /// Because a <see cref="Monitor">Monitor</see> is used to perform the synchronization, there's no protection against reentrancy from the same thread.
         /// Hence, overlapped observer callbacks are still possible, which is invalid behavior according to the observer grammar. In order to protect against this behavior as
         /// well, use the <see cref="Synchronize{T}(IObserver{T}, bool)"/> overload, passing true for the second parameter.
         /// </remarks>
@@ -182,7 +182,7 @@ namespace System.Reactive
         /// <exception cref="ArgumentNullException"><paramref name="observer"/> is null.</exception>
         /// <remarks>
         /// When the <paramref name="preventReentrancy"/> parameter is set to false, behavior is identical to the <see cref="Synchronize{T}(IObserver{T})"/> overload which uses
-        /// a <see cref="System.Threading.Monitor">Monitor</see> for synchronization. When the <paramref name="preventReentrancy"/> parameter is set to true, an <see cref="AsyncLock"/>
+        /// a <see cref="Monitor">Monitor</see> for synchronization. When the <paramref name="preventReentrancy"/> parameter is set to true, an <see cref="AsyncLock"/>
         /// is used to queue up callbacks to the specified observer if a reentrant call is made.
         /// </remarks>
         public static IObserver<T> Synchronize<T>(IObserver<T> observer, bool preventReentrancy)
@@ -197,7 +197,7 @@ namespace System.Reactive
         }
 
         /// <summary>
-        /// Synchronizes access to the observer such that its callback methods cannot be called concurrently by multiple threads, using the specified gate object for use by a <see cref="System.Threading.Monitor">Monitor</see>-based lock.
+        /// Synchronizes access to the observer such that its callback methods cannot be called concurrently by multiple threads, using the specified gate object for use by a <see cref="Monitor">Monitor</see>-based lock.
         /// This overload is useful when coordinating multiple observers that access shared state by synchronizing on a common gate object.
         /// Notice reentrant observer callbacks on the same thread are still possible.
         /// </summary>
@@ -207,7 +207,7 @@ namespace System.Reactive
         /// <returns>An observer that delivers callbacks to the specified observer in a synchronized manner.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="observer"/> or <paramref name="gate"/> is null.</exception>
         /// <remarks>
-        /// Because a <see cref="System.Threading.Monitor">Monitor</see> is used to perform the synchronization, there's no protection against reentrancy from the same thread.
+        /// Because a <see cref="Monitor">Monitor</see> is used to perform the synchronization, there's no protection against reentrancy from the same thread.
         /// Hence, overlapped observer callbacks are still possible, which is invalid behavior according to the observer grammar. In order to protect against this behavior as
         /// well, use the <see cref="Synchronize{T}(IObserver{T}, AsyncLock)"/> overload.
         /// </remarks>

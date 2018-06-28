@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Globalization;
-using System.Reactive.Disposables;
 
 namespace System.Reactive.Concurrency
 {
@@ -20,7 +19,7 @@ namespace System.Reactive.Concurrency
         /// Creates a new virtual time scheduler with the default value of TAbsolute as the initial clock value.
         /// </summary>
         protected VirtualTimeSchedulerBase()
-            : this(default(TAbsolute), Comparer<TAbsolute>.Default)
+            : this(default, Comparer<TAbsolute>.Default)
         {
         }
 

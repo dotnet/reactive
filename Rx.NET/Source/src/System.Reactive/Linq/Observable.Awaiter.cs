@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Threading;
-using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
@@ -23,7 +22,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.GetAwaiter<TSource>(source);
+            return s_impl.GetAwaiter(source);
         }
 
         /// <summary>
@@ -39,7 +38,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.GetAwaiter<TSource>(source);
+            return s_impl.GetAwaiter(source);
         }
 
         /// <summary>
@@ -56,7 +55,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.RunAsync<TSource>(source, cancellationToken);
+            return s_impl.RunAsync(source, cancellationToken);
         }
 
         /// <summary>
@@ -73,7 +72,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.RunAsync<TSource>(source, cancellationToken);
+            return s_impl.RunAsync(source, cancellationToken);
         }
     }
 }

@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Globalization;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
-using System.Reflection;
 using System.Threading;
 
 #if HAS_WINRT
@@ -73,12 +70,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
         {
-            return FromEventPattern_<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, GetSchedulerForCurrentContext());
+            return FromEventPattern_(conversion, addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
-            return FromEventPattern_<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
+            return FromEventPattern_(conversion, addHandler, removeHandler, scheduler);
         }
 
         #region Implementation
@@ -115,12 +112,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler)
         {
-            return FromEventPattern_<TEventArgs>(addHandler, removeHandler, GetSchedulerForCurrentContext());
+            return FromEventPattern_(addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler, IScheduler scheduler)
         {
-            return FromEventPattern_<TEventArgs>(addHandler, removeHandler, scheduler);
+            return FromEventPattern_(addHandler, removeHandler, scheduler);
         }
 
         #region Implementation
@@ -286,12 +283,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(Func<Action<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
         {
-            return FromEvent_<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, GetSchedulerForCurrentContext());
+            return FromEvent_(conversion, addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
         public virtual IObservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(Func<Action<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
-            return FromEvent_<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
+            return FromEvent_(conversion, addHandler, removeHandler, scheduler);
         }
 
         #region Implementation
@@ -324,12 +321,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TEventArgs> FromEvent<TEventArgs>(Action<Action<TEventArgs>> addHandler, Action<Action<TEventArgs>> removeHandler)
         {
-            return FromEvent_<TEventArgs>(addHandler, removeHandler, GetSchedulerForCurrentContext());
+            return FromEvent_(addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
         public virtual IObservable<TEventArgs> FromEvent<TEventArgs>(Action<Action<TEventArgs>> addHandler, Action<Action<TEventArgs>> removeHandler, IScheduler scheduler)
         {
-            return FromEvent_<TEventArgs>(addHandler, removeHandler, scheduler);
+            return FromEvent_(addHandler, removeHandler, scheduler);
         }
 
         #region Implementation

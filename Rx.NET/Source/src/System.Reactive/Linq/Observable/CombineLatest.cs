@@ -422,7 +422,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 _values = new List<TSource>(N);
                 for (var i = 0; i < N; i++)
-                    _values.Add(default(TSource));
+                    _values.Add(default);
 
                 _isDone = new bool[N];
 

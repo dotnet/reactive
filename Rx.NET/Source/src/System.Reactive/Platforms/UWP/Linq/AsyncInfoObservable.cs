@@ -4,8 +4,6 @@
 
 #if HAS_WINRT
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -55,7 +53,7 @@ namespace System.Reactive.Linq
             return AsyncInfo.Run<int>((ct, progress) =>
             {
                 var i = 0;
-                return (Task)source.Do(_ => progress.Report(i++)).DefaultIfEmpty().ToTask(ct);
+                return source.Do(_ => progress.Report(i++)).DefaultIfEmpty().ToTask(ct);
             });
         }
 
@@ -78,7 +76,7 @@ namespace System.Reactive.Linq
 
             return AsyncInfo.Run<TProgress>((ct, progress) =>
             {
-                return (Task)Observable.Create<TSource>(observer =>
+                return Observable.Create<TSource>(observer =>
                 {
                     var obs = Observer.Synchronize(observer);
 
