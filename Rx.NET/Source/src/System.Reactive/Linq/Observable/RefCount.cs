@@ -23,8 +23,6 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 _source = source;
                 _gate = new object();
-                _count = 0;
-                _connectableSubscription = default(IDisposable);
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(observer, this);
@@ -100,8 +98,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 _gate = new object();
                 _disconnectTime = disconnectTime;
                 _scheduler = scheduler;
-                _count = 0;
-                _connectableSubscription = default(IDisposable);
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);

@@ -26,9 +26,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                if (value is TResult)
+                if (value is TResult v)
                 {
-                    ForwardOnNext((TResult)(object)value);
+                    ForwardOnNext(v);
                 }
             }
         }
