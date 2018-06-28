@@ -3,11 +3,12 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Case<TValue, TResult> : Producer<TResult, Case<TValue, TResult>._>, IEvaluatableObservable<TResult>
+    internal sealed class Case<TValue, TResult> : BasicProducer<TResult>, IEvaluatableObservable<TResult>
     {
         private readonly Func<TValue> _selector;
         private readonly IDictionary<TValue, IObservable<TResult>> _sources;
@@ -28,33 +29,21 @@ namespace System.Reactive.Linq.ObservableImpl
             return _defaultSource;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(observer);
-
-        protected override void Run(_ sink) => sink.Run(this);
-
-        internal sealed class _ : IdentitySink<TResult>
+        protected override IDisposable Run(IObserver<TResult> observer)
         {
-            public _(IObserver<TResult> observer)
-                : base(observer)
+            var result = default(IObservable<TResult>);
+            try
             {
+                result = Eval();
+            }
+            catch (Exception exception)
+            {
+                observer.OnError(exception);
+
+                return Disposable.Empty;
             }
 
-            public void Run(Case<TValue, TResult> parent)
-            {
-                var result = default(IObservable<TResult>);
-                try
-                {
-                    result = parent.Eval();
-                }
-                catch (Exception exception)
-                {
-                    ForwardOnError(exception);
-
-                    return;
-                }
-
-                base.Run(result);
-            }
+            return result.SubscribeSafe(observer);
         }
     }
 }
