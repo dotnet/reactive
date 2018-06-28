@@ -45,6 +45,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 Disposable.TrySetSingle(ref _task, first);
             }
 
+            protected override void Dispose(bool disposing)
+            {
+                base.Dispose(disposing);
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _task);
+                }
+            }   
+
             private IDisposable LoopRec(IScheduler scheduler)
             {
                 var idx = _index;
