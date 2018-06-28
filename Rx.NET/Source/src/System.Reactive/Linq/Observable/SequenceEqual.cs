@@ -30,29 +30,26 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : IdentitySink<bool>
             {
                 private readonly IEqualityComparer<TSource> _comparer;
+                private readonly object _gate;
+                private readonly Queue<TSource> _ql;
+                private readonly Queue<TSource> _qr;
 
                 public _(IEqualityComparer<TSource> comparer, IObserver<bool> observer)
                     : base(observer)
                 {
                     _comparer = comparer;
+                    _gate = new object();
+                    _ql = new Queue<TSource>();
+                    _qr = new Queue<TSource>();
                 }
 
-                private object _gate;
                 private bool _donel;
                 private bool _doner;
-                private Queue<TSource> _ql;
-                private Queue<TSource> _qr;
 
                 private IDisposable _second;
 
                 public void Run(Observable parent)
                 {
-                    _gate = new object();
-                    _donel = false;
-                    _doner = false;
-                    _ql = new Queue<TSource>();
-                    _qr = new Queue<TSource>();
-
                     SetUpstream(parent._first.SubscribeSafe(new FirstObserver(this)));
                     Disposable.SetSingle(ref _second, parent._second.SubscribeSafe(new SecondObserver(this)));
                 }

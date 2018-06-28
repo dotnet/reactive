@@ -42,7 +42,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                ForwardOnError(new ArgumentOutOfRangeException("index"));
+                if (_i >= 0)
+                {
+                    ForwardOnError(new ArgumentOutOfRangeException("index"));
+                }
             }
         }
     }

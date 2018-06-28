@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly Func<TSource, TKey> _keySelector;
             private readonly Func<TSource, TElement> _elementSelector;
-            private readonly Dictionary<TKey, TElement> _dictionary;
+            private Dictionary<TKey, TElement> _dictionary;
 
             public _(ToDictionary<TSource, TKey, TElement> parent, IObserver<IDictionary<TKey, TElement>> observer)
                 : base(observer)
@@ -47,13 +47,22 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception ex)
                 {
+                    _dictionary = null;
                     ForwardOnError(ex);
                 }
             }
 
+            public override void OnError(Exception error)
+            {
+                _dictionary = null;
+                ForwardOnError(error);
+            }
+
             public override void OnCompleted()
             {
-                ForwardOnNext(_dictionary);
+                var dictionary = _dictionary;
+                _dictionary = null;
+                ForwardOnNext(dictionary);
                 ForwardOnCompleted();
             }
         }

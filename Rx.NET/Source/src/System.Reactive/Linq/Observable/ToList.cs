@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : Sink<TSource, IList<TSource>> 
         {
-            private readonly List<TSource> _list;
+            private List<TSource> _list;
 
             public _(IObserver<IList<TSource>> observer)
                 : base(observer)
@@ -34,9 +34,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 _list.Add(value);
             }
 
+            public override void OnError(Exception error)
+            {
+                _list = null;
+                ForwardOnError(error);
+            }
+
             public override void OnCompleted()
             {
-                ForwardOnNext(_list);
+                var list = _list;
+                _list = null;
+                ForwardOnNext(list);
                 ForwardOnCompleted();
             }
         }
