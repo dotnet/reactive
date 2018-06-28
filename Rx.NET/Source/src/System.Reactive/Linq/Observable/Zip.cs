@@ -551,21 +551,18 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(this, observer);
+        protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(observer);
 
-        protected override void Run(_ sink) => sink.Run();
+        protected override void Run(_ sink) => sink.Run(_sources);
 
         internal sealed class _ : IdentitySink<IList<TSource>>
         {
-            private readonly Zip<TSource> _parent;
-
             private readonly object _gate;
 
-            public _(Zip<TSource> parent, IObserver<IList<TSource>> observer)
+            public _(IObserver<IList<TSource>> observer)
                 : base(observer)
             {
                 _gate = new object();
-                _parent = parent;
             }
 
             private Queue<TSource>[] _queues;
@@ -574,9 +571,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private static readonly IDisposable[] Disposed = new IDisposable[0];
 
-            public void Run()
+            public void Run(IEnumerable<IObservable<TSource>> sources)
             {
-                var srcs = _parent._sources.ToArray();
+                var srcs = sources.ToArray();
 
                 var N = srcs.Length;
 
