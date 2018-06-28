@@ -50,17 +50,21 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, int count)
         {
-            return Buffer_<TSource>(source, count, count);
+            return new Buffer<TSource>.CountExact(source, count);
         }
 
         public virtual IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, int count, int skip)
         {
-            return Buffer_<TSource>(source, count, skip);
-        }
-
-        private static IObservable<IList<TSource>> Buffer_<TSource>(IObservable<TSource> source, int count, int skip)
-        {
-            return new Buffer<TSource>.Count(source, count, skip);
+            if (count > skip)
+            {
+                return new Buffer<TSource>.CountOverlap(source, count, skip);
+            }
+            else if (count < skip)
+            {
+                return new Buffer<TSource>.CountSkip(source, count, skip);
+            }
+            // count == skip
+            return new Buffer<TSource>.CountExact(source, count);
         }
 
         #endregion

@@ -26,7 +26,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 public _(IObserver<int> observer)
                     : base(observer)
                 {
-                    _count = 0;
                 }
 
                 public override void OnNext(TSource value)
@@ -76,7 +75,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     : base(observer)
                 {
                     _predicate = predicate;
-                    _count = 0;
                 }
 
                 public override void OnNext(TSource value)
