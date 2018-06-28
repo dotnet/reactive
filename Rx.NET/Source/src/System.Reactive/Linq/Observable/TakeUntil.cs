@@ -147,7 +147,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(TakeUntil<TSource> parent)
             {
-                Disposable.SetSingle(ref _timerDisposable, parent._scheduler.Schedule(this, parent._endTime, (_, state) => state.Tick()));
+                Disposable.SetSingle(ref _timerDisposable, parent._scheduler.ScheduleAction(this, parent._endTime, state => state.Tick()));
                 base.Run(parent._source);
             }
 
@@ -160,10 +160,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 base.Dispose(disposing);
             }
 
-            private IDisposable Tick()
+            private void Tick()
             {
                 OnCompleted();
-                return Disposable.Empty;
             }
 
             public override void OnNext(TSource value)

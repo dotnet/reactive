@@ -321,11 +321,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     // the GetSchedulerForCurrentContext method).
                     //
                     var onNext = _parent.GetHandler(_subject.OnNext);
-                    _parent._scheduler.Schedule(onNext, AddHandler);
+                    _parent._scheduler.ScheduleAction(onNext, AddHandler);
                 }
             }
 
-            private IDisposable AddHandler(IScheduler self, TDelegate onNext)
+            private void AddHandler(TDelegate onNext)
             {
                 var removeHandler = default(IDisposable);
                 try
@@ -335,7 +335,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 catch (Exception exception)
                 {
                     _subject.OnError(exception);
-                    return Disposable.Empty;
+                    return;
                 }
 
                 //
@@ -347,8 +347,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 // remove handler to run on the scheduler.
                 //
                 _removeHandler.Disposable = removeHandler;
-
-                return Disposable.Empty;
             }
         }
     }

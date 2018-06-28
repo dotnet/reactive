@@ -346,10 +346,10 @@ namespace System.Reactive.Linq.ObservableImpl
                         _nextShift += _timeShift;
                     }
 
-                    m.Disposable = _scheduler.Schedule((@this: this, isSpan, isShift), ts, (_, tuple) => tuple.@this.Tick(tuple.isSpan, tuple.isShift));
+                    m.Disposable = _scheduler.ScheduleAction((@this: this, isSpan, isShift), ts, tuple => tuple.@this.Tick(tuple.isSpan, tuple.isShift));
                 }
 
-                private IDisposable Tick(bool isSpan, bool isShift)
+                private void Tick(bool isSpan, bool isShift)
                 {
                     lock (_gate)
                     {
@@ -372,8 +372,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     CreateTimer();
-
-                    return Disposable.Empty;
                 }
 
                 public override void OnNext(TSource value)
@@ -559,19 +557,17 @@ namespace System.Reactive.Linq.ObservableImpl
                     var m = new SingleAssignmentDisposable();
                     Disposable.TrySetSerial(ref _timerSerial, m);
 
-                    m.Disposable = _parent._scheduler.Schedule((@this: this, id), _parent._timeSpan, (_, tuple) => tuple.@this.Tick(tuple.id));
+                    m.Disposable = _parent._scheduler.ScheduleAction((@this: this, id), _parent._timeSpan, tuple => tuple.@this.Tick(tuple.id));
                 }
 
-                private IDisposable Tick(int id)
+                private void Tick(int id)
                 {
-                    var d = Disposable.Empty;
-
                     var newId = 0;
                     lock (_gate)
                     {
                         if (id != _windowId)
                         {
-                            return d;
+                            return;
                         }
 
                         _n = 0;
@@ -583,8 +579,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         CreateTimer(newId);
                     }
-
-                    return d;
                 }
 
                 public override void OnNext(TSource value)

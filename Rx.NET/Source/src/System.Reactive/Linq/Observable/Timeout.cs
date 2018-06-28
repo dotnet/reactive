@@ -70,7 +70,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (Disposable.TrySetMultiple(ref _timerDisposable, null))
                     {
 
-                        var d = _scheduler.Schedule((idx, instance: this), _dueTime, (_, state) => { state.instance.Timeout(state.idx); return Disposable.Empty; });
+                        var d = _scheduler.ScheduleAction((idx, instance: this), _dueTime, state => { state.instance.Timeout(state.idx); });
 
                         Disposable.TrySetMultiple(ref _timerDisposable, d);
                     }
@@ -159,7 +159,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Run(Absolute parent)
                 {
-                    SetUpstream(parent._scheduler.Schedule(this, parent._dueTime, (_, @this) => @this.Timeout()));
+                    SetUpstream(parent._scheduler.ScheduleAction(this, parent._dueTime, @this => @this.Timeout()));
 
                     Disposable.TrySetSingle(ref _serialDisposable, parent._source.SubscribeSafe(this));
                 }
@@ -173,13 +173,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.Dispose(disposing);
                 }
 
-                private IDisposable Timeout()
+                private void Timeout()
                 {
                     if (Interlocked.Increment(ref _wip) == 1)
                     {
                         Disposable.TrySetSerial(ref _serialDisposable, _other.SubscribeSafe(GetForwarder()));
                     }
-                    return Disposable.Empty;
                 }
 
                 public override void OnNext(TSource value)

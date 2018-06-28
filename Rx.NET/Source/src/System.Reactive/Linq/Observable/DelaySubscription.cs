@@ -56,12 +56,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(IObservable<TSource> source, IScheduler scheduler, DateTimeOffset dueTime)
             {
-                SetUpstream(scheduler.Schedule((@this: this, source), dueTime, (self, tuple) => tuple.source.SubscribeSafe(tuple.@this)));
+                SetUpstream(scheduler.ScheduleAction((@this: this, source), dueTime, tuple => tuple.source.SubscribeSafe(tuple.@this)));
             }
 
             public void Run(IObservable<TSource> source, IScheduler scheduler, TimeSpan dueTime)
             {
-                SetUpstream(scheduler.Schedule((@this: this, source), dueTime, (self, tuple) => tuple.source.SubscribeSafe(tuple.@this)));
+                SetUpstream(scheduler.ScheduleAction((@this: this, source), dueTime, tuple => tuple.source.SubscribeSafe(tuple.@this)));
             }
         }
     }

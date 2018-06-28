@@ -111,7 +111,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Run(Time parent)
                 {
-                    SetUpstream(parent._scheduler.Schedule(this, parent._duration, (_, state) => state.Tick()));
+                    SetUpstream(parent._scheduler.ScheduleAction(this, parent._duration, state => state.Tick()));
                     Disposable.SetSingle(ref _sourceDisposable, parent._source.SubscribeSafe(this));
                 }
 
@@ -124,10 +124,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.Dispose(disposing);
                 }
 
-                private IDisposable Tick()
+                private void Tick()
                 {
                     _open = true;
-                    return Disposable.Empty;
                 }
 
                 public override void OnNext(TSource value)

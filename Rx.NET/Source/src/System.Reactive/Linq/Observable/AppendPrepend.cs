@@ -89,12 +89,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     var disp = _append
                         ? _source.SubscribeSafe(this)
-                        : _scheduler.Schedule(this, PrependValue);
+                        : _scheduler.ScheduleAction(this, PrependValue);
 
                     SetUpstream(disp);
                 }
 
-                private static IDisposable PrependValue(IScheduler scheduler, _ sink)
+                private static IDisposable PrependValue(_ sink)
                 {
                     sink.ForwardOnNext(sink._value);
                     return sink._source.SubscribeSafe(sink);
@@ -104,7 +104,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_append)
                     {
-                        var disposable = _scheduler.Schedule(this, AppendValue);
+                        var disposable = _scheduler.ScheduleAction(this, AppendValue);
                         Disposable.TrySetSingle(ref _schedulerDisposable, disposable);
                     }
                     else
@@ -113,11 +113,10 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                private static IDisposable AppendValue(IScheduler scheduler, _ sink)
+                private static void AppendValue(_ sink)
                 {
                     sink.ForwardOnNext(sink._value);
                     sink.ForwardOnCompleted();
-                    return Disposable.Empty;
                 }
 
                 protected override void Dispose(bool disposing)
