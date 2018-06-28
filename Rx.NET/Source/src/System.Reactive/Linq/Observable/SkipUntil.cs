@@ -114,11 +114,6 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal static class SkipUntilTerminalException
-    {
-        internal static readonly Exception Instance = new Exception("No further exceptions");
-    }
-
     internal sealed class SkipUntil<TSource> : Producer<TSource, SkipUntil<TSource>._>
     {
         private readonly IObservable<TSource> _source;
