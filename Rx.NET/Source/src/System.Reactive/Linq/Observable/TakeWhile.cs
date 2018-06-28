@@ -86,7 +86,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _predicate = predicate;
                     _running = true;
-                    _index = 0;
                 }
 
                 public override void OnNext(TSource value)
