@@ -15,6 +15,7 @@ namespace Benchmarks.System.Reactive
                 typeof(ZipBenchmark),
                 typeof(CombineLatestBenchmark),
                 typeof(SwitchBenchmark),
+                typeof(BufferCountBenchmark),
                 typeof(RangeBenchmark)
             });
 
