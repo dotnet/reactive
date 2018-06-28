@@ -78,8 +78,8 @@ namespace Benchmarks.System.Reactive
 
             for (var i = 0; i < N; i++)
             {
-                obs = obs.Prepend(0);
-                obs = obs.Append(0);
+                obs = obs.Prepend(i);
+                obs = obs.Append(i);
             }
 
             obs.Subscribe(v => Volatile.Write(ref _store, v));
