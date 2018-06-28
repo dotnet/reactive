@@ -338,7 +338,12 @@ namespace System.Reactive.Linq
 
         private static IObservable<int> Range_(int start, int count, IScheduler scheduler)
         {
-            return new Range(start, count, scheduler);
+            var longRunning = scheduler.AsLongRunning();
+            if (longRunning != null)
+            {
+                return new RangeLongRunning(start, count, longRunning);
+            }
+            return new RangeRecursive(start, count, scheduler);
         }
 
         #endregion
