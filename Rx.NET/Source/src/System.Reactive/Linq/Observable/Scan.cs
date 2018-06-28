@@ -75,8 +75,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 : base(observer)
             {
                 _accumulator = accumulator;
-                _accumulation = default(TSource);
-                _hasAccumulation = false;
             }
 
             public override void OnNext(TSource value)
