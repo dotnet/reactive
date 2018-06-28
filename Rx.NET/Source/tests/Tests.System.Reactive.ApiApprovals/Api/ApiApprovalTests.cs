@@ -9,13 +9,23 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace ReactiveTests.Tests.Api
 {
+#if DEBUG
     [UseReporter(typeof(DiffReporter))]
+#else
+    [UseReporter(typeof(DiffPlexReporter))]
+#endif
     [IgnoreLineEndings(true)]
     public class ApiApprovalTests
     {
+        public ApiApprovalTests(ITestOutputHelper output)
+        {
+            DiffPlexReporter.INSTANCE.Output = output;
+        }
+
         [Fact]
         public void Core()
         {
