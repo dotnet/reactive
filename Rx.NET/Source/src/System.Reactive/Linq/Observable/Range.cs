@@ -7,71 +7,108 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Range : Producer<int, Range._>
+    internal sealed class RangeRecursive : Producer<int, RangeRecursive.RangeSink>
     {
         private readonly int _start;
         private readonly int _count;
         private readonly IScheduler _scheduler;
 
-        public Range(int start, int count, IScheduler scheduler)
+        public RangeRecursive(int start, int count, IScheduler scheduler)
         {
             _start = start;
             _count = count;
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<int> observer) => new _(this, observer);
+        protected override RangeSink CreateSink(IObserver<int> observer) => new RangeSink(_start, _count, observer);
 
-        protected override void Run(_ sink) => sink.Run(_scheduler);
+        protected override void Run(RangeSink sink) => sink.Run(_scheduler);
 
-        internal sealed class _ : IdentitySink<int>
+        internal sealed class RangeSink : IdentitySink<int>
         {
-            private readonly int _start;
-            private readonly int _count;
+            readonly int _end;
 
-            public _(Range parent, IObserver<int> observer)
+            int _index;
+
+            IDisposable _task;
+
+            public RangeSink(int start, int count, IObserver<int> observer)
                 : base(observer)
             {
-                _start = parent._start;
-                _count = parent._count;
+                _index = start;
+                _end = start + count;
             }
 
             public void Run(IScheduler scheduler)
             {
-                var longRunning = scheduler.AsLongRunning();
-                if (longRunning != null)
-                {
-                    SetUpstream(longRunning.ScheduleLongRunning(0, Loop));
-                }
-                else
-                {
-                    SetUpstream(scheduler.Schedule(0, LoopRec));
-                }
+                var first = scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
+                Disposable.TrySetSingle(ref _task, first);
             }
 
-            private void Loop(int i, ICancelable cancel)
+            private IDisposable LoopRec(IScheduler scheduler)
             {
-                while (!cancel.IsDisposed && i < _count)
+                var idx = _index;
+                if (idx != _end)
                 {
-                    ForwardOnNext(_start + i);
-                    i++;
+                    _index = idx + 1;
+                    ForwardOnNext(idx);
+                    var next = scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
+                    Disposable.TrySetMultiple(ref _task, next);
+                } else
+                {
+                    ForwardOnCompleted();
+                }
+                return Disposable.Empty;
+            }
+        }
+    }
+
+    internal sealed class RangeLongRunning : Producer<int, RangeLongRunning.RangeSink>
+    {
+        private readonly int _start;
+        private readonly int _count;
+        private readonly ISchedulerLongRunning _scheduler;
+
+        public RangeLongRunning(int start, int count, ISchedulerLongRunning scheduler)
+        {
+            _start = start;
+            _count = count;
+            _scheduler = scheduler;
+        }
+
+        protected override RangeSink CreateSink(IObserver<int> observer) => new RangeSink(_start, _count, observer);
+
+        protected override void Run(RangeSink sink) => sink.Run(_scheduler);
+
+        internal sealed class RangeSink : IdentitySink<int>
+        {
+            readonly int _end;
+
+            int _index;
+
+            public RangeSink(int start, int count, IObserver<int> observer)
+                : base(observer)
+            {
+                _index = start;
+                _end = start + count;
+            }
+
+            public void Run(ISchedulerLongRunning scheduler)
+            {
+                SetUpstream(scheduler.ScheduleLongRunning(this, (@this, cancel) => @this.Loop(cancel)));
+            }
+
+            private void Loop(ICancelable cancel)
+            {
+                var idx = _index;
+                var end = _end;
+                while (!cancel.IsDisposed && idx != end)
+                {
+                    ForwardOnNext(idx++);
                 }
 
                 if (!cancel.IsDisposed)
                     ForwardOnCompleted();
-            }
-
-            private void LoopRec(int i, Action<int> recurse)
-            {
-                if (i < _count)
-                {
-                    ForwardOnNext(_start + i);
-                    recurse(i + 1);
-                }
-                else
-                {
-                    ForwardOnCompleted();
-                }
             }
         }
     }
