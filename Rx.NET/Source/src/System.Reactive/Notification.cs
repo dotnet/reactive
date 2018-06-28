@@ -220,7 +220,7 @@ namespace System.Reactive
             /// <summary>
             /// Throws the exception.
             /// </summary>
-            public override T Value { get { Exception.Throw(); return default(T); } }
+            public override T Value { get { Exception.Throw(); return default; } }
 
             /// <summary>
             /// Returns the exception.

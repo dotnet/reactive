@@ -83,7 +83,7 @@ namespace System.Reactive
         private void RemoveAt(int index)
         {
             _items[index] = _items[--_size];
-            _items[_size] = default(IndexedItem);
+            _items[_size] = default;
 
             if (Percolate(index) == index)
                 Heapify(index);

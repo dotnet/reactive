@@ -115,7 +115,7 @@ namespace System.Reactive.Subjects
             {
                 if (_isDisposed)
                 {
-                    value = default(T);
+                    value = default;
                     return false;
                 }
                 else if (_exception != null)
@@ -275,7 +275,7 @@ namespace System.Reactive.Subjects
             {
                 _isDisposed = true;
                 _observers = null;
-                _value = default(T);
+                _value = default;
                 _exception = null;
             }
         }

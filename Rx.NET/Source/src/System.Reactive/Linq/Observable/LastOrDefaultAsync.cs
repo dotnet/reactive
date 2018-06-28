@@ -26,7 +26,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 public _(IObserver<TSource> observer)
                     : base(observer)
                 {
-                    _value = default(TSource);
                 }
 
                 public override void OnNext(TSource value)
@@ -34,9 +33,17 @@ namespace System.Reactive.Linq.ObservableImpl
                     _value = value;
                 }
 
+                public override void OnError(Exception error)
+                {
+                    _value = default;
+                    ForwardOnError(error);
+                }
+
                 public override void OnCompleted()
                 {
-                    ForwardOnNext(_value);
+                    var value = _value;
+                    _value = default;
+                    ForwardOnNext(value);
                     ForwardOnCompleted();
                 }
             }
@@ -66,8 +73,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     : base(observer)
                 {
                     _predicate = predicate;
-
-                    _value = default(TSource);
                 }
 
                 public override void OnNext(TSource value)
@@ -80,6 +85,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
+                        _value = default;
                         ForwardOnError(ex);
                         return;
                     }
@@ -90,9 +96,17 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
+                public override void OnError(Exception error)
+                {
+                    _value = default;
+                    ForwardOnError(error);
+                }
+
                 public override void OnCompleted()
                 {
-                    ForwardOnNext(_value);
+                    var value = _value;
+                    _value = default;
+                    ForwardOnNext(value);
                     ForwardOnCompleted();
                 }
             }

@@ -592,7 +592,7 @@ namespace System.Reactive.Subjects
 
             protected override void DisposeCore()
             {
-                _value = default(T);
+                _value = default;
             }
         }
 

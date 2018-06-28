@@ -119,7 +119,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         break;
                 }
 
-                current = default(TSource);
+                current = default;
                 return false;
             }
         }

@@ -134,7 +134,7 @@ namespace System.Reactive.Subjects
                 if (observers == DISPOSED)
                 {
                     _exception = null;
-                    _value = default(T);
+                    _value = default;
                     ThrowDisposed();
                     break;
                 }
@@ -167,7 +167,7 @@ namespace System.Reactive.Subjects
             var observers = Volatile.Read(ref _observers);
             if (observers == DISPOSED)
             {
-                _value = default(T);
+                _value = default;
                 _exception = null;
                 ThrowDisposed();
                 return;
@@ -226,7 +226,7 @@ namespace System.Reactive.Subjects
                 var a = Volatile.Read(ref _observers);
                 if (a == DISPOSED)
                 {
-                    _value = default(T);
+                    _value = default;
                     _exception = null;
                     ThrowDisposed();
                     return true;
@@ -339,7 +339,7 @@ namespace System.Reactive.Subjects
             if (Interlocked.Exchange(ref _observers, DISPOSED) != DISPOSED)
             {
                 _exception = null;
-                _value = default(T);
+                _value = default;
                 _hasValue = false;
             }
         }

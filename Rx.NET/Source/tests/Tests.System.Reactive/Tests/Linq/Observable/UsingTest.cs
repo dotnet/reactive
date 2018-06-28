@@ -48,7 +48,7 @@ namespace ReactiveTests.Tests
                     () =>
                     {
                         disposeInvoked++;
-                        disposable = default(MockDisposable);
+                        disposable = default;
                         return disposable;
                     },
                     d =>
@@ -56,7 +56,7 @@ namespace ReactiveTests.Tests
                         _d = d;
                         createInvoked++;
                         xs = scheduler.CreateColdObservable(
-                            OnNext<long>(100, scheduler.Clock),
+                            OnNext(100, scheduler.Clock),
                             OnCompleted<long>(200));
                         return xs;
                     }

@@ -27,14 +27,18 @@ namespace System.Reactive.Linq.ObservableImpl
                 public _(IObserver<TSource> observer)
                     : base(observer)
                 {
-                    _value = default(TSource);
-                    _seenValue = false;
                 }
 
                 public override void OnNext(TSource value)
                 {
                     _value = value;
                     _seenValue = true;
+                }
+
+                public override void OnError(Exception error)
+                {
+                    _value = default;
+                    ForwardOnError(error);
                 }
 
                 public override void OnCompleted()
@@ -45,7 +49,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        ForwardOnNext(_value);
+                        var value = _value;
+                        _value = default;
+                        ForwardOnNext(value);
                         ForwardOnCompleted();
                     }
                 }
@@ -77,9 +83,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     : base(observer)
                 {
                     _predicate = predicate;
-
-                    _value = default(TSource);
-                    _seenValue = false;
                 }
 
                 public override void OnNext(TSource value)
@@ -92,6 +95,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
+                        _value = default;
                         ForwardOnError(ex);
                         return;
                     }
@@ -103,6 +107,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
+                public override void OnError(Exception error)
+                {
+                    _value = default;
+                    ForwardOnError(error);
+                }
+
                 public override void OnCompleted()
                 {
                     if (!_seenValue)
@@ -111,7 +121,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        ForwardOnNext(_value);
+                        var value = _value;
+                        _value = default;
+                        ForwardOnNext(value);
                         ForwardOnCompleted();
                     }
                 }
