@@ -18,6 +18,7 @@ namespace Benchmarks.System.Reactive
                 typeof(BufferCountBenchmark),
                 typeof(RangeBenchmark),
                 typeof(ToObservableBenchmark),
+                typeof(RepeatBenchmark),
                 typeof(AppendPrependBenchmark)
             });
 
