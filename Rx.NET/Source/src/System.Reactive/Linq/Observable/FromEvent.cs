@@ -195,7 +195,7 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly IScheduler _scheduler;
         private readonly object _gate;
 
-        public EventProducer(IScheduler scheduler)
+        protected EventProducer(IScheduler scheduler)
         {
             _scheduler = scheduler;
             _gate = new object();
@@ -358,7 +358,7 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly Action<TDelegate> _addHandler;
         private readonly Action<TDelegate> _removeHandler;
 
-        public ClassicEventProducer(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+        protected ClassicEventProducer(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
             : base(scheduler)
         {
             _addHandler = addHandler;

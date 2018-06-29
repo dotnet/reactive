@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
             protected readonly IObservable<TSource> _source;
             protected readonly IScheduler _scheduler;
 
-            public Base(IObservable<TSource> source, IScheduler scheduler)
+            protected Base(IObservable<TSource> source, IScheduler scheduler)
             {
                 _source = source;
                 _scheduler = scheduler;
@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected IStopwatch _watch;
                 protected IScheduler _scheduler;
 
-                public _(TParent parent, IObserver<TSource> observer)
+                protected _(TParent parent, IObserver<TSource> observer)
                     : base(observer)
                 {
                     _scheduler = parent._scheduler;
@@ -51,7 +51,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected readonly object _gate = new object();
                 protected IDisposable _cancelable;
 
-                public S(TParent parent, IObserver<TSource> observer)
+                protected S(TParent parent, IObserver<TSource> observer)
                     : base(parent, observer)
                 {
                 }
@@ -258,7 +258,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected IDisposable _cancelable;
                 private readonly SemaphoreSlim _evt = new SemaphoreSlim(0);
 
-                public L(TParent parent, IObserver<TSource> observer)
+                protected L(TParent parent, IObserver<TSource> observer)
                     : base(parent, observer)
                 {
                 }
@@ -586,7 +586,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             protected readonly IObservable<TSource> _source;
 
-            public Base(IObservable<TSource> source)
+            protected Base(IObservable<TSource> source)
             {
                 _source = source;
             }
@@ -598,7 +598,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private readonly Func<TSource, IObservable<TDelay>> _delaySelector;
 
-                public _(Func<TSource, IObservable<TDelay>> delaySelector, IObserver<TSource> observer)
+                protected _(Func<TSource, IObservable<TDelay>> delaySelector, IObserver<TSource> observer)
                     : base(observer)
                 {
                     _delaySelector = delaySelector;

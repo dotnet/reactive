@@ -11,7 +11,7 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly IObservable<TSource> _source;
         private readonly IScheduler _scheduler;
 
-        public DelaySubscription(IObservable<TSource> source, IScheduler scheduler)
+        protected DelaySubscription(IObservable<TSource> source, IScheduler scheduler)
         {
             _source = source;
             _scheduler = scheduler;
