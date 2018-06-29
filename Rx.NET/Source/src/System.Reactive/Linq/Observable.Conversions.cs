@@ -86,6 +86,22 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region ToWeakObservable
+
+        /// <summary>
+        /// To weak observable.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">The source.</param>
+        /// <returns></returns>
+        public static IObservable<T> ToWeakObservable<T>(this IObservable<T> source)
+        {
+            var result = new WeakObservable<T>(source);
+            return result;
+        }
+
+        #endregion ToWeakObservable
+
         #region ToEvent
 
         /// <summary>
