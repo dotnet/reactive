@@ -68,6 +68,27 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
+        /// Schedules an action to be executed.
+        /// </summary>
+        /// <param name="scheduler">Scheduler to execute the action on.</param>
+        /// <param name="state">A state object to be passed to <paramref name="action"/>.</param>
+        /// <param name="action">Action to execute.</param>
+        /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
+        // Note: The naming of that method differs because otherwise, the signature would cause ambiguities.
+        internal static IDisposable ScheduleAction<TState>(this IScheduler scheduler, TState state, Func<TState, IDisposable> action)
+        {
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            return scheduler.Schedule(
+                (action, state),
+                (_, tuple) => tuple.action(tuple.state));
+        }
+
+        /// <summary>
         /// Schedules an action to be executed after the specified relative due time.
         /// </summary>
         /// <param name="scheduler">Scheduler to execute the action on.</param>
@@ -111,6 +132,26 @@ namespace System.Reactive.Concurrency
             {
                 throw new ArgumentNullException(nameof(action));
             }
+
+            // See note above.
+            return scheduler.Schedule((state, action), dueTime, (s, tuple) => Invoke(s, tuple));
+        }
+
+        /// <summary>
+        /// Schedules an action to be executed after the specified relative due time.
+        /// </summary>
+        /// <param name="scheduler">Scheduler to execute the action on.</param>
+        /// <param name="action">Action to execute.</param>
+        /// <param name="state">A state object to be passed to <paramref name="action"/>.</param>
+        /// <param name="dueTime">Relative time after which to execute the action.</param>
+        /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
+        internal static IDisposable ScheduleAction<TState>(this IScheduler scheduler, TState state, TimeSpan dueTime, Func<TState, IDisposable> action)
+        {
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
 
             // See note above.
             return scheduler.Schedule((state, action), dueTime, (s, tuple) => Invoke(s, tuple));
@@ -166,6 +207,26 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
+        /// Schedules an action to be executed after the specified relative due time.
+        /// </summary>
+        /// <param name="scheduler">Scheduler to execute the action on.</param>
+        /// <param name="action">Action to execute.</param>
+        /// <param name="state">A state object to be passed to <paramref name="action"/>.</param>
+        /// <param name="dueTime">Relative time after which to execute the action.</param>
+        /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
+        internal static IDisposable ScheduleAction<TState>(this IScheduler scheduler, TState state, DateTimeOffset dueTime, Func<TState, IDisposable> action)
+        {
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            // See note above.
+            return scheduler.Schedule((state, action), dueTime, (s, tuple) => Invoke(s, tuple));
+        }
+
+        /// <summary>
         /// Schedules an action to be executed.
         /// </summary>
         /// <param name="scheduler">Scheduler to execute the action on.</param>
@@ -197,6 +258,11 @@ namespace System.Reactive.Concurrency
         {
             tuple.action(tuple.state);
             return Disposable.Empty;
+        }
+
+        private static IDisposable Invoke<TState>(IScheduler scheduler, (TState state, Func<TState, IDisposable> action) tuple)
+        {
+            return tuple.action(tuple.state);
         }
     }
 }
