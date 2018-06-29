@@ -32,7 +32,7 @@ namespace System.Reactive.Concurrency
 
                 Disposable.SetSingle(ref _cancel, cancelable);
 
-                scheduler.taskFactory.StartNew(
+                scheduler._taskFactory.StartNew(
                     @thisObject =>
                     {
                         var @this = (ScheduledWorkItem<TState>)@thisObject;
@@ -102,7 +102,7 @@ namespace System.Reactive.Concurrency
                     this,
                     CancellationToken.None,
                     TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion,
-                    scheduler.taskFactory.Scheduler);
+                    scheduler._taskFactory.Scheduler);
             }
 
             public void Dispose()
@@ -123,7 +123,7 @@ namespace System.Reactive.Concurrency
                 _state = state;
                 _action = action;
 
-                scheduler.taskFactory.StartNew(
+                scheduler._taskFactory.StartNew(
                     @thisObject =>
                     {
                         var @this = (LongScheduledWorkItem<TState>)thisObject;
@@ -147,8 +147,8 @@ namespace System.Reactive.Concurrency
             public bool IsDisposed => Disposable.GetIsDisposed(ref _cancel);
         }
 
-        private static readonly Lazy<TaskPoolScheduler> s_instance = new Lazy<TaskPoolScheduler>(() => new TaskPoolScheduler(new TaskFactory(TaskScheduler.Default)));
-        private readonly TaskFactory taskFactory;
+        private static readonly Lazy<TaskPoolScheduler> LazyInstance = new Lazy<TaskPoolScheduler>(() => new TaskPoolScheduler(new TaskFactory(TaskScheduler.Default)));
+        private readonly TaskFactory _taskFactory;
 
         /// <summary>
         /// Creates an object that schedules units of work using the provided <see cref="TaskFactory"/>.
@@ -157,13 +157,13 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="taskFactory"/> is <c>null</c>.</exception>
         public TaskPoolScheduler(TaskFactory taskFactory)
         {
-            this.taskFactory = taskFactory ?? throw new ArgumentNullException(nameof(taskFactory));
+            _taskFactory = taskFactory ?? throw new ArgumentNullException(nameof(taskFactory));
         }
 
         /// <summary>
         /// Gets an instance of this scheduler that uses the default <see cref="TaskScheduler"/>.
         /// </summary>
-        public static TaskPoolScheduler Default => s_instance.Value;
+        public static TaskPoolScheduler Default => LazyInstance.Value;
 
         /// <summary>
         /// Schedules an action to be executed.
@@ -262,7 +262,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return new PeriodicallyScheduledWorkItem<TState>(state, period, action, taskFactory);
+            return new PeriodicallyScheduledWorkItem<TState>(state, period, action, _taskFactory);
         }
 
         private sealed class PeriodicallyScheduledWorkItem<TState> : IDisposable

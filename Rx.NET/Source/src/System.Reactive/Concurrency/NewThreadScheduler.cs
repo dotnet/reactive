@@ -12,7 +12,7 @@ namespace System.Reactive.Concurrency
     /// </summary>
     public sealed class NewThreadScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
-        internal static readonly Lazy<NewThreadScheduler> Instance = new Lazy<NewThreadScheduler>(() => new NewThreadScheduler());
+        private static readonly Lazy<NewThreadScheduler> Instance = new Lazy<NewThreadScheduler>(() => new NewThreadScheduler());
 
         private readonly Func<ThreadStart, Thread> _threadFactory;
 
