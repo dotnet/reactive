@@ -14,9 +14,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
 
             return DoHelper(source, onNext, null, null);
         }
@@ -24,11 +29,19 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action onCompleted)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             return DoHelper(source, onNext, null, onCompleted);
         }
@@ -36,11 +49,19 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
 
             return DoHelper(source, onNext, onError, null);
         }
@@ -48,13 +69,24 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             return DoHelper(source, onNext, onError, onCompleted);
         }
@@ -62,9 +94,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, IObserver<TSource> observer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             return DoHelper(source, observer.OnNext, observer.OnError, observer.OnCompleted);
         }

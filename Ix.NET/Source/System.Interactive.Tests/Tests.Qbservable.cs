@@ -3,14 +3,12 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-using Xunit;
-using System.Runtime.CompilerServices;
-using System.Linq.Expressions;
 using System.ComponentModel;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using Xunit;
 
 namespace Tests
 {
@@ -41,7 +39,9 @@ namespace Tests
                 {
                     var gd = t.GetGenericTypeDefinition();
                     if (gd == typeof(IBuffer<>))
+                    {
                         return false;
+                    }
                 }
                 return true;
             }
@@ -64,7 +64,9 @@ namespace Tests
                     .OrderBy(x => x).ToList();
 
                 if (!group.Name.Equals("Create"))
+                {
                     Assert.True(oss.SequenceEqual(qss), "Mismatch between QueryableEx and EnumerableEx for " + group.Name);
+                }
             }
         }
 
@@ -73,7 +75,9 @@ namespace Tests
             var ps = m.GetParameters();
             var pss = ps.AsEnumerable();
             if (correct && ps.Length > 0 && ps[0].ParameterType == typeof(IQueryProvider))
+            {
                 pss = pss.Skip(1);
+            }
 
             var gens = m.IsGenericMethod ? string.Format("<{0}>", string.Join(", ", m.GetGenericArguments().Select(a => GetTypeName(a, correct)).ToArray())) : "";
 
@@ -81,7 +85,9 @@ namespace Tests
             if (m.IsDefined(typeof(ExtensionAttribute)))
             {
                 if (pars.StartsWith("IQbservable") || pars.StartsWith("IQueryable"))
+                {
                     pars = "this " + pars;
+                }
             }
 
             return string.Format("{0} {1}{2}({3})", GetTypeName(m.ReturnType, correct), m.Name, gens, pars);
@@ -93,16 +99,23 @@ namespace Tests
             {
                 var gtd = t.GetGenericTypeDefinition();
                 if (gtd == typeof(Expression<>))
+                {
                     return GetTypeName(t.GenericTypeArguments[0], false);
+                }
 
                 var args = string.Join(", ", t.GenericTypeArguments.Select(a => GetTypeName(a, false)).ToArray());
 
                 var len = t.Name.IndexOf('`');
                 var name = len >= 0 ? t.Name.Substring(0, len) : t.Name;
                 if (correct && name == "IQbservable")
+                {
                     name = "IObservable";
+                }
+
                 if (correct && name == "IQueryable")
+                {
                     name = "IEnumerable";
+                }
 
                 return string.Format("{0}<{1}>", name, args);
             }

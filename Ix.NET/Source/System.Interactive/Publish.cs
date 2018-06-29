@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -38,7 +35,9 @@ namespace System.Linq
         public static IBuffer<TSource> Publish<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return new PublishedBuffer<TSource>(source.GetEnumerator());
         }
@@ -55,9 +54,14 @@ namespace System.Linq
         public static IEnumerable<TResult> Publish<TSource, TResult>(this IEnumerable<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return Create(() => selector(source.Publish())
                               .GetEnumerator());
@@ -80,7 +84,9 @@ namespace System.Linq
             public IEnumerator<T> GetEnumerator()
             {
                 if (_disposed)
+                {
                     throw new ObjectDisposedException("");
+                }
 
                 var i = default(int);
                 lock (_source)
@@ -95,7 +101,9 @@ namespace System.Linq
             IEnumerator IEnumerable.GetEnumerator()
             {
                 if (_disposed)
+                {
                     throw new ObjectDisposedException("");
+                }
 
                 return GetEnumerator();
             }
@@ -124,7 +132,9 @@ namespace System.Linq
                     while (true)
                     {
                         if (_disposed)
+                        {
                             throw new ObjectDisposedException("");
+                        }
 
                         var hasValue = default(bool);
                         var current = default(T);
@@ -139,7 +149,9 @@ namespace System.Linq
                                     {
                                         hasValue = _source.MoveNext();
                                         if (hasValue)
+                                        {
                                             current = _source.Current;
+                                        }
                                     }
                                     catch (Exception ex)
                                     {
@@ -153,9 +165,13 @@ namespace System.Linq
                                 if (_stopped)
                                 {
                                     if (_error != null)
+                                    {
                                         throw _error;
+                                    }
                                     else
+                                    {
                                         break;
+                                    }
                                 }
 
                                 if (hasValue)
@@ -170,9 +186,13 @@ namespace System.Linq
                         }
 
                         if (hasValue)
+                        {
                             yield return _buffer[i];
+                        }
                         else
+                        {
                             break;
+                        }
 
                         i++;
                     }
@@ -180,7 +200,9 @@ namespace System.Linq
                 finally
                 {
                     if (_buffer != null)
+                    {
                         _buffer.Done(i + 1);
+                    }
                 }
             }
         }

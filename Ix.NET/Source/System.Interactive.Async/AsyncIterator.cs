@@ -59,7 +59,7 @@ namespace System.Linq
                     cancellationTokenSource.Dispose();
                 }
 
-                current = default(TSource);
+                current = default;
                 state = AsyncIteratorState.Disposed;
             }
 
@@ -68,7 +68,10 @@ namespace System.Linq
                 get
                 {
                     if (currentIsInvalid)
+                    {
                         throw new InvalidOperationException("Enumerator is in an invalid state");
+                    }
+
                     return current;
                 }
             }

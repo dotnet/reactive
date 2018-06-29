@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -21,7 +18,9 @@ namespace System.Linq
         public static IEnumerable<TResult> Create<TResult>(Func<IEnumerator<TResult>> getEnumerator)
         {
             if (getEnumerator == null)
+            {
                 throw new ArgumentNullException(nameof(getEnumerator));
+            }
 
             return new AnonymousEnumerable<TResult>(getEnumerator);
         }
@@ -38,10 +37,14 @@ namespace System.Linq
         public static IEnumerable<T> Create<T>(Action<IYielder<T>> create)
         {
             if (create == null)
+            {
                 throw new ArgumentNullException(nameof(create));
+            }
 
             foreach (var x in new Yielder<T>(create))
+            {
                 yield return x;
+            }
         }
 
         private class AnonymousEnumerable<TResult> : IEnumerable<TResult>

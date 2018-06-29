@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -21,9 +18,14 @@ namespace System.Linq
         public static IEnumerable<TSource> TakeLast<TSource>(this IEnumerable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return source.TakeLast_(count);
         }
@@ -40,12 +42,17 @@ namespace System.Linq
             foreach (var item in source)
             {
                 if (q.Count >= count)
+                {
                     q.Dequeue();
+                }
+
                 q.Enqueue(item);
             }
 
             while (q.Count > 0)
+            {
                 yield return q.Dequeue();
+            }
         }
     }
 }

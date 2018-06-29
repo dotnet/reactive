@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -35,7 +32,9 @@ namespace System.Linq
         public static IBuffer<TSource> Share<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return new SharedBuffer<TSource>(source.GetEnumerator());
         }
@@ -52,9 +51,14 @@ namespace System.Linq
         public static IEnumerable<TResult> Share<TSource, TResult>(this IEnumerable<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return Create(() => selector(source.Share())
                               .GetEnumerator());
@@ -73,7 +77,9 @@ namespace System.Linq
             public IEnumerator<T> GetEnumerator()
             {
                 if (_disposed)
+                {
                     throw new ObjectDisposedException("");
+                }
 
                 return GetEnumerator_();
             }
@@ -81,7 +87,9 @@ namespace System.Linq
             IEnumerator IEnumerable.GetEnumerator()
             {
                 if (_disposed)
+                {
                     throw new ObjectDisposedException("");
+                }
 
                 return GetEnumerator();
             }
@@ -105,13 +113,11 @@ namespace System.Linq
                 return new ShareEnumerator(this);
             }
 
-            sealed class ShareEnumerator : IEnumerator<T>
+            private sealed class ShareEnumerator : IEnumerator<T>
             {
-                readonly SharedBuffer<T> _parent;
-
-                T _current;
-
-                bool _disposed;
+                private readonly SharedBuffer<T> _parent;
+                private T _current;
+                private bool _disposed;
 
                 public ShareEnumerator(SharedBuffer<T> parent)
                 {
@@ -153,7 +159,7 @@ namespace System.Linq
                         return true;
                     }
                     _disposed = true;
-                    _current = default(T);
+                    _current = default;
                     return false;
                 }
 

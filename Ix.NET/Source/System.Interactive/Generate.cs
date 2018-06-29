@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -24,11 +21,19 @@ namespace System.Linq
         public static IEnumerable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (iterate == null)
+            {
                 throw new ArgumentNullException(nameof(iterate));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return Generate_(initialState, condition, iterate, resultSelector);
         }
@@ -36,7 +41,9 @@ namespace System.Linq
         private static IEnumerable<TResult> Generate_<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
         {
             for (var i = initialState; condition(i); i = iterate(i))
+            {
                 yield return resultSelector(i);
+            }
         }
     }
 }

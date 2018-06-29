@@ -2,12 +2,9 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -39,7 +36,9 @@ namespace System.Linq
         public static IBuffer<TSource> Memoize<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return new MemoizedBuffer<TSource>(source.GetEnumerator());
         }
@@ -56,9 +55,14 @@ namespace System.Linq
         public static IEnumerable<TResult> Memoize<TSource, TResult>(this IEnumerable<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return Create(() => selector(source.Memoize())
                               .GetEnumerator());
@@ -81,9 +85,14 @@ namespace System.Linq
         public static IBuffer<TSource> Memoize<TSource>(this IEnumerable<TSource> source, int readerCount)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (readerCount <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(readerCount));
+            }
 
             return new MemoizedBuffer<TSource>(source.GetEnumerator(), readerCount);
         }
@@ -107,11 +116,19 @@ namespace System.Linq
         public static IEnumerable<TResult> Memoize<TSource, TResult>(this IEnumerable<TSource> source, int readerCount, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (readerCount <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(readerCount));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return Create(() => selector(source.Memoize(readerCount))
                               .GetEnumerator());
@@ -144,7 +161,9 @@ namespace System.Linq
             public IEnumerator<T> GetEnumerator()
             {
                 if (_disposed)
+                {
                     throw new ObjectDisposedException("");
+                }
 
                 return GetEnumerator_();
             }
@@ -152,7 +171,9 @@ namespace System.Linq
             IEnumerator IEnumerable.GetEnumerator()
             {
                 if (_disposed)
+                {
                     throw new ObjectDisposedException("");
+                }
 
                 return GetEnumerator();
             }
@@ -183,7 +204,9 @@ namespace System.Linq
                     while (true)
                     {
                         if (_disposed)
+                        {
                             throw new ObjectDisposedException("");
+                        }
 
                         var hasValue = default(bool);
                         var current = default(T);
@@ -198,7 +221,9 @@ namespace System.Linq
                                     {
                                         hasValue = _source.MoveNext();
                                         if (hasValue)
+                                        {
                                             current = _source.Current;
+                                        }
                                     }
                                     catch (Exception ex)
                                     {
@@ -212,9 +237,13 @@ namespace System.Linq
                                 if (_stopped)
                                 {
                                     if (_error != null)
+                                    {
                                         throw _error;
+                                    }
                                     else
+                                    {
                                         break;
+                                    }
                                 }
 
                                 if (hasValue)
@@ -229,9 +258,13 @@ namespace System.Linq
                         }
 
                         if (hasValue)
+                        {
                             yield return _buffer[i];
+                        }
                         else
+                        {
                             break;
+                        }
 
                         i++;
                     }
@@ -239,15 +272,15 @@ namespace System.Linq
                 finally
                 {
                     if (_buffer != null)
+                    {
                         _buffer.Done(i + 1);
+                    }
                 }
             }
         }
     }
 
-
-
-    interface IRefCountList<T>
+    internal interface IRefCountList<T>
     {
         void Clear();
 
@@ -263,7 +296,7 @@ namespace System.Linq
         void Done(int index);
     }
 
-    class MaxRefCountList<T> : IRefCountList<T>
+    internal class MaxRefCountList<T> : IRefCountList<T>
     {
         private IList<T> _list = new List<T>();
 
@@ -292,7 +325,7 @@ namespace System.Linq
         }
     }
 
-    class RefCountList<T> : IRefCountList<T>
+    internal class RefCountList<T> : IRefCountList<T>
     {
         private int _readerCount;
         private readonly IDictionary<int, RefCount> _list;
@@ -334,11 +367,15 @@ namespace System.Linq
                 Debug.Assert(i < _count);
 
                 if (!_list.TryGetValue(i, out var res))
+                {
                     throw new InvalidOperationException("Element no longer available in the buffer.");
+                }
 
                 var val = res.Value;
                 if (--res.Count == 0)
+                {
                     _list.Remove(i);
+                }
 
                 return val;
             }
@@ -352,7 +389,7 @@ namespace System.Linq
 
         public void Done(int index)
         {
-            for (int i = index; i < _count; i++)
+            for (var i = index; i < _count; i++)
             {
                 var ignore = this[i];
             }
@@ -360,7 +397,7 @@ namespace System.Linq
             _readerCount--;
         }
 
-        class RefCount
+        private class RefCount
         {
             public int Count;
             public T Value;

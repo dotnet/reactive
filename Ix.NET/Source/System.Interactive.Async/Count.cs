@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +13,9 @@ namespace System.Linq
         public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             if (source is ICollection<TSource> collection)
             {
@@ -33,9 +33,14 @@ namespace System.Linq
         public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return source.Where(predicate)
                          .Aggregate(0, (c, _) => checked(c + 1), cancellationToken);
@@ -44,7 +49,9 @@ namespace System.Linq
         public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return Count(source, CancellationToken.None);
         }
@@ -52,9 +59,14 @@ namespace System.Linq
         public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return Count(source, predicate, CancellationToken.None);
         }
@@ -62,7 +74,9 @@ namespace System.Linq
         public static Task<long> LongCount<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Aggregate(0L, (c, _) => checked(c + 1), cancellationToken);
         }
@@ -70,9 +84,14 @@ namespace System.Linq
         public static Task<long> LongCount<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return source.Where(predicate)
                          .Aggregate(0L, (c, _) => checked(c + 1), cancellationToken);
@@ -81,7 +100,9 @@ namespace System.Linq
         public static Task<long> LongCount<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return LongCount(source, CancellationToken.None);
         }
@@ -89,9 +110,14 @@ namespace System.Linq
         public static Task<long> LongCount<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return LongCount(source, predicate, CancellationToken.None);
         }

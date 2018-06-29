@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 using System;
-using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -38,7 +37,7 @@ namespace Tests
 
             var res = xss.Concat().Select(x => i + " - " + x).ToList();
 
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 
+            Assert.True(Enumerable.SequenceEqual(res, new[] {
                 "1 - 0",
                 "2 - 0",
                 "2 - 1",

@@ -4,12 +4,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-using System.Threading;
 
 namespace Tests
 {
@@ -171,11 +169,11 @@ namespace Tests
             var xs = set.ToAsyncEnumerable();
 
             var xc = xs as ICollection<int>;
-            
+
             Assert.NotNull(xc);
 
             Assert.False(xc.IsReadOnly);
-            
+
             xc.Add(5);
 
 
@@ -263,7 +261,7 @@ namespace Tests
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() is TaskCanceledException);
         }
 
-        class MyObservable<T> : IObservable<T>
+        private class MyObservable<T> : IObservable<T>
         {
             private readonly Func<IObserver<T>, IDisposable> _subscribe;
 
@@ -278,7 +276,7 @@ namespace Tests
             }
         }
 
-        class MyDisposable : IDisposable
+        private class MyDisposable : IDisposable
         {
             private readonly Action _dispose;
 
@@ -561,11 +559,11 @@ namespace Tests
             Assert.False(fail);
         }
 
-        class MyObserver<T> : IObserver<T>
+        private class MyObserver<T> : IObserver<T>
         {
-            readonly Action<T> _onNext;
-            readonly Action<Exception> _onError;
-            readonly Action _onCompleted;
+            private readonly Action<T> _onNext;
+            private readonly Action<Exception> _onError;
+            private readonly Action _onCompleted;
 
             public MyObserver(Action<T> onNext, Action<Exception> onError, Action onCompleted)
             {

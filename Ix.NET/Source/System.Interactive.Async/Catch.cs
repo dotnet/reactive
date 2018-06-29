@@ -16,9 +16,14 @@ namespace System.Linq
             where TException : Exception
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (handler == null)
+            {
                 throw new ArgumentNullException(nameof(handler));
+            }
 
             return new CatchAsyncIterator<TSource, TException>(source, handler);
         }
@@ -26,7 +31,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Catch<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return sources.Catch_();
         }
@@ -34,7 +41,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Catch<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return sources.Catch_();
         }
@@ -42,11 +51,16 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Catch<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
+            {
                 throw new ArgumentNullException(nameof(first));
-            if (second == null)
-                throw new ArgumentNullException(nameof(second));
+            }
 
-            return new[] {first, second}.Catch_();
+            if (second == null)
+            {
+                throw new ArgumentNullException(nameof(second));
+            }
+
+            return new[] { first, second }.Catch_();
         }
 
         private static IAsyncEnumerable<TSource> Catch_<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
@@ -233,7 +247,7 @@ namespace System.Linq
 
                         break; // case
                 }
-                
+
                 Dispose();
                 return false;
             }

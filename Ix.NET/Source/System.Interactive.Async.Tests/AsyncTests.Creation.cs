@@ -5,10 +5,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xunit;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace Tests
 {
@@ -19,15 +18,15 @@ namespace Tests
         public void Create_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerable<int>(null));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerator<int>(null, () => 3, () => {}));
-       
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerator<int>(null, () => 3, () => { }));
+
         }
 
         [Fact]
         public void Create_Iterator_Throws()
         {
-     
-           var iter = AsyncEnumerable.CreateEnumerator<int>(c => Task.FromResult(true), () => 3, () => { });
+
+            var iter = AsyncEnumerable.CreateEnumerator<int>(c => Task.FromResult(true), () => 3, () => { });
 
             var enu = (IAsyncEnumerable<int>)iter;
 
@@ -56,8 +55,8 @@ namespace Tests
         [Fact]
         public async Task Empty_Null()
         {
-           await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.IsEmpty<int>(null));
-           await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.IsEmpty<int>(null, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.IsEmpty<int>(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.IsEmpty<int>(null, CancellationToken.None));
         }
 
         [Fact]
@@ -241,7 +240,7 @@ namespace Tests
         public void Generate3()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Generate(0, x => true, x => x + 1, x => { if (x == 1) throw ex; return x * x; });
+            var xs = AsyncEnumerable.Generate(0, x => true, x => x + 1, x => { if (x == 1) { throw ex; } return x * x; });
 
             var e = xs.GetEnumerator();
             HasNext(e, 0);
@@ -338,7 +337,7 @@ namespace Tests
             Assert.Equal(0, i);
 
             AssertThrows<Exception>(() => xs.GetEnumerator(), ex_ => ex_ == ex);
-            
+
             Assert.Equal(1, d);
         }
 
@@ -474,7 +473,7 @@ namespace Tests
             Assert.Equal(1, dispose);
         }
 
-        class MyD : IDisposable
+        private class MyD : IDisposable
         {
             private readonly Action _dispose;
 

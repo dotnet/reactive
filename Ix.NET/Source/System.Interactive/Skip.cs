@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -24,9 +21,14 @@ namespace System.Linq
         public static IEnumerable<TSource> SkipLast<TSource>(this IEnumerable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return source.SkipLast_(count);
         }
@@ -39,7 +41,9 @@ namespace System.Linq
             {
                 q.Enqueue(x);
                 if (q.Count > count)
+                {
                     yield return q.Dequeue();
+                }
             }
         }
     }

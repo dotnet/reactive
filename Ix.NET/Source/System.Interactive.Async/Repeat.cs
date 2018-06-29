@@ -14,7 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Repeat<TResult>(TResult element, int count)
         {
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return Enumerable.Repeat(element, count)
                              .ToAsyncEnumerable();
@@ -28,9 +30,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return new RepeatSequenceAsyncIterator<TSource>(source, count);
         }
@@ -38,7 +45,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return new RepeatSequenceAsyncIterator<TSource>(source, -1);
         }
@@ -112,7 +121,9 @@ namespace System.Linq
                         }
 
                         if (!isInfinite && currentCount-- == 0)
+                        {
                             break;
+                        }
 
                         enumerator = source.GetEnumerator();
                         state = AsyncIteratorState.Iterating;

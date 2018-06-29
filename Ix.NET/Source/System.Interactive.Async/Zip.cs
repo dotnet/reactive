@@ -14,11 +14,19 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> selector)
         {
             if (first == null)
+            {
                 throw new ArgumentNullException(nameof(first));
+            }
+
             if (second == null)
+            {
                 throw new ArgumentNullException(nameof(second));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return new ZipAsyncIterator<TFirst, TSecond, TResult>(first, second, selector);
         }

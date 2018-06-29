@@ -3,12 +3,12 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
-using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 // ReSharper disable InvokeAsExtensionMethod
 // ReSharper disable InconsistentNaming
 // ReSharper disable RedundantTypeArgumentsOfMethod
@@ -366,7 +366,7 @@ namespace Tests
             Assert.False(ys.Result);
         }
 
-        class Eq : IEqualityComparer<int>
+        private class Eq : IEqualityComparer<int>
         {
             public bool Equals(int x, int y)
             {
@@ -1070,7 +1070,7 @@ namespace Tests
         [Fact]
         public async Task ToArray4()
         {
-            var xs = await AsyncEnumerable.Range(5,50).Take(10).ToArray();
+            var xs = await AsyncEnumerable.Range(5, 50).Take(10).ToArray();
             var ex = new[] { 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 
             Assert.True(ex.SequenceEqual(xs));
@@ -1083,7 +1083,7 @@ namespace Tests
             var xs = new HashSet<int>(res);
 
             var arr = await xs.ToAsyncEnumerable().ToArray();
-            
+
 
             Assert.True(res.SequenceEqual(arr));
         }
@@ -1298,7 +1298,9 @@ namespace Tests
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
             var res = xs.ToLookup(x => x % 2).Result;
             foreach (var g in res)
+            {
                 Assert.True(g.Key == 0 || g.Key == 1);
+            }
         }
 
         [Fact]
@@ -1308,7 +1310,9 @@ namespace Tests
             var res = xs.ToLookup(x => x % 2).Result;
 #pragma warning disable IDE0007 // Use implicit type
             foreach (IGrouping<int, int> g in (IEnumerable)res)
+            {
                 Assert.True(g.Key == 0 || g.Key == 1);
+            }
 #pragma warning restore IDE0007 // Use implicit type
         }
 
@@ -1383,7 +1387,7 @@ namespace Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Average(default(IAsyncEnumerable<decimal>), x => x, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Average(default(IAsyncEnumerable<decimal?>), x => x, CancellationToken.None));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Average(AsyncEnumerable.Empty<int>(), default(Func<int, int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Average(AsyncEnumerable.Empty<int>(), default, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Average(AsyncEnumerable.Empty<int>(), default(Func<int, int?>), CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Average(AsyncEnumerable.Empty<int>(), default(Func<int, long>), CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Average(AsyncEnumerable.Empty<int>(), default(Func<int, long?>), CancellationToken.None));
@@ -1642,10 +1646,10 @@ namespace Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Min(default(IAsyncEnumerable<DateTime>), x => x, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Min(AsyncEnumerable.Empty<DateTime>(), default(Func<DateTime, bool>), CancellationToken.None));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Min(default(IAsyncEnumerable<DateTime>), Comparer<DateTime>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Min(default, Comparer<DateTime>.Default));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Min(AsyncEnumerable.Empty<DateTime>(), default(IComparer<DateTime>)));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Min(default(IAsyncEnumerable<DateTime>), Comparer<DateTime>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Min(default, Comparer<DateTime>.Default, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Min(AsyncEnumerable.Empty<DateTime>(), default(IComparer<DateTime>), CancellationToken.None));
         }
 
@@ -1825,10 +1829,10 @@ namespace Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Max(default(IAsyncEnumerable<DateTime>), x => x, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Max(AsyncEnumerable.Empty<DateTime>(), default(Func<DateTime, bool>), CancellationToken.None));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Max(default(IAsyncEnumerable<DateTime>), Comparer<DateTime>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Max(default, Comparer<DateTime>.Default));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Max(AsyncEnumerable.Empty<DateTime>(), default(IComparer<DateTime>)));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Max(default(IAsyncEnumerable<DateTime>), Comparer<DateTime>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Max(default, Comparer<DateTime>.Default, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Max(AsyncEnumerable.Empty<DateTime>(), default(IComparer<DateTime>), CancellationToken.None));
         }
 
@@ -1989,7 +1993,7 @@ namespace Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Sum(default(IAsyncEnumerable<decimal>), x => x, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Sum(default(IAsyncEnumerable<decimal?>), x => x, CancellationToken.None));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Sum(AsyncEnumerable.Empty<int>(), default(Func<int, int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Sum(AsyncEnumerable.Empty<int>(), default, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Sum(AsyncEnumerable.Empty<int>(), default(Func<int, int?>), CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Sum(AsyncEnumerable.Empty<int>(), default(Func<int, long>), CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Sum(AsyncEnumerable.Empty<int>(), default(Func<int, long?>), CancellationToken.None));
@@ -2098,15 +2102,15 @@ namespace Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinBy(AsyncEnumerable.Return(42), default(Func<int, int>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinBy(default(IAsyncEnumerable<int>), x => x, Comparer<int>.Default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinBy(AsyncEnumerable.Return(42), default(Func<int, int>), Comparer<int>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinBy(AsyncEnumerable.Return(42), default, Comparer<int>.Default));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinBy(AsyncEnumerable.Return(42), x => x, default(IComparer<int>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinBy(default(IAsyncEnumerable<int>), x => x, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinBy(AsyncEnumerable.Return(42), default(Func<int, int>), CancellationToken.None));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinBy(default(IAsyncEnumerable<int>), x => x, Comparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinBy(AsyncEnumerable.Return(42), default(Func<int, int>), Comparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinBy(AsyncEnumerable.Return(42), x => x, default(IComparer<int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinBy(AsyncEnumerable.Return(42), default, Comparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinBy(AsyncEnumerable.Return(42), x => x, default, CancellationToken.None));
         }
 
         [Fact]
@@ -2130,7 +2134,7 @@ namespace Tests
         public void MinBy3()
         {
             var ex = new Exception("Bang!");
-            var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MinBy(x => { if (x == 3) throw ex; return x; });
+            var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MinBy(x => { if (x == 3) { throw ex; } return x; });
 
             AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
@@ -2139,7 +2143,7 @@ namespace Tests
         public void MinBy4()
         {
             var ex = new Exception("Bang!");
-            var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MinBy(x => { if (x == 4) throw ex; return x; });
+            var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MinBy(x => { if (x == 4) { throw ex; } return x; });
 
             AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
@@ -2158,17 +2162,17 @@ namespace Tests
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MaxBy(default(IAsyncEnumerable<int>), x => x));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MaxBy(AsyncEnumerable.Return(42), default(Func<int, int>)));
-                                                                      
+
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MaxBy(default(IAsyncEnumerable<int>), x => x, Comparer<int>.Default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MaxBy(AsyncEnumerable.Return(42), default(Func<int, int>), Comparer<int>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MaxBy(AsyncEnumerable.Return(42), default, Comparer<int>.Default));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MaxBy(AsyncEnumerable.Return(42), x => x, default(IComparer<int>)));
-                                                                      
+
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MaxBy(default(IAsyncEnumerable<int>), x => x, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MaxBy(AsyncEnumerable.Return(42), default(Func<int, int>), CancellationToken.None));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MaxBy(default(IAsyncEnumerable<int>), x => x, Comparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MaxBy(AsyncEnumerable.Return(42), default(Func<int, int>), Comparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MaxBy(AsyncEnumerable.Return(42), x => x, default(IComparer<int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MaxBy(AsyncEnumerable.Return(42), default, Comparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MaxBy(AsyncEnumerable.Return(42), x => x, default, CancellationToken.None));
         }
 
         [Fact]
@@ -2192,7 +2196,7 @@ namespace Tests
         public void MaxBy3()
         {
             var ex = new Exception("Bang!");
-            var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MaxBy(x => { if (x == 3) throw ex; return x; });
+            var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MaxBy(x => { if (x == 3) { throw ex; } return x; });
 
             AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
@@ -2201,7 +2205,7 @@ namespace Tests
         public void MaxBy4()
         {
             var ex = new Exception("Bang!");
-            var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MaxBy(x => { if (x == 4) throw ex; return x; });
+            var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MaxBy(x => { if (x == 4) { throw ex; } return x; });
 
             AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }

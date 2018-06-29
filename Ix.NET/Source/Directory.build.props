@@ -18,6 +18,7 @@
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
     
   <ItemGroup>

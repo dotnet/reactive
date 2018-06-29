@@ -161,8 +161,7 @@ namespace System.Linq
         /// <returns>String representation of the enumerable sequence.</returns>
         public override string ToString()
         {
-            var ce = _expression as ConstantExpression;
-            if (ce == null || ce.Value != this)
+            if (!(_expression is ConstantExpression ce) || ce.Value != this)
             {
                 return _expression.ToString();
             }

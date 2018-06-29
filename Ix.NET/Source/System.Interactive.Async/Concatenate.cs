@@ -14,9 +14,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
+            {
                 throw new ArgumentNullException(nameof(first));
+            }
+
             if (second == null)
+            {
                 throw new ArgumentNullException(nameof(second));
+            }
 
             return first is ConcatAsyncIterator<TSource> concatFirst ?
                        concatFirst.Concat(second) :
@@ -26,7 +31,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return sources.Concat_();
         }
@@ -34,7 +41,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Concat<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return sources.Concat_();
         }
@@ -81,9 +90,8 @@ namespace System.Linq
             private IEnumerator<IAsyncEnumerable<TSource>> _outerEnumerator;
             private IAsyncEnumerator<TSource> _currentEnumerator;
             private int _mode;
-
-            const int State_OuterNext = 1;
-            const int State_While = 4;
+            private const int State_OuterNext = 1;
+            private const int State_While = 4;
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
@@ -105,7 +113,7 @@ namespace System.Linq
                                     // make sure we dispose the previous one if we're about to replace it
                                     _currentEnumerator?.Dispose();
                                     _currentEnumerator = _outerEnumerator.Current.GetEnumerator();
-                                   
+
                                     _mode = State_While;
                                     goto case State_While;
                                 }
@@ -121,7 +129,7 @@ namespace System.Linq
 
                                 // No more on the inner enumerator, move to the next outer
                                 goto case State_OuterNext;
-                   
+
                         }
 
                         Dispose();
@@ -183,7 +191,7 @@ namespace System.Linq
             public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
                 var list = new List<TSource>();
-                for (var i = 0;; i++)
+                for (var i = 0; ; i++)
                 {
                     var source = GetAsyncEnumerable(i);
                     if (source == null)
@@ -211,7 +219,7 @@ namespace System.Linq
                 }
 
                 var count = 0;
-                for (var i = 0;; i++)
+                for (var i = 0; ; i++)
                 {
                     var source = GetAsyncEnumerable(i);
                     if (source == null)

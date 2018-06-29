@@ -14,17 +14,34 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (outer == null)
+            {
                 throw new ArgumentNullException(nameof(outer));
+            }
+
             if (inner == null)
+            {
                 throw new ArgumentNullException(nameof(inner));
+            }
+
             if (outerKeySelector == null)
+            {
                 throw new ArgumentNullException(nameof(outerKeySelector));
+            }
+
             if (innerKeySelector == null)
+            {
                 throw new ArgumentNullException(nameof(innerKeySelector));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
         }
@@ -32,17 +49,31 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector)
         {
             if (outer == null)
+            {
                 throw new ArgumentNullException(nameof(outer));
-            if (inner == null)
-                throw new ArgumentNullException(nameof(inner));
-            if (outerKeySelector == null)
-                throw new ArgumentNullException(nameof(outerKeySelector));
-            if (innerKeySelector == null)
-                throw new ArgumentNullException(nameof(innerKeySelector));
-            if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+            }
 
-            return new JoinAsyncIterator<TOuter,TInner,TKey,TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, EqualityComparer<TKey>.Default);
+            if (inner == null)
+            {
+                throw new ArgumentNullException(nameof(inner));
+            }
+
+            if (outerKeySelector == null)
+            {
+                throw new ArgumentNullException(nameof(outerKeySelector));
+            }
+
+            if (innerKeySelector == null)
+            {
+                throw new ArgumentNullException(nameof(innerKeySelector));
+            }
+
+            if (resultSelector == null)
+            {
+                throw new ArgumentNullException(nameof(resultSelector));
+            }
+
+            return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, EqualityComparer<TKey>.Default);
         }
 
         internal sealed class JoinAsyncIterator<TOuter, TInner, TKey, TResult> : AsyncIterator<TResult>
@@ -90,17 +121,16 @@ namespace System.Linq
             }
 
             // State machine vars
-            Internal.Lookup<TKey, TInner> lookup;
-            int count;
-            TInner[] elements;
-            int index;
-            TOuter item;
+            private Internal.Lookup<TKey, TInner> lookup;
+            private int count;
+            private TInner[] elements;
+            private int index;
+            private TOuter item;
             private int mode;
-
-            const int State_If = 1;
-            const int State_DoLoop = 2;
-            const int State_For = 3;
-            const int State_While = 4;
+            private const int State_If = 1;
+            private const int State_DoLoop = 2;
+            private const int State_For = 3;
+            private const int State_While = 4;
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
@@ -124,7 +154,7 @@ namespace System.Linq
                                     if (lookup.Count != 0)
                                     {
                                         mode = State_DoLoop;
-                                        goto case State_DoLoop;   
+                                        goto case State_DoLoop;
                                     }
                                 }
 
@@ -161,7 +191,7 @@ namespace System.Linq
                                     goto case State_DoLoop;
                                 }
 
-                             
+
                                 break;
                         }
 
