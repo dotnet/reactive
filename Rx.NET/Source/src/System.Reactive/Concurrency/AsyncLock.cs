@@ -11,8 +11,8 @@ namespace System.Reactive.Concurrency
     /// </summary>
     public sealed class AsyncLock : IDisposable
     {
-        private bool isAcquired = false;
-        private bool hasFaulted = false;
+        private bool isAcquired;
+        private bool hasFaulted;
         private readonly object guard = new object();
         private Queue<(Action<Delegate, object> action, Delegate @delegate, object state)> queue;
 

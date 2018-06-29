@@ -96,7 +96,7 @@ namespace System.Reactive.Concurrency
             private sealed class PeriodicallyScheduledWorkItem<TState> : IDisposable
             {
                 private IDisposable _cancel;
-                private bool _failed = false;
+                private bool _failed;
 
                 private readonly Func<TState, TState> _action;
                 private readonly CatchSchedulerPeriodic _catchScheduler;

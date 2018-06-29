@@ -41,7 +41,7 @@ namespace System.Reactive.Concurrency
         /// or can continue using the current timer (because no earlier long term work was
         /// added to the queue).
         /// </summary>
-        private static WorkItem s_nextLongTermWorkItem = null;
+        private static WorkItem s_nextLongTermWorkItem;
 
         /// <summary>
         /// Short term work queue. Contains work that's due soon, computed at the time of

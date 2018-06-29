@@ -309,7 +309,7 @@ namespace System.Reactive.Threading.Tasks
         {
             private readonly CancellationToken _ct;
             private readonly TaskCompletionSource<TResult> _tcs;
-            private readonly CancellationTokenRegistration _ctr = default;
+            private readonly CancellationTokenRegistration _ctr;
 
             private bool _hasValue;
             private TResult _lastValue;
