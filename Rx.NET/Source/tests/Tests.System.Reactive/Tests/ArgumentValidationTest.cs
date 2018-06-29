@@ -477,11 +477,10 @@ namespace ReactiveTests.Tests
                     var thrown = true;
                     try
                     {
-                        var o = m.Invoke(null, margs) as IObservable<int>;
 
                         // Should not return null, but would be mistaken for
                         // throwing because of Subscribe(null)
-                        if (o != null)
+                        if (m.Invoke(null, margs) is IObservable<int> o)
                         {
                             o.Subscribe(null);
 
