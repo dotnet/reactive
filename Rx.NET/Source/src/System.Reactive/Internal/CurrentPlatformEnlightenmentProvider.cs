@@ -45,13 +45,8 @@ namespace System.Reactive.PlatformServices
             {
                 switch ((string)args[0])
                 {
-#if !WINDOWS && !NO_THREAD
                     case "ThreadPool":
                         return (T)(object)ThreadPoolScheduler.Instance;
-#elif WINDOWS
-                    case "ThreadPool":
-                        return (T)(object)ThreadPoolScheduler.Default;
-#endif
                     case "TaskPool":
                         return (T)(object)TaskPoolScheduler.Default;
                     case "NewThread":

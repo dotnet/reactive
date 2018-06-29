@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 #if WINDOWS
+using System.ComponentModel;
 using Windows.System.Threading;
 
 namespace System.Reactive.Concurrency
@@ -14,7 +15,7 @@ namespace System.Reactive.Concurrency
     [CLSCompliant(false)]
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerPeriodic
     {
-        private static Lazy<ThreadPoolScheduler> s_default = new Lazy<ThreadPoolScheduler>(() => new ThreadPoolScheduler());
+        private static readonly Lazy<ThreadPoolScheduler> LazyDefault = new Lazy<ThreadPoolScheduler>(() => new ThreadPoolScheduler());
 
         /// <summary>
         /// Constructs a ThreadPoolScheduler that schedules units of work on the Windows ThreadPool.
@@ -47,7 +48,14 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the singleton instance of the Windows Runtime thread pool scheduler.
         /// </summary>
-        public static ThreadPoolScheduler Default => s_default.Value;
+        [Obsolete("Use the Instance property", false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static ThreadPoolScheduler Default => LazyDefault.Value;
+
+        /// <summary>
+        /// Gets the singleton instance of the Windows Runtime thread pool scheduler.
+        /// </summary>
+        public static ThreadPoolScheduler Instance => LazyDefault.Value;
 
         /// <summary>
         /// Gets the priority at which work is scheduled.
