@@ -394,7 +394,7 @@ namespace System.Reactive
         {
             /// <summary>
             /// Complete notifications are stateless thus only one instance
-            /// can ever exist per type <see cref="T"/>.
+            /// can ever exist per type.
             /// </summary>
             internal static readonly Notification<T> Instance = new OnCompletedNotification();
 
@@ -654,20 +654,20 @@ namespace System.Reactive
 
         private sealed class NotificationToObservable : ObservableBase<T>
         {
-            private readonly IScheduler scheduler;
-            private readonly Notification<T> parent;
+            private readonly IScheduler _scheduler;
+            private readonly Notification<T> _parent;
 
             public NotificationToObservable(IScheduler scheduler, Notification<T> parent)
             {
-                this.scheduler = scheduler;
-                this.parent = parent;
+                _scheduler = scheduler;
+                _parent = parent;
             }
 
             protected override IDisposable SubscribeCore(IObserver<T> observer)
             {
-                return scheduler.Schedule((parent, observer), (scheduler, state) =>
+                return _scheduler.Schedule((_parent, observer), (scheduler, state) =>
                 {
-                    var parent = state.parent;
+                    var parent = state._parent;
                     var o = state.observer;
 
                     parent.Accept(o);
