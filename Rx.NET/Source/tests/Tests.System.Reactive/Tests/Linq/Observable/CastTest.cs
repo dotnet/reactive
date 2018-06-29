@@ -17,7 +17,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Cast_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Cast<bool>(default(IObservable<object>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Cast<bool>(default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Cast<bool>(DummyObservable<object>.Instance).Subscribe(null));
         }
 

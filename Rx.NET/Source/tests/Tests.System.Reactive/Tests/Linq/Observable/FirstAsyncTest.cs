@@ -17,7 +17,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstAsync(default(IObservable<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstAsync(default(IObservable<int>), _ => true));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstAsync(DummyObservable<int>.Instance, default(Func<int, bool>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstAsync(DummyObservable<int>.Instance, default));
         }
 
         [Fact]

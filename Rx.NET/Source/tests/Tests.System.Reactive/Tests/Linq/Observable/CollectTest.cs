@@ -22,12 +22,12 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(default(IObservable<int>), () => 0, (x, y) => x));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, default(Func<int>), (x, y) => x));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, () => 0, default(Func<int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, () => 0, default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(default(IObservable<int>), () => 0, (x, y) => x, x => x));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, default(Func<int>), (x, y) => x, x => x));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, () => 0, default(Func<int, int, int>), x => x));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, () => 0, (x, y) => x, default(Func<int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, () => 0, default, x => x));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, () => 0, (x, y) => x, default));
         }
 
         [Fact]

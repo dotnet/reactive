@@ -5,18 +5,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
 using System.Reactive.Subjects;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -35,7 +32,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Merge((IObservable<int>[])null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Merge((IEnumerable<IObservable<int>>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Merge(xs, DummyScheduler.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => xs.Merge(default(IObservable<int>), DummyScheduler.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => xs.Merge(default, DummyScheduler.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Merge((IEnumerable<IObservable<int>>)null, DummyScheduler.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Merge(new IObservable<int>[0], default(IScheduler)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Merge((IObservable<IObservable<int>>)null));

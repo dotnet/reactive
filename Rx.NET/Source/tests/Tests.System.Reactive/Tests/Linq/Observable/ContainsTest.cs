@@ -18,8 +18,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Contains_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Contains(default(IObservable<int>), 42));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Contains(default(IObservable<int>), 42, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Contains(default, 42));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Contains(default, 42, EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Contains(DummyObservable<int>.Instance, 42, null));
         }
 

@@ -24,7 +24,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-    
+
     public class SystemClockTest
     {
         private void Run(CrossAppDomainDelegate a)

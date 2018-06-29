@@ -5,19 +5,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -27,7 +21,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Repeat_Value_Count_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(1, 0, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(1, 0, default));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Repeat(1, -1, DummyScheduler.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(1, 1, DummyScheduler.Instance).Subscribe(null));
         }
@@ -127,7 +121,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Repeat_Value_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(1, (IScheduler)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(1, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(DummyScheduler.Instance, 1).Subscribe(null));
         }
 
@@ -199,7 +193,9 @@ namespace ReactiveTests.Tests
             start.WaitOne();
 
             while (lst.Count < 100)
+            {
                 ;
+            }
 
             d.Dispose();
             end.WaitOne();
@@ -223,7 +219,9 @@ namespace ReactiveTests.Tests
             start.WaitOne();
 
             while (lst.Count < 100)
+            {
                 ;
+            }
 
             d.Dispose();
             end.WaitOne();
@@ -368,7 +366,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Repeat_Observable_Default_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat<int>((IObservable<int>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Repeat().Subscribe(null));
         }
 

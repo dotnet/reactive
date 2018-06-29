@@ -4,19 +4,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {

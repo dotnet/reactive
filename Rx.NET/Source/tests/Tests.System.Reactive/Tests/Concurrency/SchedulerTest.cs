@@ -32,54 +32,54 @@ namespace ReactiveTests.Tests
         public void Scheduler_ArgumentChecks()
         {
             var ms = new MyScheduler();
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default(IScheduler), a => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default(IScheduler), () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAction(default(IScheduler), new object(), state => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default(IScheduler), 1, (a, s) => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default, a => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAction(default, new object(), state => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default, 1, (a, s) => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(ms, default(Action<Action>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(ms, 1, default(Action<int, Action<int>>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default(IScheduler), DateTimeOffset.Now, a => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default(IScheduler), DateTimeOffset.Now, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default(IScheduler), 1, DateTimeOffset.Now, (a, s) => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(ms, 1, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default, DateTimeOffset.Now, a => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default, DateTimeOffset.Now, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default, 1, DateTimeOffset.Now, (a, s) => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(ms, DateTimeOffset.Now, default(Action<Action<DateTimeOffset>>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(ms, 1, DateTimeOffset.Now, default(Action<int, Action<int, DateTimeOffset>>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default(IScheduler), TimeSpan.Zero, a => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default(IScheduler), TimeSpan.Zero, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default(IScheduler), 1, TimeSpan.Zero, (a, s) => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(ms, 1, DateTimeOffset.Now, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default, TimeSpan.Zero, a => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default, TimeSpan.Zero, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(default, 1, TimeSpan.Zero, (a, s) => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(ms, TimeSpan.Zero, default(Action<Action<TimeSpan>>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(ms, 1, TimeSpan.Zero, default(Action<int, Action<int, TimeSpan>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(ms, 1, TimeSpan.Zero, default));
         }
 
         [Fact]
         public void Schedulers_ArgumentChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.ScheduleAction(new object(), default(Action<object>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.ScheduleAction(new object(), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(DateTimeOffset.MaxValue, default(Action)));
 #if DESKTOPCLR
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.Schedule(default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.ScheduleAction(new object(), default(Action<object>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.ScheduleAction(new object(), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.Schedule(DateTimeOffset.MaxValue, default(Action)));
 #endif
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule(default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.ScheduleAction(new object(), default(Action<object>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.ScheduleAction(new object(), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule(DateTimeOffset.MaxValue, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule(default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.ScheduleAction(new object(), default(Action<object>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.ScheduleAction(new object(), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule(DateTimeOffset.MaxValue, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.ScheduleAction(new object(), default(Action<object>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.ScheduleAction(new object(), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(DateTimeOffset.MaxValue, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.Schedule(default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.ScheduleAction(new object(), default(Action<object>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.ScheduleAction(new object(), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.Schedule(DateTimeOffset.MaxValue, default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.SchedulePeriodic(42, TimeSpan.FromSeconds(1), default(Func<int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.SchedulePeriodic(42, TimeSpan.FromSeconds(1), default));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => DefaultScheduler.Instance.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
 #if HAS_WINFORMS
             var lbl = new Label();
@@ -90,7 +90,21 @@ namespace ReactiveTests.Tests
 #endif
             var ctx = new SynchronizationContext();
             ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(ctx).Schedule(default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(ctx).ScheduleAction(new object(), default(Action<object>)));
+
+            /* Unmerged change from project 'Tests.System.Reactive(netcoreapp2.0)'
+            Before:
+                        ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(ctx).ScheduleAction(new object(), default(Action<object>)));
+            After:
+                        ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(ctx).ScheduleAction(new object(), default)));
+            */
+
+            /* Unmerged change from project 'Tests.System.Reactive(net46)'
+            Before:
+                        ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(ctx).ScheduleAction(new object(), default(Action<object>)));
+            After:
+                        ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(ctx).ScheduleAction(new object(), default)));
+            */
+            ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(ctx).ScheduleAction(new object(), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(ctx).Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(ctx).Schedule(DateTimeOffset.MaxValue, default(Action)));
         }
@@ -233,7 +247,14 @@ namespace ReactiveTests.Tests
         public void Scheduler_LongRunning_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleLongRunning(null, c => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleLongRunning(ThreadPoolScheduler.Instance, default(Action<ICancelable>)));
+
+            /* Unmerged change from project 'Tests.System.Reactive(net46)'
+            Before:
+                        ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleLongRunning(ThreadPoolScheduler.Instance, default(Action<ICancelable>)));
+            After:
+                        ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleLongRunning(ThreadPoolScheduler.Instance, default));
+            */
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleLongRunning(ThreadPoolScheduler.Instance, default));
         }
 
         [Fact]
@@ -241,7 +262,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.SchedulePeriodic(null, TimeSpan.FromSeconds(1), () => { }));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Scheduler.SchedulePeriodic(ThreadPoolScheduler.Instance, TimeSpan.FromSeconds(-1), () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.SchedulePeriodic(ThreadPoolScheduler.Instance, TimeSpan.FromSeconds(1), default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.SchedulePeriodic(ThreadPoolScheduler.Instance, TimeSpan.FromSeconds(1), default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.SchedulePeriodic<int>(null, 42, TimeSpan.FromSeconds(1), _ => { }));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Scheduler.SchedulePeriodic<int>(ThreadPoolScheduler.Instance, 42, TimeSpan.FromSeconds(-1), _ => { }));
@@ -249,7 +270,7 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.SchedulePeriodic<int>(null, 42, TimeSpan.FromSeconds(1), _ => _));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Scheduler.SchedulePeriodic<int>(ThreadPoolScheduler.Instance, 42, TimeSpan.FromSeconds(-1), _ => _));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.SchedulePeriodic<int>(ThreadPoolScheduler.Instance, 42, TimeSpan.FromSeconds(1), default(Func<int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.SchedulePeriodic<int>(ThreadPoolScheduler.Instance, 42, TimeSpan.FromSeconds(1), default));
         }
 #endif
 
@@ -458,14 +479,14 @@ namespace ReactiveTests.Tests
         [Fact]
         public void DisableOptimizations_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(default(IScheduler)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(default(IScheduler), new Type[0]));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(default, new Type[0]));
 #if !WINDOWS && !NO_THREAD
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(ThreadPoolScheduler.Instance, default(Type[])));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(ThreadPoolScheduler.Instance, default));
 #endif
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(Scheduler.Default).Schedule(42, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(Scheduler.Default).Schedule(42, TimeSpan.FromSeconds(1), default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(Scheduler.Default).Schedule(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(Scheduler.Default).Schedule(42, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(Scheduler.Default).Schedule(42, TimeSpan.FromSeconds(1), default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(Scheduler.Default).Schedule(42, DateTimeOffset.Now, default));
         }
 
         [Fact]
@@ -658,12 +679,12 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Catch_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(default(IScheduler), _ => true));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(Scheduler.Default, default(Func<Exception, bool>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(default, _ => true));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(Scheduler.Default, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(Scheduler.Default, _ => true).Schedule(42, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(Scheduler.Default, _ => true).Schedule(42, TimeSpan.FromSeconds(1), default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(Scheduler.Default, _ => true).Schedule(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(Scheduler.Default, _ => true).Schedule(42, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(Scheduler.Default, _ => true).Schedule(42, TimeSpan.FromSeconds(1), default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(Scheduler.Default, _ => true).Schedule(42, DateTimeOffset.Now, default));
         }
 
         [Fact]
@@ -1125,18 +1146,18 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SchedulerAsync_Yield_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Yield(default(IScheduler)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Yield(default(IScheduler), CancellationToken.None));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Yield(default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Yield(default, CancellationToken.None));
         }
 
         [Fact]
         public void SchedulerAsync_Sleep_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), TimeSpan.Zero));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), TimeSpan.Zero, CancellationToken.None));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default, TimeSpan.Zero));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default, TimeSpan.Zero, CancellationToken.None));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), DateTimeOffset.MinValue));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), DateTimeOffset.MinValue, CancellationToken.None));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default, DateTimeOffset.MinValue));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default, DateTimeOffset.MinValue, CancellationToken.None));
         }
 
         [Fact]

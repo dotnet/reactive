@@ -70,7 +70,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToNotifier_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToNotifier<int>(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToNotifier<int>(default));
         }
 
         [Fact]
@@ -93,14 +93,14 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Create_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default(Action<int>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default(Action<int>), () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default(Action<int>), (Exception _) => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default, (Exception _) => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, default(Action<Exception>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default(Action<int>), (Exception _) => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, default(Action<Exception>), () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, (Exception _) => { }, default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default, (Exception _) => { }, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, default, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, (Exception _) => { }, default));
         }
 
         [Fact]
@@ -239,7 +239,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void AsObserver_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.AsObserver<int>(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.AsObserver<int>(default));
         }
 
         [Fact]
@@ -833,10 +833,10 @@ namespace ReactiveTests.Tests
             var s = Scheduler.Immediate;
             var o = Observer.Create<int>(_ => { });
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(default(IObserver<int>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(o, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(default, s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(o, default));
         }
 
         [Fact]

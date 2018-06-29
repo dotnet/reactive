@@ -16,15 +16,15 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Aggregate_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int>(default(IObservable<int>), 1, (x, y) => x + y));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int>(DummyObservable<int>.Instance, 1, default(Func<int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int>(default, 1, (x, y) => x + y));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int>(DummyObservable<int>.Instance, 1, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int>(default(IObservable<int>), (x, y) => x + y));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int>(DummyObservable<int>.Instance, default(Func<int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int>(default, (x, y) => x + y));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int>(DummyObservable<int>.Instance, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(default(IObservable<int>), 1, (x, y) => x + y, x => x));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(DummyObservable<int>.Instance, 1, default(Func<int, int, int>), x => x));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(DummyObservable<int>.Instance, 1, (x, y) => x + y, default(Func<int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(default, 1, (x, y) => x + y, x => x));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(DummyObservable<int>.Instance, 1, default, x => x));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(DummyObservable<int>.Instance, 1, (x, y) => x + y, default));
         }
 
         [Fact]

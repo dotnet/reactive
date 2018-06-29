@@ -5,15 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -23,17 +18,17 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SequenceEqual_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(default(IObservable<int>), DummyObservable<int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(default, DummyObservable<int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(DummyObservable<int>.Instance, default(IObservable<int>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(default(IObservable<int>), DummyObservable<int>.Instance, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(default, DummyObservable<int>.Instance, EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(DummyObservable<int>.Instance, default(IObservable<int>), EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(DummyObservable<int>.Instance, DummyObservable<int>.Instance, default(IEqualityComparer<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(DummyObservable<int>.Instance, DummyObservable<int>.Instance, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(default(IObservable<int>), new[] { 42 }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(default, new[] { 42 }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(DummyObservable<int>.Instance, default(IEnumerable<int>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(default(IObservable<int>), new[] { 42 }, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(default, new[] { 42 }, EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(DummyObservable<int>.Instance, default(IEnumerable<int>), EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(DummyObservable<int>.Instance, new[] { 42 }, default(IEqualityComparer<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(DummyObservable<int>.Instance, new[] { 42 }, default));
         }
 
         [Fact]
@@ -898,7 +893,9 @@ namespace ReactiveTests.Tests
             public bool Equals(int x, int y)
             {
                 if (x == _x)
+                {
                     throw _ex;
+                }
 
                 return x == y;
             }

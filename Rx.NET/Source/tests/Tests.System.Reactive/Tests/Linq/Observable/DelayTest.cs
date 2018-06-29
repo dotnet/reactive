@@ -746,8 +746,8 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Delay(default(IObservable<int>), x => someObservable));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Delay(someObservable, default(Func<int, IObservable<int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Delay(default(IObservable<int>), someObservable, x => someObservable));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Delay(someObservable, default(IObservable<int>), x => someObservable));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Delay(someObservable, someObservable, default(Func<int, IObservable<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Delay(someObservable, default, x => someObservable));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Delay(someObservable, someObservable, default));
         }
 
         [Fact]

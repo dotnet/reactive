@@ -137,7 +137,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ConnectableObservable_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Publish().Subscribe(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Publish().Subscribe(default));
         }
 
         [Fact]

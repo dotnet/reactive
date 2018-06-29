@@ -5,18 +5,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
@@ -26,35 +19,35 @@ namespace ReactiveTests.Tests
         [Fact]
         public void FromEvent_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(default(Func<Action<int>, Action<int>>), h => { }, h => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => h, default(Action<Action<int>>), h => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => h, h => { }, default(Action<Action<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(default, h => { }, h => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => h, default, h => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => h, h => { }, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(default(Action<Action<int>>), h => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => { }, default(Action<Action<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(default, h => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => { }, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<int>(default(Action<Action<int>>), h => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<int>(h => { }, default(Action<Action<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<int>(default, h => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<int>(h => { }, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent(default(Action<Action>), h => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent(h => { }, default(Action<Action>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent(default, h => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent(h => { }, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(default(Func<Action<int>, Action<int>>), h => { }, h => { }, Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => h, default(Action<Action<int>>), h => { }, Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => h, h => { }, default(Action<Action<int>>), Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => h, h => { }, h => { }, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(default, h => { }, h => { }, Scheduler.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => h, default, h => { }, Scheduler.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => h, h => { }, default, Scheduler.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => h, h => { }, h => { }, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(default(Action<Action<int>>), h => { }, Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => { }, default(Action<Action<int>>), Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => { }, h => { }, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(default, h => { }, Scheduler.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => { }, default, Scheduler.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(h => { }, h => { }, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<int>(default(Action<Action<int>>), h => { }, Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<int>(h => { }, default(Action<Action<int>>), Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<int>(h => { }, h => { }, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<int>(default, h => { }, Scheduler.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<int>(h => { }, default, Scheduler.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<int>(h => { }, h => { }, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent(default(Action<Action>), h => { }, Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent(h => { }, default(Action<Action>), Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent(h => { }, h => { }, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent(default, h => { }, Scheduler.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent(h => { }, default, Scheduler.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent(h => { }, h => { }, default));
         }
 
         [Fact]

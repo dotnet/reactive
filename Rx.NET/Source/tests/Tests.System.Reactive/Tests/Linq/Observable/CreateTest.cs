@@ -378,7 +378,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Iterate_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create<int>(default(Func<IObserver<int>, IEnumerable<IObservable<Object>>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create<int>(default));
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create(DummyFunc<IObserver<int>, IEnumerable<IObservable<Object>>>.Instance).Subscribe(null));
         }
 
@@ -743,7 +743,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Iterate_Void_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create(default(Func<IEnumerable<IObservable<object>>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create(default));
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create(DummyFunc<IEnumerable<IObservable<Object>>>.Instance).Subscribe(null));
         }
 

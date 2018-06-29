@@ -74,7 +74,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Amb(_qbMy, _qbNull));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Amb(default(IQbservableProvider), _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Amb(_qbp, default(IQbservable<int>[])));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Amb(default(IQbservableProvider), new MyQueryable<IObservable<int>>()));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Amb(default, new MyQueryable<IObservable<int>>()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Amb(_qbp, default(IQueryable<IObservable<int>>)));
         }
 
@@ -180,7 +180,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Buffer(_qbMy, TimeSpan.Zero, default(IScheduler)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Buffer(_qbNull, TimeSpan.Zero, TimeSpan.Zero));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Buffer(_qbNull, TimeSpan.Zero, TimeSpan.Zero, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Buffer(_qbMy, TimeSpan.Zero, TimeSpan.Zero, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Buffer(_qbMy, TimeSpan.Zero, TimeSpan.Zero, default));
         }
 
         [Fact]
@@ -196,16 +196,16 @@ namespace ReactiveTests.Tests
         public void Case_ArgumentNullChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(null, () => 1, new Dictionary<int, IObservable<int>>()));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(_qbp, default(Expression<Func<int>>), new Dictionary<int, IObservable<int>>()));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(_qbp, default, new Dictionary<int, IObservable<int>>()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(_qbp, () => 1, default(Dictionary<int, IObservable<int>>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(null, () => 1, new Dictionary<int, IObservable<int>>(), Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(_qbp, default(Expression<Func<int>>), new Dictionary<int, IObservable<int>>(), Scheduler.Immediate));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(_qbp, default, new Dictionary<int, IObservable<int>>(), Scheduler.Immediate));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(_qbp, () => 1, default(Dictionary<int, IObservable<int>>), Scheduler.Immediate));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(_qbp, () => 1, new Dictionary<int, IObservable<int>>(), default(IScheduler)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(null, () => 1, new Dictionary<int, IObservable<int>>(), _qbMy));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(_qbp, default(Expression<Func<int>>), new Dictionary<int, IObservable<int>>(), _qbMy));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(_qbp, default, new Dictionary<int, IObservable<int>>(), _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(_qbp, () => 1, default(Dictionary<int, IObservable<int>>), _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Case(_qbp, () => 1, new Dictionary<int, IObservable<int>>(), default(IQbservable<int>)));
         }
@@ -239,7 +239,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch<int>(_qbNull, _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch(default(IQbservableProvider), _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch(_qbp, default(IQbservable<int>[])));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch(default(IQbservableProvider), new MyQueryable<IObservable<int>>()));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch(default, new MyQueryable<IObservable<int>>()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch(_qbp, default(IQueryable<IObservable<int>>)));
         }
 
@@ -300,7 +300,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Concat(_qbMy, _qbNull));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Concat(default(IQbservableProvider), _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Concat(_qbp, default(IQbservable<int>[])));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Concat(default(IQbservableProvider), new MyQueryable<IObservable<int>>()));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Concat(default, new MyQueryable<IObservable<int>>()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Concat(_qbp, default(IQueryable<IObservable<int>>)));
         }
 
@@ -356,10 +356,10 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Delay(_qbNull, DateTimeOffset.Now));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Delay(_qbNull, DateTimeOffset.Now, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Delay(_qbMy, DateTimeOffset.Now, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Delay(_qbMy, DateTimeOffset.Now, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Delay(_qbNull, TimeSpan.Zero));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Delay(_qbNull, TimeSpan.Zero, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Delay(_qbMy, TimeSpan.Zero, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Delay(_qbMy, TimeSpan.Zero, default));
         }
 
         [Fact]
@@ -390,10 +390,10 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.DistinctUntilChanged(_qbNull, a => a));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.DistinctUntilChanged(_qbMy, default(Expression<Func<int, int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.DistinctUntilChanged(_qbNull, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.DistinctUntilChanged(_qbMy, default(IEqualityComparer<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.DistinctUntilChanged(_qbMy, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.DistinctUntilChanged(_qbNull, a => a, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.DistinctUntilChanged(_qbMy, default(Expression<Func<int, int>>), EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.DistinctUntilChanged(_qbMy, a => a, default(IEqualityComparer<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.DistinctUntilChanged(_qbMy, default, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.DistinctUntilChanged(_qbMy, a => a, default));
         }
 
         [Fact]
@@ -412,17 +412,17 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, default(Expression<Action<int>>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbNull, i => Debug.WriteLine(i), ex => Debug.WriteLine(ex.Message)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, default(Expression<Action<int>>), ex => Debug.WriteLine(ex.Message)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, default, ex => Debug.WriteLine(ex.Message)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, i => Debug.WriteLine(i), default(Expression<Action<Exception>>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbNull, i => Debug.WriteLine(i), () => Debug.WriteLine("")));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, default(Expression<Action<int>>), () => Debug.WriteLine("")));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, default, () => Debug.WriteLine("")));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, i => Debug.WriteLine(i), default(Expression<Action>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbNull, i => Debug.WriteLine(i), ex => Debug.WriteLine(ex.Message), () => Debug.WriteLine("")));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, default(Expression<Action<int>>), ex => Debug.WriteLine(ex.Message), () => Debug.WriteLine("")));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, i => Debug.WriteLine(i), default(Expression<Action<Exception>>), () => Debug.WriteLine("")));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, i => Debug.WriteLine(i), ex => Debug.WriteLine(ex.Message), default(Expression<Action>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, default, ex => Debug.WriteLine(ex.Message), () => Debug.WriteLine("")));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, i => Debug.WriteLine(i), default, () => Debug.WriteLine("")));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, i => Debug.WriteLine(i), ex => Debug.WriteLine(ex.Message), default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbNull, Observer.Create<int>(i => Debug.WriteLine(i))));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Do(_qbMy, default(IObserver<int>)));
@@ -506,8 +506,8 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.FromEventPattern<Action, EventArgs>(_qbp, null, e => Debug.WriteLine(""), e => Debug.WriteLine("")));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.FromEventPattern<Action, EventArgs>(_qbp, e => () => Debug.WriteLine(""), null, e => Debug.WriteLine("")));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.FromEventPattern<Action, EventArgs>(_qbp, e => () => Debug.WriteLine(""), e => Debug.WriteLine(""), null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.FromEventPattern(_qbp, default(Expression<Action<EventHandler>>), e => Debug.WriteLine("")));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.FromEventPattern(_qbp, e => Debug.WriteLine(""), default(Expression<Action<EventHandler>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.FromEventPattern(_qbp, default, e => Debug.WriteLine("")));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.FromEventPattern(_qbp, e => Debug.WriteLine(""), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.FromEventPattern(null, e => Debug.WriteLine(""), e => Debug.WriteLine("")));
         }
 
@@ -584,13 +584,13 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbNull, x => x));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbMy, default(Expression<Func<int, int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbNull, x => x, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbMy, default(Expression<Func<int, int>>), EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbMy, default, EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbMy, x => x, default(IEqualityComparer<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbNull, x => x, x => x));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbMy, default(Expression<Func<int, int>>), x => x));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbMy, x => x, default(Expression<Func<int, int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbNull, x => x, x => x, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbMy, default(Expression<Func<int, int>>), x => x, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbMy, default, x => x, EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbMy, x => x, default(Expression<Func<int, int>>), EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.GroupBy(_qbMy, x => x, x => x, default(IEqualityComparer<int>)));
         }
@@ -624,7 +624,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Interval(null, TimeSpan.Zero));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Interval(null, TimeSpan.Zero, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Interval(_qbp, TimeSpan.Zero, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Interval(_qbp, TimeSpan.Zero, default));
         }
 
         [Fact]
@@ -724,8 +724,8 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MaxBy(default(IQbservable<string>), s => s.Length));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MaxBy(new MyQbservable<string>(), default(Expression<Func<string, int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MaxBy(default(IQbservable<string>), s => s.Length, Comparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MaxBy(new MyQbservable<string>(), default(Expression<Func<string, int>>), Comparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MaxBy(new MyQbservable<string>(), s => s.Length, default(IComparer<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MaxBy(new MyQbservable<string>(), default, Comparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MaxBy(new MyQbservable<string>(), s => s.Length, default));
         }
 
         [Fact]
@@ -742,16 +742,16 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(_qbMy, _qbNull));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(_qbNull, _qbMy, Scheduler.Immediate));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(_qbMy, _qbNull, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(_qbMy, _qbMy, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(_qbMy, _qbMy, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(default(IQbservable<IObservable<int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(default(IQbservableProvider), _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(_qbp, default(IQbservable<int>[])));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(default(IQbservableProvider), Scheduler.Immediate, _qbMy));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(default, Scheduler.Immediate, _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(_qbp, default(IScheduler), _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(_qbp, Scheduler.Immediate, default(IQbservable<int>[])));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(default(IQbservableProvider), new MyQueryable<IObservable<int>>()));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(default, new MyQueryable<IObservable<int>>()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(_qbp, default(IQueryable<IObservable<int>>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(default(IQbservableProvider), new MyQueryable<IObservable<int>>(), Scheduler.Immediate));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(default, new MyQueryable<IObservable<int>>(), Scheduler.Immediate));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(_qbp, new MyQueryable<IObservable<int>>(), default(IScheduler)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Merge(_qbp, default(IQueryable<IObservable<int>>), Scheduler.Immediate));
         }
@@ -809,8 +809,8 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MinBy(default(IQbservable<string>), s => s.Length));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MinBy(new MyQbservable<string>(), default(Expression<Func<string, int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MinBy(default(IQbservable<string>), s => s.Length, Comparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MinBy(new MyQbservable<string>(), default(Expression<Func<string, int>>), Comparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MinBy(new MyQbservable<string>(), s => s.Length, default(IComparer<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MinBy(new MyQbservable<string>(), default, Comparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.MinBy(new MyQbservable<string>(), s => s.Length, default));
         }
 
         [Fact]
@@ -906,7 +906,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.OnErrorResumeNext(_qbMy, _qbNull));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.OnErrorResumeNext(default(IQbservableProvider), _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.OnErrorResumeNext(_qbp, default(IQbservable<int>[])));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.OnErrorResumeNext(default(IQbservableProvider), new MyQueryable<IObservable<int>>()));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.OnErrorResumeNext(default, new MyQueryable<IObservable<int>>()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.OnErrorResumeNext(_qbp, default(IQueryable<IObservable<int>>)));
         }
 
@@ -924,7 +924,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Range(null, 0, 10));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Range(null, 0, 10, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Range(_qbp, 0, 10, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Range(_qbp, 0, 10, default));
         }
 
         [Fact]
@@ -955,7 +955,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Repeat(_qbp, 0, default(IScheduler)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Repeat(null, 0, 10));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Repeat(null, 0, 10, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Repeat(_qbp, 0, 10, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Repeat(_qbp, 0, 10, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Repeat(_qbNull));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Repeat(_qbNull, 1));
         }
@@ -989,7 +989,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Return(null, 1));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Return(null, 1, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Return(_qbp, 1, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Return(_qbp, 1, default));
         }
 
         [Fact]
@@ -1004,7 +1004,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Sample(_qbNull, TimeSpan.Zero));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Sample(_qbNull, TimeSpan.Zero, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Sample(_qbMy, TimeSpan.Zero, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Sample(_qbMy, TimeSpan.Zero, default));
         }
 
         [Fact]
@@ -1064,8 +1064,8 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.SelectMany(_qbNull, x => Observable.Return(""), x => Observable.Return(""), () => Observable.Return("")));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.SelectMany(_qbMy, default(Expression<Func<int, IObservable<string>>>), x => Observable.Return(""), () => Observable.Return("")));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.SelectMany(_qbMy, x => Observable.Return(""), default(Expression<Func<Exception, IObservable<string>>>), () => Observable.Return("")));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.SelectMany(_qbMy, x => Observable.Return(""), x => Observable.Return(""), default(Expression<Func<IObservable<string>>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.SelectMany(_qbMy, x => Observable.Return(""), default, () => Observable.Return("")));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.SelectMany(_qbMy, x => Observable.Return(""), x => Observable.Return(""), default));
         }
 
         [Fact]
@@ -1134,8 +1134,8 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbNull, new[] { 1 }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbMy, default(int[])));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbNull, Scheduler.Immediate, new[] { 1 }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbMy, default(IScheduler), new[] { 1 }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbMy, Scheduler.Immediate, default(int[])));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbMy, default, new[] { 1 }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.StartWith(_qbMy, Scheduler.Immediate, default));
         }
 
         [Fact]
@@ -1289,7 +1289,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Throttle(_qbNull, TimeSpan.Zero));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Throttle(_qbNull, TimeSpan.Zero, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Throttle(_qbMy, TimeSpan.Zero, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Throttle(_qbMy, TimeSpan.Zero, default));
         }
 
         [Fact]
@@ -1321,7 +1321,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.TimeInterval(_qbNull));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.TimeInterval(_qbNull, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.TimeInterval(_qbMy, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.TimeInterval(_qbMy, default));
         }
 
         [Fact]
@@ -1351,8 +1351,8 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timeout(_qbNull, TimeSpan.Zero, _qbMy, Scheduler.Immediate));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timeout(_qbMy, DateTimeOffset.Now, _qbNull, Scheduler.Immediate));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timeout(_qbMy, TimeSpan.Zero, _qbNull, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timeout(_qbMy, DateTimeOffset.Now, _qbMy, default(IScheduler)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timeout(_qbMy, TimeSpan.Zero, _qbMy, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timeout(_qbMy, DateTimeOffset.Now, _qbMy, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timeout(_qbMy, TimeSpan.Zero, _qbMy, default));
         }
 
         [Fact]
@@ -1383,9 +1383,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timer(null, TimeSpan.Zero, TimeSpan.Zero));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timer(null, DateTimeOffset.Now, TimeSpan.Zero, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timer(_qbp, DateTimeOffset.Now, TimeSpan.Zero, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timer(_qbp, DateTimeOffset.Now, TimeSpan.Zero, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timer(null, TimeSpan.Zero, TimeSpan.Zero, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timer(_qbp, TimeSpan.Zero, TimeSpan.Zero, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timer(_qbp, TimeSpan.Zero, TimeSpan.Zero, default));
         }
 
         [Fact]
@@ -1406,7 +1406,7 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timestamp(_qbNull));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timestamp(_qbNull, Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timestamp(_qbMy, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Timestamp(_qbMy, default));
         }
 
         [Fact]
@@ -1423,7 +1423,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ToObservable(_qbp, default(IEnumerable<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ToObservable(null, new[] { 1 }, Scheduler.Immediate));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ToObservable(_qbp, default(IEnumerable<int>), Scheduler.Immediate));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ToObservable(_qbp, new[] { 1 }, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.ToObservable(_qbp, new[] { 1 }, default));
         }
 
         [Fact]
@@ -1501,7 +1501,7 @@ namespace ReactiveTests.Tests
         public void While_ArgumentNullChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.While(null, () => true, _qbMy));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.While(_qbp, default(Expression<Func<bool>>), _qbMy));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.While(_qbp, default, _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.While(_qbp, () => true, _qbNull));
         }
 

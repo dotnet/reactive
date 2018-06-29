@@ -5,15 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -26,7 +21,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MinBy(default(IObservable<int>), x => x));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MinBy(DummyObservable<int>.Instance, default(Func<int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MinBy(default(IObservable<int>), x => x, Comparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MinBy(DummyObservable<int>.Instance, default(Func<int, int>), Comparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MinBy(DummyObservable<int>.Instance, default, Comparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MinBy(DummyObservable<int>.Instance, x => x, null));
         }
 

@@ -17,7 +17,7 @@ namespace ReactiveTests.Tests
         public void DefaultIfEmpty_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DefaultIfEmpty(default(IObservable<int>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DefaultIfEmpty(default(IObservable<int>), 42));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DefaultIfEmpty(default, 42));
         }
 
         [Fact]

@@ -22,19 +22,19 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstOrDefault(default(IObservable<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstOrDefault(default(IObservable<int>), _ => true));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstOrDefault(DummyObservable<int>.Instance, default(Func<int, bool>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstOrDefault(DummyObservable<int>.Instance, default));
         }
 
         [Fact]
         public void FirstOrDefault_Empty()
         {
-            Assert.Equal(default(int), Observable.Empty<int>().FirstOrDefault());
+            Assert.Equal(default, Observable.Empty<int>().FirstOrDefault());
         }
 
         [Fact]
         public void FirstOrDefaultPredicate_Empty()
         {
-            Assert.Equal(default(int), Observable.Empty<int>().FirstOrDefault(_ => true));
+            Assert.Equal(default, Observable.Empty<int>().FirstOrDefault(_ => true));
         }
 
         [Fact]

@@ -785,7 +785,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(null, d));
             ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(d, null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(default(IDisposable[])));
+            ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(default));
             ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(default(IEnumerable<IDisposable>)));
 
             ReactiveAssert.Throws<ArgumentException>(() => StableCompositeDisposable.Create(null, d, d));

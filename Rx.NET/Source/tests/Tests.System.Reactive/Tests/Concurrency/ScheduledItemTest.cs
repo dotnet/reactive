@@ -17,12 +17,12 @@ namespace ReactiveTests
         [Fact]
         public void ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(default(IScheduler), 42, (x, y) => Disposable.Empty, DateTimeOffset.Now));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(Scheduler.Default, 42, default(Func<IScheduler, int, IDisposable>), DateTimeOffset.Now));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(default, 42, (x, y) => Disposable.Empty, DateTimeOffset.Now));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(Scheduler.Default, 42, default, DateTimeOffset.Now));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(default(IScheduler), 42, (x, y) => Disposable.Empty, DateTimeOffset.Now, Comparer<DateTimeOffset>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(Scheduler.Default, 42, default(Func<IScheduler, int, IDisposable>), DateTimeOffset.Now, Comparer<DateTimeOffset>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(Scheduler.Default, 42, (x, y) => Disposable.Empty, DateTimeOffset.Now, default(IComparer<DateTimeOffset>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(default, 42, (x, y) => Disposable.Empty, DateTimeOffset.Now, Comparer<DateTimeOffset>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(Scheduler.Default, 42, default, DateTimeOffset.Now, Comparer<DateTimeOffset>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledItem<DateTimeOffset, int>(Scheduler.Default, 42, (x, y) => Disposable.Empty, DateTimeOffset.Now, default));
         }
 
         [Fact]

@@ -3,20 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -177,7 +168,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Retry_Observable_Default_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Retry<int>((IObservable<int>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Retry<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Retry().Subscribe(null));
         }
 
@@ -348,7 +339,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Retry_Observable_RetryCount_Default_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Retry<int>(default(IObservable<int>), 0));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Retry<int>(default, 0));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => DummyObservable<int>.Instance.Retry(-1));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Retry(0).Subscribe(null));
         }

@@ -18,8 +18,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SubscribeSafe_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe<int>(default(IObservable<int>), Observer.Create<int>(_ => { })));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe<int>(Observable.Return(42), default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe<int>(default, Observer.Create<int>(_ => { })));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe<int>(Observable.Return(42), default));
         }
 
         [Fact]

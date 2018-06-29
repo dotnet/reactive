@@ -5,18 +5,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
 using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using System.Reactive.Linq;
+using System.Text;
+using System.Threading;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -477,7 +473,9 @@ namespace ReactiveTests.Tests
             var onNext = new Action<long>(x =>
             {
                 if (x == 0)
+                {
                     throw ex;
+                }
             });
 
             var d = default(IDisposable);
@@ -519,7 +517,9 @@ namespace ReactiveTests.Tests
                 }
 
                 if (x == 5)
+                {
                     throw ex;
+                }
             });
 
             var d = default(IDisposable);
@@ -682,7 +682,9 @@ namespace ReactiveTests.Tests
             d.Disposable = xs.Subscribe(x =>
             {
                 if (x == 0)
+                {
                     Thread.Sleep(500);
+                }
 
                 if (x > 10)
                 {
@@ -714,10 +716,14 @@ namespace ReactiveTests.Tests
             xs.Subscribe(x =>
             {
                 if (x == 0)
+                {
                     Thread.Sleep(500);
+                }
 
                 if (x == 5)
+                {
                     throw err;
+                }
             });
 
             end.WaitOne();
@@ -819,7 +825,9 @@ namespace ReactiveTests.Tests
         protected override object GetService(Type serviceType)
         {
             if (serviceType == typeof(ISchedulerPeriodic))
+            {
                 return this as ISchedulerPeriodic;
+            }
 
             return base.GetService(serviceType);
         }
@@ -854,7 +862,9 @@ namespace ReactiveTests.Tests
         public override bool Equals(object obj)
         {
             if (!(obj is TimerRun other))
+            {
                 return false;
+            }
 
             return _started == other._started && _stopped == other._stopped && _ticks.SequenceEqual(other._ticks);
         }
@@ -887,7 +897,9 @@ namespace ReactiveTests.Tests
             sb.Append("Start(" + _started + ") ");
             sb.Append("Ticks(" + string.Join(", ", _ticks.Select(t => t.ToString()).ToArray()) + ") ");
             if (_hasStopped)
+            {
                 sb.Append("Stop(" + _stopped + ")");
+            }
 
             return sb.ToString();
         }

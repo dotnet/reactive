@@ -221,15 +221,15 @@ namespace ReactiveTests.Tests
         {
             var n = Notification.CreateOnNext<int>(42);
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default(Action<int>), ex => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, default(Action<Exception>), () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, ex => { }, default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default, ex => { }, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, default, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, ex => { }, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(default(Func<int, string>), ex => "", () => ""));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", default(Func<Exception, string>), () => ""));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default(Func<string>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(default, ex => "", () => ""));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", default, () => ""));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default));
         }
 
         [Fact]
@@ -252,15 +252,15 @@ namespace ReactiveTests.Tests
         {
             var n = Notification.CreateOnError<int>(new Exception());
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default(Action<int>), ex => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, default(Action<Exception>), () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, ex => { }, default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default, ex => { }, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, default, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, ex => { }, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(default(Func<int, string>), ex => "", () => ""));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", default(Func<Exception, string>), () => ""));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default(Func<string>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(default, ex => "", () => ""));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", default, () => ""));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default));
         }
 
         [Fact]
@@ -440,15 +440,15 @@ namespace ReactiveTests.Tests
         {
             var n = Notification.CreateOnCompleted<int>();
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default(Action<int>), ex => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, default(Action<Exception>), () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, ex => { }, default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default, ex => { }, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, default, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, ex => { }, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(default(Func<int, string>), ex => "", () => ""));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", default(Func<Exception, string>), () => ""));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default(Func<string>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(default, ex => "", () => ""));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", default, () => ""));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default));
         }
 
         [Fact]

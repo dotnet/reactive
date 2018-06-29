@@ -3,19 +3,14 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Reactive.Testing;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -60,7 +55,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(1, res.Current);
 
             evt.Set();
-            Assert.True(((IEnumerator)res).MoveNext());
+            Assert.True(res.MoveNext());
             Assert.Equal(2, ((IEnumerator)res).Current);
 
             evt.Set();

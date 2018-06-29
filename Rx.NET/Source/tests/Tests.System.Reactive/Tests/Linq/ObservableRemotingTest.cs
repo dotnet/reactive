@@ -14,7 +14,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class ObservableRemotingTest : ReactiveTest
     {
         [Fact]

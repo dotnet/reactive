@@ -14,15 +14,15 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class ThreadPoolSchedulerTest
     {
         [Fact]
         public void Schedule_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.Schedule<int>(42, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.Schedule<int>(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.Schedule<int>(42, TimeSpan.Zero, default(Func<IScheduler, int, IDisposable>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.Schedule<int>(42, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.Schedule<int>(42, DateTimeOffset.Now, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.Schedule<int>(42, TimeSpan.Zero, default));
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace ReactiveTests.Tests
             var N = 5;
             var e = new ManualResetEvent(false);
             var n = 0;
-            var d = tp.SchedulePeriodic(TimeSpan.FromMilliseconds(80), () => { if (Interlocked.Increment(ref n) == N) e.Set(); });
+            var d = tp.SchedulePeriodic(TimeSpan.FromMilliseconds(80), () => { if (Interlocked.Increment(ref n) == N) { e.Set(); } });
 
             Assert.True(e.WaitOne(TimeSpan.FromMinutes(1)));
 
@@ -144,7 +144,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ScheduleLongRunning_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.ScheduleLongRunning<int>(42, default(Action<int, ICancelable>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.ScheduleLongRunning<int>(42, default));
         }
 
         [Fact]
@@ -172,7 +172,9 @@ namespace ReactiveTests.Tests
                 for (n = 0; !cancel.IsDisposed; n++)
                 {
                     if (n == 10)
+                    {
                         started.Set();
+                    }
                 }
 
                 stopped.Set();
@@ -231,7 +233,9 @@ namespace ReactiveTests.Tests
                 lock (gate)
                 {
                     if (n++ == 10)
+                    {
                         e.Set();
+                    }
                 }
 
                 lst.Add(x);
@@ -248,12 +252,16 @@ namespace ReactiveTests.Tests
             do
             {
                 lock (gate)
+                {
                     m = n;
+                }
 
                 Thread.Sleep(50);
 
                 lock (gate)
+                {
                     k = n;
+                }
             } while (m != k && i++ < 10); // Wait for Dispose to reach the timer; should be almost instantaneous due to nop'ing out of the action.
 
             Assert.NotEqual(10, i);
@@ -274,7 +282,9 @@ namespace ReactiveTests.Tests
                 try
                 {
                     if (Interlocked.Increment(ref n) > 1) // Without an AsyncLock this would fail.
+                    {
                         fail = true;
+                    }
 
                     Thread.Sleep(100);
 

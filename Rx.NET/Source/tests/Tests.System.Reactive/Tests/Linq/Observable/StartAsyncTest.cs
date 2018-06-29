@@ -3,18 +3,14 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
 
 namespace ReactiveTests.Tests
 {
@@ -43,8 +39,8 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(default(Func<Task<int>>), s));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(default(Func<CancellationToken, Task<int>>), s));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(() => doneTask, default(IScheduler)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(ct => doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(() => doneTask, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(ct => doneTask, default));
         }
 
         [Fact]
@@ -157,7 +153,9 @@ namespace ReactiveTests.Tests
                         {
                             e.Set();
                             while (true)
+                            {
                                 ct.ThrowIfCancellationRequested();
+                            }
                         }
                         finally
                         {
@@ -173,7 +171,9 @@ namespace ReactiveTests.Tests
 
                 f.WaitOne();
                 while (!t.IsCompleted)
+                {
                     ;
+                }
 
                 ReactiveAssert.Throws<OperationCanceledException>(() => xs.Single());
             }
@@ -245,8 +245,8 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<Task>), s));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<CancellationToken, Task>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(() => (Task)doneTask, default(IScheduler)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(ct => (Task)doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(() => (Task)doneTask, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(ct => (Task)doneTask, default));
         }
 
         [Fact]
@@ -351,7 +351,9 @@ namespace ReactiveTests.Tests
                         {
                             e.Set();
                             while (true)
+                            {
                                 ct.ThrowIfCancellationRequested();
+                            }
                         }
                         finally
                         {
@@ -367,7 +369,9 @@ namespace ReactiveTests.Tests
 
                 f.WaitOne();
                 while (!t.IsCompleted)
+                {
                     ;
+                }
 
                 ReactiveAssert.Throws<OperationCanceledException>(() => xs.Single());
             }

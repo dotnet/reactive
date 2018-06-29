@@ -5,18 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Text;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -28,7 +22,7 @@ namespace ReactiveTests.Tests
         public void GroupBy_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).GroupBy(DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy((Func<int, int>)null, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(null, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, (Func<int, int>)null, EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default).Subscribe(null));
@@ -47,8 +41,8 @@ namespace ReactiveTests.Tests
         public void GroupBy_KeyComparer_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).GroupBy(DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy((Func<int, int>)null, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, (IEqualityComparer<int>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(null, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, EqualityComparer<int>.Default).Subscribe(null));
         }
 
@@ -343,7 +337,10 @@ namespace ReactiveTests.Tests
                     {
                         keyInvoked++;
                         if (keyInvoked == 10)
+                        {
                             throw ex;
+                        }
+
                         return x.Trim();
                     },
                     x =>
@@ -415,7 +412,10 @@ namespace ReactiveTests.Tests
                     {
                         eleInvoked++;
                         if (eleInvoked == 10)
+                        {
                             throw ex;
+                        }
+
                         return Reverse(x);
                     },
                     comparer
@@ -612,7 +612,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -694,7 +696,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -784,7 +788,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -866,7 +872,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -939,7 +947,10 @@ namespace ReactiveTests.Tests
             {
                 keyInvoked++;
                 if (keyInvoked == 6)
+                {
                     throw ex;
+                }
+
                 return x.Trim();
             }, x => Reverse(x), comparer));
 
@@ -955,7 +966,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -1026,7 +1039,10 @@ namespace ReactiveTests.Tests
             {
                 eleInvoked++;
                 if (eleInvoked == 6)
+                {
                     throw ex;
+                }
+
                 return Reverse(x);
             }, comparer));
 
@@ -1042,7 +1058,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -1123,7 +1141,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -1206,7 +1226,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -1291,7 +1313,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.ScheduleAbsolute(320, () => outerSubscription.Dispose());
@@ -1376,7 +1400,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.ScheduleAbsolute(320, () => innerSubscriptions["foo"].Dispose());
@@ -1465,7 +1491,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.ScheduleAbsolute(320, () => innerSubscriptions["foo"].Dispose());
@@ -1707,7 +1735,9 @@ namespace ReactiveTests.Tests
             var sb = new StringBuilder();
 
             for (var i = s.Length - 1; i >= 0; i--)
+            {
                 sb.Append(s[i]);
+            }
 
             return sb.ToString();
         }
@@ -1722,7 +1752,7 @@ namespace ReactiveTests.Tests
         public void GroupBy_Capacity_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).GroupBy(DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, _groupByCapacity, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy((Func<int, int>)null, DummyFunc<int, int>.Instance, _groupByCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(null, DummyFunc<int, int>.Instance, _groupByCapacity, EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, (Func<int, int>)null, _groupByCapacity, EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, _groupByCapacity, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, _groupByCapacity, EqualityComparer<int>.Default).Subscribe(null));
@@ -1745,8 +1775,8 @@ namespace ReactiveTests.Tests
         public void GroupBy_Capacity_KeyComparer_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).GroupBy(DummyFunc<int, int>.Instance, _groupByCapacity, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy((Func<int, int>)null, _groupByCapacity, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, _groupByCapacity, (IEqualityComparer<int>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(null, _groupByCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, _groupByCapacity, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, _groupByCapacity, EqualityComparer<int>.Default).Subscribe(null));
 
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, -1, EqualityComparer<int>.Default));
@@ -2047,7 +2077,10 @@ namespace ReactiveTests.Tests
                     {
                         keyInvoked++;
                         if (keyInvoked == 10)
+                        {
                             throw ex;
+                        }
+
                         return x.Trim();
                     },
                     x =>
@@ -2120,7 +2153,10 @@ namespace ReactiveTests.Tests
                     {
                         eleInvoked++;
                         if (eleInvoked == 10)
+                        {
                             throw ex;
+                        }
+
                         return Reverse(x);
                     },
                     _groupByCapacity,
@@ -2320,7 +2356,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -2402,7 +2440,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -2492,7 +2532,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -2574,7 +2616,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -2647,7 +2691,10 @@ namespace ReactiveTests.Tests
             {
                 keyInvoked++;
                 if (keyInvoked == 6)
+                {
                     throw ex;
+                }
+
                 return x.Trim();
             }, x => Reverse(x), _groupByCapacity, comparer));
 
@@ -2663,7 +2710,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -2734,7 +2783,10 @@ namespace ReactiveTests.Tests
             {
                 eleInvoked++;
                 if (eleInvoked == 6)
+                {
                     throw ex;
+                }
+
                 return Reverse(x);
             }, _groupByCapacity, comparer));
 
@@ -2750,7 +2802,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -2831,7 +2885,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -2914,7 +2970,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.Start();
@@ -2999,7 +3057,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.ScheduleAbsolute(320, () => outerSubscription.Dispose());
@@ -3084,7 +3144,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.ScheduleAbsolute(320, () => innerSubscriptions["foo"].Dispose());
@@ -3173,7 +3235,9 @@ namespace ReactiveTests.Tests
             {
                 outerSubscription.Dispose();
                 foreach (var d in innerSubscriptions.Values)
+                {
                     d.Dispose();
+                }
             });
 
             scheduler.ScheduleAbsolute(320, () => innerSubscriptions["foo"].Dispose());
@@ -3438,7 +3502,9 @@ namespace ReactiveTests.Tests
         public bool Equals(string x, string y)
         {
             if (scheduler.Clock > equalsThrowsAfter)
+            {
                 throw EqualsException;
+            }
 
             return x.Equals(y, StringComparison.OrdinalIgnoreCase);
         }
@@ -3446,7 +3512,9 @@ namespace ReactiveTests.Tests
         public int GetHashCode(string obj)
         {
             if (scheduler.Clock > getHashCodeThrowsAfter)
+            {
                 throw HashCodeException;
+            }
 
             return StringComparer.OrdinalIgnoreCase.GetHashCode(obj);
         }

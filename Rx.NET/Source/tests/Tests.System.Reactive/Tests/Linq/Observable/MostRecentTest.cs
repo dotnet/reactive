@@ -3,19 +3,14 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Collections;
 
 namespace ReactiveTests.Tests
 {
@@ -25,7 +20,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void MostRecent_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MostRecent(default(IObservable<int>), 1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MostRecent(default, 1));
         }
 
         [Fact]

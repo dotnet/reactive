@@ -3,20 +3,13 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -34,12 +27,18 @@ namespace ReactiveTests.Tests
         private static bool IsPrime(int i)
         {
             if (i <= 1)
+            {
                 return false;
+            }
 
             var max = (int)Math.Sqrt(i);
             for (var j = 2; j <= max; ++j)
+            {
                 if (i % j == 0)
+                {
                     return false;
+                }
+            }
 
             return true;
         }
@@ -308,7 +307,10 @@ namespace ReactiveTests.Tests
                 {
                     invoked++;
                     if (x > 5)
+                    {
                         throw ex;
+                    }
+
                     return IsPrime(x);
                 })
             );
@@ -360,7 +362,10 @@ namespace ReactiveTests.Tests
             {
                 invoked++;
                 if (x == 8)
+                {
                     d.Dispose();
+                }
+
                 return IsPrime(x);
             }));
 
@@ -440,7 +445,9 @@ namespace ReactiveTests.Tests
                 xs.Where(x => x > 3).Where(x =>
                 {
                     if (x <= 3)
+                    {
                         throw new Exception();
+                    }
 
                     return x % 2 == 0;
                 })
@@ -721,7 +728,10 @@ namespace ReactiveTests.Tests
                 {
                     invoked++;
                     if (x > 5)
+                    {
                         throw ex;
+                    }
+
                     return IsPrime(x + i * 10);
                 })
             );
@@ -773,7 +783,10 @@ namespace ReactiveTests.Tests
             {
                 invoked++;
                 if (x == 8)
+                {
                     d.Dispose();
+                }
+
                 return IsPrime(x + i * 10);
             }));
 

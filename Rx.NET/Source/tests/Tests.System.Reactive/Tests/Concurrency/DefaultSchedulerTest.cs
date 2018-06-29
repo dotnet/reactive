@@ -16,10 +16,10 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Schedule_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.Schedule<int>(42, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.Schedule<int>(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.Schedule<int>(42, TimeSpan.Zero, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.SchedulePeriodic(42, TimeSpan.FromSeconds(1), default(Func<int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.Schedule<int>(42, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.Schedule<int>(42, DateTimeOffset.Now, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.Schedule<int>(42, TimeSpan.Zero, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.SchedulePeriodic(42, TimeSpan.FromSeconds(1), default));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => DefaultScheduler.Instance.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
         }
 
@@ -73,7 +73,9 @@ namespace ReactiveTests.Tests
                 try
                 {
                     if (Interlocked.Increment(ref n) > 1) // Without an AsyncLock this would fail.
+                    {
                         fail = true;
+                    }
 
                     Thread.Sleep(100);
 

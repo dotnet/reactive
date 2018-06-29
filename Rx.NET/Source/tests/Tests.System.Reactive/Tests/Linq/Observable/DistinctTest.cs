@@ -19,12 +19,12 @@ namespace ReactiveTests.Tests
         public void Distinct_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Distinct(default(IObservable<int>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Distinct(default(IObservable<int>), EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Distinct(default, EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Distinct(DummyObservable<int>.Instance, default(EqualityComparer<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Distinct(default(IObservable<int>), x => x));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Distinct(DummyObservable<int>.Instance, default(Func<int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Distinct(default(IObservable<int>), x => x, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Distinct(DummyObservable<int>.Instance, default(Func<int, int>), EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Distinct(DummyObservable<int>.Instance, default, EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Distinct(DummyObservable<int>.Instance, x => x, default(EqualityComparer<int>)));
         }
 

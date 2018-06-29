@@ -17,7 +17,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void All_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.All(DummyObservable<int>.Instance, default(Func<int, bool>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.All(DummyObservable<int>.Instance, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.All(default(IObservable<int>), x => true));
         }
 

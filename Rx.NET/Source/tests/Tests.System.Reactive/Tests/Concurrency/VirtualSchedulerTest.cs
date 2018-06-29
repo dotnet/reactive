@@ -94,22 +94,22 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler("", null));
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().ScheduleRelative(0, 'a', null));
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().ScheduleAbsolute(0, "", null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, TimeSpan.Zero, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, DateTimeOffset.UtcNow, default(Func<IScheduler, int, IDisposable>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, TimeSpan.Zero, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, DateTimeOffset.UtcNow, default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleAbsolute(default(VirtualSchedulerTestScheduler), "", () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleAbsolute(new VirtualSchedulerTestScheduler(), "", default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleAbsolute(new VirtualSchedulerTestScheduler(), "", default));
             ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleRelative(default(VirtualSchedulerTestScheduler), 'a', () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleRelative(new VirtualSchedulerTestScheduler(), 'a', default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleRelative(new VirtualSchedulerTestScheduler(), 'a', default));
         }
 
         [Fact]
         public void Historical_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler(DateTime.Now, default(IComparer<DateTimeOffset>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler().ScheduleAbsolute(42, DateTime.Now, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler().ScheduleRelative(42, TimeSpan.FromSeconds(1), default(Func<IScheduler, int, IDisposable>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler(DateTime.Now, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler().ScheduleAbsolute(42, DateTime.Now, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler().ScheduleRelative(42, TimeSpan.FromSeconds(1), default));
         }
 
 #if !NO_THREAD

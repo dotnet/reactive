@@ -3,20 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -378,7 +369,10 @@ namespace ReactiveTests.Tests
                 {
                     invoked++;
                     if (invoked == 3)
+                    {
                         throw ex;
+                    }
+
                     return IsPrime(x);
                 })
             );
@@ -534,7 +528,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.TakeWhile((x, i) => { if (i < 5) return true; throw ex; })
+                xs.TakeWhile((x, i) => { if (i < 5) { return true; } throw ex; })
             );
 
             res.Messages.AssertEqual(
@@ -554,12 +548,18 @@ namespace ReactiveTests.Tests
         private static bool IsPrime(int i)
         {
             if (i <= 1)
+            {
                 return false;
+            }
 
             var max = (int)Math.Sqrt(i);
             for (var j = 2; j <= max; ++j)
+            {
                 if (i % j == 0)
+                {
                     return false;
+                }
+            }
 
             return true;
         }

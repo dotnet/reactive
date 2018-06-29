@@ -27,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(default(IObservable<decimal?>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(default(IObservable<long?>)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(default(IObservable<DateTime>), _ => default(int)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(default(IObservable<DateTime>), _ => default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(default(IObservable<DateTime>), _ => default(double)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(default(IObservable<DateTime>), _ => default(float)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(default(IObservable<DateTime>), _ => default(decimal)));
@@ -38,7 +38,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(default(IObservable<DateTime>), _ => default(decimal?)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(default(IObservable<DateTime>), _ => default(long?)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(Observable.Empty<DateTime>(), default(Func<DateTime, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(Observable.Empty<DateTime>(), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(Observable.Empty<DateTime>(), default(Func<DateTime, double>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(Observable.Empty<DateTime>(), default(Func<DateTime, float>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(Observable.Empty<DateTime>(), default(Func<DateTime, decimal>)));
