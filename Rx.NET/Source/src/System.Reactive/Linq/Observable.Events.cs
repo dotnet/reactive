@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
-using System.Threading;
 
 namespace System.Reactive.Linq
 {
@@ -43,7 +42,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<object>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler)
         {
             if (addHandler == null)
@@ -84,7 +83,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<object>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler)
         {
             if (addHandler == null)
@@ -139,7 +138,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
         {
             if (addHandler == null)
@@ -182,7 +181,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
             if (addHandler == null)
@@ -234,7 +233,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
         {
             if (conversion == null)
@@ -252,7 +251,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(removeHandler));
             }
 
-            return s_impl.FromEventPattern<TDelegate, TEventArgs>(conversion, addHandler, removeHandler);
+            return s_impl.FromEventPattern(conversion, addHandler, removeHandler);
         }
 
         /// <summary>
@@ -283,7 +282,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
             if (conversion == null)
@@ -306,7 +305,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.FromEventPattern<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
+            return s_impl.FromEventPattern(conversion, addHandler, removeHandler, scheduler);
         }
 
         /// <summary>
@@ -340,7 +339,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
         {
             if (addHandler == null)
@@ -384,7 +383,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
             if (addHandler == null)
@@ -437,7 +436,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler)
         {
             if (addHandler == null)
@@ -450,7 +449,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(removeHandler));
             }
 
-            return s_impl.FromEventPattern<TEventArgs>(addHandler, removeHandler);
+            return s_impl.FromEventPattern(addHandler, removeHandler);
         }
 
         /// <summary>
@@ -478,7 +477,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler, IScheduler scheduler)
         {
             if (addHandler == null)
@@ -496,7 +495,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.FromEventPattern<TEventArgs>(addHandler, removeHandler, scheduler);
+            return s_impl.FromEventPattern(addHandler, removeHandler, scheduler);
         }
 
         #endregion
@@ -537,7 +536,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<object>> FromEventPattern(object target, string eventName)
         {
             if (target == null)
@@ -580,7 +579,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<object>> FromEventPattern(object target, string eventName, IScheduler scheduler)
         {
             if (target == null)
@@ -632,7 +631,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName)
         {
             if (target == null)
@@ -676,7 +675,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName, IScheduler scheduler)
         {
             if (target == null)
@@ -729,7 +728,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName)
         {
             if (target == null)
@@ -774,7 +773,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler)
         {
             if (target == null)
@@ -829,7 +828,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<object>> FromEventPattern(Type type, string eventName)
         {
             if (type == null)
@@ -872,7 +871,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<object>> FromEventPattern(Type type, string eventName, IScheduler scheduler)
         {
             if (type == null)
@@ -924,7 +923,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName)
         {
             if (type == null)
@@ -968,7 +967,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName, IScheduler scheduler)
         {
             if (type == null)
@@ -1021,7 +1020,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName)
         {
             if (type == null)
@@ -1066,7 +1065,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler)
         {
             if (type == null)
@@ -1127,7 +1126,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEvent"/>
+        /// <seealso cref="ToEvent"/>
         public static IObservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(Func<Action<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
         {
             if (conversion == null)
@@ -1145,7 +1144,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(removeHandler));
             }
 
-            return s_impl.FromEvent<TDelegate, TEventArgs>(conversion, addHandler, removeHandler);
+            return s_impl.FromEvent(conversion, addHandler, removeHandler);
         }
 
         /// <summary>
@@ -1175,7 +1174,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEvent"/>
+        /// <seealso cref="ToEvent"/>
         public static IObservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(Func<Action<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
             if (conversion == null)
@@ -1198,7 +1197,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.FromEvent<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
+            return s_impl.FromEvent(conversion, addHandler, removeHandler, scheduler);
         }
 
         /// <summary>
@@ -1230,7 +1229,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEvent"/>
+        /// <seealso cref="ToEvent"/>
         public static IObservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
         {
             if (addHandler == null)
@@ -1272,7 +1271,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEvent"/>
+        /// <seealso cref="ToEvent"/>
         public static IObservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
             if (addHandler == null)
@@ -1325,7 +1324,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEvent"/>
+        /// <seealso cref="ToEvent"/>
         public static IObservable<TEventArgs> FromEvent<TEventArgs>(Action<Action<TEventArgs>> addHandler, Action<Action<TEventArgs>> removeHandler)
         {
             if (addHandler == null)
@@ -1338,7 +1337,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(removeHandler));
             }
 
-            return s_impl.FromEvent<TEventArgs>(addHandler, removeHandler);
+            return s_impl.FromEvent(addHandler, removeHandler);
         }
 
         /// <summary>
@@ -1366,7 +1365,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEvent"/>
+        /// <seealso cref="ToEvent"/>
         public static IObservable<TEventArgs> FromEvent<TEventArgs>(Action<Action<TEventArgs>> addHandler, Action<Action<TEventArgs>> removeHandler, IScheduler scheduler)
         {
             if (addHandler == null)
@@ -1384,7 +1383,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.FromEvent<TEventArgs>(addHandler, removeHandler, scheduler);
+            return s_impl.FromEvent(addHandler, removeHandler, scheduler);
         }
 
         #endregion
@@ -1418,7 +1417,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEvent"/>
+        /// <seealso cref="ToEvent"/>
         public static IObservable<Unit> FromEvent(Action<Action> addHandler, Action<Action> removeHandler)
         {
             if (addHandler == null)
@@ -1458,7 +1457,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="Observable.ToEvent"/>
+        /// <seealso cref="ToEvent"/>
         public static IObservable<Unit> FromEvent(Action<Action> addHandler, Action<Action> removeHandler, IScheduler scheduler)
         {
             if (addHandler == null)

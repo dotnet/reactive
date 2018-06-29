@@ -448,7 +448,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> ManySelect<TSource, TResult>(IObservable<TSource> source, Func<IObservable<TSource>, TResult> selector, IScheduler scheduler)
         {
-            return Observable.Defer<TResult>(() =>
+            return Observable.Defer(() =>
             {
                 var chain = default(ChainObservable<TSource>);
 

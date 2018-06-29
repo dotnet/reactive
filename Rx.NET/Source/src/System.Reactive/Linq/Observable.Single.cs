@@ -26,7 +26,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Append<TSource>(source, value);
+            return s_impl.Append(source, value);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Append<TSource>(source, value, scheduler);
+            return s_impl.Append(source, value, scheduler);
         }
 
         #endregion
@@ -71,7 +71,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.AsObservable<TSource>(source);
+            return s_impl.AsObservable(source);
         }
 
         #endregion
@@ -99,7 +99,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(count));
             }
 
-            return s_impl.Buffer<TSource>(source, count);
+            return s_impl.Buffer(source, count);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(skip));
             }
 
-            return s_impl.Buffer<TSource>(source, count, skip);
+            return s_impl.Buffer(source, count, skip);
         }
 
         #endregion
@@ -150,7 +150,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Dematerialize<TSource>(source);
+            return s_impl.Dematerialize(source);
         }
 
         #endregion
@@ -171,7 +171,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.DistinctUntilChanged<TSource>(source);
+            return s_impl.DistinctUntilChanged(source);
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.DistinctUntilChanged<TSource>(source, comparer);
+            return s_impl.DistinctUntilChanged(source, comparer);
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(keySelector));
             }
 
-            return s_impl.DistinctUntilChanged<TSource, TKey>(source, keySelector);
+            return s_impl.DistinctUntilChanged(source, keySelector);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.DistinctUntilChanged<TSource, TKey>(source, keySelector, comparer);
+            return s_impl.DistinctUntilChanged(source, keySelector, comparer);
         }
 
         #endregion
@@ -276,7 +276,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(onNext));
             }
 
-            return s_impl.Do<TSource>(source, onNext);
+            return s_impl.Do(source, onNext);
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(onCompleted));
             }
 
-            return s_impl.Do<TSource>(source, onNext, onCompleted);
+            return s_impl.Do(source, onNext, onCompleted);
         }
 
         /// <summary>
@@ -336,7 +336,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(onError));
             }
 
-            return s_impl.Do<TSource>(source, onNext, onError);
+            return s_impl.Do(source, onNext, onError);
         }
 
         /// <summary>
@@ -372,7 +372,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(onCompleted));
             }
 
-            return s_impl.Do<TSource>(source, onNext, onError, onCompleted);
+            return s_impl.Do(source, onNext, onError, onCompleted);
         }
 
         /// <summary>
@@ -396,7 +396,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(observer));
             }
 
-            return s_impl.Do<TSource>(source, observer);
+            return s_impl.Do(source, observer);
         }
 
         #endregion
@@ -423,7 +423,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(finallyAction));
             }
 
-            return s_impl.Finally<TSource>(source, finallyAction);
+            return s_impl.Finally(source, finallyAction);
         }
 
         #endregion
@@ -444,7 +444,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.IgnoreElements<TSource>(source);
+            return s_impl.IgnoreElements(source);
         }
 
         #endregion
@@ -465,7 +465,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Materialize<TSource>(source);
+            return s_impl.Materialize(source);
         }
 
         #endregion
@@ -487,7 +487,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Prepend<TSource>(source, value);
+            return s_impl.Prepend(source, value);
         }
 
         /// <summary>
@@ -511,10 +511,11 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Prepend<TSource>(source, value, scheduler);
+            return s_impl.Prepend(source, value, scheduler);
         }
 
         #endregion
+
         #region + Repeat +
 
         /// <summary>
@@ -531,7 +532,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Repeat<TSource>(source);
+            return s_impl.Repeat(source);
         }
 
         /// <summary>
@@ -555,7 +556,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(repeatCount));
             }
 
-            return s_impl.Repeat<TSource>(source, repeatCount);
+            return s_impl.Repeat(source, repeatCount);
         }
 
         /// <summary>
@@ -606,7 +607,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Retry<TSource>(source);
+            return s_impl.Retry(source);
         }
 
         /// <summary>
@@ -630,7 +631,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(retryCount));
             }
 
-            return s_impl.Retry<TSource>(source, retryCount);
+            return s_impl.Retry(source, retryCount);
         }
 
         /// <summary>
@@ -690,7 +691,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(accumulator));
             }
 
-            return s_impl.Scan<TSource, TAccumulate>(source, seed, accumulator);
+            return s_impl.Scan(source, seed, accumulator);
         }
 
         /// <summary>
@@ -714,7 +715,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(accumulator));
             }
 
-            return s_impl.Scan<TSource>(source, accumulator);
+            return s_impl.Scan(source, accumulator);
         }
 
         #endregion
@@ -746,7 +747,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(count));
             }
 
-            return s_impl.SkipLast<TSource>(source, count);
+            return s_impl.SkipLast(source, count);
         }
 
         #endregion
@@ -773,7 +774,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(values));
             }
 
-            return s_impl.StartWith<TSource>(source, values);
+            return s_impl.StartWith(source, values);
         }
 
         /// <summary>
@@ -796,7 +797,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(values));
             }
 
-            return s_impl.StartWith<TSource>(source, values);
+            return s_impl.StartWith(source, values);
         }
 
         /// <summary>
@@ -825,7 +826,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(values));
             }
 
-            return s_impl.StartWith<TSource>(source, scheduler, values);
+            return s_impl.StartWith(source, scheduler, values);
         }
 
         /// <summary>
@@ -859,7 +860,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(values));
             }
 
-            return s_impl.StartWith<TSource>(source, scheduler, values);
+            return s_impl.StartWith(source, scheduler, values);
         }
 
         #endregion
@@ -891,7 +892,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(count));
             }
 
-            return s_impl.TakeLast<TSource>(source, count);
+            return s_impl.TakeLast(source, count);
         }
 
         /// <summary>
@@ -925,7 +926,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.TakeLast<TSource>(source, count, scheduler);
+            return s_impl.TakeLast(source, count, scheduler);
         }
 
         #endregion
@@ -957,7 +958,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(count));
             }
 
-            return s_impl.TakeLastBuffer<TSource>(source, count);
+            return s_impl.TakeLastBuffer(source, count);
         }
 
         #endregion
@@ -985,7 +986,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(count));
             }
 
-            return s_impl.Window<TSource>(source, count);
+            return s_impl.Window(source, count);
         }
 
         /// <summary>
@@ -1015,7 +1016,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(skip));
             }
 
-            return s_impl.Window<TSource>(source, count, skip);
+            return s_impl.Window(source, count, skip);
         }
 
         #endregion

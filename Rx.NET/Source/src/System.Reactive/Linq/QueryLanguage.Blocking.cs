@@ -24,12 +24,12 @@ namespace System.Reactive.Linq
 
         public virtual IEnumerable<TResult> Collect<TSource, TResult>(IObservable<TSource> source, Func<TResult> newCollector, Func<TResult, TSource, TResult> merge)
         {
-            return Collect_<TSource, TResult>(source, newCollector, merge, _ => newCollector());
+            return Collect_(source, newCollector, merge, _ => newCollector());
         }
 
         public virtual IEnumerable<TResult> Collect<TSource, TResult>(IObservable<TSource> source, Func<TResult> getInitialCollector, Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector)
         {
-            return Collect_<TSource, TResult>(source, getInitialCollector, merge, getNewCollector);
+            return Collect_(source, getInitialCollector, merge, getNewCollector);
         }
 
         private static IEnumerable<TResult> Collect_<TSource, TResult>(IObservable<TSource> source, Func<TResult> getInitialCollector, Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector)

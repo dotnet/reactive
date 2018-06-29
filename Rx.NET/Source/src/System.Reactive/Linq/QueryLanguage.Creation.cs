@@ -428,11 +428,11 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Using<TSource, TResource>(Func<CancellationToken, Task<TResource>> resourceFactoryAsync, Func<TResource, CancellationToken, Task<IObservable<TSource>>> observableFactoryAsync) where TResource : IDisposable
         {
-            return Observable.FromAsync<TResource>(resourceFactoryAsync)
+            return Observable.FromAsync(resourceFactoryAsync)
                 .SelectMany(resource =>
-                    Observable.Using<TSource, TResource>(
+                    Observable.Using(
                         () => resource,
-                        resource_ => Observable.FromAsync<IObservable<TSource>>(ct => observableFactoryAsync(resource_, ct)).Merge()
+                        resource_ => Observable.FromAsync(ct => observableFactoryAsync(resource_, ct)).Merge()
                     )
                 );
         }
