@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +27,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, IDisposable> subscribe)
         {
             if (subscribe == null)
+            {
                 throw new ArgumentNullException(nameof(subscribe));
+            }
 
             return s_impl.Create<TResult>(subscribe);
         }
@@ -48,7 +49,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Action> subscribe)
         {
             if (subscribe == null)
+            {
                 throw new ArgumentNullException(nameof(subscribe));
+            }
 
             return s_impl.Create<TResult>(subscribe);
         }
@@ -70,7 +73,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync)
         {
             if (subscribeAsync == null)
+            {
                 throw new ArgumentNullException(nameof(subscribeAsync));
+            }
 
             return s_impl.Create<TResult>(subscribeAsync);
         }
@@ -86,7 +91,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task> subscribeAsync)
         {
             if (subscribeAsync == null)
+            {
                 throw new ArgumentNullException(nameof(subscribeAsync));
+            }
 
             return s_impl.Create<TResult>(subscribeAsync);
         }
@@ -104,7 +111,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync)
         {
             if (subscribeAsync == null)
+            {
                 throw new ArgumentNullException(nameof(subscribeAsync));
+            }
 
             return s_impl.Create<TResult>(subscribeAsync);
         }
@@ -120,7 +129,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task<IDisposable>> subscribeAsync)
         {
             if (subscribeAsync == null)
+            {
                 throw new ArgumentNullException(nameof(subscribeAsync));
+            }
 
             return s_impl.Create<TResult>(subscribeAsync);
         }
@@ -138,7 +149,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync)
         {
             if (subscribeAsync == null)
+            {
                 throw new ArgumentNullException(nameof(subscribeAsync));
+            }
 
             return s_impl.Create<TResult>(subscribeAsync);
         }
@@ -154,7 +167,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task<Action>> subscribeAsync)
         {
             if (subscribeAsync == null)
+            {
                 throw new ArgumentNullException(nameof(subscribeAsync));
+            }
 
             return s_impl.Create<TResult>(subscribeAsync);
         }
@@ -173,7 +188,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Defer<TResult>(Func<IObservable<TResult>> observableFactory)
         {
             if (observableFactory == null)
+            {
                 throw new ArgumentNullException(nameof(observableFactory));
+            }
 
             return s_impl.Defer<TResult>(observableFactory);
         }
@@ -193,7 +210,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Defer<TResult>(Func<Task<IObservable<TResult>>> observableFactoryAsync)
         {
             if (observableFactoryAsync == null)
+            {
                 throw new ArgumentNullException(nameof(observableFactoryAsync));
+            }
 
             return s_impl.Defer<TResult>(observableFactoryAsync);
         }
@@ -211,7 +230,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> DeferAsync<TResult>(Func<CancellationToken, Task<IObservable<TResult>>> observableFactoryAsync)
         {
             if (observableFactoryAsync == null)
+            {
                 throw new ArgumentNullException(nameof(observableFactoryAsync));
+            }
 
             return s_impl.Defer<TResult>(observableFactoryAsync);
         }
@@ -251,7 +272,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Empty<TResult>(IScheduler scheduler)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Empty<TResult>(scheduler);
         }
@@ -267,7 +290,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Empty<TResult>(IScheduler scheduler, TResult witness)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Empty<TResult>(scheduler); // Pure inference - no specialized target method.
         }
@@ -290,11 +315,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (iterate == null)
+            {
                 throw new ArgumentNullException(nameof(iterate));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return s_impl.Generate<TState, TResult>(initialState, condition, iterate, resultSelector);
         }
@@ -314,13 +347,24 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, IScheduler scheduler)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (iterate == null)
+            {
                 throw new ArgumentNullException(nameof(iterate));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Generate<TState, TResult>(initialState, condition, iterate, resultSelector, scheduler);
         }
@@ -365,7 +409,9 @@ namespace System.Reactive.Linq
         {
             var max = ((long)start) + count - 1;
             if (count < 0 || max > int.MaxValue)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return s_impl.Range(start, count);
         }
@@ -383,10 +429,14 @@ namespace System.Reactive.Linq
         {
             var max = ((long)start) + count - 1;
             if (count < 0 || max > int.MaxValue)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Range(start, count, scheduler);
         }
@@ -417,7 +467,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Repeat<TResult>(TResult value, IScheduler scheduler)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Repeat<TResult>(value, scheduler);
         }
@@ -433,7 +485,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Repeat<TResult>(TResult value, int repeatCount)
         {
             if (repeatCount < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(repeatCount));
+            }
 
             return s_impl.Repeat<TResult>(value, repeatCount);
         }
@@ -451,9 +505,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Repeat<TResult>(TResult value, int repeatCount, IScheduler scheduler)
         {
             if (repeatCount < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(repeatCount));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Repeat<TResult>(value, repeatCount, scheduler);
         }
@@ -484,7 +543,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Return<TResult>(TResult value, IScheduler scheduler)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Return<TResult>(value, scheduler);
         }
@@ -503,7 +564,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Throw<TResult>(Exception exception)
         {
             if (exception == null)
+            {
                 throw new ArgumentNullException(nameof(exception));
+            }
 
             return s_impl.Throw<TResult>(exception);
         }
@@ -519,7 +582,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Throw<TResult>(Exception exception, TResult witness)
         {
             if (exception == null)
+            {
                 throw new ArgumentNullException(nameof(exception));
+            }
 
             return s_impl.Throw<TResult>(exception); // Pure inference - no specialized target method.
         }
@@ -535,9 +600,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Throw<TResult>(Exception exception, IScheduler scheduler)
         {
             if (exception == null)
+            {
                 throw new ArgumentNullException(nameof(exception));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Throw<TResult>(exception, scheduler);
         }
@@ -554,9 +624,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Throw<TResult>(Exception exception, IScheduler scheduler, TResult witness)
         {
             if (exception == null)
+            {
                 throw new ArgumentNullException(nameof(exception));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Throw<TResult>(exception, scheduler); // Pure inference - no specialized target method.
         }
@@ -577,9 +652,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Using<TResult, TResource>(Func<TResource> resourceFactory, Func<TResource, IObservable<TResult>> observableFactory) where TResource : IDisposable
         {
             if (resourceFactory == null)
+            {
                 throw new ArgumentNullException(nameof(resourceFactory));
+            }
+
             if (observableFactory == null)
+            {
                 throw new ArgumentNullException(nameof(observableFactory));
+            }
 
             return s_impl.Using<TResult, TResource>(resourceFactory, observableFactory);
         }
@@ -603,9 +683,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Using<TResult, TResource>(Func<CancellationToken, Task<TResource>> resourceFactoryAsync, Func<TResource, CancellationToken, Task<IObservable<TResult>>> observableFactoryAsync) where TResource : IDisposable
         {
             if (resourceFactoryAsync == null)
+            {
                 throw new ArgumentNullException(nameof(resourceFactoryAsync));
+            }
+
             if (observableFactoryAsync == null)
+            {
                 throw new ArgumentNullException(nameof(observableFactoryAsync));
+            }
 
             return s_impl.Using<TResult, TResource>(resourceFactoryAsync, observableFactoryAsync);
         }

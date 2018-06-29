@@ -7,9 +7,9 @@ using BenchmarkDotNet.Running;
 
 namespace Benchmarks.System.Reactive
 {
-    class Program
+    internal class Program
     {
-        static void Main()
+        private static void Main()
         {
             var switcher = new BenchmarkSwitcher(new[] {
                 typeof(ZipBenchmark),
@@ -17,7 +17,8 @@ namespace Benchmarks.System.Reactive
                 typeof(SwitchBenchmark),
                 typeof(BufferCountBenchmark),
                 typeof(RangeBenchmark),
-                typeof(RepeatBenchmark)
+                typeof(RepeatBenchmark),
+                typeof(AppendPrependBenchmark)
             });
 
             switcher.Run();

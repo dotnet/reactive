@@ -25,7 +25,9 @@ namespace System.Reactive.Linq.ObservableImpl
         public IDisposable Subscribe(IObserver<TResult> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             return Disposable.Empty;
         }

@@ -728,11 +728,10 @@ namespace System.Reactive.Linq
             return new StartAsyncObservable<TSource>(cancellable, result);
         }
 
-        sealed class StartAsyncObservable<TSource> : ObservableBase<TSource>
+        private sealed class StartAsyncObservable<TSource> : ObservableBase<TSource>
         {
-            readonly CancellationDisposable cancellable;
-
-            readonly IObservable<TSource> result;
+            private readonly CancellationDisposable cancellable;
+            private readonly IObservable<TSource> result;
 
             public StartAsyncObservable(CancellationDisposable cancellable, IObservable<TSource> result)
             {

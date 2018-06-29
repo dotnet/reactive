@@ -4,20 +4,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
 using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
-using System.Diagnostics;
+using System.Threading.Tasks;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -29,8 +25,8 @@ namespace ReactiveTests.Tests
         {
             var xs = DummyObservable<int>.Instance;
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Concat(xs, (IObservable<int>)null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Concat((IObservable<int>)null, xs));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Concat(xs, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Concat(null, xs));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Concat((IObservable<int>[])null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Concat((IEnumerable<IObservable<int>>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Concat((IObservable<int>[])null));
@@ -44,7 +40,7 @@ namespace ReactiveTests.Tests
         {
             var evt = new ManualResetEvent(false);
 
-            int sum = 0;
+            var sum = 0;
             Observable.Concat(Observable.Return(1), Observable.Return(2), Observable.Return(3)).Subscribe(n =>
             {
                 sum += n;
@@ -62,7 +58,7 @@ namespace ReactiveTests.Tests
 
             IEnumerable<IObservable<int>> sources = new[] { Observable.Return(1), Observable.Return(2), Observable.Return(3) };
 
-            int sum = 0;
+            var sum = 0;
             Observable.Concat(sources).Subscribe(n =>
             {
                 sum += n;
@@ -903,9 +899,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(40)
             );
 
-            var f = default(Func<IObservable<int>>);
-            f = () => Observable.Defer(() => o.Concat(f()));
-
+            IObservable<int> f() => Observable.Defer(() => o.Concat(f()));
             var res = scheduler.Start(() => f(), create, start, end);
 
             var expected = new List<Recorded<Notification<int>>>();
@@ -929,9 +923,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Concat_TailRecursive2()
         {
-            var f = default(Func<int, IObservable<int>>);
-            f = x => Observable.Defer(() => Observable.Return(x, ThreadPoolScheduler.Instance).Concat(f(x + 1)));
-
+            IObservable<int> f(int x) => Observable.Defer(() => Observable.Return(x, ThreadPoolScheduler.Instance).Concat(f(x + 1)));
             var lst = new List<int>();
             f(0).Select(x => new StackTrace().FrameCount).Take(10).ForEach(lst.Add);
 

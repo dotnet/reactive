@@ -5,18 +5,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -1017,7 +1010,7 @@ namespace ReactiveTests.Tests
             var ysd = new List<ITestableObservable<long>>();
 
             var res = scheduler.Start(() =>
-                xs.GroupJoin(ys, x => { if (x.Value >= 0) throw ex; return Observable.Empty<long>(); }, y => NewTimer(ysd, y.Interval, scheduler), (x, yy) => yy.Select(y => x.Value + y.Value)).Merge()
+                xs.GroupJoin(ys, x => { if (x.Value >= 0) { throw ex; } return Observable.Empty<long>(); }, y => NewTimer(ysd, y.Interval, scheduler), (x, yy) => yy.Select(y => x.Value + y.Value)).Merge()
             );
 
             res.Messages.AssertEqual(
@@ -1073,7 +1066,7 @@ namespace ReactiveTests.Tests
             var xsd = new List<ITestableObservable<long>>();
 
             var res = scheduler.Start(() =>
-                xs.GroupJoin(ys, x => NewTimer(xsd, x.Interval, scheduler), y => { if (y.Value.Length >= 0) throw ex; return Observable.Empty<long>(); }, (x, yy) => yy.Select(y => x.Value + y.Value)).Merge()
+                xs.GroupJoin(ys, x => NewTimer(xsd, x.Interval, scheduler), y => { if (y.Value.Length >= 0) { throw ex; } return Observable.Empty<long>(); }, (x, yy) => yy.Select(y => x.Value + y.Value)).Merge()
             );
 
             res.Messages.AssertEqual(
@@ -1130,7 +1123,7 @@ namespace ReactiveTests.Tests
             var ysd = new List<ITestableObservable<long>>();
 
             var res = scheduler.Start(() =>
-                xs.GroupJoin(ys, x => NewTimer(xsd, x.Interval, scheduler), y => NewTimer(ysd, y.Interval, scheduler), (x, yy) => { if (x.Value >= 0) throw ex; return yy.Select(y => x.Value + y.Value); }).Merge()
+                xs.GroupJoin(ys, x => NewTimer(xsd, x.Interval, scheduler), y => NewTimer(ysd, y.Interval, scheduler), (x, yy) => { if (x.Value >= 0) { throw ex; } return yy.Select(y => x.Value + y.Value); }).Merge()
             );
 
             res.Messages.AssertEqual(
@@ -1190,7 +1183,7 @@ namespace ReactiveTests.Tests
             var ysd = new List<ITestableObservable<long>>();
 
             var res = scheduler.Start(() =>
-                xs.GroupJoin(ys, x => NewTimer(xsd, x.Interval, scheduler), y => NewTimer(ysd, y.Interval, scheduler), (x, yy) => { if (x.Value >= 0) throw ex; return yy.Select(y => x.Value + y.Value); }).Merge()
+                xs.GroupJoin(ys, x => NewTimer(xsd, x.Interval, scheduler), y => NewTimer(ysd, y.Interval, scheduler), (x, yy) => { if (x.Value >= 0) { throw ex; } return yy.Select(y => x.Value + y.Value); }).Merge()
             );
 
             res.Messages.AssertEqual(

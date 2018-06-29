@@ -27,13 +27,8 @@ namespace System.Reactive
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="invokeHandler"/> is <c>null</c>.</exception>
         protected EventPatternSourceBase(IObservable<EventPattern<TSender, TEventArgs>> source, Action<Action<TSender, TEventArgs>, /*object,*/ EventPattern<TSender, TEventArgs>> invokeHandler)
         {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (invokeHandler == null)
-                throw new ArgumentNullException(nameof(invokeHandler));
-
-            _source = source;
-            _invokeHandler = invokeHandler;
+            _source = source ?? throw new ArgumentNullException(nameof(source));
+            _invokeHandler = invokeHandler ?? throw new ArgumentNullException(nameof(invokeHandler));
             _subscriptions = new Dictionary<Delegate, Stack<IDisposable>>();
         }
 
@@ -46,9 +41,14 @@ namespace System.Reactive
         protected void Add(Delegate handler, Action<TSender, TEventArgs> invoke)
         {
             if (handler == null)
+            {
                 throw new ArgumentNullException(nameof(handler));
+            }
+
             if (invoke == null)
+            {
                 throw new ArgumentNullException(nameof(invoke));
+            }
 
             var gate = new object();
             var isAdded = false;
@@ -110,7 +110,9 @@ namespace System.Reactive
         protected void Remove(Delegate handler)
         {
             if (handler == null)
+            {
                 throw new ArgumentNullException(nameof(handler));
+            }
 
             var d = default(IDisposable);
 

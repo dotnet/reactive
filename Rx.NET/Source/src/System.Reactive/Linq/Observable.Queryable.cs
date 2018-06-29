@@ -18,7 +18,9 @@ namespace System.Reactive.Linq
             get
             {
                 if (s_provider == null)
+                {
                     s_provider = new ObservableQueryProvider();
+                }
 
                 return s_provider;
             }
@@ -34,7 +36,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> AsQbservable<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return new ObservableQuery<TSource>(source);
         }

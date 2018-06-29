@@ -47,13 +47,13 @@ namespace ReactiveTests.Tests.Api
             Approvals.Verify(publicApi);
         }
 
-        string GeneratePublicApi(Assembly assembly)
+        private string GeneratePublicApi(Assembly assembly)
         {
             var namespacePrefixWhitelist = new[] { "System", "Microsoft" };
             return Filter(ApiGenerator.GeneratePublicApi(assembly, whitelistedNamespacePrefixes: namespacePrefixWhitelist));
         }
 
-        static string Filter(string text)
+        private static string Filter(string text)
         {
             return string.Join(Environment.NewLine, text.Split(new[]
                                                         {

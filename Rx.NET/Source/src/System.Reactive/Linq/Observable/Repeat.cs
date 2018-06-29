@@ -97,7 +97,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     var value = _value;
                     while (!cancel.IsDisposed)
+                    {
                         ForwardOnNext(value);
+                    }
 
                     Dispose();
                 }
@@ -220,7 +222,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     if (!cancel.IsDisposed)
+                    {
                         ForwardOnCompleted();
+                    }
                 }
             }
         }

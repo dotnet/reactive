@@ -27,7 +27,9 @@ namespace System.Reactive
         public IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             var autoDetachObserver = new AutoDetachObserver<T>(observer);
 
@@ -68,7 +70,9 @@ namespace System.Reactive
                     // screwed up.
                     //
                     if (!autoDetachObserver.Fail(exception))
+                    {
                         throw;
+                    }
                 }
             }
 
@@ -93,7 +97,9 @@ namespace System.Reactive
                 // screwed up.
                 //
                 if (!autoDetachObserver.Fail(exception))
+                {
                     throw;
+                }
             }
 
             return Disposable.Empty;

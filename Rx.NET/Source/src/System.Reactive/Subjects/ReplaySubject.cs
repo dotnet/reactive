@@ -174,7 +174,9 @@ namespace System.Reactive.Subjects
         public override void OnError(Exception error)
         {
             if (error == null)
+            {
                 throw new ArgumentNullException(nameof(error));
+            }
 
             _implementation.OnError(error);
         }
@@ -197,7 +199,9 @@ namespace System.Reactive.Subjects
         public override IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             return _implementation.Subscribe(observer);
         }
@@ -419,7 +423,9 @@ namespace System.Reactive.Subjects
             private void CheckDisposed()
             {
                 if (_isDisposed)
+                {
                     throw new ObjectDisposedException(string.Empty);
+                }
             }
 
             private void Unsubscribe(IScheduledObserver<T> observer)
@@ -469,15 +475,18 @@ namespace System.Reactive.Subjects
             public ReplayByTime(int bufferSize, TimeSpan window, IScheduler scheduler)
             {
                 if (bufferSize < 0)
+                {
                     throw new ArgumentOutOfRangeException(nameof(bufferSize));
+                }
+
                 if (window < TimeSpan.Zero)
+                {
                     throw new ArgumentOutOfRangeException(nameof(window));
-                if (scheduler == null)
-                    throw new ArgumentNullException(nameof(scheduler));
+                }
 
                 _bufferSize = bufferSize;
                 _window = window;
-                _scheduler = scheduler;
+                _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
 
                 _stopwatch = _scheduler.StartStopwatch();
                 _queue = new Queue<TimeInterval<T>>();
@@ -592,7 +601,7 @@ namespace System.Reactive.Subjects
 
             protected override void DisposeCore()
             {
-                _value = default(T);
+                _value = default;
             }
         }
 

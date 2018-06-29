@@ -23,10 +23,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource, IList<TSource>> 
+        internal sealed class _ : Sink<TSource, IList<TSource>>
         {
-            readonly Func<TSource, TKey> _keySelector;
-            readonly IComparer<TKey> _comparer;
+            private readonly Func<TSource, TKey> _keySelector;
+            private readonly IComparer<TKey> _comparer;
             private bool _hasValue;
             private TKey _lastKey;
             private List<TSource> _list;

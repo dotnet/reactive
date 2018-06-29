@@ -25,9 +25,14 @@ namespace System.Reactive.Concurrency
             where TAbsolute : IComparable<TAbsolute>
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             // As stated in Scheduler.Simple.cs,
             // an anonymous delegate will allow delegate caching.
@@ -50,9 +55,14 @@ namespace System.Reactive.Concurrency
             where TAbsolute : IComparable<TAbsolute>
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return scheduler.ScheduleAbsolute(action, dueTime, (s, a) => Invoke(s, a));
         }

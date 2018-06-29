@@ -26,5 +26,5 @@ namespace System.Reactive
 #endif
     }
 #endif
-    }
+}
 

@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class BehaviorSubjectTest : ReactiveTest
     {
         [Fact]

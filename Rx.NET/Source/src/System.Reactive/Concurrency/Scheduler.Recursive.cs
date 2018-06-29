@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Collections.Generic;
 using System.Reactive.Disposables;
 
 namespace System.Reactive.Concurrency
@@ -19,9 +18,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable Schedule(this IScheduler scheduler, Action<Action> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return scheduler.Schedule(action, (_action, self) => _action(() => self(_action)));
         }
@@ -38,9 +42,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable Schedule<TState>(this IScheduler scheduler, TState state, Action<TState, Action<TState>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return scheduler.Schedule((state, action), (s, p) => InvokeRec1(s, p));
         }
@@ -63,9 +72,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable Schedule(this IScheduler scheduler, TimeSpan dueTime, Action<Action<TimeSpan>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return scheduler.Schedule(action, dueTime, (_action, self) => _action(dt => self(_action, dt)));
         }
@@ -83,9 +97,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable Schedule<TState>(this IScheduler scheduler, TState state, TimeSpan dueTime, Action<TState, Action<TState, TimeSpan>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return scheduler.Schedule((state, action), dueTime, (s, p) => InvokeRec2(s, p));
         }
@@ -108,9 +127,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable Schedule(this IScheduler scheduler, DateTimeOffset dueTime, Action<Action<DateTimeOffset>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return scheduler.Schedule(action, dueTime, (_action, self) => _action(dt => self(_action, dt)));
         }
@@ -128,9 +152,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable Schedule<TState>(this IScheduler scheduler, TState state, DateTimeOffset dueTime, Action<TState, Action<TState, DateTimeOffset>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return scheduler.Schedule((state, action), dueTime, (s, p) => InvokeRec3(s, p));
         }
@@ -142,7 +171,7 @@ namespace System.Reactive.Concurrency
             return recursiveInvoker;
         }
 
-        abstract class InvokeRecBaseState<TState> : IDisposable
+        private abstract class InvokeRecBaseState<TState> : IDisposable
         {
             protected readonly IScheduler scheduler;
 
@@ -161,11 +190,10 @@ namespace System.Reactive.Concurrency
 
         }
 
-        sealed class InvokeRec1State<TState> : InvokeRecBaseState<TState>
+        private sealed class InvokeRec1State<TState> : InvokeRecBaseState<TState>
         {
-            readonly Action<TState, Action<TState>> action;
-
-            readonly Action<TState> recurseCallback;
+            private readonly Action<TState, Action<TState>> action;
+            private readonly Action<TState> recurseCallback;
 
             public InvokeRec1State(IScheduler scheduler, Action<TState, Action<TState>> action) : base(scheduler)
             {
@@ -177,7 +205,8 @@ namespace System.Reactive.Concurrency
             {
                 var sad = new SingleAssignmentDisposable();
                 group.Add(sad);
-                sad.Disposable = scheduler.Schedule((state, sad, @this: this), (_, nextState) => {
+                sad.Disposable = scheduler.Schedule((state, sad, @this: this), (_, nextState) =>
+                {
                     nextState.@this.group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
                     return Disposable.Empty;
@@ -190,11 +219,10 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        sealed class InvokeRec2State<TState> : InvokeRecBaseState<TState>
+        private sealed class InvokeRec2State<TState> : InvokeRecBaseState<TState>
         {
-            readonly Action<TState, Action<TState, TimeSpan>> action;
-
-            readonly Action<TState, TimeSpan> recurseCallback;
+            private readonly Action<TState, Action<TState, TimeSpan>> action;
+            private readonly Action<TState, TimeSpan> recurseCallback;
 
             public InvokeRec2State(IScheduler scheduler, Action<TState, Action<TState, TimeSpan>> action) : base(scheduler)
             {
@@ -206,7 +234,8 @@ namespace System.Reactive.Concurrency
             {
                 var sad = new SingleAssignmentDisposable();
                 group.Add(sad);
-                sad.Disposable = scheduler.Schedule((state, sad, @this: this), time, (_, nextState) => {
+                sad.Disposable = scheduler.Schedule((state, sad, @this: this), time, (_, nextState) =>
+                {
                     nextState.@this.group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
                     return Disposable.Empty;
@@ -219,11 +248,10 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        sealed class InvokeRec3State<TState> : InvokeRecBaseState<TState>
+        private sealed class InvokeRec3State<TState> : InvokeRecBaseState<TState>
         {
-            readonly Action<TState, Action<TState, DateTimeOffset>> action;
-
-            readonly Action<TState, DateTimeOffset> recurseCallback;
+            private readonly Action<TState, Action<TState, DateTimeOffset>> action;
+            private readonly Action<TState, DateTimeOffset> recurseCallback;
 
             public InvokeRec3State(IScheduler scheduler, Action<TState, Action<TState, DateTimeOffset>> action) : base(scheduler)
             {
@@ -235,7 +263,8 @@ namespace System.Reactive.Concurrency
             {
                 var sad = new SingleAssignmentDisposable();
                 group.Add(sad);
-                sad.Disposable = scheduler.Schedule((state, sad, @this: this), dtOffset, (_, nextState) => {
+                sad.Disposable = scheduler.Schedule((state, sad, @this: this), dtOffset, (_, nextState) =>
+                {
                     nextState.@this.group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
                     return Disposable.Empty;

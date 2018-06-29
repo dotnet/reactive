@@ -57,7 +57,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _queue.Enqueue(value);
                     if (_queue.Count > _parent._count)
+                    {
                         _queue.Dequeue();
+                    }
                 }
 
                 public override void OnCompleted()
@@ -66,9 +68,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     var longRunning = _parent._loopScheduler.AsLongRunning();
                     if (longRunning != null)
+                    {
                         Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, (@this, c) => @this.Loop(c)));
+                    }
                     else
+                    {
                         Disposable.SetSingle(ref _loopDisposable, _parent._loopScheduler.Schedule(this, (@this, a) => @this.LoopRec(a)));
+                    }
                 }
 
                 private void LoopRec(Action<_> recurse)
@@ -96,7 +102,9 @@ namespace System.Reactive.Linq.ObservableImpl
                             break;
                         }
                         else
+                        {
                             ForwardOnNext(_queue.Dequeue());
+                        }
 
                         n--;
                     }
@@ -174,9 +182,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     var longRunning = _parent._loopScheduler.AsLongRunning();
                     if (longRunning != null)
+                    {
                         Disposable.SetSingle(ref _loopDisposable, longRunning.ScheduleLongRunning(this, (@this, c) => @this.Loop(c)));
+                    }
                     else
+                    {
                         Disposable.SetSingle(ref _loopDisposable, _parent._loopScheduler.Schedule(this, (@this, a) => @this.LoopRec(a)));
+                    }
                 }
 
                 private void LoopRec(Action<_> recurse)
@@ -204,7 +216,9 @@ namespace System.Reactive.Linq.ObservableImpl
                             break;
                         }
                         else
+                        {
                             ForwardOnNext(_queue.Dequeue().Value);
+                        }
 
                         n--;
                     }
@@ -215,7 +229,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 private void Trim(TimeSpan now)
                 {
                     while (_queue.Count > 0 && now - _queue.Peek().Interval >= _parent._duration)
+                    {
                         _queue.Dequeue();
+                    }
                 }
             }
         }

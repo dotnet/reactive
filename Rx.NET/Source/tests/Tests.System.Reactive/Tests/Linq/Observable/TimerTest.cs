@@ -5,18 +5,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
 using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using System.Reactive.Linq;
+using System.Text;
+using System.Threading;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -477,7 +473,9 @@ namespace ReactiveTests.Tests
             var onNext = new Action<long>(x =>
             {
                 if (x == 0)
+                {
                     throw ex;
+                }
             });
 
             var d = default(IDisposable);
@@ -519,7 +517,9 @@ namespace ReactiveTests.Tests
                 }
 
                 if (x == 5)
+                {
                     throw ex;
+                }
             });
 
             var d = default(IDisposable);
@@ -682,7 +682,9 @@ namespace ReactiveTests.Tests
             d.Disposable = xs.Subscribe(x =>
             {
                 if (x == 0)
+                {
                     Thread.Sleep(500);
+                }
 
                 if (x > 10)
                 {
@@ -714,10 +716,14 @@ namespace ReactiveTests.Tests
             xs.Subscribe(x =>
             {
                 if (x == 0)
+                {
                     Thread.Sleep(500);
+                }
 
                 if (x == 5)
+                {
                     throw err;
+                }
             });
 
             end.WaitOne();
@@ -728,7 +734,7 @@ namespace ReactiveTests.Tests
 
     }
 
-    class SchedulerWithCatch : IServiceProvider, IScheduler
+    internal class SchedulerWithCatch : IServiceProvider, IScheduler
     {
         private readonly IScheduler _scheduler;
         private readonly Action<Exception> _setException;
@@ -781,7 +787,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class PeriodicTestScheduler : TestScheduler, ISchedulerPeriodic, IServiceProvider
+    internal class PeriodicTestScheduler : TestScheduler, ISchedulerPeriodic, IServiceProvider
     {
         private readonly List<TimerRun> _timers;
 
@@ -792,21 +798,21 @@ namespace ReactiveTests.Tests
 
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
-            var run = new TimerRun(this.Clock);
+            var run = new TimerRun(Clock);
             _timers.Add(run);
 
             var x = state;
 
             var d = this.Schedule(period, self =>
             {
-                run.Add(this.Clock);
+                run.Add(Clock);
 
                 x = action(x);
                 self(period);
             });
 
             return new CompositeDisposable(
-                Disposable.Create(() => { run.Stop(this.Clock); }),
+                Disposable.Create(() => { run.Stop(Clock); }),
                 d
             );
         }
@@ -819,13 +825,15 @@ namespace ReactiveTests.Tests
         protected override object GetService(Type serviceType)
         {
             if (serviceType == typeof(ISchedulerPeriodic))
+            {
                 return this as ISchedulerPeriodic;
+            }
 
             return base.GetService(serviceType);
         }
     }
 
-    class TimerRun : IEnumerable<long>
+    internal class TimerRun : IEnumerable<long>
     {
         private readonly long _started;
         private long _stopped;
@@ -853,9 +861,10 @@ namespace ReactiveTests.Tests
 
         public override bool Equals(object obj)
         {
-            var other = obj as TimerRun;
-            if (other == null)
+            if (!(obj is TimerRun other))
+            {
                 return false;
+            }
 
             return _started == other._started && _stopped == other._stopped && _ticks.SequenceEqual(other._ticks);
         }
@@ -888,7 +897,9 @@ namespace ReactiveTests.Tests
             sb.Append("Start(" + _started + ") ");
             sb.Append("Ticks(" + string.Join(", ", _ticks.Select(t => t.ToString()).ToArray()) + ") ");
             if (_hasStopped)
+            {
                 sb.Append("Stop(" + _stopped + ")");
+            }
 
             return sb.ToString();
         }

@@ -24,7 +24,9 @@ namespace System.Reactive.Linq.ObservableImpl
         public IEnumerable<IObservable<TResult>> GetSources()
         {
             foreach (var item in _source)
+            {
                 yield return _resultSelector(item);
+            }
         }
 
         internal sealed class _ : ConcatSink<TResult>

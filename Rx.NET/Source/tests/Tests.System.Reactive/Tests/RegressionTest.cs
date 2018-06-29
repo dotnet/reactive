@@ -15,7 +15,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class RegressionTest : ReactiveTest
     {
 #if NET45 || NET46
@@ -139,7 +139,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        static IEnumerable<int> Bug_1333_Enumerable(AsyncSubject<IDisposable> s, Semaphore sema)
+        private static IEnumerable<int> Bug_1333_Enumerable(AsyncSubject<IDisposable> s, Semaphore sema)
         {
             var d = s.First();
             var t = new Thread(() => { d.Dispose(); sema.Release(); });
@@ -371,7 +371,7 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
 
             var xs = scheduler.CreateHotObservable(
-                OnNext( 90, 1),
+                OnNext(90, 1),
                 OnNext(110, 2),
                 OnNext(250, 3),
                 OnNext(270, 4),
@@ -422,7 +422,10 @@ namespace ReactiveTests.Tests
                 {
                     list.Add(x);
                     if (x < 3)
+                    {
                         s.OnNext(x + 1);
+                    }
+
                     list.Add(-x);
                 });
 
@@ -442,7 +445,10 @@ namespace ReactiveTests.Tests
                 {
                     list.Add(x);
                     if (x < 3)
+                    {
                         s.OnNext(x + 1);
+                    }
+
                     list.Add(-x);
                 });
 

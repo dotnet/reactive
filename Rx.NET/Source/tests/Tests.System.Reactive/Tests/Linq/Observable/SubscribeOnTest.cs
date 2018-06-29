@@ -3,18 +3,12 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
 using System.Threading;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -51,7 +45,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.SubscribeOn<int>(someObservable, default(Dispatcher)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.SubscribeOnDispatcher<int>(default(IObservable<int>)));
 #endif
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(default(IObservable<int>), new SynchronizationContext()));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(default, new SynchronizationContext()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(someObservable, default(SynchronizationContext)));
         }
 

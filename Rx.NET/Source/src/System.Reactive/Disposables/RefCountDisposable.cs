@@ -37,10 +37,7 @@ namespace System.Reactive.Disposables
         /// <exception cref="ArgumentNullException"><paramref name="disposable"/> is null.</exception>
         public RefCountDisposable(IDisposable disposable, bool throwWhenDisposed)
         {
-            if (disposable == null)
-                throw new ArgumentNullException(nameof(disposable));
-
-            _disposable = disposable;
+            _disposable = disposable ?? throw new ArgumentNullException(nameof(disposable));
             _count = 0;
             _throwWhenDisposed = throwWhenDisposed;
         }
@@ -67,7 +64,9 @@ namespace System.Reactive.Disposables
                 if (cnt == int.MinValue)
                 {
                     if (_throwWhenDisposed)
+                    {
                         throw new ObjectDisposedException("RefCountDisposable");
+                    }
 
                     return Disposable.Empty;
                 }
@@ -114,7 +113,8 @@ namespace System.Reactive.Disposables
 
                 var b = Interlocked.CompareExchange(ref _count, u, cnt);
 
-                if (b == cnt) {
+                if (b == cnt)
+                {
                     // if there were 0 active disposables, there can't be any more after
                     // the CAS so we can dispose the underlying disposable
                     if (active == 0)
@@ -147,7 +147,8 @@ namespace System.Reactive.Disposables
 
                 var b = Interlocked.CompareExchange(ref _count, u, cnt);
 
-                if (b == cnt) {
+                if (b == cnt)
+                {
                     // if after the CAS there was zero active disposables and
                     // the main has been also marked for disposing,
                     // it is safe to dispose the underlying disposable

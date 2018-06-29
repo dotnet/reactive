@@ -3,17 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -25,19 +19,19 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SingleOrDefault(default(IObservable<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SingleOrDefault(default(IObservable<int>), _ => true));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SingleOrDefault(DummyObservable<int>.Instance, default(Func<int, bool>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SingleOrDefault(DummyObservable<int>.Instance, default));
         }
 
         [Fact]
         public void SingleOrDefault_Empty()
         {
-            Assert.Equal(default(int), Observable.Empty<int>().SingleOrDefault());
+            Assert.Equal(default, Observable.Empty<int>().SingleOrDefault());
         }
 
         [Fact]
         public void SingleOrDefaultPredicate_Empty()
         {
-            Assert.Equal(default(int), Observable.Empty<int>().SingleOrDefault(_ => true));
+            Assert.Equal(default, Observable.Empty<int>().SingleOrDefault(_ => true));
         }
 
         [Fact]

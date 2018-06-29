@@ -5,18 +5,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -54,7 +50,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.ObserveOn<int>(someObservable, default(Dispatcher)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.ObserveOnDispatcher<int>(default(IObservable<int>)));
 #endif
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(default(IObservable<int>), new SynchronizationContext()));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(default, new SynchronizationContext()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(someObservable, default(SynchronizationContext)));
         }
 
@@ -384,7 +380,9 @@ namespace ReactiveTests.Tests
                 x =>
                 {
                     if (x == 5)
+                    {
                         throw new Exception();
+                    }
                 }
             );
 
@@ -392,7 +390,7 @@ namespace ReactiveTests.Tests
             Assert.NotNull(scheduler._exception);
         }
 
-        class MyScheduler : IScheduler
+        private class MyScheduler : IScheduler
         {
             internal Exception _exception;
             private ManualResetEvent _evt;
@@ -501,10 +499,12 @@ namespace ReactiveTests.Tests
             started.WaitOne();
             Thread.Sleep(100); // Try to enter the dispatcher event wait state
 
-            for (int i = 0; i < 1000; i++)
+            for (var i = 0; i < 1000; i++)
             {
                 if (i % 100 == 0)
+                {
                     Thread.Sleep(10);
+                }
 
                 s.OnNext(i);
             }
@@ -595,7 +595,7 @@ namespace ReactiveTests.Tests
             var end = new ManualResetEvent(false);
 
             var running = new ManualResetEvent(false);
-            var d = s.ObserveOn(scheduler).Subscribe(x => { lst.Add(x); running.Set(); if (x == 3) throw new Exception(); });
+            var d = s.ObserveOn(scheduler).Subscribe(x => { lst.Add(x); running.Set(); if (x == 3) { throw new Exception(); } });
 
             s.OnNext(0);
             started.WaitOne();

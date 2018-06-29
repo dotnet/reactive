@@ -12,9 +12,8 @@ namespace System.Reactive.Linq.ObservableImpl
     {
         internal sealed class CountExact : Producer<IList<TSource>, CountExact.ExactSink>
         {
-            readonly IObservable<TSource> _source;
-
-            readonly int _count;
+            private readonly IObservable<TSource> _source;
+            private readonly int _count;
 
             public CountExact(IObservable<TSource> source, int count)
             {
@@ -28,11 +27,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class ExactSink : Sink<TSource, IList<TSource>>
             {
-                readonly int _count;
-
-                int _index;
-
-                IList<TSource> _buffer;
+                private readonly int _count;
+                private int _index;
+                private IList<TSource> _buffer;
 
                 internal ExactSink(IObserver<IList<TSource>> observer, int count) : base(observer)
                 {
@@ -79,17 +76,15 @@ namespace System.Reactive.Linq.ObservableImpl
                         ForwardOnNext(buffer);
                     }
                     ForwardOnCompleted();
-                }   
+                }
             }
         }
 
         internal sealed class CountSkip : Producer<IList<TSource>, CountSkip.SkipSink>
         {
-            readonly IObservable<TSource> _source;
-
-            readonly int _count;
-
-            readonly int _skip;
+            private readonly IObservable<TSource> _source;
+            private readonly int _count;
+            private readonly int _skip;
 
             public CountSkip(IObservable<TSource> source, int count, int skip)
             {
@@ -104,13 +99,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class SkipSink : Sink<TSource, IList<TSource>>
             {
-                readonly int _count;
-
-                readonly int _skip;
-
-                int _index;
-
-                IList<TSource> _buffer;
+                private readonly int _count;
+                private readonly int _skip;
+                private int _index;
+                private IList<TSource> _buffer;
 
                 internal SkipSink(IObserver<IList<TSource>> observer, int count, int skip) : base(observer)
                 {
@@ -183,14 +175,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(OverlapSink sink) => sink.Run(_source);
 
-            internal sealed class OverlapSink : Sink<TSource, IList<TSource>> 
+            internal sealed class OverlapSink : Sink<TSource, IList<TSource>>
             {
                 private readonly Queue<IList<TSource>> _queue;
-
                 private readonly int _count;
                 private readonly int _skip;
-
-                int _n;
+                private int _n;
 
                 public OverlapSink(IObserver<IList<TSource>> observer, int count, int skip)
                     : base(observer)
@@ -210,19 +200,25 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnNext(TSource value)
                 {
                     foreach (var s in _queue)
+                    {
                         s.Add(value);
+                    }
 
                     var c = _n - _count + 1;
                     if (c >= 0 && c % _skip == 0)
                     {
                         var s = _queue.Dequeue();
                         if (s.Count > 0)
+                        {
                             ForwardOnNext(s);
+                        }
                     }
 
                     _n++;
                     if (_n % _skip == 0)
+                    {
                         CreateWindow();
+                    }
                 }
 
                 public override void OnError(Exception error)
@@ -239,7 +235,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         var s = _queue.Dequeue();
                         if (s.Count > 0)
+                        {
                             ForwardOnNext(s);
+                        }
                     }
 
                     ForwardOnCompleted();
@@ -250,7 +248,6 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class TimeSliding : Producer<IList<TSource>, TimeSliding._>
         {
             private readonly IObservable<TSource> _source;
-
             private readonly TimeSpan _timeSpan;
             private readonly TimeSpan _timeShift;
             private readonly IScheduler _scheduler;
@@ -267,14 +264,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource, IList<TSource>> 
+            internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly TimeSpan _timeShift;
                 private readonly IScheduler _scheduler;
-
                 private readonly object _gate = new object();
                 private readonly Queue<List<TSource>> _q = new Queue<List<TSource>>();
-                
                 private IDisposable _timerSerial;
 
                 public _(TimeSliding parent, IObserver<IList<TSource>> observer)
@@ -329,18 +324,27 @@ namespace System.Reactive.Linq.ObservableImpl
                         isShift = true;
                     }
                     else if (_nextSpan < _nextShift)
+                    {
                         isSpan = true;
+                    }
                     else
+                    {
                         isShift = true;
+                    }
 
                     var newTotalTime = isSpan ? _nextSpan : _nextShift;
                     var ts = newTotalTime - _totalTime;
                     _totalTime = newTotalTime;
 
                     if (isSpan)
+                    {
                         _nextSpan += _timeShift;
+                    }
+
                     if (isShift)
+                    {
                         _nextShift += _timeShift;
+                    }
 
                     m.Disposable = _scheduler.Schedule((@this: this, isSpan, isShift), ts, (_, tuple) => tuple.@this.Tick(tuple.isSpan, tuple.isShift));
                 }
@@ -377,7 +381,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         foreach (var s in _q)
+                        {
                             s.Add(value);
+                        }
                     }
                 }
 
@@ -386,7 +392,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         while (_q.Count > 0)
+                        {
                             _q.Dequeue().Clear();
+                        }
 
                         ForwardOnError(error);
                     }
@@ -397,7 +405,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         while (_q.Count > 0)
+                        {
                             ForwardOnNext(_q.Dequeue());
+                        }
 
                         ForwardOnCompleted();
                     }
@@ -408,7 +418,6 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class TimeHopping : Producer<IList<TSource>, TimeHopping._>
         {
             private readonly IObservable<TSource> _source;
-
             private readonly TimeSpan _timeSpan;
             private readonly IScheduler _scheduler;
 
@@ -423,7 +432,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource, IList<TSource>> 
+            internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly object _gate = new object();
 
@@ -433,7 +442,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 private List<TSource> _list;
-
                 private IDisposable _periodicDisposable;
 
                 public void Run(TimeHopping parent)
@@ -510,10 +518,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run();
 
-            internal sealed class _ : Sink<TSource, IList<TSource>> 
+            internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly Ferry _parent;
-
                 private readonly object _gate = new object();
                 private IDisposable _timerSerial;
 
@@ -563,7 +570,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         if (id != _windowId)
+                        {
                             return d;
+                        }
 
                         _n = 0;
                         newId = ++_windowId;
@@ -600,7 +609,9 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
 
                         if (newWindow)
+                        {
                             CreateTimer(newId);
+                        }
                     }
                 }
 
@@ -642,12 +653,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, IList<TSource>> 
+            internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly object _gate = new object();
                 private readonly AsyncLock _bufferGate = new AsyncLock();
                 private IDisposable _bufferClosingSerialDisposable;
-
                 private readonly Func<IObservable<TBufferClosing>> _bufferClosingSelector;
 
                 public _(Selector parent, IObserver<IList<TSource>> observer)
@@ -779,7 +789,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource, IList<TSource>> 
+            internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly object _gate = new object();
 
@@ -789,7 +799,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 private IList<TSource> _buffer;
-
                 private IDisposable _boundariesDisposable;
 
                 public void Run(Boundaries parent)

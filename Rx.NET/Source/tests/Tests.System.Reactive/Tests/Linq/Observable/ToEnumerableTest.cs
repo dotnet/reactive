@@ -3,18 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Collections;
 
 namespace ReactiveTests.Tests
 {
@@ -44,7 +37,7 @@ namespace ReactiveTests.Tests
         {
             var res = Observable.Range(0, 10).ToEnumerable();
             var ieg = res.GetEnumerator();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 Assert.True(ieg.MoveNext());
                 Assert.Equal(i, ieg.Current);
@@ -57,7 +50,7 @@ namespace ReactiveTests.Tests
         {
             var res = (IEnumerable)Observable.Range(0, 10).ToEnumerable();
             var ien = res.GetEnumerator();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 Assert.True(ien.MoveNext());
                 Assert.Equal(i, ien.Current);

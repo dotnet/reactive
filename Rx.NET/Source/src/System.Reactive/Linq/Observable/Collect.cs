@@ -22,9 +22,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class _ : PushToPullSink<TSource, TResult>
         {
-            readonly object _gate;
-            readonly Func<TResult, TSource, TResult> _merge;
-            readonly Func<TResult, TResult> _getNewCollector;
+            private readonly object _gate;
+            private readonly Func<TResult, TSource, TResult> _merge;
+            private readonly Func<TResult, TResult> _getNewCollector;
 
             public _(Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector, TResult collector)
             {

@@ -26,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_sources);
 
-            internal sealed class _ : Sink<IObservable<TSource>, TSource> 
+            internal sealed class _ : Sink<IObservable<TSource>, TSource>
             {
                 private readonly int _maxConcurrent;
 
@@ -52,7 +52,9 @@ namespace System.Reactive.Linq.ObservableImpl
                             Subscribe(value);
                         }
                         else
+                        {
                             _q.Enqueue(value);
+                        }
                     }
                 }
 
@@ -85,7 +87,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.Dispose(disposing);
 
                     if (disposing)
+                    {
                         _group.Dispose();
+                    }
                 }
 
                 private void Subscribe(IObservable<TSource> innerSource)
@@ -107,7 +111,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     public override void OnNext(TSource value)
                     {
                         lock (_parent._gate)
+                        {
                             _parent.ForwardOnNext(value);
+                        }
                     }
 
                     public override void OnError(Exception error)
@@ -155,7 +161,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_sources);
 
-            internal sealed class _ : Sink<IObservable<TSource>, TSource> 
+            internal sealed class _ : Sink<IObservable<TSource>, TSource>
             {
                 public _(IObserver<TSource> observer)
                     : base(observer)
@@ -209,7 +215,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.Dispose(disposing);
 
                     if (disposing)
+                    {
                         _group.Dispose();
+                    }
                 }
 
                 private sealed class InnerObserver : SafeObserver<TSource>
@@ -224,7 +232,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     public override void OnNext(TSource value)
                     {
                         lock (_parent._gate)
+                        {
                             _parent.ForwardOnNext(value);
+                        }
                     }
 
                     public override void OnError(Exception error)
@@ -270,14 +280,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_sources);
 
-            internal sealed class _ : Sink<Task<TSource>, TSource> 
+            internal sealed class _ : Sink<Task<TSource>, TSource>
             {
                 public _(IObserver<TSource> observer)
                     : base(observer)
                 {
                 }
 
-                private object _gate = new object();
+                private readonly object _gate = new object();
                 private volatile int _count = 1;
 
                 public override void OnNext(Task<TSource> value)
@@ -298,29 +308,31 @@ namespace System.Reactive.Linq.ObservableImpl
                     switch (task.Status)
                     {
                         case TaskStatus.RanToCompletion:
+                        {
+                            lock (_gate)
                             {
-                                lock (_gate)
-                                    ForwardOnNext(task.Result);
+                                ForwardOnNext(task.Result);
+                            }
 
-                                OnCompleted();
-                            }
-                            break;
+                            OnCompleted();
+                        }
+                        break;
                         case TaskStatus.Faulted:
+                        {
+                            lock (_gate)
                             {
-                                lock (_gate)
-                                {
-                                    ForwardOnError(task.Exception.InnerException);
-                                }
+                                ForwardOnError(task.Exception.InnerException);
                             }
-                            break;
+                        }
+                        break;
                         case TaskStatus.Canceled:
+                        {
+                            lock (_gate)
                             {
-                                lock (_gate)
-                                {
-                                    ForwardOnError(new TaskCanceledException(task));
-                                }
+                                ForwardOnError(new TaskCanceledException(task));
                             }
-                            break;
+                        }
+                        break;
                     }
                 }
 

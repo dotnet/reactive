@@ -18,7 +18,9 @@ namespace System.Reactive.Linq
         internal static Expression GetSourceExpression<TSource>(IObservable<TSource> source)
         {
             if (source is IQbservable<TSource> q)
+            {
                 return q.Expression;
+            }
 
             return Expression.Constant(source, typeof(IObservable<TSource>));
         }
@@ -26,7 +28,9 @@ namespace System.Reactive.Linq
         internal static Expression GetSourceExpression<TSource>(IEnumerable<TSource> source)
         {
             if (source is IQueryable<TSource> q)
+            {
                 return q.Expression;
+            }
 
             return Expression.Constant(source, typeof(IEnumerable<TSource>));
         }

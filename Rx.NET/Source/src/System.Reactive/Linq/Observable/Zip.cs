@@ -266,7 +266,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_first, _second);
 
-            internal sealed class _ : Sink<TFirst, TResult> 
+            internal sealed class _ : Sink<TFirst, TResult>
             {
                 private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
@@ -579,7 +579,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 _queues = new Queue<TSource>[N];
                 for (var i = 0; i < N; i++)
+                {
                     _queues[i] = new Queue<TSource>();
+                }
 
                 _isDone = new bool[N];
 

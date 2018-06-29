@@ -21,10 +21,7 @@ namespace System.Reactive
         /// <exception cref="ArgumentNullException"><paramref name="subscribe"/> is <c>null</c>.</exception>
         public AnonymousObservable(Func<IObserver<T>, IDisposable> subscribe)
         {
-            if (subscribe == null)
-                throw new ArgumentNullException(nameof(subscribe));
-
-            _subscribe = subscribe;
+            _subscribe = subscribe ?? throw new ArgumentNullException(nameof(subscribe));
         }
 
         /// <summary>
