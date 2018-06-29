@@ -33,7 +33,9 @@ namespace System.Reactive.Concurrency
         public IDisposable StartPeriodicTimer(Action action, TimeSpan period)
         {
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
 
             //
             // The contract for periodic scheduling in Rx is that specifying TimeSpan.Zero as the period causes the scheduler to 
@@ -74,7 +76,8 @@ namespace System.Reactive.Concurrency
                 var item = (WorkItem)itemObject;
 
                 item.Action(item.State);
-            }) { IsBackground = true }.Start(new WorkItem(action, state));
+            })
+            { IsBackground = true }.Start(new WorkItem(action, state));
         }
 
         private static TimeSpan Normalize(TimeSpan dueTime) => dueTime < TimeSpan.Zero ? TimeSpan.Zero : dueTime;
@@ -168,7 +171,7 @@ namespace System.Reactive.Concurrency
 
             private static void Tick(object state)
             {
-                var timer = (Timer) state;
+                var timer = (Timer)state;
 
                 try
                 {
@@ -238,7 +241,7 @@ namespace System.Reactive.Concurrency
             public FastPeriodicTimer(Action action)
             {
                 _action = action;
-                
+
                 new Thread(_ => Loop(_))
                 {
                     Name = "Rx-FastPeriodicTimer",
@@ -246,7 +249,7 @@ namespace System.Reactive.Concurrency
                 }
                 .Start(this);
             }
-            
+
             private static void Loop(object threadParam)
             {
                 var timer = (FastPeriodicTimer)threadParam;

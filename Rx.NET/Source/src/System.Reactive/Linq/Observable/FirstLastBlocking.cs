@@ -2,15 +2,11 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
-using System.Collections.Generic;
 using System.Reactive.Disposables;
-using System.Text;
 using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-
     internal abstract class BaseBlocking<T> : CountdownEvent, IObserver<T>
     {
         protected IDisposable _upstream;
@@ -18,8 +14,7 @@ namespace System.Reactive.Linq.ObservableImpl
         internal T _value;
         internal bool _hasValue;
         internal Exception _error;
-
-        int once;
+        private int once;
 
         internal BaseBlocking() : base(1) { }
 
@@ -70,7 +65,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public override void OnError(Exception error)
         {
-            base.OnError(error);  
+            base.OnError(error);
             if (!Disposable.GetIsDisposed(ref _upstream))
             {
                 Disposable.TryDispose(ref _upstream);

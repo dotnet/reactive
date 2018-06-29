@@ -11,12 +11,12 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class ReplaySubjectTest : ReactiveTest
     {
         [Fact]
@@ -1922,7 +1922,7 @@ namespace ReactiveTests.Tests
             var xs = new List<int>();
 
             var o = Observer.Create<int>(
-                x => { xs.Add(x); if (x == 2) throw new Exception(); },
+                x => { xs.Add(x); if (x == 2) { throw new Exception(); } },
                 ex => { },
                 () => { }
             );

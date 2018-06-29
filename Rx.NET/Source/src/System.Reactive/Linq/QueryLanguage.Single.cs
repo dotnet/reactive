@@ -27,7 +27,9 @@ namespace System.Reactive.Linq
         private static IObservable<TSource> Append_<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
             if (source is AppendPrepend.IAppendPrepend<TSource> ap && ap.Scheduler == scheduler)
+            {
                 return ap.Append(value);
+            }
 
             return new AppendPrepend.AppendPrependSingle<TSource>(source, value, scheduler, append: true);
         }
@@ -39,7 +41,9 @@ namespace System.Reactive.Linq
         public virtual IObservable<TSource> AsObservable<TSource>(IObservable<TSource> source)
         {
             if (source is AsObservable<TSource> asObservable)
+            {
                 return asObservable;
+            }
 
             return new AsObservable<TSource>(source);
         }
@@ -74,7 +78,9 @@ namespace System.Reactive.Linq
         public virtual IObservable<TSource> Dematerialize<TSource>(IObservable<Notification<TSource>> source)
         {
             if (source is Materialize<TSource> materialize)
+            {
                 return materialize.Dematerialize();
+            }
 
             return new Dematerialize<TSource>(source);
         }
@@ -158,7 +164,9 @@ namespace System.Reactive.Linq
         public virtual IObservable<TSource> IgnoreElements<TSource>(IObservable<TSource> source)
         {
             if (source is IgnoreElements<TSource> ignoreElements)
+            {
                 return ignoreElements;
+            }
 
             return new IgnoreElements<TSource>(source);
         }
@@ -195,7 +203,9 @@ namespace System.Reactive.Linq
         private static IObservable<TSource> Prepend_<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
             if (source is AppendPrepend.IAppendPrepend<TSource> ap && ap.Scheduler == scheduler)
+            {
                 return ap.Prepend(value);
+            }
 
             return new AppendPrepend.AppendPrependSingle<TSource>(source, value, scheduler, append: false);
         }
@@ -212,7 +222,9 @@ namespace System.Reactive.Linq
         private static IEnumerable<T> RepeatInfinite<T>(T value)
         {
             while (true)
+            {
                 yield return value;
+            }
         }
 
         public virtual IObservable<TSource> Repeat<TSource>(IObservable<TSource> source, int repeatCount)
@@ -295,8 +307,7 @@ namespace System.Reactive.Linq
             //       IQueryLanguage interface, we went for consistency with the public API, hence the odd position of the IScheduler.
             //
 
-            var valueArray = values as TSource[];
-            if (valueArray == null)
+            if (!(values is TSource[] valueArray))
             {
                 var valueList = new List<TSource>(values);
                 valueArray = valueList.ToArray();

@@ -40,30 +40,43 @@ namespace System.Reactive
             {
                 e = targetType.GetEventEx(eventName, true);
                 if (e == null)
+                {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.COULD_NOT_FIND_STATIC_EVENT, eventName, targetType.FullName));
+                }
             }
             else
             {
                 e = targetType.GetEventEx(eventName, false);
                 if (e == null)
+                {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.COULD_NOT_FIND_INSTANCE_EVENT, eventName, targetType.FullName));
+                }
             }
 
             addMethod = e.GetAddMethod();
             removeMethod = e.GetRemoveMethod();
 
             if (addMethod == null)
+            {
                 throw new InvalidOperationException(Strings_Linq.EVENT_MISSING_ADD_METHOD);
+            }
+
             if (removeMethod == null)
+            {
                 throw new InvalidOperationException(Strings_Linq.EVENT_MISSING_REMOVE_METHOD);
+            }
 
             var psa = addMethod.GetParameters();
             if (psa.Length != 1)
+            {
                 throw new InvalidOperationException(Strings_Linq.EVENT_ADD_METHOD_SHOULD_TAKE_ONE_PARAMETER);
+            }
 
             var psr = removeMethod.GetParameters();
             if (psr.Length != 1)
+            {
                 throw new InvalidOperationException(Strings_Linq.EVENT_REMOVE_METHOD_SHOULD_TAKE_ONE_PARAMETER);
+            }
 
             isWinRT = false;
 
@@ -74,7 +87,9 @@ namespace System.Reactive
 
                 var pet = psr[0];
                 if (pet.ParameterType != typeof(EventRegistrationToken))
+                {
                     throw new InvalidOperationException(Strings_Linq.EVENT_WINRT_REMOVE_METHOD_SHOULD_TAKE_ERT);
+                }
             }
 #endif
 
@@ -85,16 +100,24 @@ namespace System.Reactive
             var parameters = invokeMethod.GetParameters();
 
             if (parameters.Length != 2)
+            {
                 throw new InvalidOperationException(Strings_Linq.EVENT_PATTERN_REQUIRES_TWO_PARAMETERS);
+            }
 
             if (!typeof(TSender).IsAssignableFrom(parameters[0].ParameterType))
+            {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.EVENT_SENDER_NOT_ASSIGNABLE, typeof(TSender).FullName));
+            }
 
             if (!typeof(TEventArgs).IsAssignableFrom(parameters[1].ParameterType))
+            {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.EVENT_ARGS_NOT_ASSIGNABLE, typeof(TEventArgs).FullName));
+            }
 
             if (invokeMethod.ReturnType != typeof(void))
+            {
                 throw new InvalidOperationException(Strings_Linq.EVENT_MUST_RETURN_VOID);
+            }
         }
 
         public static EventInfo GetEventEx(this Type type, string name, bool isStatic)

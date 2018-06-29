@@ -22,7 +22,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Append<TSource>(this IObservable<TSource> source, TSource value)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Append<TSource>(source, value);
         }
@@ -39,9 +41,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Append<TSource>(this IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Append<TSource>(source, value, scheduler);
         }
@@ -60,7 +67,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> AsObservable<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.AsObservable<TSource>(source);
         }
@@ -81,9 +90,14 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> Buffer<TSource>(this IObservable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return s_impl.Buffer<TSource>(source, count);
         }
@@ -101,11 +115,19 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> Buffer<TSource>(this IObservable<TSource> source, int count, int skip)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
             if (skip <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(skip));
+            }
 
             return s_impl.Buffer<TSource>(source, count, skip);
         }
@@ -124,7 +146,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Dematerialize<TSource>(this IObservable<Notification<TSource>> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Dematerialize<TSource>(source);
         }
@@ -143,7 +167,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> DistinctUntilChanged<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.DistinctUntilChanged<TSource>(source);
         }
@@ -159,9 +185,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> DistinctUntilChanged<TSource>(this IObservable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return s_impl.DistinctUntilChanged<TSource>(source, comparer);
         }
@@ -178,9 +209,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> DistinctUntilChanged<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return s_impl.DistinctUntilChanged<TSource, TKey>(source, keySelector);
         }
@@ -198,11 +234,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> DistinctUntilChanged<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return s_impl.DistinctUntilChanged<TSource, TKey>(source, keySelector, comparer);
         }
@@ -223,9 +267,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Do<TSource>(this IObservable<TSource> source, Action<TSource> onNext)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
 
             return s_impl.Do<TSource>(source, onNext);
         }
@@ -243,11 +292,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Do<TSource>(this IObservable<TSource> source, Action<TSource> onNext, Action onCompleted)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             return s_impl.Do<TSource>(source, onNext, onCompleted);
         }
@@ -265,11 +322,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Do<TSource>(this IObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
 
             return s_impl.Do<TSource>(source, onNext, onError);
         }
@@ -288,13 +353,24 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Do<TSource>(this IObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             return s_impl.Do<TSource>(source, onNext, onError, onCompleted);
         }
@@ -311,9 +387,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Do<TSource>(this IObservable<TSource> source, IObserver<TSource> observer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             return s_impl.Do<TSource>(source, observer);
         }
@@ -333,9 +414,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Finally<TSource>(this IObservable<TSource> source, Action finallyAction)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (finallyAction == null)
+            {
                 throw new ArgumentNullException(nameof(finallyAction));
+            }
 
             return s_impl.Finally<TSource>(source, finallyAction);
         }
@@ -354,7 +440,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> IgnoreElements<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.IgnoreElements<TSource>(source);
         }
@@ -373,7 +461,9 @@ namespace System.Reactive.Linq
         public static IObservable<Notification<TSource>> Materialize<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Materialize<TSource>(source);
         }
@@ -393,7 +483,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Prepend<TSource>(this IObservable<TSource> source, TSource value)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Prepend<TSource>(source, value);
         }
@@ -410,9 +502,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Prepend<TSource>(this IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Prepend<TSource>(source, value, scheduler);
         }
@@ -430,7 +527,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Repeat<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Repeat<TSource>(source);
         }
@@ -447,9 +546,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Repeat<TSource>(this IObservable<TSource> source, int repeatCount)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (repeatCount < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(repeatCount));
+            }
 
             return s_impl.Repeat<TSource>(source, repeatCount);
         }
@@ -471,9 +575,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> RepeatWhen<TSource, TSignal>(this IObservable<TSource> source, Func<IObservable<object>, IObservable<TSignal>> handler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (handler == null)
+            {
                 throw new ArgumentNullException(nameof(handler));
+            }
 
             return s_impl.RepeatWhen(source, handler);
         }
@@ -493,7 +602,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Retry<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Retry<TSource>(source);
         }
@@ -510,9 +621,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Retry<TSource>(this IObservable<TSource> source, int retryCount)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (retryCount < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(retryCount));
+            }
 
             return s_impl.Retry<TSource>(source, retryCount);
         }
@@ -534,9 +650,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> RetryWhen<TSource, TSignal>(this IObservable<TSource> source, Func<IObservable<Exception>, IObservable<TSignal>> handler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (handler == null)
+            {
                 throw new ArgumentNullException(nameof(handler));
+            }
 
             return s_impl.RetryWhen(source, handler);
         }
@@ -560,9 +681,14 @@ namespace System.Reactive.Linq
         public static IObservable<TAccumulate> Scan<TSource, TAccumulate>(this IObservable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (accumulator == null)
+            {
                 throw new ArgumentNullException(nameof(accumulator));
+            }
 
             return s_impl.Scan<TSource, TAccumulate>(source, seed, accumulator);
         }
@@ -579,9 +705,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Scan<TSource>(this IObservable<TSource> source, Func<TSource, TSource, TSource> accumulator)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (accumulator == null)
+            {
                 throw new ArgumentNullException(nameof(accumulator));
+            }
 
             return s_impl.Scan<TSource>(source, accumulator);
         }
@@ -606,9 +737,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SkipLast<TSource>(this IObservable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return s_impl.SkipLast<TSource>(source, count);
         }
@@ -628,9 +764,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> StartWith<TSource>(this IObservable<TSource> source, params TSource[] values)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (values == null)
+            {
                 throw new ArgumentNullException(nameof(values));
+            }
 
             return s_impl.StartWith<TSource>(source, values);
         }
@@ -646,9 +787,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> StartWith<TSource>(this IObservable<TSource> source, IEnumerable<TSource> values)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (values == null)
+            {
                 throw new ArgumentNullException(nameof(values));
+            }
 
             return s_impl.StartWith<TSource>(source, values);
         }
@@ -665,11 +811,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> StartWith<TSource>(this IObservable<TSource> source, IScheduler scheduler, params TSource[] values)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (values == null)
+            {
                 throw new ArgumentNullException(nameof(values));
+            }
 
             return s_impl.StartWith<TSource>(source, scheduler, values);
         }
@@ -691,11 +845,19 @@ namespace System.Reactive.Linq
             //
 
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (values == null)
+            {
                 throw new ArgumentNullException(nameof(values));
+            }
 
             return s_impl.StartWith<TSource>(source, scheduler, values);
         }
@@ -720,9 +882,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> TakeLast<TSource>(this IObservable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return s_impl.TakeLast<TSource>(source, count);
         }
@@ -744,11 +911,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> TakeLast<TSource>(this IObservable<TSource> source, int count, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.TakeLast<TSource>(source, count, scheduler);
         }
@@ -773,9 +948,14 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> TakeLastBuffer<TSource>(this IObservable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return s_impl.TakeLastBuffer<TSource>(source, count);
         }
@@ -796,9 +976,14 @@ namespace System.Reactive.Linq
         public static IObservable<IObservable<TSource>> Window<TSource>(this IObservable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return s_impl.Window<TSource>(source, count);
         }
@@ -816,11 +1001,19 @@ namespace System.Reactive.Linq
         public static IObservable<IObservable<TSource>> Window<TSource>(this IObservable<TSource> source, int count, int skip)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
             if (skip <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(skip));
+            }
 
             return s_impl.Window<TSource>(source, count, skip);
         }

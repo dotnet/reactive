@@ -22,7 +22,9 @@ namespace System.Reactive
         public static IObserver<T> ToObserver<T>(this Action<Notification<T>> handler)
         {
             if (handler == null)
+            {
                 throw new ArgumentNullException(nameof(handler));
+            }
 
             return new AnonymousObserver<T>(
                 x => handler(Notification.CreateOnNext<T>(x)),
@@ -42,10 +44,12 @@ namespace System.Reactive
         public static Action<Notification<T>> ToNotifier<T>(this IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             return n => n.Accept(observer);
-        }      
+        }
 
         /// <summary>
         /// Creates an observer from the specified OnNext action.
@@ -57,7 +61,9 @@ namespace System.Reactive
         public static IObserver<T> Create<T>(Action<T> onNext)
         {
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
 
             return new AnonymousObserver<T>(onNext);
         }
@@ -73,9 +79,14 @@ namespace System.Reactive
         public static IObserver<T> Create<T>(Action<T> onNext, Action<Exception> onError)
         {
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
 
             return new AnonymousObserver<T>(onNext, onError);
         }
@@ -91,9 +102,14 @@ namespace System.Reactive
         public static IObserver<T> Create<T>(Action<T> onNext, Action onCompleted)
         {
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             return new AnonymousObserver<T>(onNext, onCompleted);
         }
@@ -110,11 +126,19 @@ namespace System.Reactive
         public static IObserver<T> Create<T>(Action<T> onNext, Action<Exception> onError, Action onCompleted)
         {
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             return new AnonymousObserver<T>(onNext, onError, onCompleted);
         }
@@ -129,7 +153,9 @@ namespace System.Reactive
         public static IObserver<T> AsObserver<T>(this IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             return new AnonymousObserver<T>(observer.OnNext, observer.OnError, observer.OnCompleted);
         }
@@ -145,7 +171,9 @@ namespace System.Reactive
         public static IObserver<T> Checked<T>(this IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             return new CheckedObserver<T>(observer);
         }
@@ -166,7 +194,9 @@ namespace System.Reactive
         public static IObserver<T> Synchronize<T>(IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             return new SynchronizedObserver<T>(observer, new object());
         }
@@ -188,12 +218,18 @@ namespace System.Reactive
         public static IObserver<T> Synchronize<T>(IObserver<T> observer, bool preventReentrancy)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             if (preventReentrancy)
+            {
                 return new AsyncLockObserver<T>(observer, new AsyncLock());
+            }
             else
+            {
                 return new SynchronizedObserver<T>(observer, new object());
+            }
         }
 
         /// <summary>
@@ -214,9 +250,14 @@ namespace System.Reactive
         public static IObserver<T> Synchronize<T>(IObserver<T> observer, object gate)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
+
             if (gate == null)
+            {
                 throw new ArgumentNullException(nameof(gate));
+            }
 
             return new SynchronizedObserver<T>(observer, gate);
         }
@@ -233,9 +274,14 @@ namespace System.Reactive
         public static IObserver<T> Synchronize<T>(IObserver<T> observer, AsyncLock asyncLock)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
+
             if (asyncLock == null)
+            {
                 throw new ArgumentNullException(nameof(asyncLock));
+            }
 
             return new AsyncLockObserver<T>(observer, asyncLock);
         }
@@ -251,9 +297,14 @@ namespace System.Reactive
         public static IObserver<T> NotifyOn<T>(this IObserver<T> observer, IScheduler scheduler)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return new ObserveOnObserver<T>(scheduler, observer);
         }
@@ -269,9 +320,14 @@ namespace System.Reactive
         public static IObserver<T> NotifyOn<T>(this IObserver<T> observer, SynchronizationContext context)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
+
             if (context == null)
+            {
                 throw new ArgumentNullException(nameof(context));
+            }
 
             return new ObserveOnObserver<T>(new SynchronizationContextScheduler(context), observer);
         }
@@ -286,7 +342,9 @@ namespace System.Reactive
         public static IProgress<T> ToProgress<T>(this IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             return new AnonymousProgress<T>(observer.OnNext);
         }
@@ -302,14 +360,19 @@ namespace System.Reactive
         public static IProgress<T> ToProgress<T>(this IObserver<T> observer, IScheduler scheduler)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return new AnonymousProgress<T>(new ObserveOnObserver<T>(scheduler, observer).OnNext);
         }
 
-        class AnonymousProgress<T> : IProgress<T>
+        private class AnonymousProgress<T> : IProgress<T>
         {
             private readonly Action<T> _progress;
 
@@ -334,7 +397,9 @@ namespace System.Reactive
         public static IObserver<T> ToObserver<T>(this IProgress<T> progress)
         {
             if (progress == null)
+            {
                 throw new ArgumentNullException(nameof(progress));
+            }
 
             return new AnonymousObserver<T>(progress.Report);
         }

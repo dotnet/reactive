@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Disposables;
-using System.Threading;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace System.Reactive.Subjects
 {
@@ -18,7 +18,6 @@ namespace System.Reactive.Subjects
         #region Fields
 
         private AsyncSubjectDisposable[] _observers;
-
         private T _value;
         private bool _hasValue;
         private Exception _exception;
@@ -26,17 +25,17 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// A pre-allocated empty array for the no-observers state.
         /// </summary>
-        static readonly AsyncSubjectDisposable[] EMPTY = new AsyncSubjectDisposable[0];
+        private static readonly AsyncSubjectDisposable[] EMPTY = new AsyncSubjectDisposable[0];
 
         /// <summary>
         /// A pre-allocated empty array indicating the AsyncSubject has terminated
         /// </summary>
-        static readonly AsyncSubjectDisposable[] TERMINATED = new AsyncSubjectDisposable[0];
+        private static readonly AsyncSubjectDisposable[] TERMINATED = new AsyncSubjectDisposable[0];
 
         /// <summary>
         /// A pre-allocated empty array indicating the AsyncSubject has terminated
         /// </summary>
-        static readonly AsyncSubjectDisposable[] DISPOSED = new AsyncSubjectDisposable[0];
+        private static readonly AsyncSubjectDisposable[] DISPOSED = new AsyncSubjectDisposable[0];
 
         #endregion
 
@@ -126,7 +125,9 @@ namespace System.Reactive.Subjects
         public override void OnError(Exception error)
         {
             if (error == null)
+            {
                 throw new ArgumentNullException(nameof(error));
+            }
 
             for (; ; )
             {
@@ -194,7 +195,9 @@ namespace System.Reactive.Subjects
         public override IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             var parent = new AsyncSubjectDisposable(this, observer);
 
@@ -219,7 +222,7 @@ namespace System.Reactive.Subjects
             return parent;
         }
 
-        bool Add(AsyncSubjectDisposable inner)
+        private bool Add(AsyncSubjectDisposable inner)
         {
             for (; ; )
             {
@@ -248,7 +251,7 @@ namespace System.Reactive.Subjects
             }
         }
 
-        void Remove(AsyncSubjectDisposable inner)
+        private void Remove(AsyncSubjectDisposable inner)
         {
             for (; ; )
             {
@@ -299,11 +302,10 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// A disposable connecting the AsyncSubject and an IObserver.
         /// </summary>
-        sealed class AsyncSubjectDisposable : IDisposable
+        private sealed class AsyncSubjectDisposable : IDisposable
         {
             internal readonly IObserver<T> downstream;
-
-            AsyncSubject<T> parent;
+            private AsyncSubject<T> parent;
 
             public AsyncSubjectDisposable(AsyncSubject<T> parent, IObserver<T> downstream)
             {
@@ -326,7 +328,7 @@ namespace System.Reactive.Subjects
 
         #region IDisposable implementation
 
-        void ThrowDisposed()
+        private void ThrowDisposed()
         {
             throw new ObjectDisposedException(string.Empty);
         }
@@ -362,7 +364,9 @@ namespace System.Reactive.Subjects
         public void OnCompleted(Action continuation)
         {
             if (continuation == null)
+            {
                 throw new ArgumentNullException(nameof(continuation));
+            }
 
             OnCompleted(continuation, originalContext: true);
         }
@@ -383,7 +387,9 @@ namespace System.Reactive.Subjects
             public AwaitObserver(Action callback, bool originalContext)
             {
                 if (originalContext)
+                {
                     _context = SynchronizationContext.Current;
+                }
 
                 _callback = callback;
             }
@@ -437,7 +443,9 @@ namespace System.Reactive.Subjects
             _exception.ThrowIfNotNull();
 
             if (!_hasValue)
+            {
                 throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+            }
 
             return _value;
         }

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace ReactiveTests.Tests
 {
-    class RogueEnumerable<T> : IEnumerable<T>
+    internal class RogueEnumerable<T> : IEnumerable<T>
     {
         private readonly Exception _ex;
 

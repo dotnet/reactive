@@ -14,13 +14,10 @@ namespace System.Reactive.Linq.ObservableImpl
     /// <typeparam name="T">The upstream value type.</typeparam>
     internal sealed class AutoConnect<T> : IObservable<T>
     {
-        readonly IConnectableObservable<T> source;
-
-        readonly int minObservers;
-
-        readonly Action<IDisposable> onConnect;
-
-        int count;
+        private readonly IConnectableObservable<T> source;
+        private readonly int minObservers;
+        private readonly Action<IDisposable> onConnect;
+        private int count;
 
         internal AutoConnect(IConnectableObservable<T> source, int minObservers, Action<IDisposable> onConnect)
         {

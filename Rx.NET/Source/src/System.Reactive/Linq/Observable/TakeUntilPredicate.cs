@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -12,12 +9,11 @@ namespace System.Reactive.Linq.ObservableImpl
     /// Relays items to the downstream until the predicate returns <code>true</code>.
     /// </summary>
     /// <typeparam name="TSource">The element type of the sequence</typeparam>
-    internal sealed class TakeUntilPredicate<TSource> : 
+    internal sealed class TakeUntilPredicate<TSource> :
         Producer<TSource, TakeUntilPredicate<TSource>.TakeUntilPredicateObserver>
     {
-        readonly IObservable<TSource> _source;
-
-        readonly Func<TSource, bool> _stopPredicate;
+        private readonly IObservable<TSource> _source;
+        private readonly Func<TSource, bool> _stopPredicate;
 
         public TakeUntilPredicate(IObservable<TSource> source, Func<TSource, bool> stopPredicate)
         {
@@ -31,10 +27,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class TakeUntilPredicateObserver : IdentitySink<TSource>
         {
-            readonly Func<TSource, bool> _stopPredicate;
+            private readonly Func<TSource, bool> _stopPredicate;
 
-            public TakeUntilPredicateObserver(IObserver<TSource> downstream, 
-                Func<TSource, bool> predicate) : base (downstream)
+            public TakeUntilPredicateObserver(IObserver<TSource> downstream,
+                Func<TSource, bool> predicate) : base(downstream)
             {
                 _stopPredicate = predicate;
             }

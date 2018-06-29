@@ -59,6 +59,6 @@ namespace System.Reactive
         /// <summary>
         /// Gets the single <see cref="Unit"/> value.
         /// </summary>
-        public static Unit Default => default(Unit);
+        public static Unit Default => default;
     }
 }

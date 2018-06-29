@@ -13,7 +13,7 @@ namespace Benchmarks.System.Reactive
     [MemoryDiagnoser]
     public class BufferCountBenchmark
     {
-        IList<int> _store;
+        private IList<int> _store;
 
         [Benchmark]
         public void Exact()

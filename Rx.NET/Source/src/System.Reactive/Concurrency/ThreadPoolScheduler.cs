@@ -38,12 +38,14 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var workItem = new UserWorkItem<TState>(this, state, action);
 
             ThreadPool.QueueUserWorkItem(
-                closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(), 
+                closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
                 workItem);
 
             return workItem;
@@ -61,7 +63,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
@@ -91,7 +95,9 @@ namespace System.Reactive.Concurrency
         public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return s_newBackgroundThread.Value.ScheduleLongRunning(state, action);
         }
@@ -123,9 +129,14 @@ namespace System.Reactive.Concurrency
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             if (period == TimeSpan.Zero)
             {

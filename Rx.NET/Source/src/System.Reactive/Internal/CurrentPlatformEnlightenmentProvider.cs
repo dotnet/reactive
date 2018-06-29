@@ -88,8 +88,10 @@ namespace System.Reactive.PlatformServices
 #else
                     var ifType = t;
 #endif
-                    var asm = new AssemblyName(ifType.Assembly.FullName);
-                    asm.Name = "System.Reactive";
+                    var asm = new AssemblyName(ifType.Assembly.FullName)
+                    {
+                        Name = "System.Reactive"
+                    };
                     var name = "System.Reactive.Linq.QueryDebugger, " + asm.FullName;
 
                     var dbg = Type.GetType(name, false);

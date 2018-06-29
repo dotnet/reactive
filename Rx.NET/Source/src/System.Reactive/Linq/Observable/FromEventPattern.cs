@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 using System.Reflection;
 using System.Threading;
 
@@ -120,9 +119,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 return new RemoveHandlerDisposable(removeHandler);
             }
 
-            sealed class RemoveHandlerDisposable : IDisposable
+            private sealed class RemoveHandlerDisposable : IDisposable
             {
-                Action _removeHandler;
+                private Action _removeHandler;
 
                 public RemoveHandlerDisposable(Action removeHandler)
                 {

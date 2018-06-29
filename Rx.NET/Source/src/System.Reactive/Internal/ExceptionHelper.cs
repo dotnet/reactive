@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
-using System.Linq;
 
 namespace System.Reactive
 {
@@ -81,8 +78,10 @@ namespace System.Reactive
                 else
                 if (current is AggregateException a)
                 {
-                    var list = new List<Exception>(a.InnerExceptions);
-                    list.Add(ex);
+                    var list = new List<Exception>(a.InnerExceptions)
+                    {
+                        ex
+                    };
                     b = new AggregateException(list);
                 }
                 else
@@ -99,7 +98,7 @@ namespace System.Reactive
         /// <summary>
         /// The class indicating a terminal state as an Exception type.
         /// </summary>
-        sealed class TerminatedException : Exception
+        private sealed class TerminatedException : Exception
         {
             internal TerminatedException() : base("No further exceptions")
             {

@@ -5,18 +5,15 @@
 
 #pragma warning disable 1591
 
-using System;
-using System.Reactive.Concurrency;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Reactive.Joins;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive.Concurrency;
+using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
 {
@@ -21918,7 +21915,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<IQbservable<Unit>> FromAsyncPattern(this IQbservableProvider provider, Expression<Func<AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<IQbservable<Unit>> FromAsyncPattern(this IQbservableProvider provider, Expression<Func<AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -21959,7 +21956,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, IQbservable<Unit>> FromAsyncPattern<TArg1>(this IQbservableProvider provider, Expression<Func<TArg1, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, IQbservable<Unit>> FromAsyncPattern<TArg1>(this IQbservableProvider provider, Expression<Func<TArg1, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22002,7 +21999,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, TArg2, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22047,7 +22044,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, TArg2, TArg3, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22094,7 +22091,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22143,7 +22140,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22194,7 +22191,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22247,7 +22244,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22302,7 +22299,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22359,7 +22356,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22418,7 +22415,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22479,7 +22476,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22542,7 +22539,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22607,7 +22604,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22674,7 +22671,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22729,7 +22726,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<IQbservable<TResult>> FromAsyncPattern<TResult>(this IQbservableProvider provider, Expression<Func<AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<IQbservable<TResult>> FromAsyncPattern<TResult>(this IQbservableProvider provider, Expression<Func<AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22771,7 +22768,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, IQbservable<TResult>> FromAsyncPattern<TArg1, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, IQbservable<TResult>> FromAsyncPattern<TArg1, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22815,7 +22812,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, TArg2, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22861,7 +22858,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, TArg2, TArg3, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22909,7 +22906,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -22959,7 +22956,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -23011,7 +23008,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -23065,7 +23062,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -23121,7 +23118,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -23179,7 +23176,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -23239,7 +23236,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -23301,7 +23298,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -23365,7 +23362,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -23431,7 +23428,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -23499,7 +23496,7 @@ namespace System.Reactive.Linq
 #if PREFERASYNC
         [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
 #endif
-        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
+        public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>> end)
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));

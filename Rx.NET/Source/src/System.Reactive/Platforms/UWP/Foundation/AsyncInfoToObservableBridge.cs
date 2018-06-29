@@ -3,13 +3,12 @@
 // See the LICENSE file in the project root for more information. 
 
 #if HAS_WINRT
-using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 using Windows.Foundation;
 
 namespace System.Reactive.Windows.Foundation
 {
-    class AsyncInfoToObservableBridge<TResult, TProgress> : ObservableBase<TResult>
+    internal class AsyncInfoToObservableBridge<TResult, TProgress> : ObservableBase<TResult>
     {
         private readonly Action<IAsyncInfo, Action<IAsyncInfo, AsyncStatus>> _onCompleted;
         private readonly Func<IAsyncInfo, TResult> _getResult;
@@ -25,10 +24,14 @@ namespace System.Reactive.Windows.Foundation
             onProgress?.Invoke(info, (iai, p) =>
             {
                 if (multiValue && getResult != null)
+                {
                     _subject.OnNext(getResult(iai));
+                }
 
                 if (progress != null)
+                {
                     progress.Report(p);
+                }
             });
 
             Done(info, info.Status, true);
@@ -48,18 +51,26 @@ namespace System.Reactive.Windows.Foundation
                 case AsyncStatus.Error:
                     error = info.ErrorCode;
                     if (error == null)
+                    {
                         throw new InvalidOperationException("The asynchronous operation failed with a null error code.");
+                    }
+
                     break;
                 case AsyncStatus.Canceled:
                     error = new OperationCanceledException();
                     break;
                 case AsyncStatus.Completed:
                     if (_getResult != null)
+                    {
                         result = _getResult(info);
+                    }
+
                     break;
                 default:
                     if (!initial)
+                    {
                         throw new InvalidOperationException("The asynchronous operation completed unexpectedly.");
+                    }
 
                     _onCompleted(info, (iai, s) => Done(iai, s, false));
                     return;
@@ -85,7 +96,9 @@ namespace System.Reactive.Windows.Foundation
             else
             {
                 if (_getResult != null)
+                {
                     _subject.OnNext(result);
+                }
 
                 _subject.OnCompleted();
             }

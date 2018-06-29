@@ -147,7 +147,10 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         if (_hasFailed)
+                        {
                             return;
+                        }
+
                         _running = true;
                     }
 
@@ -441,7 +444,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(this);
 
-            new private sealed class S : Base<Absolute>.S
+            private new sealed class S : Base<Absolute>.S
             {
                 public S(Absolute parent, IObserver<TSource> observer)
                     : base(parent, observer)
@@ -493,7 +496,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            new private sealed class L : Base<Absolute>.L
+            private new sealed class L : Base<Absolute>.L
             {
                 public L(Absolute parent, IObserver<TSource> observer)
                     : base(parent, observer)
@@ -545,7 +548,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(this);
 
-            new private sealed class S : Base<Relative>.S
+            private new sealed class S : Base<Relative>.S
             {
                 public S(Relative parent, IObserver<TSource> observer)
                     : base(parent, observer)
@@ -560,7 +563,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            new private sealed class L : Base<Relative>.L
+            private new sealed class L : Base<Relative>.L
             {
                 public L(Relative parent, IObserver<TSource> observer)
                     : base(parent, observer)
@@ -730,7 +733,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(Base<Selector>._ sink) => sink.Run(this);
 
-            new private sealed class _ : Base<Selector>._
+            private new sealed class _ : Base<Selector>._
             {
                 public _(Func<TSource, IObservable<TDelay>> delaySelector, IObserver<TSource> observer)
                     : base(delaySelector, observer)
@@ -757,7 +760,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(Base<SelectorWithSubscriptionDelay>._ sink) => sink.Run(this);
 
-            new private sealed class _ : Base<SelectorWithSubscriptionDelay>._
+            private new sealed class _ : Base<SelectorWithSubscriptionDelay>._
             {
                 public _(Func<TSource, IObservable<TDelay>> delaySelector, IObserver<TSource> observer)
                     : base(delaySelector, observer)

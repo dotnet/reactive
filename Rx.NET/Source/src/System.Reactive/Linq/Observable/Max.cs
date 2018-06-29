@@ -431,7 +431,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnNext(double? value)
             {
                 if (!value.HasValue)
+                {
                     return;
+                }
 
                 if (_lastValue.HasValue)
                 {
@@ -479,7 +481,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnNext(float? value)
             {
                 if (!value.HasValue)
+                {
                     return;
+                }
 
                 if (_lastValue.HasValue)
                 {
@@ -527,7 +531,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnNext(decimal? value)
             {
                 if (!value.HasValue)
+                {
                     return;
+                }
 
                 if (_lastValue.HasValue)
                 {
@@ -575,7 +581,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnNext(int? value)
             {
                 if (!value.HasValue)
+                {
                     return;
+                }
 
                 if (_lastValue.HasValue)
                 {
@@ -623,7 +631,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnNext(long? value)
             {
                 if (!value.HasValue)
+                {
                     return;
+                }
 
                 if (_lastValue.HasValue)
                 {

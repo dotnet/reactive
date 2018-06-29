@@ -74,9 +74,9 @@ namespace System.Reactive.Linq
         }
 
         [Serializable]
-        class SerializableObservable<T> : IObservable<T>
+        private class SerializableObservable<T> : IObservable<T>
         {
-            readonly RemotableObservable<T> remotableObservable;
+            private readonly RemotableObservable<T> remotableObservable;
 
             public SerializableObservable(RemotableObservable<T> remotableObservable)
             {
@@ -98,9 +98,9 @@ namespace System.Reactive.Linq
             }
         }
 
-        class RemotableObserver<T> : MarshalByRefObject, IObserver<T>, ISponsor
+        private class RemotableObserver<T> : MarshalByRefObject, IObserver<T>, ISponsor
         {
-            readonly IObserver<T> underlyingObserver;
+            private readonly IObserver<T> underlyingObserver;
 
             public RemotableObserver(IObserver<T> underlyingObserver)
             {
@@ -141,7 +141,9 @@ namespace System.Reactive.Linq
             {
                 var lease = (ILease)RemotingServices.GetLifetimeService(this);
                 if (lease != null)
+                {
                     lease.Unregister(this);
+                }
             }
 
             [SecurityCritical]
@@ -160,10 +162,10 @@ namespace System.Reactive.Linq
         }
 
         [Serializable]
-        sealed class RemotableObservable<T> : MarshalByRefObject, IObservable<T>
+        private sealed class RemotableObservable<T> : MarshalByRefObject, IObservable<T>
         {
-            readonly IObservable<T> underlyingObservable;
-            readonly ILease lease;
+            private readonly IObservable<T> underlyingObservable;
+            private readonly ILease lease;
 
             public RemotableObservable(IObservable<T> underlyingObservable, ILease lease)
             {
@@ -185,7 +187,7 @@ namespace System.Reactive.Linq
                 return lease;
             }
 
-            sealed class RemotableSubscription : MarshalByRefObject, IDisposable, ISponsor
+            private sealed class RemotableSubscription : MarshalByRefObject, IDisposable, ISponsor
             {
                 private IDisposable underlyingSubscription;
 
@@ -210,7 +212,9 @@ namespace System.Reactive.Linq
                 {
                     var lease = (ILease)RemotingServices.GetLifetimeService(this);
                     if (lease != null)
+                    {
                         lease.Unregister(this);
+                    }
                 }
 
                 [SecurityCritical]

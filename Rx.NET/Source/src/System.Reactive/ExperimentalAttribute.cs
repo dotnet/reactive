@@ -7,7 +7,7 @@ namespace System.Reactive
     /// <summary>
     /// Marks the program elements that are experimental. This class cannot be inherited.
     /// </summary>
-    [Experimental, AttributeUsage(AttributeTargets.All, AllowMultiple=false, Inherited=true)]
+    [Experimental, AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = true)]
     public sealed class ExperimentalAttribute : Attribute
     {
     }

@@ -62,7 +62,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     _kind = NotificationKind.OnError;
 
                     if (_waiting)
+                    {
                         _semaphore.Release();
+                    }
 
                     _waiting = false;
                 }
@@ -80,7 +82,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     _kind = NotificationKind.OnCompleted;
 
                     if (_waiting)
+                    {
                         _semaphore.Release();
+                    }
 
                     _waiting = false;
                 }

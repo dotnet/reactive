@@ -4,19 +4,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
@@ -170,7 +164,10 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(150, () => task = xs.ForEachAsync(x =>
             {
                 if (scheduler.Clock > 400)
+                {
                     throw exception;
+                }
+
                 list.Add(new Recorded<int>(scheduler.Clock, x));
             }, cts.Token));
 
@@ -316,7 +313,7 @@ namespace ReactiveTests.Tests
         {
             var N = 10;
 
-            for (int n = 0; n < N; n++)
+            for (var n = 0; n < N; n++)
             {
                 var cts = new CancellationTokenSource();
                 var done = false;
@@ -335,7 +332,9 @@ namespace ReactiveTests.Tests
                     x =>
                     {
                         lock (lst)
+                        {
                             lst.Add(x);
+                        }
                     },
                     cts.Token
                 );
@@ -343,17 +342,25 @@ namespace ReactiveTests.Tests
                 while (true)
                 {
                     lock (lst)
+                    {
                         if (lst.Count >= 10)
+                        {
                             break;
+                        }
+                    }
                 }
 
                 cts.Cancel();
 
                 while (!t.IsCompleted)
+                {
                     ;
+                }
 
-                for (int i = 0; i < 10; i++)
+                for (var i = 0; i < 10; i++)
+                {
                     Assert.Equal(42, lst[i]);
+                }
 
                 Assert.True(done);
                 Assert.True(t.IsCanceled);
@@ -365,7 +372,7 @@ namespace ReactiveTests.Tests
         {
             var N = 10;
 
-            for (int n = 0; n < N; n++)
+            for (var n = 0; n < N; n++)
             {
                 var cts = new CancellationTokenSource();
                 var done = false;
@@ -384,7 +391,9 @@ namespace ReactiveTests.Tests
                     (x, i) =>
                     {
                         lock (lst)
+                        {
                             lst.Add(x * i);
+                        }
                     },
                     cts.Token
                 );
@@ -392,17 +401,25 @@ namespace ReactiveTests.Tests
                 while (true)
                 {
                     lock (lst)
+                    {
                         if (lst.Count >= 10)
+                        {
                             break;
+                        }
+                    }
                 }
 
                 cts.Cancel();
 
                 while (!t.IsCompleted)
+                {
                     ;
+                }
 
-                for (int i = 0; i < 10; i++)
+                for (var i = 0; i < 10; i++)
+                {
                     Assert.Equal(i * 42, lst[i]);
+                }
 
                 Assert.True(done);
                 Assert.True(t.IsCanceled);
@@ -553,7 +570,10 @@ namespace ReactiveTests.Tests
             var xs = Observable.Create<int>(observer =>
             {
                 if (x == 42)
+                {
                     throw ex;
+                }
+
                 return Disposable.Empty;
             });
 

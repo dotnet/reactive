@@ -221,7 +221,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 // lock. Future subscriptions will cause a new session to be created.
                 //
                 if (_session == null)
+                {
                     _session = new Session(this);
+                }
 
                 connection = _session.Connect(observer);
             }

@@ -5,19 +5,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -122,8 +116,10 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Range_Default()
         {
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
+            {
                 Observable.Range(100, 100).AssertEqual(Observable.Range(100, 100, DefaultScheduler.Instance));
+            }
         }
 
 #if !NO_PERF
@@ -162,7 +158,9 @@ namespace ReactiveTests.Tests
             start.WaitOne();
 
             while (lst.Count < 100)
+            {
                 ;
+            }
 
             d.Dispose();
             end.WaitOne();

@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class HistoricalSchedulerTest
     {
         public DateTimeOffset Time(int i)
@@ -401,7 +401,7 @@ namespace ReactiveTests.Tests
             Assert.True(new[] { 1, 2 }.SequenceEqual(res));
         }
 
-        class ReverseComparer<T> : IComparer<T>
+        private class ReverseComparer<T> : IComparer<T>
         {
             private readonly IComparer<T> _comparer;
 

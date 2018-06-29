@@ -2,13 +2,12 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Reactive.Disposables;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Reactive.Linq.ObservableImpl;
+using System.Reactive.Subjects;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace System.Reactive.Threading.Tasks
 {
@@ -27,7 +26,9 @@ namespace System.Reactive.Threading.Tasks
         public static IObservable<Unit> ToObservable(this Task task)
         {
             if (task == null)
+            {
                 throw new ArgumentNullException(nameof(task));
+            }
 
             return ToObservableImpl(task, scheduler: null);
         }
@@ -43,9 +44,14 @@ namespace System.Reactive.Threading.Tasks
         public static IObservable<Unit> ToObservable(this Task task, IScheduler scheduler)
         {
             if (task == null)
+            {
                 throw new ArgumentNullException(nameof(task));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return ToObservableImpl(task, scheduler);
         }
@@ -121,7 +127,9 @@ namespace System.Reactive.Threading.Tasks
         public static IObservable<TResult> ToObservable<TResult>(this Task<TResult> task)
         {
             if (task == null)
+            {
                 throw new ArgumentNullException(nameof(task));
+            }
 
             return ToObservableImpl(task, scheduler: null);
         }
@@ -138,9 +146,14 @@ namespace System.Reactive.Threading.Tasks
         public static IObservable<TResult> ToObservable<TResult>(this Task<TResult> task, IScheduler scheduler)
         {
             if (task == null)
+            {
                 throw new ArgumentNullException(nameof(task));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return ToObservableImpl(task, scheduler);
         }
@@ -249,7 +262,9 @@ namespace System.Reactive.Threading.Tasks
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable)
         {
             if (observable == null)
+            {
                 throw new ArgumentNullException(nameof(observable));
+            }
 
             return observable.ToTask(new CancellationToken(), state: null);
         }
@@ -265,7 +280,9 @@ namespace System.Reactive.Threading.Tasks
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, object state)
         {
             if (observable == null)
+            {
                 throw new ArgumentNullException(nameof(observable));
+            }
 
             return observable.ToTask(new CancellationToken(), state);
         }
@@ -281,7 +298,9 @@ namespace System.Reactive.Threading.Tasks
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken)
         {
             if (observable == null)
+            {
                 throw new ArgumentNullException(nameof(observable));
+            }
 
             return observable.ToTask(cancellationToken, state: null);
         }
@@ -358,7 +377,9 @@ namespace System.Reactive.Threading.Tasks
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken, object state)
         {
             if (observable == null)
+            {
                 throw new ArgumentNullException(nameof(observable));
+            }
 
             var tcs = new TaskCompletionSource<TResult>(state);
 

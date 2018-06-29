@@ -34,12 +34,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly TimeSpan _dueTime;
                 private readonly IObservable<TSource> _other;
                 private readonly IScheduler _scheduler;
-
-                long _index;
-
-                IDisposable _mainDisposable;
-                IDisposable _otherDisposable;
-                IDisposable _timerDisposable;
+                private long _index;
+                private IDisposable _mainDisposable;
+                private IDisposable _otherDisposable;
+                private IDisposable _timerDisposable;
 
                 public _(Relative parent, IObserver<TSource> observer)
                     : base(observer)
@@ -150,9 +148,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly IObservable<TSource> _other;
-
                 private IDisposable _serialDisposable;
-
                 private int _wip;
 
                 public _(IObservable<TSource> other, IObserver<TSource> observer)
@@ -240,10 +236,8 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly Func<TSource, IObservable<TTimeout>> _timeoutSelector;
             private readonly IObservable<TSource> _other;
-
             private IDisposable _sourceDisposable;
             private IDisposable _timerDisposable;
-
             private long _index;
 
             public _(Timeout<TSource, TTimeout> parent, IObserver<TSource> observer)
@@ -296,7 +290,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
 
                         SetTimer(timeoutSource, idx + 1);
-                    }   
+                    }
                 }
             }
 
@@ -306,7 +300,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     ForwardOnError(error);
                 }
-            }   
+            }
 
             public override void OnCompleted()
             {
@@ -316,7 +310,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            void Timeout(long idx)
+            private void Timeout(long idx)
             {
                 if (Volatile.Read(ref _index) == idx
                     && Interlocked.CompareExchange(ref _index, long.MaxValue, idx) == idx)
@@ -325,7 +319,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            bool TimeoutError(long idx, Exception error)
+            private bool TimeoutError(long idx, Exception error)
             {
                 if (Volatile.Read(ref _index) == idx
                     && Interlocked.CompareExchange(ref _index, long.MaxValue, idx) == idx)
@@ -344,7 +338,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var d = timeout.Subscribe(timeoutObserver);
                     timeoutObserver.SetResource(d);
                 }
-            }   
+            }
 
             private sealed class TimeoutObserver : SafeObserver<TTimeout>
             {

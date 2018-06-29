@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
@@ -121,11 +121,19 @@ namespace System.Reactive
             public override bool Equals(Notification<T> other)
             {
                 if (ReferenceEquals(this, other))
+                {
                     return true;
-                if (ReferenceEquals(other, null))
+                }
+
+                if (other is null)
+                {
                     return false;
+                }
+
                 if (other.Kind != NotificationKind.OnNext)
+                {
                     return false;
+                }
 
                 return EqualityComparer<T>.Default.Equals(Value, other.Value);
             }
@@ -142,7 +150,9 @@ namespace System.Reactive
             public override void Accept(IObserver<T> observer)
             {
                 if (observer == null)
+                {
                     throw new ArgumentNullException(nameof(observer));
+                }
 
                 observer.OnNext(Value);
             }
@@ -155,7 +165,9 @@ namespace System.Reactive
             public override TResult Accept<TResult>(IObserver<T, TResult> observer)
             {
                 if (observer == null)
+                {
                     throw new ArgumentNullException(nameof(observer));
+                }
 
                 return observer.OnNext(Value);
             }
@@ -169,11 +181,19 @@ namespace System.Reactive
             public override void Accept(Action<T> onNext, Action<Exception> onError, Action onCompleted)
             {
                 if (onNext == null)
+                {
                     throw new ArgumentNullException(nameof(onNext));
+                }
+
                 if (onError == null)
+                {
                     throw new ArgumentNullException(nameof(onError));
+                }
+
                 if (onCompleted == null)
+                {
                     throw new ArgumentNullException(nameof(onCompleted));
+                }
 
                 onNext(Value);
             }
@@ -188,11 +208,19 @@ namespace System.Reactive
             public override TResult Accept<TResult>(Func<T, TResult> onNext, Func<Exception, TResult> onError, Func<TResult> onCompleted)
             {
                 if (onNext == null)
+                {
                     throw new ArgumentNullException(nameof(onNext));
+                }
+
                 if (onError == null)
+                {
                     throw new ArgumentNullException(nameof(onError));
+                }
+
                 if (onCompleted == null)
+                {
                     throw new ArgumentNullException(nameof(onCompleted));
+                }
 
                 return onNext(Value);
             }
@@ -248,11 +276,19 @@ namespace System.Reactive
             public override bool Equals(Notification<T> other)
             {
                 if (ReferenceEquals(this, other))
+                {
                     return true;
-                if (ReferenceEquals(other, null))
+                }
+
+                if (other is null)
+                {
                     return false;
+                }
+
                 if (other.Kind != NotificationKind.OnError)
+                {
                     return false;
+                }
 
                 return Equals(Exception, other.Exception);
             }
@@ -269,7 +305,9 @@ namespace System.Reactive
             public override void Accept(IObserver<T> observer)
             {
                 if (observer == null)
+                {
                     throw new ArgumentNullException(nameof(observer));
+                }
 
                 observer.OnError(Exception);
             }
@@ -282,7 +320,9 @@ namespace System.Reactive
             public override TResult Accept<TResult>(IObserver<T, TResult> observer)
             {
                 if (observer == null)
+                {
                     throw new ArgumentNullException(nameof(observer));
+                }
 
                 return observer.OnError(Exception);
             }
@@ -296,11 +336,19 @@ namespace System.Reactive
             public override void Accept(Action<T> onNext, Action<Exception> onError, Action onCompleted)
             {
                 if (onNext == null)
+                {
                     throw new ArgumentNullException(nameof(onNext));
+                }
+
                 if (onError == null)
+                {
                     throw new ArgumentNullException(nameof(onError));
+                }
+
                 if (onCompleted == null)
+                {
                     throw new ArgumentNullException(nameof(onCompleted));
+                }
 
                 onError(Exception);
             }
@@ -315,11 +363,19 @@ namespace System.Reactive
             public override TResult Accept<TResult>(Func<T, TResult> onNext, Func<Exception, TResult> onError, Func<TResult> onCompleted)
             {
                 if (onNext == null)
+                {
                     throw new ArgumentNullException(nameof(onNext));
+                }
+
                 if (onError == null)
+                {
                     throw new ArgumentNullException(nameof(onError));
+                }
+
                 if (onCompleted == null)
+                {
                     throw new ArgumentNullException(nameof(onCompleted));
+                }
 
                 return onError(Exception);
             }
@@ -380,9 +436,14 @@ namespace System.Reactive
             public override bool Equals(Notification<T> other)
             {
                 if (ReferenceEquals(this, other))
+                {
                     return true;
-                if (ReferenceEquals(other, null))
+                }
+
+                if (other is null)
+                {
                     return false;
+                }
 
                 return other.Kind == NotificationKind.OnCompleted;
             }
@@ -399,7 +460,9 @@ namespace System.Reactive
             public override void Accept(IObserver<T> observer)
             {
                 if (observer == null)
+                {
                     throw new ArgumentNullException(nameof(observer));
+                }
 
                 observer.OnCompleted();
             }
@@ -412,7 +475,9 @@ namespace System.Reactive
             public override TResult Accept<TResult>(IObserver<T, TResult> observer)
             {
                 if (observer == null)
+                {
                     throw new ArgumentNullException(nameof(observer));
+                }
 
                 return observer.OnCompleted();
             }
@@ -426,11 +491,19 @@ namespace System.Reactive
             public override void Accept(Action<T> onNext, Action<Exception> onError, Action onCompleted)
             {
                 if (onNext == null)
+                {
                     throw new ArgumentNullException(nameof(onNext));
+                }
+
                 if (onError == null)
+                {
                     throw new ArgumentNullException(nameof(onError));
+                }
+
                 if (onCompleted == null)
+                {
                     throw new ArgumentNullException(nameof(onCompleted));
+                }
 
                 onCompleted();
             }
@@ -445,11 +518,19 @@ namespace System.Reactive
             public override TResult Accept<TResult>(Func<T, TResult> onNext, Func<Exception, TResult> onError, Func<TResult> onCompleted)
             {
                 if (onNext == null)
+                {
                     throw new ArgumentNullException(nameof(onNext));
+                }
+
                 if (onError == null)
+                {
                     throw new ArgumentNullException(nameof(onError));
+                }
+
                 if (onCompleted == null)
+                {
                     throw new ArgumentNullException(nameof(onCompleted));
+                }
 
                 return onCompleted();
             }
@@ -481,10 +562,14 @@ namespace System.Reactive
         public static bool operator ==(Notification<T> left, Notification<T> right)
         {
             if (ReferenceEquals(left, right))
+            {
                 return true;
+            }
 
             if ((object)left == null || (object)right == null)
+            {
                 return false;
+            }
 
             return left.Equals(right);
         }
@@ -535,7 +620,7 @@ namespace System.Reactive
         /// <param name="onError">Delegate to invoke for an OnError notification.</param>
         /// <param name="onCompleted">Delegate to invoke for an OnCompleted notification.</param>
         public abstract void Accept(Action<T> onNext, Action<Exception> onError, Action onCompleted);
-        
+
         /// <summary>
         /// Invokes the delegate corresponding to the notification and returns the produced result.
         /// </summary>
@@ -560,16 +645,17 @@ namespace System.Reactive
         public IObservable<T> ToObservable(IScheduler scheduler)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return new NotificationToObservable(scheduler, this);
         }
 
-        sealed class NotificationToObservable : ObservableBase<T>
+        private sealed class NotificationToObservable : ObservableBase<T>
         {
-            readonly IScheduler scheduler;
-
-            readonly Notification<T> parent;
+            private readonly IScheduler scheduler;
+            private readonly Notification<T> parent;
 
             public NotificationToObservable(IScheduler scheduler, Notification<T> parent)
             {
@@ -622,7 +708,9 @@ namespace System.Reactive
         public static Notification<T> CreateOnError<T>(Exception error)
         {
             if (error == null)
+            {
                 throw new ArgumentNullException(nameof(error));
+            }
 
             return new Notification<T>.OnErrorNotification(error);
         }

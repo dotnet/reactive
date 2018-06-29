@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace ReactiveTests
 {
-    class TestLongRunningScheduler : IScheduler, ISchedulerLongRunning, IServiceProvider
+    internal class TestLongRunningScheduler : IScheduler, ISchedulerLongRunning, IServiceProvider
     {
-        private Action<ManualResetEvent> _setStart;
-        private Action<ManualResetEvent> _setEnd;
-        private Action<Exception> _setException;
+        private readonly Action<ManualResetEvent> _setStart;
+        private readonly Action<ManualResetEvent> _setEnd;
+        private readonly Action<Exception> _setException;
 
         public TestLongRunningScheduler(Action<ManualResetEvent> setStart, Action<ManualResetEvent> setEnd)
             : this(setStart, setEnd, null)
@@ -68,7 +68,9 @@ namespace ReactiveTests
                 catch (Exception ex)
                 {
                     if (_setException == null)
+                    {
                         throw;
+                    }
 
                     _setException(ex);
                 }
@@ -84,7 +86,9 @@ namespace ReactiveTests
         object IServiceProvider.GetService(Type serviceType)
         {
             if (serviceType == typeof(ISchedulerLongRunning))
+            {
                 return this;
+            }
 
             return null;
         }

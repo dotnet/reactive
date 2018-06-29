@@ -7,11 +7,11 @@ using System.Reactive.Concurrency;
 
 namespace ReactiveTests.Dummies
 {
-    class DummyScheduler : IScheduler
+    internal class DummyScheduler : IScheduler
     {
         public static readonly DummyScheduler Instance = new DummyScheduler();
 
-        DummyScheduler()
+        private DummyScheduler()
         {
         }
 

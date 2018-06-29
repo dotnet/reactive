@@ -26,11 +26,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class RangeSink : IdentitySink<int>
         {
-            readonly int _end;
-
-            int _index;
-
-            IDisposable _task;
+            private readonly int _end;
+            private int _index;
+            private IDisposable _task;
 
             public RangeSink(int start, int count, IObserver<int> observer)
                 : base(observer)
@@ -52,7 +50,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     Disposable.TryDispose(ref _task);
                 }
-            }   
+            }
 
             private IDisposable LoopRec(IScheduler scheduler)
             {
@@ -63,7 +61,8 @@ namespace System.Reactive.Linq.ObservableImpl
                     ForwardOnNext(idx);
                     var next = scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
                     Disposable.TrySetMultiple(ref _task, next);
-                } else
+                }
+                else
                 {
                     ForwardOnCompleted();
                 }
@@ -91,9 +90,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class RangeSink : IdentitySink<int>
         {
-            readonly int _end;
-
-            int _index;
+            private readonly int _end;
+            private readonly int _index;
 
             public RangeSink(int start, int count, IObserver<int> observer)
                 : base(observer)
@@ -117,7 +115,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 if (!cancel.IsDisposed)
+                {
                     ForwardOnCompleted();
+                }
             }
         }
     }

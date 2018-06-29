@@ -5,16 +5,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
-using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Reactive.Disposables;
 
 namespace ReactiveTests.Tests
 {
@@ -54,7 +49,10 @@ namespace ReactiveTests.Tests
                     var b = res.MoveNext();
                     hasNext.Add(b);
                     if (b)
+                    {
                         vals.Add(new Tuple<long, int>(scheduler.Clock, res.Current));
+                    }
+
                     return Disposable.Empty;
                 });
             }
@@ -103,7 +101,10 @@ namespace ReactiveTests.Tests
                     var b = res.MoveNext();
                     hasNext.Add(b);
                     if (b)
+                    {
                         vals.Add(new Tuple<long, int>(scheduler.Clock, res.Current));
+                    }
+
                     return Disposable.Empty;
                 });
             }

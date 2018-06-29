@@ -3,12 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
@@ -23,10 +18,10 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
             var someObservable = Observable.Empty<int>();
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Append(default(IObservable<int>), 1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Append(default, 1));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Append(default(IObservable<int>), 1, scheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Append(someObservable, 1, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Append(default, 1, scheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Append(someObservable, 1, default));
         }
 
         [Fact]

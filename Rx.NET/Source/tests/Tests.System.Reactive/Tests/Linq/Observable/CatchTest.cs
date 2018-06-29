@@ -5,18 +5,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
 using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -26,10 +21,10 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Catch_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int>((IObservable<int>[])null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int>((IEnumerable<IObservable<int>>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int>(DummyObservable<int>.Instance, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int>((IObservable<int>)null, DummyObservable<int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int>(null, DummyObservable<int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int, Exception>(null, _ => DummyObservable<int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int, Exception>(DummyObservable<int>.Instance, null));
         }
@@ -682,7 +677,7 @@ namespace ReactiveTests.Tests
         {
             var evt = new ManualResetEvent(false);
 
-            int res = 0;
+            var res = 0;
             Observable.Return(1).Catch(Observable.Return(2)).Subscribe(x =>
             {
                 res = x;
@@ -698,7 +693,7 @@ namespace ReactiveTests.Tests
         {
             var evt = new ManualResetEvent(false);
 
-            int res = 0;
+            var res = 0;
             Observable.Catch(Observable.Return(1), Observable.Return(2), Observable.Return(3)).Subscribe(x =>
             {
                 res = x;
@@ -716,7 +711,7 @@ namespace ReactiveTests.Tests
 
             IEnumerable<IObservable<int>> sources = new[] { Observable.Return(1), Observable.Return(2), Observable.Return(3) };
 
-            int res = 0;
+            var res = 0;
             Observable.Catch(sources).Subscribe(x =>
             {
                 res = x;
@@ -759,9 +754,13 @@ namespace ReactiveTests.Tests
         private IEnumerable<IObservable<int>> Catch_IteratorThrows_Source(Exception ex, bool b)
         {
             if (b)
+            {
                 throw ex;
+            }
             else
+            {
                 yield break;
+            }
         }
 
         [Fact]
@@ -936,9 +935,7 @@ namespace ReactiveTests.Tests
                 OnError<int>(40, new Exception())
             );
 
-            var f = default(Func<IObservable<int>>);
-            f = () => Observable.Defer(() => o.Catch(f()));
-
+            IObservable<int> f() => Observable.Defer(() => o.Catch(f()));
             var res = scheduler.Start(() => f(), create, start, end);
 
             var expected = new List<Recorded<Notification<int>>>();

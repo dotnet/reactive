@@ -5,19 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
+using System.Reactive.Joins;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
-using System.Reactive.Joins;
 
 namespace ReactiveTests.Tests
 {
@@ -27,7 +18,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void When_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.When<int>((Plan<int>[])null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.When<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.When<int>((IEnumerable<Plan<int>>)null));
         }
 
@@ -218,7 +209,9 @@ namespace ReactiveTests.Tests
         private IEnumerable<Plan<int>> GetPlans(Exception ex)
         {
             if (ex != null)
+            {
                 throw ex;
+            }
 
             yield break;
         }

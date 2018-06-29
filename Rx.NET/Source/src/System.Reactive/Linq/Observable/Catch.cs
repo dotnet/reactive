@@ -31,7 +31,9 @@ namespace System.Reactive.Linq.ObservableImpl
             protected override IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source)
             {
                 if (source is Catch<TSource> @catch)
+                {
                     return @catch._sources;
+                }
 
                 return null;
             }
@@ -47,9 +49,13 @@ namespace System.Reactive.Linq.ObservableImpl
             protected override void Done()
             {
                 if (_lastException != null)
+                {
                     ForwardOnError(_lastException);
+                }
                 else
+                {
                     ForwardOnCompleted();
+                }
             }
 
             protected override bool Fail(Exception error)
@@ -90,8 +96,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _handler = handler;
             }
 
-            bool _once;
-
+            private bool _once;
             private IDisposable _subscription;
 
             public override void Run(IObservable<TSource> source)

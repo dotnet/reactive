@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Threading.Tasks;
@@ -23,9 +21,9 @@ namespace System.Reactive.Linq
             return new CreateWithDisposableObservable<TSource>(subscribe);
         }
 
-        sealed class CreateWithDisposableObservable<TSource> : ObservableBase<TSource>
+        private sealed class CreateWithDisposableObservable<TSource> : ObservableBase<TSource>
         {
-            readonly Func<IObserver<TSource>, IDisposable> subscribe;
+            private readonly Func<IObserver<TSource>, IDisposable> subscribe;
 
             public CreateWithDisposableObservable(Func<IObserver<TSource>, IDisposable> subscribe)
             {
@@ -43,9 +41,9 @@ namespace System.Reactive.Linq
             return new CreateWithActionDisposable<TSource>(subscribe);
         }
 
-        sealed class CreateWithActionDisposable<TSource> : ObservableBase<TSource>
+        private sealed class CreateWithActionDisposable<TSource> : ObservableBase<TSource>
         {
-            readonly Func<IObserver<TSource>, Action> subscribe;
+            private readonly Func<IObserver<TSource>, Action> subscribe;
 
             public CreateWithActionDisposable(Func<IObserver<TSource>, Action> subscribe)
             {
@@ -68,9 +66,9 @@ namespace System.Reactive.Linq
             return new CreateWithTaskTokenObservable<TResult>(subscribeAsync);
         }
 
-        sealed class CreateWithTaskTokenObservable<TResult> : ObservableBase<TResult>
+        private sealed class CreateWithTaskTokenObservable<TResult> : ObservableBase<TResult>
         {
-            readonly Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync;
+            private readonly Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync;
 
             public CreateWithTaskTokenObservable(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync)
             {
@@ -88,9 +86,9 @@ namespace System.Reactive.Linq
                 return StableCompositeDisposable.Create(cancellable, subscription);
             }
 
-            sealed class TaskCompletionObserver : IObserver<Unit>
+            private sealed class TaskCompletionObserver : IObserver<Unit>
             {
-                readonly IObserver<TResult> observer;
+                private readonly IObserver<TResult> observer;
 
                 public TaskCompletionObserver(IObserver<TResult> observer)
                 {
@@ -124,9 +122,9 @@ namespace System.Reactive.Linq
             return new CreateWithTaskDisposable<TResult>(subscribeAsync);
         }
 
-        sealed class CreateWithTaskDisposable<TResult> : ObservableBase<TResult>
+        private sealed class CreateWithTaskDisposable<TResult> : ObservableBase<TResult>
         {
-            readonly Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync;
+            private readonly Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync;
 
             public CreateWithTaskDisposable(Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync)
             {
@@ -150,11 +148,10 @@ namespace System.Reactive.Linq
                 return StableCompositeDisposable.Create(cancellable, taskCompletionObserver);
             }
 
-            sealed class TaskDisposeCompletionObserver : IObserver<IDisposable>, IDisposable
+            private sealed class TaskDisposeCompletionObserver : IObserver<IDisposable>, IDisposable
             {
-                readonly IObserver<TResult> observer;
-
-                IDisposable disposable;
+                private readonly IObserver<TResult> observer;
+                private IDisposable disposable;
 
                 public TaskDisposeCompletionObserver(IObserver<TResult> observer)
                 {
@@ -193,9 +190,9 @@ namespace System.Reactive.Linq
             return new CreateWithTaskActionObservable<TResult>(subscribeAsync);
         }
 
-        sealed class CreateWithTaskActionObservable<TResult> : ObservableBase<TResult>
+        private sealed class CreateWithTaskActionObservable<TResult> : ObservableBase<TResult>
         {
-            readonly Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync;
+            private readonly Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync;
 
             public CreateWithTaskActionObservable(Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync)
             {
@@ -219,13 +216,11 @@ namespace System.Reactive.Linq
                 return StableCompositeDisposable.Create(cancellable, taskCompletionObserver);
             }
 
-            sealed class TaskDisposeCompletionObserver : IObserver<Action>, IDisposable
+            private sealed class TaskDisposeCompletionObserver : IObserver<Action>, IDisposable
             {
-                readonly IObserver<TResult> observer;
-
-                Action disposable;
-
-                static readonly Action DisposedAction = () => { };
+                private readonly IObserver<TResult> observer;
+                private Action disposable;
+                private static readonly Action DisposedAction = () => { };
 
                 public TaskDisposeCompletionObserver(IObserver<TResult> observer)
                 {

@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.ComponentModel;
-using System.Threading;
-using System.Reactive.Disposables;
 
 namespace System.Reactive.Concurrency
 {
@@ -46,7 +44,9 @@ namespace System.Reactive.Concurrency
             get
             {
                 if (s_clock == null)
+                {
                     s_clock = ConcurrencyAbstractionLayer.Current.StartStopwatch();
+                }
 
                 return s_clock.Elapsed;
             }
@@ -78,7 +78,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var queue = default(SchedulerQueue<TimeSpan>);
 

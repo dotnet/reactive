@@ -2,21 +2,16 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
-using System.Text;
 using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class RepeatWhen<T, U> : IObservable<T>
     {
-        readonly IObservable<T> source;
-
-        readonly Func<IObservable<object>, IObservable<U>> handler;
+        private readonly IObservable<T> source;
+        private readonly Func<IObservable<object>, IObservable<U>> handler;
 
         internal RepeatWhen(IObservable<T> source, Func<IObservable<object>, IObservable<U>> handler)
         {
@@ -58,23 +53,18 @@ namespace System.Reactive.Linq.ObservableImpl
             return parent;
         }
 
-        sealed class MainObserver : Sink<T>, IObserver<T>
+        private sealed class MainObserver : Sink<T>, IObserver<T>
         {
-            readonly IObserver<Exception> errorSignal;
+            private readonly IObserver<Exception> errorSignal;
 
             internal readonly HandlerObserver handlerObserver;
-
-            readonly IObservable<T> source;
-
-            IDisposable upstream;
+            private readonly IObservable<T> source;
+            private IDisposable upstream;
 
             internal IDisposable handlerUpstream;
-
-            int trampoline;
-
-            int halfSerializer;
-
-            Exception error;
+            private int trampoline;
+            private int halfSerializer;
+            private Exception error;
 
             internal MainObserver(IObserver<T> downstream, IObservable<T> source, IObserver<Exception> errorSignal) : base(downstream)
             {
@@ -142,7 +132,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class HandlerObserver : IObserver<U>
             {
-                readonly MainObserver main;
+                private readonly MainObserver main;
 
                 internal HandlerObserver(MainObserver main)
                 {

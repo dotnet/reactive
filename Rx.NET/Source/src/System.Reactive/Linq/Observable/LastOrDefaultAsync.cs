@@ -26,6 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public _(IObserver<TSource> observer)
                     : base(observer)
                 {
+
                 }
 
                 public override void OnNext(TSource value)

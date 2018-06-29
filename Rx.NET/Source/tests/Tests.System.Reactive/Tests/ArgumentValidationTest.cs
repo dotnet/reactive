@@ -12,7 +12,6 @@ using System.Reactive.Joins;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -32,7 +31,7 @@ namespace ReactiveTests.Tests
         /// as strings generated via <see cref="TypeNameOf(Type)"/>,
         /// mapped to a value.
         /// </summary>
-        static Dictionary<string, object> _defaultValues;
+        private static Dictionary<string, object> _defaultValues;
 
         /// <summary>
         /// Prepare the default instances for various types used
@@ -40,225 +39,232 @@ namespace ReactiveTests.Tests
         /// </summary>
         static ArgumentValidationTest()
         {
-            _defaultValues = new Dictionary<string, object>();
+            _defaultValues = new Dictionary<string, object>
+            {
+                { "IObservable`1[Object]", Observable.Return(new object()) },
+                { "IObservable`1[Int32]", Observable.Return(1) },
+                { "IObservable`1[Task`1[Int32]]", Observable.Return(Task.FromResult(1)) },
+                { "IObservable`1[Notification`1[Int32]]", Observable.Return(Notification.CreateOnNext(1)) },
+                { "IObservable`1[Int64]", Observable.Return(1L) },
+                { "IObservable`1[Double]", Observable.Return(1.0) },
+                { "IObservable`1[Single]", Observable.Return(1.0f) },
+                { "IObservable`1[Decimal]", Observable.Return(1.0m) },
+                { "IObservable`1[Nullable`1[Int32]]", Observable.Return<int?>(1) },
+                { "IObservable`1[Nullable`1[Int64]]", Observable.Return<long?>(1L) },
+                { "IObservable`1[Nullable`1[Double]]", Observable.Return<double?>(1.0) },
+                { "IObservable`1[Nullable`1[Single]]", Observable.Return<float?>(1.0f) },
+                { "IObservable`1[Nullable`1[Decimal]]", Observable.Return<decimal?>(1.0m) },
+                { "IObservable`1[IObservable`1[Int32]]", Observable.Return(Observable.Return(1)) },
+                { "IObservable`1[][Int32]", new[] { Observable.Return(1) } },
 
-            _defaultValues.Add("IObservable`1[Object]", Observable.Return(new object()));
-            _defaultValues.Add("IObservable`1[Int32]", Observable.Return(1));
-            _defaultValues.Add("IObservable`1[Task`1[Int32]]", Observable.Return(Task.FromResult(1)));
-            _defaultValues.Add("IObservable`1[Notification`1[Int32]]", Observable.Return(Notification.CreateOnNext(1)));
-            _defaultValues.Add("IObservable`1[Int64]", Observable.Return(1L));
-            _defaultValues.Add("IObservable`1[Double]", Observable.Return(1.0));
-            _defaultValues.Add("IObservable`1[Single]", Observable.Return(1.0f));
-            _defaultValues.Add("IObservable`1[Decimal]", Observable.Return(1.0m));
-            _defaultValues.Add("IObservable`1[Nullable`1[Int32]]", Observable.Return<int?>(1));
-            _defaultValues.Add("IObservable`1[Nullable`1[Int64]]", Observable.Return<long?>(1L));
-            _defaultValues.Add("IObservable`1[Nullable`1[Double]]", Observable.Return<double?>(1.0));
-            _defaultValues.Add("IObservable`1[Nullable`1[Single]]", Observable.Return<float?>(1.0f));
-            _defaultValues.Add("IObservable`1[Nullable`1[Decimal]]", Observable.Return<decimal?>(1.0m));
-            _defaultValues.Add("IObservable`1[IObservable`1[Int32]]", Observable.Return(Observable.Return(1)));
-            _defaultValues.Add("IObservable`1[][Int32]", new[] { Observable.Return(1) });
+                { "IConnectableObservable`1[Int32]", Observable.Return(1).Publish() },
+                { "Int32", 1 },
+                { "Int64", 1L },
+                { "IScheduler", Scheduler.Immediate },
+                { "TimeSpan", TimeSpan.FromMilliseconds(1) },
+                { "DateTimeOffset", DateTimeOffset.Now },
+                { "Object", new object() },
+                { "Exception", new Exception() },
+                { "String", "String" },
 
-            _defaultValues.Add("IConnectableObservable`1[Int32]", Observable.Return(1).Publish());
-            _defaultValues.Add("Int32", 1);
-            _defaultValues.Add("Int64", 1L);
-            _defaultValues.Add("IScheduler", Scheduler.Immediate);
-            _defaultValues.Add("TimeSpan", TimeSpan.FromMilliseconds(1));
-            _defaultValues.Add("DateTimeOffset", DateTimeOffset.Now);
-            _defaultValues.Add("Object", new object());
-            _defaultValues.Add("Exception", new Exception());
-            _defaultValues.Add("String", "String");
+                { "IDictionary`2[Int32, IObservable`1[Int32]]", new Dictionary<int, IObservable<int>>() },
 
-            _defaultValues.Add("IDictionary`2[Int32, IObservable`1[Int32]]", new Dictionary<int, IObservable<int>>());
+                { "Type", typeof(object) },
 
-            _defaultValues.Add("Type", typeof(object));
+                { "Int32[]", new[] { 1 } },
 
-            _defaultValues.Add("Int32[]", new[] { 1 });
+                { "ISubject`1[Int32]", new Subject<int>() },
 
-            _defaultValues.Add("ISubject`1[Int32]", new Subject<int>());
+                { "ISubject`2[Int32, Int32]", new Subject<int>() },
 
-            _defaultValues.Add("ISubject`2[Int32, Int32]", new Subject<int>());
+                { "IEnumerable`1[Int32]", new[] { 1 } },
 
-            _defaultValues.Add("IEnumerable`1[Int32]", new[] { 1 });
+                { "IEnumerable`1[IObservable`1[Int32]]", new[] { Observable.Return(1) } },
 
-            _defaultValues.Add("IEnumerable`1[IObservable`1[Int32]]", new[] { Observable.Return(1) });
+                { "SynchronizationContext", SynchronizationContext.Current },
 
-            _defaultValues.Add("SynchronizationContext", SynchronizationContext.Current);
+                { "IEqualityComparer`1[Int32]", EqualityComparer<int>.Default },
 
-            _defaultValues.Add("IEqualityComparer`1[Int32]", EqualityComparer<int>.Default);
+                { "IComparer`1[Int32]", Comparer<int>.Default },
 
-            _defaultValues.Add("IComparer`1[Int32]", Comparer<int>.Default);
+                { "IObserver`1[Int32]", Observer.Create<int>(v => { }) },
 
-            _defaultValues.Add("IObserver`1[Int32]", Observer.Create<int>(v => { }));
+                { "CancellationToken", new CancellationToken() },
 
-            _defaultValues.Add("CancellationToken", new CancellationToken());
+                { "Action", new Action(() => { }) },
 
-            _defaultValues.Add("Action", new Action(() => { }));
-
-            _defaultValues.Add("Action`1[Int32]", new Action<int>(v => { }));
-            _defaultValues.Add("Action`1[Exception]", new Action<Exception>(v => { }));
-            _defaultValues.Add("Action`1[IDisposable]", new Action<IDisposable>(v => { }));
-            _defaultValues.Add("Action`1[EventHandler]", new Action<EventHandler>(v => { }));
-            _defaultValues.Add("Action`1[EventHandler`1[Int32]]", new Action<EventHandler<int>>(v => { }));
-            _defaultValues.Add("Action`1[Action`1[Int32]]", new Action<Action<int>>(v => { }));
-            _defaultValues.Add("Action`1[Action]", new Action<Action>(v => { }));
-            _defaultValues.Add("Action`1[IAsyncResult]", new Action<IAsyncResult>(v => { }));
+                { "Action`1[Int32]", new Action<int>(v => { }) },
+                { "Action`1[Exception]", new Action<Exception>(v => { }) },
+                { "Action`1[IDisposable]", new Action<IDisposable>(v => { }) },
+                { "Action`1[EventHandler]", new Action<EventHandler>(v => { }) },
+                { "Action`1[EventHandler`1[Int32]]", new Action<EventHandler<int>>(v => { }) },
+                { "Action`1[Action`1[Int32]]", new Action<Action<int>>(v => { }) },
+                { "Action`1[Action]", new Action<Action>(v => { }) },
+                { "Action`1[IAsyncResult]", new Action<IAsyncResult>(v => { }) },
 
 
-            _defaultValues.Add("Action`2[Int32, Int32]", new Action<int, int>((v, u) => { }));
+                { "Action`2[Int32, Int32]", new Action<int, int>((v, u) => { }) },
 
-            _defaultValues.Add("Func`1[Boolean]", new Func<bool>(() => true));
-            _defaultValues.Add("Func`1[Int32]", new Func<int>(() => 1));
-            _defaultValues.Add("Func`1[IObservable`1[Int32]]", new Func<IObservable<int>>(() => Observable.Return(1)));
-            _defaultValues.Add("Func`1[ISubject`2[Int32, Int32]]", new Func<ISubject<int, int>>(() => new Subject<int>()));
-            _defaultValues.Add("Func`1[Task`1[IObservable`1[Int32]]]", new Func<Task<IObservable<int>>>(() => Task.FromResult(Observable.Return(1))));
-            _defaultValues.Add("Func`1[IDisposable]", new Func<IDisposable>(() => Disposable.Empty));
-            _defaultValues.Add("Func`1[Task]", new Func<Task>(() => Task.FromResult(1)));
-            _defaultValues.Add("Func`1[Task`1[Int32]]", new Func<Task<int>>(() => Task.FromResult(1)));
-            _defaultValues.Add("Func`1[IEnumerable`1[IObservable`1[Object]]]", new Func<IEnumerable<IObservable<object>>>(() => new[] { Observable.Return((object)1) }));
+                { "Func`1[Boolean]", new Func<bool>(() => true) },
+                { "Func`1[Int32]", new Func<int>(() => 1) },
+                { "Func`1[IObservable`1[Int32]]", new Func<IObservable<int>>(() => Observable.Return(1)) },
+                { "Func`1[ISubject`2[Int32, Int32]]", new Func<ISubject<int, int>>(() => new Subject<int>()) },
+                { "Func`1[Task`1[IObservable`1[Int32]]]", new Func<Task<IObservable<int>>>(() => Task.FromResult(Observable.Return(1))) },
+                { "Func`1[IDisposable]", new Func<IDisposable>(() => Disposable.Empty) },
+                { "Func`1[Task]", new Func<Task>(() => Task.FromResult(1)) },
+                { "Func`1[Task`1[Int32]]", new Func<Task<int>>(() => Task.FromResult(1)) },
+                { "Func`1[IEnumerable`1[IObservable`1[Object]]]", new Func<IEnumerable<IObservable<object>>>(() => new[] { Observable.Return((object)1) }) },
 
-            _defaultValues.Add("Func`2[Int32, IObservable`1[Int32]]", new Func<int, IObservable<int>>(v => Observable.Return(v)));
-            _defaultValues.Add("Func`2[Exception, IObservable`1[Int32]]", new Func<Exception, IObservable<int>>(v => Observable.Return(1)));
-            _defaultValues.Add("Func`2[Int32, Task`1[Int32]]", new Func<int, Task<int>>(v => Task.FromResult(v)));
-            _defaultValues.Add("Func`2[Int32, Int32]", new Func<int, int>(v => v));
-            _defaultValues.Add("Func`2[Int32, IEnumerable`1[Int32]]", new Func<int, IEnumerable<int>>(v => new[] { v }));
-            _defaultValues.Add("Func`2[Int32, Boolean]", new Func<int, bool>(v => true));
-            _defaultValues.Add("Func`2[Int32, TimeSpan]", new Func<int, TimeSpan>(v => TimeSpan.FromMilliseconds(1)));
-            _defaultValues.Add("Func`2[Int32, DateTimeOffset]", new Func<int, DateTimeOffset>(v => DateTimeOffset.Now));
-            _defaultValues.Add("Func`2[IList`1[Int32], Int32]", new Func<IList<int>, int>(v => v.Count));
-            _defaultValues.Add("Func`2[Int32, Nullable`1[Double]]", new Func<int, double?>(v => v));
-            _defaultValues.Add("Func`2[Int32, Nullable`1[Single]]", new Func<int, float?>(v => v));
-            _defaultValues.Add("Func`2[Int32, Nullable`1[Int32]]", new Func<int, int?>(v => v));
-            _defaultValues.Add("Func`2[Int32, Nullable`1[Decimal]]", new Func<int, decimal?>(v => v));
-            _defaultValues.Add("Func`2[Int32, Nullable`1[Int64]]", new Func<int, long?>(v => v));
-            _defaultValues.Add("Func`2[Int32, Double]", new Func<int, double>(v => v));
-            _defaultValues.Add("Func`2[Int32, Single]", new Func<int, float>(v => v));
-            _defaultValues.Add("Func`2[Int32, Decimal]", new Func<int, decimal>(v => v));
-            _defaultValues.Add("Func`2[Int32, Int64]", new Func<int, long>(v => v));
-            _defaultValues.Add("Func`2[IObservable`1[Object], IObservable`1[Int32]]", new Func<IObservable<object>, IObservable<int>>(v => v.Select(w => 1)));
-            _defaultValues.Add("Func`2[IObservable`1[Exception], IObservable`1[Int32]]", new Func<IObservable<Exception>, IObservable<int>>(v => v.Select(w => 1)));
-            _defaultValues.Add("Func`2[IGroupedObservable`2[Int32, Int32], IObservable`1[Int32]]", new Func<IGroupedObservable<int, int>, IObservable<int>>(v => v));
-            _defaultValues.Add("Func`2[IObservable`1[Int32], IObservable`1[Int32]]", new Func<IObservable<int>, IObservable<int>>(v => v.Select(w => 1)));
-            _defaultValues.Add("Func`2[CancellationToken, Task`1[IObservable`1[Int32]]]", new Func<CancellationToken, Task<IObservable<int>>>(v => Task.FromResult(Observable.Return(1))));
-            _defaultValues.Add("Func`2[IDisposable, Task`1[IObservable`1[Int32]]]", new Func<IDisposable, Task<IObservable<int>>>(v => Task.FromResult(Observable.Return(1))));
-            _defaultValues.Add("Func`2[IDisposable, IObservable`1[Int32]]", new Func<IDisposable, IObservable<int>>(v => Observable.Return(1)));
-            _defaultValues.Add("Func`2[CancellationToken, Task`1[IDisposable]]", new Func<CancellationToken, Task<IDisposable>>(v => Task.FromResult(Disposable.Empty)));
-            _defaultValues.Add("Func`2[EventHandler`1[Int32], Int32]", new Func<EventHandler<int>, int>(v => 1));
-            _defaultValues.Add("Func`2[Action`1[Int32], Int32]", new Func<Action<int>, int>(v => 1));
-            _defaultValues.Add("Func`2[IObserver`1[Int32], IDisposable]", new Func<IObserver<int>, IDisposable>(v => Disposable.Empty));
-            _defaultValues.Add("Func`2[IObserver`1[Int32], Action]", new Func<IObserver<int>, Action>(v => () => { }));
-            _defaultValues.Add("Func`2[IObserver`1[Int32], Task]", new Func<IObserver<int>, Task>(v => Task.FromResult(1)));
-            _defaultValues.Add("Func`2[IObserver`1[Int32], Task`1[IDisposable]]", new Func<IObserver<int>,  Task<IDisposable>>(v => Task.FromResult(Disposable.Empty)));
-            _defaultValues.Add("Func`2[IObserver`1[Int32], Task`1[Action]]", new Func<IObserver<int>, Task<Action>>(v => Task.FromResult<Action>(() => { })));
-            _defaultValues.Add("Func`2[CancellationToken, Task]", new Func<CancellationToken, Task>(v => Task.FromResult(1)));
-            _defaultValues.Add("Func`2[CancellationToken, Task`1[Int32]]", new Func<CancellationToken, Task<int>>(v => Task.FromResult(1)));
-            _defaultValues.Add("Func`2[IAsyncResult, Int32]", new Func<IAsyncResult, int>(v => 1));
-            _defaultValues.Add("Func`2[IObserver`1[Int32], IEnumerable`1[IObservable`1[Object]]]", new Func<IObserver<int>, IEnumerable<IObservable<object>>>(v => new[] { Observable.Return((object)1) }));
-            _defaultValues.Add("Func`2[IObservable`1[Int32], Int32]", new Func<IObservable<int>, int>(v => 1));
+                { "Func`2[Int32, IObservable`1[Int32]]", new Func<int, IObservable<int>>(v => Observable.Return(v)) },
+                { "Func`2[Exception, IObservable`1[Int32]]", new Func<Exception, IObservable<int>>(v => Observable.Return(1)) },
+                { "Func`2[Int32, Task`1[Int32]]", new Func<int, Task<int>>(v => Task.FromResult(v)) },
+                { "Func`2[Int32, Int32]", new Func<int, int>(v => v) },
+                { "Func`2[Int32, IEnumerable`1[Int32]]", new Func<int, IEnumerable<int>>(v => new[] { v }) },
+                { "Func`2[Int32, Boolean]", new Func<int, bool>(v => true) },
+                { "Func`2[Int32, TimeSpan]", new Func<int, TimeSpan>(v => TimeSpan.FromMilliseconds(1)) },
+                { "Func`2[Int32, DateTimeOffset]", new Func<int, DateTimeOffset>(v => DateTimeOffset.Now) },
+                { "Func`2[IList`1[Int32], Int32]", new Func<IList<int>, int>(v => v.Count) },
+                { "Func`2[Int32, Nullable`1[Double]]", new Func<int, double?>(v => v) },
+                { "Func`2[Int32, Nullable`1[Single]]", new Func<int, float?>(v => v) },
+                { "Func`2[Int32, Nullable`1[Int32]]", new Func<int, int?>(v => v) },
+                { "Func`2[Int32, Nullable`1[Decimal]]", new Func<int, decimal?>(v => v) },
+                { "Func`2[Int32, Nullable`1[Int64]]", new Func<int, long?>(v => v) },
+                { "Func`2[Int32, Double]", new Func<int, double>(v => v) },
+                { "Func`2[Int32, Single]", new Func<int, float>(v => v) },
+                { "Func`2[Int32, Decimal]", new Func<int, decimal>(v => v) },
+                { "Func`2[Int32, Int64]", new Func<int, long>(v => v) },
+                { "Func`2[IObservable`1[Object], IObservable`1[Int32]]", new Func<IObservable<object>, IObservable<int>>(v => v.Select(w => 1)) },
+                { "Func`2[IObservable`1[Exception], IObservable`1[Int32]]", new Func<IObservable<Exception>, IObservable<int>>(v => v.Select(w => 1)) },
+                { "Func`2[IGroupedObservable`2[Int32, Int32], IObservable`1[Int32]]", new Func<IGroupedObservable<int, int>, IObservable<int>>(v => v) },
+                { "Func`2[IObservable`1[Int32], IObservable`1[Int32]]", new Func<IObservable<int>, IObservable<int>>(v => v.Select(w => 1)) },
+                { "Func`2[CancellationToken, Task`1[IObservable`1[Int32]]]", new Func<CancellationToken, Task<IObservable<int>>>(v => Task.FromResult(Observable.Return(1))) },
+                { "Func`2[IDisposable, Task`1[IObservable`1[Int32]]]", new Func<IDisposable, Task<IObservable<int>>>(v => Task.FromResult(Observable.Return(1))) },
+                { "Func`2[IDisposable, IObservable`1[Int32]]", new Func<IDisposable, IObservable<int>>(v => Observable.Return(1)) },
+                { "Func`2[CancellationToken, Task`1[IDisposable]]", new Func<CancellationToken, Task<IDisposable>>(v => Task.FromResult(Disposable.Empty)) },
+                { "Func`2[EventHandler`1[Int32], Int32]", new Func<EventHandler<int>, int>(v => 1) },
+                { "Func`2[Action`1[Int32], Int32]", new Func<Action<int>, int>(v => 1) },
+                { "Func`2[IObserver`1[Int32], IDisposable]", new Func<IObserver<int>, IDisposable>(v => Disposable.Empty) },
+                { "Func`2[IObserver`1[Int32], Action]", new Func<IObserver<int>, Action>(v => () => { }) },
+                { "Func`2[IObserver`1[Int32], Task]", new Func<IObserver<int>, Task>(v => Task.FromResult(1)) },
+                { "Func`2[IObserver`1[Int32], Task`1[IDisposable]]", new Func<IObserver<int>, Task<IDisposable>>(v => Task.FromResult(Disposable.Empty)) },
+                { "Func`2[IObserver`1[Int32], Task`1[Action]]", new Func<IObserver<int>, Task<Action>>(v => Task.FromResult<Action>(() => { })) },
+                { "Func`2[CancellationToken, Task]", new Func<CancellationToken, Task>(v => Task.FromResult(1)) },
+                { "Func`2[CancellationToken, Task`1[Int32]]", new Func<CancellationToken, Task<int>>(v => Task.FromResult(1)) },
+                { "Func`2[IAsyncResult, Int32]", new Func<IAsyncResult, int>(v => 1) },
+                { "Func`2[IObserver`1[Int32], IEnumerable`1[IObservable`1[Object]]]", new Func<IObserver<int>, IEnumerable<IObservable<object>>>(v => new[] { Observable.Return((object)1) }) },
+                { "Func`2[IObservable`1[Int32], Int32]", new Func<IObservable<int>, int>(v => 1) },
 
-            _defaultValues.Add("Func`3[Int32, Int32, IObservable`1[Int32]]", new Func<int, int, IObservable<int>>((v, u) => Observable.Return(v + u)));
-            _defaultValues.Add("Func`3[Int32, Int32, Task`1[Int32]]", new Func<int, int, Task<int>>((v, u) => Task.FromResult(v + u)));
-            _defaultValues.Add("Func`3[Int32, CancellationToken, Task`1[Int32]]", new Func<int, CancellationToken, Task<int>>((v, u) => Task.FromResult(v)));
-            _defaultValues.Add("Func`3[Int32, Int32, Int32]", new Func<int, int, int>((v, u) => v + u));
-            _defaultValues.Add("Func`3[Int32, Int32, IEnumerable`1[Int32]]", new Func<int, int, IEnumerable<int>>((v, u) => new[] { v, u }));
-            _defaultValues.Add("Func`3[Int32, Int32, Boolean]", new Func<int, int, bool>((v, u) => true));
-            _defaultValues.Add("Func`3[Int32, IObservable`1[Int32], Int32]", new Func<int, IObservable<int>, int>((v, u) => v));
-            _defaultValues.Add("Func`3[IDisposable, CancellationToken, Task`1[IObservable`1[Int32]]]", new Func<IDisposable, CancellationToken, Task<IObservable<int>>>((v, u) => Task.FromResult(Observable.Return(1))));
-            _defaultValues.Add("Func`3[IObserver`1[Int32], CancellationToken, Task]", new Func<IObserver<int>, CancellationToken, Task>((v, w) => Task.FromResult(1)));
-            _defaultValues.Add("Func`3[IObserver`1[Int32], CancellationToken, Task`1[IDisposable]]", new Func<IObserver<int>, CancellationToken, Task<IDisposable>>((v, w) => Task.FromResult(Disposable.Empty)));
-            _defaultValues.Add("Func`3[IObserver`1[Int32], CancellationToken, Task`1[Action]]", new Func<IObserver<int>, CancellationToken, Task<Action>>((v, w) => Task.FromResult<Action>(() => { })));
-            _defaultValues.Add("Func`3[AsyncCallback, Object, IAsyncResult]", new Func<AsyncCallback, object, IAsyncResult>((v, w) => null));
+                { "Func`3[Int32, Int32, IObservable`1[Int32]]", new Func<int, int, IObservable<int>>((v, u) => Observable.Return(v + u)) },
+                { "Func`3[Int32, Int32, Task`1[Int32]]", new Func<int, int, Task<int>>((v, u) => Task.FromResult(v + u)) },
+                { "Func`3[Int32, CancellationToken, Task`1[Int32]]", new Func<int, CancellationToken, Task<int>>((v, u) => Task.FromResult(v)) },
+                { "Func`3[Int32, Int32, Int32]", new Func<int, int, int>((v, u) => v + u) },
+                { "Func`3[Int32, Int32, IEnumerable`1[Int32]]", new Func<int, int, IEnumerable<int>>((v, u) => new[] { v, u }) },
+                { "Func`3[Int32, Int32, Boolean]", new Func<int, int, bool>((v, u) => true) },
+                { "Func`3[Int32, IObservable`1[Int32], Int32]", new Func<int, IObservable<int>, int>((v, u) => v) },
+                { "Func`3[IDisposable, CancellationToken, Task`1[IObservable`1[Int32]]]", new Func<IDisposable, CancellationToken, Task<IObservable<int>>>((v, u) => Task.FromResult(Observable.Return(1))) },
+                { "Func`3[IObserver`1[Int32], CancellationToken, Task]", new Func<IObserver<int>, CancellationToken, Task>((v, w) => Task.FromResult(1)) },
+                { "Func`3[IObserver`1[Int32], CancellationToken, Task`1[IDisposable]]", new Func<IObserver<int>, CancellationToken, Task<IDisposable>>((v, w) => Task.FromResult(Disposable.Empty)) },
+                { "Func`3[IObserver`1[Int32], CancellationToken, Task`1[Action]]", new Func<IObserver<int>, CancellationToken, Task<Action>>((v, w) => Task.FromResult<Action>(() => { })) },
+                { "Func`3[AsyncCallback, Object, IAsyncResult]", new Func<AsyncCallback, object, IAsyncResult>((v, w) => null) },
 
-            _defaultValues.Add("Func`4[Int32, Int32, CancellationToken, Task`1[Int32]]", new Func<int, int, CancellationToken, Task<int>>((v, u, w) => Task.FromResult(v)));
-            _defaultValues.Add("Func`4[Int32, Int32, Int32, Int32]", new Func<int, int, int, int>((v1, v2, v3) => v1 + v2 + v3));
-            _defaultValues.Add("Func`4[Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, AsyncCallback, object, IAsyncResult>((v, w, x) => null));
+                { "Func`4[Int32, Int32, CancellationToken, Task`1[Int32]]", new Func<int, int, CancellationToken, Task<int>>((v, u, w) => Task.FromResult(v)) },
+                { "Func`4[Int32, Int32, Int32, Int32]", new Func<int, int, int, int>((v1, v2, v3) => v1 + v2 + v3) },
+                { "Func`4[Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, AsyncCallback, object, IAsyncResult>((v, w, x) => null) },
 
-            _defaultValues.Add("Func`5[Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int>((v1, v2, v3, v4) => v1 + v2 + v3 + v4));
+                { "Func`5[Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int>((v1, v2, v3, v4) => v1 + v2 + v3 + v4) },
 
-            _defaultValues.Add("Func`6[Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int>((v1, v2, v3, v4, v5) => v1 + v2 + v3 + v4 + v5));
+                { "Func`6[Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int>((v1, v2, v3, v4, v5) => v1 + v2 + v3 + v4 + v5) },
 
-            _defaultValues.Add("Func`7[Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6) => v1 + v2 + v3 + v4 + v5 + v6));
+                { "Func`7[Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6) => v1 + v2 + v3 + v4 + v5 + v6) },
 
-            _defaultValues.Add("Func`8[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7) => v1 + v2 + v3 + v4 + v5 + v6 + v7));
+                { "Func`8[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7) => v1 + v2 + v3 + v4 + v5 + v6 + v7) },
 
-            _defaultValues.Add("Func`9[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8));
+                { "Func`9[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8) },
 
-            _defaultValues.Add("Func`10[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9));
+                { "Func`10[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9) },
 
-            _defaultValues.Add("Func`11[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10));
+                { "Func`11[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10) },
 
-            _defaultValues.Add("Func`12[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11));
+                { "Func`12[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11) },
 
-            _defaultValues.Add("Func`13[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11 + v12));
+                { "Func`13[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11 + v12) },
 
-            _defaultValues.Add("Func`14[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11 + v12 + v13));
+                { "Func`14[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11 + v12 + v13) },
 
-            _defaultValues.Add("Func`15[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11 + v12 + v13 + v14));
+                { "Func`15[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11 + v12 + v13 + v14) },
 
-            _defaultValues.Add("Func`16[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11 + v12 + v13 + v14 + v15));
+                { "Func`16[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11 + v12 + v13 + v14 + v15) },
 
-            _defaultValues.Add("Func`17[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11 + v12 + v13 + v14 + v15 + v16));
+                { "Func`17[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16) => v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 + v9 + v10 + v11 + v12 + v13 + v14 + v15 + v16) },
 
-            _defaultValues.Add("Plan`1[][Int32]", new Plan<int>[] {
+                {
+                    "Plan`1[][Int32]",
+                    new Plan<int>[] {
                     Observable.Return(1).Then(v => v)
-            });
+            }
+                },
 
-            _defaultValues.Add("IEnumerable`1[Plan`1[Int32]]", new Plan<int>[] {
+                {
+                    "IEnumerable`1[Plan`1[Int32]]",
+                    new Plan<int>[] {
                     Observable.Return(1).Then(v => v)
-            });
+            }
+                },
 
-            _defaultValues.Add("Action`3[Int32, Int32, Int32]", new Action<int, int, int>((v1, v2, v3) => { }));
+                { "Action`3[Int32, Int32, Int32]", new Action<int, int, int>((v1, v2, v3) => { }) },
 
-            _defaultValues.Add("Action`4[Int32, Int32, Int32, Int32]", new Action<int, int, int, int>((v1, v2, v3, v4) => { }));
+                { "Action`4[Int32, Int32, Int32, Int32]", new Action<int, int, int, int>((v1, v2, v3, v4) => { }) },
 
-            _defaultValues.Add("Action`5[Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int>((v1, v2, v3, v4, v5) => { }));
+                { "Action`5[Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int>((v1, v2, v3, v4, v5) => { }) },
 
-            _defaultValues.Add("Action`6[Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6) => { }));
+                { "Action`6[Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6) => { }) },
 
-            _defaultValues.Add("Action`7[Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7) => { }));
+                { "Action`7[Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7) => { }) },
 
-            _defaultValues.Add("Action`8[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8) => { }));
+                { "Action`8[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8) => { }) },
 
-            _defaultValues.Add("Action`9[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9) => { }));
+                { "Action`9[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9) => { }) },
 
-            _defaultValues.Add("Action`10[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10) => { }));
+                { "Action`10[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10) => { }) },
 
-            _defaultValues.Add("Action`11[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11) => { }));
+                { "Action`11[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11) => { }) },
 
-            _defaultValues.Add("Action`12[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12) => { }));
+                { "Action`12[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12) => { }) },
 
-            _defaultValues.Add("Action`13[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13) => { }));
+                { "Action`13[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13) => { }) },
 
-            _defaultValues.Add("Action`14[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14) => { }));
+                { "Action`14[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14) => { }) },
 
-            _defaultValues.Add("Action`15[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15) => { }));
+                { "Action`15[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15) => { }) },
 
-            _defaultValues.Add("Action`16[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16) => { }));
+                { "Action`16[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32]", new Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16) => { }) },
 
-            _defaultValues.Add("Func`5[Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4) => null));
+                { "Func`5[Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4) => null) },
 
-            _defaultValues.Add("Func`6[Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5) => null));
+                { "Func`6[Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5) => null) },
 
-            _defaultValues.Add("Func`7[Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6) => null));
+                { "Func`7[Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6) => null) },
 
-            _defaultValues.Add("Func`8[Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7) => null));
+                { "Func`8[Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7) => null) },
 
-            _defaultValues.Add("Func`9[Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8) => null));
+                { "Func`9[Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8) => null) },
 
-            _defaultValues.Add("Func`10[Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9) => null));
+                { "Func`10[Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9) => null) },
 
-            _defaultValues.Add("Func`11[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10) => null));
+                { "Func`11[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10) => null) },
 
-            _defaultValues.Add("Func`12[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11) => null));
+                { "Func`12[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11) => null) },
 
-            _defaultValues.Add("Func`13[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12) => null));
+                { "Func`13[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12) => null) },
 
-            _defaultValues.Add("Func`14[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13) => null));
+                { "Func`14[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13) => null) },
 
-            _defaultValues.Add("Func`15[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14) => null));
+                { "Func`15[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14) => null) },
 
-            _defaultValues.Add("Func`16[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15) => null));
+                { "Func`16[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15) => null) },
 
-            _defaultValues.Add("Func`17[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16) => null));
+                { "Func`17[Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, AsyncCallback, Object, IAsyncResult]", new Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult>((v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16) => null) }
+            };
         }
 
         #endregion
@@ -283,7 +289,7 @@ namespace ReactiveTests.Tests
         /// well as when invoking Subscribe with null.
         /// </summary>
         /// <param name="type">The type to verify.</param>
-        static void VerifyClass(Type type)
+        private static void VerifyClass(Type type)
         {
             foreach (var method in type.GetMethods())
             {
@@ -308,7 +314,7 @@ namespace ReactiveTests.Tests
                     var targs = new Type[ga.Length];
 
                     // fill in the type arguments
-                    for (int k = 0; k < targs.Length; k++)
+                    for (var k = 0; k < targs.Length; k++)
                     {
                         // watch out for type constrains
                         // the default typeof(int) will not work when
@@ -343,7 +349,8 @@ namespace ReactiveTests.Tests
                     {
                         throw new Exception("MakeGenericMethod threw: " + method, ex);
                     }
-                } else
+                }
+                else
                 {
                     // non generic method, we can invoke this directly
                     m = method;
@@ -353,7 +360,7 @@ namespace ReactiveTests.Tests
                 var args = m.GetParameters();
 
                 // for each parameter of the (generic) method
-                for (int i = 0; i < args.Length; i++)
+                for (var i = 0; i < args.Length; i++)
                 {
                     // prepare a pattern for the method invocation
                     var margs = new object[args.Length];
@@ -364,7 +371,7 @@ namespace ReactiveTests.Tests
 
                     // for each argument index
                     // with the loop i, this creates an N x N matrix where in each row, one argument is null
-                    for (int j = 0; j < args.Length; j++)
+                    for (var j = 0; j < args.Length; j++)
                     {
                         // figure out the type of the argument
                         var pt = args[j].ParameterType;
@@ -424,7 +431,8 @@ namespace ReactiveTests.Tests
                     }
                     // if the call didn't throw and returned a null object, throw
                     // no operators should return null
-                    if (obj == null && !thrown) {
+                    if (obj == null && !thrown)
+                    {
                         throw new NullReferenceException("null return: " + method + " @ " + i);
                     }
                 }
@@ -443,7 +451,7 @@ namespace ReactiveTests.Tests
                     // prepare method arguments
                     var margs = new object[args.Length];
 
-                    for (int j = 0; j < args.Length; j++)
+                    for (var j = 0; j < args.Length; j++)
                     {
                         var pt = args[j].ParameterType;
                         var paramTypeName = TypeNameOf(pt);
@@ -469,11 +477,11 @@ namespace ReactiveTests.Tests
                     var thrown = true;
                     try
                     {
-                        var o = m.Invoke(null, margs) as IObservable<int>;
 
                         // Should not return null, but would be mistaken for
                         // throwing because of Subscribe(null)
-                        if (o != null) {
+                        if (m.Invoke(null, margs) is IObservable<int> o)
+                        {
                             o.Subscribe(null);
 
                             thrown = false;
@@ -500,7 +508,7 @@ namespace ReactiveTests.Tests
                     }
                 }
             }
-        } 
+        }
 
         /// <summary>
         /// Generate a string representation of a possibly generic type
@@ -508,7 +516,7 @@ namespace ReactiveTests.Tests
         /// </summary>
         /// <param name="type">The type to get a string representation</param>
         /// <returns>The string representation of a possibly generic type</returns>
-        static string TypeNameOf(Type type)
+        private static string TypeNameOf(Type type)
         {
             var ga = type.GetGenericArguments();
             if (ga.Length == 0)

@@ -51,7 +51,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 if (hasAdded)
+                {
                     ForwardOnNext(value);
+                }
             }
         }
     }

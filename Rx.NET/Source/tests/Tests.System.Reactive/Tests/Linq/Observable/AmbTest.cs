@@ -5,18 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -643,7 +635,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Amb_Many_Enumerable_Many_Sources()
         {
-            for (int i = 0; i < 32; i++)
+            for (var i = 0; i < 32; i++)
             {
                 var sources = new List<IObservable<int>>();
                 for (var j = 0; j < i; j++)
@@ -668,7 +660,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Amb_Many_Enumerable_Many_Sources_NoStackOverflow()
         {
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 var sources = new List<IObservable<int>>();
                 for (var j = 0; j < i; j++)

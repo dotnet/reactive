@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class ImmediateSchedulerTest
     {
         [Fact]
@@ -51,9 +51,9 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Immediate_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule<int>(42, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule<int>(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule<int>(42, TimeSpan.Zero, default(Func<IScheduler, int, IDisposable>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule<int>(42, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule<int>(42, DateTimeOffset.Now, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule<int>(42, TimeSpan.Zero, default));
         }
 
         [Fact]
@@ -117,7 +117,7 @@ namespace ReactiveTests.Tests
             {
                 ReactiveAssert.Throws<ArgumentNullException>(() =>
                 {
-                    self.Schedule(43, default(Func<IScheduler, int, IDisposable>));
+                    self.Schedule(43, default);
                 });
 
                 return Disposable.Empty;
@@ -127,7 +127,7 @@ namespace ReactiveTests.Tests
             {
                 ReactiveAssert.Throws<ArgumentNullException>(() =>
                 {
-                    self.Schedule(43, TimeSpan.FromSeconds(1), default(Func<IScheduler, int, IDisposable>));
+                    self.Schedule(43, TimeSpan.FromSeconds(1), default);
                 });
 
                 return Disposable.Empty;
@@ -137,7 +137,7 @@ namespace ReactiveTests.Tests
             {
                 ReactiveAssert.Throws<ArgumentNullException>(() =>
                 {
-                    self.Schedule(43, DateTimeOffset.UtcNow.AddDays(1), default(Func<IScheduler, int, IDisposable>));
+                    self.Schedule(43, DateTimeOffset.UtcNow.AddDays(1), default);
                 });
 
                 return Disposable.Empty;
@@ -145,7 +145,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact(Skip="Ignored")]
+        [Fact(Skip = "Ignored")]
         public void Immediate_ScheduleActionDue()
         {
             var id = Thread.CurrentThread.ManagedThreadId;

@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Collections.Generic;
-using System.Reactive.Concurrency;
-using Microsoft.Reactive.Testing;
 using System;
+using System.Collections.Generic;
+using Microsoft.Reactive.Testing;
 
 namespace ReactiveTests
 {
@@ -13,18 +12,12 @@ namespace ReactiveTests
     {
         public readonly TestScheduler Scheduler;
         public readonly List<Subscription> Subscriptions = new List<Subscription>();
-
-        IEnumerable<T> underlyingEnumerable;
+        private IEnumerable<T> underlyingEnumerable;
 
         public MockEnumerable(TestScheduler scheduler, IEnumerable<T> underlyingEnumerable)
         {
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-            if (underlyingEnumerable == null)
-                throw new ArgumentNullException(nameof(underlyingEnumerable));
-
-            Scheduler = scheduler;
-            this.underlyingEnumerable = underlyingEnumerable;
+            Scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
+            this.underlyingEnumerable = underlyingEnumerable ?? throw new ArgumentNullException(nameof(underlyingEnumerable));
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -37,13 +30,13 @@ namespace ReactiveTests
             return GetEnumerator();
         }
 
-        class MockEnumerator : IEnumerator<T>
+        private class MockEnumerator : IEnumerator<T>
         {
-            List<Subscription> subscriptions;
-            IEnumerator<T> enumerator;
-            TestScheduler scheduler;
-            int index;
-            bool disposed = false;
+            private readonly List<Subscription> subscriptions;
+            private IEnumerator<T> enumerator;
+            private TestScheduler scheduler;
+            private readonly int index;
+            private bool disposed = false;
 
             public MockEnumerator(TestScheduler scheduler, List<Subscription> subscriptions, IEnumerator<T> enumerator)
             {
@@ -60,7 +53,10 @@ namespace ReactiveTests
                 get
                 {
                     if (disposed)
+                    {
                         throw new ObjectDisposedException("this");
+                    }
+
                     return enumerator.Current;
                 }
             }
@@ -83,14 +79,20 @@ namespace ReactiveTests
             public bool MoveNext()
             {
                 if (disposed)
+                {
                     throw new ObjectDisposedException("this");
+                }
+
                 return enumerator.MoveNext();
             }
 
             public void Reset()
             {
                 if (disposed)
+                {
                     throw new ObjectDisposedException("this");
+                }
+
                 enumerator.Reset();
             }
         }

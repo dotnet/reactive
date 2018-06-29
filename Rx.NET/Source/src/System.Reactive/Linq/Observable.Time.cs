@@ -30,9 +30,14 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> Buffer<TSource>(this IObservable<TSource> source, TimeSpan timeSpan)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeSpan < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
+            }
 
             return s_impl.Buffer<TSource>(source, timeSpan);
         }
@@ -55,11 +60,19 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> Buffer<TSource>(this IObservable<TSource> source, TimeSpan timeSpan, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeSpan < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Buffer<TSource>(source, timeSpan, scheduler);
         }
@@ -89,11 +102,19 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> Buffer<TSource>(this IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeSpan < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
+            }
+
             if (timeShift < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeShift));
+            }
 
             return s_impl.Buffer<TSource>(source, timeSpan, timeShift);
         }
@@ -124,13 +145,24 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> Buffer<TSource>(this IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeSpan < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
+            }
+
             if (timeShift < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeShift));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Buffer<TSource>(source, timeSpan, timeShift, scheduler);
         }
@@ -158,11 +190,19 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> Buffer<TSource>(this IObservable<TSource> source, TimeSpan timeSpan, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeSpan < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
+            }
+
             if (count <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return s_impl.Buffer<TSource>(source, timeSpan, count);
         }
@@ -187,13 +227,24 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> Buffer<TSource>(this IObservable<TSource> source, TimeSpan timeSpan, int count, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeSpan < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
+            }
+
             if (count <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Buffer<TSource>(source, timeSpan, count, scheduler);
         }
@@ -231,9 +282,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Delay<TSource>(this IObservable<TSource> source, TimeSpan dueTime)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (dueTime < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(dueTime));
+            }
 
             return s_impl.Delay<TSource>(source, dueTime);
         }
@@ -267,11 +323,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Delay<TSource>(this IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (dueTime < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(dueTime));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Delay<TSource>(source, dueTime, scheduler);
         }
@@ -304,7 +368,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Delay<TSource>(this IObservable<TSource> source, DateTimeOffset dueTime)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Delay<TSource>(source, dueTime);
         }
@@ -334,9 +400,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Delay<TSource>(this IObservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Delay<TSource>(source, dueTime, scheduler);
         }
@@ -357,9 +428,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Delay<TSource, TDelay>(this IObservable<TSource> source, Func<TSource, IObservable<TDelay>> delayDurationSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (delayDurationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(delayDurationSelector));
+            }
 
             return s_impl.Delay<TSource, TDelay>(source, delayDurationSelector);
         }
@@ -377,11 +453,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Delay<TSource, TDelay>(this IObservable<TSource> source, IObservable<TDelay> subscriptionDelay, Func<TSource, IObservable<TDelay>> delayDurationSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (subscriptionDelay == null)
+            {
                 throw new ArgumentNullException(nameof(subscriptionDelay));
+            }
+
             if (delayDurationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(delayDurationSelector));
+            }
 
             return s_impl.Delay<TSource, TDelay>(source, subscriptionDelay, delayDurationSelector);
         }
@@ -412,9 +496,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> DelaySubscription<TSource>(this IObservable<TSource> source, TimeSpan dueTime)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (dueTime < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(dueTime));
+            }
 
             return s_impl.DelaySubscription<TSource>(source, dueTime);
         }
@@ -440,11 +529,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> DelaySubscription<TSource>(this IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (dueTime < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(dueTime));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.DelaySubscription<TSource>(source, dueTime, scheduler);
         }
@@ -468,7 +565,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> DelaySubscription<TSource>(this IObservable<TSource> source, DateTimeOffset dueTime)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.DelaySubscription<TSource>(source, dueTime);
         }
@@ -493,9 +592,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> DelaySubscription<TSource>(this IObservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.DelaySubscription<TSource>(source, dueTime, scheduler);
         }
@@ -519,13 +623,24 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (iterate == null)
+            {
                 throw new ArgumentNullException(nameof(iterate));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
+
             if (timeSelector == null)
+            {
                 throw new ArgumentNullException(nameof(timeSelector));
+            }
 
             return s_impl.Generate<TState, TResult>(initialState, condition, iterate, resultSelector, timeSelector);
         }
@@ -546,15 +661,29 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector, IScheduler scheduler)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (iterate == null)
+            {
                 throw new ArgumentNullException(nameof(iterate));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
+
             if (timeSelector == null)
+            {
                 throw new ArgumentNullException(nameof(timeSelector));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Generate<TState, TResult>(initialState, condition, iterate, resultSelector, timeSelector, scheduler);
         }
@@ -574,13 +703,24 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (iterate == null)
+            {
                 throw new ArgumentNullException(nameof(iterate));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
+
             if (timeSelector == null)
+            {
                 throw new ArgumentNullException(nameof(timeSelector));
+            }
 
             return s_impl.Generate<TState, TResult>(initialState, condition, iterate, resultSelector, timeSelector);
         }
@@ -601,15 +741,29 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector, IScheduler scheduler)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (iterate == null)
+            {
                 throw new ArgumentNullException(nameof(iterate));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
+
             if (timeSelector == null)
+            {
                 throw new ArgumentNullException(nameof(timeSelector));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Generate<TState, TResult>(initialState, condition, iterate, resultSelector, timeSelector, scheduler);
         }
@@ -634,7 +788,9 @@ namespace System.Reactive.Linq
         public static IObservable<long> Interval(TimeSpan period)
         {
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
 
             return s_impl.Interval(period);
         }
@@ -657,9 +813,14 @@ namespace System.Reactive.Linq
         public static IObservable<long> Interval(TimeSpan period, IScheduler scheduler)
         {
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Interval(period, scheduler);
         }
@@ -685,9 +846,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Sample<TSource>(this IObservable<TSource> source, TimeSpan interval)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (interval < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(interval));
+            }
 
             return s_impl.Sample<TSource>(source, interval);
         }
@@ -710,11 +876,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Sample<TSource>(this IObservable<TSource> source, TimeSpan interval, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (interval < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(interval));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Sample<TSource>(source, interval, scheduler);
         }
@@ -732,9 +906,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Sample<TSource, TSample>(this IObservable<TSource> source, IObservable<TSample> sampler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (sampler == null)
+            {
                 throw new ArgumentNullException(nameof(sampler));
+            }
 
             return s_impl.Sample<TSource, TSample>(source, sampler);
         }
@@ -765,9 +944,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Skip<TSource>(this IObservable<TSource> source, TimeSpan duration)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (duration < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(duration));
+            }
 
             return s_impl.Skip<TSource>(source, duration);
         }
@@ -795,11 +979,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Skip<TSource>(this IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (duration < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(duration));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Skip<TSource>(source, duration, scheduler);
         }
@@ -825,9 +1017,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SkipLast<TSource>(this IObservable<TSource> source, TimeSpan duration)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (duration < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(duration));
+            }
 
             return s_impl.SkipLast<TSource>(source, duration);
         }
@@ -850,11 +1047,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SkipLast<TSource>(this IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (duration < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(duration));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.SkipLast<TSource>(source, duration, scheduler);
         }
@@ -877,7 +1082,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SkipUntil<TSource>(this IObservable<TSource> source, DateTimeOffset startTime)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.SkipUntil<TSource>(source, startTime);
         }
@@ -897,9 +1104,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SkipUntil<TSource>(this IObservable<TSource> source, DateTimeOffset startTime, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.SkipUntil<TSource>(source, startTime, scheduler);
         }
@@ -925,9 +1137,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Take<TSource>(this IObservable<TSource> source, TimeSpan duration)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (duration < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(duration));
+            }
 
             return s_impl.Take<TSource>(source, duration);
         }
@@ -950,11 +1167,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Take<TSource>(this IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (duration < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(duration));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Take<TSource>(source, duration, scheduler);
         }
@@ -980,9 +1205,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> TakeLast<TSource>(this IObservable<TSource> source, TimeSpan duration)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (duration < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(duration));
+            }
 
             return s_impl.TakeLast<TSource>(source, duration);
         }
@@ -1005,11 +1235,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> TakeLast<TSource>(this IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (duration < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(duration));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.TakeLast<TSource>(source, duration, scheduler);
         }
@@ -1033,13 +1271,24 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> TakeLast<TSource>(this IObservable<TSource> source, TimeSpan duration, IScheduler timerScheduler, IScheduler loopScheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (duration < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(duration));
+            }
+
             if (timerScheduler == null)
+            {
                 throw new ArgumentNullException(nameof(timerScheduler));
+            }
+
             if (loopScheduler == null)
+            {
                 throw new ArgumentNullException(nameof(loopScheduler));
+            }
 
             return s_impl.TakeLast<TSource>(source, duration, timerScheduler, loopScheduler);
         }
@@ -1064,9 +1313,14 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> TakeLastBuffer<TSource>(this IObservable<TSource> source, TimeSpan duration)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (duration < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(duration));
+            }
 
             return s_impl.TakeLastBuffer<TSource>(source, duration);
         }
@@ -1088,11 +1342,19 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> TakeLastBuffer<TSource>(this IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (duration < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(duration));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.TakeLastBuffer<TSource>(source, duration, scheduler);
         }
@@ -1112,7 +1374,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> TakeUntil<TSource>(this IObservable<TSource> source, DateTimeOffset endTime)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.TakeUntil<TSource>(source, endTime);
         }
@@ -1129,9 +1393,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> TakeUntil<TSource>(this IObservable<TSource> source, DateTimeOffset endTime, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.TakeUntil<TSource>(source, endTime, scheduler);
         }
@@ -1167,9 +1436,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Throttle<TSource>(this IObservable<TSource> source, TimeSpan dueTime)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (dueTime < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(dueTime));
+            }
 
             return s_impl.Throttle<TSource>(source, dueTime);
         }
@@ -1202,11 +1476,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Throttle<TSource>(this IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (dueTime < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(dueTime));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Throttle<TSource>(source, dueTime, scheduler);
         }
@@ -1230,9 +1512,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Throttle<TSource, TThrottle>(this IObservable<TSource> source, Func<TSource, IObservable<TThrottle>> throttleDurationSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (throttleDurationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(throttleDurationSelector));
+            }
 
             return s_impl.Throttle<TSource, TThrottle>(source, throttleDurationSelector);
         }
@@ -1251,7 +1538,9 @@ namespace System.Reactive.Linq
         public static IObservable<TimeInterval<TSource>> TimeInterval<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.TimeInterval<TSource>(source);
         }
@@ -1267,9 +1556,14 @@ namespace System.Reactive.Linq
         public static IObservable<TimeInterval<TSource>> TimeInterval<TSource>(this IObservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.TimeInterval<TSource>(source, scheduler);
         }
@@ -1307,9 +1601,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Timeout<TSource>(this IObservable<TSource> source, TimeSpan dueTime)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (dueTime < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(dueTime));
+            }
 
             return s_impl.Timeout<TSource>(source, dueTime);
         }
@@ -1342,11 +1641,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Timeout<TSource>(this IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (dueTime < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(dueTime));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Timeout<TSource>(source, dueTime, scheduler);
         }
@@ -1378,11 +1685,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Timeout<TSource>(this IObservable<TSource> source, TimeSpan dueTime, IObservable<TSource> other)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (dueTime < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(dueTime));
+            }
+
             if (other == null)
+            {
                 throw new ArgumentNullException(nameof(other));
+            }
 
             return s_impl.Timeout<TSource>(source, dueTime, other);
         }
@@ -1415,13 +1730,24 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Timeout<TSource>(this IObservable<TSource> source, TimeSpan dueTime, IObservable<TSource> other, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (dueTime < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(dueTime));
+            }
+
             if (other == null)
+            {
                 throw new ArgumentNullException(nameof(other));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Timeout<TSource>(source, dueTime, other, scheduler);
         }
@@ -1448,7 +1774,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Timeout<TSource>(this IObservable<TSource> source, DateTimeOffset dueTime)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Timeout<TSource>(source, dueTime);
         }
@@ -1472,9 +1800,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Timeout<TSource>(this IObservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Timeout<TSource>(source, dueTime, scheduler);
         }
@@ -1497,9 +1830,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Timeout<TSource>(this IObservable<TSource> source, DateTimeOffset dueTime, IObservable<TSource> other)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (other == null)
+            {
                 throw new ArgumentNullException(nameof(other));
+            }
 
             return s_impl.Timeout<TSource>(source, dueTime, other);
         }
@@ -1523,11 +1861,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Timeout<TSource>(this IObservable<TSource> source, DateTimeOffset dueTime, IObservable<TSource> other, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (other == null)
+            {
                 throw new ArgumentNullException(nameof(other));
+            }
 
             return s_impl.Timeout<TSource>(source, dueTime, other, scheduler);
         }
@@ -1549,9 +1895,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Timeout<TSource, TTimeout>(this IObservable<TSource> source, Func<TSource, IObservable<TTimeout>> timeoutDurationSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeoutDurationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(timeoutDurationSelector));
+            }
 
             return s_impl.Timeout<TSource, TTimeout>(source, timeoutDurationSelector);
         }
@@ -1570,11 +1921,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Timeout<TSource, TTimeout>(this IObservable<TSource> source, Func<TSource, IObservable<TTimeout>> timeoutDurationSelector, IObservable<TSource> other)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeoutDurationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(timeoutDurationSelector));
+            }
+
             if (other == null)
+            {
                 throw new ArgumentNullException(nameof(other));
+            }
 
             return s_impl.Timeout<TSource, TTimeout>(source, timeoutDurationSelector, other);
         }
@@ -1593,11 +1952,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Timeout<TSource, TTimeout>(this IObservable<TSource> source, IObservable<TTimeout> firstTimeout, Func<TSource, IObservable<TTimeout>> timeoutDurationSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (firstTimeout == null)
+            {
                 throw new ArgumentNullException(nameof(firstTimeout));
+            }
+
             if (timeoutDurationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(timeoutDurationSelector));
+            }
 
             return s_impl.Timeout<TSource, TTimeout>(source, firstTimeout, timeoutDurationSelector);
         }
@@ -1617,13 +1984,24 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Timeout<TSource, TTimeout>(this IObservable<TSource> source, IObservable<TTimeout> firstTimeout, Func<TSource, IObservable<TTimeout>> timeoutDurationSelector, IObservable<TSource> other)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (firstTimeout == null)
+            {
                 throw new ArgumentNullException(nameof(firstTimeout));
+            }
+
             if (timeoutDurationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(timeoutDurationSelector));
+            }
+
             if (other == null)
+            {
                 throw new ArgumentNullException(nameof(other));
+            }
 
             return s_impl.Timeout<TSource, TTimeout>(source, firstTimeout, timeoutDurationSelector, other);
         }
@@ -1664,7 +2042,9 @@ namespace System.Reactive.Linq
         public static IObservable<long> Timer(TimeSpan dueTime, TimeSpan period)
         {
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
 
             return s_impl.Timer(dueTime, period);
         }
@@ -1679,7 +2059,9 @@ namespace System.Reactive.Linq
         public static IObservable<long> Timer(DateTimeOffset dueTime, TimeSpan period)
         {
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
 
             return s_impl.Timer(dueTime, period);
         }
@@ -1694,7 +2076,9 @@ namespace System.Reactive.Linq
         public static IObservable<long> Timer(TimeSpan dueTime, IScheduler scheduler)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Timer(dueTime, scheduler);
         }
@@ -1709,7 +2093,9 @@ namespace System.Reactive.Linq
         public static IObservable<long> Timer(DateTimeOffset dueTime, IScheduler scheduler)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Timer(dueTime, scheduler);
         }
@@ -1726,9 +2112,14 @@ namespace System.Reactive.Linq
         public static IObservable<long> Timer(TimeSpan dueTime, TimeSpan period, IScheduler scheduler)
         {
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Timer(dueTime, period, scheduler);
         }
@@ -1745,9 +2136,14 @@ namespace System.Reactive.Linq
         public static IObservable<long> Timer(DateTimeOffset dueTime, TimeSpan period, IScheduler scheduler)
         {
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Timer(dueTime, period, scheduler);
         }
@@ -1766,7 +2162,9 @@ namespace System.Reactive.Linq
         public static IObservable<Timestamped<TSource>> Timestamp<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Timestamp<TSource>(source);
         }
@@ -1782,9 +2180,14 @@ namespace System.Reactive.Linq
         public static IObservable<Timestamped<TSource>> Timestamp<TSource>(this IObservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Timestamp<TSource>(source, scheduler);
         }
@@ -1812,9 +2215,14 @@ namespace System.Reactive.Linq
         public static IObservable<IObservable<TSource>> Window<TSource>(this IObservable<TSource> source, TimeSpan timeSpan)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeSpan < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
+            }
 
             return s_impl.Window<TSource>(source, timeSpan);
         }
@@ -1837,11 +2245,19 @@ namespace System.Reactive.Linq
         public static IObservable<IObservable<TSource>> Window<TSource>(this IObservable<TSource> source, TimeSpan timeSpan, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeSpan < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Window<TSource>(source, timeSpan, scheduler);
         }
@@ -1871,11 +2287,19 @@ namespace System.Reactive.Linq
         public static IObservable<IObservable<TSource>> Window<TSource>(this IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeSpan < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
+            }
+
             if (timeShift < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeShift));
+            }
 
             return s_impl.Window<TSource>(source, timeSpan, timeShift);
         }
@@ -1906,13 +2330,24 @@ namespace System.Reactive.Linq
         public static IObservable<IObservable<TSource>> Window<TSource>(this IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeSpan < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
+            }
+
             if (timeShift < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeShift));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Window<TSource>(source, timeSpan, timeShift, scheduler);
         }
@@ -1940,11 +2375,19 @@ namespace System.Reactive.Linq
         public static IObservable<IObservable<TSource>> Window<TSource>(this IObservable<TSource> source, TimeSpan timeSpan, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeSpan < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
+            }
+
             if (count <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return s_impl.Window<TSource>(source, timeSpan, count);
         }
@@ -1969,13 +2412,24 @@ namespace System.Reactive.Linq
         public static IObservable<IObservable<TSource>> Window<TSource>(this IObservable<TSource> source, TimeSpan timeSpan, int count, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (timeSpan < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSpan));
+            }
+
             if (count <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Window<TSource>(source, timeSpan, count, scheduler);
         }

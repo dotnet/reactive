@@ -145,7 +145,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     ForwardOnError(exception);
                 }
             }
-            
+
             public override void OnCompleted()
             {
                 ForwardOnNext(_sum);
@@ -224,7 +224,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnNext(double? value)
             {
                 if (value != null)
+                {
                     _sum += value.Value;
+                }
             }
 
             public override void OnCompleted()
@@ -260,7 +262,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnNext(float? value)
             {
                 if (value != null)
+                {
                     _sum += value.Value; // This is what LINQ to Objects does!
+                }
             }
 
             public override void OnCompleted()
@@ -296,7 +300,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnNext(decimal? value)
             {
                 if (value != null)
+                {
                     _sum += value.Value;
+                }
             }
 
             public override void OnCompleted()
@@ -336,7 +342,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     checked
                     {
                         if (value != null)
+                        {
                             _sum += value.Value;
+                        }
                     }
                 }
                 catch (Exception exception)
@@ -382,7 +390,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     checked
                     {
                         if (value != null)
+                        {
                             _sum += value.Value;
+                        }
                     }
                 }
                 catch (Exception exception)

@@ -6,11 +6,11 @@ using System;
 
 namespace ReactiveTests.Dummies
 {
-    class DummyObserver<T> : IObserver<T>
+    internal class DummyObserver<T> : IObserver<T>
     {
         public static readonly DummyObserver<T> Instance = new DummyObserver<T>();
 
-        DummyObserver()
+        private DummyObserver()
         {
         }
 

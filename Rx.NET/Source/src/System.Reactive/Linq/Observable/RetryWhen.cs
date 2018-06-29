@@ -2,21 +2,17 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
-using System.Text;
 using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class RetryWhen<T, U> : IObservable<T>
     {
-        readonly IObservable<T> source;
-
-        readonly Func<IObservable<Exception>, IObservable<U>> handler;
+        private readonly IObservable<T> source;
+        private readonly Func<IObservable<Exception>, IObservable<U>> handler;
 
         internal RetryWhen(IObservable<T> source, Func<IObservable<Exception>, IObservable<U>> handler)
         {
@@ -58,23 +54,17 @@ namespace System.Reactive.Linq.ObservableImpl
             return parent;
         }
 
-        sealed class MainObserver : Sink<T>, IObserver<T>
+        private sealed class MainObserver : Sink<T>, IObserver<T>
         {
-
-            readonly IObserver<Exception> errorSignal;
+            private readonly IObserver<Exception> errorSignal;
 
             internal readonly HandlerObserver handlerObserver;
-            
-            readonly IObservable<T> source;
-
-            IDisposable upstream;
+            private readonly IObservable<T> source;
+            private IDisposable upstream;
             internal IDisposable handlerUpstream;
-
-            int trampoline;
-
-            int halfSerializer;
-
-            Exception error;
+            private int trampoline;
+            private int halfSerializer;
+            private Exception error;
 
             internal MainObserver(IObserver<T> downstream, IObservable<T> source, IObserver<Exception> errorSignal) : base(downstream)
             {
@@ -88,7 +78,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 if (disposing)
                 {
                     Disposable.TryDispose(ref upstream);
-                    Disposable.TryDispose(ref handlerUpstream); 
+                    Disposable.TryDispose(ref handlerUpstream);
                 }
                 base.Dispose(disposing);
             }
@@ -141,7 +131,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class HandlerObserver : IObserver<U>
             {
-                readonly MainObserver main;
+                private readonly MainObserver main;
 
                 internal HandlerObserver(MainObserver main)
                 {
@@ -168,17 +158,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
     internal sealed class RedoSerializedObserver<X> : IObserver<X>
     {
-        readonly IObserver<X> downstream;
-
-        int wip;
-
-        Exception terminalException;
-
-        static readonly Exception DONE = new Exception();
-
-        static readonly Exception SIGNALED = new Exception();
-
-        readonly ConcurrentQueue<X> queue;
+        private readonly IObserver<X> downstream;
+        private int wip;
+        private Exception terminalException;
+        private static readonly Exception DONE = new Exception();
+        private static readonly Exception SIGNALED = new Exception();
+        private readonly ConcurrentQueue<X> queue;
 
         internal RedoSerializedObserver(IObserver<X> downstream)
         {
@@ -208,12 +193,15 @@ namespace System.Reactive.Linq.ObservableImpl
             Drain();
         }
 
-        void Clear()
+        private void Clear()
         {
-            while (queue.TryDequeue(out var _)) ;
+            while (queue.TryDequeue(out var _))
+            {
+                ;
+            }
         }
 
-        void Drain()
+        private void Drain()
         {
             if (Interlocked.Increment(ref wip) != 1)
             {

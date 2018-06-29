@@ -7,5 +7,4 @@ using System.Security;
 
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
-[assembly: AllowPartiallyTrustedCallers]
 [assembly: NeutralResourcesLanguage("en-US")]
