@@ -16,18 +16,20 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Append<TSource>(IObservable<TSource> source, TSource value)
         {
-            return Append_<TSource>(source, value, SchedulerDefaults.ConstantTimeOperations);
+            return Append_(source, value, SchedulerDefaults.ConstantTimeOperations);
         }
 
         public virtual IObservable<TSource> Append<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
-            return Append_<TSource>(source, value, scheduler);
+            return Append_(source, value, scheduler);
         }
 
         private static IObservable<TSource> Append_<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
             if (source is AppendPrepend.IAppendPrepend<TSource> ap && ap.Scheduler == scheduler)
+            {
                 return ap.Append(value);
+            }
 
             return new AppendPrepend.AppendPrependSingle<TSource>(source, value, scheduler, append: true);
         }
@@ -39,7 +41,9 @@ namespace System.Reactive.Linq
         public virtual IObservable<TSource> AsObservable<TSource>(IObservable<TSource> source)
         {
             if (source is AsObservable<TSource> asObservable)
+            {
                 return asObservable;
+            }
 
             return new AsObservable<TSource>(source);
         }
@@ -50,17 +54,21 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, int count)
         {
-            return Buffer_<TSource>(source, count, count);
+            return new Buffer<TSource>.CountExact(source, count);
         }
 
         public virtual IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, int count, int skip)
         {
-            return Buffer_<TSource>(source, count, skip);
-        }
-
-        private static IObservable<IList<TSource>> Buffer_<TSource>(IObservable<TSource> source, int count, int skip)
-        {
-            return new Buffer<TSource>.Count(source, count, skip);
+            if (count > skip)
+            {
+                return new Buffer<TSource>.CountOverlap(source, count, skip);
+            }
+            else if (count < skip)
+            {
+                return new Buffer<TSource>.CountSkip(source, count, skip);
+            }
+            // count == skip
+            return new Buffer<TSource>.CountExact(source, count);
         }
 
         #endregion
@@ -70,7 +78,9 @@ namespace System.Reactive.Linq
         public virtual IObservable<TSource> Dematerialize<TSource>(IObservable<Notification<TSource>> source)
         {
             if (source is Materialize<TSource> materialize)
+            {
                 return materialize.Dematerialize();
+            }
 
             return new Dematerialize<TSource>(source);
         }
@@ -115,12 +125,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Do<TSource>(IObservable<TSource> source, Action<TSource> onNext, Action onCompleted)
         {
-            return Do_<TSource>(source, onNext, Stubs<Exception>.Ignore, onCompleted);
+            return Do_(source, onNext, Stubs<Exception>.Ignore, onCompleted);
         }
 
         public virtual IObservable<TSource> Do<TSource>(IObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError)
         {
-            return Do_<TSource>(source, onNext, onError, Stubs.Nop);
+            return Do_(source, onNext, onError, Stubs.Nop);
         }
 
         public virtual IObservable<TSource> Do<TSource>(IObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
@@ -154,7 +164,9 @@ namespace System.Reactive.Linq
         public virtual IObservable<TSource> IgnoreElements<TSource>(IObservable<TSource> source)
         {
             if (source is IgnoreElements<TSource> ignoreElements)
+            {
                 return ignoreElements;
+            }
 
             return new IgnoreElements<TSource>(source);
         }
@@ -180,18 +192,20 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Prepend<TSource>(IObservable<TSource> source, TSource value)
         {
-            return Prepend_<TSource>(source, value, SchedulerDefaults.ConstantTimeOperations);
+            return Prepend_(source, value, SchedulerDefaults.ConstantTimeOperations);
         }
 
         public virtual IObservable<TSource> Prepend<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
-            return Prepend_<TSource>(source, value, scheduler);
+            return Prepend_(source, value, scheduler);
         }
 
         private static IObservable<TSource> Prepend_<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
             if (source is AppendPrepend.IAppendPrepend<TSource> ap && ap.Scheduler == scheduler)
+            {
                 return ap.Prepend(value);
+            }
 
             return new AppendPrepend.AppendPrependSingle<TSource>(source, value, scheduler, append: false);
         }
@@ -208,7 +222,9 @@ namespace System.Reactive.Linq
         private static IEnumerable<T> RepeatInfinite<T>(T value)
         {
             while (true)
+            {
                 yield return value;
+            }
         }
 
         public virtual IObservable<TSource> Repeat<TSource>(IObservable<TSource> source, int repeatCount)
@@ -270,12 +286,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, params TSource[] values)
         {
-            return StartWith_<TSource>(source, SchedulerDefaults.ConstantTimeOperations, values);
+            return StartWith_(source, SchedulerDefaults.ConstantTimeOperations, values);
         }
 
         public virtual IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, IScheduler scheduler, params TSource[] values)
         {
-            return StartWith_<TSource>(source, scheduler, values);
+            return StartWith_(source, scheduler, values);
         }
 
         public virtual IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, IEnumerable<TSource> values)
@@ -291,14 +307,13 @@ namespace System.Reactive.Linq
             //       IQueryLanguage interface, we went for consistency with the public API, hence the odd position of the IScheduler.
             //
 
-            var valueArray = values as TSource[];
-            if (valueArray == null)
+            if (!(values is TSource[] valueArray))
             {
                 var valueList = new List<TSource>(values);
                 valueArray = valueList.ToArray();
             }
 
-            return StartWith_<TSource>(source, scheduler, valueArray);
+            return StartWith_(source, scheduler, valueArray);
         }
 
         private static IObservable<TSource> StartWith_<TSource>(IObservable<TSource> source, IScheduler scheduler, params TSource[] values)
@@ -336,12 +351,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IObservable<TSource>> Window<TSource>(IObservable<TSource> source, int count, int skip)
         {
-            return Window_<TSource>(source, count, skip);
+            return Window_(source, count, skip);
         }
 
         public virtual IObservable<IObservable<TSource>> Window<TSource>(IObservable<TSource> source, int count)
         {
-            return Window_<TSource>(source, count, count);
+            return Window_(source, count, count);
         }
 
         private static IObservable<IObservable<TSource>> Window_<TSource>(IObservable<TSource> source, int count, int skip)

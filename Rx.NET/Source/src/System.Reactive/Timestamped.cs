@@ -79,7 +79,9 @@ namespace System.Reactive
         public override bool Equals(object obj)
         {
             if (!(obj is Timestamped<T>))
+            {
                 return false;
+            }
 
             var other = (Timestamped<T>)obj;
             return Equals(other);

@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    static internal class AppendPrepend
+    internal static class AppendPrepend
     {
         internal interface IAppendPrepend<TSource> : IObservable<TSource>
         {
@@ -37,11 +37,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 var prev = new Node<TSource>(_value);
 
                 if (_append)
+                {
                     return new AppendPrependMultiple<TSource>(_source,
                         null, new Node<TSource>(prev, value), Scheduler);
+                }
                 else
+                {
                     return new AppendPrependMultiple<TSource>(_source,
                         prev, new Node<TSource>(value), Scheduler);
+                }
             }
 
             public IAppendPrepend<TSource> Prepend(TSource value)
@@ -49,11 +53,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 var prev = new Node<TSource>(_value);
 
                 if (_append)
+                {
                     return new AppendPrependMultiple<TSource>(_source,
                         new Node<TSource>(value), prev, Scheduler);
+                }
                 else
+                {
                     return new AppendPrependMultiple<TSource>(_source,
                         new Node<TSource>(prev, value), null, Scheduler);
+                }
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
@@ -174,10 +182,14 @@ namespace System.Reactive.Linq.ObservableImpl
                     _scheduler = parent.Scheduler;
 
                     if (parent._prepends != null)
+                    {
                         _prepends = parent._prepends.ToArray();
+                    }
 
                     if (parent._appends != null)
+                    {
                         _appends = parent._appends.ToReverseArray();
+                    }
                 }
 
                 public void Run()
@@ -262,7 +274,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 private void LoopRec(State state, Action<State> recurse)
                 {
                     if (state._flag.IsDisposed)
+                    {
                         return;
+                    }
 
                     var current = state._array[state._current];
                     ForwardOnNext(current);
@@ -281,7 +295,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private void Loop(State state, ICancelable cancel)
                 {
                     var array = state._array;
-                    int i = 0;
+                    var i = 0;
 
                     while (!cancel.IsDisposed)
                     {
@@ -294,8 +308,6 @@ namespace System.Reactive.Linq.ObservableImpl
                             break;
                         }
                     }
-
-                    base.Dispose();
                 }
             }
         }
@@ -306,7 +318,7 @@ namespace System.Reactive.Linq.ObservableImpl
             public readonly T Value;
             public readonly int Count;
 
-            public Node(T value) 
+            public Node(T value)
                 : this(null, value)
             {
             }
@@ -314,14 +326,18 @@ namespace System.Reactive.Linq.ObservableImpl
             public Node(Node<T> parent, T value)
             {
                 Parent = parent;
-                Value = value; 
+                Value = value;
 
                 if (parent == null)
+                {
                     Count = 1;
+                }
                 else
                 {
                     if (parent.Count == int.MaxValue)
+                    {
                         throw new NotSupportedException($"Consecutive appends or prepends with a count of more than int.MaxValue ({int.MaxValue}) are not supported.");
+                    }
 
                     Count = parent.Count + 1;
                 }
@@ -331,7 +347,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var array = new T[Count];
                 var current = this;
-                for (int i = 0; i < Count; i++)
+                for (var i = 0; i < Count; i++)
                 {
                     array[i] = current.Value;
                     current = current.Parent;
@@ -343,7 +359,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var array = new T[Count];
                 var current = this;
-                for (int i = Count - 1; i >= 0; i--)
+                for (var i = Count - 1; i >= 0; i--)
                 {
                     array[i] = current.Value;
                     current = current.Parent;

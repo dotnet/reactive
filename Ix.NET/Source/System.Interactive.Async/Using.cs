@@ -14,9 +14,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Using<TSource, TResource>(Func<TResource> resourceFactory, Func<TResource, IAsyncEnumerable<TSource>> enumerableFactory) where TResource : IDisposable
         {
             if (resourceFactory == null)
+            {
                 throw new ArgumentNullException(nameof(resourceFactory));
+            }
+
             if (enumerableFactory == null)
+            {
                 throw new ArgumentNullException(nameof(enumerableFactory));
+            }
 
             return new UsingAsyncIterator<TSource, TResource>(resourceFactory, enumerableFactory);
         }
@@ -55,7 +60,7 @@ namespace System.Linq
                 if (resource != null)
                 {
                     resource.Dispose();
-                    resource = default(TResource);
+                    resource = default;
                 }
 
                 base.Dispose();

@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource, Timestamped<TSource>> 
+        internal sealed class _ : Sink<TSource, Timestamped<TSource>>
         {
             private readonly IScheduler _scheduler;
 

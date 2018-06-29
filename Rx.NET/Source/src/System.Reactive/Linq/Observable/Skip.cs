@@ -49,9 +49,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnNext(TSource value)
                 {
                     if (_remaining <= 0)
+                    {
                         ForwardOnNext(value);
+                    }
                     else
+                    {
                         _remaining--;
+                    }
                 }
             }
         }
@@ -81,9 +85,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 //   xs.Skip(2s).Skip(3s)  xxxxxxxxxx-o--o--o--|      xs.Skip(3s).Skip(2s)  xxxxxxx----o--o--o--|
                 //
                 if (duration <= _duration)
+                {
                     return this;
+                }
                 else
+                {
                     return new Time(_source, duration, _scheduler);
+                }
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
@@ -125,7 +133,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnNext(TSource value)
                 {
                     if (_open)
+                    {
                         ForwardOnNext(value);
+                    }
                 }
             }
         }

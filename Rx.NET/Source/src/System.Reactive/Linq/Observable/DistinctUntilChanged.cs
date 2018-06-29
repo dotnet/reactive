@@ -36,9 +36,6 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 _keySelector = parent._keySelector;
                 _comparer = parent._comparer;
-
-                _currentKey = default(TKey);
-                _hasCurrentKey = false;
             }
 
             public override void OnNext(TSource value)

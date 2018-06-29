@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -21,9 +18,14 @@ namespace System.Linq
         public static IEnumerable<TResult> While<TResult>(Func<bool> condition, IEnumerable<TResult> source)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return WhileCore(condition, source)
                 .Concat();
@@ -32,7 +34,9 @@ namespace System.Linq
         private static IEnumerable<IEnumerable<TSource>> WhileCore<TSource>(Func<bool> condition, IEnumerable<TSource> source)
         {
             while (condition())
+            {
                 yield return source;
+            }
         }
     }
 }

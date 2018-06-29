@@ -3,12 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Reactive.Disposables;
 using System.Reactive.Joins;
 
 namespace System.Reactive.Linq
 {
-	public static partial class Observable
+    public static partial class Observable
     {
         #region And
 
@@ -24,11 +23,16 @@ namespace System.Reactive.Linq
         public static Pattern<TLeft, TRight> And<TLeft, TRight>(this IObservable<TLeft> left, IObservable<TRight> right)
         {
             if (left == null)
+            {
                 throw new ArgumentNullException(nameof(left));
-            if (right == null)
-                throw new ArgumentNullException(nameof(right));
+            }
 
-            return s_impl.And<TLeft, TRight>(left, right);
+            if (right == null)
+            {
+                throw new ArgumentNullException(nameof(right));
+            }
+
+            return s_impl.And(left, right);
         }
 
         #endregion
@@ -47,11 +51,16 @@ namespace System.Reactive.Linq
         public static Plan<TResult> Then<TSource, TResult>(this IObservable<TSource> source, Func<TSource, TResult> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+            }
 
-            return s_impl.Then<TSource, TResult>(source, selector);
+            if (selector == null)
+            {
+                throw new ArgumentNullException(nameof(selector));
+            }
+
+            return s_impl.Then(source, selector);
         }
 
         #endregion
@@ -68,9 +77,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> When<TResult>(params Plan<TResult>[] plans)
         {
             if (plans == null)
+            {
                 throw new ArgumentNullException(nameof(plans));
+            }
 
-            return s_impl.When<TResult>(plans);
+            return s_impl.When(plans);
         }
 
         /// <summary>
@@ -83,9 +94,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> When<TResult>(this IEnumerable<Plan<TResult>> plans)
         {
             if (plans == null)
+            {
                 throw new ArgumentNullException(nameof(plans));
+            }
 
-            return s_impl.When<TResult>(plans);
+            return s_impl.When(plans);
         }
 
         #endregion

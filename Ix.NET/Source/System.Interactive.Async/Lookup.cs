@@ -2,11 +2,9 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,13 +16,24 @@ namespace System.Linq
         public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (elementSelector == null)
+            {
                 throw new ArgumentNullException(nameof(elementSelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return ToLookup(source, keySelector, elementSelector, comparer, CancellationToken.None);
         }
@@ -32,11 +41,19 @@ namespace System.Linq
         public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (elementSelector == null)
+            {
                 throw new ArgumentNullException(nameof(elementSelector));
+            }
 
             return ToLookup(source, keySelector, elementSelector, CancellationToken.None);
         }
@@ -44,11 +61,19 @@ namespace System.Linq
         public static Task<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return ToLookup(source, keySelector, comparer, CancellationToken.None);
         }
@@ -56,9 +81,14 @@ namespace System.Linq
         public static Task<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return ToLookup(source, keySelector, CancellationToken.None);
         }
@@ -66,13 +96,24 @@ namespace System.Linq
         public static async Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (elementSelector == null)
+            {
                 throw new ArgumentNullException(nameof(elementSelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             var lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken)
                                        .ConfigureAwait(false);
@@ -83,11 +124,19 @@ namespace System.Linq
         public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (elementSelector == null)
+            {
                 throw new ArgumentNullException(nameof(elementSelector));
+            }
 
             return source.ToLookup(keySelector, elementSelector, EqualityComparer<TKey>.Default, cancellationToken);
         }
@@ -95,11 +144,19 @@ namespace System.Linq
         public static Task<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return source.ToLookup(keySelector, x => x, comparer, cancellationToken);
         }
@@ -107,9 +164,14 @@ namespace System.Linq
         public static Task<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return source.ToLookup(keySelector, x => x, EqualityComparer<TKey>.Default, cancellationToken);
         }
@@ -188,7 +250,7 @@ namespace System.Linq.Internal
                 } while (g != _lastGrouping);
             }
         }
-        
+
         internal static async Task<Lookup<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             Debug.Assert(source != null);
@@ -209,7 +271,7 @@ namespace System.Linq.Internal
             return lookup;
         }
 
-        internal static async Task<Lookup<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector,  IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        internal static async Task<Lookup<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             Debug.Assert(source != null);
             Debug.Assert(keySelector != null);
@@ -251,7 +313,7 @@ namespace System.Linq.Internal
         internal Grouping<TKey, TElement> GetGrouping(TKey key, bool create)
         {
             var hashCode = InternalGetHashCode(key);
-            for (var g = _groupings[hashCode%_groupings.Length]; g != null; g = g._hashNext)
+            for (var g = _groupings[hashCode % _groupings.Length]; g != null; g = g._hashNext)
             {
                 if (g._hashCode == hashCode && _comparer.Equals(g._key, key))
                 {
@@ -266,7 +328,7 @@ namespace System.Linq.Internal
                     Resize();
                 }
 
-                var index = hashCode%_groupings.Length;
+                var index = hashCode % _groupings.Length;
                 var g = new Grouping<TKey, TElement>
                 {
                     _key = key,
@@ -337,20 +399,20 @@ namespace System.Linq.Internal
 
         private void Resize()
         {
-            var newSize = checked((Count*2) + 1);
+            var newSize = checked((Count * 2) + 1);
             var newGroupings = new Grouping<TKey, TElement>[newSize];
             var g = _lastGrouping;
             do
             {
                 g = g._next;
-                var index = g._hashCode%newSize;
+                var index = g._hashCode % newSize;
                 g._hashNext = newGroupings[index];
                 newGroupings[index] = g;
             } while (g != _lastGrouping);
 
             _groupings = newGroupings;
         }
-        
+
 
         public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
         {

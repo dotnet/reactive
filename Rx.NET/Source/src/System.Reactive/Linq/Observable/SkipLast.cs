@@ -26,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class _ : IdentitySink<TSource>
             {
-                private int _count;
+                private readonly int _count;
                 private Queue<TSource> _queue;
 
                 public _(int count, IObserver<TSource> observer)
@@ -40,7 +40,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _queue.Enqueue(value);
                     if (_queue.Count > _count)
+                    {
                         ForwardOnNext(_queue.Dequeue());
+                    }
                 }
             }
         }
@@ -65,13 +67,13 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly TimeSpan _duration;
-                private Queue<System.Reactive.TimeInterval<TSource>> _queue;
+                private Queue<Reactive.TimeInterval<TSource>> _queue;
 
                 public _(TimeSpan duration, IObserver<TSource> observer)
                     : base(observer)
                 {
                     _duration = duration;
-                    _queue = new Queue<System.Reactive.TimeInterval<TSource>>();
+                    _queue = new Queue<Reactive.TimeInterval<TSource>>();
                 }
 
                 private IStopwatch _watch;
@@ -86,16 +88,20 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnNext(TSource value)
                 {
                     var now = _watch.Elapsed;
-                    _queue.Enqueue(new System.Reactive.TimeInterval<TSource>(value, now));
+                    _queue.Enqueue(new Reactive.TimeInterval<TSource>(value, now));
                     while (_queue.Count > 0 && now - _queue.Peek().Interval >= _duration)
+                    {
                         ForwardOnNext(_queue.Dequeue().Value);
+                    }
                 }
 
                 public override void OnCompleted()
                 {
                     var now = _watch.Elapsed;
                     while (_queue.Count > 0 && now - _queue.Peek().Interval >= _duration)
+                    {
                         ForwardOnNext(_queue.Dequeue().Value);
+                    }
 
                     ForwardOnCompleted();
                 }

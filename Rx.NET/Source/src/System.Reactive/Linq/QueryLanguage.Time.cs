@@ -4,8 +4,6 @@
 
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
 {
@@ -19,12 +17,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, TimeSpan timeSpan)
         {
-            return Buffer_<TSource>(source, timeSpan, SchedulerDefaults.TimeBasedOperations);
+            return Buffer_(source, timeSpan, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, TimeSpan timeSpan, IScheduler scheduler)
         {
-            return Buffer_<TSource>(source, timeSpan, scheduler);
+            return Buffer_(source, timeSpan, scheduler);
         }
 
         private static IObservable<IList<TSource>> Buffer_<TSource>(IObservable<TSource> source, TimeSpan timeSpan, IScheduler scheduler)
@@ -34,12 +32,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift)
         {
-            return Buffer_<TSource>(source, timeSpan, timeShift, SchedulerDefaults.TimeBasedOperations);
+            return Buffer_(source, timeSpan, timeShift, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift, IScheduler scheduler)
         {
-            return Buffer_<TSource>(source, timeSpan, timeShift, scheduler);
+            return Buffer_(source, timeSpan, timeShift, scheduler);
         }
 
         private static IObservable<IList<TSource>> Buffer_<TSource>(IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift, IScheduler scheduler)
@@ -53,12 +51,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, TimeSpan timeSpan, int count)
         {
-            return Buffer_<TSource>(source, timeSpan, count, SchedulerDefaults.TimeBasedOperations);
+            return Buffer_(source, timeSpan, count, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, TimeSpan timeSpan, int count, IScheduler scheduler)
         {
-            return Buffer_<TSource>(source, timeSpan, count, scheduler);
+            return Buffer_(source, timeSpan, count, scheduler);
         }
 
         private static IObservable<IList<TSource>> Buffer_<TSource>(IObservable<TSource> source, TimeSpan timeSpan, int count, IScheduler scheduler)
@@ -76,12 +74,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Delay<TSource>(IObservable<TSource> source, TimeSpan dueTime)
         {
-            return Delay_<TSource>(source, dueTime, SchedulerDefaults.TimeBasedOperations);
+            return Delay_(source, dueTime, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> Delay<TSource>(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
-            return Delay_<TSource>(source, dueTime, scheduler);
+            return Delay_(source, dueTime, scheduler);
         }
 
         private static IObservable<TSource> Delay_<TSource>(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
@@ -95,12 +93,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Delay<TSource>(IObservable<TSource> source, DateTimeOffset dueTime)
         {
-            return Delay_<TSource>(source, dueTime, SchedulerDefaults.TimeBasedOperations);
+            return Delay_(source, dueTime, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> Delay<TSource>(IObservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
         {
-            return Delay_<TSource>(source, dueTime, scheduler);
+            return Delay_(source, dueTime, scheduler);
         }
 
         private static IObservable<TSource> Delay_<TSource>(IObservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
@@ -130,12 +128,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> DelaySubscription<TSource>(IObservable<TSource> source, TimeSpan dueTime)
         {
-            return DelaySubscription_<TSource>(source, dueTime, SchedulerDefaults.TimeBasedOperations);
+            return DelaySubscription_(source, dueTime, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> DelaySubscription<TSource>(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
-            return DelaySubscription_<TSource>(source, dueTime, scheduler);
+            return DelaySubscription_(source, dueTime, scheduler);
         }
 
         private static IObservable<TSource> DelaySubscription_<TSource>(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
@@ -145,12 +143,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> DelaySubscription<TSource>(IObservable<TSource> source, DateTimeOffset dueTime)
         {
-            return DelaySubscription_<TSource>(source, dueTime, SchedulerDefaults.TimeBasedOperations);
+            return DelaySubscription_(source, dueTime, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> DelaySubscription<TSource>(IObservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
         {
-            return DelaySubscription_<TSource>(source, dueTime, scheduler);
+            return DelaySubscription_(source, dueTime, scheduler);
         }
 
         private static IObservable<TSource> DelaySubscription_<TSource>(IObservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
@@ -164,12 +162,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector)
         {
-            return Generate_<TState, TResult>(initialState, condition, iterate, resultSelector, timeSelector, SchedulerDefaults.TimeBasedOperations);
+            return Generate_(initialState, condition, iterate, resultSelector, timeSelector, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector, IScheduler scheduler)
         {
-            return Generate_<TState, TResult>(initialState, condition, iterate, resultSelector, timeSelector, scheduler);
+            return Generate_(initialState, condition, iterate, resultSelector, timeSelector, scheduler);
         }
 
         private static IObservable<TResult> Generate_<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector, IScheduler scheduler)
@@ -179,12 +177,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector)
         {
-            return Generate_<TState, TResult>(initialState, condition, iterate, resultSelector, timeSelector, SchedulerDefaults.TimeBasedOperations);
+            return Generate_(initialState, condition, iterate, resultSelector, timeSelector, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector, IScheduler scheduler)
         {
-            return Generate_<TState, TResult>(initialState, condition, iterate, resultSelector, timeSelector, scheduler);
+            return Generate_(initialState, condition, iterate, resultSelector, timeSelector, scheduler);
         }
 
         private static IObservable<TResult> Generate_<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector, IScheduler scheduler)
@@ -212,12 +210,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Sample<TSource>(IObservable<TSource> source, TimeSpan interval)
         {
-            return Sample_<TSource>(source, interval, SchedulerDefaults.TimeBasedOperations);
+            return Sample_(source, interval, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> Sample<TSource>(IObservable<TSource> source, TimeSpan interval, IScheduler scheduler)
         {
-            return Sample_<TSource>(source, interval, scheduler);
+            return Sample_(source, interval, scheduler);
         }
 
         private static IObservable<TSource> Sample_<TSource>(IObservable<TSource> source, TimeSpan interval, IScheduler scheduler)
@@ -227,7 +225,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Sample<TSource, TSample>(IObservable<TSource> source, IObservable<TSample> sampler)
         {
-            return Sample_<TSource, TSample>(source, sampler);
+            return Sample_(source, sampler);
         }
 
         private static IObservable<TSource> Sample_<TSource, TSample>(IObservable<TSource> source, IObservable<TSample> sampler)
@@ -241,18 +239,20 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Skip<TSource>(IObservable<TSource> source, TimeSpan duration)
         {
-            return Skip_<TSource>(source, duration, SchedulerDefaults.TimeBasedOperations);
+            return Skip_(source, duration, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> Skip<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
-            return Skip_<TSource>(source, duration, scheduler);
+            return Skip_(source, duration, scheduler);
         }
 
         private static IObservable<TSource> Skip_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source is Skip<TSource>.Time skip && skip._scheduler == scheduler)
+            {
                 return skip.Combine(duration);
+            }
 
             return new Skip<TSource>.Time(source, duration, scheduler);
         }
@@ -263,12 +263,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> SkipLast<TSource>(IObservable<TSource> source, TimeSpan duration)
         {
-            return SkipLast_<TSource>(source, duration, SchedulerDefaults.TimeBasedOperations);
+            return SkipLast_(source, duration, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> SkipLast<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
-            return SkipLast_<TSource>(source, duration, scheduler);
+            return SkipLast_(source, duration, scheduler);
         }
 
         private static IObservable<TSource> SkipLast_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
@@ -282,18 +282,20 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> SkipUntil<TSource>(IObservable<TSource> source, DateTimeOffset startTime)
         {
-            return SkipUntil_<TSource>(source, startTime, SchedulerDefaults.TimeBasedOperations);
+            return SkipUntil_(source, startTime, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> SkipUntil<TSource>(IObservable<TSource> source, DateTimeOffset startTime, IScheduler scheduler)
         {
-            return SkipUntil_<TSource>(source, startTime, scheduler);
+            return SkipUntil_(source, startTime, scheduler);
         }
 
         private static IObservable<TSource> SkipUntil_<TSource>(IObservable<TSource> source, DateTimeOffset startTime, IScheduler scheduler)
         {
             if (source is SkipUntil<TSource> skipUntil && skipUntil._scheduler == scheduler)
+            {
                 return skipUntil.Combine(startTime);
+            }
 
             return new SkipUntil<TSource>(source, startTime, scheduler);
         }
@@ -304,18 +306,20 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Take<TSource>(IObservable<TSource> source, TimeSpan duration)
         {
-            return Take_<TSource>(source, duration, SchedulerDefaults.TimeBasedOperations);
+            return Take_(source, duration, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> Take<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
-            return Take_<TSource>(source, duration, scheduler);
+            return Take_(source, duration, scheduler);
         }
 
         private static IObservable<TSource> Take_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source is Take<TSource>.Time take && take._scheduler == scheduler)
+            {
                 return take.Combine(duration);
+            }
 
             return new Take<TSource>.Time(source, duration, scheduler);
         }
@@ -326,17 +330,17 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> TakeLast<TSource>(IObservable<TSource> source, TimeSpan duration)
         {
-            return TakeLast_<TSource>(source, duration, SchedulerDefaults.TimeBasedOperations, SchedulerDefaults.Iteration);
+            return TakeLast_(source, duration, SchedulerDefaults.TimeBasedOperations, SchedulerDefaults.Iteration);
         }
 
         public virtual IObservable<TSource> TakeLast<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
-            return TakeLast_<TSource>(source, duration, scheduler, SchedulerDefaults.Iteration);
+            return TakeLast_(source, duration, scheduler, SchedulerDefaults.Iteration);
         }
 
         public virtual IObservable<TSource> TakeLast<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler timerScheduler, IScheduler loopScheduler)
         {
-            return TakeLast_<TSource>(source, duration, timerScheduler, loopScheduler);
+            return TakeLast_(source, duration, timerScheduler, loopScheduler);
         }
 
         private static IObservable<TSource> TakeLast_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler timerScheduler, IScheduler loopScheduler)
@@ -346,12 +350,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IList<TSource>> TakeLastBuffer<TSource>(IObservable<TSource> source, TimeSpan duration)
         {
-            return TakeLastBuffer_<TSource>(source, duration, SchedulerDefaults.TimeBasedOperations);
+            return TakeLastBuffer_(source, duration, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<IList<TSource>> TakeLastBuffer<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
-            return TakeLastBuffer_<TSource>(source, duration, scheduler);
+            return TakeLastBuffer_(source, duration, scheduler);
         }
 
         private static IObservable<IList<TSource>> TakeLastBuffer_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
@@ -365,18 +369,20 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> TakeUntil<TSource>(IObservable<TSource> source, DateTimeOffset endTime)
         {
-            return TakeUntil_<TSource>(source, endTime, SchedulerDefaults.TimeBasedOperations);
+            return TakeUntil_(source, endTime, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> TakeUntil<TSource>(IObservable<TSource> source, DateTimeOffset endTime, IScheduler scheduler)
         {
-            return TakeUntil_<TSource>(source, endTime, scheduler);
+            return TakeUntil_(source, endTime, scheduler);
         }
 
         private static IObservable<TSource> TakeUntil_<TSource>(IObservable<TSource> source, DateTimeOffset endTime, IScheduler scheduler)
         {
             if (source is TakeUntil<TSource> takeUntil && takeUntil._scheduler == scheduler)
+            {
                 return takeUntil.Combine(endTime);
+            }
 
             return new TakeUntil<TSource>(source, endTime, scheduler);
         }
@@ -387,12 +393,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Throttle<TSource>(IObservable<TSource> source, TimeSpan dueTime)
         {
-            return Throttle_<TSource>(source, dueTime, SchedulerDefaults.TimeBasedOperations);
+            return Throttle_(source, dueTime, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> Throttle<TSource>(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
-            return Throttle_<TSource>(source, dueTime, scheduler);
+            return Throttle_(source, dueTime, scheduler);
         }
 
         private static IObservable<TSource> Throttle_<TSource>(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
@@ -409,17 +415,17 @@ namespace System.Reactive.Linq
 
         #region + TimeInterval +
 
-        public virtual IObservable<System.Reactive.TimeInterval<TSource>> TimeInterval<TSource>(IObservable<TSource> source)
+        public virtual IObservable<Reactive.TimeInterval<TSource>> TimeInterval<TSource>(IObservable<TSource> source)
         {
-            return TimeInterval_<TSource>(source, SchedulerDefaults.TimeBasedOperations);
+            return TimeInterval_(source, SchedulerDefaults.TimeBasedOperations);
         }
 
-        public virtual IObservable<System.Reactive.TimeInterval<TSource>> TimeInterval<TSource>(IObservable<TSource> source, IScheduler scheduler)
+        public virtual IObservable<Reactive.TimeInterval<TSource>> TimeInterval<TSource>(IObservable<TSource> source, IScheduler scheduler)
         {
-            return TimeInterval_<TSource>(source, scheduler);
+            return TimeInterval_(source, scheduler);
         }
 
-        private static IObservable<System.Reactive.TimeInterval<TSource>> TimeInterval_<TSource>(IObservable<TSource> source, IScheduler scheduler)
+        private static IObservable<Reactive.TimeInterval<TSource>> TimeInterval_<TSource>(IObservable<TSource> source, IScheduler scheduler)
         {
             return new TimeInterval<TSource>(source, scheduler);
         }
@@ -432,22 +438,22 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, TimeSpan dueTime)
         {
-            return Timeout_<TSource>(source, dueTime, Observable.Throw<TSource>(new TimeoutException()), SchedulerDefaults.TimeBasedOperations);
+            return Timeout_(source, dueTime, Observable.Throw<TSource>(new TimeoutException()), SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
-            return Timeout_<TSource>(source, dueTime, Observable.Throw<TSource>(new TimeoutException()), scheduler);
+            return Timeout_(source, dueTime, Observable.Throw<TSource>(new TimeoutException()), scheduler);
         }
 
         public virtual IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, TimeSpan dueTime, IObservable<TSource> other)
         {
-            return Timeout_<TSource>(source, dueTime, other, SchedulerDefaults.TimeBasedOperations);
+            return Timeout_(source, dueTime, other, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, TimeSpan dueTime, IObservable<TSource> other, IScheduler scheduler)
         {
-            return Timeout_<TSource>(source, dueTime, other, scheduler);
+            return Timeout_(source, dueTime, other, scheduler);
         }
 
         private static IObservable<TSource> Timeout_<TSource>(IObservable<TSource> source, TimeSpan dueTime, IObservable<TSource> other, IScheduler scheduler)
@@ -461,22 +467,22 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, DateTimeOffset dueTime)
         {
-            return Timeout_<TSource>(source, dueTime, Observable.Throw<TSource>(new TimeoutException()), SchedulerDefaults.TimeBasedOperations);
+            return Timeout_(source, dueTime, Observable.Throw<TSource>(new TimeoutException()), SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
         {
-            return Timeout_<TSource>(source, dueTime, Observable.Throw<TSource>(new TimeoutException()), scheduler);
+            return Timeout_(source, dueTime, Observable.Throw<TSource>(new TimeoutException()), scheduler);
         }
 
         public virtual IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, DateTimeOffset dueTime, IObservable<TSource> other)
         {
-            return Timeout_<TSource>(source, dueTime, other, SchedulerDefaults.TimeBasedOperations);
+            return Timeout_(source, dueTime, other, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<TSource> Timeout<TSource>(IObservable<TSource> source, DateTimeOffset dueTime, IObservable<TSource> other, IScheduler scheduler)
         {
-            return Timeout_<TSource>(source, dueTime, other, scheduler);
+            return Timeout_(source, dueTime, other, scheduler);
         }
 
         private static IObservable<TSource> Timeout_<TSource>(IObservable<TSource> source, DateTimeOffset dueTime, IObservable<TSource> other, IScheduler scheduler)
@@ -490,22 +496,22 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Timeout<TSource, TTimeout>(IObservable<TSource> source, Func<TSource, IObservable<TTimeout>> timeoutDurationSelector)
         {
-            return Timeout_<TSource, TTimeout>(source, Observable.Never<TTimeout>(), timeoutDurationSelector, Observable.Throw<TSource>(new TimeoutException()));
+            return Timeout_(source, Observable.Never<TTimeout>(), timeoutDurationSelector, Observable.Throw<TSource>(new TimeoutException()));
         }
 
         public virtual IObservable<TSource> Timeout<TSource, TTimeout>(IObservable<TSource> source, Func<TSource, IObservable<TTimeout>> timeoutDurationSelector, IObservable<TSource> other)
         {
-            return Timeout_<TSource, TTimeout>(source, Observable.Never<TTimeout>(), timeoutDurationSelector, other);
+            return Timeout_(source, Observable.Never<TTimeout>(), timeoutDurationSelector, other);
         }
 
         public virtual IObservable<TSource> Timeout<TSource, TTimeout>(IObservable<TSource> source, IObservable<TTimeout> firstTimeout, Func<TSource, IObservable<TTimeout>> timeoutDurationSelector)
         {
-            return Timeout_<TSource, TTimeout>(source, firstTimeout, timeoutDurationSelector, Observable.Throw<TSource>(new TimeoutException()));
+            return Timeout_(source, firstTimeout, timeoutDurationSelector, Observable.Throw<TSource>(new TimeoutException()));
         }
 
         public virtual IObservable<TSource> Timeout<TSource, TTimeout>(IObservable<TSource> source, IObservable<TTimeout> firstTimeout, Func<TSource, IObservable<TTimeout>> timeoutDurationSelector, IObservable<TSource> other)
         {
-            return Timeout_<TSource, TTimeout>(source, firstTimeout, timeoutDurationSelector, other);
+            return Timeout_(source, firstTimeout, timeoutDurationSelector, other);
         }
 
         private static IObservable<TSource> Timeout_<TSource, TTimeout>(IObservable<TSource> source, IObservable<TTimeout> firstTimeout, Func<TSource, IObservable<TTimeout>> timeoutDurationSelector, IObservable<TSource> other)
@@ -585,12 +591,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<Timestamped<TSource>> Timestamp<TSource>(IObservable<TSource> source)
         {
-            return Timestamp_<TSource>(source, SchedulerDefaults.TimeBasedOperations);
+            return Timestamp_(source, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<Timestamped<TSource>> Timestamp<TSource>(IObservable<TSource> source, IScheduler scheduler)
         {
-            return Timestamp_<TSource>(source, scheduler);
+            return Timestamp_(source, scheduler);
         }
 
         private static IObservable<Timestamped<TSource>> Timestamp_<TSource>(IObservable<TSource> source, IScheduler scheduler)
@@ -606,12 +612,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IObservable<TSource>> Window<TSource>(IObservable<TSource> source, TimeSpan timeSpan)
         {
-            return Window_<TSource>(source, timeSpan, SchedulerDefaults.TimeBasedOperations);
+            return Window_(source, timeSpan, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<IObservable<TSource>> Window<TSource>(IObservable<TSource> source, TimeSpan timeSpan, IScheduler scheduler)
         {
-            return Window_<TSource>(source, timeSpan, scheduler);
+            return Window_(source, timeSpan, scheduler);
         }
 
         private static IObservable<IObservable<TSource>> Window_<TSource>(IObservable<TSource> source, TimeSpan timeSpan, IScheduler scheduler)
@@ -621,12 +627,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IObservable<TSource>> Window<TSource>(IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift)
         {
-            return Window_<TSource>(source, timeSpan, timeShift, SchedulerDefaults.TimeBasedOperations);
+            return Window_(source, timeSpan, timeShift, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<IObservable<TSource>> Window<TSource>(IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift, IScheduler scheduler)
         {
-            return Window_<TSource>(source, timeSpan, timeShift, scheduler);
+            return Window_(source, timeSpan, timeShift, scheduler);
         }
 
         private static IObservable<IObservable<TSource>> Window_<TSource>(IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift, IScheduler scheduler)
@@ -640,12 +646,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IObservable<TSource>> Window<TSource>(IObservable<TSource> source, TimeSpan timeSpan, int count)
         {
-            return Window_<TSource>(source, timeSpan, count, SchedulerDefaults.TimeBasedOperations);
+            return Window_(source, timeSpan, count, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<IObservable<TSource>> Window<TSource>(IObservable<TSource> source, TimeSpan timeSpan, int count, IScheduler scheduler)
         {
-            return Window_<TSource>(source, timeSpan, count, scheduler);
+            return Window_(source, timeSpan, count, scheduler);
         }
 
         private static IObservable<IObservable<TSource>> Window_<TSource>(IObservable<TSource> source, TimeSpan timeSpan, int count, IScheduler scheduler)

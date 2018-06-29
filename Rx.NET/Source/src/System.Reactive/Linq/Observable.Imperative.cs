@@ -25,11 +25,16 @@ namespace System.Reactive.Linq
         public static Task ForEachAsync<TSource>(this IObservable<TSource> source, Action<TSource> onNext)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
-            if (onNext == null)
-                throw new ArgumentNullException(nameof(onNext));
+            }
 
-            return s_impl.ForEachAsync<TSource>(source, onNext);
+            if (onNext == null)
+            {
+                throw new ArgumentNullException(nameof(onNext));
+            }
+
+            return s_impl.ForEachAsync(source, onNext);
         }
 
         /// <summary>
@@ -46,11 +51,16 @@ namespace System.Reactive.Linq
         public static Task ForEachAsync<TSource>(this IObservable<TSource> source, Action<TSource> onNext, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
-            if (onNext == null)
-                throw new ArgumentNullException(nameof(onNext));
+            }
 
-            return s_impl.ForEachAsync<TSource>(source, onNext, cancellationToken);
+            if (onNext == null)
+            {
+                throw new ArgumentNullException(nameof(onNext));
+            }
+
+            return s_impl.ForEachAsync(source, onNext, cancellationToken);
         }
 
         /// <summary>
@@ -65,11 +75,16 @@ namespace System.Reactive.Linq
         public static Task ForEachAsync<TSource>(this IObservable<TSource> source, Action<TSource, int> onNext)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
-            if (onNext == null)
-                throw new ArgumentNullException(nameof(onNext));
+            }
 
-            return s_impl.ForEachAsync<TSource>(source, onNext);
+            if (onNext == null)
+            {
+                throw new ArgumentNullException(nameof(onNext));
+            }
+
+            return s_impl.ForEachAsync(source, onNext);
         }
 
         /// <summary>
@@ -86,11 +101,16 @@ namespace System.Reactive.Linq
         public static Task ForEachAsync<TSource>(this IObservable<TSource> source, Action<TSource, int> onNext, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
-            if (onNext == null)
-                throw new ArgumentNullException(nameof(onNext));
+            }
 
-            return s_impl.ForEachAsync<TSource>(source, onNext, cancellationToken);
+            if (onNext == null)
+            {
+                throw new ArgumentNullException(nameof(onNext));
+            }
+
+            return s_impl.ForEachAsync(source, onNext, cancellationToken);
         }
 
         #endregion
@@ -110,13 +130,21 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Case<TValue, TResult>(Func<TValue> selector, IDictionary<TValue, IObservable<TResult>> sources, IObservable<TResult> defaultSource)
         {
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
-            if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
-            if (defaultSource == null)
-                throw new ArgumentNullException(nameof(defaultSource));
+            }
 
-            return s_impl.Case<TValue, TResult>(selector, sources, defaultSource);
+            if (sources == null)
+            {
+                throw new ArgumentNullException(nameof(sources));
+            }
+
+            if (defaultSource == null)
+            {
+                throw new ArgumentNullException(nameof(defaultSource));
+            }
+
+            return s_impl.Case(selector, sources, defaultSource);
         }
 
         /// <summary>
@@ -132,13 +160,21 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Case<TValue, TResult>(Func<TValue> selector, IDictionary<TValue, IObservable<TResult>> sources, IScheduler scheduler)
         {
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
-            if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
+            }
 
-            return s_impl.Case<TValue, TResult>(selector, sources, scheduler);
+            if (sources == null)
+            {
+                throw new ArgumentNullException(nameof(sources));
+            }
+
+            if (scheduler == null)
+            {
+                throw new ArgumentNullException(nameof(scheduler));
+            }
+
+            return s_impl.Case(selector, sources, scheduler);
         }
 
         /// <summary>
@@ -153,11 +189,16 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Case<TValue, TResult>(Func<TValue> selector, IDictionary<TValue, IObservable<TResult>> sources)
         {
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
-            if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+            }
 
-            return s_impl.Case<TValue, TResult>(selector, sources);
+            if (sources == null)
+            {
+                throw new ArgumentNullException(nameof(sources));
+            }
+
+            return s_impl.Case(selector, sources);
         }
 
         #endregion
@@ -175,11 +216,16 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> DoWhile<TSource>(this IObservable<TSource> source, Func<bool> condition)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
-            if (condition == null)
-                throw new ArgumentNullException(nameof(condition));
+            }
 
-            return s_impl.DoWhile<TSource>(source, condition);
+            if (condition == null)
+            {
+                throw new ArgumentNullException(nameof(condition));
+            }
+
+            return s_impl.DoWhile(source, condition);
         }
 
         #endregion
@@ -198,11 +244,16 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> For<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, IObservable<TResult>> resultSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
-            if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+            }
 
-            return s_impl.For<TSource, TResult>(source, resultSelector);
+            if (resultSelector == null)
+            {
+                throw new ArgumentNullException(nameof(resultSelector));
+            }
+
+            return s_impl.For(source, resultSelector);
         }
 
         #endregion
@@ -221,13 +272,21 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> If<TResult>(Func<bool> condition, IObservable<TResult> thenSource, IObservable<TResult> elseSource)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
-            if (thenSource == null)
-                throw new ArgumentNullException(nameof(thenSource));
-            if (elseSource == null)
-                throw new ArgumentNullException(nameof(elseSource));
+            }
 
-            return s_impl.If<TResult>(condition, thenSource, elseSource);
+            if (thenSource == null)
+            {
+                throw new ArgumentNullException(nameof(thenSource));
+            }
+
+            if (elseSource == null)
+            {
+                throw new ArgumentNullException(nameof(elseSource));
+            }
+
+            return s_impl.If(condition, thenSource, elseSource);
         }
 
         /// <summary>
@@ -241,11 +300,16 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> If<TResult>(Func<bool> condition, IObservable<TResult> thenSource)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
-            if (thenSource == null)
-                throw new ArgumentNullException(nameof(thenSource));
+            }
 
-            return s_impl.If<TResult>(condition, thenSource);
+            if (thenSource == null)
+            {
+                throw new ArgumentNullException(nameof(thenSource));
+            }
+
+            return s_impl.If(condition, thenSource);
         }
 
         /// <summary>
@@ -260,13 +324,21 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> If<TResult>(Func<bool> condition, IObservable<TResult> thenSource, IScheduler scheduler)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
-            if (thenSource == null)
-                throw new ArgumentNullException(nameof(thenSource));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
+            }
 
-            return s_impl.If<TResult>(condition, thenSource, scheduler);
+            if (thenSource == null)
+            {
+                throw new ArgumentNullException(nameof(thenSource));
+            }
+
+            if (scheduler == null)
+            {
+                throw new ArgumentNullException(nameof(scheduler));
+            }
+
+            return s_impl.If(condition, thenSource, scheduler);
         }
 
         #endregion
@@ -284,11 +356,16 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> While<TSource>(Func<bool> condition, IObservable<TSource> source)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
+            }
 
-            return s_impl.While<TSource>(condition, source);
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            return s_impl.While(condition, source);
         }
 
         #endregion

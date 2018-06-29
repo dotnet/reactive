@@ -24,7 +24,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<double> observer)
                 : base(observer)
             {
-                _sum = 0.0;
             }
 
             public override void OnNext(double value)
@@ -55,12 +54,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<float>
         {
-            private double _sum; // This is what LINQ to Objects does!
+            private double _sum; // This is what LINQ to Objects does (accumulates into double that is)!
 
             public _(IObserver<float> observer)
                 : base(observer)
             {
-                _sum = 0.0; // This is what LINQ to Objects does!
             }
 
             public override void OnNext(float value)
@@ -96,7 +94,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<decimal> observer)
                 : base(observer)
             {
-                _sum = 0M;
             }
 
             public override void OnNext(decimal value)
@@ -132,7 +129,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<int> observer)
                 : base(observer)
             {
-                _sum = 0;
             }
 
             public override void OnNext(int value)
@@ -149,7 +145,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     ForwardOnError(exception);
                 }
             }
-            
+
             public override void OnCompleted()
             {
                 ForwardOnNext(_sum);
@@ -178,7 +174,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<long> observer)
                 : base(observer)
             {
-                _sum = 0L;
             }
 
             public override void OnNext(long value)
@@ -224,13 +219,14 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<double?> observer)
                 : base(observer)
             {
-                _sum = 0.0;
             }
 
             public override void OnNext(double? value)
             {
                 if (value != null)
+                {
                     _sum += value.Value;
+                }
             }
 
             public override void OnCompleted()
@@ -256,18 +252,19 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<float?>
         {
-            private double _sum; // This is what LINQ to Objects does!
+            private double _sum; // This is what LINQ to Objects does (accumulates into double that is)!
 
             public _(IObserver<float?> observer)
                 : base(observer)
             {
-                _sum = 0.0; // This is what LINQ to Objects does!
             }
 
             public override void OnNext(float? value)
             {
                 if (value != null)
+                {
                     _sum += value.Value; // This is what LINQ to Objects does!
+                }
             }
 
             public override void OnCompleted()
@@ -298,13 +295,14 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<decimal?> observer)
                 : base(observer)
             {
-                _sum = 0M;
             }
 
             public override void OnNext(decimal? value)
             {
                 if (value != null)
+                {
                     _sum += value.Value;
+                }
             }
 
             public override void OnCompleted()
@@ -335,7 +333,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<int?> observer)
                 : base(observer)
             {
-                _sum = 0;
             }
 
             public override void OnNext(int? value)
@@ -345,7 +342,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     checked
                     {
                         if (value != null)
+                        {
                             _sum += value.Value;
+                        }
                     }
                 }
                 catch (Exception exception)
@@ -382,7 +381,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<long?> observer)
                 : base(observer)
             {
-                _sum = 0L;
             }
 
             public override void OnNext(long? value)
@@ -392,7 +390,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     checked
                     {
                         if (value != null)
+                        {
                             _sum += value.Value;
+                        }
                     }
                 }
                 catch (Exception exception)

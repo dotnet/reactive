@@ -16,7 +16,7 @@ using ReactiveTests.Stress.Schedulers;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class EventLoopSchedulerTest
     {
         [Fact]
@@ -27,10 +27,10 @@ namespace ReactiveTests.Tests
 #if !NO_THREAD
             ReactiveAssert.Throws<ArgumentNullException>(() => new EventLoopScheduler(null));
 #endif
-            ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule<int>(42, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule<int>(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule<int>(42, TimeSpan.Zero, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => el.SchedulePeriodic(42, TimeSpan.FromSeconds(1), default(Func<int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule<int>(42, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule<int>(42, DateTimeOffset.Now, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule<int>(42, TimeSpan.Zero, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => el.SchedulePeriodic(42, TimeSpan.FromSeconds(1), default));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => el.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
         }
 
@@ -47,8 +47,11 @@ namespace ReactiveTests.Tests
             var ran = false;
             var gate = new Semaphore(0, 1);
             var el = new EventLoopScheduler();
-            el.Schedule(() => { ran = true;
-                                  gate.Release(); });
+            el.Schedule(() =>
+            {
+                ran = true;
+                gate.Release();
+            });
             Assert.True(gate.WaitOne(TimeSpan.FromSeconds(2)));
             Assert.True(ran);
         }
@@ -171,7 +174,7 @@ namespace ReactiveTests.Tests
 
         [Fact]
         public void EventLoop_ScheduleTimeOrderedInFlightActions()
-        {            
+        {
             var results = new List<int>();
             var gate = new Semaphore(0, 1);
             var el = new EventLoopScheduler();
@@ -180,7 +183,7 @@ namespace ReactiveTests.Tests
                         {
                             results.Add(0);
                             el.Schedule(TimeSpan.FromMilliseconds(50), () => results.Add(1));
-                            el.Schedule(TimeSpan.FromMilliseconds(100), ()=>
+                            el.Schedule(TimeSpan.FromMilliseconds(100), () =>
                             {
                                 results.Add(2);
                                 gate.Release();
@@ -212,7 +215,7 @@ namespace ReactiveTests.Tests
 
             Assert.True(gate.WaitOne(TimeSpan.FromSeconds(2)));
             results.AssertEqual(0, 4, 1, 2);
-        }       
+        }
 
         [Fact]
         public void EventLoop_ScheduleActionNested()
@@ -220,13 +223,16 @@ namespace ReactiveTests.Tests
             var ran = false;
             var el = new EventLoopScheduler();
             var gate = new Semaphore(0, 1);
-            el.Schedule(() => el.Schedule(() => { ran = true;
-                                                  gate.Release(); }));
+            el.Schedule(() => el.Schedule(() =>
+            {
+                ran = true;
+                gate.Release();
+            }));
             Assert.True(gate.WaitOne(TimeSpan.FromSeconds(2)));
             Assert.True(ran);
         }
 
-        [Fact(Skip ="")]
+        [Fact(Skip = "")]
         public void EventLoop_ScheduleActionDue()
         {
             var ran = false;
@@ -234,11 +240,12 @@ namespace ReactiveTests.Tests
             var sw = new Stopwatch();
             var gate = new Semaphore(0, 1);
             sw.Start();
-            el.Schedule(TimeSpan.FromSeconds(0.2), () => {
-                                  ran = true; 
-                                  sw.Stop();
-                                  gate.Release();
-                              });
+            el.Schedule(TimeSpan.FromSeconds(0.2), () =>
+            {
+                ran = true;
+                sw.Stop();
+                gate.Release();
+            });
             Assert.True(gate.WaitOne(TimeSpan.FromSeconds(2)));
             Assert.True(ran, "ran");
             Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
@@ -284,9 +291,9 @@ namespace ReactiveTests.Tests
             var M = 1000;
             var N = 4;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
-                for (int j = 1; j <= M; j *= 10)
+                for (var j = 1; j <= M; j *= 10)
                 {
                     using (var e = new EventLoopScheduler())
                     {
@@ -294,11 +301,15 @@ namespace ReactiveTests.Tests
                         {
                             var cd = new CountdownEvent(j);
 
-                            for (int k = 0; k < j; k++)
+                            for (var k = 0; k < j; k++)
+                            {
                                 d.Add(e.Schedule(() => cd.Signal()));
+                            }
 
                             if (!cd.Wait(10000))
+                            {
                                 Assert.True(false, "j = " + j);
+                            }
                         }
                     }
                 }
@@ -311,9 +322,9 @@ namespace ReactiveTests.Tests
             var M = 1000;
             var N = 4;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
-                for (int j = 1; j <= M; j *= 10) 
+                for (var j = 1; j <= M; j *= 10)
                 {
                     using (var e = new EventLoopScheduler())
                     {
@@ -321,11 +332,15 @@ namespace ReactiveTests.Tests
                         {
                             var cd = new CountdownEvent(j);
 
-                            for (int k = 0; k < j; k++)
+                            for (var k = 0; k < j; k++)
+                            {
                                 d.Add(e.Schedule(TimeSpan.FromMilliseconds(100), () => cd.Signal()));
+                            }
 
                             if (!cd.Wait(10000))
+                            {
                                 Assert.True(false, "j = " + j);
+                            }
                         }
                     }
                 }
@@ -338,9 +353,9 @@ namespace ReactiveTests.Tests
             var M = 1000;
             var N = 4;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
-                for (int j = 1; j <= M; j *= 10)
+                for (var j = 1; j <= M; j *= 10)
                 {
                     using (var e = new EventLoopScheduler())
                     {
@@ -348,11 +363,15 @@ namespace ReactiveTests.Tests
                         {
                             var cd = new CountdownEvent(j);
 
-                            for (int k = 0; k < j; k++)
+                            for (var k = 0; k < j; k++)
+                            {
                                 d.Add(e.Schedule(TimeSpan.FromMilliseconds(k), () => cd.Signal()));
+                            }
 
                             if (!cd.Wait(10000))
+                            {
                                 Assert.True(false, "j = " + j);
+                            }
                         }
                     }
                 }
@@ -363,7 +382,7 @@ namespace ReactiveTests.Tests
         public void EventLoop_Periodic()
         {
             var n = 0;
-            
+
             using (var s = new EventLoopScheduler())
             {
                 var e = new ManualResetEvent(false);
@@ -371,12 +390,16 @@ namespace ReactiveTests.Tests
                 var d = s.SchedulePeriodic(TimeSpan.FromMilliseconds(25), () =>
                 {
                     if (Interlocked.Increment(ref n) == 10)
+                    {
                         e.Set();
+                    }
                 });
-                
+
                 if (!e.WaitOne(10000))
+                {
                     Assert.True(false);
-                
+                }
+
                 d.Dispose();
             }
         }

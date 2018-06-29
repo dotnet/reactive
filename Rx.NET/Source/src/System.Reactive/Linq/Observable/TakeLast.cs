@@ -56,8 +56,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnNext(TSource value)
                 {
                     _queue.Enqueue(value);
+
                     if (_queue.Count > _count)
+                    {
                         _queue.Dequeue();
+                    }
                 }
 
                 public override void OnCompleted()
@@ -104,7 +107,9 @@ namespace System.Reactive.Linq.ObservableImpl
                             break;
                         }
                         else
+                        {
                             ForwardOnNext(_queue.Dequeue());
+                        }
 
                         n--;
                     }
@@ -219,7 +224,9 @@ namespace System.Reactive.Linq.ObservableImpl
                             break;
                         }
                         else
+                        {
                             ForwardOnNext(_queue.Dequeue().Value);
+                        }
 
                         n--;
                     }
@@ -230,7 +237,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 private void Trim(TimeSpan now)
                 {
                     while (_queue.Count > 0 && now - _queue.Peek().Interval >= _duration)
+                    {
                         _queue.Dequeue();
+                    }
                 }
             }
         }

@@ -14,7 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Take<TSource>(this IAsyncEnumerable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             if (count <= 0)
             {
@@ -27,7 +29,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> TakeLast<TSource>(this IAsyncEnumerable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             if (count <= 0)
             {
@@ -40,9 +44,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> TakeWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return new TakeWhileAsyncIterator<TSource>(source, predicate);
         }
@@ -50,9 +59,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> TakeWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return new TakeWhileWithIndexAsyncIterator<TSource>(source, predicate);
         }

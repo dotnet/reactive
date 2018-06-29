@@ -5,16 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.Reflection;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
@@ -106,19 +102,17 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(new[] { 42, 43 }));
         }
 
-        class EventSrc
+        private class EventSrc
         {
             public event EventHandler<EventArgs<string>> E;
 
             public void On(string s)
             {
-                var e = E;
-                if (e != null)
-                    e(this, new EventArgs<string>(s));
+                E?.Invoke(this, new EventArgs<string>(s));
             }
         }
 
-        class EventArgs<T> : EventArgs
+        private class EventArgs<T> : EventArgs
         {
             public T Value { get; private set; }
 
@@ -251,7 +245,7 @@ namespace ReactiveTests.Tests
             var num = 0;
             var hnd = new Action<Unit>(e => num++);
 
-            for (int i = 0; i < 2; i++)
+            for (var i = 0; i < 2; i++)
             {
                 evt.OnNext += hnd;
 
@@ -342,7 +336,7 @@ namespace ReactiveTests.Tests
             Assert.True(e1.GetHashCode() != e3.GetHashCode());
         }
 
-        class MyEventArgs : EventArgs
+        private class MyEventArgs : EventArgs
         {
         }
 

@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -20,9 +17,11 @@ namespace System.Linq
         public static IEnumerable<TSource> Retry<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
-            return new[] {source}.Repeat()
+            return new[] { source }.Repeat()
                                  .Catch();
         }
 
@@ -37,11 +36,16 @@ namespace System.Linq
         public static IEnumerable<TSource> Retry<TSource>(this IEnumerable<TSource> source, int retryCount)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
-            if (retryCount < 0)
-                throw new ArgumentOutOfRangeException(nameof(retryCount));
+            }
 
-            return new[] {source}.Repeat(retryCount)
+            if (retryCount < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(retryCount));
+            }
+
+            return new[] { source }.Repeat(retryCount)
                                  .Catch();
         }
     }

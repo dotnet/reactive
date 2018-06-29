@@ -14,9 +14,14 @@ namespace System.Linq
         public static IAsyncEnumerable<IList<TSource>> Buffer<TSource>(this IAsyncEnumerable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return new BufferAsyncIterator<TSource>(source, count, count);
         }
@@ -24,11 +29,19 @@ namespace System.Linq
         public static IAsyncEnumerable<IList<TSource>> Buffer<TSource>(this IAsyncEnumerable<TSource> source, int count, int skip)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
             if (skip <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(skip));
+            }
 
             return new BufferAsyncIterator<TSource>(source, count, skip);
         }

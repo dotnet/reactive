@@ -3,20 +3,10 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
@@ -31,14 +21,14 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, (Action<int>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(null, _ => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, x => { }, (Action)null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, (Action<int>)null, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, null, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(null, x => { }, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, x => { }, (Action<Exception>)null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, (Action<int>)null, (Exception _) => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, null, (Exception _) => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(null, x => { }, (Exception _) => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, x => { }, (Exception _) => { }, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, x => { }, (Action<Exception>)null, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, (Action<int>)null, (Exception _) => { }, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, x => { }, null, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, null, (Exception _) => { }, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(null, x => { }, (Exception _) => { }, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(null, Observer.Create<int>(i => { })));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, default(IObserver<int>)));
@@ -58,8 +48,8 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            int i = 0;
-            int sum = 2 + 3 + 4 + 5;
+            var i = 0;
+            var sum = 2 + 3 + 4 + 5;
             var res = scheduler.Start(() =>
                 xs.Do(x => { i++; sum -= x; })
             );
@@ -94,7 +84,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            int i = 0;
+            var i = 0;
             var res = scheduler.Start(() =>
                 xs.Do(_ => { i++; })
             );
@@ -128,9 +118,9 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            int i = 0;
-            int sum = 2 + 3 + 4 + 5;
-            bool completed = false;
+            var i = 0;
+            var sum = 2 + 3 + 4 + 5;
+            var completed = false;
             var res = scheduler.Start(() =>
                 xs.Do(x => { i++; sum -= x; }, () => { completed = true; })
             );
@@ -159,8 +149,8 @@ namespace ReactiveTests.Tests
 
             var xs = scheduler.CreateHotObservable<int>();
 
-            int i = 0;
-            bool completed = false;
+            var i = 0;
+            var completed = false;
             var res = scheduler.Start(() =>
                 xs.Do(x => { i++; }, () => { completed = true; })
             );
@@ -192,9 +182,9 @@ namespace ReactiveTests.Tests
                 OnError<int>(250, ex)
             );
 
-            int i = 0;
-            int sum = 2 + 3 + 4 + 5;
-            bool sawError = false;
+            var i = 0;
+            var sum = 2 + 3 + 4 + 5;
+            var sawError = false;
             var res = scheduler.Start(() =>
                 xs.Do(x => { i++; sum -= x; }, e => { sawError = e == ex; })
             );
@@ -230,9 +220,9 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            int i = 0;
-            int sum = 2 + 3 + 4 + 5;
-            bool sawError = false;
+            var i = 0;
+            var sum = 2 + 3 + 4 + 5;
+            var sawError = false;
             var res = scheduler.Start(() =>
                 xs.Do(x => { i++; sum -= x; }, _ => { sawError = true; })
             );
@@ -268,10 +258,10 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            int i = 0;
-            int sum = 2 + 3 + 4 + 5;
-            bool sawError = false;
-            bool hasCompleted = false;
+            var i = 0;
+            var sum = 2 + 3 + 4 + 5;
+            var sawError = false;
+            var hasCompleted = false;
             var res = scheduler.Start(() =>
                 xs.Do(x => { i++; sum -= x; }, e => { sawError = true; }, () => { hasCompleted = true; })
             );
@@ -310,10 +300,10 @@ namespace ReactiveTests.Tests
                 OnError<int>(250, ex)
             );
 
-            int i = 0;
-            int sum = 2 + 3 + 4 + 5;
-            bool sawError = false;
-            bool hasCompleted = false;
+            var i = 0;
+            var sum = 2 + 3 + 4 + 5;
+            var sawError = false;
+            var hasCompleted = false;
             var res = scheduler.Start(() =>
                 xs.Do(x => { i++; sum -= x; }, e => { sawError = e == ex; }, () => { hasCompleted = true; })
             );
@@ -343,9 +333,9 @@ namespace ReactiveTests.Tests
 
             var xs = scheduler.CreateHotObservable<int>();
 
-            int i = 0;
-            bool sawError = false;
-            bool hasCompleted = false;
+            var i = 0;
+            var sawError = false;
+            var hasCompleted = false;
             var res = scheduler.Start(() =>
                 xs.Do(x => { i++; }, e => { sawError = true; }, () => { hasCompleted = true; })
             );
@@ -378,10 +368,10 @@ namespace ReactiveTests.Tests
                 OnError<int>(250, ex)
             );
 
-            int i = 0;
-            int sum = 2 + 3 + 4 + 5;
-            bool sawError = false;
-            bool hasCompleted = false;
+            var i = 0;
+            var sum = 2 + 3 + 4 + 5;
+            var sawError = false;
+            var hasCompleted = false;
             var res = scheduler.Start(() =>
                 xs.Do(Observer.Create<int>(x => { i++; sum -= x; }, e => { sawError = e == ex; }, () => { hasCompleted = true; }))
             );
@@ -418,10 +408,10 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            int i = 0;
-            int sum = 2 + 3 + 4 + 5;
-            bool sawError = false;
-            bool hasCompleted = false;
+            var i = 0;
+            var sum = 2 + 3 + 4 + 5;
+            var sawError = false;
+            var hasCompleted = false;
             var res = scheduler.Start(() =>
                 xs.Do(Observer.Create<int>(x => { i++; sum -= x; }, e => { sawError = true; }, () => { hasCompleted = true; }))
             );

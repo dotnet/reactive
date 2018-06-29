@@ -45,13 +45,8 @@ namespace System.Reactive.PlatformServices
             {
                 switch ((string)args[0])
                 {
-#if !WINDOWS && !NO_THREAD
                     case "ThreadPool":
                         return (T)(object)ThreadPoolScheduler.Instance;
-#elif WINDOWS
-                    case "ThreadPool":
-                        return (T)(object)ThreadPoolScheduler.Default;
-#endif
                     case "TaskPool":
                         return (T)(object)TaskPoolScheduler.Default;
                     case "NewThread":
@@ -88,8 +83,10 @@ namespace System.Reactive.PlatformServices
 #else
                     var ifType = t;
 #endif
-                    var asm = new AssemblyName(ifType.Assembly.FullName);
-                    asm.Name = "System.Reactive";
+                    var asm = new AssemblyName(ifType.Assembly.FullName)
+                    {
+                        Name = "System.Reactive"
+                    };
                     var name = "System.Reactive.Linq.QueryDebugger, " + asm.FullName;
 
                     var dbg = Type.GetType(name, false);

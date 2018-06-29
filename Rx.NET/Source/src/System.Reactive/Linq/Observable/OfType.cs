@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource, TResult> 
+        internal sealed class _ : Sink<TSource, TResult>
         {
             public _(IObserver<TResult> observer)
                 : base(observer)

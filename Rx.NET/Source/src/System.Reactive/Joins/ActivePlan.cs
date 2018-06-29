@@ -8,7 +8,7 @@ namespace System.Reactive.Joins
 {
     internal abstract class ActivePlan
     {
-        Dictionary<IJoinObserver, IJoinObserver> joinObservers = new Dictionary<IJoinObserver, IJoinObserver>();
+        private Dictionary<IJoinObserver, IJoinObserver> joinObservers = new Dictionary<IJoinObserver, IJoinObserver>();
 
         internal abstract void Match();
 
@@ -23,7 +23,9 @@ namespace System.Reactive.Joins
         protected void Dequeue()
         {
             foreach (var joinObserver in joinObservers.Values)
+            {
                 joinObserver.Dequeue();
+            }
         }
     }
 
@@ -48,7 +50,9 @@ namespace System.Reactive.Joins
                 var n1 = first.Queue.Peek();
 
                 if (n1.Kind == NotificationKind.OnCompleted)
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -84,9 +88,11 @@ namespace System.Reactive.Joins
                 var n1 = first.Queue.Peek();
                 var n2 = second.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted)
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -128,10 +134,12 @@ namespace System.Reactive.Joins
                 var n2 = second.Queue.Peek();
                 var n3 = third.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted)
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -179,11 +187,13 @@ namespace System.Reactive.Joins
                 var n3 = third.Queue.Peek();
                 var n4 = fourth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted)
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -238,12 +248,14 @@ namespace System.Reactive.Joins
                 var n4 = fourth.Queue.Peek();
                 var n5 = fifth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
                     || n5.Kind == NotificationKind.OnCompleted)
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -270,7 +282,7 @@ namespace System.Reactive.Joins
         private readonly JoinObserver<T6> sixth;
 
         internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third,
-            JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth, 
+            JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth,
             Action<T1, T2, T3, T4, T5, T6> onNext, Action onCompleted)
         {
             this.onNext = onNext;
@@ -305,13 +317,15 @@ namespace System.Reactive.Joins
                 var n5 = fifth.Queue.Peek();
                 var n6 = sixth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
                     || n5.Kind == NotificationKind.OnCompleted
                     || n6.Kind == NotificationKind.OnCompleted)
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -379,14 +393,16 @@ namespace System.Reactive.Joins
                 var n6 = sixth.Queue.Peek();
                 var n7 = seventh.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
                     || n5.Kind == NotificationKind.OnCompleted
                     || n6.Kind == NotificationKind.OnCompleted
                     || n7.Kind == NotificationKind.OnCompleted)
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -461,7 +477,7 @@ namespace System.Reactive.Joins
                 var n7 = seventh.Queue.Peek();
                 var n8 = eighth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -470,7 +486,9 @@ namespace System.Reactive.Joins
                     || n7.Kind == NotificationKind.OnCompleted
                     || n8.Kind == NotificationKind.OnCompleted
                     )
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -552,7 +570,7 @@ namespace System.Reactive.Joins
                 var n8 = eighth.Queue.Peek();
                 var n9 = ninth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -562,7 +580,9 @@ namespace System.Reactive.Joins
                     || n8.Kind == NotificationKind.OnCompleted
                     || n9.Kind == NotificationKind.OnCompleted
                     )
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -650,7 +670,7 @@ namespace System.Reactive.Joins
                 var n9 = ninth.Queue.Peek();
                 var n10 = tenth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -661,7 +681,9 @@ namespace System.Reactive.Joins
                     || n9.Kind == NotificationKind.OnCompleted
                     || n10.Kind == NotificationKind.OnCompleted
                     )
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -755,7 +777,7 @@ namespace System.Reactive.Joins
                 var n10 = tenth.Queue.Peek();
                 var n11 = eleventh.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -767,7 +789,9 @@ namespace System.Reactive.Joins
                     || n10.Kind == NotificationKind.OnCompleted
                     || n11.Kind == NotificationKind.OnCompleted
                     )
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -868,7 +892,7 @@ namespace System.Reactive.Joins
                 var n11 = eleventh.Queue.Peek();
                 var n12 = twelfth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -881,7 +905,9 @@ namespace System.Reactive.Joins
                     || n11.Kind == NotificationKind.OnCompleted
                     || n12.Kind == NotificationKind.OnCompleted
                     )
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -988,7 +1014,7 @@ namespace System.Reactive.Joins
                 var n12 = twelfth.Queue.Peek();
                 var n13 = thirteenth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -1002,7 +1028,9 @@ namespace System.Reactive.Joins
                     || n12.Kind == NotificationKind.OnCompleted
                     || n13.Kind == NotificationKind.OnCompleted
                     )
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -1115,7 +1143,7 @@ namespace System.Reactive.Joins
                 var n13 = thirteenth.Queue.Peek();
                 var n14 = fourteenth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -1130,7 +1158,9 @@ namespace System.Reactive.Joins
                     || n13.Kind == NotificationKind.OnCompleted
                     || n14.Kind == NotificationKind.OnCompleted
                     )
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -1250,7 +1280,7 @@ namespace System.Reactive.Joins
                 var n14 = fourteenth.Queue.Peek();
                 var n15 = fifteenth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -1266,7 +1296,9 @@ namespace System.Reactive.Joins
                     || n14.Kind == NotificationKind.OnCompleted
                     || n15.Kind == NotificationKind.OnCompleted
                     )
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();
@@ -1290,7 +1322,6 @@ namespace System.Reactive.Joins
             }
         }
     }
-
 
     internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> : ActivePlan
     {
@@ -1393,7 +1424,7 @@ namespace System.Reactive.Joins
                 var n15 = fifteenth.Queue.Peek();
                 var n16 = sixteenth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -1410,7 +1441,9 @@ namespace System.Reactive.Joins
                     || n15.Kind == NotificationKind.OnCompleted
                     || n16.Kind == NotificationKind.OnCompleted
                     )
+                {
                     onCompleted();
+                }
                 else
                 {
                     Dequeue();

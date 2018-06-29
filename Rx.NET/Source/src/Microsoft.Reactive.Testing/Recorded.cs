@@ -83,7 +83,10 @@ namespace Microsoft.Reactive.Testing
         public override bool Equals(object obj)
         {
             if (obj is Recorded<T>)
+            {
                 return Equals((Recorded<T>)obj);
+            }
+
             return false;
         }
 

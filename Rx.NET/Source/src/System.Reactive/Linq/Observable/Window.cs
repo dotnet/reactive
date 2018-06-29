@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, IObservable<TSource> > 
+            internal sealed class _ : Sink<TSource, IObservable<TSource>>
             {
                 private readonly Queue<ISubject<TSource>> _queue = new Queue<ISubject<TSource>>();
                 private readonly SingleAssignmentDisposable _m = new SingleAssignmentDisposable();
@@ -50,8 +50,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void Run(IObservable<TSource> source)
                 {
-                    _n = 0;
-
                     var firstWindow = CreateWindow();
                     ForwardOnNext(firstWindow);
 
@@ -70,7 +68,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnNext(TSource value)
                 {
                     foreach (var s in _queue)
+                    {
                         s.OnNext(value);
+                    }
 
                     var c = _n - _count + 1;
                     if (c >= 0 && c % _skip == 0)
@@ -90,7 +90,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnError(Exception error)
                 {
                     while (_queue.Count > 0)
+                    {
                         _queue.Dequeue().OnError(error);
+                    }
 
                     ForwardOnError(error);
                 }
@@ -98,7 +100,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnCompleted()
                 {
                     while (_queue.Count > 0)
+                    {
                         _queue.Dequeue().OnCompleted();
+                    }
 
                     ForwardOnCompleted();
                 }
@@ -124,7 +128,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource, IObservable<TSource>> 
+            internal sealed class _ : Sink<TSource, IObservable<TSource>>
             {
                 private readonly object _gate = new object();
                 private readonly Queue<ISubject<TSource>> _q = new Queue<ISubject<TSource>>();
@@ -182,18 +186,27 @@ namespace System.Reactive.Linq.ObservableImpl
                         isShift = true;
                     }
                     else if (_nextSpan < _nextShift)
+                    {
                         isSpan = true;
+                    }
                     else
+                    {
                         isShift = true;
+                    }
 
                     var newTotalTime = isSpan ? _nextSpan : _nextShift;
                     var ts = newTotalTime - _totalTime;
                     _totalTime = newTotalTime;
 
                     if (isSpan)
+                    {
                         _nextSpan += _timeShift;
+                    }
+
                     if (isShift)
+                    {
                         _nextShift += _timeShift;
+                    }
 
                     m.Disposable = _scheduler.Schedule((@this: this, isSpan, isShift), ts, (_, tuple) => tuple.@this.Tick(tuple.isSpan, tuple.isShift));
                 }
@@ -230,7 +243,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         foreach (var s in _q)
+                        {
                             s.OnNext(value);
+                        }
                     }
                 }
 
@@ -239,7 +254,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         foreach (var s in _q)
+                        {
                             s.OnError(error);
+                        }
 
                         ForwardOnError(error);
                     }
@@ -250,7 +267,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         foreach (var s in _q)
+                        {
                             s.OnCompleted();
+                        }
 
                         ForwardOnCompleted();
                     }
@@ -275,7 +294,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource, IObservable<TSource>> 
+            internal sealed class _ : Sink<TSource, IObservable<TSource>>
             {
                 private readonly object _gate = new object();
 
@@ -364,7 +383,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, IObservable<TSource>> 
+            internal sealed class _ : Sink<TSource, IObservable<TSource>>
             {
                 private readonly object _gate = new object();
                 private readonly SerialDisposable _timerD = new SerialDisposable();
@@ -388,8 +407,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void Run(IObservable<TSource> source)
                 {
-                    _n = 0;
-
                     var groupDisposable = new CompositeDisposable(2) { _timerD };
                     _refCountDisposable = new RefCountDisposable(groupDisposable);
 
@@ -418,7 +435,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         if (window != _s)
+                        {
                             return d;
+                        }
 
                         _n = 0;
                         newWindow = new Subject<TSource>();
@@ -454,7 +473,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     if (newWindow != null)
+                    {
                         CreateTimer(newWindow);
+                    }
                 }
 
                 public override void OnError(Exception error)
@@ -495,7 +516,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, IObservable<TSource>> 
+            internal sealed class _ : Sink<TSource, IObservable<TSource>>
             {
                 private readonly object _gate = new object();
                 private readonly AsyncLock _windowGate = new AsyncLock();
@@ -634,7 +655,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource, IObservable<TSource>> 
+            internal sealed class _ : Sink<TSource, IObservable<TSource>>
             {
                 private readonly object _gate = new object();
 

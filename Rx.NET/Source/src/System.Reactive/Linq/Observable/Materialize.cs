@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource, Notification<TSource>> 
+        internal sealed class _ : Sink<TSource, Notification<TSource>>
         {
             public _(IObserver<Notification<TSource>> observer)
                 : base(observer)
@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                ForwardOnNext(Notification.CreateOnNext<TSource>(value));
+                ForwardOnNext(Notification.CreateOnNext(value));
             }
 
             public override void OnError(Exception error)

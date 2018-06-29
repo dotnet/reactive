@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,9 +13,14 @@ namespace System.Linq
         public static void ForEach<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> action)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             source.ForEach(action, CancellationToken.None);
         }
@@ -25,9 +28,14 @@ namespace System.Linq
         public static void ForEach<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             source.ForEach(action, CancellationToken.None);
         }
@@ -36,9 +44,14 @@ namespace System.Linq
         public static void ForEach<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> action, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             source.ForEachAsync(action, cancellationToken)
                   .Wait(cancellationToken);
@@ -47,9 +60,14 @@ namespace System.Linq
         public static void ForEach<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             source.ForEachAsync(action, cancellationToken)
                   .Wait(cancellationToken);
@@ -58,9 +76,14 @@ namespace System.Linq
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> action)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ForEachAsync(source, action, CancellationToken.None);
         }
@@ -68,9 +91,14 @@ namespace System.Linq
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ForEachAsync(source, action, CancellationToken.None);
         }
@@ -78,9 +106,14 @@ namespace System.Linq
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> action, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return source.ForEachAsync((x, i) => action(x), cancellationToken);
         }
@@ -88,9 +121,14 @@ namespace System.Linq
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ForEachAsync_(source, action, cancellationToken);
         }

@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Reactive.Disposables;
 using System;
+using System.Reactive.Disposables;
 
 namespace ReactiveTests
 {
@@ -18,7 +18,9 @@ namespace ReactiveTests
         public IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             observer.OnError(null);
             return Disposable.Empty;

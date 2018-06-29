@@ -33,7 +33,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource, IGroupedObservable<TKey, TElement>> 
+        internal sealed class _ : Sink<TSource, IGroupedObservable<TKey, TElement>>
         {
             private readonly object _gate = new object();
             private readonly object _nullGate = new object();
@@ -139,7 +139,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     lock (_gate)
+                    {
                         ForwardOnNext(group);
+                    }
 
                     var durationObserver = new DurationObserver(this, key, writer);
                     _groupDisposable.Add(durationObserver);
@@ -241,15 +243,21 @@ namespace System.Reactive.Linq.ObservableImpl
                 //
                 var @null = default(ISubject<TElement>);
                 lock (_nullGate)
+                {
                     @null = _null;
+                }
 
                 @null?.OnCompleted();
 
                 foreach (var w in _map.Values)
+                {
                     w.OnCompleted();
+                }
 
                 lock (_gate)
+                {
                     ForwardOnCompleted();
+                }
             }
 
             private void Error(Exception exception)
@@ -261,15 +269,21 @@ namespace System.Reactive.Linq.ObservableImpl
                 //
                 var @null = default(ISubject<TElement>);
                 lock (_nullGate)
+                {
                     @null = _null;
+                }
 
                 @null?.OnError(exception);
 
                 foreach (var w in _map.Values)
+                {
                     w.OnError(exception);
+                }
 
                 lock (_gate)
+                {
                     ForwardOnError(exception);
+                }
             }
         }
     }
@@ -311,7 +325,9 @@ namespace System.Reactive.Linq.ObservableImpl
             while (true)
             {
                 if (_map.TryGetValue(key, out value))
+                {
                     break;
+                }
 
                 if (!hasNewValue)
                 {

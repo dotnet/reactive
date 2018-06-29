@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq

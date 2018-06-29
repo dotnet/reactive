@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 using System;
-using System.Text;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using System.Collections;
 
 namespace Tests
 {
@@ -147,7 +146,7 @@ namespace Tests
             Assert.Equal(10, n);
         }
 
-        static IEnumerable<int> Tick(Action<int> t)
+        private static IEnumerable<int> Tick(Action<int> t)
         {
             var i = 0;
             while (true)
@@ -265,7 +264,7 @@ namespace Tests
             AssertThrows<MyException>(() => e2.MoveNext());
         }
 
-        class MyException : Exception
+        private class MyException : Exception
         {
         }
 
@@ -278,7 +277,7 @@ namespace Tests
             HasNext(e1, 0);
             HasNext(e1, 1);
             HasNext(e1, 2);
-            
+
             var e2 = rng.GetEnumerator();
             HasNext(e2, 3);
             HasNext(e2, 4);
@@ -550,12 +549,14 @@ namespace Tests
             Assert.True(rnd.Zip(rnd, (l, r) => l == r).All(x => x));
         }
 
-        static Random Random = new Random();
+        private static readonly Random Random = new Random();
 
-        static IEnumerable<int> Rand()
+        private static IEnumerable<int> Rand()
         {
             while (true)
+            {
                 yield return Random.Next();
+            }
         }
 
         [Fact]

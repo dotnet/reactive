@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, IList<TSource>> 
+            internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly int _count;
                 private Queue<TSource> _queue;
@@ -40,14 +40,18 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _queue.Enqueue(value);
                     if (_queue.Count > _count)
+                    {
                         _queue.Dequeue();
+                    }
                 }
 
                 public override void OnCompleted()
                 {
                     var res = new List<TSource>(_queue.Count);
                     while (_queue.Count > 0)
+                    {
                         res.Add(_queue.Dequeue());
+                    }
 
                     ForwardOnNext(res);
                     ForwardOnCompleted();
@@ -70,33 +74,33 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(_duration, observer);
 
-            protected override void Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(_source, _scheduler);
 
-            internal sealed class _ : Sink<TSource, IList<TSource>> 
+            internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly TimeSpan _duration;
-                private Queue<System.Reactive.TimeInterval<TSource>> _queue;
+                private Queue<Reactive.TimeInterval<TSource>> _queue;
 
                 public _(TimeSpan duration, IObserver<IList<TSource>> observer)
                     : base(observer)
                 {
                     _duration = duration;
-                    _queue = new Queue<System.Reactive.TimeInterval<TSource>>();
+                    _queue = new Queue<Reactive.TimeInterval<TSource>>();
                 }
 
                 private IStopwatch _watch;
 
-                public void Run(Time parent)
+                public void Run(IObservable<TSource> source, IScheduler scheduler)
                 {
-                    _watch = parent._scheduler.StartStopwatch();
+                    _watch = scheduler.StartStopwatch();
 
-                    SetUpstream(parent._source.SubscribeSafe(this));
+                    base.Run(source);
                 }
 
                 public override void OnNext(TSource value)
                 {
                     var now = _watch.Elapsed;
-                    _queue.Enqueue(new System.Reactive.TimeInterval<TSource>(value, now));
+                    _queue.Enqueue(new Reactive.TimeInterval<TSource>(value, now));
                     Trim(now);
                 }
 
@@ -107,7 +111,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     var res = new List<TSource>(_queue.Count);
                     while (_queue.Count > 0)
+                    {
                         res.Add(_queue.Dequeue().Value);
+                    }
 
                     ForwardOnNext(res);
                     ForwardOnCompleted();
@@ -116,7 +122,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 private void Trim(TimeSpan now)
                 {
                     while (_queue.Count > 0 && now - _queue.Peek().Interval >= _duration)
+                    {
                         _queue.Dequeue();
+                    }
                 }
             }
         }

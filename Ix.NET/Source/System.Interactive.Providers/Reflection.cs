@@ -19,7 +19,7 @@ namespace System.Reflection
 
 namespace System
 {
-    static class TypeExtensions
+    internal static class TypeExtensions
     {
         public static bool IsAssignableFrom(this Type t1, Type t2)
         {

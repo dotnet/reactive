@@ -3,14 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -148,8 +145,9 @@ namespace ReactiveTests.Tests
                 xs.RetryWhen(v =>
                 {
                     int[] count = { 0 };
-                    return v.SelectMany(w => {
-                        int c = ++count[0];
+                    return v.SelectMany(w =>
+                    {
+                        var c = ++count[0];
                         if (c == 3)
                         {
                             return Observable.Throw<int>(w);
@@ -197,8 +195,9 @@ namespace ReactiveTests.Tests
                 xs.RetryWhen(v =>
                 {
                     int[] count = { 0 };
-                    return v.SelectMany(w => {
-                        int c = ++count[0];
+                    return v.SelectMany(w =>
+                    {
+                        var c = ++count[0];
                         if (c == 3)
                         {
                             return Observable.Throw<int>(w);

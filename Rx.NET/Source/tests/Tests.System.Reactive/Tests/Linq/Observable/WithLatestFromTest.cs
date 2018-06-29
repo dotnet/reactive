@@ -3,20 +3,10 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -30,7 +20,7 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.WithLatestFrom<int, int, int>(someObservable, someObservable, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.WithLatestFrom<int, int, int>(null, someObservable, (_, __) => 0));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.WithLatestFrom<int, int, int>(someObservable, default(IObservable<int>), (_, __) => 0));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.WithLatestFrom<int, int, int>(someObservable, default, (_, __) => 0));
         }
 
         [Fact]
@@ -294,7 +284,9 @@ namespace ReactiveTests.Tests
                 xs.WithLatestFrom(ys, (x, y) =>
                 {
                     if (x == 5)
+                    {
                         throw ex;
+                    }
 
                     return x + y;
                 })

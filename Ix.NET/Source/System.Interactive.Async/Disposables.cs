@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace System.Linq
 {
-    class CancellationTokenDisposable : IDisposable
+    internal class CancellationTokenDisposable : IDisposable
     {
         private readonly CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -26,7 +26,7 @@ namespace System.Linq
         }
     }
 
-    static class Disposable
+    internal static class Disposable
     {
         public static IDisposable Create(IDisposable d1, IDisposable d2)
         {
@@ -34,7 +34,7 @@ namespace System.Linq
         }
     }
 
-    class BinaryDisposable : IDisposable
+    internal class BinaryDisposable : IDisposable
     {
         private IDisposable _d1;
         private IDisposable _d2;

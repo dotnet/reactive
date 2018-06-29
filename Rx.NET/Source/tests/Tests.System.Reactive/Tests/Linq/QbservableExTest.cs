@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
@@ -12,10 +11,10 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class QbservableExTest : ReactiveTest
     {
-        private IQbservable<int> _qbNull = null;
+        private readonly IQbservable<int> _qbNull = null;
         private IQbservable<int> _qbMy = new MyQbservable<int>();
         private IQbservableProvider _qbp = new MyQbservableProvider();
 
@@ -25,9 +24,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.ForkJoin(_qbNull, _qbMy, (a, b) => a + b));
             ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.ForkJoin(_qbMy, _qbNull, (a, b) => a + b));
             ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.ForkJoin(_qbMy, _qbMy, default(Expression<Func<int, int, int>>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.ForkJoin(default(IQbservableProvider), _qbMy));
+            ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.ForkJoin(default, _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.ForkJoin(_qbp, default(IQbservable<int>[])));
-            ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.ForkJoin(default(IQbservableProvider), new MyQueryable<IObservable<int>>()));
+            ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.ForkJoin(default, new MyQueryable<IObservable<int>>()));
             ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.ForkJoin(_qbp, default(IQueryable<IObservable<int>>)));
         }
 
@@ -42,9 +41,9 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Create_ArgumentNullChecks()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.Create<int>(default(IQbservableProvider), _ => new IObservable<object>[0]));
-            ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.Create<int>(_qbp, default(Expression<Func<IObserver<int>, IEnumerable<IObservable<object>>>>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.Create(default(IQbservableProvider), () => new IObservable<object>[0]));
+            ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.Create<int>(default, _ => new IObservable<object>[0]));
+            ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.Create<int>(_qbp, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.Create(default, () => new IObservable<object>[0]));
             ReactiveAssert.Throws<ArgumentNullException>(() => QbservableEx.Create(_qbp, null));
         }
 

@@ -27,9 +27,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, IEnumerable<IObservable<object>>> iteratorMethod)
         {
             if (iteratorMethod == null)
+            {
                 throw new ArgumentNullException(nameof(iteratorMethod));
+            }
 
-            return s_impl.Create<TResult>(iteratorMethod);
+            return s_impl.Create(iteratorMethod);
         }
 
         /// <summary>
@@ -42,7 +44,9 @@ namespace System.Reactive.Linq
         public static IObservable<Unit> Create(Func<IEnumerable<IObservable<object>>> iteratorMethod)
         {
             if (iteratorMethod == null)
+            {
                 throw new ArgumentNullException(nameof(iteratorMethod));
+            }
 
             return s_impl.Create(iteratorMethod);
         }
@@ -64,13 +68,21 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Expand<TSource>(this IObservable<TSource> source, Func<TSource, IObservable<TSource>> selector, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
+            }
 
-            return s_impl.Expand<TSource>(source, selector, scheduler);
+            if (selector == null)
+            {
+                throw new ArgumentNullException(nameof(selector));
+            }
+
+            if (scheduler == null)
+            {
+                throw new ArgumentNullException(nameof(scheduler));
+            }
+
+            return s_impl.Expand(source, selector, scheduler);
         }
 
         /// <summary>
@@ -85,11 +97,16 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Expand<TSource>(this IObservable<TSource> source, Func<TSource, IObservable<TSource>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+            }
 
-            return s_impl.Expand<TSource>(source, selector);
+            if (selector == null)
+            {
+                throw new ArgumentNullException(nameof(selector));
+            }
+
+            return s_impl.Expand(source, selector);
         }
 
         #endregion
@@ -111,13 +128,21 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> ForkJoin<TSource1, TSource2, TResult>(this IObservable<TSource1> first, IObservable<TSource2> second, Func<TSource1, TSource2, TResult> resultSelector)
         {
             if (first == null)
+            {
                 throw new ArgumentNullException(nameof(first));
-            if (second == null)
-                throw new ArgumentNullException(nameof(second));
-            if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+            }
 
-            return s_impl.ForkJoin<TSource1, TSource2, TResult>(first, second, resultSelector);
+            if (second == null)
+            {
+                throw new ArgumentNullException(nameof(second));
+            }
+
+            if (resultSelector == null)
+            {
+                throw new ArgumentNullException(nameof(resultSelector));
+            }
+
+            return s_impl.ForkJoin(first, second, resultSelector);
         }
 
         /// <summary>
@@ -131,9 +156,11 @@ namespace System.Reactive.Linq
         public static IObservable<TSource[]> ForkJoin<TSource>(params IObservable<TSource>[] sources)
         {
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
-            return s_impl.ForkJoin<TSource>(sources);
+            return s_impl.ForkJoin(sources);
         }
 
         /// <summary>
@@ -147,9 +174,11 @@ namespace System.Reactive.Linq
         public static IObservable<TSource[]> ForkJoin<TSource>(this IEnumerable<IObservable<TSource>> sources)
         {
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
-            return s_impl.ForkJoin<TSource>(sources);
+            return s_impl.ForkJoin(sources);
         }
 
         #endregion
@@ -170,11 +199,16 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Let<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+            }
 
-            return s_impl.Let<TSource, TResult>(source, selector);
+            if (selector == null)
+            {
+                throw new ArgumentNullException(nameof(selector));
+            }
+
+            return s_impl.Let(source, selector);
         }
 
         #endregion
@@ -188,13 +222,21 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> ManySelect<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, TResult> selector, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
+            }
 
-            return s_impl.ManySelect<TSource, TResult>(source, selector, scheduler);
+            if (selector == null)
+            {
+                throw new ArgumentNullException(nameof(selector));
+            }
+
+            if (scheduler == null)
+            {
+                throw new ArgumentNullException(nameof(scheduler));
+            }
+
+            return s_impl.ManySelect(source, selector, scheduler);
         }
 
         /// <summary>
@@ -204,11 +246,16 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> ManySelect<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, TResult> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+            }
 
-            return s_impl.ManySelect<TSource, TResult>(source, selector);
+            if (selector == null)
+            {
+                throw new ArgumentNullException(nameof(selector));
+            }
+
+            return s_impl.ManySelect(source, selector);
         }
 
         #endregion
@@ -226,9 +273,11 @@ namespace System.Reactive.Linq
         public static ListObservable<TSource> ToListObservable<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
-            return s_impl.ToListObservable<TSource>(source);
+            return s_impl.ToListObservable(source);
         }
 
         #endregion

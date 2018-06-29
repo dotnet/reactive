@@ -3,20 +3,10 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -26,7 +16,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Using_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using((Func<IDisposable>)null, DummyFunc<IDisposable, IObservable<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using(null, DummyFunc<IDisposable, IObservable<int>>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using(DummyFunc<IDisposable>.Instance, (Func<IDisposable, IObservable<int>>)null));
             ReactiveAssert.Throws</*some*/Exception>(() => Observable.Using(() => DummyDisposable.Instance, d => default(IObservable<int>)).Subscribe());
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using(() => DummyDisposable.Instance, d => DummyObservable<int>.Instance).Subscribe(null));
@@ -48,7 +38,7 @@ namespace ReactiveTests.Tests
                     () =>
                     {
                         disposeInvoked++;
-                        disposable = default(MockDisposable);
+                        disposable = default;
                         return disposable;
                     },
                     d =>
@@ -56,7 +46,7 @@ namespace ReactiveTests.Tests
                         _d = d;
                         createInvoked++;
                         xs = scheduler.CreateColdObservable(
-                            OnNext<long>(100, scheduler.Clock),
+                            OnNext(100, scheduler.Clock),
                             OnCompleted<long>(200));
                         return xs;
                     }

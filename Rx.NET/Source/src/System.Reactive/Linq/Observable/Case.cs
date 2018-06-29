@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -23,7 +22,9 @@ namespace System.Reactive.Linq.ObservableImpl
         public IObservable<TResult> Eval()
         {
             if (_sources.TryGetValue(_selector(), out var res))
+            {
                 return res;
+            }
 
             return _defaultSource;
         }

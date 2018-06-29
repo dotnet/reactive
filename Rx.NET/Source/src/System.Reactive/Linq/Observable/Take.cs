@@ -30,9 +30,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 //   xs.Take(5).Take(3)    --o--o--o|                 xs.Take(3).Take(5)    --o--o--o|
                 //
                 if (_count <= count)
+                {
                     return this;
+                }
                 else
+                {
                     return new Count(_source, count);
+                }
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(_count, observer);
@@ -90,16 +94,20 @@ namespace System.Reactive.Linq.ObservableImpl
                 //   xs.Take(5s).Take(3s)  --o--o--o|                 xs.Take(3s).Take(5s)  --o--o--o|
                 //
                 if (_duration <= duration)
+                {
                     return this;
+                }
                 else
+                {
                     return new Time(_source, duration, _scheduler);
+                }
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
             protected override void Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : IdentitySink<TSource> 
+            internal sealed class _ : IdentitySink<TSource>
             {
                 public _(IObserver<TSource> observer)
                     : base(observer)

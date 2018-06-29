@@ -12,7 +12,7 @@ namespace System.Reactive.Concurrency
     /// </summary>
     public sealed class NewThreadScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
-        internal static readonly Lazy<NewThreadScheduler> s_instance = new Lazy<NewThreadScheduler>(() => new NewThreadScheduler());
+        private static readonly Lazy<NewThreadScheduler> Instance = new Lazy<NewThreadScheduler>(() => new NewThreadScheduler());
 
         private readonly Func<ThreadStart, Thread> _threadFactory;
 
@@ -27,7 +27,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets an instance of this scheduler that uses the default Thread constructor.
         /// </summary>
-        public static NewThreadScheduler Default => s_instance.Value;
+        public static NewThreadScheduler Default => Instance.Value;
 
 #if !NO_THREAD
         /// <summary>
@@ -37,13 +37,11 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="threadFactory"/> is <c>null</c>.</exception>
         public NewThreadScheduler(Func<ThreadStart, Thread> threadFactory)
         {
-            if (threadFactory == null)
-                throw new ArgumentNullException(nameof(threadFactory));
 #else
         private NewThreadScheduler(Func<ThreadStart, Thread> threadFactory)
         {
 #endif
-            _threadFactory = threadFactory;
+            _threadFactory = threadFactory ?? throw new ArgumentNullException(nameof(threadFactory));
         }
 
         /// <summary>
@@ -58,10 +56,14 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
-            var scheduler = new EventLoopScheduler(_threadFactory);
-            scheduler.ExitIfEmpty = true;
+            var scheduler = new EventLoopScheduler(_threadFactory)
+            {
+                ExitIfEmpty = true
+            };
             return scheduler.Schedule(state, dueTime, action);
         }
 
@@ -76,7 +78,9 @@ namespace System.Reactive.Concurrency
         public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var d = new BooleanDisposable();
 
@@ -108,9 +112,14 @@ namespace System.Reactive.Concurrency
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var periodic = new Periodic<TState>(state, period, action);
 
@@ -152,7 +161,9 @@ namespace System.Reactive.Concurrency
                     lock (_cancel)
                     {
                         if (Monitor.Wait(_cancel, timeout))
+                        {
                             return;
+                        }
                     }
 
                     _state = _action(_state);

@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -22,11 +19,19 @@ namespace System.Linq
         public static IEnumerable<TResult> If<TResult>(Func<bool> condition, IEnumerable<TResult> thenSource, IEnumerable<TResult> elseSource)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (thenSource == null)
+            {
                 throw new ArgumentNullException(nameof(thenSource));
+            }
+
             if (elseSource == null)
+            {
                 throw new ArgumentNullException(nameof(elseSource));
+            }
 
             return Defer(() => condition() ? thenSource : elseSource);
         }
@@ -42,9 +47,14 @@ namespace System.Linq
         public static IEnumerable<TResult> If<TResult>(Func<bool> condition, IEnumerable<TResult> thenSource)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (thenSource == null)
+            {
                 throw new ArgumentNullException(nameof(thenSource));
+            }
 
             return Defer(() => condition() ? thenSource : Enumerable.Empty<TResult>());
         }

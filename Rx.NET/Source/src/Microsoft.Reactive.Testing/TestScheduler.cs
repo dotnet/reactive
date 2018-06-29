@@ -26,7 +26,9 @@ namespace Microsoft.Reactive.Testing
         public override IDisposable ScheduleAbsolute<TState>(TState state, long dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (dueTime <= Clock)
+            {
                 dueTime = Clock + 1;
+            }
 
             return base.ScheduleAbsolute<TState>(state, dueTime, action);
         }
@@ -75,7 +77,9 @@ namespace Microsoft.Reactive.Testing
         public ITestableObserver<T> Start<T>(Func<IObservable<T>> create, long created, long subscribed, long disposed)
         {
             if (create == null)
+            {
                 throw new ArgumentNullException(nameof(create));
+            }
 
             var source = default(IObservable<T>);
             var subscription = default(IDisposable);
@@ -102,7 +106,9 @@ namespace Microsoft.Reactive.Testing
         public ITestableObserver<T> Start<T>(Func<IObservable<T>> create, long disposed)
         {
             if (create == null)
+            {
                 throw new ArgumentNullException(nameof(create));
+            }
 
             return Start(create, ReactiveTest.Created, ReactiveTest.Subscribed, disposed);
         }
@@ -117,7 +123,9 @@ namespace Microsoft.Reactive.Testing
         public ITestableObserver<T> Start<T>(Func<IObservable<T>> create)
         {
             if (create == null)
+            {
                 throw new ArgumentNullException(nameof(create));
+            }
 
             return Start(create, ReactiveTest.Created, ReactiveTest.Subscribed, ReactiveTest.Disposed);
         }
@@ -132,7 +140,9 @@ namespace Microsoft.Reactive.Testing
         public ITestableObservable<T> CreateHotObservable<T>(params Recorded<Notification<T>>[] messages)
         {
             if (messages == null)
+            {
                 throw new ArgumentNullException(nameof(messages));
+            }
 
             return new HotObservable<T>(this, messages);
         }
@@ -147,7 +157,9 @@ namespace Microsoft.Reactive.Testing
         public ITestableObservable<T> CreateColdObservable<T>(params Recorded<Notification<T>>[] messages)
         {
             if (messages == null)
+            {
                 throw new ArgumentNullException(nameof(messages));
+            }
 
             return new ColdObservable<T>(this, messages);
         }

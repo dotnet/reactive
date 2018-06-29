@@ -2,9 +2,7 @@
 // // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,9 +13,14 @@ namespace System.Linq
         public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return All(source, predicate, CancellationToken.None);
         }
@@ -25,9 +28,14 @@ namespace System.Linq
         public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return All_(source, predicate, cancellationToken);
         }
@@ -35,9 +43,14 @@ namespace System.Linq
         public static Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return Any(source, predicate, CancellationToken.None);
         }
@@ -45,7 +58,9 @@ namespace System.Linq
         public static Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return Any(source, CancellationToken.None);
         }
@@ -53,9 +68,14 @@ namespace System.Linq
         public static Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return Any_(source, predicate, cancellationToken);
         }
@@ -63,7 +83,9 @@ namespace System.Linq
         public static async Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             using (var e = source.GetEnumerator())
             {
@@ -79,7 +101,9 @@ namespace System.Linq
                               .ConfigureAwait(false))
                 {
                     if (!predicate(e.Current))
+                    {
                         return false;
+                    }
                 }
             }
             return true;
@@ -93,7 +117,9 @@ namespace System.Linq
                               .ConfigureAwait(false))
                 {
                     if (predicate(e.Current))
+                    {
                         return true;
+                    }
                 }
             }
             return false;

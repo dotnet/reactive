@@ -4,19 +4,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
@@ -307,9 +297,9 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class FuncComparer<T> : IEqualityComparer<T>
+        private class FuncComparer<T> : IEqualityComparer<T>
         {
-            private Func<T, T, bool> _equals;
+            private readonly Func<T, T, bool> _equals;
 
             public FuncComparer(Func<T, T, bool> equals)
             {
@@ -373,9 +363,9 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class ThrowComparer<T> : IEqualityComparer<T>
+        private class ThrowComparer<T> : IEqualityComparer<T>
         {
-            private Exception _ex;
+            private readonly Exception _ex;
 
             public ThrowComparer(Exception ex)
             {

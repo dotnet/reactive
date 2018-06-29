@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 
@@ -16,18 +15,17 @@ namespace System.Reactive
         {
         }
 
-        bool _isDisposed;
-
-        int _trampoline;
-
-        IDisposable _currentSubscription;
-
-        Stack<IEnumerator<IObservable<TSource>>> _stack = new Stack<IEnumerator<IObservable<TSource>>>();
+        private bool _isDisposed;
+        private int _trampoline;
+        private IDisposable _currentSubscription;
+        private Stack<IEnumerator<IObservable<TSource>>> _stack = new Stack<IEnumerator<IObservable<TSource>>>();
 
         public void Run(IEnumerable<IObservable<TSource>> sources)
         {
             if (!TryGetEnumerator(sources, out var current))
+            {
                 return;
+            }
 
             _stack.Push(current);
 
@@ -43,7 +41,7 @@ namespace System.Reactive
             base.Dispose(disposing);
         }
 
-        void Drain()
+        private void Drain()
         {
             if (Interlocked.Increment(ref _trampoline) != 1)
             {
@@ -134,7 +132,7 @@ namespace System.Reactive
                                     // Since this drain loop is the only one to use Ready, this should
                                     // be unambiguous
                                     var u = Interlocked.CompareExchange(ref _currentSubscription, d, sad);
-                                    
+
                                     // sequence disposed or completed synchronously
                                     if (u != sad)
                                     {
@@ -144,7 +142,7 @@ namespace System.Reactive
                                             continue;
                                         }
                                     }
-                                }   
+                                }
                                 else
                                 {
                                     continue;
@@ -172,7 +170,7 @@ namespace System.Reactive
             }
         }
 
-        void DisposeAll()
+        private void DisposeAll()
         {
             Volatile.Write(ref _isDisposed, true);
             // the disposing of currentSubscription is deferred to drain due to some ObservableExTest.Iterate_Complete()
@@ -183,7 +181,9 @@ namespace System.Reactive
         protected void Recurse()
         {
             if (Disposable.TrySetSerial(ref _currentSubscription, null))
+            {
                 Drain();
+            }
         }
 
         protected abstract IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source);
@@ -220,7 +220,7 @@ namespace System.Reactive
     /// <summary>
     /// Holds onto a singleton IDisposable indicating a ready state.
     /// </summary>
-    static class ReadyToken
+    internal static class ReadyToken
     {
         /// <summary>
         /// This indicates the operation has been prepared and ready for
@@ -228,7 +228,7 @@ namespace System.Reactive
         /// </summary>
         internal static readonly IDisposable Ready = new ReadyDisposable();
 
-        sealed class ReadyDisposable : IDisposable
+        private sealed class ReadyDisposable : IDisposable
         {
             public void Dispose()
             {

@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_sources);
 
-        internal sealed class _ : Sink<IObservable<TSource>, TSource> 
+        internal sealed class _ : Sink<IObservable<TSource>, TSource>
         {
             private readonly object _gate = new object();
 
@@ -36,7 +36,9 @@ namespace System.Reactive.Linq.ObservableImpl
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
+                {
                     Disposable.TryDispose(ref _innerSerialDisposable);
+                }
 
                 base.Dispose(disposing);
             }
@@ -59,7 +61,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnError(Exception error)
             {
                 lock (_gate)
+                {
                     ForwardOnError(error);
+                }
             }
 
             public override void OnCompleted()

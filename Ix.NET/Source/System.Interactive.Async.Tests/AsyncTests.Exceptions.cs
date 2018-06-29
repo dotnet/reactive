@@ -5,10 +5,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xunit;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Tests
 {
@@ -17,12 +16,12 @@ namespace Tests
         [Fact]
         public void Catch_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int, Exception>(default(IAsyncEnumerable<int>), x => null));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int, Exception>(AsyncEnumerable.Return(42), default(Func<Exception, IAsyncEnumerable<int>>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int, Exception>(default, x => null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int, Exception>(AsyncEnumerable.Return(42), default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int>(default(IAsyncEnumerable<int>[])));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int>(default, AsyncEnumerable.Return(42)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int>(AsyncEnumerable.Return(42), default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int>(default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
         }
 
@@ -128,7 +127,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
-            var res = xs.Catch<int, InvalidOperationException>(ex_ => { if (ex_.Message == "Bang!") throw ex2; return ys; });
+            var res = xs.Catch<int, InvalidOperationException>(ex_ => { if (ex_.Message == "Bang!") { throw ex2; } return ys; });
 
             var e = res.GetEnumerator();
             HasNext(e, 1);
@@ -429,14 +428,14 @@ namespace Tests
             await SequenceIdentity(xs);
             Assert.Equal(2, i);
         }
-    
 
-    [Fact]
+
+        [Fact]
         public void OnErrorResumeNext_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(default(IAsyncEnumerable<int>[])));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(default, AsyncEnumerable.Return(42)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(AsyncEnumerable.Return(42), default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
         }
 
@@ -565,9 +564,9 @@ namespace Tests
         [Fact]
         public void Retry_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Retry<int>(default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Retry<int>(default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Retry<int>(default(IAsyncEnumerable<int>), 1));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Retry<int>(default, 1));
             AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerable.Retry<int>(AsyncEnumerable.Return(42), -1));
         }
 

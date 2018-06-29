@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -20,7 +17,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Concat<TSource>(this IEnumerable<IEnumerable<TSource>> sources)
         {
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return sources.Concat_();
         }
@@ -34,7 +33,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Concat<TSource>(params IEnumerable<TSource>[] sources)
         {
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return sources.Concat_();
         }
@@ -42,8 +43,12 @@ namespace System.Linq
         private static IEnumerable<TSource> Concat_<TSource>(this IEnumerable<IEnumerable<TSource>> sources)
         {
             foreach (var source in sources)
+            {
                 foreach (var item in source)
+                {
                     yield return item;
+                }
+            }
         }
     }
 }

@@ -24,12 +24,12 @@ namespace System.Reactive.Linq
 
         public virtual IEnumerable<TResult> Collect<TSource, TResult>(IObservable<TSource> source, Func<TResult> newCollector, Func<TResult, TSource, TResult> merge)
         {
-            return Collect_<TSource, TResult>(source, newCollector, merge, _ => newCollector());
+            return Collect_(source, newCollector, merge, _ => newCollector());
         }
 
         public virtual IEnumerable<TResult> Collect<TSource, TResult>(IObservable<TSource> source, Func<TResult> getInitialCollector, Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector)
         {
-            return Collect_<TSource, TResult>(source, getInitialCollector, merge, getNewCollector);
+            return Collect_(source, getInitialCollector, merge, getNewCollector);
         }
 
         private static IEnumerable<TResult> Collect_<TSource, TResult>(IObservable<TSource> source, Func<TResult> getInitialCollector, Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector)
@@ -281,7 +281,9 @@ namespace System.Reactive.Linq
             ex.ThrowIfNotNull();
 
             if (throwOnEmpty && !seenValue)
+            {
                 throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+            }
 
             return value;
         }
@@ -299,7 +301,7 @@ namespace System.Reactive.Linq
 
         #region |> Helpers <|
 
-        class WaitAndSetOnce : IDisposable
+        private class WaitAndSetOnce : IDisposable
         {
             private readonly ManualResetEvent _evt;
             private int _hasSet;
@@ -332,6 +334,6 @@ namespace System.Reactive.Linq
             }
         }
 
-#endregion
+        #endregion
     }
 }

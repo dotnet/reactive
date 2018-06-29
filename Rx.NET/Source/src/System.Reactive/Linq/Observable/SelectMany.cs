@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, TResult> 
+            internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly object _gate = new object();
                 private readonly CompositeDisposable _group = new CompositeDisposable();
@@ -103,7 +103,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.Dispose(disposing);
 
                     if (disposing)
+                    {
                         _group.Dispose();
+                    }
                 }
 
                 private sealed class InnerObserver : SafeObserver<TCollection>
@@ -135,7 +137,9 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
 
                         lock (_parent._gate)
+                        {
                             _parent.ForwardOnNext(res);
+                        }
                     }
 
                     public override void OnError(Exception error)
@@ -185,7 +189,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, TResult> 
+            internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly object _gate = new object();
                 private readonly CompositeDisposable _group = new CompositeDisposable();
@@ -262,7 +266,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.Dispose(disposing);
 
                     if (disposing)
+                    {
                         _group.Dispose();
+                    }
                 }
 
                 private sealed class InnerObserver : SafeObserver<TCollection>
@@ -298,7 +304,9 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
 
                         lock (_parent._gate)
+                        {
                             _parent.ForwardOnNext(res);
+                        }
                     }
 
                     public override void OnError(Exception error)
@@ -348,7 +356,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, TResult> 
+            internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly Func<TSource, IEnumerable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, TCollection, TResult> _resultSelector;
@@ -396,7 +404,9 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 hasNext = e.MoveNext();
                                 if (hasNext)
+                                {
                                     current = _resultSelector(value, e.Current);
+                                }
                             }
                             catch (Exception exception)
                             {
@@ -405,13 +415,17 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
 
                             if (hasNext)
+                            {
                                 ForwardOnNext(current);
+                            }
                         }
                     }
                     finally
                     {
                         if (e != null)
+                        {
                             e.Dispose();
+                        }
                     }
                 }
             }
@@ -434,7 +448,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, TResult> 
+            internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly Func<TSource, int, IEnumerable<TCollection>> _collectionSelector;
                 private readonly Func<TSource, int, TCollection, int, TResult> _resultSelector;
@@ -487,7 +501,9 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 hasNext = e.MoveNext();
                                 if (hasNext)
+                                {
                                     current = _resultSelector(value, index, e.Current, checked(eIndex++));
+                                }
                             }
                             catch (Exception exception)
                             {
@@ -496,13 +512,17 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
 
                             if (hasNext)
+                            {
                                 ForwardOnNext(current);
+                            }
                         }
                     }
                     finally
                     {
                         if (e != null)
+                        {
                             e.Dispose();
+                        }
                     }
                 }
             }
@@ -525,7 +545,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, TResult> 
+            internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly object _gate = new object();
                 private readonly CancellationDisposable _cancel = new CancellationDisposable();
@@ -599,47 +619,49 @@ namespace System.Reactive.Linq.ObservableImpl
                     switch (task.Status)
                     {
                         case TaskStatus.RanToCompletion:
+                        {
+                            var res = default(TResult);
+                            try
                             {
-                                var res = default(TResult);
-                                try
-                                {
-                                    res = _resultSelector(value, task.Result);
-                                }
-                                catch (Exception ex)
-                                {
-                                    lock (_gate)
-                                    {
-                                        ForwardOnError(ex);
-                                    }
-
-                                    return;
-                                }
-
-                                lock (_gate)
-                                    ForwardOnNext(res);
-
-                                OnCompleted();
+                                res = _resultSelector(value, task.Result);
                             }
-                            break;
+                            catch (Exception ex)
+                            {
+                                lock (_gate)
+                                {
+                                    ForwardOnError(ex);
+                                }
+
+                                return;
+                            }
+
+                            lock (_gate)
+                            {
+                                ForwardOnNext(res);
+                            }
+
+                            OnCompleted();
+                        }
+                        break;
                         case TaskStatus.Faulted:
+                        {
+                            lock (_gate)
+                            {
+                                ForwardOnError(task.Exception.InnerException);
+                            }
+                        }
+                        break;
+                        case TaskStatus.Canceled:
+                        {
+                            if (!_cancel.IsDisposed)
                             {
                                 lock (_gate)
                                 {
-                                    ForwardOnError(task.Exception.InnerException);
+                                    ForwardOnError(new TaskCanceledException(task));
                                 }
                             }
-                            break;
-                        case TaskStatus.Canceled:
-                            {
-                                if (!_cancel.IsDisposed)
-                                {
-                                    lock (_gate)
-                                    {
-                                        ForwardOnError(new TaskCanceledException(task));
-                                    }
-                                }
-                            }
-                            break;
+                        }
+                        break;
                     }
                 }
 
@@ -681,7 +703,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, TResult> 
+            internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly object _gate = new object();
                 private readonly CancellationDisposable _cancel = new CancellationDisposable();
@@ -758,47 +780,49 @@ namespace System.Reactive.Linq.ObservableImpl
                     switch (task.Status)
                     {
                         case TaskStatus.RanToCompletion:
+                        {
+                            var res = default(TResult);
+                            try
                             {
-                                var res = default(TResult);
-                                try
-                                {
-                                    res = _resultSelector(value, index, task.Result);
-                                }
-                                catch (Exception ex)
-                                {
-                                    lock (_gate)
-                                    {
-                                        ForwardOnError(ex);
-                                    }
-
-                                    return;
-                                }
-
-                                lock (_gate)
-                                    ForwardOnNext(res);
-
-                                OnCompleted();
+                                res = _resultSelector(value, index, task.Result);
                             }
-                            break;
+                            catch (Exception ex)
+                            {
+                                lock (_gate)
+                                {
+                                    ForwardOnError(ex);
+                                }
+
+                                return;
+                            }
+
+                            lock (_gate)
+                            {
+                                ForwardOnNext(res);
+                            }
+
+                            OnCompleted();
+                        }
+                        break;
                         case TaskStatus.Faulted:
+                        {
+                            lock (_gate)
+                            {
+                                ForwardOnError(task.Exception.InnerException);
+                            }
+                        }
+                        break;
+                        case TaskStatus.Canceled:
+                        {
+                            if (!_cancel.IsDisposed)
                             {
                                 lock (_gate)
                                 {
-                                    ForwardOnError(task.Exception.InnerException);
+                                    ForwardOnError(new TaskCanceledException(task));
                                 }
                             }
-                            break;
-                        case TaskStatus.Canceled:
-                            {
-                                if (!_cancel.IsDisposed)
-                                {
-                                    lock (_gate)
-                                    {
-                                        ForwardOnError(new TaskCanceledException(task));
-                                    }
-                                }
-                            }
-                            break;
+                        }
+                        break;
                     }
                 }
 
@@ -841,12 +865,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal class _ : Sink<TSource, TResult> 
+            internal class _ : Sink<TSource, TResult>
             {
                 protected readonly object _gate = new object();
                 private readonly Func<TSource, IObservable<TResult>> _selector;
                 private readonly CompositeDisposable _group = new CompositeDisposable();
-                
+
                 private volatile bool _isStopped;
 
                 public _(ObservableSelector parent, IObserver<TResult> observer)
@@ -893,7 +917,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.Dispose(disposing);
 
                     if (disposing)
+                    {
                         _group.Dispose();
+                    }
                 }
 
                 protected void Final()
@@ -939,7 +965,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     public override void OnNext(TResult value)
                     {
                         lock (_parent._gate)
+                        {
                             _parent.ForwardOnNext(value);
+                        }
                     }
 
                     public override void OnError(Exception error)
@@ -986,7 +1014,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override ObservableSelector._ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            new internal sealed class _ : ObservableSelector._
+            internal new sealed class _ : ObservableSelector._
             {
                 private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
                 private readonly Func<IObservable<TResult>> _selectorOnCompleted;
@@ -1069,7 +1097,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal class _ : Sink<TSource, TResult> 
+            internal class _ : Sink<TSource, TResult>
             {
                 private readonly object _gate = new object();
                 private readonly CompositeDisposable _group = new CompositeDisposable();
@@ -1123,7 +1151,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.Dispose(disposing);
 
                     if (disposing)
+                    {
                         _group.Dispose();
+                    }
                 }
 
                 protected void Final()
@@ -1169,7 +1199,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     public override void OnNext(TResult value)
                     {
                         lock (_parent._gate)
+                        {
                             _parent.ForwardOnNext(value);
+                        }
                     }
 
                     public override void OnError(Exception error)
@@ -1216,7 +1248,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override ObservableSelectorIndexed._ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            new internal sealed class _ : ObservableSelectorIndexed._
+            internal new sealed class _ : ObservableSelectorIndexed._
             {
                 private readonly object _gate = new object();
 
@@ -1301,7 +1333,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, TResult> 
+            internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly Func<TSource, IEnumerable<TResult>> _selector;
 
@@ -1347,7 +1379,9 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 hasNext = e.MoveNext();
                                 if (hasNext)
+                                {
                                     current = e.Current;
+                                }
                             }
                             catch (Exception exception)
                             {
@@ -1356,13 +1390,17 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
 
                             if (hasNext)
+                            {
                                 ForwardOnNext(current);
+                            }
                         }
                     }
                     finally
                     {
                         if (e != null)
+                        {
                             e.Dispose();
+                        }
                     }
                 }
             }
@@ -1383,7 +1421,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, TResult> 
+            internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly Func<TSource, int, IEnumerable<TResult>> _selector;
 
@@ -1431,7 +1469,9 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 hasNext = e.MoveNext();
                                 if (hasNext)
+                                {
                                     current = e.Current;
+                                }
                             }
                             catch (Exception exception)
                             {
@@ -1440,13 +1480,17 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
 
                             if (hasNext)
+                            {
                                 ForwardOnNext(current);
+                            }
                         }
                     }
                     finally
                     {
                         if (e != null)
+                        {
                             e.Dispose();
+                        }
                     }
                 }
             }
@@ -1467,7 +1511,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, TResult> 
+            internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly object _gate = new object();
                 private readonly CancellationTokenSource _cts = new CancellationTokenSource();
@@ -1531,32 +1575,34 @@ namespace System.Reactive.Linq.ObservableImpl
                     switch (task.Status)
                     {
                         case TaskStatus.RanToCompletion:
+                        {
+                            lock (_gate)
                             {
-                                lock (_gate)
-                                    ForwardOnNext(task.Result);
+                                ForwardOnNext(task.Result);
+                            }
 
-                                OnCompleted();
-                            }
-                            break;
+                            OnCompleted();
+                        }
+                        break;
                         case TaskStatus.Faulted:
+                        {
+                            lock (_gate)
+                            {
+                                ForwardOnError(task.Exception.InnerException);
+                            }
+                        }
+                        break;
+                        case TaskStatus.Canceled:
+                        {
+                            if (!_cts.IsCancellationRequested)
                             {
                                 lock (_gate)
                                 {
-                                    ForwardOnError(task.Exception.InnerException);
+                                    ForwardOnError(new TaskCanceledException(task));
                                 }
                             }
-                            break;
-                        case TaskStatus.Canceled:
-                            {
-                                if (!_cts.IsCancellationRequested)
-                                {
-                                    lock (_gate)
-                                    {
-                                        ForwardOnError(new TaskCanceledException(task));
-                                    }
-                                }
-                            }
-                            break;
+                        }
+                        break;
                     }
                 }
 
@@ -1596,7 +1642,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, TResult> 
+            internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly object _gate = new object();
                 private readonly CancellationTokenSource _cts = new CancellationTokenSource();
@@ -1661,32 +1707,34 @@ namespace System.Reactive.Linq.ObservableImpl
                     switch (task.Status)
                     {
                         case TaskStatus.RanToCompletion:
+                        {
+                            lock (_gate)
                             {
-                                lock (_gate)
-                                    ForwardOnNext(task.Result);
+                                ForwardOnNext(task.Result);
+                            }
 
-                                OnCompleted();
-                            }
-                            break;
+                            OnCompleted();
+                        }
+                        break;
                         case TaskStatus.Faulted:
+                        {
+                            lock (_gate)
+                            {
+                                ForwardOnError(task.Exception.InnerException);
+                            }
+                        }
+                        break;
+                        case TaskStatus.Canceled:
+                        {
+                            if (!_cts.IsCancellationRequested)
                             {
                                 lock (_gate)
                                 {
-                                    ForwardOnError(task.Exception.InnerException);
+                                    ForwardOnError(new TaskCanceledException(task));
                                 }
                             }
-                            break;
-                        case TaskStatus.Canceled:
-                            {
-                                if (!_cts.IsCancellationRequested)
-                                {
-                                    lock (_gate)
-                                    {
-                                        ForwardOnError(new TaskCanceledException(task));
-                                    }
-                                }
-                            }
-                            break;
+                        }
+                        break;
                     }
                 }
 

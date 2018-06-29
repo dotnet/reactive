@@ -6,7 +6,7 @@ using System;
 
 namespace ReactiveTests.Dummies
 {
-    class DummyDisposable : IDisposable
+    internal class DummyDisposable : IDisposable
     {
         public static readonly DummyDisposable Instance = new DummyDisposable();
 

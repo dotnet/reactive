@@ -29,8 +29,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 : base(observer)
             {
                 _accumulator = accumulator;
-                _accumulation = default(TSource);
-                _hasAccumulation = false;
             }
 
             public override void OnNext(TSource value)
@@ -48,9 +46,16 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
+                        _accumulation = default;
                         ForwardOnError(exception);
                     }
                 }
+            }
+
+            public override void OnError(Exception error)
+            {
+                _accumulation = default;
+                ForwardOnError(error);
             }
 
             public override void OnCompleted()
@@ -61,7 +66,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 else
                 {
-                    ForwardOnNext(_accumulation);
+                    var accumulation = _accumulation;
+                    _accumulation = default;
+                    ForwardOnNext(accumulation);
                     ForwardOnCompleted();
                 }
             }
@@ -85,7 +92,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource, TAccumulate> 
+        internal sealed class _ : Sink<TSource, TAccumulate>
         {
             private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
             private TAccumulate _accumulation;
@@ -105,18 +112,22 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
+                    _accumulation = default;
                     ForwardOnError(exception);
                 }
             }
 
             public override void OnError(Exception error)
             {
+                _accumulation = default;
                 ForwardOnError(error);
             }
 
             public override void OnCompleted()
             {
-                ForwardOnNext(_accumulation);
+                var accumulation = _accumulation;
+                _accumulation = default;
+                ForwardOnNext(accumulation);
                 ForwardOnCompleted();
             }
         }
@@ -141,7 +152,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource, TResult> 
+        internal sealed class _ : Sink<TSource, TResult>
         {
             private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
             private readonly Func<TAccumulate, TResult> _resultSelector;

@@ -61,10 +61,14 @@ namespace System.Reactive.Linq.ObservableImpl
             _gate.Wait();
 
             if (_disposed)
+            {
                 throw new ObjectDisposedException("");
+            }
 
             if (_queue.TryDequeue(out _current))
+            {
                 return true;
+            }
 
             _error.ThrowIfNotNull();
 

@@ -728,16 +728,15 @@ namespace System.Reactive.Linq
             return new StartAsyncObservable<TSource>(cancellable, result);
         }
 
-        sealed class StartAsyncObservable<TSource> : ObservableBase<TSource>
+        private sealed class StartAsyncObservable<TSource> : ObservableBase<TSource>
         {
-            readonly CancellationDisposable cancellable;
-
-            readonly IObservable<TSource> result;
+            private readonly CancellationDisposable _cancellable;
+            private readonly IObservable<TSource> _result;
 
             public StartAsyncObservable(CancellationDisposable cancellable, IObservable<TSource> result)
             {
-                this.cancellable = cancellable;
-                this.result = result;
+                _cancellable = cancellable;
+                _result = result;
             }
 
             protected override IDisposable SubscribeCore(IObserver<TSource> observer)
@@ -745,8 +744,8 @@ namespace System.Reactive.Linq
                 //
                 // [OK] Use of unsafe Subscribe: result is an AsyncSubject<TSource>.
                 //
-                var subscription = result.Subscribe/*Unsafe*/(observer);
-                return StableCompositeDisposable.Create(cancellable, subscription);
+                var subscription = _result.Subscribe/*Unsafe*/(observer);
+                return StableCompositeDisposable.Create(_cancellable, subscription);
             }
         }
 
