@@ -392,7 +392,7 @@ namespace ReactiveTests.Tests
             Assert.NotNull(scheduler._exception);
         }
 
-        class MyScheduler : IScheduler
+        private class MyScheduler : IScheduler
         {
             internal Exception _exception;
             private ManualResetEvent _evt;
@@ -501,7 +501,7 @@ namespace ReactiveTests.Tests
             started.WaitOne();
             Thread.Sleep(100); // Try to enter the dispatcher event wait state
 
-            for (int i = 0; i < 1000; i++)
+            for (var i = 0; i < 1000; i++)
             {
                 if (i % 100 == 0)
                     Thread.Sleep(10);

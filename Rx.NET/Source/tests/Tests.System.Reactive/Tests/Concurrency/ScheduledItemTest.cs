@@ -11,7 +11,7 @@ using Xunit;
 
 namespace ReactiveTests
 {
-    
+
     public class ScheduledItemTest : ReactiveTest
     {
         [Fact]
@@ -107,7 +107,7 @@ namespace ReactiveTests
             Assert.NotEqual(si1.GetHashCode(), si3.GetHashCode());
         }
 
-        class SI : ScheduledItem<int>
+        private class SI : ScheduledItem<int>
         {
             public SI(int dueTime)
                 : base(dueTime, Comparer<int>.Default)
@@ -120,7 +120,7 @@ namespace ReactiveTests
             }
         }
 
-        class SI2 : ScheduledItem<int>
+        private class SI2 : ScheduledItem<int>
         {
             private readonly int _value;
 

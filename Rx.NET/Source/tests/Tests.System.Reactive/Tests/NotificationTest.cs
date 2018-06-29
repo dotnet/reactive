@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class NotificationTest : ReactiveTest
     {
         #region ToObservable
@@ -169,7 +169,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(42, con.Value);
         }
 
-        class CheckOnNextObserver : IObserver<int>
+        private class CheckOnNextObserver : IObserver<int>
         {
             public void OnNext(int value)
             {
@@ -351,7 +351,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, obs.Error);
         }
 
-        class CheckOnErrorObserver : IObserver<int>
+        private class CheckOnErrorObserver : IObserver<int>
         {
             public void OnNext(int value)
             {
@@ -506,7 +506,7 @@ namespace ReactiveTests.Tests
             Assert.True(obs.Completed);
         }
 
-        class CheckOnCompletedObserver : IObserver<int>
+        private class CheckOnCompletedObserver : IObserver<int>
         {
             public void OnNext(int value)
             {
@@ -562,11 +562,11 @@ namespace ReactiveTests.Tests
             Assert.Equal("OK", res);
         }
 
-        class AcceptObserver : IObserver<int, string>
+        private class AcceptObserver : IObserver<int, string>
         {
-            private Func<int, string> _onNext;
-            private Func<Exception, string> _onError;
-            private Func<string> _onCompleted;
+            private readonly Func<int, string> _onNext;
+            private readonly Func<Exception, string> _onError;
+            private readonly Func<string> _onCompleted;
 
             public AcceptObserver(Func<int, string> onNext, Func<Exception, string> onError, Func<string> onCompleted)
             {

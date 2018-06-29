@@ -19,13 +19,13 @@ namespace ReactiveTests.Tests
 {
     public class FromAsyncTest : ReactiveTest
     {
-        private Task<int> doneTask;
+        private readonly Task<int> _doneTask;
 
         public FromAsyncTest()
         {
             var tcs = new TaskCompletionSource<int>();
             tcs.SetResult(42);
-            doneTask = tcs.Task;
+            _doneTask = tcs.Task;
         }
 
         #region Func
@@ -39,9 +39,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<CancellationToken, Task<int>>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<Task<int>>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(() => doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(() => _doneTask, default(IScheduler)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<CancellationToken, Task<int>>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(ct => doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(ct => _doneTask, default(IScheduler)));
         }
 
         [Fact]
@@ -229,9 +229,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<CancellationToken, Task>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<Task>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(() => (Task)doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(() => (Task)_doneTask, default(IScheduler)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<CancellationToken, Task>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(ct => (Task)doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(ct => (Task)_doneTask, default(IScheduler)));
         }
 
         [Fact]

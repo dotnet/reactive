@@ -4,12 +4,11 @@
 
 using System;
 using System.Reactive.Concurrency;
-using System.Reflection;
 using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class AsyncLockTest
     {
         [Fact]

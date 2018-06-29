@@ -146,7 +146,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            int n = 0;
+            var n = 0;
 
             var results = scheduler.Start(() => Observable.While(() => ++n < 3, xs));
 
@@ -168,7 +168,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        static T Throw<T>(Exception ex)
+        private static T Throw<T>(Exception ex)
         {
             throw ex;
         }
@@ -186,7 +186,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            int n = 0;
+            var n = 0;
 
             var ex = new Exception();
 

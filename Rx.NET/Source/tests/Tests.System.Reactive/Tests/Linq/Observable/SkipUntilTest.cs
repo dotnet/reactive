@@ -378,7 +378,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            bool disposed = false;
+            var disposed = false;
 
             var l = scheduler.CreateHotObservable(
                 OnNext(150, 1),

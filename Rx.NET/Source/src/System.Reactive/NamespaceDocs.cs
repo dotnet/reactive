@@ -8,7 +8,7 @@ namespace System.Reactive
     /// The <b>System.Reactive</b> namespace contains interfaces and classes used throughout the Reactive Extensions library.
     /// </summary>
     [Runtime.CompilerServices.CompilerGenerated]
-    class NamespaceDoc
+    internal class NamespaceDoc
     {
     }
 }
@@ -21,7 +21,7 @@ namespace System.Reactive.Concurrency
     /// and to write unit tests for functionality built using Reactive Extensions constructs.
     /// </summary>
     [Runtime.CompilerServices.CompilerGenerated]
-    class NamespaceDoc
+    internal class NamespaceDoc
     {
     }
 }
@@ -34,7 +34,7 @@ namespace System.Reactive.Disposables
     /// schedulers.
     /// </summary>
     [Runtime.CompilerServices.CompilerGenerated]
-    class NamespaceDoc
+    internal class NamespaceDoc
     {
     }
 }
@@ -46,7 +46,7 @@ namespace System.Reactive.Linq
     /// Query operators are made available as extension methods for <see cref="IObservable{T}"/> and <see cref="IQbservable{T}"/> defined on the Observable and Qbservable classes, respectively.
     /// </summary>
     [Runtime.CompilerServices.CompilerGenerated]
-    class NamespaceDoc
+    internal class NamespaceDoc
     {
     }
 }
@@ -59,7 +59,7 @@ namespace System.Reactive.Subjects
     /// have multiple registered observers, subjects are also used as a facility to provide multicast behavior for event streams in queries.
     /// </summary>
     [Runtime.CompilerServices.CompilerGenerated]
-    class NamespaceDoc
+    internal class NamespaceDoc
     {
     }
 }
@@ -71,7 +71,7 @@ namespace System.Reactive.PlatformServices
     /// Those are not intended to be used directly from user code and are subject to change in future releases of the product.
     /// </summary>
     [Runtime.CompilerServices.CompilerGenerated]
-    class NamespaceDoc
+    internal class NamespaceDoc
     {
     }
 }
@@ -82,7 +82,7 @@ namespace System.Reactive.Joins
     /// The <b>System.Reactive.Joins</b> namespace contains classes used to express join patterns over observable sequences using fluent method syntax.
     /// </summary>
     [Runtime.CompilerServices.CompilerGenerated]
-    class NamespaceDoc
+    internal class NamespaceDoc
     {
     }
 }

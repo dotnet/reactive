@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Globalization;
-using System.Reactive.Disposables;
 
 namespace System.Reactive.Concurrency
 {
@@ -20,7 +19,7 @@ namespace System.Reactive.Concurrency
         /// Creates a new virtual time scheduler with the default value of TAbsolute as the initial clock value.
         /// </summary>
         protected VirtualTimeSchedulerBase()
-            : this(default(TAbsolute), Comparer<TAbsolute>.Default)
+            : this(default, Comparer<TAbsolute>.Default)
         {
         }
 
@@ -32,11 +31,8 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="comparer"/> is <c>null</c>.</exception>
         protected VirtualTimeSchedulerBase(TAbsolute initialClock, IComparer<TAbsolute> comparer)
         {
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
-
             Clock = initialClock;
-            Comparer = comparer;
+            Comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
         }
 
         /// <summary>
@@ -92,7 +88,9 @@ namespace System.Reactive.Concurrency
         public IDisposable ScheduleRelative<TState>(TState state, TRelative dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var runAt = Add(Clock, dueTime);
 
@@ -110,7 +108,9 @@ namespace System.Reactive.Concurrency
         public IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAbsolute(state, Clock, action);
         }
@@ -127,7 +127,9 @@ namespace System.Reactive.Concurrency
         public IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleRelative(state, ToRelative(dueTime), action);
         }
@@ -144,7 +146,9 @@ namespace System.Reactive.Concurrency
         public IDisposable Schedule<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleRelative(state, ToRelative(dueTime - Now), action);
         }
@@ -195,10 +199,14 @@ namespace System.Reactive.Concurrency
         {
             var dueToClock = Comparer.Compare(time, Clock);
             if (dueToClock < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(time));
+            }
 
             if (dueToClock == 0)
+            {
                 return;
+            }
 
             if (!IsEnabled)
             {
@@ -241,10 +249,14 @@ namespace System.Reactive.Concurrency
 
             var dueToClock = Comparer.Compare(dt, Clock);
             if (dueToClock < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(time));
+            }
 
             if (dueToClock == 0)
+            {
                 return;
+            }
 
             if (!IsEnabled)
             {
@@ -267,7 +279,9 @@ namespace System.Reactive.Concurrency
 
             var dueToClock = Comparer.Compare(dt, Clock);
             if (dueToClock < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(time));
+            }
 
             Clock = dt;
         }
@@ -305,7 +319,9 @@ namespace System.Reactive.Concurrency
         protected virtual object GetService(Type serviceType)
         {
             if (serviceType == typeof(IStopwatchProvider))
+            {
                 return this as IStopwatchProvider;
+            }
 
             return null;
         }
@@ -399,7 +415,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable ScheduleAbsolute<TState>(TState state, TAbsolute dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var si = default(ScheduledItem<TAbsolute, TState>);
 

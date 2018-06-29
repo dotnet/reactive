@@ -6,12 +6,12 @@ using System;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
 using System.Threading;
-using Xunit;
 using Microsoft.Reactive.Testing;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class CurrentThreadSchedulerTest
     {
         [Fact]
@@ -118,7 +118,8 @@ namespace ReactiveTests.Tests
         {
             var ran1 = false;
             var ran2 = false;
-            Scheduler.CurrentThread.EnsureTrampoline(() => {
+            Scheduler.CurrentThread.EnsureTrampoline(() =>
+            {
                 Scheduler.CurrentThread.Schedule(() => { ran1 = true; });
                 Scheduler.CurrentThread.Schedule(() => { ran2 = true; });
             });
@@ -147,7 +148,8 @@ namespace ReactiveTests.Tests
             var ran2 = false;
             Scheduler.CurrentThread.EnsureTrampoline(() =>
             {
-                Scheduler.CurrentThread.Schedule(() => {
+                Scheduler.CurrentThread.Schedule(() =>
+                {
                     ran1 = true;
                     var d = Scheduler.CurrentThread.Schedule(() => { ran2 = true; });
                     d.Dispose();

@@ -58,7 +58,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.MoveNext());
             Assert.Equal(42, res.Current);
 
-            for (int i = 1; i <= 2; i++)
+            for (var i = 1; i <= 2; i++)
             {
                 evt.Set();
                 nxt.WaitOne();

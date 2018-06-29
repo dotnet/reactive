@@ -4,7 +4,6 @@
 
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -68,9 +67,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 HalfSerializer.ForwardOnCompleted(this, ref _halfSerializer, ref _error);
             }
 
-            sealed class OtherObserver : IObserver<TOther>
+            private sealed class OtherObserver : IObserver<TOther>
             {
-                readonly _ _parent;
+                private readonly _ _parent;
 
                 public OtherObserver(_ parent)
                 {
@@ -122,9 +121,13 @@ namespace System.Reactive.Linq.ObservableImpl
             //   xs.TU(5AM).TU(3AM)    --o--o--o|                 xs.TU(3AM).TU(5AM)    --o--o--o|
             //
             if (_endTime <= endTime)
+            {
                 return this;
+            }
             else
+            {
                 return new TakeUntil<TSource>(_source, endTime, _scheduler);
+            }
         }
 
         protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
@@ -134,9 +137,7 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class _ : IdentitySink<TSource>
         {
             private IDisposable _timerDisposable;
-
             private int _wip;
-
             private Exception _error;
 
             public _(IObserver<TSource> observer)

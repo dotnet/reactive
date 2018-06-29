@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class ImmediateSchedulerTest
     {
         [Fact]

@@ -126,7 +126,7 @@ namespace System.Reactive.Concurrency
                 scheduler.taskFactory.StartNew(
                     @thisObject =>
                     {
-                        var @this = (LongScheduledWorkItem<TState>) thisObject;
+                        var @this = (LongScheduledWorkItem<TState>)thisObject;
 
                         //
                         // Notice we don't check _cancel.IsDisposed. The contract for ISchedulerLongRunning
@@ -157,10 +157,7 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="taskFactory"/> is <c>null</c>.</exception>
         public TaskPoolScheduler(TaskFactory taskFactory)
         {
-            if (taskFactory == null)
-                throw new ArgumentNullException(nameof(taskFactory));
-
-            this.taskFactory = taskFactory;
+            this.taskFactory = taskFactory ?? throw new ArgumentNullException(nameof(taskFactory));
         }
 
         /// <summary>
@@ -179,7 +176,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return new ScheduledWorkItem<TState>(this, state, action);
         }
@@ -196,7 +195,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
@@ -252,9 +253,14 @@ namespace System.Reactive.Concurrency
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return new PeriodicallyScheduledWorkItem<TState>(state, period, action, taskFactory);
         }
@@ -300,7 +306,7 @@ namespace System.Reactive.Concurrency
                     },
                     this,
                     CancellationToken.None,
-                    TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion, 
+                    TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion,
                     _taskFactory.Scheduler
                 );
             }

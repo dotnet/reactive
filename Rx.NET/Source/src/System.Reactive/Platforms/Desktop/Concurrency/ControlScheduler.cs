@@ -25,10 +25,7 @@ namespace System.Reactive.Concurrency
         /// </remarks>
         public ControlScheduler(Control control)
         {
-            if (control == null)
-                throw new ArgumentNullException(nameof(control));
-
-            _control = control;
+            _control = control ?? throw new ArgumentNullException(nameof(control));
         }
 
         /// <summary>
@@ -50,7 +47,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             if (_control.IsDisposed)
             {
@@ -62,7 +61,9 @@ namespace System.Reactive.Concurrency
             _control.BeginInvoke(new Action(() =>
             {
                 if (!_control.IsDisposed && !d.IsDisposed)
+                {
                     d.Disposable = action(this, state);
+                }
             }));
 
             return d;
@@ -80,11 +81,15 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
+            {
                 return Schedule(state, action);
+            }
 
             var createTimer = new Func<IScheduler, TState, IDisposable>((scheduler1, state1) =>
             {
@@ -133,9 +138,13 @@ namespace System.Reactive.Concurrency
             // the UI thread, it won't fire.
             //
             if (_control.InvokeRequired)
+            {
                 return Schedule(state, createTimer);
+            }
             else
+            {
                 return createTimer(this, state);
+            }
         }
 
         /// <summary>
@@ -154,9 +163,14 @@ namespace System.Reactive.Concurrency
             // Threshold derived from Interval property setter in ndp\fx\src\winforms\managed\system\winforms\Timer.cs.
             //
             if (period.TotalMilliseconds < 1)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var createTimer = new Func<IScheduler, TState, IDisposable>((scheduler1, state1) =>
             {
@@ -189,9 +203,13 @@ namespace System.Reactive.Concurrency
             // the UI thread, it won't fire.
             //
             if (_control.InvokeRequired)
+            {
                 return Schedule(state, createTimer);
+            }
             else
+            {
                 return createTimer(this, state);
+            }
         }
     }
 }

@@ -24,11 +24,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class AmbCoordinator : IDisposable
         {
-            readonly AmbObserver leftObserver;
-
-            readonly AmbObserver rightObserver;
-
-            int winner;
+            private readonly AmbObserver leftObserver;
+            private readonly AmbObserver rightObserver;
+            private int winner;
 
             public AmbCoordinator(IObserver<TSource> observer)
             {
@@ -69,21 +67,18 @@ namespace System.Reactive.Linq.ObservableImpl
                 return false;
             }
 
-            sealed class AmbObserver : IObserver<TSource>, IDisposable
+            private sealed class AmbObserver : IObserver<TSource>, IDisposable
             {
-                readonly IObserver<TSource> downstream;
-
-                readonly AmbCoordinator parent;
-
-                readonly bool isLeft;
-
-                IDisposable upstream;
+                private readonly IObserver<TSource> downstream;
+                private readonly AmbCoordinator parent;
+                private readonly bool isLeft;
+                private IDisposable upstream;
 
                 /// <summary>
                 /// If true, this observer won the race and now can emit
                 /// on a fast path.
                 /// </summary>
-                bool iwon;
+                private bool iwon;
 
                 public AmbObserver(IObserver<TSource> downstream, AmbCoordinator parent, bool isLeft)
                 {

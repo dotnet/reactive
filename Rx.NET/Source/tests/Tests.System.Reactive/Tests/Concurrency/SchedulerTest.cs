@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class SchedulerTest : ReactiveTest
     {
         #region IScheduler
@@ -109,7 +109,7 @@ namespace ReactiveTests.Tests
         {
             var ms = new MyScheduler();
             var i = 0;
-            Scheduler.Schedule(ms, a => { if (++i < 10) a(); });
+            Scheduler.Schedule(ms, a => { if (++i < 10) { a(); } });
             Assert.Equal(10, i);
         }
 
@@ -139,7 +139,7 @@ namespace ReactiveTests.Tests
             var now = DateTimeOffset.Now;
             var i = 0;
             var ms = new MyScheduler(now) { Check = (a, s, t) => { Assert.True(t == TimeSpan.Zero); } };
-            Scheduler.Schedule(ms, now, a => { if (++i < 10) a(now); });
+            Scheduler.Schedule(ms, now, a => { if (++i < 10) { a(now); } });
             Assert.True(ms.WaitCycles == 0);
             Assert.Equal(10, i);
         }
@@ -161,7 +161,7 @@ namespace ReactiveTests.Tests
             var now = DateTimeOffset.Now;
             var ms = new MyScheduler(now) { Check = (a, s, t) => { Assert.True(t < TimeSpan.FromTicks(10)); } };
             var i = 0;
-            Scheduler.Schedule(ms, TimeSpan.Zero, a => { if (++i < 10) a(TimeSpan.FromTicks(i)); });
+            Scheduler.Schedule(ms, TimeSpan.Zero, a => { if (++i < 10) { a(TimeSpan.FromTicks(i)); } });
             Assert.True(ms.WaitCycles == Enumerable.Range(1, 9).Sum());
             Assert.Equal(10, i);
         }
@@ -174,7 +174,9 @@ namespace ReactiveTests.Tests
             {
                 lst.Add(i);
                 if (i < 9)
+                {
                     a(i + 1);
+                }
             });
 
             Assert.True(lst.SequenceEqual(Enumerable.Range(0, 10)));
@@ -268,7 +270,10 @@ namespace ReactiveTests.Tests
             var d = s.ScheduleLongRunning(42, (state, cancel) =>
             {
                 while (!cancel.IsDisposed)
+                {
                     x.Set();
+                }
+
                 e.Set();
             });
 
@@ -289,7 +294,10 @@ namespace ReactiveTests.Tests
             var d = s.ScheduleLongRunning(cancel =>
             {
                 while (!cancel.IsDisposed)
+                {
                     x.Set();
+                }
+
                 e.Set();
             });
 
@@ -316,7 +324,9 @@ namespace ReactiveTests.Tests
             var d = ThreadPoolScheduler.Instance.SchedulePeriodic(TimeSpan.FromMilliseconds(50), () =>
             {
                 if (n++ == 10)
+                {
                     e.Set();
+                }
             });
 
             e.WaitOne();
@@ -334,7 +344,9 @@ namespace ReactiveTests.Tests
                 Assert.Equal(42, x);
 
                 if (n++ == 10)
+                {
                     e.Set();
+                }
             });
 
             e.WaitOne();
@@ -370,7 +382,9 @@ namespace ReactiveTests.Tests
                 var d = Observable.Interval(TimeSpan.FromMilliseconds(100), s).Subscribe(_ =>
                 {
                     if (n++ == 10)
+                    {
                         e.Set();
+                    }
                 });
 
                 hln.OnSuspending();
@@ -395,7 +409,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        class PEP : IPlatformEnlightenmentProvider
+        private class PEP : IPlatformEnlightenmentProvider
         {
             private readonly IPlatformEnlightenmentProvider _old;
             private readonly IHostLifecycleNotifications _hln;
@@ -410,37 +424,33 @@ namespace ReactiveTests.Tests
             {
                 if (typeof(T) == typeof(IHostLifecycleNotifications))
                 {
-                    return (T)(object)_hln;
+                    return (T)_hln;
                 }
 
                 return _old.GetService<T>(args);
             }
         }
 
-        class HLN : IHostLifecycleNotifications
+        private class HLN : IHostLifecycleNotifications
         {
             public event EventHandler<HostSuspendingEventArgs> Suspending;
             public event EventHandler<HostResumingEventArgs> Resuming;
 
             public void OnSuspending()
             {
-                var s = Suspending;
-                if (s != null)
-                    s(this, null);
+                Suspending?.Invoke(this, null);
             }
 
             public void OnResuming()
             {
-                var s = Resuming;
-                if (s != null)
-                    s(this, null);
+                Resuming?.Invoke(this, null);
             }
         }
 #endif
 
 #endif
 
-#endregion
+        #endregion
 
         #region DisableOptimizations
 
@@ -602,7 +612,7 @@ namespace ReactiveTests.Tests
             Assert.Null(((IServiceProvider)d).GetService(typeof(bool)));
         }
 
-        class MyScheduler : IScheduler
+        private class MyScheduler : IScheduler
         {
             public MyScheduler()
                 : this(DateTimeOffset.Now)
@@ -775,8 +785,10 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Catch_Custom_Periodic_Regular()
         {
-            var scheduler = new MyExceptionScheduler(_ => { });
-            scheduler.PeriodicStopped = new ManualResetEvent(false);
+            var scheduler = new MyExceptionScheduler(_ => { })
+            {
+                PeriodicStopped = new ManualResetEvent(false)
+            };
 
             var @catch = scheduler.Catch<InvalidOperationException>(_ => true);
             var per = (ISchedulerPeriodic)((IServiceProvider)@catch).GetService(typeof(ISchedulerPeriodic));
@@ -785,7 +797,9 @@ namespace ReactiveTests.Tests
             var d = per.SchedulePeriodic(0, TimeSpan.Zero, x =>
             {
                 if (x > 10)
+                {
                     madeProgress.Set();
+                }
 
                 return x + 1;
             });
@@ -800,8 +814,10 @@ namespace ReactiveTests.Tests
         {
             var err = default(Exception);
             var done = new ManualResetEvent(false);
-            var scheduler = new MyExceptionScheduler(ex_ => { err = ex_; done.Set(); });
-            scheduler.PeriodicStopped = new ManualResetEvent(false);
+            var scheduler = new MyExceptionScheduler(ex_ => { err = ex_; done.Set(); })
+            {
+                PeriodicStopped = new ManualResetEvent(false)
+            };
 
             var @catch = scheduler.Catch<InvalidOperationException>(_ => true);
             var per = (ISchedulerPeriodic)((IServiceProvider)@catch).GetService(typeof(ISchedulerPeriodic));
@@ -822,8 +838,10 @@ namespace ReactiveTests.Tests
         {
             var err = default(Exception);
             var done = new ManualResetEvent(false);
-            var scheduler = new MyExceptionScheduler(ex_ => { err = ex_; done.Set(); });
-            scheduler.PeriodicStopped = new ManualResetEvent(false);
+            var scheduler = new MyExceptionScheduler(ex_ => { err = ex_; done.Set(); })
+            {
+                PeriodicStopped = new ManualResetEvent(false)
+            };
 
             var @catch = scheduler.Catch<InvalidOperationException>(_ => false);
             var per = (ISchedulerPeriodic)((IServiceProvider)@catch).GetService(typeof(ISchedulerPeriodic));
@@ -843,8 +861,10 @@ namespace ReactiveTests.Tests
         public void Catch_Custom_Periodic_Caught()
         {
             var err = default(Exception);
-            var scheduler = new MyExceptionScheduler(ex_ => err = ex_);
-            scheduler.PeriodicStopped = new ManualResetEvent(false);
+            var scheduler = new MyExceptionScheduler(ex_ => err = ex_)
+            {
+                PeriodicStopped = new ManualResetEvent(false)
+            };
 
             var caught = new ManualResetEvent(false);
             var @catch = scheduler.Catch<InvalidOperationException>(_ => { caught.Set(); return true; });
@@ -860,7 +880,7 @@ namespace ReactiveTests.Tests
             Assert.Null(err);
         }
 
-        class MyExceptionScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
+        private class MyExceptionScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
         {
             private readonly Action<Exception> _onError;
 
@@ -915,10 +935,13 @@ namespace ReactiveTests.Tests
                     try
                     {
                         var s = state;
-                        for (int i = 0; true; i++)
+                        for (var i = 0; true; i++)
                         {
                             if (i > 100 /* mimic delayed cancellation */ && b.IsDisposed)
+                            {
                                 break;
+                            }
+
                             s = action(s);
                         }
                     }
@@ -947,7 +970,7 @@ namespace ReactiveTests.Tests
             Assert.Null(((IServiceProvider)s).GetService(typeof(IAsyncResult)));
         }
 
-        class MySchedulerWithoutServices : LocalScheduler
+        private class MySchedulerWithoutServices : LocalScheduler
         {
             public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
             {
@@ -964,7 +987,7 @@ namespace ReactiveTests.Tests
             Assert.Null(Scheduler.AsStopwatchProvider(s));
         }
 
-        class MyDumbScheduler1 : IScheduler
+        private class MyDumbScheduler1 : IScheduler
         {
             public DateTimeOffset Now
             {
@@ -1033,7 +1056,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        class MyDumbScheduler2 : IScheduler, IServiceProvider
+        private class MyDumbScheduler2 : IScheduler, IServiceProvider
         {
             private readonly Dictionary<Type, object> _services;
 
@@ -1065,13 +1088,15 @@ namespace ReactiveTests.Tests
             public object GetService(Type serviceType)
             {
                 if (_services.TryGetValue(serviceType, out var res))
+                {
                     return res;
+                }
 
                 return null;
             }
         }
 
-        class MyLongRunning : ISchedulerLongRunning
+        private class MyLongRunning : ISchedulerLongRunning
         {
             public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
             {
@@ -1079,7 +1104,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        class MyStopwatchProvider : IStopwatchProvider
+        private class MyStopwatchProvider : IStopwatchProvider
         {
             public IStopwatch StartStopwatch()
             {
@@ -1087,7 +1112,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        class MyPeriodic : ISchedulerPeriodic
+        private class MyPeriodic : ISchedulerPeriodic
         {
             public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
             {
@@ -1096,7 +1121,7 @@ namespace ReactiveTests.Tests
         }
 
         #endregion
-        
+
         [Fact]
         public void SchedulerAsync_Yield_ArgumentChecking()
         {
@@ -1513,7 +1538,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        class MySyncCtx : SynchronizationContext
+        private class MySyncCtx : SynchronizationContext
         {
             public override void Post(SendOrPostCallback d, object state)
             {
@@ -1522,6 +1547,6 @@ namespace ReactiveTests.Tests
         }
 
 #endif
-        
+
     }
 }

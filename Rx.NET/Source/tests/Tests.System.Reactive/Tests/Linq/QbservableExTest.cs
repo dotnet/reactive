@@ -12,10 +12,10 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class QbservableExTest : ReactiveTest
     {
-        private IQbservable<int> _qbNull = null;
+        private readonly IQbservable<int> _qbNull = null;
         private IQbservable<int> _qbMy = new MyQbservable<int>();
         private IQbservableProvider _qbp = new MyQbservableProvider();
 

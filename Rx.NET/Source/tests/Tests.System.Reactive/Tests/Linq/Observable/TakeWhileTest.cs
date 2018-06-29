@@ -551,7 +551,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        static bool IsPrime(int i)
+        private static bool IsPrime(int i)
         {
             if (i <= 1)
                 return false;

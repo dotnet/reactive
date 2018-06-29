@@ -37,7 +37,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Start_Action()
         {
-            bool done = false;
+            var done = false;
             Assert.True(Observable.Start(() => { done = true; }).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(done, "done");
         }
@@ -47,7 +47,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            bool done = false;
+            var done = false;
 
             var res = scheduler.Start(() =>
                 Observable.Start(() => { done = true; }, scheduler)

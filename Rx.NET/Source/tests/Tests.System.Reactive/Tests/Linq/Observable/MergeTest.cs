@@ -668,13 +668,13 @@ namespace ReactiveTests.Tests
             var inputs = new List<List<Recorded<Notification<int>>>>();
 
             const int N = 10;
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var lst = new List<Recorded<Notification<int>>> { OnNext(150, 1) };
                 inputs.Add(lst);
 
-                ushort start = (ushort)(301 + i);
-                for (int j = 0; j < i; j++)
+                var start = (ushort)(301 + i);
+                for (var j = 0; j < i; j++)
                 {
                     var onNext = OnNext(start += (ushort)(j * 5), j + i + 2);
                     lst.Add(onNext);
@@ -707,7 +707,7 @@ namespace ReactiveTests.Tests
             );
 
             Assert.True(resOnNext.Count + 1 == res.Messages.Count, "length");
-            for (int i = 0; i < resOnNext.Count; i++)
+            for (var i = 0; i < resOnNext.Count; i++)
             {
                 var msg = res.Messages[i];
                 Assert.True(msg.Time == resOnNext[i].Time);

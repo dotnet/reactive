@@ -2054,10 +2054,10 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        class CurrentThrowsEnumerable<T> : IEnumerable<T>
+        private class CurrentThrowsEnumerable<T> : IEnumerable<T>
         {
-            IEnumerable<T> e;
-            Exception ex;
+            private IEnumerable<T> e;
+            private readonly Exception ex;
 
             public CurrentThrowsEnumerable(IEnumerable<T> e, Exception ex)
             {
@@ -2075,10 +2075,10 @@ namespace ReactiveTests.Tests
                 return GetEnumerator();
             }
 
-            class Enumerator : IEnumerator<T>
+            private class Enumerator : IEnumerator<T>
             {
-                IEnumerator<T> e;
-                Exception ex;
+                private IEnumerator<T> e;
+                private readonly Exception ex;
 
                 public Enumerator(IEnumerator<T> e, Exception ex)
                 {
@@ -2169,10 +2169,10 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class MoveNextThrowsEnumerable<T> : IEnumerable<T>
+        private class MoveNextThrowsEnumerable<T> : IEnumerable<T>
         {
-            IEnumerable<T> e;
-            Exception ex;
+            private IEnumerable<T> e;
+            private readonly Exception ex;
 
             public MoveNextThrowsEnumerable(IEnumerable<T> e, Exception ex)
             {
@@ -2190,10 +2190,10 @@ namespace ReactiveTests.Tests
                 return GetEnumerator();
             }
 
-            class Enumerator : IEnumerator<T>
+            private class Enumerator : IEnumerator<T>
             {
-                IEnumerator<T> e;
-                Exception ex;
+                private IEnumerator<T> e;
+                private readonly Exception ex;
 
                 public Enumerator(IEnumerator<T> e, Exception ex)
                 {
@@ -3166,7 +3166,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        static T Throw<T>(Exception ex)
+        private static T Throw<T>(Exception ex)
         {
             throw ex;
         }

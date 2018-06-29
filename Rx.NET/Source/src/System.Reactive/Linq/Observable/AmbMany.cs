@@ -2,18 +2,16 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Reactive.Disposables;
-using System.Text;
-using System.Threading;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class AmbManyArray<T> : BasicProducer<T>
     {
-        readonly IObservable<T>[] sources;
+        private readonly IObservable<T>[] sources;
 
         public AmbManyArray(IObservable<T>[] sources)
         {
@@ -28,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
     internal sealed class AmbManyEnumerable<T> : BasicProducer<T>
     {
-        readonly IEnumerable<IObservable<T>> sources;
+        private readonly IEnumerable<IObservable<T>> sources;
 
         public AmbManyEnumerable(IEnumerable<IObservable<T>> sources)
         {
@@ -56,11 +54,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
     internal sealed class AmbCoordinator<T> : IDisposable
     {
-        readonly IObserver<T> downstream;
-
-        readonly InnerObserver[] observers;
-
-        int winner;
+        private readonly IObserver<T> downstream;
+        private readonly InnerObserver[] observers;
+        private int winner;
 
         internal AmbCoordinator(IObserver<T> downstream, int n)
         {
@@ -116,7 +112,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        bool TryWin(int index)
+        private bool TryWin(int index)
         {
             if (Volatile.Read(ref winner) == -1 && Interlocked.CompareExchange(ref winner, index, -1) == -1)
             {
@@ -134,15 +130,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class InnerObserver : IObserver<T>, IDisposable
         {
-            readonly IObserver<T> downstream;
-
-            readonly AmbCoordinator<T> parent;
-
-            readonly int index;
-
-            IDisposable upstream;
-
-            bool won;
+            private readonly IObserver<T> downstream;
+            private readonly AmbCoordinator<T> parent;
+            private readonly int index;
+            private IDisposable upstream;
+            private bool won;
 
             public InnerObserver(AmbCoordinator<T> parent, int index)
             {
@@ -197,7 +189,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     won = true;
                     downstream.OnNext(value);
-                } else
+                }
+                else
                 {
                     Dispose();
                 }

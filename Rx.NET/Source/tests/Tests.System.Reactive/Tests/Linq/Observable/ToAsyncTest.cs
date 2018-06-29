@@ -371,7 +371,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction0()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync(() => { hasRun = true; })().ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync(() => { hasRun = true; }, Scheduler.Default)().ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -387,7 +387,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction1()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int>(a => { Assert.Equal(1, a); hasRun = true; })(1).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int>(a => { Assert.Equal(1, a); hasRun = true; }, Scheduler.Default)(1).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -403,7 +403,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction2()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int>((a, b) => { Assert.Equal(1, a); Assert.Equal(2, b); hasRun = true; })(1, 2).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int>((a, b) => { Assert.Equal(1, a); Assert.Equal(2, b); hasRun = true; }, Scheduler.Default)(1, 2).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -419,7 +419,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction3()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int>((a, b, c) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); hasRun = true; })(1, 2, 3).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int>((a, b, c) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); hasRun = true; }, Scheduler.Default)(1, 2, 3).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -435,7 +435,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction4()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int, int>((a, b, c, d) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); hasRun = true; })(1, 2, 3, 4).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int, int>((a, b, c, d) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -451,7 +451,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction5()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int, int, int>((a, b, c, d, e) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); hasRun = true; })(1, 2, 3, 4, 5).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int, int, int>((a, b, c, d, e) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -467,7 +467,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction6()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e, f) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); hasRun = true; })(1, 2, 3, 4, 5, 6).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e, f) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -483,7 +483,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction7()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); hasRun = true; })(1, 2, 3, 4, 5, 6, 7).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -499,7 +499,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction8()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -515,7 +515,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction9()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -531,7 +531,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction10()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -547,7 +547,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction11()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -563,7 +563,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction12()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -579,7 +579,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction13()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -595,7 +595,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction14()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -611,7 +611,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction15()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); Assert.Equal(15, o); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); Assert.Equal(15, o); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");
@@ -627,7 +627,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsyncAction16()
         {
-            bool hasRun = false;
+            var hasRun = false;
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); Assert.Equal(15, o); Assert.Equal(16, p); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); Assert.Equal(15, o); Assert.Equal(16, p); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(hasRun, "has run");

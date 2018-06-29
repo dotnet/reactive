@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class ObservableSafetyTest : ReactiveTest
     {
         [Fact]
@@ -68,7 +68,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class RogueObservable : IObservable<int>
+        private class RogueObservable : IObservable<int>
         {
             private readonly Exception _ex;
 
@@ -184,7 +184,9 @@ namespace ReactiveTests.Tests
                 res.Subscribe(z =>
                 {
                     if (z == 4)
+                    {
                         throw ex;
+                    }
                 });
             });
 
@@ -256,7 +258,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class MyObserver : ObserverBase<int>
+        private class MyObserver : ObserverBase<int>
         {
             private readonly Func<int, bool> _predicate;
             private readonly Exception _exception;
@@ -270,7 +272,9 @@ namespace ReactiveTests.Tests
             protected override void OnNextCore(int value)
             {
                 if (_predicate(value))
+                {
                     throw _exception;
+                }
             }
 
             protected override void OnErrorCore(Exception error)

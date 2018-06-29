@@ -14,10 +14,10 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class VirtualSchedulerTest
     {
-        class VirtualSchedulerTestScheduler : VirtualTimeScheduler<string, char>
+        private class VirtualSchedulerTestScheduler : VirtualTimeScheduler<string, char>
         {
             public VirtualSchedulerTestScheduler()
             {
@@ -98,7 +98,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, TimeSpan.Zero, default(Func<IScheduler, int, IDisposable>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, DateTimeOffset.UtcNow, default(Func<IScheduler, int, IDisposable>)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleAbsolute(default(VirtualSchedulerTestScheduler), "", () => {}));
+            ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleAbsolute(default(VirtualSchedulerTestScheduler), "", () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleAbsolute(new VirtualSchedulerTestScheduler(), "", default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleRelative(default(VirtualSchedulerTestScheduler), 'a', () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleRelative(new VirtualSchedulerTestScheduler(), 'a', default(Action)));
@@ -144,7 +144,10 @@ namespace ReactiveTests.Tests
                 {
                     if (Interlocked.Decrement(ref sync) != 0)
                     {
-                        while (Volatile.Read(ref sync) != 0) ;
+                        while (Volatile.Read(ref sync) != 0)
+                        {
+                            ;
+                        }
                     }
 
                     Task.Delay(10).Wait();
@@ -157,7 +160,10 @@ namespace ReactiveTests.Tests
                 {
                     if (Interlocked.Decrement(ref sync) != 0)
                     {
-                        while (Volatile.Read(ref sync) != 0) ;
+                        while (Volatile.Read(ref sync) != 0)
+                        {
+                            ;
+                        }
                     }
 
                     while (watch.Elapsed < TimeSpan.FromSeconds(11))

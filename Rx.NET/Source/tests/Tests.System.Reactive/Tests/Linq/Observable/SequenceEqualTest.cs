@@ -562,9 +562,9 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class ThrowComparer : IEqualityComparer<int>
+        private class ThrowComparer : IEqualityComparer<int>
         {
-            private Exception _ex;
+            private readonly Exception _ex;
 
             public ThrowComparer(Exception ex)
             {
@@ -840,7 +840,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class OddEvenComparer : IEqualityComparer<int>
+        private class OddEvenComparer : IEqualityComparer<int>
         {
             public bool Equals(int x, int y)
             {
@@ -884,10 +884,10 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class ThrowingComparer : IEqualityComparer<int>
+        private class ThrowingComparer : IEqualityComparer<int>
         {
-            private int _x;
-            private Exception _ex;
+            private readonly int _x;
+            private readonly Exception _ex;
 
             public ThrowingComparer(int x, Exception ex)
             {

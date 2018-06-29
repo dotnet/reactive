@@ -5,18 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -160,7 +152,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class ModComparer : IEqualityComparer<int>
+        private class ModComparer : IEqualityComparer<int>
         {
             private readonly int _mod;
 
@@ -321,7 +313,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
 
             var res = scheduler.Start(() =>
-                xs.Distinct(x => { if (x == 0) throw ex; return x / 2; })
+                xs.Distinct(x => { if (x == 0) { throw ex; } return x / 2; })
             );
 
             res.Messages.AssertEqual(
@@ -367,7 +359,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class ThrowComparer : IEqualityComparer<int>
+        private class ThrowComparer : IEqualityComparer<int>
         {
             private readonly int _err;
             private readonly Exception _ex;
@@ -386,7 +378,9 @@ namespace ReactiveTests.Tests
             public int GetHashCode(int obj)
             {
                 if (obj == _err)
+                {
                     throw _ex;
+                }
 
                 return EqualityComparer<int>.Default.GetHashCode(obj);
             }

@@ -103,7 +103,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            List<int> data = new List<int>(new[] { 1, 2, 3 });
+            var data = new List<int>(new[] { 1, 2, 3 });
             var res = scheduler.Start(() =>
                 xs.StartWith(data)
             );
@@ -128,7 +128,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            List<int> data = new List<int>(new[] { 1, 2, 3 });
+            var data = new List<int>(new[] { 1, 2, 3 });
             var res = scheduler.Start(() =>
                 xs.StartWith(scheduler, data)
             );

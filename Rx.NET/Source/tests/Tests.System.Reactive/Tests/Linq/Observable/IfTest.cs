@@ -305,7 +305,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        static T Throw<T>(Exception ex)
+        private static T Throw<T>(Exception ex)
         {
             throw ex;
         }

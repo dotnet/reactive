@@ -7,12 +7,12 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class ConnectableObservableTest : ReactiveTest
     {
         [Fact]
@@ -25,7 +25,7 @@ namespace ReactiveTests.Tests
 
             co2.Subscribe(x => y = x);
             Assert.NotEqual(1, y);
-            
+
             co2.Connect();
             Assert.Equal(1, y);
         }

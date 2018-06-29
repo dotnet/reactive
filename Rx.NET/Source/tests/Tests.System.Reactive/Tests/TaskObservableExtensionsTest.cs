@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -15,10 +14,10 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class TaskObservableExtensionsTest : ReactiveTest
     {
-        private Task<int> doneTask;
+        private readonly Task<int> doneTask;
 
         public TaskObservableExtensionsTest()
         {
@@ -394,9 +393,9 @@ namespace ReactiveTests.Tests
         {
             var s = Scheduler.Immediate;
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)null, s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(null, s));
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)doneTask, default(IScheduler)));
 
             var tcs = new System.Threading.Tasks.TaskCompletionSource<int>();
@@ -873,10 +872,10 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
 
             var xs = Observable.Return(5, scheduler);
-            
+
             var continuation = xs.ToTask(state);
             Assert.Same(continuation.AsyncState, state);
-            
+
             scheduler.Start();
 
             Assert.True(continuation.IsCompleted);

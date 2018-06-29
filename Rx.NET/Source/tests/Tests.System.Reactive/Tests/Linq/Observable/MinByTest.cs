@@ -375,7 +375,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class ReverseComparer<T> : IComparer<T>
+        private class ReverseComparer<T> : IComparer<T>
         {
             private IComparer<T> _comparer;
 
@@ -390,9 +390,9 @@ namespace ReactiveTests.Tests
             }
         }
 
-        class ThrowingComparer<T> : IComparer<T>
+        private class ThrowingComparer<T> : IComparer<T>
         {
-            private Exception _ex;
+            private readonly Exception _ex;
 
             public ThrowingComparer(Exception ex)
             {

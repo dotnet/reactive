@@ -31,7 +31,9 @@ namespace System.Reactive.Concurrency
             {
                 var dispatcher = System.Windows.Threading.Dispatcher.FromThread(Thread.CurrentThread);
                 if (dispatcher == null)
+                {
                     throw new InvalidOperationException(Strings_WindowsThreading.NO_DISPATCHER_CURRENT_THREAD);
+                }
 
                 return new DispatcherScheduler(dispatcher);
             }
@@ -44,14 +46,11 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> is <c>null</c>.</exception>
         public DispatcherScheduler(System.Windows.Threading.Dispatcher dispatcher)
         {
-            if (dispatcher == null)
-                throw new ArgumentNullException(nameof(dispatcher));
-
-            Dispatcher = dispatcher;
+            Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
             Priority = Windows.Threading.DispatcherPriority.Normal;
 
         }
-        
+
         /// <summary>
         /// Constructs a <see cref="DispatcherScheduler"/> that schedules units of work on the given <see cref="System.Windows.Threading.Dispatcher"/> at the given priority.
         /// </summary>
@@ -60,10 +59,7 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> is <c>null</c>.</exception>
         public DispatcherScheduler(System.Windows.Threading.Dispatcher dispatcher, System.Windows.Threading.DispatcherPriority priority)
         {
-            if (dispatcher == null)
-                throw new ArgumentNullException(nameof(dispatcher));
-
-            Dispatcher = dispatcher;
+            Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
             Priority = priority;
         }
 
@@ -71,7 +67,7 @@ namespace System.Reactive.Concurrency
         /// Gets the <see cref="System.Windows.Threading.Dispatcher"/> associated with the <see cref="DispatcherScheduler"/>.
         /// </summary>
         public System.Windows.Threading.Dispatcher Dispatcher { get; }
-        
+
         /// <summary>
         /// Gets the priority at which work items will be dispatched.
         /// </summary>
@@ -88,7 +84,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var d = new SingleAssignmentDisposable();
 
@@ -118,7 +116,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
@@ -181,9 +181,14 @@ namespace System.Reactive.Concurrency
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var timer = new System.Windows.Threading.DispatcherTimer(Priority, Dispatcher);
 

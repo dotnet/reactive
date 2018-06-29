@@ -193,7 +193,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        static IEnumerable<int> EnumerableToObservable_Error_Core(Exception ex)
+        private static IEnumerable<int> EnumerableToObservable_Error_Core(Exception ex)
         {
             yield return 1;
             yield return 2;

@@ -3,13 +3,13 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using Xunit;
-using Microsoft.Reactive.Testing;
 using System.Reactive;
+using Microsoft.Reactive.Testing;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class AnonymousTest
     {
         [Fact]

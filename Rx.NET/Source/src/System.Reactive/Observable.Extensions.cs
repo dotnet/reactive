@@ -27,7 +27,9 @@ namespace System
         public static IDisposable Subscribe<T>(this IObservable<T> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             //
             // [OK] Use of unsafe Subscribe: non-pretentious constructor for an observer; this overload is not to be used internally.
@@ -46,9 +48,14 @@ namespace System
         public static IDisposable Subscribe<T>(this IObservable<T> source, Action<T> onNext)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
 
             //
             // [OK] Use of unsafe Subscribe: non-pretentious constructor for an observer; this overload is not to be used internally.
@@ -68,11 +75,19 @@ namespace System
         public static IDisposable Subscribe<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
 
             //
             // [OK] Use of unsafe Subscribe: non-pretentious constructor for an observer; this overload is not to be used internally.
@@ -92,11 +107,19 @@ namespace System
         public static IDisposable Subscribe<T>(this IObservable<T> source, Action<T> onNext, Action onCompleted)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             //
             // [OK] Use of unsafe Subscribe: non-pretentious constructor for an observer; this overload is not to be used internally.
@@ -117,13 +140,24 @@ namespace System
         public static IDisposable Subscribe<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError, Action onCompleted)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             //
             // [OK] Use of unsafe Subscribe: non-pretentious constructor for an observer; this overload is not to be used internally.
@@ -146,9 +180,14 @@ namespace System
         public static void Subscribe<T>(this IObservable<T> source, IObserver<T> observer, CancellationToken token)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             source.Subscribe_(observer, token);
         }
@@ -164,7 +203,9 @@ namespace System
         public static void Subscribe<T>(this IObservable<T> source, CancellationToken token)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             source.Subscribe_(new AnonymousObserver<T>(Stubs<T>.Ignore, Stubs.Throw, Stubs.Nop), token);
         }
@@ -180,9 +221,14 @@ namespace System
         public static void Subscribe<T>(this IObservable<T> source, Action<T> onNext, CancellationToken token)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
 
             source.Subscribe_(new AnonymousObserver<T>(onNext, Stubs.Throw, Stubs.Nop), token);
         }
@@ -199,11 +245,19 @@ namespace System
         public static void Subscribe<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError, CancellationToken token)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
 
             source.Subscribe_(new AnonymousObserver<T>(onNext, onError, Stubs.Nop), token);
         }
@@ -220,11 +274,19 @@ namespace System
         public static void Subscribe<T>(this IObservable<T> source, Action<T> onNext, Action onCompleted, CancellationToken token)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             source.Subscribe_(new AnonymousObserver<T>(onNext, Stubs.Throw, onCompleted), token);
         }
@@ -242,13 +304,24 @@ namespace System
         public static void Subscribe<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError, Action onCompleted, CancellationToken token)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             source.Subscribe_(new AnonymousObserver<T>(onNext, onError, onCompleted), token);
         }
@@ -292,9 +365,14 @@ namespace System
         public static IDisposable SubscribeSafe<T>(this IObservable<T> source, IObserver<T> observer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             //
             // The following types are white-listed and should not exhibit exceptional behavior

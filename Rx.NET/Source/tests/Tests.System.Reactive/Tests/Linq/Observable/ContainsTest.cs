@@ -5,15 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -229,7 +224,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class ContainsComparerThrows : IEqualityComparer<int>
+        private class ContainsComparerThrows : IEqualityComparer<int>
         {
             public bool Equals(int x, int y)
             {
@@ -300,7 +295,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class ContainsComparerMod2 : IEqualityComparer<int>
+        private class ContainsComparerMod2 : IEqualityComparer<int>
         {
             public bool Equals(int x, int y)
             {

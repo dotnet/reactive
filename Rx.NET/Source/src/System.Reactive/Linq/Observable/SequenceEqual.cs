@@ -101,7 +101,9 @@ namespace System.Reactive.Linq.ObservableImpl
                                 _parent.ForwardOnCompleted();
                             }
                             else
+                            {
                                 _parent._ql.Enqueue(value);
+                            }
                         }
                     }
 
@@ -173,7 +175,9 @@ namespace System.Reactive.Linq.ObservableImpl
                                 _parent.ForwardOnCompleted();
                             }
                             else
+                            {
                                 _parent._qr.Enqueue(value);
+                            }
                         }
                     }
 
@@ -226,7 +230,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource, bool> 
+            internal sealed class _ : Sink<TSource, bool>
             {
                 private readonly IEqualityComparer<TSource> _comparer;
 

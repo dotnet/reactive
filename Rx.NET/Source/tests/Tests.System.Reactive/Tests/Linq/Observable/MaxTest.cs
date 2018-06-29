@@ -2413,7 +2413,7 @@ namespace ReactiveTests.Tests
 
     internal class ThrowingComparer<T> : IComparer<T>
     {
-        private Exception _ex;
+        private readonly Exception _ex;
 
         public ThrowingComparer(Exception ex)
         {

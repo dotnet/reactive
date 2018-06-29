@@ -3750,7 +3750,7 @@ namespace ReactiveTests.Tests
 
         #endregion
 
-        static string Reverse(string s)
+        private static string Reverse(string s)
         {
             var sb = new StringBuilder();
 

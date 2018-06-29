@@ -22,12 +22,12 @@ namespace System.Reactive.Disposables
         /// <exception cref="ArgumentNullException"><paramref name="context"/> or <paramref name="disposable"/> is null.</exception>
         public ContextDisposable(SynchronizationContext context, IDisposable disposable)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
             if (disposable == null)
+            {
                 throw new ArgumentNullException(nameof(disposable));
+            }
 
-            Context = context;
+            Context = context ?? throw new ArgumentNullException(nameof(context));
             Disposable.SetSingle(ref _disposable, disposable);
         }
 

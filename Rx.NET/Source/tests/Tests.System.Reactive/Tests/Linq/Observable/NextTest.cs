@@ -49,7 +49,7 @@ namespace ReactiveTests.Tests
 
             var res = src.Next().GetEnumerator();
 
-            Action release = () => Task.Run(async () =>
+            void release() => Task.Run(async () =>
             {
                 await Task.Delay(250);
                 evt.Set();
@@ -157,7 +157,7 @@ namespace ReactiveTests.Tests
 
             var res = src.Next().GetEnumerator();
 
-            Action release = () => new Thread(() =>
+            void release() => new Thread(() =>
             {
                 Thread.Sleep(250);
                 evt.Set();

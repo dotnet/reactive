@@ -94,13 +94,11 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="threadFactory"/> is <c>null</c>.</exception>
         public EventLoopScheduler(Func<ThreadStart, Thread> threadFactory)
         {
-            if (threadFactory == null)
-                throw new ArgumentNullException(nameof(threadFactory));
 #else
         internal EventLoopScheduler(Func<ThreadStart, Thread> threadFactory)
         {
 #endif
-            _threadFactory = threadFactory;
+            _threadFactory = threadFactory ?? throw new ArgumentNullException(nameof(threadFactory));
             _stopwatch = ConcurrencyAbstractionLayer.Current.StartStopwatch();
 
             _gate = new object();
@@ -144,7 +142,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var due = _stopwatch.Elapsed + dueTime;
             var si = new ScheduledItem<TimeSpan, TState>(this, state, action, due);
@@ -152,7 +152,9 @@ namespace System.Reactive.Concurrency
             lock (_gate)
             {
                 if (_disposed)
+                {
                     throw new ObjectDisposedException("");
+                }
 
                 if (dueTime <= TimeSpan.Zero)
                 {
@@ -185,9 +187,14 @@ namespace System.Reactive.Concurrency
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return new PeriodicallyScheduledWorkItem<TState>(this, state, period, action);
         }
@@ -298,7 +305,10 @@ namespace System.Reactive.Concurrency
                     // Bug fix that ensures the number of calls to Release never greatly exceeds the number of calls to Wait.
                     // See work item #37: https://rx.codeplex.com/workitem/37
                     //
-                    while (_evt.CurrentCount > 0) _evt.Wait();
+                    while (_evt.CurrentCount > 0)
+                    {
+                        _evt.Wait();
+                    }
 
                     //
                     // The event could have been set by a call to Dispose. This takes priority over anything else. We quit the
@@ -306,7 +316,7 @@ namespace System.Reactive.Concurrency
                     //
                     if (_disposed)
                     {
-                        ((IDisposable)_evt).Dispose();
+                        _evt.Dispose();
                         return;
                     }
 

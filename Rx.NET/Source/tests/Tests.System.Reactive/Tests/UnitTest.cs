@@ -7,7 +7,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class UnitTest
     {
         [Fact]

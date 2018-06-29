@@ -728,7 +728,7 @@ namespace ReactiveTests.Tests
 
     }
 
-    class SchedulerWithCatch : IServiceProvider, IScheduler
+    internal class SchedulerWithCatch : IServiceProvider, IScheduler
     {
         private readonly IScheduler _scheduler;
         private readonly Action<Exception> _setException;
@@ -781,7 +781,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class PeriodicTestScheduler : TestScheduler, ISchedulerPeriodic, IServiceProvider
+    internal class PeriodicTestScheduler : TestScheduler, ISchedulerPeriodic, IServiceProvider
     {
         private readonly List<TimerRun> _timers;
 
@@ -825,7 +825,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class TimerRun : IEnumerable<long>
+    internal class TimerRun : IEnumerable<long>
     {
         private readonly long _started;
         private long _stopped;

@@ -424,7 +424,7 @@ namespace ReactiveTests.Tests
             Assert.True(ctx.ran);
         }
 
-        class MyContext : SynchronizationContext
+        private class MyContext : SynchronizationContext
         {
             public bool ran;
 

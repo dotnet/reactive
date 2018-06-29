@@ -5,18 +5,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -722,9 +720,13 @@ namespace ReactiveTests.Tests
             {
                 lst.Add(x);
                 if (x < 9)
+                {
                     s.OnNext(x + 1);
+                }
                 else
+                {
                     s.OnCompleted();
+                }
             }, () =>
             {
                 evt.Set();
@@ -1196,7 +1198,9 @@ namespace ReactiveTests.Tests
                 xs.Delay(x =>
                 {
                     if (x == 4)
+                    {
                         throw ex;
+                    }
 
                     return ys;
                 })
@@ -1384,7 +1388,9 @@ namespace ReactiveTests.Tests
                             );
                     }
                     else
+                    {
                         throw ex;
+                    }
                 })
             );
 
@@ -1702,7 +1708,7 @@ namespace ReactiveTests.Tests
             Assert.False(called);
         }
 
-        class ImpulseScheduler : IScheduler
+        private class ImpulseScheduler : IScheduler
         {
             public DateTimeOffset Now
             {
@@ -1761,7 +1767,7 @@ namespace ReactiveTests.Tests
             e.WaitOne();
         }
 
-        class MyLongRunning1 : LocalScheduler, ISchedulerLongRunning
+        private class MyLongRunning1 : LocalScheduler, ISchedulerLongRunning
         {
             private ManualResetEvent _start;
             private ManualResetEvent _stop;
@@ -1807,7 +1813,7 @@ namespace ReactiveTests.Tests
             e.WaitOne();
         }
 
-        class MyLongRunning2 : LocalScheduler, ISchedulerLongRunning
+        private class MyLongRunning2 : LocalScheduler, ISchedulerLongRunning
         {
             private ManualResetEvent _start;
             private ManualResetEvent _stop;

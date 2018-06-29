@@ -72,7 +72,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_gate)
                 {
                     if (_hasValue && _id == currentid)
+                    {
                         ForwardOnNext(_value);
+                    }
+
                     _hasValue = false;
                 }
 
@@ -91,7 +94,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _id = unchecked(_id + 1);
                 }
             }
-            
+
             public override void OnCompleted()
             {
                 Disposable.TryDispose(ref _serialCancelable);
@@ -99,7 +102,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_gate)
                 {
                     if (_hasValue)
+                    {
                         ForwardOnNext(_value);
+                    }
 
                     ForwardOnCompleted();
 
@@ -204,7 +209,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_gate)
                 {
                     if (_hasValue)
+                    {
                         ForwardOnNext(_value);
+                    }
 
                     ForwardOnCompleted();
 
@@ -231,7 +238,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_parent._gate)
                     {
                         if (_parent._hasValue && _parent._id == _currentid)
+                        {
                             _parent.ForwardOnNext(_value);
+                        }
 
                         _parent._hasValue = false;
                         Dispose();
@@ -251,7 +260,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_parent._gate)
                     {
                         if (_parent._hasValue && _parent._id == _currentid)
+                        {
                             _parent.ForwardOnNext(_value);
+                        }
 
                         _parent._hasValue = false;
                         Dispose();

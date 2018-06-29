@@ -17,9 +17,14 @@ namespace System.Reactive
         public IQbservable<TResult> CreateQuery<TResult>(Expression expression)
         {
             if (expression == null)
+            {
                 throw new ArgumentNullException(nameof(expression));
+            }
+
             if (!typeof(IObservable<TResult>).IsAssignableFrom(expression.Type))
+            {
                 throw new ArgumentException(Strings_Providers.INVALID_TREE_TYPE, nameof(expression));
+            }
 
             return new ObservableQuery<TResult>(expression);
         }
@@ -39,7 +44,9 @@ namespace System.Reactive
             //
             var call = expression as MethodCallExpression;
             if (call == null || call.Method.DeclaringType != typeof(Qbservable) || call.Method.Name != nameof(Qbservable.ToQueryable))
+            {
                 throw new ArgumentException(Strings_Providers.EXPECTED_TOQUERYABLE_METHODCALL, nameof(expression));
+            }
 
             //
             // This is the IQbservable<T> object corresponding to the lhs. Now wrap
@@ -70,7 +77,9 @@ namespace System.Reactive
             get
             {
                 if (s_AsQueryable == null)
+                {
                     s_AsQueryable = Qbservable.InfoOf<object>(() => Queryable.AsQueryable<object>(null)).GetGenericMethodDefinition();
+                }
 
                 return s_AsQueryable;
             }
@@ -146,7 +155,9 @@ namespace System.Reactive
             if (_expression is ConstantExpression c && c.Value == this)
             {
                 if (_source != null)
+                {
                     return _source.ToString();
+                }
 
                 return "null";
             }
@@ -154,7 +165,7 @@ namespace System.Reactive
             return _expression.ToString();
         }
 
-        class ObservableRewriter : ExpressionVisitor
+        private class ObservableRewriter : ExpressionVisitor
         {
             protected override Expression VisitConstant(ConstantExpression/*!*/ node)
             {
@@ -324,7 +335,7 @@ namespace System.Reactive
                 return arguments.Select(arg => Visit(arg)).ToList();
             }
 
-            class Lazy<T>
+            private class Lazy<T>
             {
                 private readonly Func<T> _factory;
                 private T _value;
@@ -395,13 +406,17 @@ namespace System.Reactive
                 var typeArgs = method.IsGenericMethod ? method.GetGenericArguments() : null;
                 var targetMethod = methods[method.Name].FirstOrDefault(candidateMethod => ArgsMatch(candidateMethod, arguments, typeArgs));
                 if (targetMethod == null)
+                {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Providers.NO_MATCHING_METHOD_FOUND, method.Name, targetType.Name));
+                }
 
                 //
                 // Restore generic arguments.
                 //
                 if (typeArgs != null)
+                {
                     targetMethod = targetMethod.MakeGenericMethod(typeArgs);
+                }
 
                 //
                 // Finally, we need to deal with mismatches on Expression<Func<...>> versus Func<...>.
@@ -435,13 +450,17 @@ namespace System.Reactive
                 //
                 var parameters = method.GetParameters();
                 if (parameters.Length != arguments.Count)
+                {
                     return false;
+                }
 
                 //
                 // Genericity should match too.
                 //
                 if (!method.IsGenericMethod && typeArgs != null && typeArgs.Length > 0)
+                {
                     return false;
+                }
 
                 //
                 // Reconstruct the generic method if needed.
@@ -449,10 +468,14 @@ namespace System.Reactive
                 if (method.IsGenericMethodDefinition)
                 {
                     if (typeArgs == null)
+                    {
                         return false;
+                    }
 
                     if (method.GetGenericArguments().Length != typeArgs.Length)
+                    {
                         return false;
+                    }
 
                     var result = method.MakeGenericMethod(typeArgs);
                     parameters = result.GetParameters();
@@ -475,7 +498,9 @@ namespace System.Reactive
                     {
                         argument = Unquote(argument);
                         if (!parameterType.IsAssignableFrom(argument.Type))
+                        {
                             return false;
+                        }
                     }
                 }
 
@@ -488,7 +513,9 @@ namespace System.Reactive
                 // Get rid of all outer quotes around an expression.
                 //
                 while (expression.NodeType == ExpressionType.Quote)
+                {
                     expression = ((UnaryExpression)expression).Operand;
+                }
 
                 return expression;
             }

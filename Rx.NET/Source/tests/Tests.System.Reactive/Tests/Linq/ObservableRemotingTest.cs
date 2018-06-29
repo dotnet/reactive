@@ -33,7 +33,7 @@ namespace ReactiveTests.Tests
             RemotingObservable.Remotable(Qbservable.Return(Qbservable.Provider, 42), null /* valid lease object */);
         }
 
-        class MyLease : ILease
+        private class MyLease : ILease
         {
             public TimeSpan CurrentLeaseTime
             {
@@ -119,7 +119,7 @@ namespace ReactiveTests.Tests
         {
             var evt = new ManualResetEvent(false);
 
-            bool next = false;
+            var next = false;
             var e = GetRemoteObservable(t => t.Return(42));
             using (e.Subscribe(value => { next = true; Assert.Equal(42, value); }, _ => { Assert.True(false); }, () => { evt.Set(); }))
             {
@@ -133,7 +133,7 @@ namespace ReactiveTests.Tests
         {
             var evt = new ManualResetEvent(false);
 
-            bool next = false;
+            var next = false;
             var e = GetRemoteObservable(t => t.ReturnLongLease(42));
             using (e.Subscribe(value => { next = true; Assert.Equal(42, value); }, _ => { Assert.True(false); }, () => { evt.Set(); }))
             {
@@ -149,7 +149,7 @@ namespace ReactiveTests.Tests
 
             var evt = new ManualResetEvent(false);
 
-            bool error = false;
+            var error = false;
             var e = GetRemoteObservable(t => t.Throw(ex));
             using (e.Subscribe(value => { Assert.True(false); }, err => { error = true; Assert.True(err is InvalidOperationException && err.Message == ex.Message); evt.Set(); }, () => { Assert.True(false); }))
             {

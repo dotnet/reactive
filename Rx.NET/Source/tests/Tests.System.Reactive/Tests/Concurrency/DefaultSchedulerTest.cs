@@ -4,14 +4,13 @@
 
 using System;
 using System.Reactive.Concurrency;
-using System.Diagnostics;
 using System.Threading;
-using Xunit;
 using Microsoft.Reactive.Testing;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class DefaultSchedulerTest
     {
         [Fact]
@@ -101,7 +100,7 @@ namespace ReactiveTests.Tests
 
             var N = Environment.ProcessorCount * 2;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var e = new ManualResetEvent(false);
                 var f = new ManualResetEvent(false);

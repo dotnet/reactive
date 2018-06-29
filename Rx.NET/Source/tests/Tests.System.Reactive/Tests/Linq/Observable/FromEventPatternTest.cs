@@ -792,36 +792,28 @@ namespace ReactiveTests.Tests
 
         public void M1(int i)
         {
-            var e = E1;
-            if (e != null)
-                e(this, new TestEventArgs { Id = i });
+            E1?.Invoke(this, new TestEventArgs { Id = i });
         }
 
         public event EventHandler<TestEventArgs> E2;
 
         public void M2(int i)
         {
-            var e = E2;
-            if (e != null)
-                e(this, new TestEventArgs { Id = i });
+            E2?.Invoke(this, new TestEventArgs { Id = i });
         }
 
         public event Action<object, TestEventArgs> E3;
 
         public void M3(int i)
         {
-            var e = E3;
-            if (e != null)
-                e(this, new TestEventArgs { Id = i });
+            E3?.Invoke(this, new TestEventArgs { Id = i });
         }
 
         public event Action<int> E4;
 
         public void M4(int i)
         {
-            var e = E4;
-            if (e != null)
-                e(i);
+            E4?.Invoke(i);
         }
 
         public event TestEventHandler AddThrows
@@ -839,18 +831,14 @@ namespace ReactiveTests.Tests
         public event EventHandler E5;
         public void M5(int i)
         {
-            var e = E5;
-            if (e != null)
-                e(this, new FromEventPattern.TestEventArgs { Id = i });
+            E5?.Invoke(this, new FromEventPattern.TestEventArgs { Id = i });
         }
 
         public static event EventHandler<TestEventArgs> E6;
 
         public static void M6(int i)
         {
-            var e = E6;
-            if (e != null)
-                e(null, new TestEventArgs { Id = i });
+            E6?.Invoke(null, new TestEventArgs { Id = i });
         }
     }
 
@@ -862,33 +850,25 @@ namespace ReactiveTests.Tests
 
         public void OnA()
         {
-            var a = A;
-            if (a != null)
-                a();
+            A?.Invoke();
         }
 
         public event Action<int> B;
 
         public void OnB(int x)
         {
-            var b = B;
-            if (b != null)
-                b(x);
+            B?.Invoke(x);
         }
 
         public event MyAction C;
 
         public void OnC(int x)
         {
-            var c = C;
-            if (c != null)
-                c(x);
+            C?.Invoke(x);
         }
     }
 
-
-
-    class FromEventPattern_ArgCheck
+    internal class FromEventPattern_ArgCheck
     {
 #pragma warning disable 67
         public event Action E1;
@@ -910,20 +890,16 @@ namespace ReactiveTests.Tests
 
         public void OnE2(CancelEventArgs args)
         {
-            var e = E2;
-            if (e != null)
-                e(this, args);
+            E2?.Invoke(this, args);
         }
 
         public void OnE3(string sender)
         {
-            var e = E3;
-            if (e != null)
-                e(sender, EventArgs.Empty);
+            E3?.Invoke(sender, EventArgs.Empty);
         }
     }
 
-    class MyEventObject
+    internal class MyEventObject
     {
         public static Action Add;
         public static Action Remove;
@@ -941,19 +917,17 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class MyEventSource
+    internal class MyEventSource
     {
         public event EventHandler<MyEventArgs> Bar;
 
         public void OnBar(int value)
         {
-            var bar = Bar;
-            if (bar != null)
-                bar(this, new MyEventArgs(value));
+            Bar?.Invoke(this, new MyEventArgs(value));
         }
     }
 
-    class MyEventArgs : EventArgs
+    internal class MyEventArgs : EventArgs
     {
         public MyEventArgs(int value)
         {
@@ -963,7 +937,7 @@ namespace ReactiveTests.Tests
         public int Value { get; private set; }
     }
 
-    class MyEventSyncCtx : SynchronizationContext
+    internal class MyEventSyncCtx : SynchronizationContext
     {
         public int PostCount { get; private set; }
 
@@ -983,9 +957,9 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class MyEventScheduler : LocalScheduler
+    internal class MyEventScheduler : LocalScheduler
     {
-        private Action _schedule;
+        private readonly Action _schedule;
 
         public MyEventScheduler(Action schedule)
         {

@@ -2,61 +2,58 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System;
 using System.Collections.Generic;
 using System.Reactive;
-using System;
 using System.Reactive.Disposables;
 
 namespace Microsoft.Reactive.Testing
 {
-    class ColdObservable<T> : ITestableObservable<T>
+    internal class ColdObservable<T> : ITestableObservable<T>
     {
-        readonly TestScheduler scheduler;
-        readonly Recorded<Notification<T>>[] messages;
-        readonly List<Subscription> subscriptions = new List<Subscription>();
+        private readonly TestScheduler _scheduler;
+        private readonly Recorded<Notification<T>>[] _messages;
+        private readonly List<Subscription> _subscriptions = new List<Subscription>();
 
         public ColdObservable(TestScheduler scheduler, params Recorded<Notification<T>>[] messages)
         {
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-            if (messages == null)
-                throw new ArgumentNullException(nameof(messages));
-
-            this.scheduler = scheduler;
-            this.messages = messages;
+            _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
+            _messages = messages ?? throw new ArgumentNullException(nameof(messages));
         }
 
         public virtual IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
-            subscriptions.Add(new Subscription(scheduler.Clock));
-            var index = subscriptions.Count - 1;
+            _subscriptions.Add(new Subscription(_scheduler.Clock));
+            var index = _subscriptions.Count - 1;
 
             var d = new CompositeDisposable();
 
-            for (var i = 0; i < messages.Length; ++i)
+            for (var i = 0; i < _messages.Length; ++i)
             {
-                var notification = messages[i].Value;
-                d.Add(scheduler.ScheduleRelative(default(object), messages[i].Time, (scheduler1, state1) => { notification.Accept(observer); return Disposable.Empty; }));
+                var notification = _messages[i].Value;
+                d.Add(_scheduler.ScheduleRelative(default(object), _messages[i].Time, (scheduler1, state1) => { notification.Accept(observer); return Disposable.Empty; }));
             }
 
             return Disposable.Create(() =>
             {
-                subscriptions[index] = new Subscription(subscriptions[index].Subscribe, scheduler.Clock);
+                _subscriptions[index] = new Subscription(_subscriptions[index].Subscribe, _scheduler.Clock);
                 d.Dispose();
             });
         }
 
         public IList<Subscription> Subscriptions
         {
-            get { return subscriptions; }
+            get { return _subscriptions; }
         }
 
         public IList<Recorded<Notification<T>>> Messages
         {
-            get { return messages; }
+            get { return _messages; }
         }
     }
 }

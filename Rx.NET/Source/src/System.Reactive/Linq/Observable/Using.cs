@@ -38,7 +38,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     var resource = parent._resourceFactory();
                     if (resource != null)
+                    {
                         Disposable.SetSingle(ref _disposable, resource);
+                    }
+
                     source = parent._observableFactory(resource);
                 }
                 catch (Exception exception)

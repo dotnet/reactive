@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class TaskPoolSchedulerTest
     {
         [Fact]
@@ -124,11 +124,15 @@ namespace ReactiveTests.Tests
             var d = TaskPoolScheduler.Default.SchedulePeriodic(TimeSpan.FromMilliseconds(25), () =>
             {
                 if (Interlocked.Increment(ref n) == 10)
+                {
                     e.Set();
+                }
             });
 
             if (!e.WaitOne(10000))
+            {
                 Assert.True(false);
+            }
 
             d.Dispose();
         }

@@ -31,7 +31,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Where<int>(DummyFunc<int, bool>.Instance).Subscribe(null));
         }
 
-        static bool IsPrime(int i)
+        private static bool IsPrime(int i)
         {
             if (i <= 1)
                 return false;

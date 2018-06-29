@@ -20,6 +20,7 @@ using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
+#pragma warning disable IDE0039 // Use local function
     public class ManySelectTest : ReactiveTest
     {
 
@@ -130,4 +131,5 @@ namespace ReactiveTests.Tests
         }
 
     }
+#pragma warning restore IDE0039 // Use local function
 }

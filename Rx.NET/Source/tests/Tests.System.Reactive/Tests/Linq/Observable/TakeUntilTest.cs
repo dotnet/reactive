@@ -352,7 +352,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            bool sourceNotDisposed = false;
+            var sourceNotDisposed = false;
 
             var l = scheduler.CreateHotObservable(
                 OnNext(150, 1),
@@ -382,7 +382,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            bool signalNotDisposed = false;
+            var signalNotDisposed = false;
 
             var l = scheduler.CreateHotObservable(
                 OnNext(150, 1),

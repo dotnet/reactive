@@ -44,7 +44,7 @@ namespace ReactiveTests.Tests
         {
             var res = Observable.Range(0, 10).ToEnumerable();
             var ieg = res.GetEnumerator();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 Assert.True(ieg.MoveNext());
                 Assert.Equal(i, ieg.Current);
@@ -57,7 +57,7 @@ namespace ReactiveTests.Tests
         {
             var res = (IEnumerable)Observable.Range(0, 10).ToEnumerable();
             var ien = res.GetEnumerator();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 Assert.True(ien.MoveNext());
                 Assert.Equal(i, ien.Current);

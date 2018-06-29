@@ -1702,7 +1702,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        static string Reverse(string s)
+        private static string Reverse(string s)
         {
             var sb = new StringBuilder();
 
@@ -3414,11 +3414,11 @@ namespace ReactiveTests.Tests
 
     }
 
-    class GroupByComparer : IEqualityComparer<string>
+    internal class GroupByComparer : IEqualityComparer<string>
     {
-        TestScheduler scheduler;
-        int equalsThrowsAfter;
-        ushort getHashCodeThrowsAfter;
+        private TestScheduler scheduler;
+        private readonly int equalsThrowsAfter;
+        private readonly ushort getHashCodeThrowsAfter;
 
         public Exception HashCodeException = new Exception();
         public Exception EqualsException = new Exception();

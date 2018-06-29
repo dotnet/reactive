@@ -316,7 +316,7 @@ namespace ReactiveTests.Tests
         {
             var N = 10;
 
-            for (int n = 0; n < N; n++)
+            for (var n = 0; n < N; n++)
             {
                 var cts = new CancellationTokenSource();
                 var done = false;
@@ -352,7 +352,7 @@ namespace ReactiveTests.Tests
                 while (!t.IsCompleted)
                     ;
 
-                for (int i = 0; i < 10; i++)
+                for (var i = 0; i < 10; i++)
                     Assert.Equal(42, lst[i]);
 
                 Assert.True(done);
@@ -365,7 +365,7 @@ namespace ReactiveTests.Tests
         {
             var N = 10;
 
-            for (int n = 0; n < N; n++)
+            for (var n = 0; n < N; n++)
             {
                 var cts = new CancellationTokenSource();
                 var done = false;
@@ -401,7 +401,7 @@ namespace ReactiveTests.Tests
                 while (!t.IsCompleted)
                     ;
 
-                for (int i = 0; i < 10; i++)
+                for (var i = 0; i < 10; i++)
                     Assert.Equal(i * 42, lst[i]);
 
                 Assert.True(done);

@@ -60,7 +60,7 @@ namespace ReactiveTests.Tests
             var tp = ThreadPoolScheduler.Instance;
             var N = 100;
             var cd = new CountdownEvent(N);
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 tp.Schedule(TimeSpan.FromMilliseconds(100 + i), () => { cd.Signal(); });
             }
@@ -302,7 +302,7 @@ namespace ReactiveTests.Tests
 
             var N = Environment.ProcessorCount * 2;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var e = new ManualResetEvent(false);
                 var f = new ManualResetEvent(false);

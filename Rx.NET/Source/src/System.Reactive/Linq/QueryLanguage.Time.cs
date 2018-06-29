@@ -4,8 +4,6 @@
 
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
 {
@@ -252,7 +250,9 @@ namespace System.Reactive.Linq
         private static IObservable<TSource> Skip_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source is Skip<TSource>.Time skip && skip._scheduler == scheduler)
+            {
                 return skip.Combine(duration);
+            }
 
             return new Skip<TSource>.Time(source, duration, scheduler);
         }
@@ -293,7 +293,9 @@ namespace System.Reactive.Linq
         private static IObservable<TSource> SkipUntil_<TSource>(IObservable<TSource> source, DateTimeOffset startTime, IScheduler scheduler)
         {
             if (source is SkipUntil<TSource> skipUntil && skipUntil._scheduler == scheduler)
+            {
                 return skipUntil.Combine(startTime);
+            }
 
             return new SkipUntil<TSource>(source, startTime, scheduler);
         }
@@ -315,7 +317,9 @@ namespace System.Reactive.Linq
         private static IObservable<TSource> Take_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source is Take<TSource>.Time take && take._scheduler == scheduler)
+            {
                 return take.Combine(duration);
+            }
 
             return new Take<TSource>.Time(source, duration, scheduler);
         }
@@ -376,7 +380,9 @@ namespace System.Reactive.Linq
         private static IObservable<TSource> TakeUntil_<TSource>(IObservable<TSource> source, DateTimeOffset endTime, IScheduler scheduler)
         {
             if (source is TakeUntil<TSource> takeUntil && takeUntil._scheduler == scheduler)
+            {
                 return takeUntil.Combine(endTime);
+            }
 
             return new TakeUntil<TSource>(source, endTime, scheduler);
         }

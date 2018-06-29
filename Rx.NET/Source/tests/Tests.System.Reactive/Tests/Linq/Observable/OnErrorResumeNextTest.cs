@@ -420,7 +420,7 @@ namespace ReactiveTests.Tests
         {
             var evt = new ManualResetEvent(false);
 
-            int sum = 0;
+            var sum = 0;
             Observable.Return(1).OnErrorResumeNext(Observable.Return(2)).Subscribe(x =>
             {
                 sum += x;
@@ -435,7 +435,7 @@ namespace ReactiveTests.Tests
         {
             var evt = new ManualResetEvent(false);
 
-            int sum = 0;
+            var sum = 0;
             Observable.OnErrorResumeNext(Observable.Return(1), Observable.Return(2), Observable.Return(3)).Subscribe(x =>
             {
                 sum += x;
@@ -452,7 +452,7 @@ namespace ReactiveTests.Tests
 
             IEnumerable<IObservable<int>> sources = new[] { Observable.Return(1), Observable.Return(2), Observable.Return(3) };
 
-            int sum = 0;
+            var sum = 0;
             Observable.OnErrorResumeNext(sources).Subscribe(x =>
             {
                 sum += x;
@@ -653,9 +653,7 @@ namespace ReactiveTests.Tests
                 OnError<int>(40, new Exception())
             );
 
-            var f = default(Func<IObservable<int>>);
-            f = () => Observable.Defer(() => o.OnErrorResumeNext(f()));
-
+            IObservable<int> f() => Observable.Defer(() => o.OnErrorResumeNext(f()));
             var res = scheduler.Start(() => f(), create, start, end);
 
             var expected = new List<Recorded<Notification<int>>>();

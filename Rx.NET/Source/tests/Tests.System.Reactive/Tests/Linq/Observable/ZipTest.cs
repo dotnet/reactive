@@ -20,6 +20,7 @@ using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
+#pragma warning disable IDE0039 // Use local function
     public class ZipTest : ReactiveTest
     {
 
@@ -2118,7 +2119,7 @@ namespace ReactiveTests.Tests
             var msgs1 = Enumerable.Range(0, 5).Select((x, i) => OnNext((ushort)(205 + i * 5), x)).ToArray();
             var msgs2 = Enumerable.Range(0, 10).Select((x, i) => OnNext((ushort)(202 + i * 8), x)).ToArray();
 
-            int len = Math.Min(msgs1.Length, msgs2.Length);
+            var len = Math.Min(msgs1.Length, msgs2.Length);
 
             var o1 = scheduler.CreateHotObservable(msgs1);
             var o2 = scheduler.CreateHotObservable(msgs2);
@@ -2128,7 +2129,7 @@ namespace ReactiveTests.Tests
             );
 
             Assert.True(len == res.Messages.Count, "length");
-            for (int i = 0; i < len; i++)
+            for (var i = 0; i < len; i++)
             {
                 var sum = msgs1[i].Value.Value + msgs2[i].Value.Value;
                 var time = Math.Max(msgs1[i].Time, msgs2[i].Time);
@@ -2147,7 +2148,7 @@ namespace ReactiveTests.Tests
             var msgs1 = Enumerable.Range(0, 10).Select((x, i) => OnNext((ushort)(205 + i * 5), x)).ToArray();
             var msgs2 = Enumerable.Range(0, 5).Select((x, i) => OnNext((ushort)(202 + i * 8), x)).ToArray();
 
-            int len = Math.Min(msgs1.Length, msgs2.Length);
+            var len = Math.Min(msgs1.Length, msgs2.Length);
 
             var o1 = scheduler.CreateHotObservable(msgs1);
             var o2 = scheduler.CreateHotObservable(msgs2);
@@ -2157,7 +2158,7 @@ namespace ReactiveTests.Tests
             );
 
             Assert.True(len == res.Messages.Count, "length");
-            for (int i = 0; i < len; i++)
+            for (var i = 0; i < len; i++)
             {
                 var sum = msgs1[i].Value.Value + msgs2[i].Value.Value;
                 var time = Math.Max(msgs1[i].Time, msgs2[i].Time);
@@ -2176,7 +2177,7 @@ namespace ReactiveTests.Tests
             var msgs1 = Enumerable.Range(0, 10).Select((x, i) => OnNext((ushort)(205 + i * 5), x)).ToArray();
             var msgs2 = Enumerable.Range(0, 10).Select((x, i) => OnNext((ushort)(202 + i * 8), x)).ToArray();
 
-            int len = Math.Min(msgs1.Length, msgs2.Length);
+            var len = Math.Min(msgs1.Length, msgs2.Length);
 
             var o1 = scheduler.CreateHotObservable(msgs1);
             var o2 = scheduler.CreateHotObservable(msgs2);
@@ -2186,7 +2187,7 @@ namespace ReactiveTests.Tests
             );
 
             Assert.True(len == res.Messages.Count, "length");
-            for (int i = 0; i < len; i++)
+            for (var i = 0; i < len; i++)
             {
                 var sum = msgs1[i].Value.Value + msgs2[i].Value.Value;
                 var time = Math.Max(msgs1[i].Time, msgs2[i].Time);
@@ -3916,10 +3917,10 @@ namespace ReactiveTests.Tests
             yield break;
         }
 
-        class MyEnumerable : IEnumerable<int>
+        private class MyEnumerable : IEnumerable<int>
         {
-            private bool _throwInCurrent;
-            private Exception _ex;
+            private readonly bool _throwInCurrent;
+            private readonly Exception _ex;
 
             public MyEnumerable(bool throwInCurrent, Exception ex)
             {
@@ -3937,10 +3938,10 @@ namespace ReactiveTests.Tests
                 return GetEnumerator();
             }
 
-            class MyEnumerator : IEnumerator<int>
+            private class MyEnumerator : IEnumerator<int>
             {
-                private bool _throwInCurrent;
-                private Exception _ex;
+                private readonly bool _throwInCurrent;
+                private readonly Exception _ex;
 
                 public MyEnumerator(bool throwInCurrent, Exception ex)
                 {
@@ -4284,4 +4285,5 @@ namespace ReactiveTests.Tests
         #endregion
 
     }
+#pragma warning restore IDE0039 // Use local function
 }

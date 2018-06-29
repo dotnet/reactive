@@ -98,7 +98,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     hasNext = state.enumerator.MoveNext();
                     if (hasNext)
+                    {
                         current = state.enumerator.Current;
+                    }
                 }
                 catch (Exception exception)
                 {
@@ -137,7 +139,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         hasNext = enumerator.MoveNext();
                         if (hasNext)
+                        {
                             current = enumerator.Current;
+                        }
                     }
                     catch (Exception exception)
                     {

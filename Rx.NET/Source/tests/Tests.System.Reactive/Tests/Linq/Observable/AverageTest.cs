@@ -3,17 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
 
 namespace ReactiveTests.Tests
 {
@@ -1394,7 +1388,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 #if !CRIPPLED_REFLECTION || NETCOREAPP1_1 || NETCOREAPP1_0
-        class OverflowInjection<T> : IObservable<T>
+        private class OverflowInjection<T> : IObservable<T>
         {
             private readonly IObservable<T> _source;
             private readonly object _initialCount;
@@ -1428,7 +1422,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
-            var res = scheduler.Start(() => xs.Average(x => (int)x.Length));
+            var res = scheduler.Start(() => xs.Average(x => x.Length));
 
             res.Messages.AssertEqual(
                 OnNext(240, 2.0),

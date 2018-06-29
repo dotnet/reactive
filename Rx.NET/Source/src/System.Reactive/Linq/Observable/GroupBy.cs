@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource, IGroupedObservable<TKey, TElement>> 
+        internal sealed class _ : Sink<TSource, IGroupedObservable<TKey, TElement>>
         {
             private readonly Func<TSource, TKey> _keySelector;
             private readonly Func<TSource, TElement> _elementSelector;
@@ -154,7 +154,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _null?.OnCompleted();
 
                 foreach (var w in _map.Values)
+                {
                     w.OnCompleted();
+                }
 
                 ForwardOnCompleted();
             }
@@ -164,7 +166,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _null?.OnError(exception);
 
                 foreach (var w in _map.Values)
+                {
                     w.OnError(exception);
+                }
 
                 ForwardOnError(exception);
             }

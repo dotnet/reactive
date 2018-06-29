@@ -149,7 +149,7 @@ namespace ReactiveTests.Tests
                 {
                     int[] count = { 0 };
                     return v.SelectMany(w => {
-                        int c = ++count[0];
+                        var c = ++count[0];
                         if (c == 3)
                         {
                             return Observable.Throw<int>(w);
@@ -198,7 +198,7 @@ namespace ReactiveTests.Tests
                 {
                     int[] count = { 0 };
                     return v.SelectMany(w => {
-                        int c = ++count[0];
+                        var c = ++count[0];
                         if (c == 3)
                         {
                             return Observable.Throw<int>(w);

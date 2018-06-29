@@ -125,7 +125,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SubscribeToEnumerable_DefaultScheduler()
         {
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 var scheduler = new TestScheduler();
 
@@ -148,7 +148,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        IEnumerable<int> Enumerable_Finite()
+        private IEnumerable<int> Enumerable_Finite()
         {
             yield return 1;
             yield return 2;
@@ -158,13 +158,13 @@ namespace ReactiveTests.Tests
             yield break;
         }
 
-        IEnumerable<int> Enumerable_Infinite()
+        private IEnumerable<int> Enumerable_Infinite()
         {
             while (true)
                 yield return 1;
         }
 
-        IEnumerable<int> Enumerable_Error(Exception exception)
+        private IEnumerable<int> Enumerable_Error(Exception exception)
         {
             yield return 1;
             yield return 2;
@@ -223,7 +223,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Subscribe_OnNext_Return()
         {
-            int _x = -1;
+            var _x = -1;
             Observable.Return(42, Scheduler.Immediate).Subscribe((int x) => { _x = x; });
             Assert.Equal(42, _x);
         }
@@ -247,8 +247,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Subscribe_OnNextOnCompleted_Return()
         {
-            bool finished = false;
-            int _x = -1;
+            var finished = false;
+            var _x = -1;
             Observable.Return(42, Scheduler.Immediate).Subscribe((int x) => { _x = x; }, () => { finished = true; });
             Assert.Equal(42, _x);
             Assert.True(finished);
@@ -267,7 +267,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Subscribe_OnNextOnCompleted_Empty()
         {
-            bool finished = false;
+            var finished = false;
             Observable.Empty<int>(Scheduler.Immediate).Subscribe((int _) => { Assert.True(false); }, () => { finished = true; });
             Assert.True(finished);
         }

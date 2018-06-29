@@ -122,7 +122,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Range_Default()
         {
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
                 Observable.Range(100, 100).AssertEqual(Observable.Range(100, 100, DefaultScheduler.Instance));
         }
 

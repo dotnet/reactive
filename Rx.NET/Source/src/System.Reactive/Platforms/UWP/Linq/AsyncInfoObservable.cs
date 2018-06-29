@@ -4,8 +4,6 @@
 
 #if HAS_WINRT
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -32,7 +30,9 @@ namespace System.Reactive.Linq
         public static IAsyncAction ToAsyncAction<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return AsyncInfo.Run(ct => (Task)source.DefaultIfEmpty().ToTask(ct));
         }
@@ -50,12 +50,14 @@ namespace System.Reactive.Linq
         public static IAsyncActionWithProgress<int> ToAsyncActionWithProgress<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return AsyncInfo.Run<int>((ct, progress) =>
             {
                 var i = 0;
-                return (Task)source.Do(_ => progress.Report(i++)).DefaultIfEmpty().ToTask(ct);
+                return source.Do(_ => progress.Report(i++)).DefaultIfEmpty().ToTask(ct);
             });
         }
 
@@ -72,13 +74,18 @@ namespace System.Reactive.Linq
         public static IAsyncActionWithProgress<TProgress> ToAsyncActionWithProgress<TSource, TProgress>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TProgress>> progressSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (progressSelector == null)
+            {
                 throw new ArgumentNullException(nameof(progressSelector));
+            }
 
             return AsyncInfo.Run<TProgress>((ct, progress) =>
             {
-                return (Task)Observable.Create<TSource>(observer =>
+                return Observable.Create<TSource>(observer =>
                 {
                     var obs = Observer.Synchronize(observer);
 
@@ -110,7 +117,9 @@ namespace System.Reactive.Linq
         public static IAsyncOperation<TSource> ToAsyncOperation<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return AsyncInfo.Run(ct => source.ToTask(ct));
         }
@@ -126,7 +135,9 @@ namespace System.Reactive.Linq
         public static IAsyncOperationWithProgress<TSource, int> ToAsyncOperationWithProgress<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return AsyncInfo.Run<TSource, int>((ct, progress) =>
             {
@@ -150,9 +161,14 @@ namespace System.Reactive.Linq
         public static IAsyncOperationWithProgress<TResult, int> ToAsyncOperationWithProgress<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> resultSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return AsyncInfo.Run<TResult, int>((ct, progress) =>
             {
@@ -176,11 +192,19 @@ namespace System.Reactive.Linq
         public static IAsyncOperationWithProgress<TResult, TProgress> ToAsyncOperationWithProgress<TSource, TResult, TProgress>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> resultSelector, Func<IObservable<TSource>, IObservable<TProgress>> progressSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
+
             if (progressSelector == null)
+            {
                 throw new ArgumentNullException(nameof(progressSelector));
+            }
 
             return AsyncInfo.Run<TResult, TProgress>((ct, progress) =>
             {

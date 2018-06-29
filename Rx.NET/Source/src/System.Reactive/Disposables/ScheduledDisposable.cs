@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
-using System.Threading;
 
 namespace System.Reactive.Disposables
 {
@@ -22,12 +21,12 @@ namespace System.Reactive.Disposables
         /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="disposable"/> is null.</exception>
         public ScheduledDisposable(IScheduler scheduler, IDisposable disposable)
         {
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
             if (disposable == null)
+            {
                 throw new ArgumentNullException(nameof(disposable));
+            }
 
-            Scheduler = scheduler;
+            Scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             Disposables.Disposable.SetSingle(ref _disposable, disposable);
         }
 

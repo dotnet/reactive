@@ -280,9 +280,9 @@ namespace ReactiveTests.Tests
 
                 var s = new Thread(() =>
                 {
-                    beforeSubscribeNull = object.ReferenceEquals(SynchronizationContext.Current, null);
+                    beforeSubscribeNull = SynchronizationContext.Current is null;
                     d = xs.Subscribe(e => res.Add(e.EventArgs.Value));
-                    afterSubscribeNull = object.ReferenceEquals(SynchronizationContext.Current, null);
+                    afterSubscribeNull = SynchronizationContext.Current is null;
                 });
 
                 s.Start();
@@ -300,9 +300,9 @@ namespace ReactiveTests.Tests
 
                 var u = new Thread(() =>
                 {
-                    beforeDisposeNull = object.ReferenceEquals(SynchronizationContext.Current, null);
+                    beforeDisposeNull = SynchronizationContext.Current is null;
                     d.Dispose();
-                    afterDisposeNull = object.ReferenceEquals(SynchronizationContext.Current, null);
+                    afterDisposeNull = SynchronizationContext.Current is null;
                 });
 
                 u.Start();

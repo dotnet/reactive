@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive;
@@ -15,16 +16,15 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using Xunit;
 using Microsoft.Reactive.Testing;
-using System.Diagnostics;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class QbservableTest
     {
-        private IQbservable<int> _qbNull = null;
+        private readonly IQbservable<int> _qbNull = null;
         private IQbservable<int> _qbMy = new MyQbservable<int>();
         private IQbservableProvider _qbp = new MyQbservableProvider();
 
@@ -599,9 +599,9 @@ namespace ReactiveTests.Tests
         public void GroupBy()
         {
             _qbMy.GroupBy(x => (double)x);
-            _qbMy.GroupBy(x => (double)x, EqualityComparer<double>.Default);
+            _qbMy.GroupBy(x => x, EqualityComparer<double>.Default);
             _qbMy.GroupBy(x => (double)x, x => x.ToString());
-            _qbMy.GroupBy(x => (double)x, x => x.ToString(), EqualityComparer<double>.Default);
+            _qbMy.GroupBy(x => x, x => x.ToString(), EqualityComparer<double>.Default);
         }
 
         [Fact]
@@ -1467,7 +1467,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Using(_qbp, () => new MyDisposable(), default(Expression<Func<MyDisposable, IObservable<int>>>)));
         }
 
-        class MyDisposable : IDisposable
+        private class MyDisposable : IDisposable
         {
             public void Dispose()
             {
@@ -1683,7 +1683,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<MyException>(() => Qbservable.Provider.Throw<int>(new MyException()).ForEach(_ => { }));
         }
 
-        class MyException : Exception
+        private class MyException : Exception
         {
         }
 
@@ -1771,7 +1771,7 @@ namespace ReactiveTests.Tests
                         select new { Name = o.Key, Observable = o.ToList(), Qbservable = q.ToList() })
                        .ToList();
 
-            Func<Type, bool> filterReturn = t =>
+            bool filterReturn(Type t)
             {
                 if (t.GetTypeInfo().IsGenericType)
                 {
@@ -1779,10 +1779,12 @@ namespace ReactiveTests.Tests
                     if (
                         gd == typeof(ListObservable<>) ||
                         gd == typeof(IConnectableObservable<>))
+                    {
                         return false;
+                    }
                 }
                 return true;
-            };
+            }
 
             foreach (var group in mtch)
             {
@@ -1794,7 +1796,7 @@ namespace ReactiveTests.Tests
 
                 var oss = group.Observable.Where(m => filterReturn(m.ReturnType)).Select(m => GetSignature(m, false)).OrderBy(x => x).ToList();
                 var qss = group.Qbservable.Select(m => GetSignature(m, true)).OrderBy(x => x).ToList();
-                
+
                 Assert.True(oss.SequenceEqual(qss), "Mismatch between Qbservable and Observable for " + group.Name);
             }
         }
@@ -1804,16 +1806,20 @@ namespace ReactiveTests.Tests
             var ps = m.GetParameters();
             var pss = ps.AsEnumerable();
             if (correct && ps.Length > 0 && ps[0].ParameterType == typeof(IQbservableProvider))
+            {
                 pss = pss.Skip(1);
+            }
 
             var gens = m.IsGenericMethod ? string.Format("<{0}>", string.Join(", ", m.GetGenericArguments().Select(a => GetTypeName(a, correct)).ToArray())) : "";
 
             var pars = string.Join(", ", pss.Select(p => (p.IsDefined(typeof(ParamArrayAttribute)) ? "params " : "") + GetTypeName(p.ParameterType, correct) + " " + p.Name).ToArray());
-            
-            if(m.IsDefined(typeof(ExtensionAttribute)))
+
+            if (m.IsDefined(typeof(ExtensionAttribute)))
             {
                 if (pars.StartsWith("IQbservable") || pars.StartsWith("IQueryable"))
+                {
                     pars = "this " + pars;
+                }
             }
 
             return string.Format("{0} {1}{2}({3})", GetTypeName(m.ReturnType, correct), m.Name, gens, pars);
@@ -1825,16 +1831,23 @@ namespace ReactiveTests.Tests
             {
                 var gtd = t.GetGenericTypeDefinition();
                 if (gtd == typeof(Expression<>))
+                {
                     return GetTypeName(t.GetGenericArguments()[0], false);
+                }
 
                 var args = string.Join(", ", t.GetGenericArguments().Select(a => GetTypeName(a, false)).ToArray());
-                
+
                 var len = t.Name.IndexOf('`');
                 var name = len >= 0 ? t.Name.Substring(0, len) : t.Name;
                 if (correct && name == "IQbservable")
+                {
                     name = "IObservable";
+                }
+
                 if (correct && name == "IQueryable")
+                {
                     name = "IEnumerable";
+                }
 
                 return string.Format("{0}<{1}>", name, args);
             }
@@ -1864,7 +1877,7 @@ namespace ReactiveTests.Tests
             var res1 = Qbservable.Provider.Qux(42).AsObservable().Single();
             Assert.Equal(42, res1);
         }
-        
+
         [Fact]
         public void Qbservable_Extensibility_Missing()
         {
@@ -1957,7 +1970,7 @@ namespace ReactiveTests.Tests
 #endif
     }
 
-    class MyQbservable<T> : IQbservable<T>
+    internal class MyQbservable<T> : IQbservable<T>
     {
         public MyQbservable()
         {
@@ -1991,7 +2004,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class MyQbservableProvider : IQbservableProvider
+    internal class MyQbservableProvider : IQbservableProvider
     {
         public IQbservable<TResult> CreateQuery<TResult>(Expression expression)
         {
@@ -1999,7 +2012,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class MyQbservableQueryable<T> : IQbservable<T>
+    internal class MyQbservableQueryable<T> : IQbservable<T>
     {
         public MyQbservableQueryable()
         {
@@ -2033,7 +2046,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class MyQueryable<T> : IQueryable<T>
+    internal class MyQueryable<T> : IQueryable<T>
     {
         public MyQueryable()
         {
@@ -2072,7 +2085,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class MyQbservableQueryableProvider : IQbservableProvider, IQueryProvider
+    internal class MyQbservableQueryableProvider : IQbservableProvider, IQueryProvider
     {
         public IQbservable<TResult> CreateQuery<TResult>(Expression expression)
         {
@@ -2100,9 +2113,9 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class EmptyQbservable<T> : IQbservable<T>, IQbservableProvider
+    internal class EmptyQbservable<T> : IQbservable<T>, IQbservableProvider
     {
-        private Expression _expression;
+        private readonly Expression _expression;
 
         public EmptyQbservable()
         {
@@ -2135,7 +2148,7 @@ namespace ReactiveTests.Tests
             return new MyD();
         }
 
-        class MyD : IDisposable
+        private class MyD : IDisposable
         {
             public void Dispose()
             {

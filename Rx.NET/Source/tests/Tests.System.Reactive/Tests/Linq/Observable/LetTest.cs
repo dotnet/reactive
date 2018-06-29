@@ -36,7 +36,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Let_CallsFunctionImmediately()
         {
-            bool called = false;
+            var called = false;
             Observable.Empty<int>().Let(x => { called = true; return x; });
             Assert.True(called);
         }

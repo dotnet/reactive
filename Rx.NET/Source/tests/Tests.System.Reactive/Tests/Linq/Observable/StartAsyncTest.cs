@@ -21,7 +21,7 @@ namespace ReactiveTests.Tests
     public class StartAsyncTest : ReactiveTest
     {
 
-        private Task<int> doneTask;
+        private readonly Task<int> doneTask;
 
         public StartAsyncTest()
         {
@@ -144,7 +144,7 @@ namespace ReactiveTests.Tests
         {
             var N = 10;
 
-            for (int n = 0; n < N; n++)
+            for (var n = 0; n < N; n++)
             {
                 var e = new ManualResetEvent(false);
                 var f = new ManualResetEvent(false);
@@ -338,7 +338,7 @@ namespace ReactiveTests.Tests
         {
             var N = 10;
 
-            for (int n = 0; n < N; n++)
+            for (var n = 0; n < N; n++)
             {
                 var e = new ManualResetEvent(false);
                 var f = new ManualResetEvent(false);

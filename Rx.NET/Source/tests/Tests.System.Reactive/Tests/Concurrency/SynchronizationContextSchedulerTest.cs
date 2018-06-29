@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class SynchronizationContextSchedulerTest
     {
         [Fact]
@@ -112,7 +112,7 @@ namespace ReactiveTests.Tests
             Assert.True(ms.Count == 1);
         }
 
-        class MySync : SynchronizationContext
+        private class MySync : SynchronizationContext
         {
             public int Count { get; private set; }
 

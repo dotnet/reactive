@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 #if WINDOWS
-using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Runtime.ExceptionServices;
 using System.Threading;
@@ -28,10 +27,7 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> is <c>null</c>.</exception>
         public CoreDispatcherScheduler(CoreDispatcher dispatcher)
         {
-            if (dispatcher == null)
-                throw new ArgumentNullException(nameof(dispatcher));
-
-            Dispatcher = dispatcher;
+            Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
             Priority = CoreDispatcherPriority.Normal;
         }
 
@@ -43,10 +39,7 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> is <c>null</c>.</exception>
         public CoreDispatcherScheduler(CoreDispatcher dispatcher, CoreDispatcherPriority priority)
         {
-            if (dispatcher == null)
-                throw new ArgumentNullException(nameof(dispatcher));
-
-            Dispatcher = dispatcher;
+            Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
             Priority = priority;
         }
 
@@ -59,7 +52,9 @@ namespace System.Reactive.Concurrency
             {
                 var window = Window.Current;
                 if (window == null)
+                {
                     throw new InvalidOperationException(Strings_WindowsThreading.NO_WINDOW_CURRENT);
+                }
 
                 return new CoreDispatcherScheduler(window.Dispatcher);
             }
@@ -86,7 +81,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var d = new SingleAssignmentDisposable();
 
@@ -111,8 +108,10 @@ namespace System.Reactive.Concurrency
                         // For scheduler implementation guidance rules, see TaskPoolScheduler.cs
                         // in System.Reactive.PlatformServices\Reactive\Concurrency.
                         //
-                        var timer = new DispatcherTimer();
-                        timer.Interval = TimeSpan.Zero;
+                        var timer = new DispatcherTimer
+                        {
+                            Interval = TimeSpan.Zero
+                        };
                         timer.Tick += (o, e) =>
                         {
                             timer.Stop();
@@ -142,7 +141,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
@@ -209,9 +210,14 @@ namespace System.Reactive.Concurrency
             // Empirical observation - negative values seem to be normalized to TimeSpan.Zero, but let's not go there.
             //
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var timer = new DispatcherTimer();
 

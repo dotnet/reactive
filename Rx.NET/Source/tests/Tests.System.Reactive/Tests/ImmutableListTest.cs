@@ -2,14 +2,14 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information.
 
-using Xunit;
 using System.Linq;
 using System.Reactive;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
 #if SIGNED
-    
+
     public class ImmutableListTest
     {
         [Fact]
@@ -65,6 +65,6 @@ namespace ReactiveTests.Tests
 
             Assert.True(list.Data.SequenceEqual(new string[] { }));
         }
-        }
+    }
 #endif
 }

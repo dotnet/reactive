@@ -3,20 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -152,20 +143,23 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class A : IEquatable<A>
+    internal class A : IEquatable<A>
     {
-        int id;
+        private int _id;
 
         public A(int id)
         {
-            this.id = id;
+            this._id = id;
         }
 
         public bool Equals(A other)
         {
             if (other == null)
+            {
                 return false;
-            return id == other.id && GetType().Equals(other.GetType());
+            }
+
+            return _id == other._id && GetType().Equals(other.GetType());
         }
 
         public override bool Equals(object obj)
@@ -175,11 +169,11 @@ namespace ReactiveTests.Tests
 
         public override int GetHashCode()
         {
-            return id;
+            return _id;
         }
     }
 
-    class B : A
+    internal class B : A
     {
         public B(int id)
             : base(id)
@@ -187,7 +181,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class C : A
+    internal class C : A
     {
         public C(int id)
             : base(id)
@@ -195,7 +189,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class D : B
+    internal class D : B
     {
         public D(int id)
             : base(id)
@@ -203,20 +197,23 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class E : IEquatable<E>
+    internal class E : IEquatable<E>
     {
-        int id;
+        private int _id;
 
         public E(int id)
         {
-            this.id = id;
+            this._id = id;
         }
 
         public bool Equals(E other)
         {
             if (other == null)
+            {
                 return false;
-            return id == other.id && GetType().Equals(other.GetType());
+            }
+
+            return _id == other._id && GetType().Equals(other.GetType());
         }
 
         public override bool Equals(object obj)
@@ -226,7 +223,7 @@ namespace ReactiveTests.Tests
 
         public override int GetHashCode()
         {
-            return id;
+            return _id;
         }
     }
 }

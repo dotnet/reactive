@@ -32,9 +32,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class _ : IdentitySink<TResult>
             {
-                readonly Func<TState, bool> _condition;
-                readonly Func<TState, TState> _iterate;
-                readonly Func<TState, TResult> _resultSelector;
+                private readonly Func<TState, bool> _condition;
+                private readonly Func<TState, TState> _iterate;
+                private readonly Func<TState, TResult> _resultSelector;
 
                 public _(NoTime parent, IObserver<TResult> observer)
                     : base(observer)
@@ -175,10 +175,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class _ : IdentitySink<TResult>
             {
-                readonly Func<TState, bool> _condition;
-                readonly Func<TState, TState> _iterate;
-                readonly Func<TState, TResult> _resultSelector;
-                readonly Func<TState, DateTimeOffset> _timeSelector;
+                private readonly Func<TState, bool> _condition;
+                private readonly Func<TState, TState> _iterate;
+                private readonly Func<TState, TResult> _resultSelector;
+                private readonly Func<TState, DateTimeOffset> _timeSelector;
 
                 public _(Absolute parent, IObserver<TResult> observer)
                     : base(observer)
@@ -193,7 +193,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private bool _first;
                 private bool _hasResult;
-
                 private TResult _result;
 
                 public void Run(IScheduler outerScheduler, TState initialState)

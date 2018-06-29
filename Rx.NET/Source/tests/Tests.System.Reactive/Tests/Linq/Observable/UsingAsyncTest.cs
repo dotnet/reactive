@@ -50,7 +50,7 @@ namespace ReactiveTests.Tests
         public void UsingAsync_CancelResource()
         {
             var N = 10;// 0000;
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var called = false;
 
@@ -93,7 +93,7 @@ namespace ReactiveTests.Tests
         public void UsingAsync_CancelFactory()
         {
             var N = 10;// 0000;
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var gate = new object();
                 var disposed = false;

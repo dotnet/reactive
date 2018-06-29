@@ -69,7 +69,7 @@ namespace System.Reactive
         }
 
         private IDisposable _disposable;
-        
+
         public abstract void OnNext(TSource value);
 
         public abstract void OnError(Exception error);
@@ -89,7 +89,9 @@ namespace System.Reactive
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
+            {
                 Disposable.TryDispose(ref _disposable);
+            }
         }
     }
 }

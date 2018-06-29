@@ -55,7 +55,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        IEnumerable<int> For_Error_Core(Exception ex)
+        private IEnumerable<int> For_Error_Core(Exception ex)
         {
             yield return 1;
             yield return 2;
@@ -118,7 +118,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        static T Throw<T>(Exception ex)
+        private static T Throw<T>(Exception ex)
         {
             throw ex;
         }

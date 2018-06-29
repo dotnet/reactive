@@ -17,15 +17,16 @@ using System.Reflection;
 
 namespace ReactiveTests.Tests
 {
+#pragma warning disable IDE0039 // Use local function
     public class FromAsyncPatternTest : ReactiveTest
     {
-        private Task<int> doneTask;
+        private readonly Task<int> _doneTask;
 
         public FromAsyncPatternTest()
         {
             var tcs = new TaskCompletionSource<int>();
             tcs.SetResult(42);
-            doneTask = tcs.Task;
+            _doneTask = tcs.Task;
         }
 
         [Fact]
@@ -1165,7 +1166,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        class Result : IAsyncResult
+        private class Result : IAsyncResult
         {
             public object AsyncState
             {
@@ -1189,4 +1190,5 @@ namespace ReactiveTests.Tests
         }
 
     }
+#pragma warning restore IDE0039 // Use local function
 }
