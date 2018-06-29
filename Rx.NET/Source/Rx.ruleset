@@ -218,12 +218,5 @@
     <Rule Id="CA2241" Action="Warning" />
     <Rule Id="CA2242" Action="Warning" />
     <Rule Id="CA2243" Action="Warning" />
-    <!--
-    <Rule Id="IDE0001" Action="Warning" />
-    <Rule Id="IDE0003" Action="Warning" />
-    <Rule Id="IDE0004" Action="Warning" />
-    <Rule Id="IDE0005" Action="Warning" />
-    <Rule Id="IDE0034" Action="Warning" />
-    -->
   </Rules>
 </RuleSet>
