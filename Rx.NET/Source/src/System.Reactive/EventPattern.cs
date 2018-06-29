@@ -58,10 +58,15 @@ namespace System.Reactive
         /// <returns><c>true</c> if both <see cref="EventPattern{TSender, TEventArgs}"/> objects represent the same event; otherwise, <c>false</c>.</returns>
         public bool Equals(EventPattern<TSender, TEventArgs> other)
         {
-            if (ReferenceEquals(null, other))
+            if (other is null)
+            {
                 return false;
+            }
+
             if (ReferenceEquals(this, other))
+            {
                 return true;
+            }
 
             return EqualityComparer<TSender>.Default.Equals(Sender, other.Sender) && EqualityComparer<TEventArgs>.Default.Equals(EventArgs, other.EventArgs);
         }

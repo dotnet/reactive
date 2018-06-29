@@ -5,15 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
 
 namespace ReactiveTests.Tests
 {
@@ -27,12 +22,12 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(default(IObservable<int>), () => 0, (x, y) => x));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, default(Func<int>), (x, y) => x));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, () => 0, default(Func<int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, () => 0, default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(default(IObservable<int>), () => 0, (x, y) => x, x => x));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, default(Func<int>), (x, y) => x, x => x));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, () => 0, default(Func<int, int, int>), x => x));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, () => 0, (x, y) => x, default(Func<int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, () => 0, default, x => x));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Collect(someObservable, () => 0, (x, y) => x, default));
         }
 
         [Fact]
@@ -186,7 +181,17 @@ namespace ReactiveTests.Tests
 
             var ex = new Exception();
             var n = 0;
-            var ys = xs.Collect<int, int>(() => { if (n++ == 0) return 0; else throw ex; }, (x, y) => x + y);
+            var ys = xs.Collect<int, int>(() =>
+            {
+                if (n++ == 0)
+                {
+                    return 0;
+                }
+                else
+                {
+                    throw ex;
+                }
+            }, (x, y) => x + y);
             var e = default(IEnumerator<int>);
 
             var ex_ = default(Exception);

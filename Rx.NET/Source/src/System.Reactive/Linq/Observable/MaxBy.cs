@@ -23,9 +23,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource, IList<TSource>> 
+        internal sealed class _ : Sink<TSource, IList<TSource>>
         {
-            private readonly MaxBy<TSource, TKey> _parent;
+            private readonly Func<TSource, TKey> _keySelector;
+            private readonly IComparer<TKey> _comparer;
             private bool _hasValue;
             private TKey _lastKey;
             private List<TSource> _list;
@@ -33,10 +34,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(MaxBy<TSource, TKey> parent, IObserver<IList<TSource>> observer)
                 : base(observer)
             {
-                _parent = parent;
+                _keySelector = parent._keySelector;
+                _comparer = parent._comparer;
 
-                _hasValue = false;
-                _lastKey = default(TKey);
                 _list = new List<TSource>();
             }
 
@@ -45,10 +45,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 var key = default(TKey);
                 try
                 {
-                    key = _parent._keySelector(value);
+                    key = _keySelector(value);
                 }
                 catch (Exception ex)
                 {
+                    _list = null;
+                    _lastKey = default;
                     ForwardOnError(ex);
                     return;
                 }
@@ -64,10 +66,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     try
                     {
-                        comparison = _parent._comparer.Compare(key, _lastKey);
+                        comparison = _comparer.Compare(key, _lastKey);
                     }
                     catch (Exception ex)
                     {
+                        _list = null;
+                        _lastKey = default;
                         ForwardOnError(ex);
                         return;
                     }
@@ -85,9 +89,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
+            public override void OnError(Exception error)
+            {
+                _lastKey = default;
+                _list = null;
+                base.OnError(error);
+            }
+
             public override void OnCompleted()
             {
-                ForwardOnNext(_list);
+                var list = _list;
+                _list = null;
+                _lastKey = default;
+                ForwardOnNext(list);
                 ForwardOnCompleted();
             }
         }

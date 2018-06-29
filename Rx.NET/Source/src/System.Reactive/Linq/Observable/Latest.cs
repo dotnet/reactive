@@ -13,9 +13,9 @@ namespace System.Reactive.Linq.ObservableImpl
         {
         }
 
-        protected override PushToPullSink<TSource, TSource> Run(IDisposable subscription)
+        protected override PushToPullSink<TSource, TSource> Run()
         {
-            return new _(subscription);
+            return new _();
         }
 
         private sealed class _ : PushToPullSink<TSource, TSource>
@@ -23,8 +23,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly object _gate;
             private readonly SemaphoreSlim _semaphore;
 
-            public _(IDisposable subscription)
-                : base(subscription)
+            public _()
             {
                 _gate = new object();
                 _semaphore = new SemaphoreSlim(0, 1);
@@ -47,7 +46,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 if (lackedValue)
+                {
                     _semaphore.Release();
+                }
             }
 
             public override void OnError(Exception error)
@@ -64,7 +65,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 if (lackedValue)
+                {
                     _semaphore.Release();
+                }
             }
 
             public override void OnCompleted()
@@ -80,7 +83,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 if (lackedValue)
+                {
                     _semaphore.Release();
+                }
             }
 
             public override bool TryMoveNext(out TSource current)
@@ -120,7 +125,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         break;
                 }
 
-                current = default(TSource);
+                current = default;
                 return false;
             }
         }

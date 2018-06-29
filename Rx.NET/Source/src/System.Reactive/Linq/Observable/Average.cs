@@ -185,7 +185,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<int, double> 
+        internal sealed class _ : Sink<int, double>
         {
             private long _sum;
             private long _count;
@@ -241,7 +241,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<long, double> 
+        internal sealed class _ : Sink<long, double>
         {
             private long _sum;
             private long _count;
@@ -477,7 +477,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<int?, double?> 
+        internal sealed class _ : Sink<int?, double?>
         {
             private long _sum;
             private long _count;
@@ -537,7 +537,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<long?, double?> 
+        internal sealed class _ : Sink<long?, double?>
         {
             private long _sum;
             private long _count;

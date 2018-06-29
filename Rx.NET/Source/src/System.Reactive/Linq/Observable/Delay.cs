@@ -25,12 +25,25 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal abstract class _ : IdentitySink<TSource>
             {
-                public _(IObserver<TSource> observer)
+                protected IStopwatch _watch;
+                protected IScheduler _scheduler;
+
+                public _(TParent parent, IObserver<TSource> observer)
                     : base(observer)
                 {
+                    _scheduler = parent._scheduler;
                 }
 
-                public abstract void Run(TParent parent);
+                public void Run(TParent parent)
+                {
+                    _watch = _scheduler.StartStopwatch();
+
+                    RunCore(parent);
+
+                    base.Run(parent._source);
+                }
+
+                protected abstract void RunCore(TParent parent);
             }
 
             internal abstract class S : _
@@ -38,15 +51,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected readonly object _gate = new object();
                 protected IDisposable _cancelable;
 
-                protected readonly IScheduler _scheduler;
-
                 public S(TParent parent, IObserver<TSource> observer)
-                    : base(observer)
+                    : base(parent, observer)
                 {
-                    _scheduler = parent._scheduler;
                 }
 
-                protected IStopwatch _watch;
                 protected TimeSpan _delay;
                 protected bool _ready;
                 protected bool _active;
@@ -58,15 +67,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 private bool _hasFailed;
                 private Exception _exception;
 
-                public override void Run(TParent parent)
-                {
-                    _watch = _scheduler.StartStopwatch();
-
-                    RunCore(parent);
-
-                    base.Run(parent._source);
-                }
-
                 protected override void Dispose(bool disposing)
                 {
                     base.Dispose(disposing);
@@ -76,8 +76,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         Disposable.TryDispose(ref _cancelable);
                     }
                 }
-
-                protected abstract void RunCore(TParent parent);
 
                 public override void OnNext(TSource value)
                 {
@@ -149,7 +147,10 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         if (_hasFailed)
+                        {
                             return;
+                        }
+
                         _running = true;
                     }
 
@@ -257,15 +258,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected IDisposable _cancelable;
                 private readonly SemaphoreSlim _evt = new SemaphoreSlim(0);
 
-                private readonly IScheduler _scheduler;
-
                 public L(TParent parent, IObserver<TSource> observer)
-                    : base(observer)
+                    : base(parent, observer)
                 {
-                    _scheduler = parent._scheduler;
                 }
 
-                protected IStopwatch _watch;
                 protected TimeSpan _delay;
                 protected Queue<System.Reactive.TimeInterval<TSource>> _queue = new Queue<System.Reactive.TimeInterval<TSource>>();
 
@@ -274,15 +271,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 private TimeSpan _completeAt;
                 private bool _hasFailed;
                 private Exception _exception;
-
-                public override void Run(TParent parent)
-                {
-                    _watch = _scheduler.StartStopwatch();
-
-                    RunCore(parent);
-
-                    base.Run(parent._source);
-                }
 
                 protected override void Dispose(bool disposing)
                 {
@@ -293,8 +281,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         Disposable.TryDispose(ref _cancelable);
                     }
                 }
-
-                protected abstract void RunCore(TParent parent);
 
                 protected void ScheduleDrain()
                 {
@@ -458,7 +444,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(this);
 
-            new private sealed class S : Base<Absolute>.S
+            private new sealed class S : Base<Absolute>.S
             {
                 public S(Absolute parent, IObserver<TSource> observer)
                     : base(parent, observer)
@@ -510,7 +496,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            new private sealed class L : Base<Absolute>.L
+            private new sealed class L : Base<Absolute>.L
             {
                 public L(Absolute parent, IObserver<TSource> observer)
                     : base(parent, observer)
@@ -562,7 +548,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(this);
 
-            new private sealed class S : Base<Relative>.S
+            private new sealed class S : Base<Relative>.S
             {
                 public S(Relative parent, IObserver<TSource> observer)
                     : base(parent, observer)
@@ -577,7 +563,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            new private sealed class L : Base<Relative>.L
+            private new sealed class L : Base<Relative>.L
             {
                 public L(Relative parent, IObserver<TSource> observer)
                     : base(parent, observer)
@@ -747,7 +733,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(Base<Selector>._ sink) => sink.Run(this);
 
-            new private sealed class _ : Base<Selector>._
+            private new sealed class _ : Base<Selector>._
             {
                 public _(Func<TSource, IObservable<TDelay>> delaySelector, IObserver<TSource> observer)
                     : base(delaySelector, observer)
@@ -774,7 +760,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(Base<SelectorWithSubscriptionDelay>._ sink) => sink.Run(this);
 
-            new private sealed class _ : Base<SelectorWithSubscriptionDelay>._
+            private new sealed class _ : Base<SelectorWithSubscriptionDelay>._
             {
                 public _(Func<TSource, IObservable<TDelay>> delaySelector, IObserver<TSource> observer)
                     : base(delaySelector, observer)

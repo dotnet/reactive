@@ -107,7 +107,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var window = new WindowObservable<TRight>(s, _parent._refCount);
 
                     // BREAKING CHANGE v2 > v1.x - Order of evaluation or the _leftDurationSelector and _resultSelector now consistent with Join.
-                    
+
                     var duration = default(IObservable<TLeftDuration>);
                     try
                     {

@@ -20,7 +20,9 @@ namespace System.Reactive.Concurrency
         public static SchedulerOperation Yield(this IScheduler scheduler)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return new SchedulerOperation(a => scheduler.Schedule(a), scheduler.GetCancellationToken());
         }
@@ -36,7 +38,9 @@ namespace System.Reactive.Concurrency
         public static SchedulerOperation Yield(this IScheduler scheduler, CancellationToken cancellationToken)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return new SchedulerOperation(a => scheduler.Schedule(a), cancellationToken);
         }
@@ -52,7 +56,9 @@ namespace System.Reactive.Concurrency
         public static SchedulerOperation Sleep(this IScheduler scheduler, TimeSpan dueTime)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return new SchedulerOperation(a => scheduler.Schedule(dueTime, a), scheduler.GetCancellationToken());
         }
@@ -69,7 +75,9 @@ namespace System.Reactive.Concurrency
         public static SchedulerOperation Sleep(this IScheduler scheduler, TimeSpan dueTime, CancellationToken cancellationToken)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return new SchedulerOperation(a => scheduler.Schedule(dueTime, a), cancellationToken);
         }
@@ -85,7 +93,9 @@ namespace System.Reactive.Concurrency
         public static SchedulerOperation Sleep(this IScheduler scheduler, DateTimeOffset dueTime)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return new SchedulerOperation(a => scheduler.Schedule(dueTime, a), scheduler.GetCancellationToken());
         }
@@ -102,7 +112,9 @@ namespace System.Reactive.Concurrency
         public static SchedulerOperation Sleep(this IScheduler scheduler, DateTimeOffset dueTime, CancellationToken cancellationToken)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return new SchedulerOperation(a => scheduler.Schedule(dueTime, a), cancellationToken);
         }
@@ -119,9 +131,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable ScheduleAsync<TState>(this IScheduler scheduler, TState state, Func<IScheduler, TState, CancellationToken, Task> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAsync_<TState>(scheduler, state, action);
         }
@@ -138,9 +155,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable ScheduleAsync<TState>(this IScheduler scheduler, TState state, Func<IScheduler, TState, CancellationToken, Task<IDisposable>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAsync_<TState>(scheduler, state, action);
         }
@@ -155,9 +177,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable ScheduleAsync(this IScheduler scheduler, Func<IScheduler, CancellationToken, Task> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAsync_(scheduler, action, (self, closureAction, ct) => closureAction(self, ct));
         }
@@ -172,9 +199,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable ScheduleAsync(this IScheduler scheduler, Func<IScheduler, CancellationToken, Task<IDisposable>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAsync_(scheduler, action, (self, closureAction, ct) => closureAction(self, ct));
         }
@@ -192,9 +224,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable ScheduleAsync<TState>(this IScheduler scheduler, TState state, TimeSpan dueTime, Func<IScheduler, TState, CancellationToken, Task> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAsync_(scheduler, state, dueTime, action);
         }
@@ -212,9 +249,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable ScheduleAsync<TState>(this IScheduler scheduler, TState state, TimeSpan dueTime, Func<IScheduler, TState, CancellationToken, Task<IDisposable>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAsync_(scheduler, state, dueTime, action);
         }
@@ -230,9 +272,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable ScheduleAsync(this IScheduler scheduler, TimeSpan dueTime, Func<IScheduler, CancellationToken, Task> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAsync_(scheduler, action, dueTime, (self, closureAction, ct) => closureAction(self, ct));
         }
@@ -248,9 +295,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable ScheduleAsync(this IScheduler scheduler, TimeSpan dueTime, Func<IScheduler, CancellationToken, Task<IDisposable>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAsync_(scheduler, action, dueTime, (self, closureAction, ct) => closureAction(self, ct));
         }
@@ -268,9 +320,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable ScheduleAsync<TState>(this IScheduler scheduler, TState state, DateTimeOffset dueTime, Func<IScheduler, TState, CancellationToken, Task> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAsync_(scheduler, state, dueTime, action);
         }
@@ -288,9 +345,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable ScheduleAsync<TState>(this IScheduler scheduler, TState state, DateTimeOffset dueTime, Func<IScheduler, TState, CancellationToken, Task<IDisposable>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAsync_(scheduler, state, dueTime, action);
         }
@@ -306,9 +368,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable ScheduleAsync(this IScheduler scheduler, DateTimeOffset dueTime, Func<IScheduler, CancellationToken, Task> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAsync_(scheduler, action, dueTime, (self, closureAction, ct) => closureAction(self, ct));
         }
@@ -324,9 +391,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable ScheduleAsync(this IScheduler scheduler, DateTimeOffset dueTime, Func<IScheduler, CancellationToken, Task<IDisposable>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAsync_(scheduler, action, dueTime, (self, closureAction, ct) => closureAction(self, ct));
         }
@@ -369,7 +441,9 @@ namespace System.Reactive.Concurrency
             action(new CancelableScheduler(self, c.Token), s, c.Token).ContinueWith(t =>
             {
                 if (t.IsCanceled)
+                {
                     return;
+                }
 
                 if (t.Exception != null)
                 {
@@ -389,8 +463,7 @@ namespace System.Reactive.Concurrency
 
         private static CancellationToken GetCancellationToken(this IScheduler scheduler)
         {
-            var cs = scheduler as CancelableScheduler;
-            return cs != null ? cs.Token : CancellationToken.None;
+            return scheduler is CancelableScheduler cs ? cs.Token : CancellationToken.None;
         }
 
         private sealed class CancelableScheduler : IScheduler

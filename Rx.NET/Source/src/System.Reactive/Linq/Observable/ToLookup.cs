@@ -26,11 +26,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource, ILookup<TKey, TElement>> 
+        internal sealed class _ : Sink<TSource, ILookup<TKey, TElement>>
         {
             private readonly Func<TSource, TKey> _keySelector;
             private readonly Func<TSource, TElement> _elementSelector;
-            private readonly Lookup<TKey, TElement> _lookup;
+            private Lookup<TKey, TElement> _lookup;
 
             public _(ToLookup<TSource, TKey, TElement> parent, IObserver<ILookup<TKey, TElement>> observer)
                 : base(observer)
@@ -48,13 +48,22 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception ex)
                 {
+                    _lookup = null;
                     ForwardOnError(ex);
                 }
             }
 
+            public override void OnError(Exception error)
+            {
+                _lookup = null;
+                ForwardOnError(error);
+            }
+
             public override void OnCompleted()
             {
-                ForwardOnNext(_lookup);
+                var lookup = _lookup;
+                _lookup = null;
+                ForwardOnNext(lookup);
                 ForwardOnCompleted();
             }
         }

@@ -3,19 +3,14 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Threading;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -27,19 +22,19 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstOrDefault(default(IObservable<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstOrDefault(default(IObservable<int>), _ => true));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstOrDefault(DummyObservable<int>.Instance, default(Func<int, bool>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstOrDefault(DummyObservable<int>.Instance, default));
         }
 
         [Fact]
         public void FirstOrDefault_Empty()
         {
-            Assert.Equal(default(int), Observable.Empty<int>().FirstOrDefault());
+            Assert.Equal(default, Observable.Empty<int>().FirstOrDefault());
         }
 
         [Fact]
         public void FirstOrDefaultPredicate_Empty()
         {
-            Assert.Equal(default(int), Observable.Empty<int>().FirstOrDefault(_ => true));
+            Assert.Equal(default, Observable.Empty<int>().FirstOrDefault(_ => true));
         }
 
         [Fact]
@@ -101,7 +96,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        class O : IObservable<int>
+        private class O : IObservable<int>
         {
             private readonly ManualResetEvent _event = new ManualResetEvent(false);
             private IObserver<int> _observer;

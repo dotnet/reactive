@@ -52,12 +52,9 @@ namespace System.Reactive.PlatformServices
 
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-
-                s_current = value;
+                s_current = value ?? throw new ArgumentNullException(nameof(value));
             }
-            
+
         }
 
         private static IPlatformEnlightenmentProvider CreatePlatformProvider() => new CurrentPlatformEnlightenmentProvider();

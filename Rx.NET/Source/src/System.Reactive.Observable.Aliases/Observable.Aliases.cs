@@ -5,9 +5,7 @@
 #pragma warning disable 1591
 
 using System.Collections.Generic;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Reactive;
 using System.Reactive.Threading.Tasks; // needed for doc comments
 using System.Threading;
 using System.Threading.Tasks;

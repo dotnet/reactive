@@ -24,7 +24,9 @@ namespace System.Reactive.Linq.ObservableImpl
         public IEnumerable<IObservable<TSource>> GetSources()
         {
             while (_condition())
+            {
                 yield return _source;
+            }
         }
 
         internal sealed class _ : ConcatSink<TSource>

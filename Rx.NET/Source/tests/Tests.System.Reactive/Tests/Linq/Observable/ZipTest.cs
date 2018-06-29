@@ -5,21 +5,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
 using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
+#pragma warning disable IDE0039 // Use local function
     public class ZipTest : ReactiveTest
     {
 
@@ -216,7 +211,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -236,7 +233,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -257,7 +256,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -279,7 +280,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -302,7 +305,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -326,7 +331,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -351,7 +358,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -377,7 +386,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -404,7 +415,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -432,7 +445,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -461,7 +476,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -491,7 +508,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -522,7 +541,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -554,7 +575,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         [Fact]
@@ -587,7 +610,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
+            }
         }
 
         #endregion
@@ -708,7 +733,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -730,7 +757,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -753,7 +782,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2, e3 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -777,7 +808,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2, e3, e4 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -802,7 +835,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -828,7 +863,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -855,7 +892,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -883,7 +922,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -912,7 +953,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -942,7 +985,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -973,7 +1018,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -1005,7 +1052,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -1038,7 +1087,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -1072,7 +1123,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         [Fact]
@@ -1107,7 +1160,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+            }
         }
 
         #endregion
@@ -1632,7 +1687,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                o.Zip(e, (x, y) => { if (x == y) return 42; throw ex; })
+                o.Zip(e, (x, y) => { if (x == y) { return 42; } throw ex; })
             );
 
             res.Messages.AssertEqual(
@@ -1666,7 +1721,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                o.Zip(e, (x, y) => { if (x == y) return 42; throw ex; })
+                o.Zip(e, (x, y) => { if (x == y) { return 42; } throw ex; })
             );
 
             res.Messages.AssertEqual(
@@ -1704,7 +1759,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -1726,7 +1783,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -1749,7 +1808,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -1773,7 +1834,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -1798,7 +1861,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -1824,7 +1889,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -1851,7 +1918,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -1879,7 +1948,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -1908,7 +1979,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -1938,7 +2011,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -1969,7 +2044,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -2001,7 +2078,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -2034,7 +2113,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -2068,7 +2149,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         [Fact]
@@ -2103,7 +2186,9 @@ namespace ReactiveTests.Tests
             );
 
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 })
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
+            }
         }
 
         #endregion
@@ -2118,7 +2203,7 @@ namespace ReactiveTests.Tests
             var msgs1 = Enumerable.Range(0, 5).Select((x, i) => OnNext((ushort)(205 + i * 5), x)).ToArray();
             var msgs2 = Enumerable.Range(0, 10).Select((x, i) => OnNext((ushort)(202 + i * 8), x)).ToArray();
 
-            int len = Math.Min(msgs1.Length, msgs2.Length);
+            var len = Math.Min(msgs1.Length, msgs2.Length);
 
             var o1 = scheduler.CreateHotObservable(msgs1);
             var o2 = scheduler.CreateHotObservable(msgs2);
@@ -2128,7 +2213,7 @@ namespace ReactiveTests.Tests
             );
 
             Assert.True(len == res.Messages.Count, "length");
-            for (int i = 0; i < len; i++)
+            for (var i = 0; i < len; i++)
             {
                 var sum = msgs1[i].Value.Value + msgs2[i].Value.Value;
                 var time = Math.Max(msgs1[i].Time, msgs2[i].Time);
@@ -2147,7 +2232,7 @@ namespace ReactiveTests.Tests
             var msgs1 = Enumerable.Range(0, 10).Select((x, i) => OnNext((ushort)(205 + i * 5), x)).ToArray();
             var msgs2 = Enumerable.Range(0, 5).Select((x, i) => OnNext((ushort)(202 + i * 8), x)).ToArray();
 
-            int len = Math.Min(msgs1.Length, msgs2.Length);
+            var len = Math.Min(msgs1.Length, msgs2.Length);
 
             var o1 = scheduler.CreateHotObservable(msgs1);
             var o2 = scheduler.CreateHotObservable(msgs2);
@@ -2157,7 +2242,7 @@ namespace ReactiveTests.Tests
             );
 
             Assert.True(len == res.Messages.Count, "length");
-            for (int i = 0; i < len; i++)
+            for (var i = 0; i < len; i++)
             {
                 var sum = msgs1[i].Value.Value + msgs2[i].Value.Value;
                 var time = Math.Max(msgs1[i].Time, msgs2[i].Time);
@@ -2176,7 +2261,7 @@ namespace ReactiveTests.Tests
             var msgs1 = Enumerable.Range(0, 10).Select((x, i) => OnNext((ushort)(205 + i * 5), x)).ToArray();
             var msgs2 = Enumerable.Range(0, 10).Select((x, i) => OnNext((ushort)(202 + i * 8), x)).ToArray();
 
-            int len = Math.Min(msgs1.Length, msgs2.Length);
+            var len = Math.Min(msgs1.Length, msgs2.Length);
 
             var o1 = scheduler.CreateHotObservable(msgs1);
             var o2 = scheduler.CreateHotObservable(msgs2);
@@ -2186,7 +2271,7 @@ namespace ReactiveTests.Tests
             );
 
             Assert.True(len == res.Messages.Count, "length");
-            for (int i = 0; i < len; i++)
+            for (var i = 0; i < len; i++)
             {
                 var sum = msgs1[i].Value.Value + msgs2[i].Value.Value;
                 var time = Math.Max(msgs1[i].Time, msgs2[i].Time);
@@ -2226,7 +2311,10 @@ namespace ReactiveTests.Tests
                 o1.Zip(o2, (x, y) =>
                 {
                     if (y == 5)
+                    {
                         throw ex;
+                    }
+
                     return x + y;
                 })
             );
@@ -2258,7 +2346,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2283,7 +2373,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2309,7 +2401,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2, e3 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2336,7 +2430,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2, e3, e4 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2364,7 +2460,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2, e3, e4, e5 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2393,7 +2491,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2423,7 +2523,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2454,7 +2556,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2486,7 +2590,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2519,7 +2625,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2553,7 +2661,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2588,7 +2698,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2624,7 +2736,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2661,7 +2775,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         [Fact]
@@ -2699,7 +2815,9 @@ namespace ReactiveTests.Tests
 
             var es = new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 };
             foreach (var e in es)
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
+            }
         }
 
         #endregion
@@ -2758,7 +2876,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -2787,7 +2907,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -2817,7 +2939,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -2848,7 +2972,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -2880,7 +3006,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -2913,7 +3041,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -2947,7 +3077,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -2982,7 +3114,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -3018,7 +3152,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -3055,7 +3191,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -3093,7 +3231,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -3132,7 +3272,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -3172,7 +3314,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -3213,7 +3357,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -3255,7 +3401,9 @@ namespace ReactiveTests.Tests
 
             var i = 0;
             foreach (var e in es.Take(es.Length - 1))
+            {
                 e.Subscriptions.AssertEqual(Subscribe(200, 220 + (i++ * 10)));
+            }
 
             es.Last().Subscriptions.AssertEqual(
                 Subscribe(200, 220 + (i - 1) * 10)
@@ -3884,7 +4032,10 @@ namespace ReactiveTests.Tests
                 o1.Zip(o2, (x, y) =>
                 {
                     if (y == 5)
+                    {
                         throw ex;
+                    }
+
                     return x + y;
                 })
             );
@@ -3912,14 +4063,17 @@ namespace ReactiveTests.Tests
         private IEnumerable<int> ThrowEnumerable(bool b, Exception ex)
         {
             if (!b)
+            {
                 throw ex;
+            }
+
             yield break;
         }
 
-        class MyEnumerable : IEnumerable<int>
+        private class MyEnumerable : IEnumerable<int>
         {
-            private bool _throwInCurrent;
-            private Exception _ex;
+            private readonly bool _throwInCurrent;
+            private readonly Exception _ex;
 
             public MyEnumerable(bool throwInCurrent, Exception ex)
             {
@@ -3937,10 +4091,10 @@ namespace ReactiveTests.Tests
                 return GetEnumerator();
             }
 
-            class MyEnumerator : IEnumerator<int>
+            private class MyEnumerator : IEnumerator<int>
             {
-                private bool _throwInCurrent;
-                private Exception _ex;
+                private readonly bool _throwInCurrent;
+                private readonly Exception _ex;
 
                 public MyEnumerator(bool throwInCurrent, Exception ex)
                 {
@@ -3953,9 +4107,13 @@ namespace ReactiveTests.Tests
                     get
                     {
                         if (_throwInCurrent)
+                        {
                             throw _ex;
+                        }
                         else
+                        {
                             return 1;
+                        }
                     }
                 }
 
@@ -3971,7 +4129,10 @@ namespace ReactiveTests.Tests
                 public bool MoveNext()
                 {
                     if (!_throwInCurrent)
+                    {
                         throw _ex;
+                    }
+
                     return true;
                 }
 
@@ -4240,13 +4401,17 @@ namespace ReactiveTests.Tests
             start();
 
             foreach (var xs in sources)
+            {
                 yield return xs;
+            }
         }
 
         private IEnumerable<IObservable<T>> GetSources<T>(Exception ex, params IObservable<T>[] sources)
         {
             foreach (var xs in sources)
+            {
                 yield return xs;
+            }
 
             throw ex;
         }
@@ -4284,4 +4449,5 @@ namespace ReactiveTests.Tests
         #endregion
 
     }
+#pragma warning restore IDE0039 // Use local function
 }

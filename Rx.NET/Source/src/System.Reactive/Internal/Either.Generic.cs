@@ -13,7 +13,7 @@ namespace System.Reactive
         {
         }
 
-        public static Either<TLeft, TRight> CreateLeft(TLeft value) =>  new Left(value);
+        public static Either<TLeft, TRight> CreateLeft(TLeft value) => new Left(value);
 
         public static Either<TLeft, TRight> CreateRight(TRight value) => new Right(value);
 
@@ -36,9 +36,14 @@ namespace System.Reactive
             public bool Equals(Left other)
             {
                 if (other == this)
+                {
                     return true;
+                }
+
                 if (other == null)
+                {
                     return false;
+                }
 
                 return EqualityComparer<TLeft>.Default.Equals(Value, other.Value);
             }
@@ -69,9 +74,14 @@ namespace System.Reactive
             public bool Equals(Right other)
             {
                 if (other == this)
+                {
                     return true;
+                }
+
                 if (other == null)
+                {
                     return false;
+                }
 
                 return EqualityComparer<TRight>.Default.Equals(Value, other.Value);
             }

@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource, System.Reactive.TimeInterval<TSource>> 
+        internal sealed class _ : Sink<TSource, System.Reactive.TimeInterval<TSource>>
         {
             public _(IObserver<System.Reactive.TimeInterval<TSource>> observer)
                 : base(observer)

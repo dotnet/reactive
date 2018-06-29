@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
@@ -14,17 +13,15 @@ namespace System.Reactive
 
     internal class ScheduledObserver<T> : ObserverBase<T>, IScheduledObserver<T>
     {
-        private volatile int _state = 0;
+        private int _state = 0;
         private const int STOPPED = 0;
         private const int RUNNING = 1;
         private const int PENDING = 2;
         private const int FAULTED = 9;
-
         private readonly ConcurrentQueue<T> _queue = new ConcurrentQueue<T>();
-        private volatile bool _failed;
-        private volatile Exception _error;
-        private volatile bool _completed;
-
+        private bool _failed;
+        private Exception _error;
+        private bool _completed;
         private readonly IObserver<T> _observer;
         private readonly IScheduler _scheduler;
         private readonly ISchedulerLongRunning _longRunning;
@@ -43,9 +40,9 @@ namespace System.Reactive
             }
         }
 
-        sealed class SemaphoreSlimRelease : IDisposable
+        private sealed class SemaphoreSlimRelease : IDisposable
         {
-            SemaphoreSlim _dispatcherEvent;
+            private SemaphoreSlim _dispatcherEvent;
 
             public SemaphoreSlimRelease(SemaphoreSlim dispatcherEvent)
             {
@@ -90,7 +87,9 @@ namespace System.Reactive
                 _dispatcherEvent.Wait();
 
                 if (cancel.IsDisposed)
+                {
                     return;
+                }
 
                 var next = default(T);
                 while (_queue.TryDequeue(out next))
@@ -103,7 +102,9 @@ namespace System.Reactive
                     {
                         var nop = default(T);
                         while (_queue.TryDequeue(out nop))
+                        {
                             ;
+                        }
 
                         throw;
                     }
@@ -111,7 +112,9 @@ namespace System.Reactive
                     _dispatcherEvent.Wait();
 
                     if (cancel.IsDisposed)
+                    {
                         return;
+                    }
                 }
 
                 if (_failed)
@@ -144,7 +147,9 @@ namespace System.Reactive
                 EnsureDispatcher();
             }
             else
+            {
                 EnsureActiveSlow();
+            }
         }
 
         private void EnsureActiveSlow()
@@ -161,7 +166,9 @@ namespace System.Reactive
                 }
 
                 if (old == FAULTED)
+                {
                     return;
+                }
 
                 // If we find the consumer loop running, we transition to PENDING to handle
                 // the case where the queue is seen empty by the consumer, making it transition
@@ -187,7 +194,9 @@ namespace System.Reactive
                 // this state.
                 //
                 if (old == PENDING || old == RUNNING && Interlocked.CompareExchange(ref _state, PENDING, RUNNING) == RUNNING)
+                {
                     break;
+                }
             }
 
             if (isOwner)
@@ -218,7 +227,9 @@ namespace System.Reactive
                     //      _observer.OnError(...)                     // Lost an OnNext
                     //
                     if (!_queue.IsEmpty)
+                    {
                         continue;
+                    }
 
                     Interlocked.Exchange(ref _state, STOPPED);
                     _observer.OnError(_error);
@@ -243,7 +254,9 @@ namespace System.Reactive
                     //      _observer.OnCompleted()                    // Lost an OnNext
                     //
                     if (!_queue.IsEmpty)
+                    {
                         continue;
+                    }
 
                     Interlocked.Exchange(ref _state, STOPPED);
                     _observer.OnCompleted();
@@ -253,7 +266,9 @@ namespace System.Reactive
 
                 var old = Interlocked.CompareExchange(ref _state, STOPPED, RUNNING);
                 if (old == RUNNING || old == FAULTED)
+                {
                     return;
+                }
 
                 Debug.Assert(old == PENDING);
 
@@ -274,7 +289,9 @@ namespace System.Reactive
 
                 var nop = default(T);
                 while (_queue.TryDequeue(out nop))
+                {
                     ;
+                }
 
                 throw;
             }
@@ -366,45 +383,43 @@ namespace System.Reactive
     /// <typeparam name="T">The element type of the sequence.</typeparam>
     internal sealed class ObserveOnObserverNew<T> : IObserver<T>, IDisposable
     {
-        readonly IObserver<T> downstream;
-
-        readonly IScheduler scheduler;
+        private readonly IObserver<T> downstream;
+        private readonly IScheduler scheduler;
 
         /// <summary>
         /// If not null, the <see cref="scheduler"/> supports
         /// long running tasks.
         /// </summary>
-        readonly ISchedulerLongRunning longRunning;
-
-        readonly ConcurrentQueue<T> queue;
-
+        private readonly ISchedulerLongRunning longRunning;
+        private readonly ConcurrentQueue<T> queue;
         private IDisposable _run;
 
         /// <summary>
         /// The current task representing a running drain operation.
         /// </summary>
-        IDisposable task;
+        private IDisposable task;
 
         /// <summary>
         /// Indicates the work-in-progress state of this operator,
         /// zero means no work is currently being done.
         /// </summary>
-        int wip;
+        private int wip;
 
         /// <summary>
         /// If true, the upstream has issued OnCompleted.
         /// </summary>
-        bool done;
+        private bool done;
+
         /// <summary>
         /// If <see cref="done"/> is true and this is non-null, the upstream
         /// failed with an OnError.
         /// </summary>
-        Exception error;
+        private Exception error;
 
         /// <summary>
         /// Indicates a dispose has been requested.
         /// </summary>
-        bool disposed;
+        private bool disposed;
 
         public ObserveOnObserverNew(IScheduler scheduler, IObserver<T> downstream)
         {
@@ -431,10 +446,13 @@ namespace System.Reactive
         /// Remove remaining elements from the queue upon
         /// cancellation or failure.
         /// </summary>
-        void Clear()
+        private void Clear()
         {
             var q = queue;
-            while (q.TryDequeue(out var _)) ;
+            while (q.TryDequeue(out var _))
+            {
+                ;
+            }
         }
 
         public void OnCompleted()
@@ -460,7 +478,7 @@ namespace System.Reactive
         /// Submit the drain task via the appropriate scheduler if
         /// there is no drain currently running (wip > 0).
         /// </summary>
-        void Schedule()
+        private void Schedule()
         {
             if (Interlocked.Increment(ref wip) == 1)
             {
@@ -495,7 +513,7 @@ namespace System.Reactive
         /// Avoids creating a delegate that captures <code>this</code>
         /// whenever the signals have to be drained.
         /// </summary>
-        static readonly Action<ObserveOnObserverNew<T>, ICancelable> DRAIN_LONG_RUNNING =
+        private static readonly Action<ObserveOnObserverNew<T>, ICancelable> DRAIN_LONG_RUNNING =
             (self, cancel) => self.DrainLongRunning();
 
         /// <summary>
@@ -503,7 +521,7 @@ namespace System.Reactive
         /// Avoids creating a delegate that captures <code>this</code>
         /// whenever the signals have to be drained.
         /// </summary>
-        static readonly Func<IScheduler, ObserveOnObserverNew<T>, IDisposable> DRAIN_SHORT_RUNNING =
+        private static readonly Func<IScheduler, ObserveOnObserverNew<T>, IDisposable> DRAIN_SHORT_RUNNING =
             (scheduler, self) => self.DrainShortRunning(scheduler);
 
         /// <summary>
@@ -512,7 +530,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="recursiveScheduler">The scheduler to use for scheduling the next signal emission if necessary.</param>
         /// <returns>The IDisposable of the recursively scheduled task or an empty disposable.</returns>
-        IDisposable DrainShortRunning(IScheduler recursiveScheduler)
+        private IDisposable DrainShortRunning(IScheduler recursiveScheduler)
         {
             DrainStep(queue, downstream, false);
 
@@ -534,7 +552,7 @@ namespace System.Reactive
         /// <param name="delayError">Should the errors be delayed until all
         /// queued items have been emitted to the downstream?</param>
         /// <returns>True if the drain loop should stop.</returns>
-        bool DrainStep(ConcurrentQueue<T> q, IObserver<T> downstream, bool delayError)
+        private bool DrainStep(ConcurrentQueue<T> q, IObserver<T> downstream, bool delayError)
         {
             // Check if the operator has been disposed
             if (Volatile.Read(ref disposed))
@@ -602,7 +620,7 @@ namespace System.Reactive
         /// as this is executing a long-running scheduler so
         /// it can occupy that thread as long as it needs to.
         /// </summary>
-        void DrainLongRunning()
+        private void DrainLongRunning()
         {
             var missed = 1;
 

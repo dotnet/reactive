@@ -20,8 +20,6 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 _onNext = onNext;
                 _done = done;
-
-                _stopped = 0;
             }
 
             public Exception Error => _exception;
@@ -72,9 +70,6 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 _onNext = onNext;
                 _done = done;
-
-                _index = 0;
-                _stopped = 0;
             }
 
             public Exception Error => _exception;

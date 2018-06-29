@@ -40,13 +40,13 @@ namespace System.Reactive.Linq
             return new WhenObservable<TResult>(plans);
         }
 
-        sealed class WhenObservable<TResult> : ObservableBase<TResult>
+        private sealed class WhenObservable<TResult> : ObservableBase<TResult>
         {
-            readonly IEnumerable<Plan<TResult>> plans;
+            private readonly IEnumerable<Plan<TResult>> _plans;
 
             public WhenObservable(IEnumerable<Plan<TResult>> plans)
             {
-                this.plans = plans;
+                _plans = plans;
             }
 
             protected override IDisposable SubscribeCore(IObserver<TResult> observer)
@@ -57,16 +57,20 @@ namespace System.Reactive.Linq
                 var outObserver = new OutObserver(observer, externalSubscriptions);
                 try
                 {
-                    Action<ActivePlan> onDeactivate = activePlan =>
+                    void onDeactivate(ActivePlan activePlan)
                     {
                         activePlans.Remove(activePlan);
                         if (activePlans.Count == 0)
+                        {
                             outObserver.OnCompleted();
-                    };
+                        }
+                    }
 
-                    foreach (var plan in plans)
+                    foreach (var plan in _plans)
+                    {
                         activePlans.Add(plan.Activate(externalSubscriptions, outObserver,
                                                       onDeactivate));
+                    }
                 }
                 catch (Exception e)
                 {
@@ -86,35 +90,34 @@ namespace System.Reactive.Linq
                 return group;
             }
 
-            sealed class OutObserver : IObserver<TResult>
+            private sealed class OutObserver : IObserver<TResult>
             {
-                readonly IObserver<TResult> observer;
-
-                readonly Dictionary<object, IJoinObserver> externalSubscriptions;
+                private readonly IObserver<TResult> _observer;
+                private readonly Dictionary<object, IJoinObserver> _externalSubscriptions;
 
                 public OutObserver(IObserver<TResult> observer, Dictionary<object, IJoinObserver> externalSubscriptions)
                 {
-                    this.observer = observer;
-                    this.externalSubscriptions = externalSubscriptions;
+                    _observer = observer;
+                    _externalSubscriptions = externalSubscriptions;
                 }
 
                 public void OnCompleted()
                 {
-                    observer.OnCompleted();
+                    _observer.OnCompleted();
                 }
 
                 public void OnError(Exception exception)
                 {
-                    foreach (var po in externalSubscriptions.Values)
+                    foreach (var po in _externalSubscriptions.Values)
                     {
                         po.Dispose();
                     }
-                    observer.OnError(exception);
+                    _observer.OnError(exception);
                 }
 
                 public void OnNext(TResult value)
                 {
-                    observer.OnNext(value);
+                    _observer.OnNext(value);
                 }
             }
         }

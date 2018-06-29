@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource, TAccumulate> 
+        internal sealed class _ : Sink<TSource, TAccumulate>
         {
             private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
             private TAccumulate _accumulation;
@@ -75,8 +75,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 : base(observer)
             {
                 _accumulator = accumulator;
-                _accumulation = default(TSource);
-                _hasAccumulation = false;
             }
 
             public override void OnNext(TSource value)

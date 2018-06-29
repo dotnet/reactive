@@ -27,7 +27,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public _(IObserver<TSource> observer)
                     : base(observer)
                 {
-                    _value = default(TSource);
+                    _value = default;
                     _seenValue = false;
                 }
 
@@ -78,7 +78,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _predicate = predicate;
 
-                    _value = default(TSource);
+                    _value = default;
                     _seenValue = false;
                 }
 

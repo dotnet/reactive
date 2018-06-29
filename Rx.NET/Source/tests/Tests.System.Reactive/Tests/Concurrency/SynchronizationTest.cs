@@ -6,12 +6,12 @@ using System;
 using System.Reactive.Concurrency;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class SynchronizationTests
     {
         [Fact]
@@ -40,7 +40,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Synchronization.Synchronize(DummyObservable<int>.Instance, null));
         }
 
-        class MySyncCtx : SynchronizationContext
+        private class MySyncCtx : SynchronizationContext
         {
         }
     }

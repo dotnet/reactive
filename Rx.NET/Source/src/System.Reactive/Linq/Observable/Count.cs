@@ -19,14 +19,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, int> 
+            internal sealed class _ : Sink<TSource, int>
             {
                 private int _count;
 
                 public _(IObserver<int> observer)
                     : base(observer)
                 {
-                    _count = 0;
                 }
 
                 public override void OnNext(TSource value)
@@ -67,7 +66,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, int> 
+            internal sealed class _ : Sink<TSource, int>
             {
                 private readonly Func<TSource, bool> _predicate;
                 private int _count;
@@ -76,7 +75,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     : base(observer)
                 {
                     _predicate = predicate;
-                    _count = 0;
                 }
 
                 public override void OnNext(TSource value)

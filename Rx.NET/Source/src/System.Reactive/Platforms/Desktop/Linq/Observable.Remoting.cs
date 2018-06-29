@@ -27,7 +27,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Remotable<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return Remotable_<TSource>(source);
         }
@@ -44,7 +46,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Remotable<TSource>(this IObservable<TSource> source, ILease lease)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return Remotable_<TSource>(source, lease);
         }
@@ -60,7 +64,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Remotable<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -87,7 +93,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Remotable<TSource>(this IQbservable<TSource> source, ILease lease)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(

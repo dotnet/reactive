@@ -3,7 +3,7 @@ using Xunit.Runners.UI;
 
 namespace Tests.Reactive.Uwp.DeviceRunner
 {
-    sealed partial class App : RunnerApplication
+    public sealed partial class App : RunnerApplication
     {
         protected override void OnInitializeRunner()
         {

@@ -9,13 +9,23 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace ReactiveTests.Tests.Api
 {
+#if DEBUG
     [UseReporter(typeof(DiffReporter))]
+#else
+    [UseReporter(typeof(DiffPlexReporter))]
+#endif
     [IgnoreLineEndings(true)]
     public class ApiApprovalTests
     {
+        public ApiApprovalTests(ITestOutputHelper output)
+        {
+            DiffPlexReporter.INSTANCE.Output = output;
+        }
+
         [Fact]
         public void Core()
         {
@@ -37,13 +47,13 @@ namespace ReactiveTests.Tests.Api
             Approvals.Verify(publicApi);
         }
 
-        string GeneratePublicApi(Assembly assembly)
+        private string GeneratePublicApi(Assembly assembly)
         {
             var namespacePrefixWhitelist = new[] { "System", "Microsoft" };
             return Filter(ApiGenerator.GeneratePublicApi(assembly, whitelistedNamespacePrefixes: namespacePrefixWhitelist));
         }
 
-        static string Filter(string text)
+        private static string Filter(string text)
         {
             return string.Join(Environment.NewLine, text.Split(new[]
                                                         {

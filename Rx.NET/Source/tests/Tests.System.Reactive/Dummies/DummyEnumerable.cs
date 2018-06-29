@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace ReactiveTests.Dummies
 {
-    class DummyEnumerable<T> : IEnumerable<T>
+    internal class DummyEnumerable<T> : IEnumerable<T>
     {
         public static readonly DummyEnumerable<T> Instance = new DummyEnumerable<T>();
 
@@ -26,7 +26,7 @@ namespace ReactiveTests.Dummies
         }
     }
 
-    class NullEnumeratorEnumerable<T> : IEnumerable<T>
+    internal class NullEnumeratorEnumerable<T> : IEnumerable<T>
     {
         public static readonly NullEnumeratorEnumerable<T> Instance = new NullEnumeratorEnumerable<T>();
 

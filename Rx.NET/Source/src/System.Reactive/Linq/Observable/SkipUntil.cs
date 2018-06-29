@@ -4,7 +4,6 @@
 
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -25,10 +24,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            IDisposable _otherDisposable;
-            volatile bool _forward;
-            int _halfSerializer;
-            Exception _error;
+            private IDisposable _otherDisposable;
+            private bool _forward;
+            private int _halfSerializer;
+            private Exception _error;
 
             public _(IObserver<TSource> observer)
                 : base(observer)
@@ -57,7 +56,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnNext(TSource value)
             {
                 if (_forward)
+                {
                     HalfSerializer.ForwardOnNext(this, value, ref _halfSerializer, ref _error);
+                }
             }
 
             public override void OnError(Exception ex)
@@ -68,19 +69,23 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnCompleted()
             {
                 if (_forward)
+                {
                     HalfSerializer.ForwardOnCompleted(this, ref _halfSerializer, ref _error);
+                }
                 else
+                {
                     DisposeUpstream();
+                }
             }
 
-            void OtherComplete()
+            private void OtherComplete()
             {
                 _forward = true;
             }
 
-            sealed class OtherObserver : IObserver<TOther>, IDisposable
+            private sealed class OtherObserver : IObserver<TOther>, IDisposable
             {
-                readonly _ _parent;
+                private readonly _ _parent;
 
                 public OtherObserver(_ parent)
                 {
@@ -114,11 +119,6 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal static class SkipUntilTerminalException
-    {
-        internal static readonly Exception Instance = new Exception("No further exceptions");
-    }
-
     internal sealed class SkipUntil<TSource> : Producer<TSource, SkipUntil<TSource>._>
     {
         private readonly IObservable<TSource> _source;
@@ -144,9 +144,13 @@ namespace System.Reactive.Linq.ObservableImpl
             //   xs.SU(5AM).SU(3AM)    xxxxxxxxx--------o--|      xs.SU(3AM).SU(5AM)    xxxxxxxxxxxxxxxx-o--|
             //
             if (startTime <= _startTime)
+            {
                 return this;
+            }
             else
+            {
                 return new SkipUntil<TSource>(_source, startTime, _scheduler);
+            }
         }
 
         protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
@@ -155,7 +159,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private volatile bool _open;
+            private bool _open;
 
             public _(IObserver<TSource> observer)
                 : base(observer)
@@ -188,7 +192,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnNext(TSource value)
             {
                 if (_open)
+                {
                     ForwardOnNext(value);
+                }
             }
         }
     }

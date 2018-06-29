@@ -16,15 +16,11 @@ namespace System.Reactive.Subjects
     {
         #region Fields
 
-        SubjectDisposable[] _observers;
-
-        Exception _exception;
-
-        static readonly SubjectDisposable[] EMPTY = new SubjectDisposable[0];
-
-        static readonly SubjectDisposable[] TERMINATED = new SubjectDisposable[0];
-
-        static readonly SubjectDisposable[] DISPOSED = new SubjectDisposable[0];
+        private SubjectDisposable[] _observers;
+        private Exception _exception;
+        private static readonly SubjectDisposable[] EMPTY = new SubjectDisposable[0];
+        private static readonly SubjectDisposable[] TERMINATED = new SubjectDisposable[0];
+        private static readonly SubjectDisposable[] DISPOSED = new SubjectDisposable[0];
 
         #endregion
 
@@ -64,7 +60,7 @@ namespace System.Reactive.Subjects
 
         #region IObserver<T> implementation
 
-        void ThrowDisposed()
+        private void ThrowDisposed()
         {
             throw new ObjectDisposedException(string.Empty);
         }
@@ -106,7 +102,9 @@ namespace System.Reactive.Subjects
         public override void OnError(Exception error)
         {
             if (error == null)
+            {
                 throw new ArgumentNullException(nameof(error));
+            }
 
             for (; ; )
             {
@@ -165,7 +163,9 @@ namespace System.Reactive.Subjects
         public override IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             var disposable = default(SubjectDisposable);
             for (; ; )
@@ -208,7 +208,7 @@ namespace System.Reactive.Subjects
             return Disposable.Empty;
         }
 
-        void Unsubscribe(SubjectDisposable observer)
+        private void Unsubscribe(SubjectDisposable observer)
         {
             for (; ; )
             {
@@ -259,7 +259,9 @@ namespace System.Reactive.Subjects
             {
                 var observer = Interlocked.Exchange(ref _observer, null);
                 if (observer == null)
+                {
                     return;
+                }
 
                 _subject.Unsubscribe(this);
                 _subject = null;

@@ -55,7 +55,9 @@ namespace System.Reactive.Disposables
         public static IDisposable Create(Action dispose)
         {
             if (dispose == null)
+            {
                 throw new ArgumentNullException(nameof(dispose));
+            }
 
             return new AnonymousDisposable(dispose);
         }
@@ -70,7 +72,9 @@ namespace System.Reactive.Disposables
         public static IDisposable Create<TState>(TState state, Action<TState> dispose)
         {
             if (dispose == null)
+            {
                 throw new ArgumentNullException(nameof(dispose));
+            }
 
             return new AnonymousDisposable<TState>(state, dispose);
         }
@@ -83,7 +87,7 @@ namespace System.Reactive.Disposables
         {
             var current = Volatile.Read(ref fieldRef);
 
-            return current == BooleanDisposable.True 
+            return current == BooleanDisposable.True
                 ? null
                 : current;
         }
@@ -113,7 +117,9 @@ namespace System.Reactive.Disposables
             var result = TrySetSingle(ref fieldRef, value);
 
             if (result == TrySetSingleResult.AlreadyAssigned)
+            {
                 throw new InvalidOperationException(Strings_Core.DISPOSABLE_ALREADY_ASSIGNED);
+            }
 
             return result == TrySetSingleResult.Success;
         }
@@ -126,10 +132,14 @@ namespace System.Reactive.Disposables
         {
             var old = Interlocked.CompareExchange(ref fieldRef, value, null);
             if (old == null)
+            {
                 return TrySetSingleResult.Success;
+            }
 
             if (old != BooleanDisposable.True)
+            {
                 return TrySetSingleResult.AlreadyAssigned;
+            }
 
             value?.Dispose();
             return TrySetSingleResult.Disposed;
@@ -220,7 +230,9 @@ namespace System.Reactive.Disposables
             var old = Interlocked.Exchange(ref fieldRef, BooleanDisposable.True);
 
             if (old == BooleanDisposable.True)
+            {
                 return false;
+            }
 
             old?.Dispose();
             return true;
@@ -231,7 +243,9 @@ namespace System.Reactive.Disposables
             var old = Interlocked.Exchange(ref fieldRef, BooleanDisposable.True);
 
             if (old == BooleanDisposable.True)
+            {
                 return false;
+            }
 
             disposeAction(old, state);
             return true;

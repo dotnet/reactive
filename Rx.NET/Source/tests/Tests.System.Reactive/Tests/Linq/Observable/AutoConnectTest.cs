@@ -5,14 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
@@ -21,7 +17,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void AutoConnect_Basic()
         {
-            int called = 0;
+            var called = 0;
 
             var source = Observable.Defer(() =>
             {
@@ -47,7 +43,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void AutoConnect_Immediately()
         {
-            int called = 0;
+            var called = 0;
 
             var source = Observable.Defer(() =>
             {
@@ -73,7 +69,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void AutoConnect_TwoConsumers()
         {
-            int called = 0;
+            var called = 0;
 
             var source = Observable.Defer(() =>
             {

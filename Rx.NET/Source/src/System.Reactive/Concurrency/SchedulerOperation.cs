@@ -89,10 +89,14 @@ namespace System.Reactive.Concurrency
         public void OnCompleted(Action continuation)
         {
             if (continuation == null)
+            {
                 throw new ArgumentNullException(nameof(continuation));
+            }
 
             if (_continuation != null)
+            {
                 throw new InvalidOperationException(Strings_Core.SCHEDULER_OPERATION_ALREADY_AWAITED);
+            }
 
             if (_postBackToOriginalContext)
             {

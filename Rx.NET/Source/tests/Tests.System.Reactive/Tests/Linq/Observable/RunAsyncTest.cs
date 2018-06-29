@@ -3,20 +3,13 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.Threading;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Subjects;
-using System.Reactive.Disposables;
 
 namespace ReactiveTests.Tests
 {
@@ -28,7 +21,7 @@ namespace ReactiveTests.Tests
             var ct = CancellationToken.None;
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RunAsync<int>(default(IObservable<int>), ct));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RunAsync<int>(default(IConnectableObservable<int>), ct));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RunAsync<int>(default, ct));
         }
 
         [Fact]

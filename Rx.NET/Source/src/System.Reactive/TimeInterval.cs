@@ -78,7 +78,9 @@ namespace System.Reactive
         public override bool Equals(object obj)
         {
             if (!(obj is TimeInterval<T>))
+            {
                 return false;
+            }
 
             var other = (TimeInterval<T>)obj;
             return Equals(other);

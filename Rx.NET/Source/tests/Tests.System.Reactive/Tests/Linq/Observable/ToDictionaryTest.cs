@@ -5,15 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -118,7 +113,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.ToDictionary(x => { if (x < 4) return x * 2; throw ex; }, x => x * 4, EqualityComparer<int>.Default)
+                xs.ToDictionary(x => { if (x < 4) { return x * 2; } throw ex; }, x => x * 4, EqualityComparer<int>.Default)
             );
 
             res.Messages.AssertEqual(
@@ -147,7 +142,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.ToDictionary(x => x * 2, x => { if (x < 4) return x * 4; throw ex; }, EqualityComparer<int>.Default)
+                xs.ToDictionary(x => x * 2, x => { if (x < 4) { return x * 4; } throw ex; }, EqualityComparer<int>.Default)
             );
 
             res.Messages.AssertEqual(

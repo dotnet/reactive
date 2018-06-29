@@ -14,7 +14,6 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class Eager : Producer<TSource, Eager._>
         {
             private readonly IConnectableObservable<TSource> _source;
-
             private readonly object _gate;
             private int _count;
             private IDisposable _connectableSubscription;
@@ -23,8 +22,6 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 _source = source;
                 _gate = new object();
-                _count = 0;
-                _connectableSubscription = default(IDisposable);
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(observer, this);
@@ -33,7 +30,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class _ : IdentitySink<TSource>
             {
-                readonly Eager _parent;
+                private readonly Eager _parent;
 
                 public _(IObserver<TSource> observer, Eager parent)
                     : base(observer)
@@ -90,7 +87,6 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly TimeSpan _disconnectTime;
             private readonly IConnectableObservable<TSource> _source;
             private IDisposable _serial;
-
             private int _count;
             private IDisposable _connectableSubscription;
 
@@ -100,8 +96,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 _gate = new object();
                 _disconnectTime = disconnectTime;
                 _scheduler = scheduler;
-                _count = 0;
-                _connectableSubscription = default(IDisposable);
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
@@ -124,7 +118,9 @@ namespace System.Reactive.Linq.ObservableImpl
                         if (++parent._count == 1)
                         {
                             if (parent._connectableSubscription == null)
+                            {
                                 parent._connectableSubscription = parent._source.Connect();
+                            }
 
                             Disposable.TrySetSerial(ref parent._serial, new SingleAssignmentDisposable());
                         }
