@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
@@ -309,6 +311,47 @@ namespace ReactiveTests.Tests
                 OnNext(252, 5),
                 OnCompleted<int>(252)
             );
+        }
+
+        [Fact]
+        public void AppendPrepend_SchedulerRecursive()
+        {
+            var scheduler = new EventLoopScheduler();
+
+            var source = Observable.Range(1, 1000).DelaySubscription(TimeSpan.FromMilliseconds(100), ThreadPoolScheduler.Instance);
+
+            var result = source.Prepend(0, scheduler).Prepend(-1, scheduler)
+                .Timeout(TimeSpan.FromSeconds(5))
+                .ToList().First();
+
+            Assert.Equal(1002, result.Count);
+
+            var j = 0;
+            for (var i = -1; i <= 1000; i++)
+            {
+                Assert.Equal(i, result[j++]);
+            }
+        }
+
+        [Fact]
+        public void AppendPrepend_SchedulerLongRunning()
+        {
+            var scheduler = NewThreadScheduler.Default;
+            Assert.True(scheduler is ISchedulerLongRunning, "Not a long-running scheduler!");
+
+            var source = Observable.Range(1, 1000).DelaySubscription(TimeSpan.FromMilliseconds(100), ThreadPoolScheduler.Instance);
+
+            var result = source.Prepend(0, scheduler).Prepend(-1, scheduler)
+                .Timeout(TimeSpan.FromSeconds(5))
+                .ToList().First();
+
+            Assert.Equal(1002, result.Count);
+
+            var j = 0;
+            for (var i = -1; i <= 1000; i++)
+            {
+                Assert.Equal(i, result[j++]);
+            }
         }
     }
 }

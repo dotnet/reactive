@@ -308,8 +308,6 @@ namespace System.Reactive.Linq.ObservableImpl
                             break;
                         }
                     }
-
-                    base.Dispose();
                 }
             }
         }
