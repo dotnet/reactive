@@ -10,7 +10,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class ConcatMany<T> : IObservable<T>
     {
-        readonly IObservable<IObservable<T>> sources;
+        private readonly IObservable<IObservable<T>> sources;
 
         internal ConcatMany(IObservable<IObservable<T>> sources)
         {
@@ -31,21 +31,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class ConcatManyOuterObserver : IObserver<IObservable<T>>, IDisposable
         {
-            readonly IObserver<T> downstream;
-
-            readonly ConcurrentQueue<IObservable<T>> queue;
-
-            readonly InnerObserver innerObserver;
-
-            IDisposable upstream;
-
-            int trampoline;
-
-            Exception error;
-
-            bool done;
-
-            int active;
+            private readonly IObserver<T> downstream;
+            private readonly ConcurrentQueue<IObservable<T>> queue;
+            private readonly InnerObserver innerObserver;
+            private IDisposable upstream;
+            private int trampoline;
+            private Exception error;
+            private bool done;
+            private int active;
 
             internal ConcatManyOuterObserver(IObserver<T> downstream)
             {
@@ -65,12 +58,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 DisposeMain();
             }
 
-            void DisposeMain()
+            private void DisposeMain()
             {
                 Disposable.TryDispose(ref upstream);
             }
 
-            bool IsDisposed()
+            private bool IsDisposed()
             {
                 return Disposable.GetIsDisposed(ref upstream);
             }
@@ -96,12 +89,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 Drain();
             }
 
-            void InnerNext(T item)
+            private void InnerNext(T item)
             {
                 downstream.OnNext(item);
             }
 
-            void InnerError(Exception error)
+            private void InnerError(Exception error)
             {
                 if (innerObserver.Finish())
                 {
@@ -114,7 +107,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            void InnerComplete()
+            private void InnerComplete()
             {
                 if (innerObserver.Finish())
                 {
@@ -123,7 +116,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            void Drain()
+            private void Drain()
             {
                 if (Interlocked.Increment(ref trampoline) != 1)
                 {
@@ -134,7 +127,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (IsDisposed())
                     {
-                        while (queue.TryDequeue(out var _)) ;
+                        while (queue.TryDequeue(out var _))
+                        {
+                            ;
+                        }
                     }
                     else
                     {
@@ -177,7 +173,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal sealed class InnerObserver : IObserver<T>, IDisposable
             {
-                readonly ConcatManyOuterObserver parent;
+                private readonly ConcatManyOuterObserver parent;
 
                 internal IDisposable upstream;
 

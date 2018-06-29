@@ -5,15 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -117,7 +112,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.ToLookup(x => { if (x < 4) return x * 2; throw ex; }, x => x * 4, EqualityComparer<int>.Default)
+                xs.ToLookup(x => { if (x < 4) { return x * 2; } throw ex; }, x => x * 4, EqualityComparer<int>.Default)
             );
 
             res.Messages.AssertEqual(
@@ -146,7 +141,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.ToLookup(x => x * 2, x => { if (x < 4) return x * 4; throw ex; }, EqualityComparer<int>.Default)
+                xs.ToLookup(x => x * 2, x => { if (x < 4) { return x * 4; } throw ex; }, EqualityComparer<int>.Default)
             );
 
             res.Messages.AssertEqual(
@@ -220,7 +215,9 @@ namespace ReactiveTests.Tests
                     g.AssertEqual(1, 3, 5, 7, 9);
                 }
                 else
+                {
                     Assert.True(false, "Unknown group.");
+                }
             }
         }
 
@@ -234,17 +231,27 @@ namespace ReactiveTests.Tests
                 if (g.Key == "0")
                 {
                     var l = new List<int>();
-                    foreach (int v in ((System.Collections.IEnumerable)g)) l.Add(v);
+                    foreach (int v in ((System.Collections.IEnumerable)g))
+                    {
+                        l.Add(v);
+                    }
+
                     l.AssertEqual(2, 4, 6, 8, 10);
                 }
                 else if (g.Key == "1")
                 {
                     var l = new List<int>();
-                    foreach (int v in ((System.Collections.IEnumerable)g)) l.Add(v);
+                    foreach (int v in ((System.Collections.IEnumerable)g))
+                    {
+                        l.Add(v);
+                    }
+
                     l.AssertEqual(1, 3, 5, 7, 9);
                 }
                 else
+                {
                     Assert.True(false, "Unknown group.");
+                }
             }
         }
 

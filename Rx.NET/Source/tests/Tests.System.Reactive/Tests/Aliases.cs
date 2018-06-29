@@ -2,20 +2,15 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
-using System.Reactive.Concurrency;
-using System.Threading;
-using Microsoft.Reactive.Testing;
-using Xunit;
 using System.Reactive.Linq;
 using System.Reactive.Observable.Aliases;
+using Microsoft.Reactive.Testing;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class AliasesTest : ReactiveTest
     {
         [Fact]

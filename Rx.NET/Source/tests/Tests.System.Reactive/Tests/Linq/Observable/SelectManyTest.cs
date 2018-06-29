@@ -5,18 +5,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
 using System.Reactive.Subjects;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -929,7 +924,10 @@ namespace ReactiveTests.Tests
                 {
                     invoked++;
                     if (invoked == 3)
+                    {
                         throw ex;
+                    }
+
                     return x;
                 })
             );
@@ -1545,7 +1543,10 @@ namespace ReactiveTests.Tests
                 {
                     invoked++;
                     if (invoked == 3)
+                    {
                         throw ex;
+                    }
+
                     return x;
                 })
             );
@@ -1892,7 +1893,9 @@ namespace ReactiveTests.Tests
                 {
                     invoked++;
                     if (invoked == 3)
+                    {
                         throw ex;
+                    }
 
                     return Enumerable.Repeat(x, x);
                 })
@@ -1943,7 +1946,9 @@ namespace ReactiveTests.Tests
                     (x, y) =>
                     {
                         if (x == 3)
+                        {
                             throw ex;
+                        }
 
                         return x + y;
                     }
@@ -2029,7 +2034,9 @@ namespace ReactiveTests.Tests
                     {
                         invoked++;
                         if (invoked == 3)
+                        {
                             throw ex;
+                        }
 
                         return Enumerable.Repeat(x, x);
                     },
@@ -2054,10 +2061,10 @@ namespace ReactiveTests.Tests
             Assert.Equal(3, invoked);
         }
 
-        class CurrentThrowsEnumerable<T> : IEnumerable<T>
+        private class CurrentThrowsEnumerable<T> : IEnumerable<T>
         {
-            IEnumerable<T> e;
-            Exception ex;
+            private IEnumerable<T> e;
+            private readonly Exception ex;
 
             public CurrentThrowsEnumerable(IEnumerable<T> e, Exception ex)
             {
@@ -2075,10 +2082,10 @@ namespace ReactiveTests.Tests
                 return GetEnumerator();
             }
 
-            class Enumerator : IEnumerator<T>
+            private class Enumerator : IEnumerator<T>
             {
-                IEnumerator<T> e;
-                Exception ex;
+                private IEnumerator<T> e;
+                private readonly Exception ex;
 
                 public Enumerator(IEnumerator<T> e, Exception ex)
                 {
@@ -2169,10 +2176,10 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class MoveNextThrowsEnumerable<T> : IEnumerable<T>
+        private class MoveNextThrowsEnumerable<T> : IEnumerable<T>
         {
-            IEnumerable<T> e;
-            Exception ex;
+            private IEnumerable<T> e;
+            private readonly Exception ex;
 
             public MoveNextThrowsEnumerable(IEnumerable<T> e, Exception ex)
             {
@@ -2190,10 +2197,10 @@ namespace ReactiveTests.Tests
                 return GetEnumerator();
             }
 
-            class Enumerator : IEnumerator<T>
+            private class Enumerator : IEnumerator<T>
             {
-                IEnumerator<T> e;
-                Exception ex;
+                private IEnumerator<T> e;
+                private readonly Exception ex;
 
                 public Enumerator(IEnumerator<T> e, Exception ex)
                 {
@@ -2656,7 +2663,9 @@ namespace ReactiveTests.Tests
                 {
                     invoked++;
                     if (invoked == 3)
+                    {
                         throw ex;
+                    }
 
                     return Enumerable.Repeat(x, x);
                 })
@@ -2707,7 +2716,9 @@ namespace ReactiveTests.Tests
                     (x, _, y, __) =>
                     {
                         if (x == 3)
+                        {
                             throw ex;
+                        }
 
                         return x + y;
                     }
@@ -2793,7 +2804,9 @@ namespace ReactiveTests.Tests
                     {
                         invoked++;
                         if (invoked == 3)
+                        {
                             throw ex;
+                        }
 
                         return Enumerable.Repeat(x, x);
                     },
@@ -3166,7 +3179,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        static T Throw<T>(Exception ex)
+        private static T Throw<T>(Exception ex)
         {
             throw ex;
         }
@@ -5046,7 +5059,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(default(IObservable<int>), x => t));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(DummyObservable<int>.Instance, default(Func<int, Task<int>>)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(default(IObservable<int>), (int x, CancellationToken ct) => t));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(default, (int x, CancellationToken ct) => t));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(DummyObservable<int>.Instance, default(Func<int, CancellationToken, Task<int>>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(default(IObservable<int>), x => t, (x, y) => x));
@@ -5080,14 +5093,19 @@ namespace ReactiveTests.Tests
             var res = Observable.Range(0, 10).SelectMany(x => Task.Factory.StartNew(() =>
             {
                 if (x > 5)
+                {
                     throw ex;
+                }
+
                 return x + 1;
             })).ToEnumerable();
 
             ReactiveAssert.Throws(ex, () =>
             {
                 foreach (var x in res)
+                {
                     ;
+                }
             });
         }
 
@@ -5099,14 +5117,19 @@ namespace ReactiveTests.Tests
             var res = Observable.Range(0, 10).SelectMany(x =>
             {
                 if (x > 5)
+                {
                     throw ex;
+                }
+
                 return Task.Factory.StartNew(() => x + 1);
             }).ToEnumerable();
 
             ReactiveAssert.Throws(ex, () =>
             {
                 foreach (var x in res)
+                {
                     ;
+                }
             });
         }
 
@@ -5132,14 +5155,19 @@ namespace ReactiveTests.Tests
             var res = Observable.Range(0, 10).SelectMany(x => Task.Factory.StartNew(() => x + 1), (x, y) =>
             {
                 if (x > 5)
+                {
                     throw ex;
+                }
+
                 return x + y;
             }).ToEnumerable();
 
             ReactiveAssert.Throws(ex, () =>
             {
                 foreach (var x in res)
+                {
                     ;
+                }
             });
         }
 
@@ -5500,7 +5528,9 @@ namespace ReactiveTests.Tests
             var res = Observable.SelectMany(xs, (x, token) =>
             {
                 if (x == 2)
+                {
                     throw ex;
+                }
 
                 var tcs = tcss[x];
 
@@ -5891,7 +5921,9 @@ namespace ReactiveTests.Tests
             var res = Observable.SelectMany(xs, (x, token) =>
             {
                 if (x == 2)
+                {
                     throw ex;
+                }
 
                 var tcs = tcss[x];
 
@@ -5993,14 +6025,19 @@ namespace ReactiveTests.Tests
             var res = Observable.Range(0, 10).SelectMany((int x, int _) => Task.Factory.StartNew(() =>
             {
                 if (x > 5)
+                {
                     throw ex;
+                }
+
                 return x + 1;
             })).ToEnumerable();
 
             ReactiveAssert.Throws(ex, () =>
             {
                 foreach (var x in res)
+                {
                     ;
+                }
             });
         }
 
@@ -6012,14 +6049,19 @@ namespace ReactiveTests.Tests
             var res = Observable.Range(0, 10).SelectMany((int x, int _) =>
             {
                 if (x > 5)
+                {
                     throw ex;
+                }
+
                 return Task.Factory.StartNew(() => x + 1);
             }).ToEnumerable();
 
             ReactiveAssert.Throws(ex, () =>
             {
                 foreach (var x in res)
+                {
                     ;
+                }
             });
         }
 
@@ -6045,14 +6087,19 @@ namespace ReactiveTests.Tests
             var res = Observable.Range(0, 10).SelectMany((x, _) => Task.Factory.StartNew(() => x + 1), (x, _, y) =>
             {
                 if (x > 5)
+                {
                     throw ex;
+                }
+
                 return x + y;
             }).ToEnumerable();
 
             ReactiveAssert.Throws(ex, () =>
             {
                 foreach (var x in res)
+                {
                     ;
+                }
             });
         }
 
@@ -6413,7 +6460,9 @@ namespace ReactiveTests.Tests
             var res = Observable.SelectMany(xs, (x, _, token) =>
             {
                 if (x == 2)
+                {
                     throw ex;
+                }
 
                 var tcs = tcss[x];
 
@@ -6804,7 +6853,9 @@ namespace ReactiveTests.Tests
             var res = Observable.SelectMany(xs, (x, _, token) =>
             {
                 if (x == 2)
+                {
                     throw ex;
+                }
 
                 var tcs = tcss[x];
 

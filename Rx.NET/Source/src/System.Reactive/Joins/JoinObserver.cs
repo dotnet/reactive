@@ -62,7 +62,9 @@ namespace System.Reactive.Joins
 
                     Queue.Enqueue(notification);
                     foreach (var activePlan in _activePlans.ToArray()) // Working on a copy since _activePlans might change while iterating.
+                    {
                         activePlan.Match();
+                    }
                 }
             }
         }
@@ -79,7 +81,9 @@ namespace System.Reactive.Joins
         {
             _activePlans.Remove(activePlan);
             if (_activePlans.Count == 0)
+            {
                 Dispose();
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -89,7 +93,9 @@ namespace System.Reactive.Joins
             if (!_isDisposed)
             {
                 if (disposing)
+                {
                     Disposable.TryDispose(ref _subscription);
+                }
 
                 _isDisposed = true;
             }

@@ -7,8 +7,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Reactive.Concurrency;
+using System.Reflection;
 
 namespace System.Reactive.Linq
 {
@@ -28,7 +28,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> AsObservable<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source;
         }
@@ -44,13 +46,15 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> ToQbservable<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return ((IQbservableProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.ToQbservable<TSource>(default(IQueryable<TSource>))),
+                    InfoOf(() => Qbservable.ToQbservable<TSource>(default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -71,15 +75,20 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> ToQbservable<TSource>(this IQueryable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return ((IQbservableProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.ToQbservable<TSource>(default(IQueryable<TSource>))),
+                    InfoOf(() => Qbservable.ToQbservable<TSource>(default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -92,7 +101,9 @@ namespace System.Reactive.Linq
         internal static Expression GetSourceExpression<TSource>(IObservable<TSource> source)
         {
             if (source is IQbservable<TSource> q)
+            {
                 return q.Expression;
+            }
 
             return Expression.Constant(source, typeof(IObservable<TSource>));
         }
@@ -100,7 +111,9 @@ namespace System.Reactive.Linq
         internal static Expression GetSourceExpression<TSource>(IEnumerable<TSource> source)
         {
             if (source is IQueryable<TSource> q)
+            {
                 return q.Expression;
+            }
 
             return Expression.Constant(source, typeof(IEnumerable<TSource>));
         }

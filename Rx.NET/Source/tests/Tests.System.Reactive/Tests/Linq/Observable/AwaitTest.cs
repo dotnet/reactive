@@ -3,19 +3,13 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.Threading;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Threading;
-using System.Reactive.Subjects;
-using System.Reactive.Disposables;
 
 namespace ReactiveTests.Tests
 {
@@ -25,7 +19,7 @@ namespace ReactiveTests.Tests
         public void Await_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GetAwaiter<int>(default(IObservable<int>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GetAwaiter<int>(default(IConnectableObservable<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GetAwaiter<int>(default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GetAwaiter(Observable.Empty<int>()).OnCompleted(null));
         }

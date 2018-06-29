@@ -6,20 +6,20 @@ using System;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
 using System.Threading;
-using Xunit;
 using Microsoft.Reactive.Testing;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class CurrentThreadSchedulerTest
     {
         [Fact]
         public void CurrentThread_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(42, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(42, default(TimeSpan), default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(42, default(DateTimeOffset), default(Func<IScheduler, int, IDisposable>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(42, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(42, default(TimeSpan), default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(42, default(DateTimeOffset), default));
         }
 
         [Fact]
@@ -61,7 +61,8 @@ namespace ReactiveTests.Tests
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var ran = false;
-            Scheduler.CurrentThread.Schedule(() => {
+            Scheduler.CurrentThread.Schedule(() =>
+            {
                 Assert.Equal(id, Thread.CurrentThread.ManagedThreadId);
                 Scheduler.CurrentThread.Schedule(() => { ran = true; });
             });
@@ -81,7 +82,7 @@ namespace ReactiveTests.Tests
             Assert.True(ran);
         }
 
-        [Fact(Skip ="")]
+        [Fact(Skip = "")]
         public void CurrentThread_ScheduleActionDue()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -100,11 +101,13 @@ namespace ReactiveTests.Tests
             var ran = false;
             var sw = new Stopwatch();
             sw.Start();
-            Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(0.2), () => {
+            Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(0.2), () =>
+            {
                 sw.Stop();
                 Assert.Equal(id, Thread.CurrentThread.ManagedThreadId);
                 sw.Start();
-                Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(0.2), () => {
+                Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(0.2), () =>
+                {
                     sw.Stop();
                     ran = true;
                 });
@@ -118,7 +121,8 @@ namespace ReactiveTests.Tests
         {
             var ran1 = false;
             var ran2 = false;
-            Scheduler.CurrentThread.EnsureTrampoline(() => {
+            Scheduler.CurrentThread.EnsureTrampoline(() =>
+            {
                 Scheduler.CurrentThread.Schedule(() => { ran1 = true; });
                 Scheduler.CurrentThread.Schedule(() => { ran2 = true; });
             });
@@ -147,7 +151,8 @@ namespace ReactiveTests.Tests
             var ran2 = false;
             Scheduler.CurrentThread.EnsureTrampoline(() =>
             {
-                Scheduler.CurrentThread.Schedule(() => {
+                Scheduler.CurrentThread.Schedule(() =>
+                {
                     ran1 = true;
                     var d = Scheduler.CurrentThread.Schedule(() => { ran2 = true; });
                     d.Dispose();

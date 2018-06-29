@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Threading;
 using System.Collections.Generic;
 
 namespace System.Reactive
@@ -32,10 +31,15 @@ namespace System.Reactive
         private int Percolate(int index)
         {
             if (index >= _size || index < 0)
+            {
                 return index;
+            }
+
             var parent = (index - 1) / 2;
             if (parent < 0 || parent == index)
+            {
                 return index;
+            }
 
             if (IsHigherPriority(index, parent))
             {
@@ -51,16 +55,24 @@ namespace System.Reactive
         private void Heapify(int index)
         {
             if (index >= _size || index < 0)
+            {
                 return;
+            }
 
             var left = 2 * index + 1;
             var right = 2 * index + 2;
             var first = index;
 
             if (left < _size && IsHigherPriority(left, first))
+            {
                 first = left;
+            }
+
             if (right < _size && IsHigherPriority(right, first))
+            {
                 first = right;
+            }
+
             if (first != index)
             {
                 var temp = _items[index];
@@ -75,7 +87,9 @@ namespace System.Reactive
         public T Peek()
         {
             if (_size == 0)
+            {
                 throw new InvalidOperationException(Strings_Core.HEAP_EMPTY);
+            }
 
             return _items[0].Value;
         }
@@ -83,10 +97,12 @@ namespace System.Reactive
         private void RemoveAt(int index)
         {
             _items[index] = _items[--_size];
-            _items[_size] = default(IndexedItem);
+            _items[_size] = default;
 
             if (Percolate(index) == index)
+            {
                 Heapify(index);
+            }
 
             if (_size < _items.Length / 4)
             {
@@ -140,7 +156,10 @@ namespace System.Reactive
             {
                 var c = Value.CompareTo(other.Value);
                 if (c == 0)
+                {
                     c = Id.CompareTo(other.Id);
+                }
+
                 return c;
             }
         }

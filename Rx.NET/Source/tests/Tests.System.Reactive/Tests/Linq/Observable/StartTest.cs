@@ -3,17 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
 
 namespace ReactiveTests.Tests
 {
@@ -24,7 +18,7 @@ namespace ReactiveTests.Tests
         public void Start_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Start(null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Start<int>((Func<int>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Start<int>(null));
 
             var someScheduler = new TestScheduler();
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Start(null, someScheduler));
@@ -37,7 +31,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Start_Action()
         {
-            bool done = false;
+            var done = false;
             Assert.True(Observable.Start(() => { done = true; }).ToEnumerable().SequenceEqual(new[] { new Unit() }));
             Assert.True(done, "done");
         }
@@ -47,7 +41,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            bool done = false;
+            var done = false;
 
             var res = scheduler.Start(() =>
                 Observable.Start(() => { done = true; }, scheduler)

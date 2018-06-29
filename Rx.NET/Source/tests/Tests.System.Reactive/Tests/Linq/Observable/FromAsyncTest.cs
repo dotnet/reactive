@@ -3,29 +3,26 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Threading;
 
 namespace ReactiveTests.Tests
 {
     public class FromAsyncTest : ReactiveTest
     {
-        private Task<int> doneTask;
+        private readonly Task<int> _doneTask;
 
         public FromAsyncTest()
         {
             var tcs = new TaskCompletionSource<int>();
             tcs.SetResult(42);
-            doneTask = tcs.Task;
+            _doneTask = tcs.Task;
         }
 
         #region Func
@@ -39,9 +36,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<CancellationToken, Task<int>>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<Task<int>>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(() => doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(() => _doneTask, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<CancellationToken, Task<int>>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(ct => doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(ct => _doneTask, default));
         }
 
         [Fact]
@@ -146,7 +143,9 @@ namespace ReactiveTests.Tests
                     {
                         e.Set();
                         while (true)
+                        {
                             ct.ThrowIfCancellationRequested();
+                        }
                     }
                     finally
                     {
@@ -161,7 +160,9 @@ namespace ReactiveTests.Tests
 
             f.WaitOne();
             while (!t.IsCompleted)
+            {
                 ;
+            }
         }
 
 #if DESKTOPCLR
@@ -229,9 +230,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<CancellationToken, Task>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<Task>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(() => (Task)doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(() => (Task)_doneTask, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<CancellationToken, Task>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(ct => (Task)doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(ct => (Task)_doneTask, default));
         }
 
         [Fact]
@@ -332,7 +333,9 @@ namespace ReactiveTests.Tests
                     {
                         e.Set();
                         while (true)
+                        {
                             ct.ThrowIfCancellationRequested();
+                        }
                     }
                     finally
                     {
@@ -347,7 +350,9 @@ namespace ReactiveTests.Tests
 
             f.WaitOne();
             while (!t.IsCompleted)
+            {
                 ;
+            }
         }
 
 #if DESKTOPCLR

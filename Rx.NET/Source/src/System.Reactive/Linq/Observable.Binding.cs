@@ -7,7 +7,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
 {
-	public static partial class Observable
+    public static partial class Observable
     {
         #region + Multicast +
 
@@ -25,9 +25,14 @@ namespace System.Reactive.Linq
         public static IConnectableObservable<TResult> Multicast<TSource, TResult>(this IObservable<TSource> source, ISubject<TSource, TResult> subject)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (subject == null)
+            {
                 throw new ArgumentNullException(nameof(subject));
+            }
 
             return s_impl.Multicast<TSource, TResult>(source, subject);
         }
@@ -48,11 +53,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Multicast<TSource, TIntermediate, TResult>(this IObservable<TSource> source, Func<ISubject<TSource, TIntermediate>> subjectSelector, Func<IObservable<TIntermediate>, IObservable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (subjectSelector == null)
+            {
                 throw new ArgumentNullException(nameof(subjectSelector));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.Multicast<TSource, TIntermediate, TResult>(source, subjectSelector, selector);
         }
@@ -74,7 +87,9 @@ namespace System.Reactive.Linq
         public static IConnectableObservable<TSource> Publish<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Publish<TSource>(source);
         }
@@ -93,9 +108,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Publish<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.Publish<TSource, TResult>(source, selector);
         }
@@ -114,7 +134,9 @@ namespace System.Reactive.Linq
         public static IConnectableObservable<TSource> Publish<TSource>(this IObservable<TSource> source, TSource initialValue)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Publish<TSource>(source, initialValue);
         }
@@ -134,9 +156,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Publish<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, TSource initialValue)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.Publish<TSource, TResult>(source, selector, initialValue);
         }
@@ -158,7 +185,9 @@ namespace System.Reactive.Linq
         public static IConnectableObservable<TSource> PublishLast<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.PublishLast<TSource>(source);
         }
@@ -177,9 +206,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> PublishLast<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.PublishLast<TSource, TResult>(source, selector);
         }
@@ -198,7 +232,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> RefCount<TSource>(this IConnectableObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.RefCount<TSource>(source);
         }
@@ -214,10 +250,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> RefCount<TSource>(this IConnectableObservable<TSource> source, TimeSpan disconnectDelay)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException("source");
+            }
 
             if (disconnectDelay < TimeSpan.Zero)
+            {
                 throw new ArgumentException("disconnectDelay");
+            }
 
             return s_impl.RefCount<TSource>(source, disconnectDelay);
         }
@@ -234,13 +274,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> RefCount<TSource>(this IConnectableObservable<TSource> source, TimeSpan disconnectDelay, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException("source");
+            }
 
             if (scheduler == null)
+            {
                 throw new ArgumentNullException("scheduler");
+            }
 
             if (disconnectDelay < TimeSpan.Zero)
+            {
                 throw new ArgumentException("disconnectDelay");
+            }
 
             return s_impl.RefCount<TSource>(source, disconnectDelay, scheduler);
         }
@@ -262,7 +308,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> AutoConnect<TSource>(this IConnectableObservable<TSource> source, int minObservers = 1, Action<IDisposable> onConnect = null)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.AutoConnect(source, minObservers, onConnect);
         }
@@ -284,7 +332,9 @@ namespace System.Reactive.Linq
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Replay<TSource>(source);
         }
@@ -303,9 +353,14 @@ namespace System.Reactive.Linq
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Replay<TSource>(source, scheduler);
         }
@@ -324,9 +379,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.Replay<TSource, TResult>(source, selector);
         }
@@ -346,11 +406,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Replay<TSource, TResult>(source, selector, scheduler);
         }
@@ -370,9 +438,14 @@ namespace System.Reactive.Linq
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, TimeSpan window)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (window < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(window));
+            }
 
             return s_impl.Replay<TSource>(source, window);
         }
@@ -393,11 +466,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, TimeSpan window)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
+
             if (window < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(window));
+            }
 
             return s_impl.Replay<TSource, TResult>(source, selector, window);
         }
@@ -418,11 +499,19 @@ namespace System.Reactive.Linq
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (window < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(window));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Replay<TSource>(source, window, scheduler);
         }
@@ -444,13 +533,24 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
+
             if (window < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(window));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Replay<TSource, TResult>(source, selector, window, scheduler);
         }
@@ -471,11 +571,19 @@ namespace System.Reactive.Linq
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, int bufferSize, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (bufferSize < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Replay<TSource>(source, bufferSize, scheduler);
         }
@@ -497,13 +605,24 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, int bufferSize, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
+
             if (bufferSize < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Replay<TSource, TResult>(source, selector, bufferSize, scheduler);
         }
@@ -523,9 +642,14 @@ namespace System.Reactive.Linq
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, int bufferSize)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (bufferSize < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
+            }
 
             return s_impl.Replay<TSource>(source, bufferSize);
         }
@@ -546,11 +670,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, int bufferSize)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
+
             if (bufferSize < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
+            }
 
             return s_impl.Replay<TSource, TResult>(source, selector, bufferSize);
         }
@@ -572,11 +704,19 @@ namespace System.Reactive.Linq
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, int bufferSize, TimeSpan window)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (bufferSize < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
+            }
+
             if (window < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(window));
+            }
 
             return s_impl.Replay<TSource>(source, bufferSize, window);
         }
@@ -599,13 +739,24 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, int bufferSize, TimeSpan window)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
+
             if (bufferSize < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
+            }
+
             if (window < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(window));
+            }
 
             return s_impl.Replay<TSource, TResult>(source, selector, bufferSize, window);
         }
@@ -628,13 +779,24 @@ namespace System.Reactive.Linq
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, int bufferSize, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (bufferSize < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
+            }
+
             if (window < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(window));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Replay<TSource>(source, bufferSize, window, scheduler);
         }
@@ -658,15 +820,29 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, int bufferSize, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
+
             if (bufferSize < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
+            }
+
             if (window < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(window));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Replay<TSource, TResult>(source, selector, bufferSize, window, scheduler);
         }

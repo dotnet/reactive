@@ -38,7 +38,9 @@ namespace System.Reactive
             {
 
                 if (!_dictionary.TryGetValue(key, out var list))
+                {
                     return Enumerable.Empty<E>();
+                }
 
                 return Hide(list);
             }

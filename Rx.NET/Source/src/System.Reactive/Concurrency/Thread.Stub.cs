@@ -27,6 +27,6 @@ namespace System.Reactive.Concurrency
         private void Run() => _start();
     }
 
-    delegate void ThreadStart();
+    internal delegate void ThreadStart();
 }
 #endif

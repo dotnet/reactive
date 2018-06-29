@@ -2,23 +2,20 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System;
 using System.Collections.Generic;
 using System.Reactive;
-using System;
 
 namespace Microsoft.Reactive.Testing
 {
-    class MockObserver<T> : ITestableObserver<T>
+    internal class MockObserver<T> : ITestableObserver<T>
     {
-        TestScheduler scheduler;
-        List<Recorded<Notification<T>>> messages;
+        private TestScheduler scheduler;
+        private List<Recorded<Notification<T>>> messages;
 
         public MockObserver(TestScheduler scheduler)
         {
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-
-            this.scheduler = scheduler;
+            this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             messages = new List<Recorded<Notification<T>>>();
         }
 

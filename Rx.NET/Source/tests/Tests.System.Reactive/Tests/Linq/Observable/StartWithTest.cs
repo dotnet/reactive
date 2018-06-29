@@ -4,19 +4,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
@@ -31,18 +22,18 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
             var someObservable = Observable.Empty<int>();
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(default(IObservable<int>), 1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(default, 1));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, default(int[])));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(default(IObservable<int>), values));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, default(IEnumerable<int>)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(default(IObservable<int>), scheduler, 1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(default, scheduler, 1));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, default(IScheduler), 1));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, scheduler, default(int[])));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, scheduler, default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(default(IObservable<int>), scheduler, values));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, default(IScheduler), values));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, default, values));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, scheduler, default(IEnumerable<int>)));
         }
 
@@ -103,7 +94,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            List<int> data = new List<int>(new[] { 1, 2, 3 });
+            var data = new List<int>(new[] { 1, 2, 3 });
             var res = scheduler.Start(() =>
                 xs.StartWith(data)
             );
@@ -128,7 +119,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            List<int> data = new List<int>(new[] { 1, 2, 3 });
+            var data = new List<int>(new[] { 1, 2, 3 });
             var res = scheduler.Start(() =>
                 xs.StartWith(scheduler, data)
             );

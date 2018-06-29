@@ -5,17 +5,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -26,7 +22,7 @@ namespace ReactiveTests.Tests
         public void EnumerableToObservable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToObservable((IEnumerable<int>)null, DummyScheduler.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToObservable(DummyEnumerable<int>.Instance, (IScheduler)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToObservable(DummyEnumerable<int>.Instance, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToObservable(DummyEnumerable<int>.Instance, DummyScheduler.Instance).Subscribe(null));
             ReactiveAssert.Throws<NullReferenceException>(() => Observable.ToObservable(NullEnumeratorEnumerable<int>.Instance, Scheduler.CurrentThread).Subscribe());
         }
@@ -161,7 +157,9 @@ namespace ReactiveTests.Tests
             start.WaitOne();
 
             while (lst.Count < 100)
+            {
                 ;
+            }
 
             d.Dispose();
             end.WaitOne();
@@ -193,7 +191,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        static IEnumerable<int> EnumerableToObservable_Error_Core(Exception ex)
+        private static IEnumerable<int> EnumerableToObservable_Error_Core(Exception ex)
         {
             yield return 1;
             yield return 2;

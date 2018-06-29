@@ -2,18 +2,18 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Reactive;
-using Xunit;
 using System;
 using System.Collections.Generic;
+using System.Reactive;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
     public class HalfSerializerTest
     {
-        int wip;
-        Exception error;
-        Consumer consumer = new Consumer();
+        private int wip;
+        private Exception error;
+        private Consumer consumer = new Consumer();
 
         [Fact]
         public void HalfSerializer_OnNext()
@@ -133,7 +133,7 @@ namespace ReactiveTests.Tests
             Assert.Null(consumer.exc);
         }
 
-        sealed class Consumer : ISink<int>
+        private sealed class Consumer : ISink<int>
         {
             internal List<int> items = new List<int>();
 
@@ -156,11 +156,10 @@ namespace ReactiveTests.Tests
             }
         }
 
-        sealed class ReentrantConsumer : ISink<int>
+        private sealed class ReentrantConsumer : ISink<int>
         {
-            readonly HalfSerializerTest parent;
-
-            readonly bool errorReenter;
+            private readonly HalfSerializerTest parent;
+            private readonly bool errorReenter;
 
             internal readonly Exception x = new IndexOutOfRangeException();
 
@@ -186,7 +185,8 @@ namespace ReactiveTests.Tests
                 if (errorReenter)
                 {
                     HalfSerializer.ForwardOnError(this, x, ref parent.wip, ref parent.error);
-                } else
+                }
+                else
                 {
                     HalfSerializer.ForwardOnCompleted(this, ref parent.wip, ref parent.error);
                 }

@@ -40,7 +40,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnCompleted()
             {
                 if (!_found)
+                {
                     ForwardOnNext(_defaultValue);
+                }
 
                 ForwardOnCompleted();
             }

@@ -3,17 +3,10 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
 
 namespace ReactiveTests.Tests
 {
@@ -33,7 +26,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(default(IObservable<decimal?>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(default(IObservable<long?>)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(default(IObservable<DateTime>), _ => default(int)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(default(IObservable<DateTime>), _ => default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(default(IObservable<DateTime>), _ => default(double)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(default(IObservable<DateTime>), _ => default(float)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(default(IObservable<DateTime>), _ => default(decimal)));
@@ -44,7 +37,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(default(IObservable<DateTime>), _ => default(decimal?)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(default(IObservable<DateTime>), _ => default(long?)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(Observable.Empty<DateTime>(), default(Func<DateTime, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(Observable.Empty<DateTime>(), default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(Observable.Empty<DateTime>(), default(Func<DateTime, double>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(Observable.Empty<DateTime>(), default(Func<DateTime, float>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(Observable.Empty<DateTime>(), default(Func<DateTime, decimal>)));
@@ -1408,7 +1401,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
-            var res = scheduler.Start(() => xs.Sum(x => (int)x.Length));
+            var res = scheduler.Start(() => xs.Sum(x => x.Length));
 
             res.Messages.AssertEqual(
                 OnNext(240, 6),

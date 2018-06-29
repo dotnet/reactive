@@ -4,21 +4,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
 using System.Reflection;
 using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
-using System.ComponentModel;
-using System.Diagnostics;
+using Microsoft.Reactive.Testing;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -35,7 +30,7 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern(null, h => { }, Scheduler.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern(h => { }, null, Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern(h => { }, h => { }, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern(h => { }, h => { }, default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, EventArgs>(null, h => { }, h => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, EventArgs>(h => new EventHandler(h), null, h => { }));
@@ -44,7 +39,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, EventArgs>(null, h => { }, h => { }, Scheduler.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, EventArgs>(h => new EventHandler(h), null, h => { }, Scheduler.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, EventArgs>(h => new EventHandler(h), h => { }, null, Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, EventArgs>(h => new EventHandler(h), h => { }, h => { }, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, EventArgs>(h => new EventHandler(h), h => { }, h => { }, default));
         }
 
         [Fact]
@@ -190,15 +185,15 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(null, h => { }, Scheduler.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(h => { }, null, Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(h => { }, h => { }, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(h => { }, h => { }, default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, EventArgs>(null, h => { }, Scheduler.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, EventArgs>(h => { }, null, Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, EventArgs>(h => { }, h => { }, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, EventArgs>(h => { }, h => { }, default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, object, EventArgs>(null, h => { }, Scheduler.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, object, EventArgs>(h => { }, null, Scheduler.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, object, EventArgs>(h => { }, h => { }, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, object, EventArgs>(h => { }, h => { }, default));
         }
 
         [Fact]
@@ -241,7 +236,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), null));
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(default(object), "foo", Scheduler.Default));
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), null, Scheduler.Default));
-            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), "foo", default(IScheduler)));
+            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), "foo", default));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), "E1"));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), "E5"));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), "E6"));
@@ -251,7 +246,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(new FromEventPattern_ArgCheck(), null));
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(default(object), "foo", Scheduler.Default));
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(new FromEventPattern_ArgCheck(), null, Scheduler.Default));
-            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(new FromEventPattern_ArgCheck(), "foo", default(IScheduler)));
+            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(new FromEventPattern_ArgCheck(), "foo", default));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern<EventArgs>(new FromEventPattern_ArgCheck(), "E1"));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern<EventArgs>(new FromEventPattern_ArgCheck(), "E2"));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern<EventArgs>(new FromEventPattern_ArgCheck(), "E3"));
@@ -264,7 +259,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<FromEventPattern_ArgCheck, EventArgs>(new FromEventPattern_ArgCheck(), null));
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<FromEventPattern_ArgCheck, EventArgs>(default(object), "foo", Scheduler.Default));
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<FromEventPattern_ArgCheck, EventArgs>(new FromEventPattern_ArgCheck(), null, Scheduler.Default));
-            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<FromEventPattern_ArgCheck, EventArgs>(new FromEventPattern_ArgCheck(), "foo", default(IScheduler)));
+            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<FromEventPattern_ArgCheck, EventArgs>(new FromEventPattern_ArgCheck(), "foo", default));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern<FromEventPattern_ArgCheck, EventArgs>(new FromEventPattern_ArgCheck(), "E1"));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern<FromEventPattern_ArgCheck, EventArgs>(new FromEventPattern_ArgCheck(), "E2"));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern<FromEventPattern_ArgCheck, EventArgs>(new FromEventPattern_ArgCheck(), "E3"));
@@ -394,7 +389,7 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => fe.M1(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(fe, "E1").Select(evt => new { Sender = (object)evt.Sender, EventArgs = (object)evt.EventArgs })
+                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(fe, "E1").Select(evt => new { Sender = evt.Sender, EventArgs = (object)evt.EventArgs })
             );
 
             results.Messages.AssertEqual(
@@ -419,7 +414,7 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => fe.M2(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(fe, "E2").Select(evt => new { Sender = (object)evt.Sender, EventArgs = (object)evt.EventArgs })
+                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(fe, "E2").Select(evt => new { Sender = evt.Sender, EventArgs = (object)evt.EventArgs })
             );
 
             results.Messages.AssertEqual(
@@ -444,7 +439,7 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => fe.M2(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern<object, FromEventPattern.TestEventArgs>(fe, "E2").Select(evt => new { Sender = (object)evt.Sender, EventArgs = (object)evt.EventArgs })
+                Observable.FromEventPattern<object, FromEventPattern.TestEventArgs>(fe, "E2").Select(evt => new { Sender = evt.Sender, EventArgs = (object)evt.EventArgs })
             );
 
             results.Messages.AssertEqual(
@@ -469,7 +464,7 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => fe.M3(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(fe, "E3").Select(evt => new { Sender = (object)evt.Sender, EventArgs = (object)evt.EventArgs })
+                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(fe, "E3").Select(evt => new { Sender = evt.Sender, EventArgs = (object)evt.EventArgs })
             );
 
             results.Messages.AssertEqual(
@@ -519,25 +514,25 @@ namespace ReactiveTests.Tests
         [Fact]
         public void FromEventPattern_Reflection_Static_ArgumentChecking()
         {
-            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(default(Type), "foo"));
+            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(default, "foo"));
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(typeof(FromEventPattern_ArgCheck), null));
-            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(default(Type), "foo", Scheduler.Default));
+            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(default, "foo", Scheduler.Default));
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(typeof(FromEventPattern_ArgCheck), null, Scheduler.Default));
-            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(typeof(FromEventPattern_ArgCheck), "foo", default(IScheduler)));
+            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(typeof(FromEventPattern_ArgCheck), "foo", default));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern(typeof(FromEventPattern_ArgCheck), "foo"));
 
-            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(default(Type), "foo"));
+            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(default, "foo"));
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(typeof(FromEventPattern_ArgCheck), null));
-            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(default(Type), "foo", Scheduler.Default));
+            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(default, "foo", Scheduler.Default));
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(typeof(FromEventPattern_ArgCheck), null, Scheduler.Default));
-            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(typeof(FromEventPattern_ArgCheck), "foo", default(IScheduler)));
+            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(typeof(FromEventPattern_ArgCheck), "foo", default));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern<EventArgs>(typeof(FromEventPattern_ArgCheck), "foo"));
 
-            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<object, EventArgs>(default(Type), "foo"));
+            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<object, EventArgs>(default, "foo"));
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<object, EventArgs>(typeof(FromEventPattern_ArgCheck), null));
-            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<object, EventArgs>(default(Type), "foo", Scheduler.Default));
+            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<object, EventArgs>(default, "foo", Scheduler.Default));
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<object, EventArgs>(typeof(FromEventPattern_ArgCheck), null, Scheduler.Default));
-            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<object, EventArgs>(typeof(FromEventPattern_ArgCheck), "foo", default(IScheduler)));
+            ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern<object, EventArgs>(typeof(FromEventPattern_ArgCheck), "foo", default));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern<object, EventArgs>(typeof(FromEventPattern_ArgCheck), "foo"));
         }
 
@@ -554,7 +549,7 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => FromEventPattern.M6(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(typeof(FromEventPattern), "E6").Select(evt => new { Sender = (object)evt.Sender, EventArgs = (object)evt.EventArgs })
+                Observable.FromEventPattern<FromEventPattern.TestEventArgs>(typeof(FromEventPattern), "E6").Select(evt => new { Sender = evt.Sender, EventArgs = (object)evt.EventArgs })
             );
 
             results.Messages.AssertEqual(
@@ -577,7 +572,7 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => FromEventPattern.M6(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern<object, FromEventPattern.TestEventArgs>(typeof(FromEventPattern), "E6").Select(evt => new { Sender = (object)evt.Sender, EventArgs = (object)evt.EventArgs })
+                Observable.FromEventPattern<object, FromEventPattern.TestEventArgs>(typeof(FromEventPattern), "E6").Select(evt => new { Sender = evt.Sender, EventArgs = (object)evt.EventArgs })
             );
 
             results.Messages.AssertEqual(
@@ -600,7 +595,7 @@ namespace ReactiveTests.Tests
             scheduler.ScheduleAbsolute(1050, () => FromEventPattern.M6(6));
 
             var results = scheduler.Start(() =>
-                Observable.FromEventPattern(typeof(FromEventPattern), "E6").Select(evt => new { Sender = (object)evt.Sender, EventArgs = (object)evt.EventArgs })
+                Observable.FromEventPattern(typeof(FromEventPattern), "E6").Select(evt => new { Sender = evt.Sender, EventArgs = evt.EventArgs })
             );
 
             results.Messages.AssertEqual(
@@ -769,9 +764,15 @@ namespace ReactiveTests.Tests
             public bool Equals(TestEventArgs other)
             {
                 if (other == this)
+                {
                     return true;
+                }
+
                 if (other == null)
+                {
                     return false;
+                }
+
                 return other.Id == Id;
             }
 
@@ -792,36 +793,28 @@ namespace ReactiveTests.Tests
 
         public void M1(int i)
         {
-            var e = E1;
-            if (e != null)
-                e(this, new TestEventArgs { Id = i });
+            E1?.Invoke(this, new TestEventArgs { Id = i });
         }
 
         public event EventHandler<TestEventArgs> E2;
 
         public void M2(int i)
         {
-            var e = E2;
-            if (e != null)
-                e(this, new TestEventArgs { Id = i });
+            E2?.Invoke(this, new TestEventArgs { Id = i });
         }
 
         public event Action<object, TestEventArgs> E3;
 
         public void M3(int i)
         {
-            var e = E3;
-            if (e != null)
-                e(this, new TestEventArgs { Id = i });
+            E3?.Invoke(this, new TestEventArgs { Id = i });
         }
 
         public event Action<int> E4;
 
         public void M4(int i)
         {
-            var e = E4;
-            if (e != null)
-                e(i);
+            E4?.Invoke(i);
         }
 
         public event TestEventHandler AddThrows
@@ -839,18 +832,14 @@ namespace ReactiveTests.Tests
         public event EventHandler E5;
         public void M5(int i)
         {
-            var e = E5;
-            if (e != null)
-                e(this, new FromEventPattern.TestEventArgs { Id = i });
+            E5?.Invoke(this, new FromEventPattern.TestEventArgs { Id = i });
         }
 
         public static event EventHandler<TestEventArgs> E6;
 
         public static void M6(int i)
         {
-            var e = E6;
-            if (e != null)
-                e(null, new TestEventArgs { Id = i });
+            E6?.Invoke(null, new TestEventArgs { Id = i });
         }
     }
 
@@ -862,33 +851,25 @@ namespace ReactiveTests.Tests
 
         public void OnA()
         {
-            var a = A;
-            if (a != null)
-                a();
+            A?.Invoke();
         }
 
         public event Action<int> B;
 
         public void OnB(int x)
         {
-            var b = B;
-            if (b != null)
-                b(x);
+            B?.Invoke(x);
         }
 
         public event MyAction C;
 
         public void OnC(int x)
         {
-            var c = C;
-            if (c != null)
-                c(x);
+            C?.Invoke(x);
         }
     }
 
-
-
-    class FromEventPattern_ArgCheck
+    internal class FromEventPattern_ArgCheck
     {
 #pragma warning disable 67
         public event Action E1;
@@ -910,20 +891,16 @@ namespace ReactiveTests.Tests
 
         public void OnE2(CancelEventArgs args)
         {
-            var e = E2;
-            if (e != null)
-                e(this, args);
+            E2?.Invoke(this, args);
         }
 
         public void OnE3(string sender)
         {
-            var e = E3;
-            if (e != null)
-                e(sender, EventArgs.Empty);
+            E3?.Invoke(sender, EventArgs.Empty);
         }
     }
 
-    class MyEventObject
+    internal class MyEventObject
     {
         public static Action Add;
         public static Action Remove;
@@ -941,19 +918,17 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class MyEventSource
+    internal class MyEventSource
     {
         public event EventHandler<MyEventArgs> Bar;
 
         public void OnBar(int value)
         {
-            var bar = Bar;
-            if (bar != null)
-                bar(this, new MyEventArgs(value));
+            Bar?.Invoke(this, new MyEventArgs(value));
         }
     }
 
-    class MyEventArgs : EventArgs
+    internal class MyEventArgs : EventArgs
     {
         public MyEventArgs(int value)
         {
@@ -963,7 +938,7 @@ namespace ReactiveTests.Tests
         public int Value { get; private set; }
     }
 
-    class MyEventSyncCtx : SynchronizationContext
+    internal class MyEventSyncCtx : SynchronizationContext
     {
         public int PostCount { get; private set; }
 
@@ -983,9 +958,9 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class MyEventScheduler : LocalScheduler
+    internal class MyEventScheduler : LocalScheduler
     {
-        private Action _schedule;
+        private readonly Action _schedule;
 
         public MyEventScheduler(Action schedule)
         {

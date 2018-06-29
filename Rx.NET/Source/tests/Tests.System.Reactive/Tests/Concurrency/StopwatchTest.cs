@@ -2,14 +2,11 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Reactive.Concurrency;
-using System.Threading;
-using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    static class StopwatchTest
+    internal static class StopwatchTest
     {
         public static void Run(IStopwatchProvider stopwatchProvider)
         {

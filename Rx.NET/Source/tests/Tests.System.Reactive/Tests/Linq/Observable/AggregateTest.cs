@@ -3,17 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -22,15 +16,15 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Aggregate_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int>(default(IObservable<int>), 1, (x, y) => x + y));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int>(DummyObservable<int>.Instance, 1, default(Func<int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int>(default, 1, (x, y) => x + y));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int>(DummyObservable<int>.Instance, 1, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int>(default(IObservable<int>), (x, y) => x + y));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int>(DummyObservable<int>.Instance, default(Func<int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int>(default, (x, y) => x + y));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int>(DummyObservable<int>.Instance, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(default(IObservable<int>), 1, (x, y) => x + y, x => x));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(DummyObservable<int>.Instance, 1, default(Func<int, int, int>), x => x));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(DummyObservable<int>.Instance, 1, (x, y) => x + y, default(Func<int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(default, 1, (x, y) => x + y, x => x));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(DummyObservable<int>.Instance, 1, default, x => x));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(DummyObservable<int>.Instance, 1, (x, y) => x + y, default));
         }
 
         [Fact]
@@ -179,7 +173,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.Aggregate(0, (acc, x) => { if (x < 3) return acc + x; throw ex; })
+                xs.Aggregate(0, (acc, x) => { if (x < 3) { return acc + x; } throw ex; })
             );
 
             res.Messages.AssertEqual(
@@ -337,7 +331,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.Aggregate(0, (acc, x) => { if (x < 3) return acc + x; throw ex; }, x => x * 5)
+                xs.Aggregate(0, (acc, x) => { if (x < 3) { return acc + x; } throw ex; }, x => x * 5)
             );
 
             res.Messages.AssertEqual(
@@ -516,7 +510,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.Aggregate((acc, x) => { if (x < 3) return acc + x; throw ex; })
+                xs.Aggregate((acc, x) => { if (x < 3) { return acc + x; } throw ex; })
             );
 
             res.Messages.AssertEqual(

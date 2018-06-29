@@ -4,19 +4,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -55,7 +46,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        IEnumerable<int> For_Error_Core(Exception ex)
+        private IEnumerable<int> For_Error_Core(Exception ex)
         {
             yield return 1;
             yield return 2;
@@ -118,7 +109,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        static T Throw<T>(Exception ex)
+        private static T Throw<T>(Exception ex)
         {
             throw ex;
         }

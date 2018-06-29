@@ -8,7 +8,7 @@ using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
-    class ConnectableObservable<T> : IConnectableObservable<T>
+    internal class ConnectableObservable<T> : IConnectableObservable<T>
     {
         private IConnectableObservable<T> _o;
 

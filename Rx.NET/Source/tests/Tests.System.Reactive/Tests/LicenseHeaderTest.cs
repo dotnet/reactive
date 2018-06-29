@@ -2,12 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests.System.Reactive.Tests
@@ -18,9 +14,8 @@ namespace Tests.System.Reactive.Tests
     /// </summary>
     public class LicenseHeaderTest
     {
-        static readonly bool fixHeaders = true;
-
-        static readonly string[] lines = {
+        private static readonly bool fixHeaders = true;
+        private static readonly string[] lines = {
             "// Licensed to the .NET Foundation under one or more agreements.",
             "// The .NET Foundation licenses this file to you under the Apache 2.0 License.",
             "// See the LICENSE file in the project root for more information.",
@@ -47,13 +42,13 @@ namespace Tests.System.Reactive.Tests
             }
         }
 
-        int ScanPath(string path, StringBuilder error)
+        private int ScanPath(string path, StringBuilder error)
         {
             var count = 0;
             foreach (var file in Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories))
             {
                 // exclusions
-                if (file.Contains("obj/Debug") 
+                if (file.Contains("obj/Debug")
                     || file.Contains(@"obj\Debug")
                     || file.Contains("AssemblyInfo.cs")
                     || file.Contains(".Designer.cs")
@@ -67,7 +62,7 @@ namespace Tests.System.Reactive.Tests
                 }
 
                 // analysis
-                string content = File.ReadAllText(file);
+                var content = File.ReadAllText(file);
 
                 if (!content.StartsWith(lines[0]))
                 {
@@ -76,8 +71,8 @@ namespace Tests.System.Reactive.Tests
 
                     if (fixHeaders)
                     {
-                        StringBuilder newContent = new StringBuilder();
-                        string separator = content.Contains("\r\n") ? "\r\n" : "\n";
+                        var newContent = new StringBuilder();
+                        var separator = content.Contains("\r\n") ? "\r\n" : "\n";
 
                         foreach (var s in lines)
                         {
@@ -86,7 +81,7 @@ namespace Tests.System.Reactive.Tests
                         newContent.Append(content);
 
                         File.WriteAllText(file, newContent.ToString());
-                     }
+                    }
                 }
             }
             return count;

@@ -28,7 +28,9 @@ namespace System.Reactive.Concurrency
         public IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return _scheduler.Schedule(state, Wrap(action));
         }
@@ -36,7 +38,9 @@ namespace System.Reactive.Concurrency
         public IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return _scheduler.Schedule(state, dueTime, Wrap(action));
         }
@@ -44,7 +48,9 @@ namespace System.Reactive.Concurrency
         public IDisposable Schedule<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return _scheduler.Schedule(state, dueTime, Wrap(action));
         }
@@ -63,12 +69,15 @@ namespace System.Reactive.Concurrency
 
         public object GetService(Type serviceType)
         {
-            var serviceProvider = _scheduler as IServiceProvider;
-            if (serviceProvider == null)
+            if (!(_scheduler is IServiceProvider serviceProvider))
+            {
                 return null;
+            }
 
             if (TryGetService(serviceProvider, serviceType, out var result))
+            {
                 return result;
+            }
 
             return serviceProvider.GetService(serviceType);
         }

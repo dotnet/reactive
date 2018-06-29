@@ -3,18 +3,12 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
 
 namespace ReactiveTests.Tests
 {
@@ -25,9 +19,9 @@ namespace ReactiveTests.Tests
         {
             var someObservable = Observable.Empty<int>();
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Synchronize<int>(default(IObservable<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Synchronize<int>(default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Synchronize<int>(default(IObservable<int>), new object()));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Synchronize<int>(default, new object()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Synchronize<int>(someObservable, null));
         }
 
@@ -35,8 +29,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Synchronize_Range()
         {
-            int i = 0;
-            bool outsideLock = true;
+            var i = 0;
+            var outsideLock = true;
 
             var gate = new object();
             lock (gate)
@@ -53,7 +47,7 @@ namespace ReactiveTests.Tests
                 Thread.Sleep(10);
                 lock (gate)
                 {
-                    int start = i;
+                    var start = i;
                     Thread.Sleep(100);
                     Assert.Equal(start, i);
                 }
@@ -66,7 +60,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
             var resLock = new object();
             var e = default(Exception);
-            bool outsideLock = true;
+            var outsideLock = true;
 
             var gate = new object();
             lock (gate)
@@ -83,7 +77,9 @@ namespace ReactiveTests.Tests
                 lock (resLock)
                 {
                     if (e != null)
+                    {
                         break;
+                    }
                 }
             }
 
@@ -97,7 +93,7 @@ namespace ReactiveTests.Tests
             {
                 var t1 = new Thread(() =>
                 {
-                    for (int i = 0; i < 100; i++)
+                    for (var i = 0; i < 100; i++)
                     {
                         obs.OnNext(i);
                     }
@@ -107,7 +103,7 @@ namespace ReactiveTests.Tests
                 {
                     t1.Start();
 
-                    for (int i = 100; i < 200; i++)
+                    for (var i = 100; i < 200; i++)
                     {
                         obs.OnNext(i);
                     }
@@ -121,7 +117,7 @@ namespace ReactiveTests.Tests
 
             var evt = new ManualResetEvent(false);
 
-            int sum = 0;
+            var sum = 0;
             o.Synchronize().Subscribe(x => sum += x, () => { evt.Set(); });
 
             evt.WaitOne();

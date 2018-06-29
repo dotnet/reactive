@@ -2,14 +2,10 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Globalization;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
-using System.Reflection;
 using System.Threading;
 
 #if HAS_WINRT
-using System.Runtime.InteropServices.WindowsRuntime;
 #endif
 
 namespace System.Reactive.Linq
@@ -369,9 +365,13 @@ namespace System.Reactive.Linq
             var context = SynchronizationContext.Current;
 
             if (context != null)
+            {
                 return new SynchronizationContextScheduler(context, false);
+            }
             else
+            {
                 return SchedulerDefaults.ConstantTimeOperations;
+            }
         }
 
         #endregion

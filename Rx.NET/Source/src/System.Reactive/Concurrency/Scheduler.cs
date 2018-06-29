@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Reactive.PlatformServices;
 using System.Globalization;
+using System.Reactive.PlatformServices;
 
 namespace System.Reactive.Concurrency
 {
@@ -90,7 +90,10 @@ namespace System.Reactive.Concurrency
             var res = PlatformEnlightenmentProvider.Current.GetService<IScheduler>(name);
 #pragma warning restore CS0618 // Type or member is obsolete
             if (res == null)
+            {
                 throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, Strings_Core.CANT_OBTAIN_SCHEDULER, name));
+            }
+
             return res;
         }
     }

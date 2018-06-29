@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class SynchronizationContextSchedulerTest
     {
         [Fact]
@@ -23,9 +23,9 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(null, true));
-            ReactiveAssert.Throws<ArgumentNullException>(() => s.Schedule<int>(42, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => s.Schedule<int>(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => s.Schedule<int>(42, TimeSpan.Zero, default(Func<IScheduler, int, IDisposable>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => s.Schedule<int>(42, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => s.Schedule<int>(42, DateTimeOffset.Now, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => s.Schedule<int>(42, TimeSpan.Zero, default));
         }
 
         [Fact]
@@ -112,7 +112,7 @@ namespace ReactiveTests.Tests
             Assert.True(ms.Count == 1);
         }
 
-        class MySync : SynchronizationContext
+        private class MySync : SynchronizationContext
         {
             public int Count { get; private set; }
 

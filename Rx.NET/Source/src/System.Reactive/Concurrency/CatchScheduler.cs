@@ -77,7 +77,7 @@ namespace System.Reactive.Concurrency
             public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
             {
                 return _scheduler.ScheduleLongRunning(
-                    (scheduler: this, action, state), 
+                    (scheduler: this, action, state),
                     (tuple, cancel) =>
                     {
                         try
@@ -124,7 +124,9 @@ namespace System.Reactive.Concurrency
                     // take effect.
                     //
                     if (_failed)
+                    {
                         return default;
+                    }
 
                     try
                     {
@@ -135,7 +137,9 @@ namespace System.Reactive.Concurrency
                         _failed = true;
 
                         if (!_catchScheduler._handler(exception))
+                        {
                             throw;
+                        }
 
                         Disposable.TryDispose(ref _cancel);
                         return default;
