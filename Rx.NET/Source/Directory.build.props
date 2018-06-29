@@ -21,6 +21,7 @@
     <PackageOutputPath>$(MSBuildThisFileDirectory)artifacts</PackageOutputPath>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   
   <ItemGroup Condition="'$(IsTestProject)' != 'true' and '$(SourceLinkEnabled)' != 'false'">
