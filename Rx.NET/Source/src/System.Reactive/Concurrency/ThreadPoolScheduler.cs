@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 #if !WINDOWS && !NO_THREAD
-using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Threading;
 
@@ -12,7 +11,7 @@ namespace System.Reactive.Concurrency
     /// <summary>
     /// Represents an object that schedules units of work on the CLR thread pool.
     /// </summary>
-    /// <seealso cref="ThreadPoolScheduler.Instance">Singleton instance of this type exposed through this static property.</seealso>
+    /// <seealso cref="Instance">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
         private static readonly Lazy<ThreadPoolScheduler> LazyInstance = new Lazy<ThreadPoolScheduler>(() => new ThreadPoolScheduler());

@@ -12,13 +12,13 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.Default">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class DefaultScheduler : LocalScheduler, ISchedulerPeriodic
     {
-        private static readonly Lazy<DefaultScheduler> s_instance = new Lazy<DefaultScheduler>(() => new DefaultScheduler());
-        private static IConcurrencyAbstractionLayer s_cal = ConcurrencyAbstractionLayer.Current;
+        private static readonly Lazy<DefaultScheduler> _instance = new Lazy<DefaultScheduler>(() => new DefaultScheduler());
+        private static IConcurrencyAbstractionLayer _cal = ConcurrencyAbstractionLayer.Current;
 
         /// <summary>
         /// Gets the singleton instance of the default scheduler.
         /// </summary>
-        public static DefaultScheduler Instance => s_instance.Value;
+        public static DefaultScheduler Instance => _instance.Value;
 
         private DefaultScheduler()
         {
@@ -41,7 +41,7 @@ namespace System.Reactive.Concurrency
 
             var workItem = new UserWorkItem<TState>(this, state, action);
 
-            workItem.CancelQueueDisposable = s_cal.QueueUserWorkItem(
+            workItem.CancelQueueDisposable = _cal.QueueUserWorkItem(
                 closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
                 workItem);
 
@@ -72,7 +72,7 @@ namespace System.Reactive.Concurrency
 
             var workItem = new UserWorkItem<TState>(this, state, action);
 
-            workItem.CancelQueueDisposable = s_cal.StartTimer(
+            workItem.CancelQueueDisposable = _cal.StartTimer(
                 closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
                 workItem,
                 dt);
@@ -117,7 +117,7 @@ namespace System.Reactive.Concurrency
                 _state = state;
                 _action = action;
 
-                _cancel = s_cal.StartPeriodicTimer(Tick, period);
+                _cancel = _cal.StartPeriodicTimer(Tick, period);
             }
 
             private void Tick()
@@ -145,7 +145,7 @@ namespace System.Reactive.Concurrency
         {
             if (serviceType == typeof(ISchedulerLongRunning))
             {
-                if (s_cal.SupportsLongRunning)
+                if (_cal.SupportsLongRunning)
                 {
                     return LongRunning.Instance;
                 }
@@ -168,7 +168,7 @@ namespace System.Reactive.Concurrency
                     _state = state;
                     _action = action;
 
-                    s_cal.StartThread(
+                    _cal.StartThread(
                         @thisObject =>
                         {
                             var @this = (LongScheduledWorkItem<TState>)@thisObject;

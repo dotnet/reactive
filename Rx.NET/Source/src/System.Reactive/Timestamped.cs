@@ -102,7 +102,7 @@ namespace System.Reactive
         /// <returns>String representation of the current <see cref="Timestamped{T}" /> value.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.CurrentCulture, "{0}@{1}", Value, Timestamp);
+            return string.Format(CultureInfo.CurrentCulture, "{0}@{1}", Value, Timestamp);
         }
     }
 

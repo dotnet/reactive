@@ -12,7 +12,7 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.CurrentThread">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class CurrentThreadScheduler : LocalScheduler
     {
-        private static readonly Lazy<CurrentThreadScheduler> s_instance = new Lazy<CurrentThreadScheduler>(() => new CurrentThreadScheduler());
+        private static readonly Lazy<CurrentThreadScheduler> _staticInstance = new Lazy<CurrentThreadScheduler>(() => new CurrentThreadScheduler());
 
         private CurrentThreadScheduler()
         {
@@ -21,34 +21,34 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the singleton instance of the current thread scheduler.
         /// </summary>
-        public static CurrentThreadScheduler Instance => s_instance.Value;
+        public static CurrentThreadScheduler Instance => _staticInstance.Value;
 
         [ThreadStatic]
-        private static SchedulerQueue<TimeSpan> s_threadLocalQueue;
+        private static SchedulerQueue<TimeSpan> _threadLocalQueue;
 
         [ThreadStatic]
-        private static IStopwatch s_clock;
+        private static IStopwatch _clock;
 
         [ThreadStatic]
-        private static bool running;
+        private static bool _running;
 
-        private static SchedulerQueue<TimeSpan> GetQueue() => s_threadLocalQueue;
+        private static SchedulerQueue<TimeSpan> GetQueue() => _threadLocalQueue;
 
         private static void SetQueue(SchedulerQueue<TimeSpan> newQueue)
         {
-            s_threadLocalQueue = newQueue;
+            _threadLocalQueue = newQueue;
         }
 
         private static TimeSpan Time
         {
             get
             {
-                if (s_clock == null)
+                if (_clock == null)
                 {
-                    s_clock = ConcurrencyAbstractionLayer.Current.StartStopwatch();
+                    _clock = ConcurrencyAbstractionLayer.Current.StartStopwatch();
                 }
 
-                return s_clock.Elapsed;
+                return _clock.Elapsed;
             }
         }
 
@@ -64,7 +64,7 @@ namespace System.Reactive.Concurrency
         /// Gets a value that indicates whether the caller must call a Schedule method.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static bool IsScheduleRequired => !running;
+        public static bool IsScheduleRequired => !_running;
 
         /// <summary>
         /// Schedules an action to be executed after dueTime.
@@ -85,9 +85,9 @@ namespace System.Reactive.Concurrency
             var queue = default(SchedulerQueue<TimeSpan>);
 
             // There is no timed task and no task is currently running
-            if (!running)
+            if (!_running)
             {
-                running = true;
+                _running = true;
 
                 if (dueTime > TimeSpan.Zero)
                 {
@@ -103,7 +103,7 @@ namespace System.Reactive.Concurrency
                 catch
                 {
                     SetQueue(null);
-                    running = false;
+                    _running = false;
                     throw;
                 }
 
@@ -120,12 +120,12 @@ namespace System.Reactive.Concurrency
                     finally
                     {
                         SetQueue(null);
-                        running = false;
+                        _running = false;
                     }
                 }
                 else
                 {
-                    running = false;
+                    _running = false;
                 }
 
                 return d;

@@ -173,41 +173,41 @@ namespace System.Reactive.Concurrency
 
         private abstract class InvokeRecBaseState<TState> : IDisposable
         {
-            protected readonly IScheduler scheduler;
+            protected readonly IScheduler Scheduler;
 
-            protected readonly CompositeDisposable group;
+            protected readonly CompositeDisposable Group;
 
             public InvokeRecBaseState(IScheduler scheduler)
             {
-                this.scheduler = scheduler;
-                group = new CompositeDisposable();
+                Scheduler = scheduler;
+                Group = new CompositeDisposable();
             }
 
             public void Dispose()
             {
-                group.Dispose();
+                Group.Dispose();
             }
 
         }
 
         private sealed class InvokeRec1State<TState> : InvokeRecBaseState<TState>
         {
-            private readonly Action<TState, Action<TState>> action;
-            private readonly Action<TState> recurseCallback;
+            private readonly Action<TState, Action<TState>> _action;
+            private readonly Action<TState> _recurseCallback;
 
             public InvokeRec1State(IScheduler scheduler, Action<TState, Action<TState>> action) : base(scheduler)
             {
-                this.action = action;
-                recurseCallback = state => InvokeNext(state);
+                _action = action;
+                _recurseCallback = state => InvokeNext(state);
             }
 
             internal void InvokeNext(TState state)
             {
                 var sad = new SingleAssignmentDisposable();
-                group.Add(sad);
-                sad.Disposable = scheduler.Schedule((state, sad, @this: this), (_, nextState) =>
+                Group.Add(sad);
+                sad.Disposable = Scheduler.Schedule((state, sad, @this: this), (_, nextState) =>
                 {
-                    nextState.@this.group.Remove(nextState.sad);
+                    nextState.@this.Group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
                     return Disposable.Empty;
                 });
@@ -215,28 +215,28 @@ namespace System.Reactive.Concurrency
 
             internal void InvokeFirst(TState state)
             {
-                action(state, recurseCallback);
+                _action(state, _recurseCallback);
             }
         }
 
         private sealed class InvokeRec2State<TState> : InvokeRecBaseState<TState>
         {
-            private readonly Action<TState, Action<TState, TimeSpan>> action;
-            private readonly Action<TState, TimeSpan> recurseCallback;
+            private readonly Action<TState, Action<TState, TimeSpan>> _action;
+            private readonly Action<TState, TimeSpan> _recurseCallback;
 
             public InvokeRec2State(IScheduler scheduler, Action<TState, Action<TState, TimeSpan>> action) : base(scheduler)
             {
-                this.action = action;
-                recurseCallback = (state, time) => InvokeNext(state, time);
+                _action = action;
+                _recurseCallback = (state, time) => InvokeNext(state, time);
             }
 
             internal void InvokeNext(TState state, TimeSpan time)
             {
                 var sad = new SingleAssignmentDisposable();
-                group.Add(sad);
-                sad.Disposable = scheduler.Schedule((state, sad, @this: this), time, (_, nextState) =>
+                Group.Add(sad);
+                sad.Disposable = Scheduler.Schedule((state, sad, @this: this), time, (_, nextState) =>
                 {
-                    nextState.@this.group.Remove(nextState.sad);
+                    nextState.@this.Group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
                     return Disposable.Empty;
                 });
@@ -244,28 +244,28 @@ namespace System.Reactive.Concurrency
 
             internal void InvokeFirst(TState state)
             {
-                action(state, recurseCallback);
+                _action(state, _recurseCallback);
             }
         }
 
         private sealed class InvokeRec3State<TState> : InvokeRecBaseState<TState>
         {
-            private readonly Action<TState, Action<TState, DateTimeOffset>> action;
-            private readonly Action<TState, DateTimeOffset> recurseCallback;
+            private readonly Action<TState, Action<TState, DateTimeOffset>> _action;
+            private readonly Action<TState, DateTimeOffset> _recurseCallback;
 
             public InvokeRec3State(IScheduler scheduler, Action<TState, Action<TState, DateTimeOffset>> action) : base(scheduler)
             {
-                this.action = action;
-                recurseCallback = (state, dtOffset) => InvokeNext(state, dtOffset);
+                _action = action;
+                _recurseCallback = (state, dtOffset) => InvokeNext(state, dtOffset);
             }
 
             internal void InvokeNext(TState state, DateTimeOffset dtOffset)
             {
                 var sad = new SingleAssignmentDisposable();
-                group.Add(sad);
-                sad.Disposable = scheduler.Schedule((state, sad, @this: this), dtOffset, (_, nextState) =>
+                Group.Add(sad);
+                sad.Disposable = Scheduler.Schedule((state, sad, @this: this), dtOffset, (_, nextState) =>
                 {
-                    nextState.@this.group.Remove(nextState.sad);
+                    nextState.@this.Group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
                     return Disposable.Empty;
                 });
@@ -273,7 +273,7 @@ namespace System.Reactive.Concurrency
 
             internal void InvokeFirst(TState state)
             {
-                action(state, recurseCallback);
+                _action(state, _recurseCallback);
             }
         }
     }

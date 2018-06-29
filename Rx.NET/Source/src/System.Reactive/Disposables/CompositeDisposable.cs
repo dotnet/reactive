@@ -388,18 +388,18 @@ namespace System.Reactive.Disposables
         /// </summary>
         private sealed class CompositeEnumerator : IEnumerator<IDisposable>
         {
-            private readonly IDisposable[] disposables;
-            private int index;
+            private readonly IDisposable[] _disposables;
+            private int _index;
 
             public CompositeEnumerator(IDisposable[] disposables)
             {
-                this.disposables = disposables;
-                index = -1;
+                _disposables = disposables;
+                _index = -1;
             }
 
-            public IDisposable Current => disposables[index];
+            public IDisposable Current => _disposables[_index];
 
-            object IEnumerator.Current => disposables[index];
+            object IEnumerator.Current => _disposables[_index];
 
             public void Dispose()
             {
@@ -407,17 +407,17 @@ namespace System.Reactive.Disposables
                 // beyond the lifecycle of the enumerator.
                 // Not sure if this happens by default to
                 // generic array enumerators though.
-                var disposables = this.disposables;
+                var disposables = _disposables;
                 Array.Clear(disposables, 0, disposables.Length);
             }
 
             public bool MoveNext()
             {
-                var disposables = this.disposables;
+                var disposables = _disposables;
 
                 for (; ; )
                 {
-                    var idx = ++index;
+                    var idx = ++_index;
                     if (idx >= disposables.Length)
                     {
                         return false;
@@ -432,7 +432,7 @@ namespace System.Reactive.Disposables
 
             public void Reset()
             {
-                index = -1;
+                _index = -1;
             }
         }
     }

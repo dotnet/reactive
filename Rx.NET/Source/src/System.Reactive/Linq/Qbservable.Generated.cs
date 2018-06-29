@@ -1,4 +1,4 @@
-/*
+﻿/*
  * WARNING: Auto-generated file (merged on 06/13/2018)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
@@ -11,7 +11,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
+#if !CRIPPLED_REFLECTION
 using System.Reflection;
+#endif
 using System.Threading;
 using System.Threading.Tasks;
 

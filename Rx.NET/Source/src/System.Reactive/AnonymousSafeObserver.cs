@@ -24,7 +24,7 @@ namespace System.Reactive
         private readonly Action<Exception> _onError;
         private readonly Action _onCompleted;
 
-        private int isStopped;
+        private int _isStopped;
 
         public AnonymousSafeObserver(Action<T> onNext, Action<Exception> onError, Action onCompleted)
         {
@@ -35,7 +35,7 @@ namespace System.Reactive
 
         public override void OnNext(T value)
         {
-            if (isStopped == 0)
+            if (_isStopped == 0)
             {
                 var __noError = false;
                 try
@@ -55,7 +55,7 @@ namespace System.Reactive
 
         public override void OnError(Exception error)
         {
-            if (Interlocked.Exchange(ref isStopped, 1) == 0)
+            if (Interlocked.Exchange(ref _isStopped, 1) == 0)
             {
                 using (this)
                 {
@@ -66,7 +66,7 @@ namespace System.Reactive
 
         public override void OnCompleted()
         {
-            if (Interlocked.Exchange(ref isStopped, 1) == 0)
+            if (Interlocked.Exchange(ref _isStopped, 1) == 0)
             {
                 using (this)
                 {

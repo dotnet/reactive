@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying typed event.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="addHandler"/> or <paramref name="removeHandler"/> is null.</exception>
-        /// <seealso cref="WindowsObservable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TResult>> FromEventPattern<TSender, TResult>(Action<TypedEventHandler<TSender, TResult>> addHandler, Action<TypedEventHandler<TSender, TResult>> removeHandler)
         {
             if (addHandler == null)
@@ -62,7 +62,7 @@ namespace System.Reactive.Linq
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying typed event.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="conversion"/> or <paramref name="addHandler"/> or <paramref name="removeHandler"/> is null.</exception>
-        /// <seealso cref="WindowsObservable.ToEventPattern"/>
+        /// <seealso cref="ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TResult>> FromEventPattern<TDelegate, TSender, TResult>(Func<TypedEventHandler<TSender, TResult>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
         {
             if (conversion == null)

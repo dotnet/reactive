@@ -35,7 +35,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(dispatcher));
             }
 
-            return ObserveOn_<TSource>(source, dispatcher);
+            return ObserveOn_(source, dispatcher);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(dispatcher));
             }
 
-            return ObserveOn_<TSource>(source, dispatcher, priority);
+            return ObserveOn_(source, dispatcher, priority);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return ObserveOn_<TSource>(source, scheduler.Dispatcher, scheduler.Priority);
+            return ObserveOn_(source, scheduler.Dispatcher, scheduler.Priority);
         }
 
 
@@ -106,7 +106,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(dispatcherObject));
             }
 
-            return ObserveOn_<TSource>(source, dispatcherObject.Dispatcher);
+            return ObserveOn_(source, dispatcherObject.Dispatcher);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(dispatcherObject));
             }
 
-            return ObserveOn_<TSource>(source, dispatcherObject.Dispatcher, priority);
+            return ObserveOn_(source, dispatcherObject.Dispatcher, priority);
         }
 
 
@@ -148,7 +148,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return ObserveOn_<TSource>(source, DispatcherScheduler.Current.Dispatcher);
+            return ObserveOn_(source, DispatcherScheduler.Current.Dispatcher);
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return ObserveOn_<TSource>(source, DispatcherScheduler.Current.Dispatcher, priority);
+            return ObserveOn_(source, DispatcherScheduler.Current.Dispatcher, priority);
         }
 
         private static IObservable<TSource> ObserveOn_<TSource>(IObservable<TSource> source, Dispatcher dispatcher, DispatcherPriority priority)
@@ -208,7 +208,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(dispatcher));
             }
 
-            return SubscribeOn_<TSource>(source, dispatcher);
+            return SubscribeOn_(source, dispatcher);
         }
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(dispatcher));
             }
 
-            return SubscribeOn_<TSource>(source, dispatcher, priority);
+            return SubscribeOn_(source, dispatcher, priority);
         }
 
 
@@ -264,7 +264,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return SubscribeOn_<TSource>(source, scheduler.Dispatcher, scheduler.Priority);
+            return SubscribeOn_(source, scheduler.Dispatcher, scheduler.Priority);
         }
 
         /// <summary>
@@ -291,7 +291,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(dispatcherObject));
             }
 
-            return SubscribeOn_<TSource>(source, dispatcherObject.Dispatcher);
+            return SubscribeOn_(source, dispatcherObject.Dispatcher);
         }
 
         /// <summary>
@@ -319,7 +319,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(dispatcherObject));
             }
 
-            return SubscribeOn_<TSource>(source, dispatcherObject.Dispatcher, priority);
+            return SubscribeOn_(source, dispatcherObject.Dispatcher, priority);
         }
 
         /// <summary>
@@ -340,7 +340,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return SubscribeOn_<TSource>(source, DispatcherScheduler.Current.Dispatcher);
+            return SubscribeOn_(source, DispatcherScheduler.Current.Dispatcher);
         }
 
         /// <summary>
@@ -362,7 +362,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return SubscribeOn_<TSource>(source, DispatcherScheduler.Current.Dispatcher, priority);
+            return SubscribeOn_(source, DispatcherScheduler.Current.Dispatcher, priority);
         }
 
         private static IObservable<TSource> SubscribeOn_<TSource>(IObservable<TSource> source, Dispatcher dispatcher, DispatcherPriority priority)

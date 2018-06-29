@@ -12,7 +12,7 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.Immediate">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class ImmediateScheduler : LocalScheduler
     {
-        private static readonly Lazy<ImmediateScheduler> s_instance = new Lazy<ImmediateScheduler>(() => new ImmediateScheduler());
+        private static readonly Lazy<ImmediateScheduler> _instance = new Lazy<ImmediateScheduler>(() => new ImmediateScheduler());
 
         private ImmediateScheduler()
         {
@@ -21,7 +21,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the singleton instance of the immediate scheduler.
         /// </summary>
-        public static ImmediateScheduler Instance => s_instance.Value;
+        public static ImmediateScheduler Instance => _instance.Value;
 
         /// <summary>
         /// Schedules an action to be executed.
@@ -68,7 +68,7 @@ namespace System.Reactive.Concurrency
 
         private sealed class AsyncLockScheduler : LocalScheduler
         {
-            private AsyncLock asyncLock;
+            private AsyncLock _asyncLock;
 
             public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
             {
@@ -79,12 +79,12 @@ namespace System.Reactive.Concurrency
 
                 var m = new SingleAssignmentDisposable();
 
-                if (asyncLock == null)
+                if (_asyncLock == null)
                 {
-                    asyncLock = new AsyncLock();
+                    _asyncLock = new AsyncLock();
                 }
 
-                asyncLock.Wait(
+                _asyncLock.Wait(
                     (@this: this, m, action, state),
                     tuple =>
                     {
@@ -118,12 +118,12 @@ namespace System.Reactive.Concurrency
 
                 var m = new SingleAssignmentDisposable();
 
-                if (asyncLock == null)
+                if (_asyncLock == null)
                 {
-                    asyncLock = new AsyncLock();
+                    _asyncLock = new AsyncLock();
                 }
 
-                asyncLock.Wait(
+                _asyncLock.Wait(
                     (@this: this, m, state, action, timer, dueTime),
                     tuple =>
                     {

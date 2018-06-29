@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 #if !NO_THREAD
-using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Threading;
 
@@ -236,7 +235,7 @@ namespace System.Reactive.Concurrency
         private sealed class FastPeriodicTimer : IDisposable
         {
             private readonly Action _action;
-            private volatile bool disposed;
+            private volatile bool _disposed;
 
             public FastPeriodicTimer(Action action)
             {
@@ -254,7 +253,7 @@ namespace System.Reactive.Concurrency
             {
                 var timer = (FastPeriodicTimer)threadParam;
 
-                while (!timer.disposed)
+                while (!timer._disposed)
                 {
                     timer._action();
                 }
@@ -262,7 +261,7 @@ namespace System.Reactive.Concurrency
 
             public void Dispose()
             {
-                disposed = true;
+                _disposed = true;
             }
         }
     }

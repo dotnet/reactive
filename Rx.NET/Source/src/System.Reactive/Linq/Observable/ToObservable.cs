@@ -5,7 +5,6 @@
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -26,9 +25,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            IEnumerator<TSource> _enumerator;
+            private IEnumerator<TSource> _enumerator;
 
-            volatile bool _disposed;
+            private volatile bool _disposed;
 
             public _(IObserver<TSource> observer)
                 : base(observer)

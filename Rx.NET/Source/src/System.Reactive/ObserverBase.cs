@@ -13,14 +13,14 @@ namespace System.Reactive
     /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
     public abstract class ObserverBase<T> : IObserver<T>, IDisposable
     {
-        private int isStopped;
+        private int _isStopped;
 
         /// <summary>
         /// Creates a new observer in a non-stopped state.
         /// </summary>
         protected ObserverBase()
         {
-            isStopped = 0;
+            _isStopped = 0;
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace System.Reactive
         /// <param name="value">Next element in the sequence.</param>
         public void OnNext(T value)
         {
-            if (Volatile.Read(ref isStopped) == 0)
+            if (Volatile.Read(ref _isStopped) == 0)
             {
                 OnNextCore(value);
             }
@@ -54,7 +54,7 @@ namespace System.Reactive
                 throw new ArgumentNullException(nameof(error));
             }
 
-            if (Interlocked.Exchange(ref isStopped, 1) == 0)
+            if (Interlocked.Exchange(ref _isStopped, 1) == 0)
             {
                 OnErrorCore(error);
             }
@@ -73,7 +73,7 @@ namespace System.Reactive
         /// </summary>
         public void OnCompleted()
         {
-            if (Interlocked.Exchange(ref isStopped, 1) == 0)
+            if (Interlocked.Exchange(ref _isStopped, 1) == 0)
             {
                 OnCompletedCore();
             }
@@ -102,13 +102,13 @@ namespace System.Reactive
         {
             if (disposing)
             {
-                Volatile.Write(ref isStopped, 1);
+                Volatile.Write(ref _isStopped, 1);
             }
         }
 
         internal bool Fail(Exception error)
         {
-            if (Interlocked.Exchange(ref isStopped, 1) == 0)
+            if (Interlocked.Exchange(ref _isStopped, 1) == 0)
             {
                 OnErrorCore(error);
                 return true;

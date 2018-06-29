@@ -21,7 +21,7 @@ namespace System.Reactive.Concurrency
         /// <param name="control">Windows Forms control to get the message loop from.</param>
         /// <exception cref="ArgumentNullException"><paramref name="control"/> is null.</exception>
         /// <remarks>
-        /// This scheduler type is typically used indirectly through the <see cref="System.Reactive.Linq.ControlObservable.ObserveOn{TSource}"/> and <see cref="System.Reactive.Linq.ControlObservable.SubscribeOn{TSource}"/> method overloads that take a Windows Forms control.
+        /// This scheduler type is typically used indirectly through the <see cref="Linq.ControlObservable.ObserveOn{TSource}"/> and <see cref="Linq.ControlObservable.SubscribeOn{TSource}"/> method overloads that take a Windows Forms control.
         /// </remarks>
         public ControlScheduler(Control control)
         {
@@ -95,7 +95,7 @@ namespace System.Reactive.Concurrency
             {
                 var d = new MultipleAssignmentDisposable();
 
-                var timer = new System.Windows.Forms.Timer();
+                var timer = new Windows.Forms.Timer();
 
                 timer.Tick += (s, e) =>
                 {
@@ -174,7 +174,7 @@ namespace System.Reactive.Concurrency
 
             var createTimer = new Func<IScheduler, TState, IDisposable>((scheduler1, state1) =>
             {
-                var timer = new System.Windows.Forms.Timer();
+                var timer = new Windows.Forms.Timer();
 
                 timer.Tick += (s, e) =>
                 {

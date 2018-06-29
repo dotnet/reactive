@@ -20,9 +20,9 @@ namespace System.Reactive
     [Experimental]
     public class ListObservable<T> : IList<T>, IObservable<object>
     {
-        private readonly IDisposable subscription;
-        private readonly AsyncSubject<object> subject = new AsyncSubject<object>();
-        private readonly List<T> results = new List<T>();
+        private readonly IDisposable _subscription;
+        private readonly AsyncSubject<object> _subject = new AsyncSubject<object>();
+        private readonly List<T> _results = new List<T>();
 
         /// <summary>
         /// Constructs an object that retains the values of source and signals the end of the sequence.
@@ -36,12 +36,12 @@ namespace System.Reactive
                 throw new ArgumentNullException(nameof(source));
             }
 
-            subscription = source.Subscribe(results.Add, subject.OnError, subject.OnCompleted);
+            _subscription = source.Subscribe(_results.Add, _subject.OnError, _subject.OnCompleted);
         }
 
         private void Wait()
         {
-            subject.DefaultIfEmpty().Wait();
+            _subject.DefaultIfEmpty().Wait();
         }
 
         /// <summary>
@@ -53,12 +53,12 @@ namespace System.Reactive
             {
                 Wait();
 
-                if (results.Count == 0)
+                if (_results.Count == 0)
                 {
                     throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
                 }
 
-                return results[results.Count - 1];
+                return _results[_results.Count - 1];
             }
         }
         /// <summary>
@@ -69,7 +69,7 @@ namespace System.Reactive
         public int IndexOf(T item)
         {
             Wait();
-            return results.IndexOf(item);
+            return _results.IndexOf(item);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace System.Reactive
         public void Insert(int index, T item)
         {
             Wait();
-            results.Insert(index, item);
+            _results.Insert(index, item);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace System.Reactive
         public void RemoveAt(int index)
         {
             Wait();
-            results.RemoveAt(index);
+            _results.RemoveAt(index);
         }
 
         /// <summary>
@@ -102,12 +102,12 @@ namespace System.Reactive
             get
             {
                 Wait();
-                return results[index];
+                return _results[index];
             }
             set
             {
                 Wait();
-                results[index] = value;
+                _results[index] = value;
             }
         }
 
@@ -118,7 +118,7 @@ namespace System.Reactive
         public void Add(T item)
         {
             Wait();
-            results.Add(item);
+            _results.Add(item);
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace System.Reactive
         public void Clear()
         {
             Wait();
-            results.Clear();
+            _results.Clear();
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace System.Reactive
         public bool Contains(T item)
         {
             Wait();
-            return results.Contains(item);
+            return _results.Contains(item);
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace System.Reactive
         public void CopyTo(T[] array, int arrayIndex)
         {
             Wait();
-            results.CopyTo(array, arrayIndex);
+            _results.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace System.Reactive
             get
             {
                 Wait();
-                return results.Count;
+                return _results.Count;
             }
         }
 
@@ -180,7 +180,7 @@ namespace System.Reactive
         public bool Remove(T item)
         {
             Wait();
-            return results.Remove(item);
+            return _results.Remove(item);
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace System.Reactive
         public IEnumerator<T> GetEnumerator()
         {
             Wait();
-            return results.GetEnumerator();
+            return _results.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -208,7 +208,7 @@ namespace System.Reactive
                 throw new ArgumentNullException(nameof(observer));
             }
 
-            return StableCompositeDisposable.Create(subscription, subject.Subscribe(observer));
+            return StableCompositeDisposable.Create(_subscription, _subject.Subscribe(observer));
         }
     }
 }

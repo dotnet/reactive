@@ -69,7 +69,7 @@ namespace System.Reactive.Concurrency
     /// </summary>
     public class HistoricalScheduler : HistoricalSchedulerBase
     {
-        private readonly SchedulerQueue<DateTimeOffset> queue = new SchedulerQueue<DateTimeOffset>();
+        private readonly SchedulerQueue<DateTimeOffset> _queue = new SchedulerQueue<DateTimeOffset>();
 
         /// <summary>
         /// Creates a new historical scheduler with the minimum value of <see cref="DateTimeOffset"/> as the initial clock value.
@@ -105,13 +105,13 @@ namespace System.Reactive.Concurrency
         /// <returns>The next scheduled item.</returns>
         protected override IScheduledItem<DateTimeOffset> GetNext()
         {
-            while (queue.Count > 0)
+            while (_queue.Count > 0)
             {
-                var next = queue.Peek();
+                var next = _queue.Peek();
 
                 if (next.IsCanceled)
                 {
-                    queue.Dequeue();
+                    _queue.Dequeue();
                 }
                 else
                 {
@@ -142,12 +142,12 @@ namespace System.Reactive.Concurrency
 
             var run = new Func<IScheduler, TState, IDisposable>((scheduler, state1) =>
             {
-                queue.Remove(si);
+                _queue.Remove(si);
                 return action(scheduler, state1);
             });
 
             si = new ScheduledItem<DateTimeOffset, TState>(this, state, run, dueTime, Comparer);
-            queue.Enqueue(si);
+            _queue.Enqueue(si);
 
             return si;
         }

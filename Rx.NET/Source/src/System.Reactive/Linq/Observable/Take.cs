@@ -123,7 +123,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _gate = new object();
 
                     Disposable.SetSingle(ref _task, parent._scheduler.Schedule(this, parent._duration, (_, state) => state.Tick()));
-                    base.Run(parent._source);
+                    Run(parent._source);
                 }
 
                 protected override void Dispose(bool disposing)

@@ -23,16 +23,16 @@ namespace System.Reactive.Linq
 
         private sealed class CreateWithDisposableObservable<TSource> : ObservableBase<TSource>
         {
-            private readonly Func<IObserver<TSource>, IDisposable> subscribe;
+            private readonly Func<IObserver<TSource>, IDisposable> _subscribe;
 
             public CreateWithDisposableObservable(Func<IObserver<TSource>, IDisposable> subscribe)
             {
-                this.subscribe = subscribe;
+                _subscribe = subscribe;
             }
 
             protected override IDisposable SubscribeCore(IObserver<TSource> observer)
             {
-                return subscribe(observer) ?? Disposable.Empty;
+                return _subscribe(observer) ?? Disposable.Empty;
             }
         }
 
@@ -43,16 +43,16 @@ namespace System.Reactive.Linq
 
         private sealed class CreateWithActionDisposable<TSource> : ObservableBase<TSource>
         {
-            private readonly Func<IObserver<TSource>, Action> subscribe;
+            private readonly Func<IObserver<TSource>, Action> _subscribe;
 
             public CreateWithActionDisposable(Func<IObserver<TSource>, Action> subscribe)
             {
-                this.subscribe = subscribe;
+                _subscribe = subscribe;
             }
 
             protected override IDisposable SubscribeCore(IObserver<TSource> observer)
             {
-                var a = subscribe(observer);
+                var a = _subscribe(observer);
                 return a != null ? Disposable.Create(a) : Disposable.Empty;
             }
         }
@@ -68,18 +68,18 @@ namespace System.Reactive.Linq
 
         private sealed class CreateWithTaskTokenObservable<TResult> : ObservableBase<TResult>
         {
-            private readonly Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync;
+            private readonly Func<IObserver<TResult>, CancellationToken, Task> _subscribeAsync;
 
             public CreateWithTaskTokenObservable(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync)
             {
-                this.subscribeAsync = subscribeAsync;
+                _subscribeAsync = subscribeAsync;
             }
 
             protected override IDisposable SubscribeCore(IObserver<TResult> observer)
             {
                 var cancellable = new CancellationDisposable();
 
-                var taskObservable = subscribeAsync(observer, cancellable.Token).ToObservable();
+                var taskObservable = _subscribeAsync(observer, cancellable.Token).ToObservable();
                 var taskCompletionObserver = new TaskCompletionObserver(observer);
                 var subscription = taskObservable.Subscribe(taskCompletionObserver);
 
@@ -88,21 +88,21 @@ namespace System.Reactive.Linq
 
             private sealed class TaskCompletionObserver : IObserver<Unit>
             {
-                private readonly IObserver<TResult> observer;
+                private readonly IObserver<TResult> _observer;
 
                 public TaskCompletionObserver(IObserver<TResult> observer)
                 {
-                    this.observer = observer;
+                    _observer = observer;
                 }
 
                 public void OnCompleted()
                 {
-                    observer.OnCompleted();
+                    _observer.OnCompleted();
                 }
 
                 public void OnError(Exception error)
                 {
-                    observer.OnError(error);
+                    _observer.OnError(error);
                 }
 
                 public void OnNext(Unit value)
@@ -124,18 +124,18 @@ namespace System.Reactive.Linq
 
         private sealed class CreateWithTaskDisposable<TResult> : ObservableBase<TResult>
         {
-            private readonly Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync;
+            private readonly Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> _subscribeAsync;
 
             public CreateWithTaskDisposable(Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync)
             {
-                this.subscribeAsync = subscribeAsync;
+                _subscribeAsync = subscribeAsync;
             }
 
             protected override IDisposable SubscribeCore(IObserver<TResult> observer)
             {
                 var cancellable = new CancellationDisposable();
 
-                var taskObservable = subscribeAsync(observer, cancellable.Token).ToObservable();
+                var taskObservable = _subscribeAsync(observer, cancellable.Token).ToObservable();
 
                 var taskCompletionObserver = new TaskDisposeCompletionObserver(observer);
 
@@ -150,32 +150,32 @@ namespace System.Reactive.Linq
 
             private sealed class TaskDisposeCompletionObserver : IObserver<IDisposable>, IDisposable
             {
-                private readonly IObserver<TResult> observer;
-                private IDisposable disposable;
+                private readonly IObserver<TResult> _observer;
+                private IDisposable _disposable;
 
                 public TaskDisposeCompletionObserver(IObserver<TResult> observer)
                 {
-                    this.observer = observer;
+                    _observer = observer;
                 }
 
                 public void Dispose()
                 {
-                    Disposable.TryDispose(ref disposable);
+                    Disposable.TryDispose(ref _disposable);
                 }
 
                 public void OnCompleted()
                 {
-                    observer.OnCompleted();
+                    _observer.OnCompleted();
                 }
 
                 public void OnError(Exception error)
                 {
-                    observer.OnError(error);
+                    _observer.OnError(error);
                 }
 
                 public void OnNext(IDisposable value)
                 {
-                    Disposable.SetSingle(ref disposable, value);
+                    Disposable.SetSingle(ref _disposable, value);
                 }
             }
         }
@@ -192,18 +192,18 @@ namespace System.Reactive.Linq
 
         private sealed class CreateWithTaskActionObservable<TResult> : ObservableBase<TResult>
         {
-            private readonly Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync;
+            private readonly Func<IObserver<TResult>, CancellationToken, Task<Action>> _subscribeAsync;
 
             public CreateWithTaskActionObservable(Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync)
             {
-                this.subscribeAsync = subscribeAsync;
+                _subscribeAsync = subscribeAsync;
             }
 
             protected override IDisposable SubscribeCore(IObserver<TResult> observer)
             {
                 var cancellable = new CancellationDisposable();
 
-                var taskObservable = subscribeAsync(observer, cancellable.Token).ToObservable();
+                var taskObservable = _subscribeAsync(observer, cancellable.Token).ToObservable();
 
                 var taskCompletionObserver = new TaskDisposeCompletionObserver(observer);
 
@@ -218,33 +218,33 @@ namespace System.Reactive.Linq
 
             private sealed class TaskDisposeCompletionObserver : IObserver<Action>, IDisposable
             {
-                private readonly IObserver<TResult> observer;
-                private Action disposable;
+                private readonly IObserver<TResult> _observer;
+                private Action _disposable;
                 private static readonly Action DisposedAction = () => { };
 
                 public TaskDisposeCompletionObserver(IObserver<TResult> observer)
                 {
-                    this.observer = observer;
+                    _observer = observer;
                 }
 
                 public void Dispose()
                 {
-                    Interlocked.Exchange(ref disposable, DisposedAction)?.Invoke();
+                    Interlocked.Exchange(ref _disposable, DisposedAction)?.Invoke();
                 }
 
                 public void OnCompleted()
                 {
-                    observer.OnCompleted();
+                    _observer.OnCompleted();
                 }
 
                 public void OnError(Exception error)
                 {
-                    observer.OnError(error);
+                    _observer.OnError(error);
                 }
 
                 public void OnNext(Action value)
                 {
-                    if (Interlocked.CompareExchange(ref disposable, value, null) != null)
+                    if (Interlocked.CompareExchange(ref _disposable, value, null) != null)
                     {
                         value?.Invoke();
                     }

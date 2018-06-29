@@ -141,7 +141,7 @@ namespace System.Reactive
             /// <summary>
             /// Returns a string representation of this instance.
             /// </summary>
-            public override string ToString() => String.Format(CultureInfo.CurrentCulture, "OnNext({0})", Value);
+            public override string ToString() => string.Format(CultureInfo.CurrentCulture, "OnNext({0})", Value);
 
             /// <summary>
             /// Invokes the observer's method corresponding to the notification.
@@ -296,7 +296,7 @@ namespace System.Reactive
             /// <summary>
             /// Returns a string representation of this instance.
             /// </summary>
-            public override string ToString() => String.Format(CultureInfo.CurrentCulture, "OnError({0})", Exception.GetType().FullName);
+            public override string ToString() => string.Format(CultureInfo.CurrentCulture, "OnError({0})", Exception.GetType().FullName);
 
             /// <summary>
             /// Invokes the observer's method corresponding to the notification.

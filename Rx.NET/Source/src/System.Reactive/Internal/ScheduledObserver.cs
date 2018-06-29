@@ -383,50 +383,50 @@ namespace System.Reactive
     /// <typeparam name="T">The element type of the sequence.</typeparam>
     internal sealed class ObserveOnObserverNew<T> : IObserver<T>, IDisposable
     {
-        private readonly IObserver<T> downstream;
-        private readonly IScheduler scheduler;
+        private readonly IObserver<T> _downstream;
+        private readonly IScheduler _scheduler;
 
         /// <summary>
-        /// If not null, the <see cref="scheduler"/> supports
+        /// If not null, the <see cref="_scheduler"/> supports
         /// long running tasks.
         /// </summary>
-        private readonly ISchedulerLongRunning longRunning;
-        private readonly ConcurrentQueue<T> queue;
+        private readonly ISchedulerLongRunning _longRunning;
+        private readonly ConcurrentQueue<T> _queue;
         private IDisposable _run;
 
         /// <summary>
         /// The current task representing a running drain operation.
         /// </summary>
-        private IDisposable task;
+        private IDisposable _task;
 
         /// <summary>
         /// Indicates the work-in-progress state of this operator,
         /// zero means no work is currently being done.
         /// </summary>
-        private int wip;
+        private int _wip;
 
         /// <summary>
         /// If true, the upstream has issued OnCompleted.
         /// </summary>
-        private bool done;
+        private bool _done;
 
         /// <summary>
-        /// If <see cref="done"/> is true and this is non-null, the upstream
+        /// If <see cref="_done"/> is true and this is non-null, the upstream
         /// failed with an OnError.
         /// </summary>
-        private Exception error;
+        private Exception _error;
 
         /// <summary>
         /// Indicates a dispose has been requested.
         /// </summary>
-        private bool disposed;
+        private bool _disposed;
 
         public ObserveOnObserverNew(IScheduler scheduler, IObserver<T> downstream)
         {
-            this.downstream = downstream;
-            this.scheduler = scheduler;
-            longRunning = scheduler.AsLongRunning();
-            queue = new ConcurrentQueue<T>();
+            _downstream = downstream;
+            _scheduler = scheduler;
+            _longRunning = scheduler.AsLongRunning();
+            _queue = new ConcurrentQueue<T>();
         }
 
         public void Run(IObservable<T> source)
@@ -436,8 +436,8 @@ namespace System.Reactive
 
         public void Dispose()
         {
-            Volatile.Write(ref disposed, true);
-            Disposable.TryDispose(ref task);
+            Volatile.Write(ref _disposed, true);
+            Disposable.TryDispose(ref _task);
             Disposable.TryDispose(ref _run);
             Clear();
         }
@@ -448,7 +448,7 @@ namespace System.Reactive
         /// </summary>
         private void Clear()
         {
-            var q = queue;
+            var q = _queue;
             while (q.TryDequeue(out var _))
             {
                 ;
@@ -457,20 +457,20 @@ namespace System.Reactive
 
         public void OnCompleted()
         {
-            Volatile.Write(ref done, true);
+            Volatile.Write(ref _done, true);
             Schedule();
         }
 
         public void OnError(Exception error)
         {
-            this.error = error;
-            Volatile.Write(ref done, true);
+            _error = error;
+            Volatile.Write(ref _done, true);
             Schedule();
         }
 
         public void OnNext(T value)
         {
-            queue.Enqueue(value);
+            _queue.Enqueue(value);
             Schedule();
         }
 
@@ -480,20 +480,20 @@ namespace System.Reactive
         /// </summary>
         private void Schedule()
         {
-            if (Interlocked.Increment(ref wip) == 1)
+            if (Interlocked.Increment(ref _wip) == 1)
             {
                 var newTask = new SingleAssignmentDisposable();
 
-                if (Disposable.TrySetMultiple(ref task, newTask))
+                if (Disposable.TrySetMultiple(ref _task, newTask))
                 {
-                    var longRunning = this.longRunning;
+                    var longRunning = _longRunning;
                     if (longRunning != null)
                     {
                         newTask.Disposable = longRunning.ScheduleLongRunning(this, DRAIN_LONG_RUNNING);
                     }
                     else
                     {
-                        newTask.Disposable = scheduler.Schedule(this, DRAIN_SHORT_RUNNING);
+                        newTask.Disposable = _scheduler.Schedule(this, DRAIN_SHORT_RUNNING);
                     }
                 }
 
@@ -501,7 +501,7 @@ namespace System.Reactive
                 // of items. This doesn't have to be inside the
                 // wip != 0 (exclusive) mode as the queue
                 // is of a multi-consumer type.
-                if (Volatile.Read(ref disposed))
+                if (Volatile.Read(ref _disposed))
                 {
                     Clear();
                 }
@@ -532,9 +532,9 @@ namespace System.Reactive
         /// <returns>The IDisposable of the recursively scheduled task or an empty disposable.</returns>
         private IDisposable DrainShortRunning(IScheduler recursiveScheduler)
         {
-            DrainStep(queue, downstream, false);
+            DrainStep(_queue, _downstream, false);
 
-            if (Interlocked.Decrement(ref wip) != 0)
+            if (Interlocked.Decrement(ref _wip) != 0)
             {
                 return recursiveScheduler.Schedule(this, DRAIN_SHORT_RUNNING);
             }
@@ -555,7 +555,7 @@ namespace System.Reactive
         private bool DrainStep(ConcurrentQueue<T> q, IObserver<T> downstream, bool delayError)
         {
             // Check if the operator has been disposed
-            if (Volatile.Read(ref disposed))
+            if (Volatile.Read(ref _disposed))
             {
                 // cleanup residue items in the queue
                 Clear();
@@ -563,33 +563,33 @@ namespace System.Reactive
             }
 
             // Has the upstream call OnCompleted?
-            var d = Volatile.Read(ref done);
+            var d = Volatile.Read(ref _done);
 
             if (d && !delayError)
             {
                 // done = true happens before setting error
                 // this is safe to be a plain read
-                var ex = error;
+                var ex = _error;
                 // if not null, there was an OnError call
                 if (ex != null)
                 {
-                    Volatile.Write(ref disposed, true);
+                    Volatile.Write(ref _disposed, true);
                     downstream.OnError(ex);
                     return true;
                 }
             }
 
             // get the next item from the queue if any
-            var empty = !queue.TryDequeue(out var v);
+            var empty = !_queue.TryDequeue(out var v);
 
             // the upstream called OnComplete and the queue is empty
             // that means we are done, no further signals can happen
             if (d && empty)
             {
-                Volatile.Write(ref disposed, true);
+                Volatile.Write(ref _disposed, true);
                 // done = true happens before setting error
                 // this is safe to be a plain read
-                var ex = error;
+                var ex = _error;
                 // if not null, there was an OnError call
                 if (ex != null)
                 {
@@ -627,8 +627,8 @@ namespace System.Reactive
             // read out fields upfront as the DrainStep uses atomics
             // that would force the re-read of these constant values
             // from memory, regardless of readonly, afaik
-            var q = queue;
-            var downstream = this.downstream;
+            var q = _queue;
+            var downstream = _downstream;
 
             for (; ; )
             {
@@ -643,7 +643,7 @@ namespace System.Reactive
                     }
                 }
 
-                missed = Interlocked.Add(ref wip, -missed);
+                missed = Interlocked.Add(ref _wip, -missed);
                 if (missed == 0)
                 {
                     break;

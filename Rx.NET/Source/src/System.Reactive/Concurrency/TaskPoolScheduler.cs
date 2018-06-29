@@ -11,7 +11,7 @@ namespace System.Reactive.Concurrency
     /// <summary>
     /// Represents an object that schedules units of work on the Task Parallel Library (TPL) task pool.
     /// </summary>
-    /// <seealso cref="TaskPoolScheduler.Default">Instance of this type using the default TaskScheduler to schedule work on the TPL task pool.</seealso>
+    /// <seealso cref="Default">Instance of this type using the default TaskScheduler to schedule work on the TPL task pool.</seealso>
     public sealed class TaskPoolScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
         private sealed class ScheduledWorkItem<TState> : IDisposable

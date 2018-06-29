@@ -37,7 +37,7 @@ namespace System.Reactive.Linq.ObservableImpl
             public void Run(SkipUntil<TSource, TOther> parent)
             {
                 Disposable.TrySetSingle(ref _otherDisposable, parent._other.Subscribe(new OtherObserver(this)));
-                base.Run(parent._source);
+                Run(parent._source);
             }
 
             protected override void Dispose(bool disposing)
@@ -171,7 +171,7 @@ namespace System.Reactive.Linq.ObservableImpl
             public void Run(SkipUntil<TSource> parent)
             {
                 Disposable.SetSingle(ref _task, parent._scheduler.Schedule(this, parent._startTime, (_, state) => state.Tick()));
-                base.Run(parent._source);
+                Run(parent._source);
             }
 
             protected override void Dispose(bool disposing)

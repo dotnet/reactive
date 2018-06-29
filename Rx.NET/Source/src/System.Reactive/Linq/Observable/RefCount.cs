@@ -40,7 +40,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Run()
                 {
-                    base.Run(_parent._source);
+                    Run(_parent._source);
 
                     lock (_parent._gate)
                     {

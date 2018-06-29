@@ -98,8 +98,8 @@ namespace System.Reactive.Subjects
                         {
                             if (!o.IsDisposed())
                             {
-                                o.downstream.OnNext(value);
-                                o.downstream.OnCompleted();
+                                o.Downstream.OnNext(value);
+                                o.Downstream.OnCompleted();
                             }
                         }
                     }
@@ -109,7 +109,7 @@ namespace System.Reactive.Subjects
                         {
                             if (!o.IsDisposed())
                             {
-                                o.downstream.OnCompleted();
+                                o.Downstream.OnCompleted();
                             }
                         }
                     }
@@ -151,7 +151,7 @@ namespace System.Reactive.Subjects
                     {
                         if (!o.IsDisposed())
                         {
-                            o.downstream.OnError(error);
+                            o.Downstream.OnError(error);
                         }
                     }
                 }
@@ -304,23 +304,23 @@ namespace System.Reactive.Subjects
         /// </summary>
         private sealed class AsyncSubjectDisposable : IDisposable
         {
-            internal readonly IObserver<T> downstream;
-            private AsyncSubject<T> parent;
+            internal readonly IObserver<T> Downstream;
+            private AsyncSubject<T> _parent;
 
             public AsyncSubjectDisposable(AsyncSubject<T> parent, IObserver<T> downstream)
             {
-                this.parent = parent;
-                this.downstream = downstream;
+                _parent = parent;
+                Downstream = downstream;
             }
 
             public void Dispose()
             {
-                Interlocked.Exchange(ref parent, null)?.Remove(this);
+                Interlocked.Exchange(ref _parent, null)?.Remove(this);
             }
 
             internal bool IsDisposed()
             {
-                return Volatile.Read(ref parent) == null;
+                return Volatile.Read(ref _parent) == null;
             }
         }
 

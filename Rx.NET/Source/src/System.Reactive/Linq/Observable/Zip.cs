@@ -310,7 +310,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    base.Run(first);
+                    Run(first);
                 }
 
                 protected override void Dispose(bool disposing)

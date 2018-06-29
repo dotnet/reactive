@@ -68,18 +68,18 @@ namespace System.Reactive.Concurrency
                 }
             }
 
-            private readonly IObservable<TSource> source;
-            private readonly IScheduler scheduler;
+            private readonly IObservable<TSource> _source;
+            private readonly IScheduler _scheduler;
 
             public SubscribeOnObservable(IObservable<TSource> source, IScheduler scheduler)
             {
-                this.source = source;
-                this.scheduler = scheduler;
+                _source = source;
+                _scheduler = scheduler;
             }
 
             protected override IDisposable SubscribeCore(IObserver<TSource> observer)
             {
-                return new Subscription(source, scheduler, observer);
+                return new Subscription(_source, _scheduler, observer);
             }
         }
 

@@ -13,7 +13,7 @@ namespace System.Reactive.PlatformServices
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class HostLifecycleService
     {
-        private static Lazy<IHostLifecycleNotifications> s_notifications = new Lazy<IHostLifecycleNotifications>(InitializeNotifications);
+        private static Lazy<IHostLifecycleNotifications> _notifications = new Lazy<IHostLifecycleNotifications>(InitializeNotifications);
 
         private static int _refCount;
 
@@ -34,7 +34,7 @@ namespace System.Reactive.PlatformServices
         {
             if (Interlocked.Increment(ref _refCount) == 1)
             {
-                var notifications = s_notifications.Value;
+                var notifications = _notifications.Value;
                 if (notifications != null)
                 {
                     notifications.Suspending += OnSuspending;
@@ -51,7 +51,7 @@ namespace System.Reactive.PlatformServices
         {
             if (Interlocked.Decrement(ref _refCount) == 0)
             {
-                var notifications = s_notifications.Value;
+                var notifications = _notifications.Value;
                 if (notifications != null)
                 {
                     notifications.Suspending -= OnSuspending;

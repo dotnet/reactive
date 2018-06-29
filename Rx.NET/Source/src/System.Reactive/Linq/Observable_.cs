@@ -9,6 +9,8 @@ namespace System.Reactive.Linq
     /// </summary>
     public static partial class Observable
     {
+#pragma warning disable IDE1006 // Naming Styles: 3rd party code is known to reflect for this specific field name
         private static IQueryLanguage s_impl = QueryServices.GetQueryImpl<IQueryLanguage>(new QueryLanguage());
+#pragma warning restore IDE1006 // Naming Styles
     }
 }
