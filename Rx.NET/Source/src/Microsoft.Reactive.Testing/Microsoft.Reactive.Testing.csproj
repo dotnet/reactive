@@ -7,7 +7,6 @@
     <DefineConstants>$(DefineConstants);PLATFORM_DOTNET;XUNIT_VISIBILITY_INTERNAL</DefineConstants>        
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>    
     <Description>Reactive Extensions (Rx) for .NET - Testing Library</Description>
-    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
