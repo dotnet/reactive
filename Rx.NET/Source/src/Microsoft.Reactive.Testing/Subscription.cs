@@ -22,8 +22,8 @@ namespace Microsoft.Reactive.Testing
         /// </summary>
         public const long Infinite = long.MaxValue;
 
-        private long _subscribe;
-        private long _unsubscribe;
+        private readonly long _subscribe;
+        private readonly long _unsubscribe;
 
         /// <summary>
         /// Gets the subscription virtual time.
@@ -72,7 +72,7 @@ namespace Microsoft.Reactive.Testing
         /// <param name="left">The first Subscription value to compare.</param>
         /// <param name="right">The second Subscription value to compare.</param>
         /// <returns>true if the first Subscription value has the same Subscribe and Unsubscribe as the second Subscription value; otherwise, false.</returns>
-        public static bool operator==(Subscription left, Subscription right)
+        public static bool operator ==(Subscription left, Subscription right)
         {
             return left.Equals(right);
         }
@@ -96,7 +96,10 @@ namespace Microsoft.Reactive.Testing
         public override bool Equals(object obj)
         {
             if (obj is Subscription)
+            {
                 return Equals((Subscription)obj);
+            }
+
             return false;
         }
 
@@ -116,9 +119,13 @@ namespace Microsoft.Reactive.Testing
         public override string ToString()
         {
             if (Unsubscribe == Infinite)
+            {
                 return string.Format(CultureInfo.CurrentCulture, "({0}, Infinite)", Subscribe);
+            }
             else
+            {
                 return string.Format(CultureInfo.CurrentCulture, "({0}, {1})", Subscribe, Unsubscribe);
+            }
         }
     }
 }

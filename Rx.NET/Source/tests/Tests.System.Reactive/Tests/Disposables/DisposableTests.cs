@@ -14,7 +14,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class DisposableTests
     {
         [Fact]
@@ -27,7 +27,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void AnonymousDisposable_CreateNull()
         {
-            Assert.Throws(typeof(ArgumentNullException), () => Disposable.Create(null));            
+            Assert.Throws(typeof(ArgumentNullException), () => Disposable.Create(null));
         }
 
         [Fact]
@@ -66,8 +66,10 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SingleAssignmentDisposable_SetNull()
         {
-            var d = new SingleAssignmentDisposable();
-            d.Disposable = null;
+            var d = new SingleAssignmentDisposable
+            {
+                Disposable = null
+            };
         }
 
         [Fact]
@@ -115,8 +117,10 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SingleAssignmentDisposable_SetMultipleTimes()
         {
-            var d = new SingleAssignmentDisposable();
-            d.Disposable = Disposable.Empty;
+            var d = new SingleAssignmentDisposable
+            {
+                Disposable = Disposable.Empty
+            };
 
             ReactiveAssert.Throws<InvalidOperationException>(() => { d.Disposable = Disposable.Empty; });
         }
@@ -132,7 +136,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void CompositeDisposable_Contains()
         {
-            var d1 = Disposable.Create(() => {} );
+            var d1 = Disposable.Create(() => { });
             var d2 = Disposable.Create(() => { });
 
             var g = new CompositeDisposable(d1, d2);
@@ -199,7 +203,10 @@ namespace ReactiveTests.Tests
             var g = new CompositeDisposable(d1, d2);
             var lst = new List<IDisposable>();
             foreach (var x in g)
+            {
                 lst.Add(x);
+            }
+
             Assert.True(lst.SequenceEqual(new[] { d1, d2 }));
         }
 
@@ -211,7 +218,10 @@ namespace ReactiveTests.Tests
             var g = new CompositeDisposable(d1, d2);
             var lst = new List<IDisposable>();
             foreach (IDisposable x in (IEnumerable)g)
+            {
                 lst.Add(x);
+            }
+
             Assert.True(lst.SequenceEqual(new[] { d1, d2 }));
         }
 
@@ -344,7 +354,7 @@ namespace ReactiveTests.Tests
 
             var N = 100;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var j = i;
 
@@ -355,17 +365,26 @@ namespace ReactiveTests.Tests
 
             var d1 = Enumerable.Range(0, N).Where(i => i % 2 == 0).ToArray();
             foreach (var i in d1)
+            {
                 g.Remove(m[i]);
+            }
+
             Assert.True(r.SequenceEqual(d1));
 
             var d2 = Enumerable.Range(0, N).Where(i => i % 3 == 0).ToArray();
             foreach (var i in d2)
+            {
                 g.Remove(m[i]);
+            }
+
             Assert.True(r.SequenceEqual(d1.Concat(d2.Where(x => !d1.Any(y => x == y)))));
 
             var d3 = Enumerable.Range(0, N).Where(i => i % 5 == 0).ToArray();
             foreach (var i in d3)
+            {
                 g.Remove(m[i]);
+            }
+
             Assert.True(r.SequenceEqual(d1.Concat(d2.Where(x => !d1.Any(y => x == y))).Concat(d3.Where(x => !d1.Any(y => x == y) && !d2.Any(y => x == y)))));
 
             g.Dispose();
@@ -546,7 +565,7 @@ namespace ReactiveTests.Tests
             Assert.True(disp);
         }
 
-        class MySync : SynchronizationContext
+        private class MySync : SynchronizationContext
         {
             internal bool _disposed = false;
 
@@ -766,7 +785,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(null, d));
             ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(d, null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(default(IDisposable[])));
+            ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(default));
             ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(default(IEnumerable<IDisposable>)));
 
             ReactiveAssert.Throws<ArgumentException>(() => StableCompositeDisposable.Create(null, d, d));

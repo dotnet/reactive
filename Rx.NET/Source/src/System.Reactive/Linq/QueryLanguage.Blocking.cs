@@ -281,7 +281,9 @@ namespace System.Reactive.Linq
             ex.ThrowIfNotNull();
 
             if (throwOnEmpty && !seenValue)
+            {
                 throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+            }
 
             return value;
         }
@@ -299,7 +301,7 @@ namespace System.Reactive.Linq
 
         #region |> Helpers <|
 
-        class WaitAndSetOnce : IDisposable
+        private class WaitAndSetOnce : IDisposable
         {
             private readonly ManualResetEvent _evt;
             private int _hasSet;
@@ -332,6 +334,6 @@ namespace System.Reactive.Linq
             }
         }
 
-#endregion
+        #endregion
     }
 }

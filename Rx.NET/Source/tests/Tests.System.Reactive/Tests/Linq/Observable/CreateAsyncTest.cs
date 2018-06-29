@@ -5,17 +5,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
 
 namespace ReactiveTests.Tests
 {
@@ -97,7 +94,7 @@ namespace ReactiveTests.Tests
             Assert.True(lst.SequenceEqual(new[] { 42 }));
         }
 
-        Task Producer1(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer1(IObserver<int> results, CancellationToken token, IScheduler scheduler)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -137,7 +134,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        Task Producer2(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer2(IObserver<int> results, CancellationToken token, IScheduler scheduler)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -179,7 +176,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        Task Producer3(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer3(IObserver<int> results, CancellationToken token, IScheduler scheduler)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -221,7 +218,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        Task Producer4(IObserver<int> results, CancellationToken token, IScheduler scheduler, Exception exception)
+        private Task Producer4(IObserver<int> results, CancellationToken token, IScheduler scheduler, Exception exception)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -265,7 +262,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        Task Producer5(IObserver<int> results, CancellationToken token, IScheduler scheduler, Exception exception)
+        private Task Producer5(IObserver<int> results, CancellationToken token, IScheduler scheduler, Exception exception)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -309,8 +306,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-
-        Task Producer6(IObserver<int> results, CancellationToken token, Exception exception)
+        private Task Producer6(IObserver<int> results, CancellationToken token, Exception exception)
         {
             throw exception;
         }
@@ -334,7 +330,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        Task Producer7(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer7(IObserver<int> results, CancellationToken token, IScheduler scheduler)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -376,7 +372,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        Task Producer8(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer8(IObserver<int> results, CancellationToken token, IScheduler scheduler)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -418,7 +414,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        Task Producer9(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer9(IObserver<int> results, CancellationToken token, IScheduler scheduler)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -461,7 +457,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        Task Producer10(IObserver<int> results, CancellationToken token, IScheduler scheduler)
+        private Task Producer10(IObserver<int> results, CancellationToken token, IScheduler scheduler)
         {
             var tcs = new TaskCompletionSource<object>();
 
@@ -508,14 +504,14 @@ namespace ReactiveTests.Tests
             });
         }
 
-        void RunSynchronously(Action action)
+        private void RunSynchronously(Action action)
         {
             var t = new Task(action);
             t.RunSynchronously(new SynchronousScheduler());
             t.Wait();
         }
 
-        class SynchronousScheduler : TaskScheduler
+        private class SynchronousScheduler : TaskScheduler
         {
             protected override IEnumerable<Task> GetScheduledTasks()
             {
@@ -565,7 +561,9 @@ namespace ReactiveTests.Tests
                     while (!ct.IsCancellationRequested)
                     {
                         if (i++ == 10)
+                        {
                             e.Set();
+                        }
 
                         observer.OnNext(42);
                     }
@@ -623,7 +621,9 @@ namespace ReactiveTests.Tests
                     while (!ct.IsCancellationRequested)
                     {
                         if (i++ == 10)
+                        {
                             e.Set();
+                        }
 
                         observer.OnNext(42);
                     }
@@ -684,7 +684,9 @@ namespace ReactiveTests.Tests
                     while (!ct.IsCancellationRequested)
                     {
                         if (i++ == 10)
+                        {
                             e.Set();
+                        }
 
                         observer.OnNext(42);
                     }

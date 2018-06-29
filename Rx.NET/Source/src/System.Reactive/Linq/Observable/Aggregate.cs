@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 : base(observer)
             {
                 _accumulator = accumulator;
-                _accumulation = default(TSource);
+                _accumulation = default;
                 _hasAccumulation = false;
             }
 
@@ -85,7 +85,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource, TAccumulate> 
+        internal sealed class _ : Sink<TSource, TAccumulate>
         {
             private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
             private TAccumulate _accumulation;
@@ -141,7 +141,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource, TResult> 
+        internal sealed class _ : Sink<TSource, TResult>
         {
             private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
             private readonly Func<TAccumulate, TResult> _resultSelector;

@@ -8,7 +8,7 @@ namespace Microsoft.Reactive.Testing
     /// The <b>Microsoft.Reactive.Testing</b> namespace contains interfaces and classes providing functionality to test applications and libraries built using Reactive Extensions.
     /// </summary>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute]
-    class NamespaceDoc
+    internal class NamespaceDoc
     {
     }
 }

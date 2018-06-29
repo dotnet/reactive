@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class TimeTests
     {
         [Fact]
@@ -24,7 +24,7 @@ namespace ReactiveTests.Tests
         {
             var ti = new TimeInterval<int>(42, TimeSpan.FromSeconds(123.45));
             Assert.False(ti.Equals("x"));
-            Assert.False(((object)ti).Equals("x"));
+            Assert.False(ti.Equals("x"));
             Assert.True(ti.Equals(ti));
             Assert.True(((object)ti).Equals(ti));
 
@@ -106,7 +106,7 @@ namespace ReactiveTests.Tests
         {
             var ti = new Timestamped<int>(42, new DateTimeOffset());
             Assert.False(ti.Equals("x"));
-            Assert.False(((object)ti).Equals("x"));
+            Assert.False(ti.Equals("x"));
             Assert.True(ti.Equals(ti));
             Assert.True(((object)ti).Equals(ti));
 

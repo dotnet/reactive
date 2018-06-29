@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class NotificationTest : ReactiveTest
     {
         #region ToObservable
@@ -169,7 +169,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(42, con.Value);
         }
 
-        class CheckOnNextObserver : IObserver<int>
+        private class CheckOnNextObserver : IObserver<int>
         {
             public void OnNext(int value)
             {
@@ -221,15 +221,15 @@ namespace ReactiveTests.Tests
         {
             var n = Notification.CreateOnNext<int>(42);
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default(Action<int>), ex => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, default(Action<Exception>), () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, ex => { }, default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default, ex => { }, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, default, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, ex => { }, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(default(Func<int, string>), ex => "", () => ""));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", default(Func<Exception, string>), () => ""));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default(Func<string>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(default, ex => "", () => ""));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", default, () => ""));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default));
         }
 
         [Fact]
@@ -252,15 +252,15 @@ namespace ReactiveTests.Tests
         {
             var n = Notification.CreateOnError<int>(new Exception());
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default(Action<int>), ex => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, default(Action<Exception>), () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, ex => { }, default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default, ex => { }, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, default, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, ex => { }, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(default(Func<int, string>), ex => "", () => ""));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", default(Func<Exception, string>), () => ""));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default(Func<string>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(default, ex => "", () => ""));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", default, () => ""));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default));
         }
 
         [Fact]
@@ -351,7 +351,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, obs.Error);
         }
 
-        class CheckOnErrorObserver : IObserver<int>
+        private class CheckOnErrorObserver : IObserver<int>
         {
             public void OnNext(int value)
             {
@@ -440,15 +440,15 @@ namespace ReactiveTests.Tests
         {
             var n = Notification.CreateOnCompleted<int>();
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default(Action<int>), ex => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, default(Action<Exception>), () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, ex => { }, default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(default, ex => { }, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, default, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept(x => { }, ex => { }, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(default(Func<int, string>), ex => "", () => ""));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", default(Func<Exception, string>), () => ""));
-            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default(Func<string>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(default, ex => "", () => ""));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", default, () => ""));
+            ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default));
         }
 
         [Fact]
@@ -506,7 +506,7 @@ namespace ReactiveTests.Tests
             Assert.True(obs.Completed);
         }
 
-        class CheckOnCompletedObserver : IObserver<int>
+        private class CheckOnCompletedObserver : IObserver<int>
         {
             public void OnNext(int value)
             {
@@ -562,11 +562,11 @@ namespace ReactiveTests.Tests
             Assert.Equal("OK", res);
         }
 
-        class AcceptObserver : IObserver<int, string>
+        private class AcceptObserver : IObserver<int, string>
         {
-            private Func<int, string> _onNext;
-            private Func<Exception, string> _onError;
-            private Func<string> _onCompleted;
+            private readonly Func<int, string> _onNext;
+            private readonly Func<Exception, string> _onError;
+            private readonly Func<string> _onCompleted;
 
             public AcceptObserver(Func<int, string> onNext, Func<Exception, string> onError, Func<string> onCompleted)
             {

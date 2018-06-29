@@ -3,20 +3,12 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
@@ -54,7 +46,7 @@ namespace ReactiveTests.Tests
         public void DeferAsync_WithCancel_Cancel()
         {
             var N = 10;// 0000;
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var e = new ManualResetEvent(false);
                 var called = false;
@@ -64,7 +56,9 @@ namespace ReactiveTests.Tests
                     e.Set();
 
                     while (!ct.IsCancellationRequested)
+                    {
                         ;
+                    }
 
                     return Observable.Defer(() => { called = true; return Observable.Return(42); });
                 }));

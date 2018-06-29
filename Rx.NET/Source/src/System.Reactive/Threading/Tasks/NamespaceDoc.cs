@@ -8,7 +8,7 @@ namespace System.Reactive.Threading.Tasks
     /// The <b>System.Reactive.Threading.Tasks</b> namespace contains helpers for the conversion between tasks and observable sequences.
     /// </summary>
     [Runtime.CompilerServices.CompilerGenerated]
-    class NamespaceDoc
+    internal class NamespaceDoc
     {
     }
 }

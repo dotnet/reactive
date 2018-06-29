@@ -5,18 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
@@ -50,7 +44,7 @@ namespace ReactiveTests.Tests
         public void UsingAsync_CancelResource()
         {
             var N = 10;// 0000;
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var called = false;
 
@@ -64,7 +58,10 @@ namespace ReactiveTests.Tests
                         s.Set();
                         e.WaitOne();
                         while (!ct.IsCancellationRequested)
+                        {
                             ;
+                        }
+
                         x.Set();
                         return Disposable.Empty;
                     }),
@@ -93,7 +90,7 @@ namespace ReactiveTests.Tests
         public void UsingAsync_CancelFactory()
         {
             var N = 10;// 0000;
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var gate = new object();
                 var disposed = false;
@@ -108,7 +105,9 @@ namespace ReactiveTests.Tests
                         Disposable.Create(() =>
                         {
                             lock (gate)
+                            {
                                 disposed = true;
+                            }
                         })
                     ),
                     (_, ct) => Task.Factory.StartNew<IObservable<int>>(() =>
@@ -116,7 +115,10 @@ namespace ReactiveTests.Tests
                         s.Set();
                         e.WaitOne();
                         while (!ct.IsCancellationRequested)
+                        {
                             ;
+                        }
+
                         x.Set();
                         return Observable.Defer<int>(() =>
                         {
@@ -143,8 +145,12 @@ namespace ReactiveTests.Tests
                 while (true)
                 {
                     lock (gate)
+                    {
                         if (disposed)
+                        {
                             break;
+                        }
+                    }
                 }
 
                 Assert.False(called, i.ToString());

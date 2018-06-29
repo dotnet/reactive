@@ -46,7 +46,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 if (lackedValue)
+                {
                     _semaphore.Release();
+                }
             }
 
             public override void OnError(Exception error)
@@ -63,7 +65,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 if (lackedValue)
+                {
                     _semaphore.Release();
+                }
             }
 
             public override void OnCompleted()
@@ -79,7 +83,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 if (lackedValue)
+                {
                     _semaphore.Release();
+                }
             }
 
             public override bool TryMoveNext(out TSource current)
@@ -119,7 +125,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         break;
                 }
 
-                current = default(TSource);
+                current = default;
                 return false;
             }
         }

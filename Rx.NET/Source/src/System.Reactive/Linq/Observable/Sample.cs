@@ -80,9 +80,13 @@ namespace System.Reactive.Linq.ObservableImpl
                     _sourceAtEnd = true;
 
                     if (_samplerAtEnd)
+                    {
                         ForwardOnCompleted();
+                    }
                     else
+                    {
                         Disposable.TryDispose(ref _sourceDisposable);
+                    }
                 }
             }
 
@@ -138,7 +142,9 @@ namespace System.Reactive.Linq.ObservableImpl
                             _parent.ForwardOnCompleted();
                         }
                         else
+                        {
                             Disposable.TryDispose(ref _parent._samplerDisposable);
+                        }
                     }
                 }
             }
@@ -164,7 +170,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private object _gate = new object();
+            private readonly object _gate = new object();
 
             public _(IObserver<TSource> observer)
                 : base(observer)

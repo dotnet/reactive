@@ -4,19 +4,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
@@ -54,7 +44,7 @@ namespace ReactiveTests.Tests
             const int N = 2;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -79,12 +69,12 @@ namespace ReactiveTests.Tests
 
             const int N = 2;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -119,7 +109,7 @@ namespace ReactiveTests.Tests
             const int N = 3;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -144,12 +134,12 @@ namespace ReactiveTests.Tests
 
             const int N = 3;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -184,7 +174,7 @@ namespace ReactiveTests.Tests
             const int N = 4;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -209,12 +199,12 @@ namespace ReactiveTests.Tests
 
             const int N = 4;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -249,7 +239,7 @@ namespace ReactiveTests.Tests
             const int N = 5;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -274,12 +264,12 @@ namespace ReactiveTests.Tests
 
             const int N = 5;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -314,7 +304,7 @@ namespace ReactiveTests.Tests
             const int N = 6;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -339,12 +329,12 @@ namespace ReactiveTests.Tests
 
             const int N = 6;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -379,7 +369,7 @@ namespace ReactiveTests.Tests
             const int N = 7;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -404,12 +394,12 @@ namespace ReactiveTests.Tests
 
             const int N = 7;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -444,7 +434,7 @@ namespace ReactiveTests.Tests
             const int N = 8;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -469,12 +459,12 @@ namespace ReactiveTests.Tests
 
             const int N = 8;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -509,7 +499,7 @@ namespace ReactiveTests.Tests
             const int N = 9;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -534,12 +524,12 @@ namespace ReactiveTests.Tests
 
             const int N = 9;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -574,7 +564,7 @@ namespace ReactiveTests.Tests
             const int N = 10;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -599,12 +589,12 @@ namespace ReactiveTests.Tests
 
             const int N = 10;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -639,7 +629,7 @@ namespace ReactiveTests.Tests
             const int N = 11;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -664,12 +654,12 @@ namespace ReactiveTests.Tests
 
             const int N = 11;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -704,7 +694,7 @@ namespace ReactiveTests.Tests
             const int N = 12;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -729,12 +719,12 @@ namespace ReactiveTests.Tests
 
             const int N = 12;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -769,7 +759,7 @@ namespace ReactiveTests.Tests
             const int N = 13;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -794,12 +784,12 @@ namespace ReactiveTests.Tests
 
             const int N = 13;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -834,7 +824,7 @@ namespace ReactiveTests.Tests
             const int N = 14;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -859,12 +849,12 @@ namespace ReactiveTests.Tests
 
             const int N = 14;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -899,7 +889,7 @@ namespace ReactiveTests.Tests
             const int N = 15;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -924,12 +914,12 @@ namespace ReactiveTests.Tests
 
             const int N = 15;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {
@@ -964,7 +954,7 @@ namespace ReactiveTests.Tests
             const int N = 16;
 
             var obs = new List<IObservable<int>>();
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 obs.Add(scheduler.CreateHotObservable(
                     OnNext(210, 1),
@@ -989,12 +979,12 @@ namespace ReactiveTests.Tests
 
             const int N = 16;
 
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 var scheduler = new TestScheduler();
                 var obs = new List<IObservable<int>>();
 
-                for (int j = 0; j < N; j++)
+                for (var j = 0; j < N; j++)
                 {
                     if (j == i)
                     {

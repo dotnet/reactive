@@ -4,7 +4,6 @@
 
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using System.Threading;
 
 namespace System.Reactive
 {
@@ -31,7 +30,9 @@ namespace System.Reactive
         public IDisposable Subscribe(IObserver<TSource> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             return SubscribeRaw(observer, enableSafeguard: true);
         }
@@ -53,7 +54,7 @@ namespace System.Reactive
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
                 var runAssignable = new SingleAssignmentDisposable();
-                
+
                 CurrentThreadScheduler.Instance.ScheduleAction(
                     (@this: this, runAssignable, observer),
                     tuple => tuple.runAssignable.Disposable = tuple.@this.Run(tuple.observer));
@@ -89,7 +90,9 @@ namespace System.Reactive
         public IDisposable Subscribe(IObserver<TTarget> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             return SubscribeRaw(observer, enableSafeguard: true);
         }

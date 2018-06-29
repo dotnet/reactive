@@ -28,11 +28,19 @@ namespace System.Reactive.Concurrency
         public static IDisposable SchedulePeriodic<TState>(this IScheduler scheduler, TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return SchedulePeriodic_(scheduler, state, period, action);
         }
@@ -54,11 +62,19 @@ namespace System.Reactive.Concurrency
         public static IDisposable SchedulePeriodic<TState>(this IScheduler scheduler, TState state, TimeSpan period, Action<TState> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return SchedulePeriodic_(scheduler, (state, action), period, t => { t.action(t.state); return t; });
         }
@@ -78,11 +94,19 @@ namespace System.Reactive.Concurrency
         public static IDisposable SchedulePeriodic(this IScheduler scheduler, TimeSpan period, Action action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return SchedulePeriodic_(scheduler, action, period, a => { a(); return a; });
         }
@@ -99,7 +123,9 @@ namespace System.Reactive.Concurrency
         public static IStopwatch StartStopwatch(this IScheduler scheduler)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             //
             // All schedulers deriving from LocalScheduler will automatically pick up this
@@ -576,7 +602,9 @@ namespace System.Reactive.Concurrency
                         // safely bail out, delegating work to the catch-up tail calls.
                         //
                         if (Interlocked.Increment(ref _pendingTickCount) == 1)
+                        {
                             goto case DISPATCH_START;
+                        }
 
                         break;
 

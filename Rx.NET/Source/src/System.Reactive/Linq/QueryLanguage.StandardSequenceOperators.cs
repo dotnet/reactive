@@ -26,7 +26,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> DefaultIfEmpty<TSource>(IObservable<TSource> source)
         {
-            return new DefaultIfEmpty<TSource>(source, default(TSource));
+            return new DefaultIfEmpty<TSource>(source, default);
         }
 
         public virtual IObservable<TSource> DefaultIfEmpty<TSource>(IObservable<TSource> source, TSource defaultValue)
@@ -282,7 +282,7 @@ namespace System.Reactive.Linq
         {
             return new SelectMany<TSource, TResult>.ObservableSelector(source, selector);
         }
-        
+
         private static IObservable<TResult> SelectMany_<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector)
         {
             return new SelectMany<TSource, TResult>.ObservableSelectorIndexed(source, selector);
@@ -345,7 +345,9 @@ namespace System.Reactive.Linq
         public virtual IObservable<TSource> Skip<TSource>(IObservable<TSource> source, int count)
         {
             if (source is Skip<TSource>.Count skip)
+            {
                 return skip.Combine(count);
+            }
 
             return new Skip<TSource>.Count(source, count);
         }
@@ -371,7 +373,9 @@ namespace System.Reactive.Linq
         public virtual IObservable<TSource> Take<TSource>(IObservable<TSource> source, int count)
         {
             if (count == 0)
+            {
                 return Empty<TSource>();
+            }
 
             return Take_(source, count);
         }
@@ -379,7 +383,9 @@ namespace System.Reactive.Linq
         public virtual IObservable<TSource> Take<TSource>(IObservable<TSource> source, int count, IScheduler scheduler)
         {
             if (count == 0)
+            {
                 return Empty<TSource>(scheduler);
+            }
 
             return Take_(source, count);
         }
@@ -387,7 +393,9 @@ namespace System.Reactive.Linq
         private static IObservable<TSource> Take_<TSource>(IObservable<TSource> source, int count)
         {
             if (source is Take<TSource>.Count take)
+            {
                 return take.Combine(count);
+            }
 
             return new Take<TSource>.Count(source, count);
         }
@@ -413,7 +421,9 @@ namespace System.Reactive.Linq
         public virtual IObservable<TSource> Where<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source is Where<TSource>.Predicate where)
+            {
                 return where.Combine(predicate);
+            }
 
             return new Where<TSource>.Predicate(source, predicate);
         }

@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, long> 
+            internal sealed class _ : Sink<TSource, long>
             {
                 private long _count;
 
@@ -66,7 +66,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource, long> 
+            internal sealed class _ : Sink<TSource, long>
             {
                 private readonly Func<TSource, bool> _predicate;
                 private long _count;

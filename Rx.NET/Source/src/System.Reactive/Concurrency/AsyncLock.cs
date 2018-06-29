@@ -13,7 +13,7 @@ namespace System.Reactive.Concurrency
     {
         private bool isAcquired = false;
         private bool hasFaulted = false;
-        private object guard = new object();
+        private readonly object guard = new object();
         private Queue<(Action<Delegate, object> action, Delegate @delegate, object state)> queue;
 
         /// <summary>
@@ -26,7 +26,9 @@ namespace System.Reactive.Concurrency
         public void Wait(Action action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             Wait(action, closureAction => closureAction());
         }
@@ -44,13 +46,15 @@ namespace System.Reactive.Concurrency
         internal void Wait<TState>(TState state, Action<TState> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             Wait(state, action, (actionObject, stateObject) => ((Action<TState>)actionObject)((TState)stateObject));
         }
 
         private void Wait(object state, Delegate @delegate, Action<Delegate, object> action)
-        { 
+        {
             // allow one thread to update the state
             lock (guard)
             {

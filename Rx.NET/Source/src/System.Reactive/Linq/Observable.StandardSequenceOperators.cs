@@ -24,7 +24,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Cast<TResult>(this IObservable<object> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Cast<TResult>(source);
         }
@@ -43,7 +45,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> DefaultIfEmpty<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.DefaultIfEmpty<TSource>(source);
         }
@@ -59,7 +63,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> DefaultIfEmpty<TSource>(this IObservable<TSource> source, TSource defaultValue)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.DefaultIfEmpty<TSource>(source, defaultValue);
         }
@@ -79,7 +85,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Distinct<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.Distinct<TSource>(source);
         }
@@ -96,9 +104,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Distinct<TSource>(this IObservable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return s_impl.Distinct<TSource>(source, comparer);
         }
@@ -116,9 +129,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Distinct<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return s_impl.Distinct<TSource, TKey>(source, keySelector);
         }
@@ -137,11 +155,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Distinct<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return s_impl.Distinct<TSource, TKey>(source, keySelector, comparer);
         }
@@ -162,9 +188,14 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return s_impl.GroupBy<TSource, TKey>(source, keySelector);
         }
@@ -182,11 +213,19 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return s_impl.GroupBy<TSource, TKey>(source, keySelector, comparer);
         }
@@ -205,11 +244,19 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (elementSelector == null)
+            {
                 throw new ArgumentNullException(nameof(elementSelector));
+            }
 
             return s_impl.GroupBy<TSource, TKey, TElement>(source, keySelector, elementSelector);
         }
@@ -229,13 +276,24 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (elementSelector == null)
+            {
                 throw new ArgumentNullException(nameof(elementSelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return s_impl.GroupBy<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
         }
@@ -254,11 +312,19 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, int capacity)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (capacity < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(capacity));
+            }
 
             return s_impl.GroupBy<TSource, TKey>(source, keySelector, capacity);
         }
@@ -278,13 +344,24 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, int capacity, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (capacity < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(capacity));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return s_impl.GroupBy<TSource, TKey>(source, keySelector, capacity, comparer);
         }
@@ -305,13 +382,24 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, int capacity)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (elementSelector == null)
+            {
                 throw new ArgumentNullException(nameof(elementSelector));
+            }
+
             if (capacity < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(capacity));
+            }
 
             return s_impl.GroupBy<TSource, TKey, TElement>(source, keySelector, elementSelector, capacity);
         }
@@ -333,15 +421,29 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, int capacity, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (elementSelector == null)
+            {
                 throw new ArgumentNullException(nameof(elementSelector));
+            }
+
             if (capacity < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(capacity));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return s_impl.GroupBy<TSource, TKey, TElement>(source, keySelector, elementSelector, capacity, comparer);
         }
@@ -372,15 +474,29 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TElement>> GroupByUntil<TSource, TKey, TElement, TDuration>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>> durationSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (elementSelector == null)
+            {
                 throw new ArgumentNullException(nameof(elementSelector));
+            }
+
             if (durationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(durationSelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return s_impl.GroupByUntil<TSource, TKey, TElement, TDuration>(source, keySelector, elementSelector, durationSelector, comparer);
         }
@@ -406,13 +522,24 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TElement>> GroupByUntil<TSource, TKey, TElement, TDuration>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>> durationSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (elementSelector == null)
+            {
                 throw new ArgumentNullException(nameof(elementSelector));
+            }
+
             if (durationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(durationSelector));
+            }
 
             return s_impl.GroupByUntil<TSource, TKey, TElement, TDuration>(source, keySelector, elementSelector, durationSelector);
         }
@@ -437,13 +564,24 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>> durationSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (durationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(durationSelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return s_impl.GroupByUntil<TSource, TKey, TDuration>(source, keySelector, durationSelector, comparer);
         }
@@ -467,11 +605,19 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>> durationSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (durationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(durationSelector));
+            }
 
             return s_impl.GroupByUntil<TSource, TKey, TDuration>(source, keySelector, durationSelector);
         }
@@ -500,17 +646,34 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TElement>> GroupByUntil<TSource, TKey, TElement, TDuration>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>> durationSelector, int capacity, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (elementSelector == null)
+            {
                 throw new ArgumentNullException(nameof(elementSelector));
+            }
+
             if (durationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(durationSelector));
+            }
+
             if (capacity < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(capacity));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return s_impl.GroupByUntil<TSource, TKey, TElement, TDuration>(source, keySelector, elementSelector, durationSelector, capacity, comparer);
         }
@@ -538,15 +701,29 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TElement>> GroupByUntil<TSource, TKey, TElement, TDuration>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>> durationSelector, int capacity)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (elementSelector == null)
+            {
                 throw new ArgumentNullException(nameof(elementSelector));
+            }
+
             if (durationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(durationSelector));
+            }
+
             if (capacity < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(capacity));
+            }
 
             return s_impl.GroupByUntil<TSource, TKey, TElement, TDuration>(source, keySelector, elementSelector, durationSelector, capacity);
         }
@@ -573,15 +750,29 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>> durationSelector, int capacity, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (durationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(durationSelector));
+            }
+
             if (capacity < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(capacity));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return s_impl.GroupByUntil<TSource, TKey, TDuration>(source, keySelector, durationSelector, capacity, comparer);
         }
@@ -607,13 +798,24 @@ namespace System.Reactive.Linq
         public static IObservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>> durationSelector, int capacity)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (durationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(durationSelector));
+            }
+
             if (capacity < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(capacity));
+            }
 
             return s_impl.GroupByUntil<TSource, TKey, TDuration>(source, keySelector, durationSelector, capacity);
         }
@@ -640,15 +842,29 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(this IObservable<TLeft> left, IObservable<TRight> right, Func<TLeft, IObservable<TLeftDuration>> leftDurationSelector, Func<TRight, IObservable<TRightDuration>> rightDurationSelector, Func<TLeft, IObservable<TRight>, TResult> resultSelector)
         {
             if (left == null)
+            {
                 throw new ArgumentNullException(nameof(left));
+            }
+
             if (right == null)
+            {
                 throw new ArgumentNullException(nameof(right));
+            }
+
             if (leftDurationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(leftDurationSelector));
+            }
+
             if (rightDurationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(rightDurationSelector));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return s_impl.GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(left, right, leftDurationSelector, rightDurationSelector, resultSelector);
         }
@@ -675,15 +891,29 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(this IObservable<TLeft> left, IObservable<TRight> right, Func<TLeft, IObservable<TLeftDuration>> leftDurationSelector, Func<TRight, IObservable<TRightDuration>> rightDurationSelector, Func<TLeft, TRight, TResult> resultSelector)
         {
             if (left == null)
+            {
                 throw new ArgumentNullException(nameof(left));
+            }
+
             if (right == null)
+            {
                 throw new ArgumentNullException(nameof(right));
+            }
+
             if (leftDurationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(leftDurationSelector));
+            }
+
             if (rightDurationSelector == null)
+            {
                 throw new ArgumentNullException(nameof(rightDurationSelector));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return s_impl.Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(left, right, leftDurationSelector, rightDurationSelector, resultSelector);
         }
@@ -702,7 +932,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> OfType<TResult>(this IObservable<object> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return s_impl.OfType<TResult>(source);
         }
@@ -723,9 +955,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Select<TSource, TResult>(this IObservable<TSource> source, Func<TSource, TResult> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.Select<TSource, TResult>(source, selector);
         }
@@ -742,9 +979,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Select<TSource, TResult>(this IObservable<TSource> source, Func<TSource, int, TResult> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.Select<TSource, TResult>(source, selector);
         }
@@ -765,9 +1007,14 @@ namespace System.Reactive.Linq
         public static IObservable<TOther> SelectMany<TSource, TOther>(this IObservable<TSource> source, IObservable<TOther> other)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (other == null)
+            {
                 throw new ArgumentNullException(nameof(other));
+            }
 
             return s_impl.SelectMany<TSource, TOther>(source, other);
         }
@@ -784,9 +1031,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.SelectMany<TSource, TResult>(source, selector);
         }
@@ -803,9 +1055,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.SelectMany<TSource, TResult>(source, selector);
         }
@@ -823,9 +1080,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, Task<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.SelectMany<TSource, TResult>(source, selector);
         }
@@ -843,9 +1105,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, int, Task<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.SelectMany<TSource, TResult>(source, selector);
         }
@@ -863,9 +1130,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, CancellationToken, Task<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.SelectMany<TSource, TResult>(source, selector);
         }
@@ -883,9 +1155,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.SelectMany<TSource, TResult>(source, selector);
         }
@@ -904,11 +1181,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IObservable<TSource> source, Func<TSource, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (collectionSelector == null)
+            {
                 throw new ArgumentNullException(nameof(collectionSelector));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return s_impl.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         }
@@ -927,11 +1212,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IObservable<TSource> source, Func<TSource, int, IObservable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (collectionSelector == null)
+            {
                 throw new ArgumentNullException(nameof(collectionSelector));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return s_impl.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         }
@@ -951,11 +1244,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IObservable<TSource> source, Func<TSource, Task<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (taskSelector == null)
+            {
                 throw new ArgumentNullException(nameof(taskSelector));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return s_impl.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
         }
@@ -975,11 +1276,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IObservable<TSource> source, Func<TSource, int, Task<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (taskSelector == null)
+            {
                 throw new ArgumentNullException(nameof(taskSelector));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return s_impl.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
         }
@@ -999,11 +1308,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IObservable<TSource> source, Func<TSource, CancellationToken, Task<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (taskSelector == null)
+            {
                 throw new ArgumentNullException(nameof(taskSelector));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return s_impl.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
         }
@@ -1023,11 +1340,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (taskSelector == null)
+            {
                 throw new ArgumentNullException(nameof(taskSelector));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return s_impl.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
         }
@@ -1046,13 +1371,24 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, IObservable<TResult>> onNext, Func<Exception, IObservable<TResult>> onError, Func<IObservable<TResult>> onCompleted)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             return s_impl.SelectMany<TSource, TResult>(source, onNext, onError, onCompleted);
         }
@@ -1071,13 +1407,24 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> onNext, Func<Exception, IObservable<TResult>> onError, Func<IObservable<TResult>> onCompleted)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             return s_impl.SelectMany<TSource, TResult>(source, onNext, onError, onCompleted);
         }
@@ -1095,9 +1442,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, IEnumerable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.SelectMany<TSource, TResult>(source, selector);
         }
@@ -1115,9 +1467,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, int, IEnumerable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return s_impl.SelectMany<TSource, TResult>(source, selector);
         }
@@ -1137,11 +1494,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IObservable<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (collectionSelector == null)
+            {
                 throw new ArgumentNullException(nameof(collectionSelector));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return s_impl.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         }
@@ -1161,11 +1526,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (collectionSelector == null)
+            {
                 throw new ArgumentNullException(nameof(collectionSelector));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return s_impl.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         }
@@ -1186,9 +1559,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Skip<TSource>(this IObservable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return s_impl.Skip<TSource>(source, count);
         }
@@ -1208,9 +1586,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SkipWhile<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return s_impl.SkipWhile<TSource>(source, predicate);
         }
@@ -1227,9 +1610,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SkipWhile<TSource>(this IObservable<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return s_impl.SkipWhile<TSource>(source, predicate);
         }
@@ -1250,9 +1638,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Take<TSource>(this IObservable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return s_impl.Take<TSource>(source, count);
         }
@@ -1270,11 +1663,19 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Take<TSource>(this IObservable<TSource> source, int count, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Take<TSource>(source, count, scheduler);
         }
@@ -1294,9 +1695,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> TakeWhile<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return s_impl.TakeWhile<TSource>(source, predicate);
         }
@@ -1313,9 +1719,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> TakeWhile<TSource>(this IObservable<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return s_impl.TakeWhile<TSource>(source, predicate);
         }
@@ -1335,9 +1746,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Where<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return s_impl.Where<TSource>(source, predicate);
         }
@@ -1353,9 +1769,14 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Where<TSource>(this IObservable<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (predicate == null)
+            {
                 throw new ArgumentNullException(nameof(predicate));
+            }
 
             return s_impl.Where<TSource>(source, predicate);
         }

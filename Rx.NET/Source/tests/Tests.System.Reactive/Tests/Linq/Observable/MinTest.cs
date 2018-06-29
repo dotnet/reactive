@@ -5,15 +5,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
 
 namespace ReactiveTests.Tests
 {
@@ -34,7 +28,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default(IObservable<decimal?>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default(IObservable<long?>)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default(IObservable<DateTime>), _ => default(int)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default(IObservable<DateTime>), _ => default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default(IObservable<DateTime>), _ => default(double)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default(IObservable<DateTime>), _ => default(float)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default(IObservable<DateTime>), _ => default(decimal)));
@@ -58,15 +52,15 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default(IObservable<DateTime>)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default(IObservable<DateTime>), Comparer<DateTime>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default, Comparer<DateTime>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(Observable.Empty<DateTime>(), default(IComparer<DateTime>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default(IObservable<DateTime>), _ => ""));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(Observable.Empty<DateTime>(), default(Func<DateTime, string>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default(IObservable<DateTime>), _ => "", Comparer<string>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(Observable.Empty<DateTime>(), default(Func<DateTime, string>), Comparer<string>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(Observable.Empty<DateTime>(), _ => "", default(IComparer<string>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(Observable.Empty<DateTime>(), default, Comparer<string>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(Observable.Empty<DateTime>(), _ => "", default));
         }
 
         [Fact]
@@ -2119,7 +2113,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
-            var res = scheduler.Start(() => xs.Min(x => (int)x.Length));
+            var res = scheduler.Start(() => xs.Min(x => x.Length));
 
             res.Messages.AssertEqual(
                 OnNext(240, 1),

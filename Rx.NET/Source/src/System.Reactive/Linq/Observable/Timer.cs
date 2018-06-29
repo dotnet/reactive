@@ -119,8 +119,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : IdentitySink<long>
             {
                 private readonly TimeSpan _period;
-
-                long _index;
+                private long _index;
 
                 public _(TimeSpan period, IObserver<long> observer)
                     : base(observer)
@@ -139,9 +138,13 @@ namespace System.Reactive.Linq.ObservableImpl
                     // Optimize for the case of Observable.Interval.
                     //
                     if (dueTime == _period)
+                    {
                         SetUpstream(parent._scheduler.SchedulePeriodic(this, _period, @this => @this.Tick()));
+                    }
                     else
+                    {
                         SetUpstream(parent._scheduler.Schedule(this, dueTime, (innerScheduler, @this) => @this.InvokeStart(innerScheduler)));
+                    }
                 }
 
                 //

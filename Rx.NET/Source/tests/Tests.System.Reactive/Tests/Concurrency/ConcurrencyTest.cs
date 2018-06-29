@@ -9,7 +9,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class ConcurrencyTest
     {
         [Fact]
@@ -23,15 +23,20 @@ namespace ReactiveTests.Tests
             var e = new ManualResetEvent(false);
 
             for (var i = 0; i < concurrency; ++i)
+            {
                 NewThreadScheduler.Default.Schedule(() =>
                     {
                         e.WaitOne();
                         try
                         {
                             if (Scheduler.CurrentThread.ScheduleRequired)
+                            {
                                 Scheduler.CurrentThread.Schedule(() => { });
+                            }
                             else
+                            {
                                 new Action(() => { })();
+                            }
                         }
                         catch (NullReferenceException)
                         {
@@ -42,11 +47,14 @@ namespace ReactiveTests.Tests
                             s.Release();
                         }
                     });
+            }
 
             e.Set();
 
             for (var i = 0; i < concurrency; ++i)
+            {
                 s.WaitOne();
+            }
 
             Assert.True(passed);
         }
@@ -62,15 +70,20 @@ namespace ReactiveTests.Tests
             var e = new ManualResetEvent(false);
 
             for (var i = 0; i < concurrency; ++i)
+            {
                 NewThreadScheduler.Default.Schedule(() =>
                 {
                     e.WaitOne();
                     try
                     {
                         if (Scheduler.CurrentThread.ScheduleRequired)
+                        {
                             Scheduler.CurrentThread.Schedule(() => { });
+                        }
                         else
+                        {
                             new Action(() => { })();
+                        }
                     }
                     catch (NullReferenceException)
                     {
@@ -81,11 +94,14 @@ namespace ReactiveTests.Tests
                         s.Release();
                     }
                 });
+            }
 
             e.Set();
 
             for (var i = 0; i < concurrency; ++i)
+            {
                 s.WaitOne();
+            }
 
             Assert.True(passed);
         }

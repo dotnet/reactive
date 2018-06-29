@@ -34,7 +34,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    ForwardOnNext(default(TSource));
+                    ForwardOnNext(default);
                     ForwardOnCompleted();
                 }
             }
@@ -88,7 +88,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    ForwardOnNext(default(TSource));
+                    ForwardOnNext(default);
                     ForwardOnCompleted();
                 }
             }

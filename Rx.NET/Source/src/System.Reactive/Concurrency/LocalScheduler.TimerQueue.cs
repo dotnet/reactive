@@ -302,7 +302,9 @@ namespace System.Reactive.Concurrency
             lock (s_gate) */
             {
                 if (s_longTerm.Count == 0)
+                {
                     return;
+                }
 
                 //
                 // To avoid setting the timer all over again for the first work item if it hasn't changed,
@@ -310,7 +312,9 @@ namespace System.Reactive.Concurrency
                 //
                 var next = s_longTerm.Peek();
                 if (next == s_nextLongTermWorkItem)
+                {
                     return;
+                }
 
                 //
                 // We need to arrive early in order to accommodate for potential drift. The relative amount
@@ -350,7 +354,9 @@ namespace System.Reactive.Concurrency
 
                     var due = Scheduler.Normalize(next.DueTime - next.Scheduler.Now);
                     if (due >= SHORTTERM)
+                    {
                         break;
+                    }
 
                     var item = s_longTerm.Dequeue();
                     item.Scheduler.ScheduleShortTermWork(item);

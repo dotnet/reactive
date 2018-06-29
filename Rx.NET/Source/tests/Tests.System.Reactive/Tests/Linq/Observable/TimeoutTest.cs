@@ -3,20 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
@@ -30,21 +21,21 @@ namespace ReactiveTests.Tests
             var someObservable = Observable.Empty<int>();
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default(IObservable<int>), TimeSpan.Zero));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default(IObservable<int>), TimeSpan.Zero, someObservable));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default, TimeSpan.Zero, someObservable));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, TimeSpan.Zero, default(IObservable<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default(IObservable<int>), new DateTimeOffset()));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default(IObservable<int>), new DateTimeOffset(), someObservable));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default, new DateTimeOffset(), someObservable));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, new DateTimeOffset(), default(IObservable<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default(IObservable<int>), TimeSpan.Zero, scheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, TimeSpan.Zero, default(IScheduler)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default(IObservable<int>), TimeSpan.Zero, someObservable, scheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default, TimeSpan.Zero, someObservable, scheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, TimeSpan.Zero, someObservable, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, TimeSpan.Zero, default(IObservable<int>), scheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, TimeSpan.Zero, default, scheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default(IObservable<int>), new DateTimeOffset(), scheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, new DateTimeOffset(), default(IScheduler)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default(IObservable<int>), new DateTimeOffset(), someObservable, scheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default, new DateTimeOffset(), someObservable, scheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, new DateTimeOffset(), someObservable, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, new DateTimeOffset(), default(IObservable<int>), scheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, new DateTimeOffset(), default, scheduler));
 
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Timeout(someObservable, TimeSpan.FromSeconds(-1)));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Timeout(someObservable, TimeSpan.FromSeconds(-1), scheduler));
@@ -630,18 +621,18 @@ namespace ReactiveTests.Tests
         {
             var someObservable = Observable.Empty<int>();
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default(IObservable<int>), someObservable, x => someObservable, someObservable));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, default(IObservable<int>), x => someObservable, someObservable));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, someObservable, default(Func<int, IObservable<int>>), someObservable));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, someObservable, x => someObservable, default(IObservable<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default, someObservable, x => someObservable, someObservable));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, default, x => someObservable, someObservable));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, someObservable, default, someObservable));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, someObservable, x => someObservable, default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default(IObservable<int>), someObservable, x => someObservable));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, default(IObservable<int>), x => someObservable));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, someObservable, default(Func<int, IObservable<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, default, x => someObservable));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, someObservable, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default(IObservable<int>), x => someObservable, someObservable));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default, x => someObservable, someObservable));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, default(Func<int, IObservable<int>>), someObservable));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, x => someObservable, default(IObservable<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, x => someObservable, default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(default(IObservable<int>), x => someObservable));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Timeout(someObservable, default(Func<int, IObservable<int>>)));
@@ -1018,9 +1009,13 @@ namespace ReactiveTests.Tests
                 xs.Timeout(ys, x =>
                 {
                     if (x < 3)
+                    {
                         return zs;
+                    }
                     else
+                    {
                         throw ex;
+                    }
                 })
             );
 

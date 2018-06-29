@@ -3,13 +3,13 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using Xunit;
-using Microsoft.Reactive.Testing;
 using System.Reactive;
+using Microsoft.Reactive.Testing;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class AnonymousTest
     {
         [Fact]
@@ -21,17 +21,17 @@ namespace ReactiveTests.Tests
         [Fact]
         public void AnonymousObserver_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(default(Action<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(default(Action<int>), () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(default, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(x => { }, default(Action)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(default(Action<int>), ex => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(default, ex => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(x => { }, default(Action<Exception>)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(default(Action<int>), ex => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(x => { }, default(Action<Exception>), () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(x => { }, ex => { }, default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(default, ex => { }, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(x => { }, default, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new AnonymousObserver<int>(x => { }, ex => { }, default));
         }
 
         [Fact]

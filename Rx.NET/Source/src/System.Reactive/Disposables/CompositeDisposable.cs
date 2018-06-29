@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 
 namespace System.Reactive.Disposables
@@ -16,7 +15,6 @@ namespace System.Reactive.Disposables
     public sealed class CompositeDisposable : ICollection<IDisposable>, ICancelable
     {
         private readonly object _gate = new object();
-
         private bool _disposed;
         private List<IDisposable> _disposables;
         private int _count;
@@ -42,7 +40,9 @@ namespace System.Reactive.Disposables
         public CompositeDisposable(int capacity)
         {
             if (capacity < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(capacity));
+            }
 
             _disposables = new List<IDisposable>(capacity);
         }
@@ -72,7 +72,9 @@ namespace System.Reactive.Disposables
         public CompositeDisposable(IEnumerable<IDisposable> disposables)
         {
             if (disposables == null)
+            {
                 throw new ArgumentNullException(nameof(disposables));
+            }
 
             // If the disposables is a collection, get its size
             // and use it as a capacity hint for the copy.
@@ -126,7 +128,9 @@ namespace System.Reactive.Disposables
         public void Add(IDisposable item)
         {
             if (item == null)
+            {
                 throw new ArgumentNullException(nameof(item));
+            }
 
             lock (_gate)
             {
@@ -153,7 +157,9 @@ namespace System.Reactive.Disposables
         public bool Remove(IDisposable item)
         {
             if (item == null)
+            {
                 throw new ArgumentNullException(nameof(item));
+            }
 
             lock (_gate)
             {
@@ -278,7 +284,9 @@ namespace System.Reactive.Disposables
         public bool Contains(IDisposable item)
         {
             if (item == null)
+            {
                 throw new ArgumentNullException(nameof(item));
+            }
 
             lock (_gate)
             {
@@ -300,9 +308,14 @@ namespace System.Reactive.Disposables
         public void CopyTo(IDisposable[] array, int arrayIndex)
         {
             if (array == null)
+            {
                 throw new ArgumentNullException(nameof(array));
+            }
+
             if (arrayIndex < 0 || arrayIndex >= array.Length)
+            {
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+            }
 
             lock (_gate)
             {
@@ -367,17 +380,16 @@ namespace System.Reactive.Disposables
         /// An empty enumerator for the <see cref="GetEnumerator"/>
         /// method to avoid allocation on disposed or empty composites.
         /// </summary>
-        static readonly CompositeEnumerator EMPTY_ENUMERATOR =
+        private static readonly CompositeEnumerator EMPTY_ENUMERATOR =
             new CompositeEnumerator(new IDisposable[0]);
 
         /// <summary>
         /// An enumerator for an array of disposables.
         /// </summary>
-        sealed class CompositeEnumerator : IEnumerator<IDisposable>
+        private sealed class CompositeEnumerator : IEnumerator<IDisposable>
         {
-            readonly IDisposable[] disposables;
-
-            int index;
+            private readonly IDisposable[] disposables;
+            private int index;
 
             public CompositeEnumerator(IDisposable[] disposables)
             {

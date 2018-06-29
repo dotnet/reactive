@@ -3,21 +3,13 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using Microsoft.Reactive.Testing;
-using Xunit;
-using ReactiveTests.Dummies;
-using System.Reflection;
-using System.Threading;
-using System.Reactive.Disposables;
 using System.Reactive.Subjects;
-using System.Runtime.CompilerServices;
+using Microsoft.Reactive.Testing;
+using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -102,7 +94,7 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 210)
             );
         }
-        
+
         [Fact]
         public void RepeatWhen_Disposed()
         {
@@ -131,8 +123,8 @@ namespace ReactiveTests.Tests
             var errors = 0;
 
             main.RepeatWhen(v => inner).Subscribe(
-                onNext: v => items++, 
-                onError: e => errors++, 
+                onNext: v => items++,
+                onError: e => errors++,
                 onCompleted: () => end++);
 
             Assert.True(main.HasObservers);
@@ -508,8 +500,9 @@ namespace ReactiveTests.Tests
                 xs.RepeatWhen(v =>
                 {
                     int[] count = { 0 };
-                    return v.SelectMany(w => {
-                        int c = ++count[0];
+                    return v.SelectMany(w =>
+                    {
+                        var c = ++count[0];
                         if (c == 3)
                         {
                             return Observable.Throw<int>(ex);

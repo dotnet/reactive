@@ -56,7 +56,9 @@ namespace ReactiveTests.Stress.Linq
                     {
                         var n = Observable.Range(0, N, NewThreadScheduler.Default).Delay(TimeSpan.FromMilliseconds(d), NewThreadScheduler.Default).Count().Wait();
                         if (n != N)
+                        {
                             throw new InvalidOperationException("Lost OnNext message!");
+                        }
 
                         Debug.Write(".");
                     }
