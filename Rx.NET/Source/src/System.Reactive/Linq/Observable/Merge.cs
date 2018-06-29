@@ -40,7 +40,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private Queue<IObservable<TSource>> _q = new Queue<IObservable<TSource>>();
                 private volatile bool _isStopped;
                 private CompositeDisposable _group = new CompositeDisposable();
-                private int _activeCount = 0;
+                private int _activeCount;
 
                 public override void OnNext(IObservable<TSource> value)
                 {

@@ -13,7 +13,7 @@ namespace System.Reactive
 
     internal class ScheduledObserver<T> : ObserverBase<T>, IScheduledObserver<T>
     {
-        private int _state = 0;
+        private int _state;
         private const int STOPPED = 0;
         private const int RUNNING = 1;
         private const int PENDING = 2;
