@@ -4,7 +4,7 @@
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <Copyright>Copyright (c) .NET Foundation and Contributors.</Copyright>
     <MinClientVersion>2.12</MinClientVersion>
-    <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Authors>.NET Foundation and Contributors</Authors>
     <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</PackageIconUrl>
     <PackageProjectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</PackageProjectUrl>
