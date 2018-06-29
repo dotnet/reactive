@@ -60,7 +60,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected bool _ready;
                 protected bool _active;
                 protected bool _running;
-                protected Queue<System.Reactive.TimeInterval<TSource>> _queue = new Queue<Reactive.TimeInterval<TSource>>();
+                protected Queue<Reactive.TimeInterval<TSource>> _queue = new Queue<Reactive.TimeInterval<TSource>>();
 
                 private bool _hasCompleted;
                 private TimeSpan _completeAt;
@@ -85,7 +85,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         var next = _watch.Elapsed.Add(_delay);
 
-                        _queue.Enqueue(new System.Reactive.TimeInterval<TSource>(value, next));
+                        _queue.Enqueue(new Reactive.TimeInterval<TSource>(value, next));
 
                         shouldRun = _ready && !_active;
                         _active = true;
@@ -264,7 +264,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 protected TimeSpan _delay;
-                protected Queue<System.Reactive.TimeInterval<TSource>> _queue = new Queue<System.Reactive.TimeInterval<TSource>>();
+                protected Queue<Reactive.TimeInterval<TSource>> _queue = new Queue<Reactive.TimeInterval<TSource>>();
 
                 private CancellationTokenSource _stop;
                 private bool _hasCompleted;
@@ -296,7 +296,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         var next = _watch.Elapsed.Add(_delay);
 
-                        _queue.Enqueue(new System.Reactive.TimeInterval<TSource>(value, next));
+                        _queue.Enqueue(new Reactive.TimeInterval<TSource>(value, next));
 
                         _evt.Release();
                     }

@@ -31,7 +31,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(subscribe));
             }
 
-            return s_impl.Create<TResult>(subscribe);
+            return s_impl.Create(subscribe);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(subscribe));
             }
 
-            return s_impl.Create<TResult>(subscribe);
+            return s_impl.Create(subscribe);
         }
 
         #endregion
@@ -77,7 +77,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(subscribeAsync));
             }
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return s_impl.Create(subscribeAsync);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(subscribeAsync));
             }
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return s_impl.Create(subscribeAsync);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(subscribeAsync));
             }
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return s_impl.Create(subscribeAsync);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(subscribeAsync));
             }
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return s_impl.Create(subscribeAsync);
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(subscribeAsync));
             }
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return s_impl.Create(subscribeAsync);
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(subscribeAsync));
             }
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return s_impl.Create(subscribeAsync);
         }
 
         #endregion
@@ -192,7 +192,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(observableFactory));
             }
 
-            return s_impl.Defer<TResult>(observableFactory);
+            return s_impl.Defer(observableFactory);
         }
 
         #endregion
@@ -214,7 +214,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(observableFactoryAsync));
             }
 
-            return s_impl.Defer<TResult>(observableFactoryAsync);
+            return s_impl.Defer(observableFactoryAsync);
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(observableFactoryAsync));
             }
 
-            return s_impl.Defer<TResult>(observableFactoryAsync);
+            return s_impl.Defer(observableFactoryAsync);
         }
 
         #endregion
@@ -329,7 +329,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(resultSelector));
             }
 
-            return s_impl.Generate<TState, TResult>(initialState, condition, iterate, resultSelector);
+            return s_impl.Generate(initialState, condition, iterate, resultSelector);
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Generate<TState, TResult>(initialState, condition, iterate, resultSelector, scheduler);
+            return s_impl.Generate(initialState, condition, iterate, resultSelector, scheduler);
         }
 
         #endregion
@@ -453,7 +453,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that repeats the given element infinitely.</returns>
         public static IObservable<TResult> Repeat<TResult>(TResult value)
         {
-            return s_impl.Repeat<TResult>(value);
+            return s_impl.Repeat(value);
         }
 
         /// <summary>
@@ -471,7 +471,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Repeat<TResult>(value, scheduler);
+            return s_impl.Repeat(value, scheduler);
         }
 
         /// <summary>
@@ -489,7 +489,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(repeatCount));
             }
 
-            return s_impl.Repeat<TResult>(value, repeatCount);
+            return s_impl.Repeat(value, repeatCount);
         }
 
         /// <summary>
@@ -514,7 +514,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Repeat<TResult>(value, repeatCount, scheduler);
+            return s_impl.Repeat(value, repeatCount, scheduler);
         }
 
         #endregion
@@ -529,7 +529,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the single specified element.</returns>
         public static IObservable<TResult> Return<TResult>(TResult value)
         {
-            return s_impl.Return<TResult>(value);
+            return s_impl.Return(value);
         }
 
         /// <summary>
@@ -547,7 +547,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Return<TResult>(value, scheduler);
+            return s_impl.Return(value, scheduler);
         }
 
         #endregion
@@ -644,7 +644,7 @@ namespace System.Reactive.Linq
         /// Constructs an observable sequence that depends on a resource object, whose lifetime is tied to the resulting observable sequence's lifetime.
         /// </summary>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="System.IDisposable"/>.</typeparam>
+        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="IDisposable"/>.</typeparam>
         /// <param name="resourceFactory">Factory function to obtain a resource object.</param>
         /// <param name="observableFactory">Factory function to obtain an observable sequence that depends on the obtained resource.</param>
         /// <returns>An observable sequence whose lifetime controls the lifetime of the dependent resource object.</returns>
@@ -661,7 +661,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(observableFactory));
             }
 
-            return s_impl.Using<TResult, TResource>(resourceFactory, observableFactory);
+            return s_impl.Using(resourceFactory, observableFactory);
         }
 
         #endregion
@@ -673,7 +673,7 @@ namespace System.Reactive.Linq
         /// The CancellationToken passed to the asynchronous methods is tied to the returned disposable subscription, allowing best-effort cancellation at any stage of the resource acquisition or usage.
         /// </summary>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="System.IDisposable"/>.</typeparam>
+        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="IDisposable"/>.</typeparam>
         /// <param name="resourceFactoryAsync">Asynchronous factory function to obtain a resource object.</param>
         /// <param name="observableFactoryAsync">Asynchronous factory function to obtain an observable sequence that depends on the obtained resource.</param>
         /// <returns>An observable sequence whose lifetime controls the lifetime of the dependent resource object.</returns>
@@ -692,7 +692,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(observableFactoryAsync));
             }
 
-            return s_impl.Using<TResult, TResource>(resourceFactoryAsync, observableFactoryAsync);
+            return s_impl.Using(resourceFactoryAsync, observableFactoryAsync);
         }
 
         #endregion

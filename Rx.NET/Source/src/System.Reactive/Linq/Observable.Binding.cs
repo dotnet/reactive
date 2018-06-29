@@ -34,7 +34,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(subject));
             }
 
-            return s_impl.Multicast<TSource, TResult>(source, subject);
+            return s_impl.Multicast(source, subject);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Multicast<TSource, TIntermediate, TResult>(source, subjectSelector, selector);
+            return s_impl.Multicast(source, subjectSelector, selector);
         }
 
         #endregion
@@ -91,7 +91,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Publish<TSource>(source);
+            return s_impl.Publish(source);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Publish<TSource, TResult>(source, selector);
+            return s_impl.Publish(source, selector);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Publish<TSource>(source, initialValue);
+            return s_impl.Publish(source, initialValue);
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Publish<TSource, TResult>(source, selector, initialValue);
+            return s_impl.Publish(source, selector, initialValue);
         }
 
         #endregion
@@ -189,7 +189,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.PublishLast<TSource>(source);
+            return s_impl.PublishLast(source);
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.PublishLast<TSource, TResult>(source, selector);
+            return s_impl.PublishLast(source, selector);
         }
 
         #endregion
@@ -236,7 +236,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.RefCount<TSource>(source);
+            return s_impl.RefCount(source);
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentException("disconnectDelay");
             }
 
-            return s_impl.RefCount<TSource>(source, disconnectDelay);
+            return s_impl.RefCount(source, disconnectDelay);
         }
 
         /// <summary>
@@ -288,7 +288,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentException("disconnectDelay");
             }
 
-            return s_impl.RefCount<TSource>(source, disconnectDelay, scheduler);
+            return s_impl.RefCount(source, disconnectDelay, scheduler);
         }
 
         #endregion
@@ -336,7 +336,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Replay<TSource>(source);
+            return s_impl.Replay(source);
         }
 
         /// <summary>
@@ -362,7 +362,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Replay<TSource>(source, scheduler);
+            return s_impl.Replay(source, scheduler);
         }
 
         /// <summary>
@@ -388,7 +388,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Replay<TSource, TResult>(source, selector);
+            return s_impl.Replay(source, selector);
         }
 
         /// <summary>
@@ -420,7 +420,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Replay<TSource, TResult>(source, selector, scheduler);
+            return s_impl.Replay(source, selector, scheduler);
         }
 
         /// <summary>
@@ -447,7 +447,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(window));
             }
 
-            return s_impl.Replay<TSource>(source, window);
+            return s_impl.Replay(source, window);
         }
 
         /// <summary>
@@ -480,7 +480,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(window));
             }
 
-            return s_impl.Replay<TSource, TResult>(source, selector, window);
+            return s_impl.Replay(source, selector, window);
         }
 
         /// <summary>
@@ -513,7 +513,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Replay<TSource>(source, window, scheduler);
+            return s_impl.Replay(source, window, scheduler);
         }
 
         /// <summary>
@@ -552,7 +552,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Replay<TSource, TResult>(source, selector, window, scheduler);
+            return s_impl.Replay(source, selector, window, scheduler);
         }
 
         /// <summary>
@@ -585,7 +585,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Replay<TSource>(source, bufferSize, scheduler);
+            return s_impl.Replay(source, bufferSize, scheduler);
         }
 
         /// <summary>
@@ -624,7 +624,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Replay<TSource, TResult>(source, selector, bufferSize, scheduler);
+            return s_impl.Replay(source, selector, bufferSize, scheduler);
         }
 
         /// <summary>
@@ -651,7 +651,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
             }
 
-            return s_impl.Replay<TSource>(source, bufferSize);
+            return s_impl.Replay(source, bufferSize);
         }
 
         /// <summary>
@@ -684,7 +684,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
             }
 
-            return s_impl.Replay<TSource, TResult>(source, selector, bufferSize);
+            return s_impl.Replay(source, selector, bufferSize);
         }
 
         /// <summary>
@@ -718,7 +718,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(window));
             }
 
-            return s_impl.Replay<TSource>(source, bufferSize, window);
+            return s_impl.Replay(source, bufferSize, window);
         }
 
         /// <summary>
@@ -758,7 +758,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(window));
             }
 
-            return s_impl.Replay<TSource, TResult>(source, selector, bufferSize, window);
+            return s_impl.Replay(source, selector, bufferSize, window);
         }
 
         /// <summary>
@@ -798,7 +798,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Replay<TSource>(source, bufferSize, window, scheduler);
+            return s_impl.Replay(source, bufferSize, window, scheduler);
         }
 
         /// <summary>
@@ -844,7 +844,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Replay<TSource, TResult>(source, selector, bufferSize, window, scheduler);
+            return s_impl.Replay(source, selector, bufferSize, window, scheduler);
         }
 
         #endregion
