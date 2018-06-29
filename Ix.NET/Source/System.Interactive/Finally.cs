@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -21,9 +18,14 @@ namespace System.Linq
         public static IEnumerable<TSource> Finally<TSource>(this IEnumerable<TSource> source, Action finallyAction)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (finallyAction == null)
+            {
                 throw new ArgumentNullException(nameof(finallyAction));
+            }
 
             return source.Finally_(finallyAction);
         }
@@ -33,7 +35,9 @@ namespace System.Linq
             try
             {
                 foreach (var item in source)
+                {
                     yield return item;
+                }
             }
             finally
             {

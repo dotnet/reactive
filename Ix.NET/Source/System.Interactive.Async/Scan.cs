@@ -14,9 +14,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TAccumulate> Scan<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (accumulator == null)
+            {
                 throw new ArgumentNullException(nameof(accumulator));
+            }
 
             return new ScanAsyncEnumerable<TSource, TAccumulate>(source, seed, accumulator);
         }
@@ -24,9 +29,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Scan<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (accumulator == null)
+            {
                 throw new ArgumentNullException(nameof(accumulator));
+            }
 
             return new ScanAsyncEnumerable<TSource>(source, accumulator);
         }
@@ -61,7 +71,7 @@ namespace System.Linq
                 {
                     enumerator.Dispose();
                     enumerator = null;
-                    accumulated = default(TAccumulate);
+                    accumulated = default;
                 }
 
                 base.Dispose();
@@ -89,7 +99,7 @@ namespace System.Linq
                         }
 
                         break;
-                        
+
                 }
 
                 Dispose();
@@ -127,7 +137,7 @@ namespace System.Linq
                 {
                     enumerator.Dispose();
                     enumerator = null;
-                    accumulated = default(TSource);
+                    accumulated = default;
                 }
 
                 base.Dispose();
@@ -140,7 +150,7 @@ namespace System.Linq
                     case AsyncIteratorState.Allocated:
                         enumerator = source.GetEnumerator();
                         hasSeed = false;
-                        accumulated = default(TSource);
+                        accumulated = default;
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;

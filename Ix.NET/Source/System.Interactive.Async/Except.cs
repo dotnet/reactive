@@ -14,9 +14,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Except<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
+            {
                 throw new ArgumentNullException(nameof(first));
+            }
+
             if (second == null)
+            {
                 throw new ArgumentNullException(nameof(second));
+            }
 
             return first.Except(second, EqualityComparer<TSource>.Default);
         }
@@ -24,11 +29,19 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Except<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
+            {
                 throw new ArgumentNullException(nameof(first));
+            }
+
             if (second == null)
+            {
                 throw new ArgumentNullException(nameof(second));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return new ExceptAsyncIterator<TSource>(first, second, comparer);
         }
@@ -118,7 +131,7 @@ namespace System.Linq
                             }
 
                         } while (moveNext);
-                        
+
 
                         Dispose();
                         break;

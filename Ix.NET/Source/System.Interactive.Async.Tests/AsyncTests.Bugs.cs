@@ -3,14 +3,12 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xunit;
-using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Diagnostics;
+using Xunit;
 
 namespace Tests
 {
@@ -79,7 +77,7 @@ namespace Tests
         }
         */
 #if !NO_THREAD
-        static IEnumerable<int> Xs(Action a)
+        private static IEnumerable<int> Xs(Action a)
         {
             try
             {
@@ -137,7 +135,7 @@ namespace Tests
             }).ToAsyncEnumerable();
 
             var ex = new Exception("Bang!");
-            var ys = xs.Select(x => { if (x == 1) throw ex; return x; });
+            var ys = xs.Select(x => { if (x == 1) { throw ex; } return x; });
 
             var e = ys.GetEnumerator();
             await Assert.ThrowsAsync<Exception>(() => e.MoveNext());
@@ -234,7 +232,8 @@ namespace Tests
                 {
                     _iterationsBeforeDelay = iterationsBeforeDelay;
                 }
-                int _i = -1;
+
+                private int _i = -1;
                 public void Dispose()
                 {
                 }
@@ -243,12 +242,12 @@ namespace Tests
                 public bool MoveNextWasCalled { get; private set; }
 
                 public int Current => _i;
-                
+
                 public async Task<bool> MoveNext(CancellationToken cancellationToken)
                 {
                     LastToken = cancellationToken;
                     MoveNextWasCalled = true;
-                  
+
                     _i++;
                     if (Current >= _iterationsBeforeDelay)
                     {
@@ -285,7 +284,7 @@ namespace Tests
 
                 public void Reset()
                 {
-                  
+
                 }
 
                 object IEnumerator.Current => Current;
@@ -318,13 +317,13 @@ namespace Tests
 
 
             Task<bool> t = null;
-            var tMoveNext =Task.Run(
+            var tMoveNext = Task.Run(
                 () =>
                 {
                     // This call *will* block
                     t = e.MoveNext(cts.Token);
                 });
-         
+
 
             isRunningEvent.WaitOne();
             cts.Cancel();
@@ -345,7 +344,7 @@ namespace Tests
             evt.Set();
         }
 
-        static IEnumerable<int> Blocking(ManualResetEvent evt, ManualResetEvent blockingStarted)
+        private static IEnumerable<int> Blocking(ManualResetEvent evt, ManualResetEvent blockingStarted)
         {
             blockingStarted.Set();
             evt.WaitOne();
@@ -426,7 +425,7 @@ namespace Tests
         }
     }
 
-    static class MyExt
+    internal static class MyExt
     {
         public static IEnumerable<T> WithDispose<T>(this IEnumerable<T> source, Action a)
         {
@@ -446,7 +445,7 @@ namespace Tests
             });
         }
 
-        class Enumerator<T> : IEnumerator<T>
+        private class Enumerator<T> : IEnumerator<T>
         {
             private readonly Func<bool> _moveNext;
             private readonly Func<T> _current;

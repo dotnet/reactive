@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 using System;
-using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -132,12 +131,12 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(null, _ => { }, _ => { }));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(null, _ => { }, _ => { }, () => { }));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default(Action<int>)));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default(Action<int>), () => { }));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default, () => { }));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, _ => { }, default(Action)));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default(Action<int>), _ => { }, () => { }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, _ => { }, default(Action<Exception>), () => { }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, _ => { }, _ => { }, default(Action)));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default(Action<int>), _ => { }));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default, _ => { }, () => { }));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, _ => { }, default, () => { }));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, _ => { }, _ => { }, default));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default, _ => { }));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, _ => { }, default(Action<Exception>)));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(null, new MyObserver()));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default(IObserver<int>)));
@@ -180,7 +179,7 @@ namespace Tests
             Assert.Equal(45, obs.Sum);
         }
 
-        class MyObserver : IObserver<int>
+        private class MyObserver : IObserver<int>
         {
             public int Sum;
             public bool Done;
@@ -287,7 +286,7 @@ namespace Tests
             Assert.True(Enumerable.SequenceEqual(res, new[] { 0, 1 }));
         }
 
-        class MyEqualityComparer : IEqualityComparer<int>
+        private class MyEqualityComparer : IEqualityComparer<int>
         {
             public bool Equals(int x, int y)
             {
@@ -351,7 +350,7 @@ namespace Tests
         [Fact]
         public void TakeLast_TakeZero()
         {
-            var e = Enumerable.Range(1, 5) ;
+            var e = Enumerable.Range(1, 5);
 #if NETCOREAPP2_1 || WINDOWS_UWP
             var r = EnumerableEx.TakeLast(e, 0).ToList();
 #else
@@ -383,7 +382,7 @@ namespace Tests
 #else
             var r = e.TakeLast(5).ToList();
 #endif
-            
+
             Assert.True(Enumerable.SequenceEqual(r, e));
         }
 

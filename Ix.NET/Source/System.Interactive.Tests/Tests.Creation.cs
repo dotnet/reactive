@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 using System;
-using System.Text;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
-using System.Collections;
 using System.Threading;
+using Xunit;
 
 namespace Tests
 {
@@ -16,7 +15,7 @@ namespace Tests
         [Fact]
         public void Create_Arguments()
         {
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Create<int>(default(Func<IEnumerator<int>>)));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Create<int>(default));
         }
 
         [Fact]
@@ -48,7 +47,8 @@ namespace Tests
         {
             SynchronizationContext.SetSynchronizationContext(null);
 
-            var xs = EnumerableEx.Create<int>(async yield => {
+            var xs = EnumerableEx.Create<int>(async yield =>
+            {
                 var i = 0;
                 while (i < 10)
                 {
@@ -71,7 +71,8 @@ namespace Tests
         {
             SynchronizationContext.SetSynchronizationContext(null);
 
-            var xs = EnumerableEx.Create<int>(async yield => {
+            var xs = EnumerableEx.Create<int>(async yield =>
+            {
                 var i = 0;
                 while (true)
                 {
@@ -98,8 +99,9 @@ namespace Tests
         [Fact]
         public void YielderNoReset()
         {
-            var xs = EnumerableEx.Create<int>(async yield => {
-               await yield.Break();
+            var xs = EnumerableEx.Create<int>(async yield =>
+            {
+                await yield.Break();
             });
 
             AssertThrows<NotSupportedException>(() => xs.GetEnumerator().Reset());
@@ -237,7 +239,7 @@ namespace Tests
             Assert.True(d.Done);
         }
 
-        class MyDisposable : IDisposable
+        private class MyDisposable : IDisposable
         {
             public bool Done;
 

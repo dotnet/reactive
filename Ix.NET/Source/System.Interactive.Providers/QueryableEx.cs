@@ -23,13 +23,15 @@ namespace System.Linq
         public static bool IsEmpty<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.Execute<bool>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.IsEmpty<TSource>(default(IQueryable<TSource>))),
+                    InfoOf(() => QueryableEx.IsEmpty<TSource>(default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -56,15 +58,20 @@ namespace System.Linq
         public static TSource Min<TSource>(this IQueryable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return source.Provider.Execute<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Min<TSource>(default(IQueryable<TSource>), default(IComparer<TSource>))),
+                    InfoOf(() => QueryableEx.Min<TSource>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -93,15 +100,20 @@ namespace System.Linq
         public static IList<TSource> MinBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return source.Provider.Execute<IList<TSource>>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.MinBy<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>))),
+                    InfoOf(() => QueryableEx.MinBy<TSource, TKey>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
 #endif
@@ -131,17 +143,25 @@ namespace System.Linq
         public static IList<TSource> MinBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return source.Provider.Execute<IList<TSource>>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.MinBy<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))),
+                    InfoOf(() => QueryableEx.MinBy<TSource, TKey>(default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
 #endif
@@ -170,15 +190,20 @@ namespace System.Linq
         public static TSource Max<TSource>(this IQueryable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return source.Provider.Execute<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Max<TSource>(default(IQueryable<TSource>), default(IComparer<TSource>))),
+                    InfoOf(() => QueryableEx.Max<TSource>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -207,15 +232,20 @@ namespace System.Linq
         public static IList<TSource> MaxBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return source.Provider.Execute<IList<TSource>>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.MaxBy<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>))),
+                    InfoOf(() => QueryableEx.MaxBy<TSource, TKey>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
 #endif
@@ -245,17 +275,25 @@ namespace System.Linq
         public static IList<TSource> MaxBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return source.Provider.Execute<IList<TSource>>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.MaxBy<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))),
+                    InfoOf(() => QueryableEx.MaxBy<TSource, TKey>(default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
 #endif
@@ -285,15 +323,20 @@ namespace System.Linq
         public static IQueryable<TResult> Share<TSource, TResult>(this IQueryable<TSource> source, Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Share<TSource, TResult>(default(IQueryable<TSource>), default(Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>>))),
+                    InfoOf(() => QueryableEx.Share<TSource, TResult>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
 #endif
@@ -322,15 +365,20 @@ namespace System.Linq
         public static IQueryable<TResult> Publish<TSource, TResult>(this IQueryable<TSource> source, Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Publish<TSource, TResult>(default(IQueryable<TSource>), default(Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>>))),
+                    InfoOf(() => QueryableEx.Publish<TSource, TResult>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
 #endif
@@ -359,15 +407,20 @@ namespace System.Linq
         public static IQueryable<TResult> Memoize<TSource, TResult>(this IQueryable<TSource> source, Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Memoize<TSource, TResult>(default(IQueryable<TSource>), default(Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>>))),
+                    InfoOf(() => QueryableEx.Memoize<TSource, TResult>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
 #endif
@@ -397,15 +450,20 @@ namespace System.Linq
         public static IQueryable<TResult> Memoize<TSource, TResult>(this IQueryable<TSource> source, int readerCount, Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Memoize<TSource, TResult>(default(IQueryable<TSource>), default(int), default(Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>>))),
+                    InfoOf(() => QueryableEx.Memoize<TSource, TResult>(default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
 #endif
@@ -434,15 +492,20 @@ namespace System.Linq
         public static IQueryable<TResult> Create<TResult>(this IQueryProvider provider, Expression<Func<IEnumerator<TResult>>> getEnumerator)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (getEnumerator == null)
+            {
                 throw new ArgumentNullException(nameof(getEnumerator));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Create<TResult>(default(IQueryProvider), default(Expression<Func<IEnumerator<TResult>>>))),
+                    InfoOf(() => QueryableEx.Create<TResult>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
@@ -470,13 +533,15 @@ namespace System.Linq
         public static IQueryable<TResult> Return<TResult>(this IQueryProvider provider, TResult value)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Return<TResult>(default(IQueryProvider), default(TResult))),
+                    InfoOf(() => QueryableEx.Return<TResult>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
@@ -504,15 +569,20 @@ namespace System.Linq
         public static IQueryable<TResult> Throw<TResult>(this IQueryProvider provider, Exception exception)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (exception == null)
+            {
                 throw new ArgumentNullException(nameof(exception));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Throw<TResult>(default(IQueryProvider), default(Exception))),
+                    InfoOf(() => QueryableEx.Throw<TResult>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
@@ -540,15 +610,20 @@ namespace System.Linq
         public static IQueryable<TResult> Defer<TResult>(this IQueryProvider provider, Expression<Func<IEnumerable<TResult>>> enumerableFactory)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (enumerableFactory == null)
+            {
                 throw new ArgumentNullException(nameof(enumerableFactory));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Defer<TResult>(default(IQueryProvider), default(Expression<Func<IEnumerable<TResult>>>))),
+                    InfoOf(() => QueryableEx.Defer<TResult>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
@@ -580,19 +655,30 @@ namespace System.Linq
         public static IQueryable<TResult> Generate<TState, TResult>(this IQueryProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (iterate == null)
+            {
                 throw new ArgumentNullException(nameof(iterate));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Generate<TState, TResult>(default(IQueryProvider), default(TState), default(Expression<Func<TState, bool>>), default(Expression<Func<TState, TState>>), default(Expression<Func<TState, TResult>>))),
+                    InfoOf(() => QueryableEx.Generate<TState, TResult>(default, default, default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TState), typeof(TResult)),
 #endif
@@ -625,17 +711,25 @@ namespace System.Linq
         public static IQueryable<TSource> Using<TSource, TResource>(this IQueryProvider provider, Expression<Func<TResource>> resourceFactory, Expression<Func<TResource, IEnumerable<TSource>>> enumerableFactory) where TResource : IDisposable
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (resourceFactory == null)
+            {
                 throw new ArgumentNullException(nameof(resourceFactory));
+            }
+
             if (enumerableFactory == null)
+            {
                 throw new ArgumentNullException(nameof(enumerableFactory));
+            }
 
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Using<TSource, TResource>(default(IQueryProvider), default(Expression<Func<TResource>>), default(Expression<Func<TResource, IEnumerable<TSource>>>))),
+                    InfoOf(() => QueryableEx.Using<TSource, TResource>(default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResource)),
 #endif
@@ -664,13 +758,15 @@ namespace System.Linq
         public static IEnumerable<TResult> Repeat<TResult>(this IQueryProvider provider, TResult value)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Repeat<TResult>(default(IQueryProvider), default(TResult))),
+                    InfoOf(() => QueryableEx.Repeat<TResult>(default, default(TResult))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
@@ -700,15 +796,20 @@ namespace System.Linq
             where TException : Exception
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (handler == null)
+            {
                 throw new ArgumentNullException(nameof(handler));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Catch<TSource, TException>(default(IQueryable<TSource>), default(Expression<Func<TException, IEnumerable<TSource>>>))),
+                    InfoOf(() => QueryableEx.Catch<TSource, TException>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TException)),
 #endif
@@ -736,7 +837,9 @@ namespace System.Linq
         public static IQueryable<TSource> Catch<TSource>(this IQueryable<IEnumerable<TSource>> sources)
         {
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -769,15 +872,20 @@ namespace System.Linq
         public static IQueryable<TSource> Catch<TSource>(this IQueryProvider provider, params IEnumerable<TSource>[] sources)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Catch<TSource>(default(IQueryProvider), default(IEnumerable<TSource>[]))),
+                    InfoOf(() => QueryableEx.Catch<TSource>(default, default(IEnumerable<TSource>[]))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -805,15 +913,20 @@ namespace System.Linq
         public static IQueryable<TSource> Catch<TSource>(this IQueryable<TSource> first, IEnumerable<TSource> second)
         {
             if (first == null)
+            {
                 throw new ArgumentNullException(nameof(first));
+            }
+
             if (second == null)
+            {
                 throw new ArgumentNullException(nameof(second));
+            }
 
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Catch<TSource>(default(IQueryable<TSource>), default(IEnumerable<TSource>))),
+                    InfoOf(() => QueryableEx.Catch<TSource>(default(IQueryable<TSource>), default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -841,15 +954,20 @@ namespace System.Linq
         public static IQueryable<TSource> Finally<TSource>(this IQueryable<TSource> source, Expression<Action> finallyAction)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (finallyAction == null)
+            {
                 throw new ArgumentNullException(nameof(finallyAction));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Finally<TSource>(default(IQueryable<TSource>), default(Expression<Action>))),
+                    InfoOf(() => QueryableEx.Finally<TSource>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -877,15 +995,20 @@ namespace System.Linq
         public static IQueryable<TSource> OnErrorResumeNext<TSource>(this IQueryable<TSource> first, IEnumerable<TSource> second)
         {
             if (first == null)
+            {
                 throw new ArgumentNullException(nameof(first));
+            }
+
             if (second == null)
+            {
                 throw new ArgumentNullException(nameof(second));
+            }
 
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.OnErrorResumeNext<TSource>(default(IQueryable<TSource>), default(IEnumerable<TSource>))),
+                    InfoOf(() => QueryableEx.OnErrorResumeNext<TSource>(default(IQueryable<TSource>), default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -913,15 +1036,20 @@ namespace System.Linq
         public static IEnumerable<TSource> OnErrorResumeNext<TSource>(this IQueryProvider provider, params IEnumerable<TSource>[] sources)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.OnErrorResumeNext<TSource>(default(IQueryProvider), default(IEnumerable<TSource>[]))),
+                    InfoOf(() => QueryableEx.OnErrorResumeNext<TSource>(default, default(IEnumerable<TSource>[]))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -948,7 +1076,9 @@ namespace System.Linq
         public static IQueryable<TSource> OnErrorResumeNext<TSource>(this IQueryable<IEnumerable<TSource>> sources)
         {
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -980,13 +1110,15 @@ namespace System.Linq
         public static IQueryable<TSource> Retry<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Retry<TSource>(default(IQueryable<TSource>))),
+                    InfoOf(() => QueryableEx.Retry<TSource>(default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1013,13 +1145,15 @@ namespace System.Linq
         public static IQueryable<TSource> Retry<TSource>(this IQueryable<TSource> source, int retryCount)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Retry<TSource>(default(IQueryable<TSource>), default(int))),
+                    InfoOf(() => QueryableEx.Retry<TSource>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1048,17 +1182,25 @@ namespace System.Linq
         public static IQueryable<TResult> While<TResult>(this IQueryProvider provider, Expression<Func<bool>> condition, IEnumerable<TResult> source)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.While<TResult>(default(IQueryProvider), default(Expression<Func<bool>>), default(IEnumerable<TResult>))),
+                    InfoOf(() => QueryableEx.While<TResult>(default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
@@ -1089,19 +1231,30 @@ namespace System.Linq
         public static IQueryable<TResult> If<TResult>(this IQueryProvider provider, Expression<Func<bool>> condition, IEnumerable<TResult> thenSource, IEnumerable<TResult> elseSource)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (thenSource == null)
+            {
                 throw new ArgumentNullException(nameof(thenSource));
+            }
+
             if (elseSource == null)
+            {
                 throw new ArgumentNullException(nameof(elseSource));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.If<TResult>(default(IQueryProvider), default(Expression<Func<bool>>), default(IEnumerable<TResult>), default(IEnumerable<TResult>))),
+                    InfoOf(() => QueryableEx.If<TResult>(default, default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
@@ -1132,17 +1285,25 @@ namespace System.Linq
         public static IQueryable<TResult> If<TResult>(this IQueryProvider provider, Expression<Func<bool>> condition, IEnumerable<TResult> thenSource)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (thenSource == null)
+            {
                 throw new ArgumentNullException(nameof(thenSource));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.If<TResult>(default(IQueryProvider), default(Expression<Func<bool>>), default(IEnumerable<TResult>))),
+                    InfoOf(() => QueryableEx.If<TResult>(default, default(Expression<Func<bool>>), default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
@@ -1171,15 +1332,20 @@ namespace System.Linq
         public static IQueryable<TResult> DoWhile<TResult>(this IQueryable<TResult> source, Expression<Func<bool>> condition)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
 
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.DoWhile<TResult>(default(IQueryable<TResult>), default(Expression<Func<bool>>))),
+                    InfoOf(() => QueryableEx.DoWhile<TResult>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
@@ -1209,17 +1375,25 @@ namespace System.Linq
         public static IQueryable<TResult> Case<TValue, TResult>(this IQueryProvider provider, Expression<Func<TValue>> selector, IDictionary<TValue, IEnumerable<TResult>> sources)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
+
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Case<TValue, TResult>(default(IQueryProvider), default(Expression<Func<TValue>>), default(IDictionary<TValue, IEnumerable<TResult>>))),
+                    InfoOf(() => QueryableEx.Case<TValue, TResult>(default, default, default(IDictionary<TValue, IEnumerable<TResult>>))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TValue), typeof(TResult)),
 #endif
@@ -1250,19 +1424,30 @@ namespace System.Linq
         public static IQueryable<TResult> Case<TValue, TResult>(this IQueryProvider provider, Expression<Func<TValue>> selector, IDictionary<TValue, IEnumerable<TResult>> sources, IEnumerable<TResult> defaultSource)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
+
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
+
             if (defaultSource == null)
+            {
                 throw new ArgumentNullException(nameof(defaultSource));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Case<TValue, TResult>(default(IQueryProvider), default(Expression<Func<TValue>>), default(IDictionary<TValue, IEnumerable<TResult>>), default(IEnumerable<TResult>))),
+                    InfoOf(() => QueryableEx.Case<TValue, TResult>(default, default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TValue), typeof(TResult)),
 #endif
@@ -1292,17 +1477,25 @@ namespace System.Linq
         public static IQueryable<TResult> For<TSource, TResult>(this IQueryProvider provider, IEnumerable<TSource> source, Expression<Func<TSource, IEnumerable<TResult>>> resultSelector)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.For<TSource, TResult>(default(IQueryProvider), default(IEnumerable<TSource>), default(Expression<Func<TSource, IEnumerable<TResult>>>))),
+                    InfoOf(() => QueryableEx.For<TSource, TResult>(default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
 #endif
@@ -1329,7 +1522,9 @@ namespace System.Linq
         public static IQueryable<TSource> Concat<TSource>(this IQueryable<IEnumerable<TSource>> sources)
         {
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1362,15 +1557,20 @@ namespace System.Linq
         public static IQueryable<TSource> Concat<TSource>(this IQueryProvider provider, params IEnumerable<TSource>[] sources)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Concat<TSource>(default(IQueryProvider), default(IEnumerable<TSource>[]))),
+                    InfoOf(() => QueryableEx.Concat<TSource>(default, default(IEnumerable<TSource>[]))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1399,15 +1599,20 @@ namespace System.Linq
         public static IQueryable<TOther> SelectMany<TSource, TOther>(this IQueryable<TSource> source, IEnumerable<TOther> other)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (other == null)
+            {
                 throw new ArgumentNullException(nameof(other));
+            }
 
             return source.Provider.CreateQuery<TOther>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.SelectMany<TSource, TOther>(default(IQueryable<TSource>), default(IEnumerable<TOther>))),
+                    InfoOf(() => QueryableEx.SelectMany<TSource, TOther>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TOther)),
 #endif
@@ -1435,13 +1640,15 @@ namespace System.Linq
         public static IQueryable<TSource> Hide<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Hide<TSource>(default(IQueryable<TSource>))),
+                    InfoOf(() => QueryableEx.Hide<TSource>(default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1468,15 +1675,20 @@ namespace System.Linq
         public static IQueryable<TSource> Do<TSource>(this IQueryable<TSource> source, Expression<Action<TSource>> onNext)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Do<TSource>(default(IQueryable<TSource>), default(Expression<Action<TSource>>))),
+                    InfoOf(() => QueryableEx.Do<TSource>(default, default(Expression<Action<TSource>>))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1505,17 +1717,25 @@ namespace System.Linq
         public static IQueryable<TSource> Do<TSource>(this IQueryable<TSource> source, Expression<Action<TSource>> onNext, Expression<Action> onCompleted)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Do<TSource>(default(IQueryable<TSource>), default(Expression<Action<TSource>>), default(Expression<Action>))),
+                    InfoOf(() => QueryableEx.Do<TSource>(default, default, default(Expression<Action>))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1545,17 +1765,25 @@ namespace System.Linq
         public static IQueryable<TSource> Do<TSource>(this IQueryable<TSource> source, Expression<Action<TSource>> onNext, Expression<Action<Exception>> onError)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Do<TSource>(default(IQueryable<TSource>), default(Expression<Action<TSource>>), default(Expression<Action<Exception>>))),
+                    InfoOf(() => QueryableEx.Do<TSource>(default, default, default(Expression<Action<Exception>>))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1586,19 +1814,30 @@ namespace System.Linq
         public static IQueryable<TSource> Do<TSource>(this IQueryable<TSource> source, Expression<Action<TSource>> onNext, Expression<Action<Exception>> onError, Expression<Action> onCompleted)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
+
             if (onError == null)
+            {
                 throw new ArgumentNullException(nameof(onError));
+            }
+
             if (onCompleted == null)
+            {
                 throw new ArgumentNullException(nameof(onCompleted));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Do<TSource>(default(IQueryable<TSource>), default(Expression<Action<TSource>>), default(Expression<Action<Exception>>), default(Expression<Action>))),
+                    InfoOf(() => QueryableEx.Do<TSource>(default, default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1628,15 +1867,20 @@ namespace System.Linq
         public static IQueryable<TSource> Do<TSource>(this IQueryable<TSource> source, IObserver<TSource> observer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Do<TSource>(default(IQueryable<TSource>), default(IObserver<TSource>))),
+                    InfoOf(() => QueryableEx.Do<TSource>(default, default(IObserver<TSource>))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1664,13 +1908,15 @@ namespace System.Linq
         public static IQueryable<IList<TSource>> Buffer<TSource>(this IQueryable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Buffer<TSource>(default(IQueryable<TSource>), default(int))),
+                    InfoOf(() => QueryableEx.Buffer<TSource>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1699,13 +1945,15 @@ namespace System.Linq
         public static IQueryable<IList<TSource>> Buffer<TSource>(this IQueryable<TSource> source, int count, int skip)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Buffer<TSource>(default(IQueryable<TSource>), default(int), default(int))),
+                    InfoOf(() => QueryableEx.Buffer<TSource>(default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1733,13 +1981,15 @@ namespace System.Linq
         public static IQueryable<TSource> IgnoreElements<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.IgnoreElements<TSource>(default(IQueryable<TSource>))),
+                    InfoOf(() => QueryableEx.IgnoreElements<TSource>(default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1767,15 +2017,20 @@ namespace System.Linq
         public static IQueryable<TSource> Distinct<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Distinct<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>))),
+                    InfoOf(() => QueryableEx.Distinct<TSource, TKey>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
 #endif
@@ -1805,17 +2060,25 @@ namespace System.Linq
         public static IQueryable<TSource> Distinct<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Distinct<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IEqualityComparer<TKey>))),
+                    InfoOf(() => QueryableEx.Distinct<TSource, TKey>(default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
 #endif
@@ -1843,13 +2106,15 @@ namespace System.Linq
         public static IQueryable<TSource> DistinctUntilChanged<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.DistinctUntilChanged<TSource>(default(IQueryable<TSource>))),
+                    InfoOf(() => QueryableEx.DistinctUntilChanged<TSource>(default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1876,15 +2141,20 @@ namespace System.Linq
         public static IQueryable<TSource> DistinctUntilChanged<TSource>(this IQueryable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.DistinctUntilChanged<TSource>(default(IQueryable<TSource>), default(IEqualityComparer<TSource>))),
+                    InfoOf(() => QueryableEx.DistinctUntilChanged<TSource>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -1913,15 +2183,20 @@ namespace System.Linq
         public static IQueryable<TSource> DistinctUntilChanged<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.DistinctUntilChanged<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>))),
+                    InfoOf(() => QueryableEx.DistinctUntilChanged<TSource, TKey>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
 #endif
@@ -1951,17 +2226,25 @@ namespace System.Linq
         public static IQueryable<TSource> DistinctUntilChanged<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.DistinctUntilChanged<TSource, TKey>(default(IQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IEqualityComparer<TKey>))),
+                    InfoOf(() => QueryableEx.DistinctUntilChanged<TSource, TKey>(default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
 #endif
@@ -1990,15 +2273,20 @@ namespace System.Linq
         public static IQueryable<TSource> Expand<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, IEnumerable<TSource>>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Expand<TSource>(default(IQueryable<TSource>), default(Expression<Func<TSource, IEnumerable<TSource>>>))),
+                    InfoOf(() => QueryableEx.Expand<TSource>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -2026,13 +2314,15 @@ namespace System.Linq
         public static IQueryable<TSource> StartWith<TSource>(this IQueryable<TSource> source, params TSource[] values)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.StartWith<TSource>(default(IQueryable<TSource>), default(TSource[]))),
+                    InfoOf(() => QueryableEx.StartWith<TSource>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -2062,15 +2352,20 @@ namespace System.Linq
         public static IQueryable<TAccumulate> Scan<TSource, TAccumulate>(this IQueryable<TSource> source, TAccumulate seed, Expression<Func<TAccumulate, TSource, TAccumulate>> accumulator)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (accumulator == null)
+            {
                 throw new ArgumentNullException(nameof(accumulator));
+            }
 
             return source.Provider.CreateQuery<TAccumulate>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Scan<TSource, TAccumulate>(default(IQueryable<TSource>), default(TAccumulate), default(Expression<Func<TAccumulate, TSource, TAccumulate>>))),
+                    InfoOf(() => QueryableEx.Scan<TSource, TAccumulate>(default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TAccumulate)),
 #endif
@@ -2099,15 +2394,20 @@ namespace System.Linq
         public static IQueryable<TSource> Scan<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, TSource, TSource>> accumulator)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (accumulator == null)
+            {
                 throw new ArgumentNullException(nameof(accumulator));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Scan<TSource>(default(IQueryable<TSource>), default(Expression<Func<TSource, TSource, TSource>>))),
+                    InfoOf(() => QueryableEx.Scan<TSource>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -2135,13 +2435,15 @@ namespace System.Linq
         public static IQueryable<TSource> TakeLast<TSource>(this IQueryable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.TakeLast<TSource>(default(IQueryable<TSource>), default(int))),
+                    InfoOf(() => QueryableEx.TakeLast<TSource>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -2169,13 +2471,15 @@ namespace System.Linq
         public static IQueryable<TSource> SkipLast<TSource>(this IQueryable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.SkipLast<TSource>(default(IQueryable<TSource>), default(int))),
+                    InfoOf(() => QueryableEx.SkipLast<TSource>(default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -2202,7 +2506,9 @@ namespace System.Linq
         public static IQueryable<TSource> Repeat<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -2235,13 +2541,15 @@ namespace System.Linq
         public static IQueryable<TSource> Repeat<TSource>(this IQueryable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Repeat<TSource>(default(IQueryable<TSource>), default(int))),
+                    InfoOf(() => QueryableEx.Repeat<TSource>(default(IQueryable<TSource>), default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -2268,13 +2576,15 @@ namespace System.Linq
         public static IQueryable<TResult> Empty<TResult>(this IQueryProvider provider)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Empty<TResult>(default(IQueryProvider))),
+                    InfoOf(() => QueryableEx.Empty<TResult>(default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
@@ -2301,13 +2611,15 @@ namespace System.Linq
         public static IQueryable<int> Range(this IQueryProvider provider, int start, int count)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
 
             return provider.CreateQuery<int>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Range(default(IQueryProvider), default(int), default(int))),
+                    InfoOf(() => QueryableEx.Range(default, default, default)),
 #else
                     (MethodInfo)MethodInfo.GetCurrentMethod(),
 #endif
@@ -2337,13 +2649,15 @@ namespace System.Linq
         public static IQueryable<TResult> Repeat<TResult>(this IQueryProvider provider, TResult element, int count)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Repeat<TResult>(default(IQueryProvider), default(TResult), default(int))),
+                    InfoOf(() => QueryableEx.Repeat<TResult>(default, default, default)),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
@@ -2373,7 +2687,7 @@ namespace System.Linq
             }
         }
 
-        class QueryProviderShim : IQueryProvider
+        private class QueryProviderShim : IQueryProvider
         {
             public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
             {
@@ -2420,13 +2734,17 @@ namespace System.Linq
                                 var typeArgs = method.IsGenericMethod ? method.GetGenericArguments() : null;
                                 var targetMethod = methods[method.Name].FirstOrDefault(candidateMethod => ArgsMatch(candidateMethod, arguments, typeArgs));
                                 if (targetMethod == null)
+                                {
                                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "There is no method '{0}' on type '{1}' that matches the specified arguments", method.Name, targetType.Name));
+                                }
 
                                 //
                                 // Restore generic arguments.
                                 //
                                 if (typeArgs != null)
+                                {
                                     targetMethod = targetMethod.MakeGenericMethod(typeArgs);
+                                }
 
                                 //
                                 // Finally, we need to deal with mismatches on Expression<Func<...>> versus Func<...>.
@@ -2462,13 +2780,17 @@ namespace System.Linq
                 //
                 var parameters = method.GetParameters();
                 if (parameters.Length != arguments.Count)
+                {
                     return false;
+                }
 
                 //
                 // Genericity should match too.
                 //
                 if (!method.IsGenericMethod && typeArgs != null && typeArgs.Length > 0)
+                {
                     return false;
+                }
 
                 //
                 // Reconstruct the generic method if needed.
@@ -2476,10 +2798,14 @@ namespace System.Linq
                 if (method.IsGenericMethodDefinition)
                 {
                     if (typeArgs == null)
+                    {
                         return false;
+                    }
 
                     if (method.GetGenericArguments().Length != typeArgs.Length)
+                    {
                         return false;
+                    }
 
                     var result = method.MakeGenericMethod(typeArgs);
                     parameters = result.GetParameters();
@@ -2502,7 +2828,9 @@ namespace System.Linq
                     {
                         argument = Unquote(argument);
                         if (!parameterType.IsAssignableFrom(argument.Type))
+                        {
                             return false;
+                        }
                     }
                 }
 
@@ -2515,7 +2843,9 @@ namespace System.Linq
                 // Get rid of all outer quotes around an expression.
                 //
                 while (expression.NodeType == ExpressionType.Quote)
+                {
                     expression = ((UnaryExpression)expression).Operand;
+                }
 
                 return expression;
             }
@@ -2524,7 +2854,9 @@ namespace System.Linq
         internal static Expression GetSourceExpression<TSource>(IEnumerable<TSource> source)
         {
             if (source is IQueryable<TSource> q)
+            {
                 return q.Expression;
+            }
 
             return Expression.Constant(source, typeof(IEnumerable<TSource>));
         }

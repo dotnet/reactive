@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -20,7 +17,9 @@ namespace System.Linq
         public static IEnumerable<TResult> Repeat<TResult>(TResult value)
         {
             while (true)
+            {
                 yield return value;
+            }
         }
 
         /// <summary>
@@ -44,7 +43,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Repeat<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return Repeat_(source);
         }
@@ -59,9 +60,14 @@ namespace System.Linq
         public static IEnumerable<TSource> Repeat<TSource>(this IEnumerable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return Repeat_(source, count);
         }
@@ -69,15 +75,23 @@ namespace System.Linq
         private static IEnumerable<TSource> Repeat_<TSource>(IEnumerable<TSource> source)
         {
             while (true)
+            {
                 foreach (var item in source)
+                {
                     yield return item;
+                }
+            }
         }
 
         private static IEnumerable<TSource> Repeat_<TSource>(IEnumerable<TSource> source, int count)
         {
             for (var i = 0; i < count; i++)
+            {
                 foreach (var item in source)
+                {
                     yield return item;
+                }
+            }
         }
     }
 }

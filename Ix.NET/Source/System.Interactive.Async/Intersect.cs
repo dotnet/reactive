@@ -14,11 +14,19 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Intersect<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
+            {
                 throw new ArgumentNullException(nameof(first));
+            }
+
             if (second == null)
+            {
                 throw new ArgumentNullException(nameof(second));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return new IntersectAsyncIterator<TSource>(first, second, comparer);
         }
@@ -27,9 +35,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Intersect<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
+            {
                 throw new ArgumentNullException(nameof(first));
+            }
+
             if (second == null)
+            {
                 throw new ArgumentNullException(nameof(second));
+            }
 
             return first.Intersect(second, EqualityComparer<TSource>.Default);
         }

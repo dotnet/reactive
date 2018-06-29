@@ -23,7 +23,7 @@ namespace Tests
         [Fact]
         public void Append1()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Append(4);
 
@@ -39,11 +39,11 @@ namespace Tests
         [Fact]
         public async Task Append2()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Append(4);
 
-            var a = new[] {1, 2, 3, 4};
+            var a = new[] { 1, 2, 3, 4 };
 
             var arr = await res.ToArray();
             Assert.Equal(a, arr);
@@ -52,7 +52,7 @@ namespace Tests
         [Fact]
         public async Task Append3()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var res = xs.Append(4);
             var a = new List<int>
             {
@@ -68,7 +68,7 @@ namespace Tests
         [Fact]
         public async Task Append4()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Append(4);
             Assert.Equal(4, await res.Count());
@@ -82,7 +82,7 @@ namespace Tests
 
             var res = xs.Append(4);
 
-            var a = new[] {1, 2, 3, 4};
+            var a = new[] { 1, 2, 3, 4 };
 
             var arr = await res.ToArray();
             Assert.Equal(a, arr);
@@ -119,7 +119,7 @@ namespace Tests
         [Fact]
         public void AppendN1()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Append(4)
                         .Append(5)
@@ -139,13 +139,13 @@ namespace Tests
         [Fact]
         public async Task AppendN2()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Append(4)
                         .Append(5)
                         .Append(6);
 
-            var a = new[] {1, 2, 3, 4, 5, 6};
+            var a = new[] { 1, 2, 3, 4, 5, 6 };
 
             var arr = await res.ToArray();
             Assert.Equal(a, arr);
@@ -154,7 +154,7 @@ namespace Tests
         [Fact]
         public async Task AppendN3()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var res = xs.Append(4)
                         .Append(5)
                         .Append(6);
@@ -184,7 +184,7 @@ namespace Tests
                         .Append(5)
                         .Append(6);
 
-            var a = new[] {1, 2, 3, 4, 5, 6};
+            var a = new[] { 1, 2, 3, 4, 5, 6 };
 
             var arr = await res.ToArray();
             Assert.Equal(a, arr);
@@ -228,7 +228,7 @@ namespace Tests
         [Fact]
         public async Task AppenN4()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Append(4)
                         .Append(5)
@@ -239,7 +239,7 @@ namespace Tests
         [Fact]
         public void Prepend1()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Prepend(4);
 
@@ -255,11 +255,11 @@ namespace Tests
         [Fact]
         public async Task Prepend2()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Prepend(4);
 
-            var a = new[] {4, 1, 2, 3};
+            var a = new[] { 4, 1, 2, 3 };
 
             var arr = await res.ToArray();
             Assert.Equal(a, arr);
@@ -268,7 +268,7 @@ namespace Tests
         [Fact]
         public async Task Prepend3()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var res = xs.Prepend(4);
             var a = new List<int>
             {
@@ -285,7 +285,7 @@ namespace Tests
         [Fact]
         public async Task Prepend4()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Prepend(4);
             Assert.Equal(4, await res.Count());
@@ -300,7 +300,7 @@ namespace Tests
 
             var res = xs.Prepend(4);
 
-            var a = new[] {4, 1, 2, 3};
+            var a = new[] { 4, 1, 2, 3 };
 
             var arr = await res.ToArray();
             Assert.Equal(a, arr);
@@ -349,7 +349,7 @@ namespace Tests
         [Fact]
         public void PrependN1()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Prepend(4)
                         .Prepend(5)
@@ -369,13 +369,13 @@ namespace Tests
         [Fact]
         public async Task PrependN2()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Prepend(4)
                         .Prepend(5)
                         .Prepend(6);
 
-            var a = new[] {6, 5, 4, 1, 2, 3};
+            var a = new[] { 6, 5, 4, 1, 2, 3 };
 
             var arr = await res.ToArray();
             Assert.Equal(a, arr);
@@ -384,7 +384,7 @@ namespace Tests
         [Fact]
         public async Task PrependN3()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var res = xs.Prepend(4)
                         .Prepend(5)
                         .Prepend(6);
@@ -406,7 +406,7 @@ namespace Tests
         [Fact]
         public async Task PrependN4()
         {
-            var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Prepend(4)
                         .Prepend(5)
@@ -424,7 +424,7 @@ namespace Tests
                         .Prepend(5)
                         .Prepend(6);
 
-            var a = new[] {6, 5, 4, 1, 2, 3};
+            var a = new[] { 6, 5, 4, 1, 2, 3 };
 
             var arr = await res.ToArray();
             Assert.Equal(a, arr);
@@ -480,7 +480,7 @@ namespace Tests
                         .Prepend(10);
 
             var e = res.GetEnumerator();
-            
+
 
             HasNext(e, 10);
             HasNext(e, 9);
@@ -615,7 +615,7 @@ namespace Tests
                         .Prepend(5);
 
             var e = res.GetEnumerator();
-            
+
             HasNext(e, 5);
             HasNext(e, 1);
             HasNext(e, 2);

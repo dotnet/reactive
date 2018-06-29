@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -21,7 +18,9 @@ namespace System.Linq
         public static IEnumerable<TSource> StartWith<TSource>(this IEnumerable<TSource> source, params TSource[] values)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.StartWith_(values);
         }
@@ -29,10 +28,14 @@ namespace System.Linq
         private static IEnumerable<TSource> StartWith_<TSource>(this IEnumerable<TSource> source, params TSource[] values)
         {
             foreach (var x in values)
+            {
                 yield return x;
+            }
 
             foreach (var item in source)
+            {
                 yield return item;
+            }
         }
     }
 }

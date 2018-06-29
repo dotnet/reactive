@@ -6,10 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using Xunit;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Tests
 {
@@ -20,7 +19,7 @@ namespace Tests
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Concat<int>(null, AsyncEnumerable.Return(42)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Concat<int>(AsyncEnumerable.Return(42), null));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Concat<int>(default(IAsyncEnumerable<int>[])));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Concat<int>(default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Concat<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
         }
 
@@ -204,8 +203,7 @@ namespace Tests
             Assert.Equal(8, await c.Count());
         }
 
-
-        static IEnumerable<IAsyncEnumerable<int>> ConcatXss()
+        private static IEnumerable<IAsyncEnumerable<int>> ConcatXss()
         {
             yield return new[] { 1, 2, 3 }.ToAsyncEnumerable();
             yield return new[] { 4, 5 }.ToAsyncEnumerable();
@@ -292,7 +290,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var res = xs.Zip(ys, (x, y) => { if (x > 0) throw ex; return x * y; });
+            var res = xs.Zip(ys, (x, y) => { if (x > 0) { throw ex; } return x * y; });
 
             var e = res.GetEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
@@ -610,7 +608,7 @@ namespace Tests
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NotImplementedException);
         }
 
-        class EqEx : IEqualityComparer<int>
+        private class EqEx : IEqualityComparer<int>
         {
             public bool Equals(int x, int y)
             {
@@ -622,7 +620,7 @@ namespace Tests
                 throw new NotImplementedException();
             }
         }
-        
+
         [Fact]
         public void GroupJoin_Null()
         {
@@ -637,7 +635,7 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), null, x => x, (x, y) => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, null, (x, y) => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, null, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, (x, y) => x, default(IEqualityComparer<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, (x, y) => x, default));
         }
 
         [Fact]
@@ -729,9 +727,13 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = new[] { 3, 6, 4 }.ToAsyncEnumerable();
 
-            var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => {
+            var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) =>
+            {
                 if (x == 1)
+                {
                     throw ex;
+                }
+
                 return x + " - " + i.Aggregate("", (s, j) => s + j).Result;
             });
 
@@ -754,7 +756,7 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), null, x => x, (x, y) => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, null, (x, y) => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, null, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, (x, y) => x, default(IEqualityComparer<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, (x, y) => x, default));
         }
 
         [Fact]
@@ -962,7 +964,7 @@ namespace Tests
         [Fact]
         public void SelectManyMultiple_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(default, AsyncEnumerable.Return(42)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>)));
         }
 
@@ -1001,16 +1003,36 @@ namespace Tests
         {
             public bool Equals(CustomerOrder other)
             {
-                if (other is null) return false;
-                if (ReferenceEquals(this, other)) return true;
+                if (other is null)
+                {
+                    return false;
+                }
+
+                if (ReferenceEquals(this, other))
+                {
+                    return true;
+                }
+
                 return OrderId == other.OrderId && string.Equals(CustomerId, other.CustomerId);
             }
 
             public override bool Equals(object obj)
             {
-                if (obj is null) return false;
-                if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != GetType()) return false;
+                if (obj is null)
+                {
+                    return false;
+                }
+
+                if (ReferenceEquals(this, obj))
+                {
+                    return true;
+                }
+
+                if (obj.GetType() != GetType())
+                {
+                    return false;
+                }
+
                 return Equals((CustomerOrder)obj);
             }
 

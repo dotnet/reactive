@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,7 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Append<TSource>(this IAsyncEnumerable<TSource> source, TSource element)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             if (source is AppendPrepentAsyncIterator<TSource> appendable)
             {
@@ -29,7 +29,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Prepend<TSource>(this IAsyncEnumerable<TSource> source, TSource element)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             if (source is AppendPrepentAsyncIterator<TSource> appendable)
             {
@@ -95,8 +97,7 @@ namespace System.Linq
         {
             private readonly TSource item;
             private readonly bool appending;
-
-            bool hasEnumerator;
+            private bool hasEnumerator;
 
             public AppendPrepend1AsyncIterator(IAsyncEnumerable<TSource> source, TSource item, bool appending)
                 : base(source)
@@ -130,7 +131,7 @@ namespace System.Linq
                         if (!hasEnumerator)
                         {
                             GetSourceEnumerator();
-                            hasEnumerator = true;   
+                            hasEnumerator = true;
                         }
 
                         if (enumerator != null)
@@ -327,8 +328,8 @@ namespace System.Linq
                 return new AppendPrependNAsyncIterator<TSource>(source, prepended, appended);
             }
 
-            int mode;
-            IEnumerator<TSource> appendedEnumerator;
+            private int mode;
+            private IEnumerator<TSource> appendedEnumerator;
 
             public override void Dispose()
             {
@@ -347,7 +348,7 @@ namespace System.Linq
                 {
                     case AsyncIteratorState.Allocated:
                         mode = 1;
-                        state = AsyncIteratorState.Iterating; 
+                        state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -385,7 +386,7 @@ namespace System.Linq
                                 }
 
                                 break;
-                                
+
 
                             case 4:
                                 if (appendedEnumerator.MoveNext())
@@ -473,7 +474,7 @@ namespace System.Linq
                         list.Add(en.Current);
                     }
                 }
-                
+
                 if (appended != null)
                 {
 

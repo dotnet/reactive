@@ -14,9 +14,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Finally<TSource>(this IAsyncEnumerable<TSource> source, Action finallyAction)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (finallyAction == null)
+            {
                 throw new ArgumentNullException(nameof(finallyAction));
+            }
 
             return new FinallyAsyncIterator<TSource>(source, finallyAction);
         }
@@ -27,10 +32,8 @@ namespace System.Linq
             private readonly IAsyncEnumerable<TSource> source;
 
             private IAsyncEnumerator<TSource> enumerator;
-
-            CancellationTokenRegistration _tokenRegistration;
-
-            int _once;
+            private CancellationTokenRegistration _tokenRegistration;
+            private int _once;
 
             public FinallyAsyncIterator(IAsyncEnumerable<TSource> source, Action finallyAction)
             {

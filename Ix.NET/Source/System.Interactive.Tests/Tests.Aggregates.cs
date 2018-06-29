@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 using System;
-using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -42,7 +41,7 @@ namespace Tests
             Assert.Equal(3, new[] { 5, 3, 7 }.Min(new Mod3Comparer()));
         }
 
-        class Mod3Comparer : IComparer<int>
+        private class Mod3Comparer : IComparer<int>
         {
             public int Compare(int x, int y)
             {
@@ -56,7 +55,7 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => EnumerableEx.MinBy(null, (int x) => x));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.MinBy(new[] { 1 }, default(Func<int, int>)));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.MinBy(null, (int x) => x, Comparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.MinBy(new[] { 1 }, default(Func<int, int>), Comparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.MinBy(new[] { 1 }, default, Comparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.MinBy(new[] { 1 }, (int x) => x, null));
         }
 
@@ -86,7 +85,7 @@ namespace Tests
             Assert.Equal(5, new[] { 2, 5, 3, 7 }.Max(new Mod7Comparer()));
         }
 
-        class Mod7Comparer : IComparer<int>
+        private class Mod7Comparer : IComparer<int>
         {
             public int Compare(int x, int y)
             {
@@ -100,7 +99,7 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => EnumerableEx.MaxBy(null, (int x) => x));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.MaxBy(new[] { 1 }, default(Func<int, int>)));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.MaxBy(null, (int x) => x, Comparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.MaxBy(new[] { 1 }, default(Func<int, int>), Comparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.MaxBy(new[] { 1 }, default, Comparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.MaxBy(new[] { 1 }, (int x) => x, null));
         }
 

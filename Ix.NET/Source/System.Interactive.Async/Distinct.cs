@@ -14,11 +14,19 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return new DistinctAsyncIterator<TSource, TKey>(source, keySelector, comparer);
         }
@@ -26,9 +34,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return source.Distinct(keySelector, EqualityComparer<TKey>.Default);
         }
@@ -36,9 +49,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return new DistinctAsyncIterator<TSource>(source, comparer);
         }
@@ -46,7 +64,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.Distinct(EqualityComparer<TSource>.Default);
         }
@@ -54,7 +74,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.DistinctUntilChanged(EqualityComparer<TSource>.Default);
         }
@@ -62,9 +84,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return new DistinctUntilChangedAsyncIterator<TSource>(source, comparer);
         }
@@ -72,9 +99,14 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
 
             return source.DistinctUntilChanged_(keySelector, EqualityComparer<TKey>.Default);
         }
@@ -82,11 +114,19 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (keySelector == null)
+            {
                 throw new ArgumentNullException(nameof(keySelector));
+            }
+
             if (comparer == null)
+            {
                 throw new ArgumentNullException(nameof(comparer));
+            }
 
             return source.DistinctUntilChanged_(keySelector, comparer);
         }
@@ -369,7 +409,7 @@ namespace System.Linq
                 {
                     enumerator.Dispose();
                     enumerator = null;
-                    currentValue = default(TSource);
+                    currentValue = default;
                 }
 
                 base.Dispose();
@@ -440,7 +480,7 @@ namespace System.Linq
                 {
                     enumerator.Dispose();
                     enumerator = null;
-                    currentKeyValue = default(TKey);
+                    currentKeyValue = default;
                 }
 
                 base.Dispose();

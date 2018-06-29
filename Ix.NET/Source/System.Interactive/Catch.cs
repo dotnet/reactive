@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -24,9 +21,14 @@ namespace System.Linq
             where TException : Exception
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (handler == null)
+            {
                 throw new ArgumentNullException(nameof(handler));
+            }
 
             return source.Catch_(handler);
         }
@@ -40,7 +42,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Catch<TSource>(this IEnumerable<IEnumerable<TSource>> sources)
         {
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return sources.Catch_();
         }
@@ -54,7 +58,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Catch<TSource>(params IEnumerable<TSource>[] sources)
         {
             if (sources == null)
+            {
                 throw new ArgumentNullException(nameof(sources));
+            }
 
             return sources.Catch_();
         }
@@ -69,11 +75,16 @@ namespace System.Linq
         public static IEnumerable<TSource> Catch<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
         {
             if (first == null)
+            {
                 throw new ArgumentNullException(nameof(first));
-            if (second == null)
-                throw new ArgumentNullException(nameof(second));
+            }
 
-            return new[] {first, second}.Catch_();
+            if (second == null)
+            {
+                throw new ArgumentNullException(nameof(second));
+            }
+
+            return new[] { first, second }.Catch_();
         }
 
         private static IEnumerable<TSource> Catch_<TSource, TException>(this IEnumerable<TSource> source, Func<TException, IEnumerable<TSource>> handler)
@@ -90,7 +101,9 @@ namespace System.Linq
                     try
                     {
                         if (!e.MoveNext())
+                        {
                             break;
+                        }
 
                         c = e.Current;
                     }
@@ -107,7 +120,9 @@ namespace System.Linq
             if (err != null)
             {
                 foreach (var item in err)
+                {
                     yield return item;
+                }
             }
         }
 
@@ -128,7 +143,9 @@ namespace System.Linq
                         try
                         {
                             if (!e.MoveNext())
+                            {
                                 break;
+                            }
 
                             c = e.Current;
                         }
@@ -142,12 +159,16 @@ namespace System.Linq
                     }
 
                     if (error == null)
+                    {
                         break;
+                    }
                 }
             }
 
             if (error != null)
+            {
                 throw error;
+            }
         }
     }
 }

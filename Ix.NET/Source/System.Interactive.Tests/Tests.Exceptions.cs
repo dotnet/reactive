@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 using System;
-using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -16,7 +15,7 @@ namespace Tests
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Catch<int>(null, new[] { 1 }));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Catch<int>(new[] { 1 }, null));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.Catch<int>(default(IEnumerable<int>[])));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.Catch<int>(default));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Catch<int>(default(IEnumerable<IEnumerable<int>>)));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Catch<int, Exception>(null, ex => new[] { 1 }));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Catch<int, Exception>(new[] { 1 }, null));
@@ -282,7 +281,7 @@ namespace Tests
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.OnErrorResumeNext<int>(null, new[] { 1 }));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.OnErrorResumeNext<int>(new[] { 1 }, null));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.OnErrorResumeNext<int>(default(IEnumerable<int>[])));
+            AssertThrows<ArgumentNullException>(() => EnumerableEx.OnErrorResumeNext<int>(default));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.OnErrorResumeNext<int>(default(IEnumerable<IEnumerable<int>>)));
         }
 
