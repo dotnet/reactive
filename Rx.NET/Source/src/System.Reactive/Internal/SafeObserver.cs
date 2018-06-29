@@ -24,15 +24,15 @@ namespace System.Reactive
 
             public override void OnNext(TSource value)
             {
-                var __noError = false;
+                var noError = false;
                 try
                 {
                     _observer.OnNext(value);
-                    __noError = true;
+                    noError = true;
                 }
                 finally
                 {
-                    if (!__noError)
+                    if (!noError)
                     {
                         Dispose();
                     }
