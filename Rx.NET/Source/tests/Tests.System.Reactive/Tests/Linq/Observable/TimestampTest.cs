@@ -63,7 +63,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(150, 1),
                 OnCompleted<int>(400)
             );
@@ -88,7 +88,7 @@ namespace ReactiveTests.Tests
 
             var ex = new Exception();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(150, 1),
                 OnError<int>(400, ex)
             );
@@ -111,7 +111,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(150, 1)
             );
 

@@ -38,7 +38,7 @@ namespace ReactiveTests.Tests
         public void Last_Return()
         {
             var value = 42;
-            Assert.Equal(value, Observable.Return<int>(value).Last());
+            Assert.Equal(value, Observable.Return(value).Last());
         }
 
         [Fact]

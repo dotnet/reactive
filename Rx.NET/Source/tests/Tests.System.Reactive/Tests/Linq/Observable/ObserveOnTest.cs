@@ -51,7 +51,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.ObserveOnDispatcher<int>(default(IObservable<int>)));
 #endif
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(default, new SynchronizationContext()));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn<int>(someObservable, default(SynchronizationContext)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ObserveOn(someObservable, default(SynchronizationContext)));
         }
 
 #if HAS_WINFORMS
@@ -649,16 +649,16 @@ namespace ReactiveTests.Tests
 
     internal class MyCtx : SynchronizationContext
     {
-        private IScheduler scheduler;
+        private IScheduler _scheduler;
 
         public MyCtx(IScheduler scheduler)
         {
-            this.scheduler = scheduler;
+            _scheduler = scheduler;
         }
 
         public override void Post(SendOrPostCallback d, object state)
         {
-            scheduler.Schedule(state, (self, s) => { d(s); return Disposable.Empty; });
+            _scheduler.Schedule(state, (self, s) => { d(s); return Disposable.Empty; });
         }
     }
 }

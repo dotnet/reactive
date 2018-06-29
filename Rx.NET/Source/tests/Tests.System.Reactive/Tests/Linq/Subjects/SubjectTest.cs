@@ -370,8 +370,8 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int, int>(null, Observable.Return(42)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int, int>(Observer.Create<int>(x => { }), null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int>(null, Observable.Return(42)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int>(Observer.Create<int>(x => { }), null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create(null, Observable.Return(42)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create(Observer.Create<int>(x => { }), null));
         }
 
         [Fact]

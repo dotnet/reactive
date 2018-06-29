@@ -19,7 +19,7 @@ namespace ReactiveTests.Tests
         public void When_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.When<int>(null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.When<int>((IEnumerable<Plan<int>>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.When((IEnumerable<Plan<int>>)null));
         }
 
         [Fact]

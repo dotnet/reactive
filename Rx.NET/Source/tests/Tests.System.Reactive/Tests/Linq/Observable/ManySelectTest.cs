@@ -18,10 +18,10 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ManySelect_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.ManySelect<int, int>(null, DummyFunc<IObservable<int>, int>.Instance, DummyScheduler.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.ManySelect(null, DummyFunc<IObservable<int>, int>.Instance, DummyScheduler.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.ManySelect<int, int>(DummyObservable<int>.Instance, null, DummyScheduler.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.ManySelect<int, int>(DummyObservable<int>.Instance, DummyFunc<IObservable<int>, int>.Instance, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.ManySelect<int, int>(null, DummyFunc<IObservable<int>, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.ManySelect(DummyObservable<int>.Instance, DummyFunc<IObservable<int>, int>.Instance, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.ManySelect(null, DummyFunc<IObservable<int>, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.ManySelect<int, int>(DummyObservable<int>.Instance, null));
         }
 

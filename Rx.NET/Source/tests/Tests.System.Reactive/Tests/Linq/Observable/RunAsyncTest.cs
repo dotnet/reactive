@@ -20,7 +20,7 @@ namespace ReactiveTests.Tests
         {
             var ct = CancellationToken.None;
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RunAsync<int>(default(IObservable<int>), ct));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RunAsync(default(IObservable<int>), ct));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RunAsync<int>(default, ct));
         }
 

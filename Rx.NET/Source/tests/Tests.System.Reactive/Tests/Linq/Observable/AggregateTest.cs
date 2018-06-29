@@ -17,13 +17,13 @@ namespace ReactiveTests.Tests
         public void Aggregate_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int>(default, 1, (x, y) => x + y));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int>(DummyObservable<int>.Instance, 1, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate(DummyObservable<int>.Instance, 1, default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int>(default, (x, y) => x + y));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int>(DummyObservable<int>.Instance, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate(DummyObservable<int>.Instance, default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(default, 1, (x, y) => x + y, x => x));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(DummyObservable<int>.Instance, 1, default, x => x));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate(DummyObservable<int>.Instance, 1, default, x => x));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(DummyObservable<int>.Instance, 1, (x, y) => x + y, default));
         }
 
@@ -67,7 +67,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250, 42 + 24),
+                OnNext(250, 42 + 24),
                 OnCompleted<int>(250)
             );
 
@@ -225,7 +225,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250, (42 + 24) * 5),
+                OnNext(250, (42 + 24) * 5),
                 OnCompleted<int>(250)
             );
 
@@ -412,7 +412,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250, 24),
+                OnNext(250, 24),
                 OnCompleted<int>(250)
             );
 

@@ -51,16 +51,16 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Immediate_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule<int>(42, default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule<int>(42, DateTimeOffset.Now, default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule<int>(42, TimeSpan.Zero, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule(42, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule(42, DateTimeOffset.Now, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule(42, TimeSpan.Zero, default));
         }
 
         [Fact]
         public void Immediate_Simple1()
         {
             var _x = 0;
-            Scheduler.Immediate.Schedule<int>(42, (self, x) => { _x = x; return Disposable.Empty; });
+            Scheduler.Immediate.Schedule(42, (self, x) => { _x = x; return Disposable.Empty; });
             Assert.Equal(42, _x);
         }
 
@@ -68,7 +68,7 @@ namespace ReactiveTests.Tests
         public void Immediate_Simple2()
         {
             var _x = 0;
-            Scheduler.Immediate.Schedule<int>(42, DateTimeOffset.Now, (self, x) => { _x = x; return Disposable.Empty; });
+            Scheduler.Immediate.Schedule(42, DateTimeOffset.Now, (self, x) => { _x = x; return Disposable.Empty; });
             Assert.Equal(42, _x);
         }
 
@@ -76,7 +76,7 @@ namespace ReactiveTests.Tests
         public void Immediate_Simple3()
         {
             var _x = 0;
-            Scheduler.Immediate.Schedule<int>(42, TimeSpan.Zero, (self, x) => { _x = x; return Disposable.Empty; });
+            Scheduler.Immediate.Schedule(42, TimeSpan.Zero, (self, x) => { _x = x; return Disposable.Empty; });
             Assert.Equal(42, _x);
         }
 
@@ -85,7 +85,7 @@ namespace ReactiveTests.Tests
         {
             var _x = 0;
             var _y = 0;
-            Scheduler.Immediate.Schedule<int>(42, (self, x) => { _x = x; return self.Schedule<int>(43, (self2, y) => { _y = y; return Disposable.Empty; }); });
+            Scheduler.Immediate.Schedule(42, (self, x) => { _x = x; return self.Schedule(43, (self2, y) => { _y = y; return Disposable.Empty; }); });
             Assert.Equal(42, _x);
             Assert.Equal(43, _y);
         }
@@ -95,7 +95,7 @@ namespace ReactiveTests.Tests
         {
             var _x = 0;
             var _y = 0;
-            Scheduler.Immediate.Schedule<int>(42, (self, x) => { _x = x; return self.Schedule<int>(43, DateTimeOffset.Now, (self2, y) => { _y = y; return Disposable.Empty; }); });
+            Scheduler.Immediate.Schedule(42, (self, x) => { _x = x; return self.Schedule(43, DateTimeOffset.Now, (self2, y) => { _y = y; return Disposable.Empty; }); });
             Assert.Equal(42, _x);
             Assert.Equal(43, _y);
         }
@@ -105,7 +105,7 @@ namespace ReactiveTests.Tests
         {
             var _x = 0;
             var _y = 0;
-            Scheduler.Immediate.Schedule<int>(42, (self, x) => { _x = x; return self.Schedule<int>(43, TimeSpan.FromMilliseconds(100), (self2, y) => { _y = y; return Disposable.Empty; }); });
+            Scheduler.Immediate.Schedule(42, (self, x) => { _x = x; return self.Schedule(43, TimeSpan.FromMilliseconds(100), (self2, y) => { _y = y; return Disposable.Empty; }); });
             Assert.Equal(42, _x);
             Assert.Equal(43, _y);
         }

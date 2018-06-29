@@ -3702,7 +3702,7 @@ namespace ReactiveTests.Tests
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnCompleted<int>(290) });
 
             var res = scheduler.Start(() =>
-                Observable.CombineLatest<int>(new IObservable<int>[] { e0, e1, e2 }.AsEnumerable())
+                Observable.CombineLatest(new IObservable<int>[] { e0, e1, e2 }.AsEnumerable())
             );
 
             res.Messages.AssertEqual(
@@ -3771,10 +3771,10 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(230, new[] { 1, 2, 3 }.Sum()),
-                OnNext<int>(240, new[] { 1, 5, 3 }.Sum()),
-                OnNext<int>(250, new[] { 4, 5, 3 }.Sum()),
-                OnNext<int>(260, new[] { 4, 5, 6 }.Sum()),
+                OnNext(230, new[] { 1, 2, 3 }.Sum()),
+                OnNext(240, new[] { 1, 5, 3 }.Sum()),
+                OnNext(250, new[] { 4, 5, 3 }.Sum()),
+                OnNext(260, new[] { 4, 5, 6 }.Sum()),
                 OnCompleted<int>(420)
             );
 
@@ -3842,13 +3842,13 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(230, new[] { 1, 2, 3 }.Sum()),
-                OnNext<int>(240, new[] { 1, 5, 3 }.Sum()),
-                OnNext<int>(250, new[] { 4, 5, 3 }.Sum()),
-                OnNext<int>(260, new[] { 4, 5, 6 }.Sum()),
-                OnNext<int>(280, new[] { 4, 5, 8 }.Sum()),
-                OnNext<int>(290, new[] { 4, 7, 8 }.Sum()),
-                OnNext<int>(310, new[] { 4, 9, 8 }.Sum()),
+                OnNext(230, new[] { 1, 2, 3 }.Sum()),
+                OnNext(240, new[] { 1, 5, 3 }.Sum()),
+                OnNext(250, new[] { 4, 5, 3 }.Sum()),
+                OnNext(260, new[] { 4, 5, 6 }.Sum()),
+                OnNext(280, new[] { 4, 5, 8 }.Sum()),
+                OnNext(290, new[] { 4, 7, 8 }.Sum()),
+                OnNext(310, new[] { 4, 9, 8 }.Sum()),
                 OnCompleted<int>(410)
             );
 
@@ -3915,8 +3915,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(230, new[] { 1, 2, 3 }.Sum()),
-                OnNext<int>(240, new[] { 1, 5, 3 }.Sum()),
+                OnNext(230, new[] { 1, 2, 3 }.Sum()),
+                OnNext(240, new[] { 1, 5, 3 }.Sum()),
                 OnError<int>(250, ex)
             );
 

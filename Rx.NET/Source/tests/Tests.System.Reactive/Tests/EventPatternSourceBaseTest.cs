@@ -49,7 +49,7 @@ namespace ReactiveTests.Tests
         {
             add
             {
-                base.Add(value, GetInvoke(value));
+                Add(value, GetInvoke(value));
             }
 
             remove

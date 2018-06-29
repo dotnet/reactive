@@ -19,9 +19,9 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Multicast_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Multicast<int, int>(null, new Subject<int>()));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Multicast(null, new Subject<int>()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Multicast<int, int>(DummyObservable<int>.Instance, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Multicast<int, int, int>(null, () => new Subject<int>(), xs => xs));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Multicast(null, () => new Subject<int>(), xs => xs));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Multicast<int, int, int>(DummyObservable<int>.Instance, null, xs => xs));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Multicast<int, int, int>(DummyObservable<int>.Instance, () => new Subject<int>(), null));
         }

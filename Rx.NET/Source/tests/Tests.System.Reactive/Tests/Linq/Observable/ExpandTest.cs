@@ -71,7 +71,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.Expand(x => scheduler.CreateColdObservable<int>(
+                xs.Expand(x => scheduler.CreateColdObservable(
                     OnNext(100 + x, 2 * x),
                     OnNext(200 + x, 3 * x),
                     OnCompleted<int>(300 + x)
@@ -96,7 +96,7 @@ namespace ReactiveTests.Tests
             );
 
             var res = scheduler.Start(() =>
-                xs.Expand(x => scheduler.CreateColdObservable<int>(
+                xs.Expand(x => scheduler.CreateColdObservable(
                     OnNext(100 + x, 2 * x),
                     OnNext(200 + x, 3 * x),
                     OnCompleted<int>(300 + x)

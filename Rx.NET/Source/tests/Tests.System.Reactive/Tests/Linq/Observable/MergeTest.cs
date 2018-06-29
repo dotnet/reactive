@@ -43,7 +43,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Merge_DefaultScheduler()
         {
-            var xs = Observable.Merge<int>(Observable.Return(42), Observable.Return(43), Observable.Return(44));
+            var xs = Observable.Merge(Observable.Return(42), Observable.Return(43), Observable.Return(44));
             var res = xs.ToList().Single();
             Assert.True(new[] { 42, 43, 44 }.SequenceEqual(res));
         }
@@ -1164,7 +1164,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(300)
             );
 
-            var xs = scheduler.CreateHotObservable<IObservable<int>>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext<IObservable<int>>(210, ys1),
                 OnNext<IObservable<int>>(260, ys2),
                 OnNext<IObservable<int>>(270, ys3),

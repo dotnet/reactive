@@ -582,7 +582,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(220)
             );
 
-            var results = scheduler.Start(() => xs.ForkJoin<int, int, int>(ys, (x, y) => x + y));
+            var results = scheduler.Start(() => xs.ForkJoin(ys, (x, y) => x + y));
 
             results.Messages.AssertEqual(
                 OnCompleted<int>(220)
@@ -611,7 +611,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(220)
             );
 
-            var results = scheduler.Start(() => xs.ForkJoin<int, int, int>(ys, (x, y) => x + y));
+            var results = scheduler.Start(() => xs.ForkJoin(ys, (x, y) => x + y));
 
             results.Messages.AssertEqual(
                 OnCompleted<int>(220)

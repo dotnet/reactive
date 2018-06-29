@@ -5,7 +5,6 @@
 #if !NO_REMOTING && !XUNIT
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;

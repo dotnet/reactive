@@ -11,22 +11,22 @@ namespace ReactiveTests.Tests
 {
     public class HalfSerializerTest
     {
-        private int wip;
-        private Exception error;
-        private Consumer consumer = new Consumer();
+        private int _wip;
+        private Exception _error;
+        private Consumer _consumer = new Consumer();
 
         [Fact]
         public void HalfSerializer_OnNext()
         {
-            HalfSerializer.ForwardOnNext(consumer, 1, ref wip, ref error);
+            HalfSerializer.ForwardOnNext(_consumer, 1, ref _wip, ref _error);
 
-            Assert.Equal(0, wip);
-            Assert.Null(error);
+            Assert.Equal(0, _wip);
+            Assert.Null(_error);
 
-            Assert.Equal(1, consumer.items.Count);
-            Assert.Equal(1, consumer.items[0]);
-            Assert.Equal(0, consumer.done);
-            Assert.Null(consumer.exc);
+            Assert.Equal(1, _consumer.Items.Count);
+            Assert.Equal(1, _consumer.Items[0]);
+            Assert.Equal(0, _consumer.Done);
+            Assert.Null(_consumer.Exc);
         }
 
         [Fact]
@@ -34,16 +34,16 @@ namespace ReactiveTests.Tests
         {
             var ex = new InvalidOperationException();
 
-            HalfSerializer.ForwardOnError(consumer, ex, ref wip, ref error);
+            HalfSerializer.ForwardOnError(_consumer, ex, ref _wip, ref _error);
 
-            Assert.Equal(1, wip);
-            Assert.Equal(error, ExceptionHelper.Terminated);
+            Assert.Equal(1, _wip);
+            Assert.Equal(_error, ExceptionHelper.Terminated);
 
-            HalfSerializer.ForwardOnNext(consumer, 2, ref wip, ref error);
+            HalfSerializer.ForwardOnNext(_consumer, 2, ref _wip, ref _error);
 
-            Assert.Equal(0, consumer.items.Count);
-            Assert.Equal(0, consumer.done);
-            Assert.Equal(ex, consumer.exc);
+            Assert.Equal(0, _consumer.Items.Count);
+            Assert.Equal(0, _consumer.Done);
+            Assert.Equal(ex, _consumer.Exc);
         }
 
         [Fact]
@@ -51,52 +51,52 @@ namespace ReactiveTests.Tests
         {
             var ex = new InvalidOperationException();
 
-            HalfSerializer.ForwardOnError(consumer, ex, ref wip, ref error);
+            HalfSerializer.ForwardOnError(_consumer, ex, ref _wip, ref _error);
 
-            Assert.Equal(1, wip);
-            Assert.Equal(error, ExceptionHelper.Terminated);
+            Assert.Equal(1, _wip);
+            Assert.Equal(_error, ExceptionHelper.Terminated);
 
-            HalfSerializer.ForwardOnNext(consumer, 2, ref wip, ref error);
+            HalfSerializer.ForwardOnNext(_consumer, 2, ref _wip, ref _error);
             var ex2 = new NotSupportedException();
-            HalfSerializer.ForwardOnError(consumer, ex2, ref wip, ref error);
-            HalfSerializer.ForwardOnCompleted(consumer, ref wip, ref error);
+            HalfSerializer.ForwardOnError(_consumer, ex2, ref _wip, ref _error);
+            HalfSerializer.ForwardOnCompleted(_consumer, ref _wip, ref _error);
 
-            Assert.Equal(0, consumer.items.Count);
-            Assert.Equal(0, consumer.done);
-            Assert.Equal(ex, consumer.exc);
+            Assert.Equal(0, _consumer.Items.Count);
+            Assert.Equal(0, _consumer.Done);
+            Assert.Equal(ex, _consumer.Exc);
         }
 
         [Fact]
         public void HalfSerializer_OnCompleted()
         {
-            HalfSerializer.ForwardOnCompleted(consumer, ref wip, ref error);
+            HalfSerializer.ForwardOnCompleted(_consumer, ref _wip, ref _error);
 
-            Assert.Equal(1, wip);
-            Assert.Equal(error, ExceptionHelper.Terminated);
+            Assert.Equal(1, _wip);
+            Assert.Equal(_error, ExceptionHelper.Terminated);
 
-            HalfSerializer.ForwardOnNext(consumer, 2, ref wip, ref error);
+            HalfSerializer.ForwardOnNext(_consumer, 2, ref _wip, ref _error);
 
-            Assert.Equal(0, consumer.items.Count);
-            Assert.Equal(1, consumer.done);
-            Assert.Null(consumer.exc);
+            Assert.Equal(0, _consumer.Items.Count);
+            Assert.Equal(1, _consumer.Done);
+            Assert.Null(_consumer.Exc);
         }
 
         [Fact]
         public void HalfSerializer_OnCompleted_Ignore_Further_Events()
         {
-            HalfSerializer.ForwardOnCompleted(consumer, ref wip, ref error);
+            HalfSerializer.ForwardOnCompleted(_consumer, ref _wip, ref _error);
 
-            Assert.Equal(1, wip);
-            Assert.Equal(error, ExceptionHelper.Terminated);
+            Assert.Equal(1, _wip);
+            Assert.Equal(_error, ExceptionHelper.Terminated);
 
-            HalfSerializer.ForwardOnNext(consumer, 2, ref wip, ref error);
+            HalfSerializer.ForwardOnNext(_consumer, 2, ref _wip, ref _error);
             var ex2 = new NotSupportedException();
-            HalfSerializer.ForwardOnError(consumer, ex2, ref wip, ref error);
-            HalfSerializer.ForwardOnCompleted(consumer, ref wip, ref error);
+            HalfSerializer.ForwardOnError(_consumer, ex2, ref _wip, ref _error);
+            HalfSerializer.ForwardOnCompleted(_consumer, ref _wip, ref _error);
 
-            Assert.Equal(0, consumer.items.Count);
-            Assert.Equal(1, consumer.done);
-            Assert.Null(consumer.exc);
+            Assert.Equal(0, _consumer.Items.Count);
+            Assert.Equal(1, _consumer.Done);
+            Assert.Null(_consumer.Exc);
         }
 
         // Practically simulates concurrent invocation of the HalfSerializer methods
@@ -105,15 +105,15 @@ namespace ReactiveTests.Tests
         {
             var c = new ReentrantConsumer(this, true);
 
-            HalfSerializer.ForwardOnNext(c, 1, ref wip, ref error);
+            HalfSerializer.ForwardOnNext(c, 1, ref _wip, ref _error);
 
-            Assert.Equal(1, wip);
-            Assert.Equal(error, ExceptionHelper.Terminated);
+            Assert.Equal(1, _wip);
+            Assert.Equal(_error, ExceptionHelper.Terminated);
 
-            Assert.Equal(1, consumer.items.Count);
-            Assert.Equal(1, consumer.items[0]);
-            Assert.Equal(0, consumer.done);
-            Assert.Equal(c.x, consumer.exc);
+            Assert.Equal(1, _consumer.Items.Count);
+            Assert.Equal(1, _consumer.Items[0]);
+            Assert.Equal(0, _consumer.Done);
+            Assert.Equal(c.X, _consumer.Exc);
         }
 
         // Practically simulates concurrent invocation of the HalfSerializer methods
@@ -122,73 +122,73 @@ namespace ReactiveTests.Tests
         {
             var c = new ReentrantConsumer(this, false);
 
-            HalfSerializer.ForwardOnNext(c, 1, ref wip, ref error);
+            HalfSerializer.ForwardOnNext(c, 1, ref _wip, ref _error);
 
-            Assert.Equal(1, wip);
-            Assert.Equal(error, ExceptionHelper.Terminated);
+            Assert.Equal(1, _wip);
+            Assert.Equal(_error, ExceptionHelper.Terminated);
 
-            Assert.Equal(1, consumer.items.Count);
-            Assert.Equal(1, consumer.items[0]);
-            Assert.Equal(1, consumer.done);
-            Assert.Null(consumer.exc);
+            Assert.Equal(1, _consumer.Items.Count);
+            Assert.Equal(1, _consumer.Items[0]);
+            Assert.Equal(1, _consumer.Done);
+            Assert.Null(_consumer.Exc);
         }
 
         private sealed class Consumer : ISink<int>
         {
-            internal List<int> items = new List<int>();
+            internal List<int> Items = new List<int>();
 
-            internal int done;
-            internal Exception exc;
+            internal int Done;
+            internal Exception Exc;
 
             public void ForwardOnCompleted()
             {
-                done++;
+                Done++;
             }
 
             public void ForwardOnError(Exception error)
             {
-                exc = error;
+                Exc = error;
             }
 
             public void ForwardOnNext(int value)
             {
-                items.Add(value);
+                Items.Add(value);
             }
         }
 
         private sealed class ReentrantConsumer : ISink<int>
         {
-            private readonly HalfSerializerTest parent;
-            private readonly bool errorReenter;
+            private readonly HalfSerializerTest _parent;
+            private readonly bool _errorReenter;
 
-            internal readonly Exception x = new IndexOutOfRangeException();
+            internal readonly Exception X = new IndexOutOfRangeException();
 
             public ReentrantConsumer(HalfSerializerTest parent, bool errorReenter)
             {
-                this.parent = parent;
-                this.errorReenter = errorReenter;
+                this._parent = parent;
+                this._errorReenter = errorReenter;
             }
 
             public void ForwardOnCompleted()
             {
-                parent.consumer.ForwardOnCompleted();
+                _parent._consumer.ForwardOnCompleted();
             }
 
             public void ForwardOnError(Exception error)
             {
-                parent.consumer.ForwardOnError(error);
+                _parent._consumer.ForwardOnError(error);
             }
 
             public void ForwardOnNext(int value)
             {
-                parent.consumer.ForwardOnNext(value);
-                if (errorReenter)
+                _parent._consumer.ForwardOnNext(value);
+                if (_errorReenter)
                 {
-                    HalfSerializer.ForwardOnError(this, x, ref parent.wip, ref parent.error);
+                    HalfSerializer.ForwardOnError(this, X, ref _parent._wip, ref _parent._error);
                 }
                 else
                 {
-                    HalfSerializer.ForwardOnCompleted(this, ref parent.wip, ref parent.error);
+                    HalfSerializer.ForwardOnCompleted(this, ref _parent._wip, ref _parent._error);
                 }
             }
         }

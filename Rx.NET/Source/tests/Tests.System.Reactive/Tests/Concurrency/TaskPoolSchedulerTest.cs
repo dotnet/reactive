@@ -17,9 +17,9 @@ namespace ReactiveTests.Tests
         public void TaskPool_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new TaskPoolScheduler(null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule<int>(42, default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule<int>(42, DateTimeOffset.Now, default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule<int>(42, TimeSpan.Zero, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(42, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(42, DateTimeOffset.Now, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(42, TimeSpan.Zero, default));
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.SchedulePeriodic(42, TimeSpan.FromSeconds(1), default));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => TaskPoolScheduler.Default.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
         }

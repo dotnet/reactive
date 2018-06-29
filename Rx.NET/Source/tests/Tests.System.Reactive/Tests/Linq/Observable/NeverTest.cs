@@ -16,7 +16,7 @@ namespace ReactiveTests.Tests
         public void Never_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Never<int>().Subscribe(null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Never<int>(42).Subscribe(null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Never(42).Subscribe(null));
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = Observable.Never<int>(42);
+            var xs = Observable.Never(42);
 
             var res = scheduler.CreateObserver<int>();
 

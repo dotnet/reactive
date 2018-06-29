@@ -92,20 +92,20 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs1 = scheduler.CreateColdObservable<int>(
+            var xs1 = scheduler.CreateColdObservable(
                 OnNext(10, 1),
                 OnNext(20, 2),
                 OnNext(30, 3),
                 OnCompleted<int>(40)
             );
 
-            var xs2 = scheduler.CreateColdObservable<int>(
+            var xs2 = scheduler.CreateColdObservable(
                 OnNext(10, 4),
                 OnNext(20, 5),
                 OnCompleted<int>(30)
             );
 
-            var xs3 = scheduler.CreateColdObservable<int>(
+            var xs3 = scheduler.CreateColdObservable(
                 OnNext(10, 6),
                 OnNext(20, 7),
                 OnNext(30, 8),
@@ -864,7 +864,7 @@ namespace ReactiveTests.Tests
             var invoked = default(long);
 
             var xs = o1;
-            var ys = Observable.Defer<int>(new Func<IObservable<int>>(() => { invoked = scheduler.Clock; throw ex; }));
+            var ys = Observable.Defer(new Func<IObservable<int>>(() => { invoked = scheduler.Clock; throw ex; }));
 
             var res = scheduler.Start(() =>
                 xs.Concat(ys)
@@ -892,7 +892,7 @@ namespace ReactiveTests.Tests
 
             var scheduler = new TestScheduler();
 
-            var o = scheduler.CreateColdObservable<int>(
+            var o = scheduler.CreateColdObservable(
                 OnNext(10, 1),
                 OnNext(20, 2),
                 OnNext(30, 3),
