@@ -32,7 +32,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(right));
             }
 
-            return s_impl.And<TLeft, TRight>(left, right);
+            return s_impl.And(left, right);
         }
 
         #endregion
@@ -60,7 +60,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Then<TSource, TResult>(source, selector);
+            return s_impl.Then(source, selector);
         }
 
         #endregion
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(plans));
             }
 
-            return s_impl.When<TResult>(plans);
+            return s_impl.When(plans);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(plans));
             }
 
-            return s_impl.When<TResult>(plans);
+            return s_impl.When(plans);
         }
 
         #endregion

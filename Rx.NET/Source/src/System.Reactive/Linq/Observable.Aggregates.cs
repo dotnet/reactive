@@ -35,7 +35,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(accumulator));
             }
 
-            return s_impl.Aggregate<TSource, TAccumulate>(source, seed, accumulator);
+            return s_impl.Aggregate(source, seed, accumulator);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(resultSelector));
             }
 
-            return s_impl.Aggregate<TSource, TAccumulate, TResult>(source, seed, accumulator, resultSelector);
+            return s_impl.Aggregate(source, seed, accumulator, resultSelector);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(accumulator));
             }
 
-            return s_impl.Aggregate<TSource>(source, accumulator);
+            return s_impl.Aggregate(source, accumulator);
         }
 
         #endregion
@@ -123,7 +123,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            return s_impl.All<TSource>(source, predicate);
+            return s_impl.All(source, predicate);
         }
 
         #endregion
@@ -145,7 +145,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Any<TSource>(source);
+            return s_impl.Any(source);
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            return s_impl.Any<TSource>(source, predicate);
+            return s_impl.Any(source, predicate);
         }
 
         #endregion
@@ -385,7 +385,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Average<TSource>(source, selector);
+            return s_impl.Average(source, selector);
         }
 
         /// <summary>
@@ -410,7 +410,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Average<TSource>(source, selector);
+            return s_impl.Average(source, selector);
         }
 
         /// <summary>
@@ -435,7 +435,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Average<TSource>(source, selector);
+            return s_impl.Average(source, selector);
         }
 
         /// <summary>
@@ -461,7 +461,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Average<TSource>(source, selector);
+            return s_impl.Average(source, selector);
         }
 
         /// <summary>
@@ -487,7 +487,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Average<TSource>(source, selector);
+            return s_impl.Average(source, selector);
         }
 
         /// <summary>
@@ -513,7 +513,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Average<TSource>(source, selector);
+            return s_impl.Average(source, selector);
         }
 
         /// <summary>
@@ -538,7 +538,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Average<TSource>(source, selector);
+            return s_impl.Average(source, selector);
         }
 
         /// <summary>
@@ -563,7 +563,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Average<TSource>(source, selector);
+            return s_impl.Average(source, selector);
         }
 
         /// <summary>
@@ -589,7 +589,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Average<TSource>(source, selector);
+            return s_impl.Average(source, selector);
         }
 
         /// <summary>
@@ -615,7 +615,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Average<TSource>(source, selector);
+            return s_impl.Average(source, selector);
         }
 
         #endregion
@@ -638,7 +638,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Contains<TSource>(source, value);
+            return s_impl.Contains(source, value);
         }
 
         /// <summary>
@@ -663,7 +663,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.Contains<TSource>(source, value, comparer);
+            return s_impl.Contains(source, value, comparer);
         }
 
         #endregion
@@ -686,7 +686,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Count<TSource>(source);
+            return s_impl.Count(source);
         }
 
         /// <summary>
@@ -710,7 +710,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            return s_impl.Count<TSource>(source, predicate);
+            return s_impl.Count(source, predicate);
         }
 
         #endregion
@@ -739,7 +739,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
 
-            return s_impl.ElementAt<TSource>(source, index);
+            return s_impl.ElementAt(source, index);
         }
 
         #endregion
@@ -767,7 +767,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
 
-            return s_impl.ElementAtOrDefault<TSource>(source, index);
+            return s_impl.ElementAtOrDefault(source, index);
         }
 
         #endregion
@@ -789,7 +789,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.FirstAsync<TSource>(source);
+            return s_impl.FirstAsync(source);
         }
 
         /// <summary>
@@ -813,7 +813,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            return s_impl.FirstAsync<TSource>(source, predicate);
+            return s_impl.FirstAsync(source, predicate);
         }
 
         #endregion
@@ -834,7 +834,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.FirstOrDefaultAsync<TSource>(source);
+            return s_impl.FirstOrDefaultAsync(source);
         }
 
         /// <summary>
@@ -857,7 +857,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            return s_impl.FirstOrDefaultAsync<TSource>(source, predicate);
+            return s_impl.FirstOrDefaultAsync(source, predicate);
         }
 
         #endregion
@@ -878,7 +878,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.IsEmpty<TSource>(source);
+            return s_impl.IsEmpty(source);
         }
 
         #endregion
@@ -900,7 +900,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.LastAsync<TSource>(source);
+            return s_impl.LastAsync(source);
         }
 
         /// <summary>
@@ -924,7 +924,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            return s_impl.LastAsync<TSource>(source, predicate);
+            return s_impl.LastAsync(source, predicate);
         }
 
         #endregion
@@ -945,7 +945,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.LastOrDefaultAsync<TSource>(source);
+            return s_impl.LastOrDefaultAsync(source);
         }
 
         /// <summary>
@@ -968,7 +968,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            return s_impl.LastOrDefaultAsync<TSource>(source, predicate);
+            return s_impl.LastOrDefaultAsync(source, predicate);
         }
 
         #endregion
@@ -991,7 +991,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.LongCount<TSource>(source);
+            return s_impl.LongCount(source);
         }
 
         /// <summary>
@@ -1015,7 +1015,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            return s_impl.LongCount<TSource>(source, predicate);
+            return s_impl.LongCount(source, predicate);
         }
 
         #endregion
@@ -1037,7 +1037,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Max<TSource>(source);
+            return s_impl.Max(source);
         }
 
         /// <summary>
@@ -1061,7 +1061,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.Max<TSource>(source, comparer);
+            return s_impl.Max(source, comparer);
         }
 
         /// <summary>
@@ -1256,7 +1256,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Max<TSource, TResult>(source, selector);
+            return s_impl.Max(source, selector);
         }
 
         /// <summary>
@@ -1287,7 +1287,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.Max<TSource, TResult>(source, selector, comparer);
+            return s_impl.Max(source, selector, comparer);
         }
 
         /// <summary>
@@ -1311,7 +1311,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Max<TSource>(source, selector);
+            return s_impl.Max(source, selector);
         }
 
         /// <summary>
@@ -1335,7 +1335,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Max<TSource>(source, selector);
+            return s_impl.Max(source, selector);
         }
 
         /// <summary>
@@ -1359,7 +1359,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Max<TSource>(source, selector);
+            return s_impl.Max(source, selector);
         }
 
         /// <summary>
@@ -1383,7 +1383,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Max<TSource>(source, selector);
+            return s_impl.Max(source, selector);
         }
 
         /// <summary>
@@ -1407,7 +1407,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Max<TSource>(source, selector);
+            return s_impl.Max(source, selector);
         }
 
         /// <summary>
@@ -1431,7 +1431,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Max<TSource>(source, selector);
+            return s_impl.Max(source, selector);
         }
 
         /// <summary>
@@ -1455,7 +1455,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Max<TSource>(source, selector);
+            return s_impl.Max(source, selector);
         }
 
         /// <summary>
@@ -1479,7 +1479,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Max<TSource>(source, selector);
+            return s_impl.Max(source, selector);
         }
 
         /// <summary>
@@ -1503,7 +1503,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Max<TSource>(source, selector);
+            return s_impl.Max(source, selector);
         }
 
         /// <summary>
@@ -1527,7 +1527,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Max<TSource>(source, selector);
+            return s_impl.Max(source, selector);
         }
 
         #endregion
@@ -1556,7 +1556,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(keySelector));
             }
 
-            return s_impl.MaxBy<TSource, TKey>(source, keySelector);
+            return s_impl.MaxBy(source, keySelector);
         }
 
         /// <summary>
@@ -1587,7 +1587,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.MaxBy<TSource, TKey>(source, keySelector, comparer);
+            return s_impl.MaxBy(source, keySelector, comparer);
         }
 
         #endregion
@@ -1609,7 +1609,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Min<TSource>(source);
+            return s_impl.Min(source);
         }
 
         /// <summary>
@@ -1633,7 +1633,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.Min<TSource>(source, comparer);
+            return s_impl.Min(source, comparer);
         }
 
         /// <summary>
@@ -1828,7 +1828,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Min<TSource, TResult>(source, selector);
+            return s_impl.Min(source, selector);
         }
 
         /// <summary>
@@ -1859,7 +1859,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.Min<TSource, TResult>(source, selector, comparer);
+            return s_impl.Min(source, selector, comparer);
         }
 
         /// <summary>
@@ -1883,7 +1883,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Min<TSource>(source, selector);
+            return s_impl.Min(source, selector);
         }
 
         /// <summary>
@@ -1907,7 +1907,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Min<TSource>(source, selector);
+            return s_impl.Min(source, selector);
         }
 
         /// <summary>
@@ -1931,7 +1931,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Min<TSource>(source, selector);
+            return s_impl.Min(source, selector);
         }
 
         /// <summary>
@@ -1955,7 +1955,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Min<TSource>(source, selector);
+            return s_impl.Min(source, selector);
         }
 
         /// <summary>
@@ -1979,7 +1979,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Min<TSource>(source, selector);
+            return s_impl.Min(source, selector);
         }
 
         /// <summary>
@@ -2003,7 +2003,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Min<TSource>(source, selector);
+            return s_impl.Min(source, selector);
         }
 
         /// <summary>
@@ -2027,7 +2027,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Min<TSource>(source, selector);
+            return s_impl.Min(source, selector);
         }
 
         /// <summary>
@@ -2051,7 +2051,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Min<TSource>(source, selector);
+            return s_impl.Min(source, selector);
         }
 
         /// <summary>
@@ -2075,7 +2075,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Min<TSource>(source, selector);
+            return s_impl.Min(source, selector);
         }
 
         /// <summary>
@@ -2099,7 +2099,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Min<TSource>(source, selector);
+            return s_impl.Min(source, selector);
         }
 
         #endregion
@@ -2128,7 +2128,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(keySelector));
             }
 
-            return s_impl.MinBy<TSource, TKey>(source, keySelector);
+            return s_impl.MinBy(source, keySelector);
         }
 
         /// <summary>
@@ -2159,7 +2159,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.MinBy<TSource, TKey>(source, keySelector, comparer);
+            return s_impl.MinBy(source, keySelector, comparer);
         }
 
         #endregion
@@ -2187,7 +2187,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(second));
             }
 
-            return s_impl.SequenceEqual<TSource>(first, second);
+            return s_impl.SequenceEqual(first, second);
         }
 
         /// <summary>
@@ -2217,7 +2217,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.SequenceEqual<TSource>(first, second, comparer);
+            return s_impl.SequenceEqual(first, second, comparer);
         }
 
         /// <summary>
@@ -2241,7 +2241,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(second));
             }
 
-            return s_impl.SequenceEqual<TSource>(first, second);
+            return s_impl.SequenceEqual(first, second);
         }
 
         /// <summary>
@@ -2271,7 +2271,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.SequenceEqual<TSource>(first, second, comparer);
+            return s_impl.SequenceEqual(first, second, comparer);
         }
 
         #endregion
@@ -2293,7 +2293,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.SingleAsync<TSource>(source);
+            return s_impl.SingleAsync(source);
         }
 
         /// <summary>
@@ -2317,7 +2317,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            return s_impl.SingleAsync<TSource>(source, predicate);
+            return s_impl.SingleAsync(source, predicate);
         }
 
         #endregion
@@ -2339,7 +2339,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.SingleOrDefaultAsync<TSource>(source);
+            return s_impl.SingleOrDefaultAsync(source);
         }
 
         /// <summary>
@@ -2363,7 +2363,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            return s_impl.SingleOrDefaultAsync<TSource>(source, predicate);
+            return s_impl.SingleOrDefaultAsync(source, predicate);
         }
 
         #endregion
@@ -2567,7 +2567,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Sum<TSource>(source, selector);
+            return s_impl.Sum(source, selector);
         }
 
         /// <summary>
@@ -2591,7 +2591,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Sum<TSource>(source, selector);
+            return s_impl.Sum(source, selector);
         }
 
         /// <summary>
@@ -2616,7 +2616,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Sum<TSource>(source, selector);
+            return s_impl.Sum(source, selector);
         }
 
         /// <summary>
@@ -2641,7 +2641,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Sum<TSource>(source, selector);
+            return s_impl.Sum(source, selector);
         }
 
         /// <summary>
@@ -2666,7 +2666,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Sum<TSource>(source, selector);
+            return s_impl.Sum(source, selector);
         }
 
         /// <summary>
@@ -2690,7 +2690,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Sum<TSource>(source, selector);
+            return s_impl.Sum(source, selector);
         }
 
         /// <summary>
@@ -2714,7 +2714,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Sum<TSource>(source, selector);
+            return s_impl.Sum(source, selector);
         }
 
         /// <summary>
@@ -2739,7 +2739,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Sum<TSource>(source, selector);
+            return s_impl.Sum(source, selector);
         }
 
         /// <summary>
@@ -2764,7 +2764,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Sum<TSource>(source, selector);
+            return s_impl.Sum(source, selector);
         }
 
         /// <summary>
@@ -2789,7 +2789,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Sum<TSource>(source, selector);
+            return s_impl.Sum(source, selector);
         }
 
         #endregion
@@ -2811,7 +2811,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.ToArray<TSource>(source);
+            return s_impl.ToArray(source);
         }
 
         #endregion
@@ -2840,7 +2840,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(keySelector));
             }
 
-            return s_impl.ToDictionary<TSource, TKey>(source, keySelector);
+            return s_impl.ToDictionary(source, keySelector);
         }
 
         /// <summary>
@@ -2871,7 +2871,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.ToDictionary<TSource, TKey>(source, keySelector, comparer);
+            return s_impl.ToDictionary(source, keySelector, comparer);
         }
 
         /// <summary>
@@ -2903,7 +2903,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(elementSelector));
             }
 
-            return s_impl.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector);
+            return s_impl.ToDictionary(source, keySelector, elementSelector);
         }
 
         /// <summary>
@@ -2941,7 +2941,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.ToDictionary<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
+            return s_impl.ToDictionary(source, keySelector, elementSelector, comparer);
         }
 
         #endregion
@@ -2963,7 +2963,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.ToList<TSource>(source);
+            return s_impl.ToList(source);
         }
 
         #endregion
@@ -2992,7 +2992,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(keySelector));
             }
 
-            return s_impl.ToLookup<TSource, TKey>(source, keySelector);
+            return s_impl.ToLookup(source, keySelector);
         }
 
         /// <summary>
@@ -3023,7 +3023,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.ToLookup<TSource, TKey>(source, keySelector, comparer);
+            return s_impl.ToLookup(source, keySelector, comparer);
         }
 
         /// <summary>
@@ -3055,7 +3055,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(elementSelector));
             }
 
-            return s_impl.ToLookup<TSource, TKey, TElement>(source, keySelector, elementSelector);
+            return s_impl.ToLookup(source, keySelector, elementSelector);
         }
 
         /// <summary>
@@ -3093,7 +3093,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return s_impl.ToLookup<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
+            return s_impl.ToLookup(source, keySelector, elementSelector, comparer);
         }
 
         #endregion

@@ -12,12 +12,12 @@ namespace System.Reactive.Linq
     {
         public virtual AsyncSubject<TSource> GetAwaiter<TSource>(IObservable<TSource> source)
         {
-            return RunAsync<TSource>(source, CancellationToken.None);
+            return RunAsync(source, CancellationToken.None);
         }
 
         public virtual AsyncSubject<TSource> GetAwaiter<TSource>(IConnectableObservable<TSource> source)
         {
-            return RunAsync<TSource>(source, CancellationToken.None);
+            return RunAsync(source, CancellationToken.None);
         }
 
         public virtual AsyncSubject<TSource> RunAsync<TSource>(IObservable<TSource> source, CancellationToken cancellationToken)

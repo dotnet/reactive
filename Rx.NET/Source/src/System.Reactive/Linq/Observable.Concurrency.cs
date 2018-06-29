@@ -35,7 +35,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ObserveOn<TSource>(source, scheduler);
+            return s_impl.ObserveOn(source, scheduler);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(context));
             }
 
-            return s_impl.ObserveOn<TSource>(source, context);
+            return s_impl.ObserveOn(source, context);
         }
 
         #endregion
@@ -94,7 +94,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.SubscribeOn<TSource>(source, scheduler);
+            return s_impl.SubscribeOn(source, scheduler);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(context));
             }
 
-            return s_impl.SubscribeOn<TSource>(source, context);
+            return s_impl.SubscribeOn(source, context);
         }
 
         #endregion
@@ -148,7 +148,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.Synchronize<TSource>(source);
+            return s_impl.Synchronize(source);
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(gate));
             }
 
-            return s_impl.Synchronize<TSource>(source, gate);
+            return s_impl.Synchronize(source, gate);
         }
 
         #endregion

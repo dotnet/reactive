@@ -34,7 +34,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(onNext));
             }
 
-            return s_impl.ForEachAsync<TSource>(source, onNext);
+            return s_impl.ForEachAsync(source, onNext);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(onNext));
             }
 
-            return s_impl.ForEachAsync<TSource>(source, onNext, cancellationToken);
+            return s_impl.ForEachAsync(source, onNext, cancellationToken);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(onNext));
             }
 
-            return s_impl.ForEachAsync<TSource>(source, onNext);
+            return s_impl.ForEachAsync(source, onNext);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(onNext));
             }
 
-            return s_impl.ForEachAsync<TSource>(source, onNext, cancellationToken);
+            return s_impl.ForEachAsync(source, onNext, cancellationToken);
         }
 
         #endregion
@@ -144,7 +144,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(defaultSource));
             }
 
-            return s_impl.Case<TValue, TResult>(selector, sources, defaultSource);
+            return s_impl.Case(selector, sources, defaultSource);
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Case<TValue, TResult>(selector, sources, scheduler);
+            return s_impl.Case(selector, sources, scheduler);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(sources));
             }
 
-            return s_impl.Case<TValue, TResult>(selector, sources);
+            return s_impl.Case(selector, sources);
         }
 
         #endregion
@@ -225,7 +225,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(condition));
             }
 
-            return s_impl.DoWhile<TSource>(source, condition);
+            return s_impl.DoWhile(source, condition);
         }
 
         #endregion
@@ -253,7 +253,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(resultSelector));
             }
 
-            return s_impl.For<TSource, TResult>(source, resultSelector);
+            return s_impl.For(source, resultSelector);
         }
 
         #endregion
@@ -286,7 +286,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(elseSource));
             }
 
-            return s_impl.If<TResult>(condition, thenSource, elseSource);
+            return s_impl.If(condition, thenSource, elseSource);
         }
 
         /// <summary>
@@ -309,7 +309,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(thenSource));
             }
 
-            return s_impl.If<TResult>(condition, thenSource);
+            return s_impl.If(condition, thenSource);
         }
 
         /// <summary>
@@ -338,7 +338,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.If<TResult>(condition, thenSource, scheduler);
+            return s_impl.If(condition, thenSource, scheduler);
         }
 
         #endregion
@@ -365,7 +365,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.While<TSource>(condition, source);
+            return s_impl.While(condition, source);
         }
 
         #endregion

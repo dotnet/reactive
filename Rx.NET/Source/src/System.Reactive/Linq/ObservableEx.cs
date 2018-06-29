@@ -31,7 +31,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(iteratorMethod));
             }
 
-            return s_impl.Create<TResult>(iteratorMethod);
+            return s_impl.Create(iteratorMethod);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Expand<TSource>(source, selector, scheduler);
+            return s_impl.Expand(source, selector, scheduler);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Expand<TSource>(source, selector);
+            return s_impl.Expand(source, selector);
         }
 
         #endregion
@@ -142,7 +142,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(resultSelector));
             }
 
-            return s_impl.ForkJoin<TSource1, TSource2, TResult>(first, second, resultSelector);
+            return s_impl.ForkJoin(first, second, resultSelector);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(sources));
             }
 
-            return s_impl.ForkJoin<TSource>(sources);
+            return s_impl.ForkJoin(sources);
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(sources));
             }
 
-            return s_impl.ForkJoin<TSource>(sources);
+            return s_impl.ForkJoin(sources);
         }
 
         #endregion
@@ -208,7 +208,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.Let<TSource, TResult>(source, selector);
+            return s_impl.Let(source, selector);
         }
 
         #endregion
@@ -236,7 +236,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ManySelect<TSource, TResult>(source, selector, scheduler);
+            return s_impl.ManySelect(source, selector, scheduler);
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             }
 
-            return s_impl.ManySelect<TSource, TResult>(source, selector);
+            return s_impl.ManySelect(source, selector);
         }
 
         #endregion
@@ -277,7 +277,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.ToListObservable<TSource>(source);
+            return s_impl.ToListObservable(source);
         }
 
         #endregion

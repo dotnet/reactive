@@ -39,7 +39,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -256,7 +256,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -291,7 +291,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -327,7 +327,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -402,7 +402,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -441,7 +441,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -481,7 +481,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -522,7 +522,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         #endregion
@@ -579,7 +579,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -607,7 +607,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -636,7 +636,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -666,7 +666,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -697,7 +697,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -729,7 +729,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -762,7 +762,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -796,7 +796,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -831,7 +831,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -867,7 +867,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -904,7 +904,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -942,7 +942,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -981,7 +981,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         /// <summary>
@@ -1021,7 +1021,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(end));
             }
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(begin, end);
+            return s_impl.FromAsyncPattern(begin, end);
         }
 
         #endregion
@@ -1052,7 +1052,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.Start<TResult>(function);
+            return s_impl.Start(function);
         }
 
         /// <summary>
@@ -1081,7 +1081,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Start<TResult>(function, scheduler);
+            return s_impl.Start(function, scheduler);
         }
 
         /// <summary>
@@ -1104,7 +1104,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(functionAsync));
             }
 
-            return s_impl.StartAsync<TResult>(functionAsync);
+            return s_impl.StartAsync(functionAsync);
         }
 
         /// <summary>
@@ -1133,7 +1133,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.StartAsync<TResult>(functionAsync, scheduler);
+            return s_impl.StartAsync(functionAsync, scheduler);
         }
 
         /// <summary>
@@ -1164,7 +1164,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(functionAsync));
             }
 
-            return s_impl.StartAsync<TResult>(functionAsync);
+            return s_impl.StartAsync(functionAsync);
         }
 
         /// <summary>
@@ -1201,7 +1201,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.StartAsync<TResult>(functionAsync, scheduler);
+            return s_impl.StartAsync(functionAsync, scheduler);
         }
 
         #endregion
@@ -1397,7 +1397,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(functionAsync));
             }
 
-            return s_impl.FromAsync<TResult>(functionAsync);
+            return s_impl.FromAsync(functionAsync);
         }
 
         /// <summary>
@@ -1420,7 +1420,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.FromAsync<TResult>(functionAsync, scheduler);
+            return s_impl.FromAsync(functionAsync, scheduler);
         }
 
         /// <summary>
@@ -1439,7 +1439,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(functionAsync));
             }
 
-            return s_impl.FromAsync<TResult>(functionAsync);
+            return s_impl.FromAsync(functionAsync);
         }
 
         /// <summary>
@@ -1464,7 +1464,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.FromAsync<TResult>(functionAsync, scheduler);
+            return s_impl.FromAsync(functionAsync, scheduler);
         }
 
         #endregion
@@ -1575,7 +1575,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -1598,7 +1598,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -1616,7 +1616,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -1640,7 +1640,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -1659,7 +1659,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -1684,7 +1684,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -1704,7 +1704,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -1730,7 +1730,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -1751,7 +1751,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -1778,7 +1778,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -1800,7 +1800,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -1828,7 +1828,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -1851,7 +1851,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -1880,7 +1880,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -1904,7 +1904,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -1934,7 +1934,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -1959,7 +1959,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -1990,7 +1990,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -2016,7 +2016,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -2048,7 +2048,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -2075,7 +2075,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -2108,7 +2108,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -2136,7 +2136,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -2170,7 +2170,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -2199,7 +2199,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -2234,7 +2234,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -2264,7 +2264,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -2300,7 +2300,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -2331,7 +2331,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -2368,7 +2368,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -2400,7 +2400,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -2438,7 +2438,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         /// <summary>
@@ -2471,7 +2471,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(function));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>(function);
+            return s_impl.ToAsync(function);
         }
 
         /// <summary>
@@ -2510,7 +2510,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>(function, scheduler);
+            return s_impl.ToAsync(function, scheduler);
         }
 
         #endregion
@@ -2569,7 +2569,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -2592,7 +2592,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -2610,7 +2610,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -2634,7 +2634,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -2653,7 +2653,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -2678,7 +2678,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -2698,7 +2698,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -2724,7 +2724,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -2745,7 +2745,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -2772,7 +2772,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -2794,7 +2794,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -2822,7 +2822,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -2845,7 +2845,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -2874,7 +2874,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -2898,7 +2898,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -2928,7 +2928,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -2953,7 +2953,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -2984,7 +2984,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -3010,7 +3010,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -3042,7 +3042,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -3069,7 +3069,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -3102,7 +3102,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -3130,7 +3130,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -3164,7 +3164,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -3193,7 +3193,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -3228,7 +3228,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -3258,7 +3258,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -3294,7 +3294,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -3325,7 +3325,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -3362,7 +3362,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         /// <summary>
@@ -3394,7 +3394,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>(action);
+            return s_impl.ToAsync(action);
         }
 
         /// <summary>
@@ -3432,7 +3432,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>(action, scheduler);
+            return s_impl.ToAsync(action, scheduler);
         }
 
         #endregion

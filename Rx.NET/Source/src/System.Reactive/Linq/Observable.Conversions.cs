@@ -31,7 +31,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(observer));
             }
 
-            return s_impl.Subscribe<TSource>(source, observer);
+            return s_impl.Subscribe(source, observer);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.Subscribe<TSource>(source, observer, scheduler);
+            return s_impl.Subscribe(source, observer, scheduler);
         }
 
         #endregion
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.ToEnumerable<TSource>(source);
+            return s_impl.ToEnumerable(source);
         }
 
         #endregion
@@ -118,7 +118,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.ToEvent<TSource>(source);
+            return s_impl.ToEvent(source);
         }
 
         #endregion
@@ -139,7 +139,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.ToEventPattern<TEventArgs>(source);
+            return s_impl.ToEventPattern(source);
         }
 
         #endregion
@@ -160,7 +160,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return s_impl.ToObservable<TSource>(source);
+            return s_impl.ToObservable(source);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
-            return s_impl.ToObservable<TSource>(source, scheduler);
+            return s_impl.ToObservable(source, scheduler);
         }
 
         #endregion
