@@ -84,13 +84,15 @@ namespace System.Reactive.Concurrency
         {
             if (serviceType == typeof(IStopwatchProvider))
             {
-                return this as IStopwatchProvider;
+                return this;
             }
-            else if (serviceType == typeof(ISchedulerLongRunning))
+
+            if (serviceType == typeof(ISchedulerLongRunning))
             {
                 return this as ISchedulerLongRunning;
             }
-            else if (serviceType == typeof(ISchedulerPeriodic))
+
+            if (serviceType == typeof(ISchedulerPeriodic))
             {
                 return this as ISchedulerPeriodic;
             }

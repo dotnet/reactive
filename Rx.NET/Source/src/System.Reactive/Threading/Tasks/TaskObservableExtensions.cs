@@ -246,10 +246,8 @@ namespace System.Reactive.Threading.Tasks
             {
                 return subject.ObserveOn(scheduler);
             }
-            else
-            {
-                return subject.AsObservable();
-            }
+
+            return subject.AsObservable();
         }
 
         /// <summary>

@@ -368,10 +368,8 @@ namespace System.Reactive.Linq
             {
                 return new SynchronizationContextScheduler(context, false);
             }
-            else
-            {
-                return SchedulerDefaults.ConstantTimeOperations;
-            }
+
+            return SchedulerDefaults.ConstantTimeOperations;
         }
 
         #endregion

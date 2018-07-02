@@ -63,7 +63,8 @@ namespace System.Reactive.Linq
             {
                 return new Buffer<TSource>.CountOverlap(source, count, skip);
             }
-            else if (count < skip)
+
+            if (count < skip)
             {
                 return new Buffer<TSource>.CountSkip(source, count, skip);
             }

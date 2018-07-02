@@ -106,10 +106,8 @@ namespace System.Reactive.Linq.ObservableImpl
                             ForwardOnCompleted();
                             break;
                         }
-                        else
-                        {
-                            ForwardOnNext(_queue.Dequeue());
-                        }
+
+                        ForwardOnNext(_queue.Dequeue());
 
                         n--;
                     }
@@ -223,10 +221,8 @@ namespace System.Reactive.Linq.ObservableImpl
                             ForwardOnCompleted();
                             break;
                         }
-                        else
-                        {
-                            ForwardOnNext(_queue.Dequeue().Value);
-                        }
+
+                        ForwardOnNext(_queue.Dequeue().Value);
 
                         n--;
                     }

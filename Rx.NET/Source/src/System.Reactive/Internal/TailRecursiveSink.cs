@@ -109,44 +109,40 @@ namespace System.Reactive
                                     _stack.Push(nextEnumerator);
                                     continue;
                                 }
-                                else
+
+                                Volatile.Write(ref _isDisposed, true);
+                                continue;
+                            }
+
+                            // we need an unique indicator for this as
+                            // Subscribe could return a Disposable.Empty or
+                            // a BooleanDisposable
+                            var sad = ReadyToken.Ready;
+
+                            // Swap in the Ready indicator so we know the sequence hasn't been disposed
+                            if (Disposable.TrySetSingle(ref _currentSubscription, sad) == TrySetSingleResult.Success)
+                            {
+                                // subscribe to the source
+                                var d = next.SubscribeSafe(this);
+
+                                // Try to swap in the returned disposable in place of the Ready indicator
+                                // Since this drain loop is the only one to use Ready, this should
+                                // be unambiguous
+                                var u = Interlocked.CompareExchange(ref _currentSubscription, d, sad);
+
+                                // sequence disposed or completed synchronously
+                                if (u != sad)
                                 {
-                                    Volatile.Write(ref _isDisposed, true);
-                                    continue;
+                                    d.Dispose();
+                                    if (u == BooleanDisposable.True)
+                                    {
+                                        continue;
+                                    }
                                 }
                             }
                             else
                             {
-                                // we need an unique indicator for this as
-                                // Subscribe could return a Disposable.Empty or
-                                // a BooleanDisposable
-                                var sad = ReadyToken.Ready;
-
-                                // Swap in the Ready indicator so we know the sequence hasn't been disposed
-                                if (Disposable.TrySetSingle(ref _currentSubscription, sad) == TrySetSingleResult.Success)
-                                {
-                                    // subscribe to the source
-                                    var d = next.SubscribeSafe(this);
-
-                                    // Try to swap in the returned disposable in place of the Ready indicator
-                                    // Since this drain loop is the only one to use Ready, this should
-                                    // be unambiguous
-                                    var u = Interlocked.CompareExchange(ref _currentSubscription, d, sad);
-
-                                    // sequence disposed or completed synchronously
-                                    if (u != sad)
-                                    {
-                                        d.Dispose();
-                                        if (u == BooleanDisposable.True)
-                                        {
-                                            continue;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    continue;
-                                }
+                                continue;
                             }
                         }
                         else

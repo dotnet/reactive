@@ -62,10 +62,8 @@ namespace System.Reactive
             {
                 return a.MakeSafe();
             }
-            else
-            {
-                return new WrappingSafeObserver(observer);
-            }
+
+            return new WrappingSafeObserver(observer);
         }
 
         private IDisposable _disposable;
