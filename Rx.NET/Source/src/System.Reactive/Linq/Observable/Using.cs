@@ -51,7 +51,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return;
                 }
 
-                base.Run(source);
+                Run(source);
             }
 
             protected override void Dispose(bool disposing)

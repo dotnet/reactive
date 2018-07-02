@@ -11,10 +11,10 @@ namespace System.Reactive.Concurrency
     /// </summary>
     public sealed class AsyncLock : IDisposable
     {
-        private bool isAcquired;
-        private bool hasFaulted;
-        private readonly object guard = new object();
-        private Queue<(Action<Delegate, object> action, Delegate @delegate, object state)> queue;
+        private bool _isAcquired;
+        private bool _hasFaulted;
+        private readonly object _guard = new object();
+        private Queue<(Action<Delegate, object> action, Delegate @delegate, object state)> _queue;
 
         /// <summary>
         /// Queues the action for execution. If the caller acquires the lock and becomes the owner,
@@ -56,24 +56,24 @@ namespace System.Reactive.Concurrency
         private void Wait(object state, Delegate @delegate, Action<Delegate, object> action)
         {
             // allow one thread to update the state
-            lock (guard)
+            lock (_guard)
             {
                 // if a previous action crashed, ignore any future actions
-                if (hasFaulted)
+                if (_hasFaulted)
                 {
                     return;
                 }
 
                 // if the "lock" is busy, queue up the extra work
                 // otherwise there is no need to queue up "action"
-                if (isAcquired)
+                if (_isAcquired)
                 {
                     // create the queue if necessary
-                    var q = queue;
+                    var q = _queue;
                     if (q == null)
                     {
                         q = new Queue<(Action<Delegate, object> action, Delegate @delegate, object state)>();
-                        queue = q;
+                        _queue = q;
                     }
                     // enqueue the work
                     q.Enqueue((action, @delegate, state));
@@ -81,7 +81,7 @@ namespace System.Reactive.Concurrency
                 }
 
                 // indicate there is processing going on
-                isAcquired = true;
+                _isAcquired = true;
             }
 
             // if we get here, execute the "action" first
@@ -95,25 +95,25 @@ namespace System.Reactive.Concurrency
                 catch
                 {
                     // the execution failed, terminate this AsyncLock
-                    lock (guard)
+                    lock (_guard)
                     {
                         // throw away the queue
-                        queue = null;
+                        _queue = null;
                         // report fault
-                        hasFaulted = true;
+                        _hasFaulted = true;
                     }
                     throw;
                 }
 
                 // execution succeeded, let's see if more work has to be done
-                lock (guard)
+                lock (_guard)
                 {
-                    var q = queue;
+                    var q = _queue;
                     // either there is no queue yet or we run out of work
                     if (q == null || q.Count == 0)
                     {
                         // release the lock
-                        isAcquired = false;
+                        _isAcquired = false;
                         return;
                     }
 
@@ -129,10 +129,10 @@ namespace System.Reactive.Concurrency
         /// </summary>
         public void Dispose()
         {
-            lock (guard)
+            lock (_guard)
             {
-                queue = null;
-                hasFaulted = true;
+                _queue = null;
+                _hasFaulted = true;
             }
         }
     }

@@ -12,7 +12,9 @@ namespace System.Reactive.Linq
     /// </summary>
     public static class ObservableEx
     {
+#pragma warning disable IDE1006 // Naming Styles: 3rd party code is known to reflect for this specific field name
         private static IQueryLanguageEx s_impl = QueryServices.GetQueryImpl<IQueryLanguageEx>(new QueryLanguageEx());
+#pragma warning restore IDE1006 // Naming Styles
 
         #region Create
 

@@ -60,29 +60,29 @@ namespace System.Reactive.Concurrency
         //
 
 
-        private static Lazy<IScheduler> s_threadPool = new Lazy<IScheduler>(() => Initialize("ThreadPool"));
+        private static Lazy<IScheduler> _threadPool = new Lazy<IScheduler>(() => Initialize("ThreadPool"));
 
         /// <summary>
         /// Gets a scheduler that schedules work on the thread pool.
         /// </summary>
         [Obsolete(Constants_Core.OBSOLETE_SCHEDULER_THREADPOOL)]
-        public static IScheduler ThreadPool => s_threadPool.Value;
+        public static IScheduler ThreadPool => _threadPool.Value;
 
-        private static Lazy<IScheduler> s_newThread = new Lazy<IScheduler>(() => Initialize("NewThread"));
+        private static Lazy<IScheduler> _newThread = new Lazy<IScheduler>(() => Initialize("NewThread"));
 
         /// <summary>
         /// Gets a scheduler that schedules work on a new thread using default thread creation options.
         /// </summary>
         [Obsolete(Constants_Core.OBSOLETE_SCHEDULER_NEWTHREAD)]
-        public static IScheduler NewThread => s_newThread.Value;
+        public static IScheduler NewThread => _newThread.Value;
 
-        private static Lazy<IScheduler> s_taskPool = new Lazy<IScheduler>(() => Initialize("TaskPool"));
+        private static Lazy<IScheduler> _taskPool = new Lazy<IScheduler>(() => Initialize("TaskPool"));
 
         /// <summary>
         /// Gets a scheduler that schedules work on Task Parallel Library (TPL) task pool using the default TaskScheduler.
         /// </summary>
         [Obsolete(Constants_Core.OBSOLETE_SCHEDULER_TASKPOOL)]
-        public static IScheduler TaskPool => s_taskPool.Value;
+        public static IScheduler TaskPool => _taskPool.Value;
 
         private static IScheduler Initialize(string name)
         {

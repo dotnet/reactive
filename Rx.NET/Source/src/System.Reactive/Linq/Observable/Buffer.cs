@@ -292,7 +292,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     CreateWindow();
                     CreateTimer();
 
-                    base.Run(parent._source);
+                    Run(parent._source);
                 }
 
                 protected override void Dispose(bool disposing)
@@ -447,7 +447,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _list = new List<TSource>();
 
                     Disposable.SetSingle(ref _periodicDisposable, parent._scheduler.SchedulePeriodic(this, parent._timeSpan, @this => @this.Tick()));
-                    base.Run(parent._source);
+                    Run(parent._source);
                 }
 
                 protected override void Dispose(bool disposing)
@@ -799,7 +799,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _buffer = new List<TSource>();
 
-                    base.Run(parent._source);
+                    Run(parent._source);
                     Disposable.SetSingle(ref _boundariesDisposable, parent._bufferBoundaries.SubscribeSafe(new BufferClosingObserver(this)));
                 }
 

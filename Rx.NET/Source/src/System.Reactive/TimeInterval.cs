@@ -101,7 +101,7 @@ namespace System.Reactive
         /// <returns>String representation of the current <see cref="TimeInterval{T}"/> value.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.CurrentCulture, "{0}@{1}", Value, Interval);
+            return string.Format(CultureInfo.CurrentCulture, "{0}@{1}", Value, Interval);
         }
     }
 }

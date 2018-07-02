@@ -357,7 +357,7 @@ namespace System.Reactive.Concurrency
     public abstract class VirtualTimeScheduler<TAbsolute, TRelative> : VirtualTimeSchedulerBase<TAbsolute, TRelative>
         where TAbsolute : IComparable<TAbsolute>
     {
-        private readonly SchedulerQueue<TAbsolute> queue = new SchedulerQueue<TAbsolute>();
+        private readonly SchedulerQueue<TAbsolute> _queue = new SchedulerQueue<TAbsolute>();
 
         /// <summary>
         /// Creates a new virtual time scheduler with the default value of TAbsolute as the initial clock value.
@@ -384,14 +384,14 @@ namespace System.Reactive.Concurrency
         /// <returns>The next scheduled item.</returns>
         protected override IScheduledItem<TAbsolute> GetNext()
         {
-            lock (queue)
+            lock (_queue)
             {
-                while (queue.Count > 0)
+                while (_queue.Count > 0)
                 {
-                    var next = queue.Peek();
+                    var next = _queue.Peek();
                     if (next.IsCanceled)
                     {
-                        queue.Dequeue();
+                        _queue.Dequeue();
                     }
                     else
                     {
@@ -423,9 +423,9 @@ namespace System.Reactive.Concurrency
 
             var run = new Func<IScheduler, TState, IDisposable>((scheduler, state1) =>
             {
-                lock (queue)
+                lock (_queue)
                 {
-                    queue.Remove(si);
+                    _queue.Remove(si);
                 }
 
                 return action(scheduler, state1);
@@ -433,9 +433,9 @@ namespace System.Reactive.Concurrency
 
             si = new ScheduledItem<TAbsolute, TState>(this, state, run, dueTime, Comparer);
 
-            lock (queue)
+            lock (_queue)
             {
-                queue.Enqueue(si);
+                _queue.Enqueue(si);
             }
 
             return si;

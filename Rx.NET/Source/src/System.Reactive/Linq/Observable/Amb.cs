@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Reactive.Disposables;
 using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
@@ -24,26 +23,26 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class AmbCoordinator : IDisposable
         {
-            private readonly AmbObserver leftObserver;
-            private readonly AmbObserver rightObserver;
-            private int winner;
+            private readonly AmbObserver _leftObserver;
+            private readonly AmbObserver _rightObserver;
+            private int _winner;
 
             public AmbCoordinator(IObserver<TSource> observer)
             {
-                leftObserver = new AmbObserver(observer, this, true);
-                rightObserver = new AmbObserver(observer, this, false);
+                _leftObserver = new AmbObserver(observer, this, true);
+                _rightObserver = new AmbObserver(observer, this, false);
             }
 
             public void Run(IObservable<TSource> left, IObservable<TSource> right)
             {
-                leftObserver.OnSubscribe(left.Subscribe(leftObserver));
-                rightObserver.OnSubscribe(right.Subscribe(rightObserver));
+                _leftObserver.Run(left);
+                _rightObserver.Run(right);
             }
 
             public void Dispose()
             {
-                leftObserver.Dispose();
-                rightObserver.Dispose();
+                _leftObserver.Dispose();
+                _rightObserver.Dispose();
             }
 
             /// <summary>
@@ -55,89 +54,80 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var index = isLeft ? 1 : 2;
 
-                if (Volatile.Read(ref winner) == index)
+                if (Volatile.Read(ref _winner) == index)
                 {
                     return true;
                 }
-                if (Interlocked.CompareExchange(ref winner, index, 0) == 0)
+                if (Interlocked.CompareExchange(ref _winner, index, 0) == 0)
                 {
-                    (isLeft ? rightObserver : leftObserver).Dispose();
+                    (isLeft ? _rightObserver : _leftObserver).Dispose();
                     return true;
                 }
                 return false;
             }
 
-            private sealed class AmbObserver : IObserver<TSource>, IDisposable
+            private sealed class AmbObserver : IdentitySink<TSource>
             {
-                private readonly IObserver<TSource> downstream;
-                private readonly AmbCoordinator parent;
-                private readonly bool isLeft;
-                private IDisposable upstream;
+                private readonly AmbCoordinator _parent;
+                private readonly bool _isLeft;
 
                 /// <summary>
                 /// If true, this observer won the race and now can emit
                 /// on a fast path.
                 /// </summary>
-                private bool iwon;
+                private bool _iwon;
 
-                public AmbObserver(IObserver<TSource> downstream, AmbCoordinator parent, bool isLeft)
+                public AmbObserver(IObserver<TSource> downstream, AmbCoordinator parent, bool isLeft) : base(downstream)
                 {
-                    this.downstream = downstream;
-                    this.parent = parent;
-                    this.isLeft = isLeft;
+                    _parent = parent;
+                    _isLeft = isLeft;
                 }
 
-                internal void OnSubscribe(IDisposable d)
+                public override void OnCompleted()
                 {
-                    Disposable.SetSingle(ref upstream, d);
-                }
-
-                public void Dispose()
-                {
-                    Disposable.TryDispose(ref upstream);
-                }
-
-                public void OnCompleted()
-                {
-                    if (iwon)
+                    if (_iwon)
                     {
-                        downstream.OnCompleted();
+                        ForwardOnCompleted();
+                    }
+                    else if (_parent.TryWin(_isLeft))
+                    {
+                        _iwon = true;
+                        ForwardOnCompleted();
                     }
                     else
-                    if (parent.TryWin(isLeft))
                     {
-                        iwon = true;
-                        downstream.OnCompleted();
+                        Dispose();
                     }
-                    Dispose();
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
-                    if (iwon)
+                    if (_iwon)
                     {
-                        downstream.OnError(error);
+                        ForwardOnError(error);
+                    }
+                    else if (_parent.TryWin(_isLeft))
+                    {
+                        _iwon = true;
+                        ForwardOnError(error);
                     }
                     else
-                    if (parent.TryWin(isLeft))
                     {
-                        iwon = true;
-                        downstream.OnError(error);
+                        Dispose();
                     }
-                    Dispose();
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
-                    if (iwon)
+                    if (_iwon)
                     {
-                        downstream.OnNext(value);
+                        ForwardOnNext(value);
                     }
                     else
-                    if (parent.TryWin(isLeft))
+                    if (_parent.TryWin(_isLeft))
                     {
-                        iwon = true;
-                        downstream.OnNext(value);
+                        _iwon = true;
+                        ForwardOnNext(value);
                     }
                 }
             }

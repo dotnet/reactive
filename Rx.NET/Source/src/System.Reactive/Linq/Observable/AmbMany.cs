@@ -11,31 +11,31 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class AmbManyArray<T> : BasicProducer<T>
     {
-        private readonly IObservable<T>[] sources;
+        private readonly IObservable<T>[] _sources;
 
         public AmbManyArray(IObservable<T>[] sources)
         {
-            this.sources = sources;
+            _sources = sources;
         }
 
         protected override IDisposable Run(IObserver<T> observer)
         {
-            return AmbCoordinator<T>.Create(observer, sources);
+            return AmbCoordinator<T>.Create(observer, _sources);
         }
     }
 
     internal sealed class AmbManyEnumerable<T> : BasicProducer<T>
     {
-        private readonly IEnumerable<IObservable<T>> sources;
+        private readonly IEnumerable<IObservable<T>> _sources;
 
         public AmbManyEnumerable(IEnumerable<IObservable<T>> sources)
         {
-            this.sources = sources;
+            _sources = sources;
         }
 
         protected override IDisposable Run(IObserver<T> observer)
         {
-            var sourcesEnumerable = this.sources;
+            var sourcesEnumerable = _sources;
             var sources = default(IObservable<T>[]);
 
             try
@@ -54,20 +54,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
     internal sealed class AmbCoordinator<T> : IDisposable
     {
-        private readonly IObserver<T> downstream;
-        private readonly InnerObserver[] observers;
-        private int winner;
+        private readonly IObserver<T> _downstream;
+        private readonly InnerObserver[] _observers;
+        private int _winner;
 
         internal AmbCoordinator(IObserver<T> downstream, int n)
         {
-            this.downstream = downstream;
+            _downstream = downstream;
             var o = new InnerObserver[n];
             for (var i = 0; i < n; i++)
             {
                 o[i] = new InnerObserver(this, i);
             }
-            observers = o;
-            Volatile.Write(ref winner, -1);
+            _observers = o;
+            Volatile.Write(ref _winner, -1);
         }
 
         internal static IDisposable Create(IObserver<T> observer, IObservable<T>[] sources)
@@ -93,34 +93,34 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal void Subscribe(IObservable<T>[] sources)
         {
-            for (var i = 0; i < observers.Length; i++)
+            for (var i = 0; i < _observers.Length; i++)
             {
-                var inner = Volatile.Read(ref observers[i]);
+                var inner = Volatile.Read(ref _observers[i]);
                 if (inner == null)
                 {
                     break;
                 }
-                inner.OnSubscribe(sources[i].Subscribe(inner));
+                inner.Run(sources[i]);
             }
         }
 
         public void Dispose()
         {
-            for (var i = 0; i < observers.Length; i++)
+            for (var i = 0; i < _observers.Length; i++)
             {
-                Interlocked.Exchange(ref observers[i], null)?.Dispose();
+                Interlocked.Exchange(ref _observers[i], null)?.Dispose();
             }
         }
 
         private bool TryWin(int index)
         {
-            if (Volatile.Read(ref winner) == -1 && Interlocked.CompareExchange(ref winner, index, -1) == -1)
+            if (Volatile.Read(ref _winner) == -1 && Interlocked.CompareExchange(ref _winner, index, -1) == -1)
             {
-                for (var i = 0; i < observers.Length; i++)
+                for (var i = 0; i < _observers.Length; i++)
                 {
                     if (index != i)
                     {
-                        Interlocked.Exchange(ref observers[i], null)?.Dispose();
+                        Interlocked.Exchange(ref _observers[i], null)?.Dispose();
                     }
                 }
                 return true;
@@ -128,67 +128,28 @@ namespace System.Reactive.Linq.ObservableImpl
             return false;
         }
 
-        internal sealed class InnerObserver : IObserver<T>, IDisposable
+        internal sealed class InnerObserver : IdentitySink<T>
         {
-            private readonly IObserver<T> downstream;
-            private readonly AmbCoordinator<T> parent;
-            private readonly int index;
-            private IDisposable upstream;
-            private bool won;
+            private readonly AmbCoordinator<T> _parent;
+            private readonly int _index;
+            private bool _won;
 
-            public InnerObserver(AmbCoordinator<T> parent, int index)
+            public InnerObserver(AmbCoordinator<T> parent, int index) : base(parent._downstream)
             {
-                downstream = parent.downstream;
-                this.parent = parent;
-                this.index = index;
+                _parent = parent;
+                _index = index;
             }
 
-            public void Dispose()
+            public override void OnCompleted()
             {
-                Disposable.TryDispose(ref upstream);
-            }
-
-            public void OnCompleted()
-            {
-                if (won)
+                if (_won)
                 {
-                    downstream.OnCompleted();
+                    ForwardOnCompleted();
                 }
-                else
-                if (parent.TryWin(index))
+                else if (_parent.TryWin(_index))
                 {
-                    won = true;
-                    downstream.OnCompleted();
-                }
-                Dispose();
-            }
-
-            public void OnError(Exception error)
-            {
-                if (won)
-                {
-                    downstream.OnError(error);
-                }
-                else
-                if (parent.TryWin(index))
-                {
-                    won = true;
-                    downstream.OnError(error);
-                }
-                Dispose();
-            }
-
-            public void OnNext(T value)
-            {
-                if (won)
-                {
-                    downstream.OnNext(value);
-                }
-                else
-                if (parent.TryWin(index))
-                {
-                    won = true;
-                    downstream.OnNext(value);
+                    _won = true;
+                    ForwardOnCompleted();
                 }
                 else
                 {
@@ -196,11 +157,39 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            internal void OnSubscribe(IDisposable d)
+            public override void OnError(Exception error)
             {
-                Disposable.SetSingle(ref upstream, d);
+                if (_won)
+                {
+                    ForwardOnError(error);
+                }
+                else if (_parent.TryWin(_index))
+                {
+                    _won = true;
+                    ForwardOnError(error);
+                }
+                else
+                {
+                    Dispose();
+                }
+            }
+
+            public override void OnNext(T value)
+            {
+                if (_won)
+                {
+                    ForwardOnNext(value);
+                }
+                else if (_parent.TryWin(_index))
+                {
+                    _won = true;
+                    ForwardOnNext(value);
+                }
+                else
+                {
+                    Dispose();
+                }
             }
         }
-
     }
 }

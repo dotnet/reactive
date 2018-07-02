@@ -18,7 +18,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Counter for diagnostic purposes, to name the threads.
         /// </summary>
-        private static int s_counter;
+        private static int _counter;
 
         /// <summary>
         /// Thread factory function.
@@ -82,7 +82,7 @@ namespace System.Reactive.Concurrency
         /// Creates an object that schedules units of work on a designated thread.
         /// </summary>
         public EventLoopScheduler()
-            : this(a => new Thread(a) { Name = "Event Loop " + Interlocked.Increment(ref s_counter), IsBackground = true })
+            : this(a => new Thread(a) { Name = "Event Loop " + Interlocked.Increment(ref _counter), IsBackground = true })
         {
         }
 

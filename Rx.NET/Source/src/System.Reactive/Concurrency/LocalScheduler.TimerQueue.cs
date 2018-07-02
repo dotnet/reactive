@@ -20,20 +20,20 @@ namespace System.Reactive.Concurrency
         /// Gate to protect queues and to synchronize scheduling decisions and system clock
         /// change management.
         /// </summary>
-        private static readonly object s_gate = new object();
+        private static readonly object _staticGate = new object();
 
         /// <summary>
         /// Long term work queue. Contains work that's due beyond SHORTTERM, computed at the
         /// time of enqueueing.
         /// </summary>
-        private static readonly PriorityQueue<WorkItem/*!*/> s_longTerm = new PriorityQueue<WorkItem/*!*/>();
+        private static readonly PriorityQueue<WorkItem/*!*/> _longTerm = new PriorityQueue<WorkItem/*!*/>();
 
         /// <summary>
         /// Disposable resource for the long term timer that will reevaluate and dispatch the
         /// first item in the long term queue. A serial disposable is used to make "dispose
         /// current and assign new" logic easier. The disposable itself is never disposed.
         /// </summary>
-        private static readonly SerialDisposable s_nextLongTermTimer = new SerialDisposable();
+        private static readonly SerialDisposable _nextLongTermTimer = new SerialDisposable();
 
         /// <summary>
         /// Item at the head of the long term queue for which the current long term timer is
@@ -41,7 +41,7 @@ namespace System.Reactive.Concurrency
         /// or can continue using the current timer (because no earlier long term work was
         /// added to the queue).
         /// </summary>
-        private static WorkItem s_nextLongTermWorkItem;
+        private static WorkItem _nextLongTermWorkItem;
 
         /// <summary>
         /// Short term work queue. Contains work that's due soon, computed at the time of
@@ -137,7 +137,7 @@ namespace System.Reactive.Concurrency
             var due = Scheduler.Normalize(dueTime - Now);
             if (due == TimeSpan.Zero)
             {
-                return Schedule<TState>(state, TimeSpan.Zero, action);
+                return Schedule(state, TimeSpan.Zero, action);
             }
 
             //
@@ -277,9 +277,9 @@ namespace System.Reactive.Concurrency
         /// <param name="item">Work item to schedule on the long term. The caller is responsible to determine the work is indeed long term.</param>
         private static void ScheduleLongTermWork(WorkItem/*!*/ item)
         {
-            lock (s_gate)
+            lock (_staticGate)
             {
-                s_longTerm.Enqueue(item);
+                _longTerm.Enqueue(item);
 
                 //
                 // In case we're the first long-term item in the queue now, the timer will have
@@ -301,7 +301,7 @@ namespace System.Reactive.Concurrency
              * 
             lock (s_gate) */
             {
-                if (s_longTerm.Count == 0)
+                if (_longTerm.Count == 0)
                 {
                     return;
                 }
@@ -310,8 +310,8 @@ namespace System.Reactive.Concurrency
                 // To avoid setting the timer all over again for the first work item if it hasn't changed,
                 // we keep track of the next long term work item that will be processed by the timer.
                 //
-                var next = s_longTerm.Peek();
-                if (next == s_nextLongTermWorkItem)
+                var next = _longTerm.Peek();
+                if (next == _nextLongTermWorkItem)
                 {
                     return;
                 }
@@ -332,8 +332,8 @@ namespace System.Reactive.Concurrency
                 //
                 var dueCapped = TimeSpan.FromTicks(Math.Min(dueEarly.Ticks, MAXSUPPORTEDTIMER.Ticks));
 
-                s_nextLongTermWorkItem = next;
-                s_nextLongTermTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(_ => EvaluateLongTermQueue(_), null, dueCapped);
+                _nextLongTermWorkItem = next;
+                _nextLongTermTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(_ => EvaluateLongTermQueue(_), null, dueCapped);
             }
         }
 
@@ -344,13 +344,13 @@ namespace System.Reactive.Concurrency
         /// <param name="state">Ignored.</param>
         private static void EvaluateLongTermQueue(object state)
         {
-            lock (s_gate)
+            lock (_staticGate)
             {
                 var next = default(WorkItem);
 
-                while (s_longTerm.Count > 0)
+                while (_longTerm.Count > 0)
                 {
-                    next = s_longTerm.Peek();
+                    next = _longTerm.Peek();
 
                     var due = Scheduler.Normalize(next.DueTime - next.Scheduler.Now);
                     if (due >= SHORTTERM)
@@ -358,11 +358,11 @@ namespace System.Reactive.Concurrency
                         break;
                     }
 
-                    var item = s_longTerm.Dequeue();
+                    var item = _longTerm.Dequeue();
                     item.Scheduler.ScheduleShortTermWork(item);
                 }
 
-                s_nextLongTermWorkItem = null;
+                _nextLongTermWorkItem = null;
                 UpdateLongTermProcessingTimer();
             }
         }
@@ -375,7 +375,7 @@ namespace System.Reactive.Concurrency
         /// <param name="sender">Currently not used.</param>
         internal void SystemClockChanged(object sender, SystemClockChangedEventArgs args)
         {
-            lock (s_gate)
+            lock (_staticGate)
             {
                 lock (_gate)
                 {
@@ -400,14 +400,14 @@ namespace System.Reactive.Concurrency
                     while (_shortTerm.Count > 0)
                     {
                         var next = _shortTerm.Dequeue();
-                        s_longTerm.Enqueue(next);
+                        _longTerm.Enqueue(next);
                     }
 
                     //
                     // Reevaluate the queue and don't forget to null out the current timer to force the
                     // method to create a new timer for the new first long term item.
                     //
-                    s_nextLongTermWorkItem = null;
+                    _nextLongTermWorkItem = null;
                     EvaluateLongTermQueue(null);
                 }
             }

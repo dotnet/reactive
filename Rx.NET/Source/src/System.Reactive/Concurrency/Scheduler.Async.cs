@@ -175,7 +175,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return ScheduleAsync_<TState>(scheduler, state, action);
+            return ScheduleAsync_(scheduler, state, action);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return ScheduleAsync_<TState>(scheduler, state, action);
+            return ScheduleAsync_(scheduler, state, action);
         }
 
         /// <summary>

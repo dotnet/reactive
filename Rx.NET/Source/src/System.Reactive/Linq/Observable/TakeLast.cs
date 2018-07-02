@@ -114,7 +114,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         n--;
                     }
 
-                    base.Dispose();
+                    Dispose();
                 }
             }
         }
@@ -142,14 +142,14 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly TimeSpan _duration;
                 private readonly IScheduler _loopScheduler;
-                private Queue<System.Reactive.TimeInterval<TSource>> _queue;
+                private Queue<Reactive.TimeInterval<TSource>> _queue;
 
                 public _(Time parent, IObserver<TSource> observer)
                     : base(observer)
                 {
                     _duration = parent._duration;
                     _loopScheduler = parent._loopScheduler;
-                    _queue = new Queue<System.Reactive.TimeInterval<TSource>>();
+                    _queue = new Queue<Reactive.TimeInterval<TSource>>();
                 }
 
                 private IDisposable _loopDisposable;
@@ -158,7 +158,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public void Run(IObservable<TSource> source, IScheduler scheduler)
                 {
                     _watch = scheduler.StartStopwatch();
-                    base.Run(source);
+                    Run(source);
                 }
 
                 protected override void Dispose(bool disposing)
@@ -173,7 +173,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public override void OnNext(TSource value)
                 {
                     var now = _watch.Elapsed;
-                    _queue.Enqueue(new System.Reactive.TimeInterval<TSource>(value, now));
+                    _queue.Enqueue(new Reactive.TimeInterval<TSource>(value, now));
                     Trim(now);
                 }
 
@@ -231,7 +231,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         n--;
                     }
 
-                    base.Dispose();
+                    Dispose();
                 }
 
                 private void Trim(TimeSpan now)

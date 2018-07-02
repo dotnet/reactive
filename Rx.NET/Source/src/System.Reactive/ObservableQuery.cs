@@ -71,18 +71,18 @@ namespace System.Reactive
             return Expression.Lambda<Func<IQueryable<TElement>>>(res).Compile()();
         }
 
-        private static MethodInfo s_AsQueryable;
+        private static MethodInfo _staticAsQueryable;
 
         private static MethodInfo AsQueryable
         {
             get
             {
-                if (s_AsQueryable == null)
+                if (_staticAsQueryable == null)
                 {
-                    s_AsQueryable = Qbservable.InfoOf<object>(() => Queryable.AsQueryable<object>(null)).GetGenericMethodDefinition();
+                    _staticAsQueryable = Qbservable.InfoOf<object>(() => Queryable.AsQueryable<object>(null)).GetGenericMethodDefinition();
                 }
 
-                return s_AsQueryable;
+                return _staticAsQueryable;
             }
         }
 

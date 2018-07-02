@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 #if NO_THREAD && WINDOWS
-using System.Reactive.Disposables;
 using System.Threading;
 
 namespace System.Reactive.Concurrency

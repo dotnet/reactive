@@ -14,7 +14,7 @@ namespace System.Reactive.Linq.ObservableImpl
         internal T _value;
         internal bool _hasValue;
         internal Exception _error;
-        private int once;
+        private int _once;
 
         internal BaseBlocking() : base(1) { }
 
@@ -25,7 +25,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected void Unblock()
         {
-            if (Interlocked.CompareExchange(ref once, 1, 0) == 0)
+            if (Interlocked.CompareExchange(ref _once, 1, 0) == 0)
             {
                 Signal();
             }

@@ -196,8 +196,8 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : IdentitySink<TResult>
             {
                 private readonly TResult _value;
-
                 private readonly int _remaining;
+
                 public _(TResult value, int remaining, IObserver<TResult> observer)
                     : base(observer)
                 {

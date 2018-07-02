@@ -76,11 +76,11 @@ namespace System.Reactive.Linq
         [Serializable]
         private class SerializableObservable<T> : IObservable<T>
         {
-            private readonly RemotableObservable<T> remotableObservable;
+            private readonly RemotableObservable<T> _remotableObservable;
 
             public SerializableObservable(RemotableObservable<T> remotableObservable)
             {
-                this.remotableObservable = remotableObservable;
+                _remotableObservable = remotableObservable;
             }
 
             public IDisposable Subscribe(IObserver<T> observer)
@@ -90,7 +90,7 @@ namespace System.Reactive.Linq
                 //
                 // [OK] Use of unsafe Subscribe: non-pretentious transparent wrapping through remoting; exception coming from the remote object is not re-routed.
                 //
-                var d = remotableObservable.Subscribe/*Unsafe*/(new RemotableObserver<T>(consumer));
+                var d = _remotableObservable.Subscribe/*Unsafe*/(new RemotableObserver<T>(consumer));
 
                 consumer.SetResource(d);
 
@@ -100,23 +100,23 @@ namespace System.Reactive.Linq
 
         private class RemotableObserver<T> : MarshalByRefObject, IObserver<T>, ISponsor
         {
-            private readonly IObserver<T> underlyingObserver;
+            private readonly IObserver<T> _underlyingObserver;
 
             public RemotableObserver(IObserver<T> underlyingObserver)
             {
-                this.underlyingObserver = underlyingObserver;
+                _underlyingObserver = underlyingObserver;
             }
 
             public void OnNext(T value)
             {
-                underlyingObserver.OnNext(value);
+                _underlyingObserver.OnNext(value);
             }
 
             public void OnError(Exception exception)
             {
                 try
                 {
-                    underlyingObserver.OnError(exception);
+                    _underlyingObserver.OnError(exception);
                 }
                 finally
                 {
@@ -128,7 +128,7 @@ namespace System.Reactive.Linq
             {
                 try
                 {
-                    underlyingObserver.OnCompleted();
+                    _underlyingObserver.OnCompleted();
                 }
                 finally
                 {
@@ -164,13 +164,13 @@ namespace System.Reactive.Linq
         [Serializable]
         private sealed class RemotableObservable<T> : MarshalByRefObject, IObservable<T>
         {
-            private readonly IObservable<T> underlyingObservable;
-            private readonly ILease lease;
+            private readonly IObservable<T> _underlyingObservable;
+            private readonly ILease _lease;
 
             public RemotableObservable(IObservable<T> underlyingObservable, ILease lease)
             {
-                this.underlyingObservable = underlyingObservable;
-                this.lease = lease;
+                _underlyingObservable = underlyingObservable;
+                _lease = lease;
             }
 
             public IDisposable Subscribe(IObserver<T> observer)
@@ -178,22 +178,22 @@ namespace System.Reactive.Linq
                 //
                 // [OK] Use of unsafe Subscribe: non-pretentious transparent wrapping through remoting; throwing across remoting boundaries is fine.
                 //
-                return new RemotableSubscription(underlyingObservable.Subscribe/*Unsafe*/(observer));
+                return new RemotableSubscription(_underlyingObservable.Subscribe/*Unsafe*/(observer));
             }
 
             [SecurityCritical]
             public override object InitializeLifetimeService()
             {
-                return lease;
+                return _lease;
             }
 
             private sealed class RemotableSubscription : MarshalByRefObject, IDisposable, ISponsor
             {
-                private IDisposable underlyingSubscription;
+                private IDisposable _underlyingSubscription;
 
                 public RemotableSubscription(IDisposable underlyingSubscription)
                 {
-                    this.underlyingSubscription = underlyingSubscription;
+                    _underlyingSubscription = underlyingSubscription;
                 }
 
                 public void Dispose()
@@ -201,7 +201,7 @@ namespace System.Reactive.Linq
                     //
                     // Avoiding double-dispose and dropping the reference upon disposal.
                     //
-                    using (Interlocked.Exchange(ref underlyingSubscription, Disposable.Empty))
+                    using (Interlocked.Exchange(ref _underlyingSubscription, Disposable.Empty))
                     {
                         Unregister();
                     }

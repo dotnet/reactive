@@ -58,7 +58,7 @@ namespace System.Reactive
         {
             for (var i = 0; i < _data.Length; ++i)
             {
-                if (object.Equals(_data[i], value))
+                if (Equals(_data[i], value))
                 {
                     return i;
                 }

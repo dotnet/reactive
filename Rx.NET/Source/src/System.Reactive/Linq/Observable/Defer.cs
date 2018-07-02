@@ -44,7 +44,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return;
                 }
 
-                base.Run(result);
+                Run(result);
             }
         }
     }

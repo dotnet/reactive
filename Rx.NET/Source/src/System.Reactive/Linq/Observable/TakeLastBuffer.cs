@@ -94,7 +94,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _watch = scheduler.StartStopwatch();
 
-                    base.Run(source);
+                    Run(source);
                 }
 
                 public override void OnNext(TSource value)

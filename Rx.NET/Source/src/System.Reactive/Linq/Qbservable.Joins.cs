@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Joins;
+#if !CRIPPLED_REFLECTION
 using System.Reflection;
+#endif
 
 namespace System.Reactive.Linq
 {
@@ -41,9 +43,9 @@ namespace System.Reactive.Linq
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.And<TLeft, TRight>(default, default)),
+                    InfoOf(() => And<TLeft, TRight>(default, default)),
 #else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TLeft), typeof(TRight)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TLeft), typeof(TRight)),
 #endif
                     left.Expression,
                     GetSourceExpression(right)
@@ -76,9 +78,9 @@ namespace System.Reactive.Linq
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.Then<TSource, TResult>(default, default)),
+                    InfoOf(() => Then<TSource, TResult>(default, default)),
 #else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
 #endif
                     source.Expression,
                     selector
@@ -110,9 +112,9 @@ namespace System.Reactive.Linq
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.When<TResult>(default, default)),
+                    InfoOf(() => When<TResult>(default, default)),
 #else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.NewArrayInit(
@@ -147,9 +149,9 @@ namespace System.Reactive.Linq
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.When<TResult>(default, default(IEnumerable<QueryablePlan<TResult>>))),
+                    InfoOf(() => When(default, default(IEnumerable<QueryablePlan<TResult>>))),
 #else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(plans, typeof(IEnumerable<QueryablePlan<TResult>>))

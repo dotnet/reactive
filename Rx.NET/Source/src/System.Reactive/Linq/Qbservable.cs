@@ -54,9 +54,9 @@ namespace System.Reactive.Linq
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.ToQbservable<TSource>(default)),
+                    InfoOf(() => ToQbservable<TSource>(default)),
 #else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
                     source.Expression
                 )
@@ -88,9 +88,9 @@ namespace System.Reactive.Linq
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.ToQbservable<TSource>(default)),
+                    InfoOf(() => ToQbservable<TSource>(default)),
 #else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
                     source.Expression,
                     Expression.Constant(scheduler)

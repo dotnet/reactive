@@ -11,7 +11,7 @@ namespace System.Reactive.Concurrency
     /// <summary>
     /// Represents an object that schedules units of work on the Windows Runtime thread pool.
     /// </summary>
-    /// <seealso cref="ThreadPoolScheduler.Default">Singleton instance of this type exposed through this static property.</seealso>
+    /// <seealso cref="Default">Singleton instance of this type exposed through this static property.</seealso>
     [CLSCompliant(false)]
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerPeriodic
     {

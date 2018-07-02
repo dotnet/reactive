@@ -10,11 +10,11 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class ConcatMany<T> : IObservable<T>
     {
-        private readonly IObservable<IObservable<T>> sources;
+        private readonly IObservable<IObservable<T>> _sources;
 
         internal ConcatMany(IObservable<IObservable<T>> sources)
         {
-            this.sources = sources;
+            _sources = sources;
         }
 
         public IDisposable Subscribe(IObserver<T> observer)
@@ -24,84 +24,84 @@ namespace System.Reactive.Linq.ObservableImpl
                 throw new ArgumentNullException(nameof(observer));
             }
             var parent = new ConcatManyOuterObserver(observer);
-            var d = sources.SubscribeSafe(parent);
+            var d = _sources.SubscribeSafe(parent);
             parent.OnSubscribe(d);
             return parent;
         }
 
         internal sealed class ConcatManyOuterObserver : IObserver<IObservable<T>>, IDisposable
         {
-            private readonly IObserver<T> downstream;
-            private readonly ConcurrentQueue<IObservable<T>> queue;
-            private readonly InnerObserver innerObserver;
-            private IDisposable upstream;
-            private int trampoline;
-            private Exception error;
-            private bool done;
-            private int active;
+            private readonly IObserver<T> _downstream;
+            private readonly ConcurrentQueue<IObservable<T>> _queue;
+            private readonly InnerObserver _innerObserver;
+            private IDisposable _upstream;
+            private int _trampoline;
+            private Exception _error;
+            private bool _done;
+            private int _active;
 
             internal ConcatManyOuterObserver(IObserver<T> downstream)
             {
-                this.downstream = downstream;
-                queue = new ConcurrentQueue<IObservable<T>>();
-                innerObserver = new InnerObserver(this);
+                _downstream = downstream;
+                _queue = new ConcurrentQueue<IObservable<T>>();
+                _innerObserver = new InnerObserver(this);
             }
 
             internal void OnSubscribe(IDisposable d)
             {
-                Disposable.SetSingle(ref upstream, d);
+                Disposable.SetSingle(ref _upstream, d);
             }
 
             public void Dispose()
             {
-                innerObserver.Dispose();
+                _innerObserver.Dispose();
                 DisposeMain();
             }
 
             private void DisposeMain()
             {
-                Disposable.TryDispose(ref upstream);
+                Disposable.TryDispose(ref _upstream);
             }
 
             private bool IsDisposed()
             {
-                return Disposable.GetIsDisposed(ref upstream);
+                return Disposable.GetIsDisposed(ref _upstream);
             }
 
             public void OnCompleted()
             {
-                Volatile.Write(ref done, true);
+                Volatile.Write(ref _done, true);
                 Drain();
             }
 
             public void OnError(Exception error)
             {
-                if (Interlocked.CompareExchange(ref this.error, error, null) == null)
+                if (Interlocked.CompareExchange(ref _error, error, null) == null)
                 {
-                    Volatile.Write(ref done, true);
+                    Volatile.Write(ref _done, true);
                     Drain();
                 }
             }
 
             public void OnNext(IObservable<T> value)
             {
-                queue.Enqueue(value);
+                _queue.Enqueue(value);
                 Drain();
             }
 
             private void InnerNext(T item)
             {
-                downstream.OnNext(item);
+                _downstream.OnNext(item);
             }
 
             private void InnerError(Exception error)
             {
-                if (innerObserver.Finish())
+                if (_innerObserver.Finish())
                 {
-                    if (Interlocked.CompareExchange(ref this.error, error, null) == null)
+                    if (Interlocked.CompareExchange(ref _error, error, null) == null)
                     {
-                        Volatile.Write(ref done, true);
-                        Volatile.Write(ref active, 0);
+                        Volatile.Write(ref _done, true);
+                        Volatile.Write(ref _active, 0);
                         Drain();
                     }
                 }
@@ -109,16 +109,16 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private void InnerComplete()
             {
-                if (innerObserver.Finish())
+                if (_innerObserver.Finish())
                 {
-                    Volatile.Write(ref active, 0);
+                    Volatile.Write(ref _active, 0);
                     Drain();
                 }
             }
 
             private void Drain()
             {
-                if (Interlocked.Increment(ref trampoline) != 1)
+                if (Interlocked.Increment(ref _trampoline) != 1)
                 {
                     return;
                 }
@@ -127,72 +127,72 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (IsDisposed())
                     {
-                        while (queue.TryDequeue(out var _))
+                        while (_queue.TryDequeue(out var _))
                         {
                             ;
                         }
                     }
                     else
                     {
-                        if (Volatile.Read(ref active) == 0)
+                        if (Volatile.Read(ref _active) == 0)
                         {
-                            var isDone = Volatile.Read(ref done);
+                            var isDone = Volatile.Read(ref _done);
 
                             if (isDone)
                             {
-                                var ex = Volatile.Read(ref error);
+                                var ex = Volatile.Read(ref _error);
                                 if (ex != null)
                                 {
-                                    downstream.OnError(ex);
+                                    _downstream.OnError(ex);
                                     DisposeMain();
                                     continue;
                                 }
                             }
 
-                            if (queue.TryDequeue(out var source))
+                            if (_queue.TryDequeue(out var source))
                             {
                                 var sad = new SingleAssignmentDisposable();
-                                if (innerObserver.SetDisposable(sad))
+                                if (_innerObserver.SetDisposable(sad))
                                 {
-                                    Interlocked.Exchange(ref active, 1);
-                                    sad.Disposable = source.SubscribeSafe(innerObserver);
+                                    Interlocked.Exchange(ref _active, 1);
+                                    sad.Disposable = source.SubscribeSafe(_innerObserver);
                                 }
                             }
                             else
                             {
                                 if (isDone)
                                 {
-                                    downstream.OnCompleted();
+                                    _downstream.OnCompleted();
                                     DisposeMain();
                                 }
                             }
                         }
                     }
-                } while (Interlocked.Decrement(ref trampoline) != 0);
+                } while (Interlocked.Decrement(ref _trampoline) != 0);
             }
 
             internal sealed class InnerObserver : IObserver<T>, IDisposable
             {
-                private readonly ConcatManyOuterObserver parent;
+                private readonly ConcatManyOuterObserver _parent;
 
-                internal IDisposable upstream;
+                internal IDisposable Upstream;
 
                 internal InnerObserver(ConcatManyOuterObserver parent)
                 {
-                    this.parent = parent;
+                    _parent = parent;
                 }
 
                 internal bool SetDisposable(SingleAssignmentDisposable sad)
                 {
-                    return Disposable.TrySetSingle(ref upstream, sad) == TrySetSingleResult.Success;
+                    return Disposable.TrySetSingle(ref Upstream, sad) == TrySetSingleResult.Success;
                 }
 
                 internal bool Finish()
                 {
-                    var sad = Volatile.Read(ref upstream);
+                    var sad = Volatile.Read(ref Upstream);
                     if (sad != BooleanDisposable.True)
                     {
-                        if (Interlocked.CompareExchange(ref upstream, null, sad) == sad)
+                        if (Interlocked.CompareExchange(ref Upstream, null, sad) == sad)
                         {
                             sad.Dispose();
                             return true;
@@ -203,22 +203,22 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Dispose()
                 {
-                    Disposable.TryDispose(ref upstream);
+                    Disposable.TryDispose(ref Upstream);
                 }
 
                 public void OnCompleted()
                 {
-                    parent.InnerComplete();
+                    _parent.InnerComplete();
                 }
 
                 public void OnError(Exception error)
                 {
-                    parent.InnerError(error);
+                    _parent.InnerError(error);
                 }
 
                 public void OnNext(T value)
                 {
-                    parent.InnerNext(value);
+                    _parent.InnerNext(value);
                 }
             }
         }

@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="control"/> is null.</exception>
         /// <remarks>
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the specified control.
-        /// In order to invoke observer callbacks on the specified control, e.g. to render results in a control, use <see cref="ControlObservable.ObserveOn"/>.
+        /// In order to invoke observer callbacks on the specified control, e.g. to render results in a control, use <see cref="ObserveOn"/>.
         /// </remarks>
         public static IObservable<TSource> SubscribeOn<TSource>(this IObservable<TSource> source, Control control)
         {

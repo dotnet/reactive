@@ -404,7 +404,7 @@ namespace System.Reactive.Linq
         /// <param name="start">The value of the first integer in the sequence.</param>
         /// <param name="count">The number of sequential integers to generate.</param>
         /// <returns>An observable sequence that contains a range of sequential integral numbers.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="Int32.MaxValue"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="int.MaxValue"/>.</exception>
         public static IObservable<int> Range(int start, int count)
         {
             var max = ((long)start) + count - 1;
@@ -423,7 +423,7 @@ namespace System.Reactive.Linq
         /// <param name="count">The number of sequential integers to generate.</param>
         /// <param name="scheduler">Scheduler to run the generator loop on.</param>
         /// <returns>An observable sequence that contains a range of sequential integral numbers.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="Int32.MaxValue"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="int.MaxValue"/>.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
         public static IObservable<int> Range(int start, int count, IScheduler scheduler)
         {

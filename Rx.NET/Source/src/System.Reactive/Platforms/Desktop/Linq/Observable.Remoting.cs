@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <returns>The observable sequence that supports remote subscriptions.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Remotable", Justification = "In honor of the .NET Remoting heroes.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Remotable", Justification = "In honor of the .NET Remoting heroes.")]
         public static IObservable<TSource> Remotable<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -31,7 +31,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return Remotable_<TSource>(source);
+            return Remotable_(source);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq
         /// <param name="lease">Lease object to control lifetime of the remotable sequence. Notice null is a supported value.</param>
         /// <returns>The observable sequence that supports remote subscriptions.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Remotable", Justification = "In honor of the .NET Remoting heroes.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Remotable", Justification = "In honor of the .NET Remoting heroes.")]
         public static IObservable<TSource> Remotable<TSource>(this IObservable<TSource> source, ILease lease)
         {
             if (source == null)
@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return Remotable_<TSource>(source, lease);
+            return Remotable_(source, lease);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <returns>The observable sequence that supports remote subscriptions.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Remotable", Justification = "In honor of the .NET Remoting heroes.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Remotable", Justification = "In honor of the .NET Remoting heroes.")]
         public static IQbservable<TSource> Remotable<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
@@ -74,7 +74,7 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => RemotingObservable.Remotable<TSource>(default(IQbservable<TSource>))),
 #else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
                     source.Expression
                 )
@@ -89,7 +89,7 @@ namespace System.Reactive.Linq
         /// <param name="lease">Lease object to control lifetime of the remotable sequence. Notice null is a supported value.</param>
         /// <returns>The observable sequence that supports remote subscriptions.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Remotable", Justification = "In honor of the .NET Remoting heroes.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Remotable", Justification = "In honor of the .NET Remoting heroes.")]
         public static IQbservable<TSource> Remotable<TSource>(this IQbservable<TSource> source, ILease lease)
         {
             if (source == null)
@@ -103,7 +103,7 @@ namespace System.Reactive.Linq
 #if CRIPPLED_REFLECTION
                     InfoOf(() => RemotingObservable.Remotable<TSource>(default(IQbservable<TSource>), default(ILease))),
 #else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
                     source.Expression,
                     Expression.Constant(lease, typeof(ILease))

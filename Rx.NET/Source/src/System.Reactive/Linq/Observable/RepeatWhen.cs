@@ -10,13 +10,13 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class RepeatWhen<T, U> : IObservable<T>
     {
-        private readonly IObservable<T> source;
-        private readonly Func<IObservable<object>, IObservable<U>> handler;
+        private readonly IObservable<T> _source;
+        private readonly Func<IObservable<object>, IObservable<U>> _handler;
 
         internal RepeatWhen(IObservable<T> source, Func<IObservable<object>, IObservable<U>> handler)
         {
-            this.source = source;
-            this.handler = handler;
+            _source = source;
+            _handler = handler;
         }
 
         public IDisposable Subscribe(IObserver<T> observer)
@@ -31,7 +31,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             try
             {
-                redo = handler(completeSignals);
+                redo = _handler(completeSignals);
                 if (redo == null)
                 {
                     throw new NullReferenceException("The handler returned a null IObservable");
@@ -43,10 +43,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 return Disposable.Empty;
             }
 
-            var parent = new MainObserver(observer, source, new RedoSerializedObserver<object>(completeSignals));
+            var parent = new MainObserver(observer, _source, new RedoSerializedObserver<object>(completeSignals));
 
-            var d = redo.SubscribeSafe(parent.handlerObserver);
-            Disposable.SetSingle(ref parent.handlerUpstream, d);
+            var d = redo.SubscribeSafe(parent.HandlerConsumer);
+            Disposable.SetSingle(ref parent.HandlerUpstream, d);
 
             parent.HandlerNext();
 
@@ -55,103 +55,103 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class MainObserver : Sink<T>, IObserver<T>
         {
-            private readonly IObserver<Exception> errorSignal;
+            private readonly IObserver<Exception> _errorSignal;
 
-            internal readonly HandlerObserver handlerObserver;
-            private readonly IObservable<T> source;
-            private IDisposable upstream;
+            internal readonly HandlerObserver HandlerConsumer;
+            private readonly IObservable<T> _source;
+            private IDisposable _upstream;
 
-            internal IDisposable handlerUpstream;
-            private int trampoline;
-            private int halfSerializer;
-            private Exception error;
+            internal IDisposable HandlerUpstream;
+            private int _trampoline;
+            private int _halfSerializer;
+            private Exception _error;
 
             internal MainObserver(IObserver<T> downstream, IObservable<T> source, IObserver<Exception> errorSignal) : base(downstream)
             {
-                this.source = source;
-                this.errorSignal = errorSignal;
-                handlerObserver = new HandlerObserver(this);
+                _source = source;
+                _errorSignal = errorSignal;
+                HandlerConsumer = new HandlerObserver(this);
             }
 
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
                 {
-                    Disposable.TryDispose(ref upstream);
-                    Disposable.TryDispose(ref handlerUpstream);
+                    Disposable.TryDispose(ref _upstream);
+                    Disposable.TryDispose(ref HandlerUpstream);
                 }
                 base.Dispose(disposing);
             }
 
             public void OnCompleted()
             {
-                if (Disposable.TrySetSerial(ref upstream, null))
+                if (Disposable.TrySetSerial(ref _upstream, null))
                 {
-                    errorSignal.OnNext(null);
+                    _errorSignal.OnNext(null);
                 }
 
             }
 
             public void OnError(Exception error)
             {
-                HalfSerializer.ForwardOnError(this, error, ref halfSerializer, ref this.error);
+                HalfSerializer.ForwardOnError(this, error, ref _halfSerializer, ref _error);
             }
 
             public void OnNext(T value)
             {
-                HalfSerializer.ForwardOnNext(this, value, ref halfSerializer, ref error);
+                HalfSerializer.ForwardOnNext(this, value, ref _halfSerializer, ref _error);
             }
 
             internal void HandlerError(Exception error)
             {
-                HalfSerializer.ForwardOnError(this, error, ref halfSerializer, ref this.error);
+                HalfSerializer.ForwardOnError(this, error, ref _halfSerializer, ref _error);
             }
 
             internal void HandlerComplete()
             {
-                HalfSerializer.ForwardOnCompleted(this, ref halfSerializer, ref error);
+                HalfSerializer.ForwardOnCompleted(this, ref _halfSerializer, ref _error);
             }
 
             internal void HandlerNext()
             {
-                if (Interlocked.Increment(ref trampoline) == 1)
+                if (Interlocked.Increment(ref _trampoline) == 1)
                 {
                     do
                     {
                         var sad = new SingleAssignmentDisposable();
-                        if (Interlocked.CompareExchange(ref upstream, sad, null) != null)
+                        if (Interlocked.CompareExchange(ref _upstream, sad, null) != null)
                         {
                             return;
                         }
 
-                        sad.Disposable = source.SubscribeSafe(this);
+                        sad.Disposable = _source.SubscribeSafe(this);
                     }
-                    while (Interlocked.Decrement(ref trampoline) != 0);
+                    while (Interlocked.Decrement(ref _trampoline) != 0);
                 }
             }
 
             internal sealed class HandlerObserver : IObserver<U>
             {
-                private readonly MainObserver main;
+                private readonly MainObserver _main;
 
                 internal HandlerObserver(MainObserver main)
                 {
-                    this.main = main;
+                    _main = main;
                 }
 
                 public void OnCompleted()
                 {
-                    main.HandlerComplete();
+                    _main.HandlerComplete();
                 }
 
                 public void OnError(Exception error)
                 {
-                    main.HandlerError(error);
+                    _main.HandlerError(error);
                 }
 
                 public void OnNext(U value)
                 {
-                    main.HandlerNext();
+                    _main.HandlerNext();
                 }
             }
         }
