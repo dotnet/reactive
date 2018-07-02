@@ -21,11 +21,11 @@ namespace System.Reactive.Concurrency
                     return Disposable.Empty;
 
                 action(new CancelableScheduler(self, _cts.Token), s, _cts.Token).ContinueWith(
-                    (t, @thisObject) =>
+                    (t, thisObject) =>
                     {
                         if (!t.IsCanceled)
                         {
-                            var @this = (AsyncInvocation<TState>)@thisObject;
+                            var @this = (AsyncInvocation<TState>)thisObject;
 
                             t.Exception?.Handle(e => e is OperationCanceledException);
 

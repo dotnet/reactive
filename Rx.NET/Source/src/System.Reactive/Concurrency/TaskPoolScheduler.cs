@@ -33,9 +33,9 @@ namespace System.Reactive.Concurrency
                 Disposable.SetSingle(ref _cancel, cancelable);
 
                 scheduler._taskFactory.StartNew(
-                    @thisObject =>
+                    thisObject =>
                     {
-                        var @this = (ScheduledWorkItem<TState>)@thisObject;
+                        var @this = (ScheduledWorkItem<TState>)thisObject;
                         //
                         // BREAKING CHANGE v2.0 > v1.x - No longer escalating exceptions using a throwing
                         //                               helper thread.
@@ -90,7 +90,7 @@ namespace System.Reactive.Concurrency
                 Disposable.SetSingle(ref _cancel, ct);
 
                 TaskHelpers.Delay(dueTime, ct.Token).ContinueWith(
-                    (_, @thisObject) =>
+                    (_, thisObject) =>
                     {
                         var @this = (SlowlyScheduledWorkItem<TState>)thisObject;
 
@@ -124,7 +124,7 @@ namespace System.Reactive.Concurrency
                 _action = action;
 
                 scheduler._taskFactory.StartNew(
-                    @thisObject =>
+                    thisObject =>
                     {
                         var @this = (LongScheduledWorkItem<TState>)thisObject;
 

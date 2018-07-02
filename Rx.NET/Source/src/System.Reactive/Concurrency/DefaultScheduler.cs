@@ -169,9 +169,9 @@ namespace System.Reactive.Concurrency
                     _action = action;
 
                     _cal.StartThread(
-                        @thisObject =>
+                        thisObject =>
                         {
-                            var @this = (LongScheduledWorkItem<TState>)@thisObject;
+                            var @this = (LongScheduledWorkItem<TState>)thisObject;
 
                             //
                             // Notice we don't check d.IsDisposed. The contract for ISchedulerLongRunning
