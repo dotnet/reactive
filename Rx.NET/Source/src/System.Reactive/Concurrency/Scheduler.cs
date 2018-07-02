@@ -60,7 +60,7 @@ namespace System.Reactive.Concurrency
         //
 
 
-        private static Lazy<IScheduler> _threadPool = new Lazy<IScheduler>(() => Initialize("ThreadPool"));
+        private static readonly Lazy<IScheduler> _threadPool = new Lazy<IScheduler>(() => Initialize("ThreadPool"));
 
         /// <summary>
         /// Gets a scheduler that schedules work on the thread pool.
@@ -68,7 +68,7 @@ namespace System.Reactive.Concurrency
         [Obsolete(Constants_Core.OBSOLETE_SCHEDULER_THREADPOOL)]
         public static IScheduler ThreadPool => _threadPool.Value;
 
-        private static Lazy<IScheduler> _newThread = new Lazy<IScheduler>(() => Initialize("NewThread"));
+        private static readonly Lazy<IScheduler> _newThread = new Lazy<IScheduler>(() => Initialize("NewThread"));
 
         /// <summary>
         /// Gets a scheduler that schedules work on a new thread using default thread creation options.
@@ -76,7 +76,7 @@ namespace System.Reactive.Concurrency
         [Obsolete(Constants_Core.OBSOLETE_SCHEDULER_NEWTHREAD)]
         public static IScheduler NewThread => _newThread.Value;
 
-        private static Lazy<IScheduler> _taskPool = new Lazy<IScheduler>(() => Initialize("TaskPool"));
+        private static readonly Lazy<IScheduler> _taskPool = new Lazy<IScheduler>(() => Initialize("TaskPool"));
 
         /// <summary>
         /// Gets a scheduler that schedules work on Task Parallel Library (TPL) task pool using the default TaskScheduler.

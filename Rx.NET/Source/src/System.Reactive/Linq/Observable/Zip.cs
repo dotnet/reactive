@@ -85,7 +85,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     private readonly _ _parent;
                     private SecondObserver _other;
-                    private Queue<TFirst> _queue;
+                    private readonly Queue<TFirst> _queue;
 
                     public FirstObserver(_ parent)
                     {
@@ -168,7 +168,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     private readonly _ _parent;
                     private FirstObserver _other;
-                    private Queue<TSecond> _queue;
+                    private readonly Queue<TSecond> _queue;
 
                     public SecondObserver(_ parent)
                     {

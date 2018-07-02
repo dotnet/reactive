@@ -28,7 +28,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Stopwatch for timing free of absolute time dependencies.
         /// </summary>
-        private IStopwatch _stopwatch;
+        private readonly IStopwatch _stopwatch;
 
         /// <summary>
         /// Thread used by the event loop to run work items on. No work should be run on any other thread.

@@ -26,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class _ : IdentitySink<TSource>
         {
             private readonly Func<TSource, TKey> _keySelector;
-            private HashSet<TKey> _hashSet;
+            private readonly HashSet<TKey> _hashSet;
 
             public _(Distinct<TSource, TKey> parent, IObserver<TSource> observer)
                 : base(observer)
