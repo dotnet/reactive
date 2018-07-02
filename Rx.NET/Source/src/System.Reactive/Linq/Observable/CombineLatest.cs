@@ -236,7 +236,7 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly bool[] _hasValue;
         private readonly bool[] _isDone;
 
-        public CombineLatestSink(int arity, IObserver<TResult> observer)
+        protected CombineLatestSink(int arity, IObserver<TResult> observer)
             : base(observer)
         {
             _gate = new object();

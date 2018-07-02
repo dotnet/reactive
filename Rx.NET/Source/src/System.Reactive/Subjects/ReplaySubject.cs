@@ -229,7 +229,7 @@ namespace System.Reactive.Subjects
             private Exception _error;
             private bool _isDisposed;
 
-            public ReplayBase()
+            protected ReplayBase()
             {
                 _observers = ImmutableList<IScheduledObserver<T>>.Empty;
 

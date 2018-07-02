@@ -177,7 +177,7 @@ namespace System.Reactive.Concurrency
 
             protected readonly CompositeDisposable group;
 
-            public InvokeRecBaseState(IScheduler scheduler)
+            protected InvokeRecBaseState(IScheduler scheduler)
             {
                 this.scheduler = scheduler;
                 group = new CompositeDisposable();

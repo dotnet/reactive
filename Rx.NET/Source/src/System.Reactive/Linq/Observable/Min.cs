@@ -25,7 +25,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             protected readonly IComparer<TSource> _comparer;
 
-            public _(IComparer<TSource> comparer, IObserver<TSource> observer)
+            protected _(IComparer<TSource> comparer, IObserver<TSource> observer)
                 : base(observer)
             {
                 _comparer = comparer;

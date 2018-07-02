@@ -10,7 +10,7 @@ namespace System.Reactive
 {
     internal abstract class TailRecursiveSink<TSource> : IdentitySink<TSource>
     {
-        public TailRecursiveSink(IObserver<TSource> observer)
+        protected TailRecursiveSink(IObserver<TSource> observer)
             : base(observer)
         {
         }

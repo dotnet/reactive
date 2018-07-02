@@ -390,7 +390,7 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly ICollection[] _queues;
         private readonly bool[] _isDone;
 
-        public ZipSink(int arity, IObserver<TResult> observer)
+        protected ZipSink(int arity, IObserver<TResult> observer)
             : base(observer)
         {
             _gate = new object();

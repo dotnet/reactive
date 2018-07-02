@@ -11,13 +11,13 @@ namespace System.Reactive.Concurrency
         protected readonly IScheduler _scheduler;
         private readonly ConditionalWeakTable<IScheduler, IScheduler> _cache;
 
-        public SchedulerWrapper(IScheduler scheduler)
+        protected SchedulerWrapper(IScheduler scheduler)
         {
             _scheduler = scheduler;
             _cache = new ConditionalWeakTable<IScheduler, IScheduler>();
         }
 
-        public SchedulerWrapper(IScheduler scheduler, ConditionalWeakTable<IScheduler, IScheduler> cache)
+        protected SchedulerWrapper(IScheduler scheduler, ConditionalWeakTable<IScheduler, IScheduler> cache)
         {
             _scheduler = scheduler;
             _cache = cache;
