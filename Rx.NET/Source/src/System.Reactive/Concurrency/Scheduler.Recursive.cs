@@ -236,7 +236,7 @@ namespace System.Reactive.Concurrency
 
                 Group.Add(sad);
                 sad.Disposable = Scheduler.ScheduleAction((state, sad, @this: this), time, nextState => {
-                    nextState.@this.group.Remove(nextState.sad);
+                    nextState.@this.Group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
                 });
             }
@@ -264,7 +264,7 @@ namespace System.Reactive.Concurrency
 
                 Group.Add(sad);
                 sad.Disposable = Scheduler.ScheduleAction((state, sad, @this: this), dtOffset, nextState => {
-                    nextState.@this.group.Remove(nextState.sad);
+                    nextState.@this.Group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
                 });
             }
