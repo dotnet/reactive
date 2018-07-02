@@ -299,7 +299,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        value.ContinueWith((t, @thisObject) => ((_)@thisObject).OnCompletedTask(t), this);
+                        value.ContinueWith((t, thisObject) => ((_)thisObject).OnCompletedTask(t), this);
                     }
                 }
 
