@@ -331,7 +331,7 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<InvalidOperationException>(() => scheduler3.Start());
 
-            var xss = Observable.Create<int>(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Retry(3);
+            var xss = Observable.Create(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Retry(3);
 
             ReactiveAssert.Throws<InvalidOperationException>(() => xss.Subscribe());
         }

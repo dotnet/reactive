@@ -46,7 +46,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherObservable.SubscribeOnDispatcher<int>(default(IObservable<int>)));
 #endif
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(default, new SynchronizationContext()));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn<int>(someObservable, default(SynchronizationContext)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SubscribeOn(someObservable, default(SynchronizationContext)));
         }
 
 #if HAS_WINFORMS

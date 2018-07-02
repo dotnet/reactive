@@ -22,7 +22,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Synchronize<int>(default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Synchronize<int>(default, new object()));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Synchronize<int>(someObservable, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Synchronize(someObservable, null));
         }
 
 #if !NO_THREAD

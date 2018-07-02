@@ -4,7 +4,6 @@
 
 #if !NO_REMOTING
 using System;
-using System.IO;
 using System.Reactive.Concurrency;
 using System.Reactive.PlatformServices;
 using System.Runtime.CompilerServices;

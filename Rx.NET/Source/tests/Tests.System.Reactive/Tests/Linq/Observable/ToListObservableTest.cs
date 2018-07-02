@@ -68,7 +68,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => { var t = s.Value; });
 
             res.Messages.AssertEqual(
-                OnError<Object>(600, ex)
+                OnError<object>(600, ex)
             );
         }
 
@@ -93,7 +93,7 @@ namespace ReactiveTests.Tests
             s.AssertEqual(1, 2, 3);
 
             res.Messages.AssertEqual(
-                OnCompleted<Object>(600)
+                OnCompleted<object>(600)
             );
 
             Assert.Equal(3, s.Value);

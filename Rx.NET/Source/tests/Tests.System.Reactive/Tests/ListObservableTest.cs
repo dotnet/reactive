@@ -355,7 +355,7 @@ namespace ReactiveTests.Tests
         {
             var s = new TestScheduler();
 
-            var xs = s.CreateHotObservable<int>(
+            var xs = s.CreateHotObservable(
                 OnNext(300, 1)
             );
 
@@ -372,7 +372,7 @@ namespace ReactiveTests.Tests
 
             var ex = new Exception();
 
-            var xs = s.CreateHotObservable<int>(
+            var xs = s.CreateHotObservable(
                 OnNext(300, 1),
                 OnError<int>(400, ex)
             );
@@ -380,7 +380,7 @@ namespace ReactiveTests.Tests
             var results = s.Start(() => new ListObservable<int>(xs));
 
             results.Messages.AssertEqual(
-                OnError<Object>(400, ex)
+                OnError<object>(400, ex)
             );
         }
 
@@ -389,7 +389,7 @@ namespace ReactiveTests.Tests
         {
             var s = new TestScheduler();
 
-            var xs = s.CreateHotObservable<int>(
+            var xs = s.CreateHotObservable(
                 OnNext(300, 1),
                 OnCompleted<int>(400)
             );
@@ -397,7 +397,7 @@ namespace ReactiveTests.Tests
             var results = s.Start(() => new ListObservable<int>(xs));
 
             results.Messages.AssertEqual(
-                OnCompleted<Object>(400)
+                OnCompleted<object>(400)
             );
         }
 
@@ -406,7 +406,7 @@ namespace ReactiveTests.Tests
         {
             var s = new TestScheduler();
 
-            var xs = s.CreateHotObservable<int>(
+            var xs = s.CreateHotObservable(
                 OnNext(300, 1),
                 OnCompleted<int>(1100)
             );
@@ -422,7 +422,7 @@ namespace ReactiveTests.Tests
         {
             var s = new TestScheduler();
 
-            var xs = s.CreateHotObservable<int>(
+            var xs = s.CreateHotObservable(
                 OnNext(300, 1),
                 OnCompleted<int>(400)
             );

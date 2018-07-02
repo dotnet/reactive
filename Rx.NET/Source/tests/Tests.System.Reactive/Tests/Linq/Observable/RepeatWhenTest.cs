@@ -59,7 +59,7 @@ namespace ReactiveTests.Tests
             var ex = new InvalidOperationException();
 
             var res = scheduler.Start(() =>
-                xs.RepeatWhen<int, object>(v => v.Select<object, object>(w => throw ex))
+                xs.RepeatWhen(v => v.Select<object, object>(w => throw ex))
             );
 
             res.Messages.AssertEqual(
@@ -83,7 +83,7 @@ namespace ReactiveTests.Tests
             var ex = new InvalidOperationException();
 
             var res = scheduler.Start(() =>
-                xs.RepeatWhen<int, object>(v => v.Take(1).Skip(1))
+                xs.RepeatWhen(v => v.Take(1).Skip(1))
             );
 
             res.Messages.AssertEqual(
@@ -289,7 +289,7 @@ namespace ReactiveTests.Tests
 
             scheduler3.Start();
 
-            var xss = Observable.Create<int>(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).RepeatWhen(v => v);
+            var xss = Observable.Create(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).RepeatWhen(v => v);
 
             ReactiveAssert.Throws<InvalidOperationException>(() => xss.Subscribe());
         }
@@ -473,7 +473,7 @@ namespace ReactiveTests.Tests
 
             scheduler3.Start();
 
-            var xss = Observable.Create<int>(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).RepeatWhen(v =>
+            var xss = Observable.Create(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).RepeatWhen(v =>
             {
                 var count = 0;
                 return v.TakeWhile(w => ++count < 3);

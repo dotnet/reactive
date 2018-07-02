@@ -140,7 +140,7 @@ namespace System.Reactive.Linq.ObservableImpl
                                 {
                                     var cancelable = (SingleAssignmentDisposable)Volatile.Read(ref closureParent._serial);
 
-                                    cancelable.Disposable = closureParent._scheduler.Schedule((cancelable, closureParent), closureParent._disconnectTime, (self, tuple2) =>
+                                    cancelable.Disposable = closureParent._scheduler.ScheduleAction((cancelable, closureParent), closureParent._disconnectTime, tuple2 =>
                                     {
                                         lock (tuple2.closureParent._gate)
                                         {
@@ -150,8 +150,6 @@ namespace System.Reactive.Linq.ObservableImpl
                                                 tuple2.closureParent._connectableSubscription = null;
                                             }
                                         }
-
-                                        return Disposable.Empty;
                                     });
                                 }
                             }

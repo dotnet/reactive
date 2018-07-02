@@ -10,17 +10,17 @@ namespace ReactiveTests
 {
     public class MockDisposable : List<long>, IDisposable
     {
-        private TestScheduler scheduler;
+        private TestScheduler _scheduler;
 
         public MockDisposable(TestScheduler scheduler)
         {
-            this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
+            this._scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             Add(scheduler.Clock);
         }
 
         public void Dispose()
         {
-            Add(scheduler.Clock);
+            Add(_scheduler.Clock);
         }
     }
 }

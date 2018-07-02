@@ -50,7 +50,7 @@ namespace System.Reactive
                 // exception thrown in OnNext to circle back to OnError, which looks like the
                 // sequence can't make up its mind.
                 //
-                CurrentThreadScheduler.Instance.Schedule(autoDetachObserver, ScheduledSubscribe);
+                CurrentThreadScheduler.Instance.ScheduleAction(autoDetachObserver, ScheduledSubscribe);
             }
             else
             {
@@ -79,7 +79,7 @@ namespace System.Reactive
             return autoDetachObserver;
         }
 
-        private IDisposable ScheduledSubscribe(IScheduler _, AutoDetachObserver<T> autoDetachObserver)
+        private void ScheduledSubscribe(AutoDetachObserver<T> autoDetachObserver)
         {
             try
             {
@@ -101,8 +101,6 @@ namespace System.Reactive
                     throw;
                 }
             }
-
-            return Disposable.Empty;
         }
 
         /// <summary>

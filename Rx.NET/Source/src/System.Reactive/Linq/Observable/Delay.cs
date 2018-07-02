@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
             protected readonly IObservable<TSource> _source;
             protected readonly IScheduler _scheduler;
 
-            public Base(IObservable<TSource> source, IScheduler scheduler)
+            protected Base(IObservable<TSource> source, IScheduler scheduler)
             {
                 _source = source;
                 _scheduler = scheduler;
@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected IStopwatch _watch;
                 protected IScheduler _scheduler;
 
-                public _(TParent parent, IObserver<TSource> observer)
+                protected _(TParent parent, IObserver<TSource> observer)
                     : base(observer)
                 {
                     _scheduler = parent._scheduler;
@@ -51,7 +51,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected readonly object _gate = new object();
                 protected IDisposable _cancelable;
 
-                public S(TParent parent, IObserver<TSource> observer)
+                protected S(TParent parent, IObserver<TSource> observer)
                     : base(parent, observer)
                 {
                 }
@@ -258,7 +258,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected IDisposable _cancelable;
                 private readonly SemaphoreSlim _evt = new SemaphoreSlim(0);
 
-                public L(TParent parent, IObserver<TSource> observer)
+                protected L(TParent parent, IObserver<TSource> observer)
                     : base(parent, observer)
                 {
                 }
@@ -396,7 +396,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         if (shouldWait)
                         {
                             var timer = new ManualResetEventSlim();
-                            _scheduler.Schedule(timer, waitTime, (_, slimTimer) => { slimTimer.Set(); return Disposable.Empty; });
+                            _scheduler.ScheduleAction(timer, waitTime, slimTimer => { slimTimer.Set(); });
 
                             try
                             {
@@ -455,10 +455,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _ready = false;
 
-                    Disposable.TrySetSingle(ref _cancelable, parent._scheduler.Schedule(this, parent._dueTime, (_, @this) => @this.Start()));
+                    Disposable.TrySetSingle(ref _cancelable, parent._scheduler.ScheduleAction(this, parent._dueTime, @this => @this.Start()));
                 }
 
-                private IDisposable Start()
+                private void Start()
                 {
                     var next = default(TimeSpan);
                     var shouldRun = false;
@@ -491,8 +491,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         Disposable.TrySetSerial(ref _cancelable, _scheduler.Schedule((Base<Absolute>.S)this, next, (@this, a) => DrainQueue(a)));
                     }
-
-                    return Disposable.Empty;
                 }
             }
 
@@ -508,10 +506,10 @@ namespace System.Reactive.Linq.ObservableImpl
                     // ScheduleDrain might have already set a newer disposable
                     // using TrySetSerial would cancel it, stopping the emission
                     // and hang the consumer
-                    Disposable.TrySetSingle(ref _cancelable, parent._scheduler.Schedule(this, parent._dueTime, (_, @this) => @this.Start()));
+                    Disposable.TrySetSingle(ref _cancelable, parent._scheduler.ScheduleAction(this, parent._dueTime, @this => @this.Start()));
                 }
 
-                private IDisposable Start()
+                private void Start()
                 {
                     lock (_gate)
                     {
@@ -528,8 +526,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     ScheduleDrain();
-
-                    return Disposable.Empty;
                 }
             }
         }
@@ -586,7 +582,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             protected readonly IObservable<TSource> _source;
 
-            public Base(IObservable<TSource> source)
+            protected Base(IObservable<TSource> source)
             {
                 _source = source;
             }
@@ -598,7 +594,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private readonly Func<TSource, IObservable<TDelay>> _delaySelector;
 
-                public _(Func<TSource, IObservable<TDelay>> delaySelector, IObserver<TSource> observer)
+                protected _(Func<TSource, IObservable<TDelay>> delaySelector, IObserver<TSource> observer)
                     : base(observer)
                 {
                     _delaySelector = delaySelector;

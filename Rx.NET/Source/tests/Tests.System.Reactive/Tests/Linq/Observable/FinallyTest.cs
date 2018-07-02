@@ -18,7 +18,7 @@ namespace ReactiveTests.Tests
             var someObservable = Observable.Empty<int>();
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Finally<int>(null, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Finally<int>(someObservable, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Finally(someObservable, null));
         }
 
         [Fact]

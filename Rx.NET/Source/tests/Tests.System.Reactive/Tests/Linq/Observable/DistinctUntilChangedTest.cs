@@ -19,13 +19,13 @@ namespace ReactiveTests.Tests
             var someObservable = Observable.Empty<int>();
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DistinctUntilChanged<int>(null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DistinctUntilChanged<int>(null, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DistinctUntilChanged<int>(someObservable, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DistinctUntilChanged(null, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DistinctUntilChanged(someObservable, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DistinctUntilChanged<int, int>(null, _ => _));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DistinctUntilChanged<int, int>(someObservable, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DistinctUntilChanged<int, int>(someObservable, _ => _, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DistinctUntilChanged(someObservable, _ => _, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DistinctUntilChanged<int, int>(null, _ => _, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DistinctUntilChanged<int, int>(someObservable, null, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.DistinctUntilChanged(someObservable, null, EqualityComparer<int>.Default));
         }
 
         [Fact]

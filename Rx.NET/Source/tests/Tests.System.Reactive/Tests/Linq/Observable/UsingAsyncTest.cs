@@ -29,9 +29,9 @@ namespace ReactiveTests.Tests
         {
             var done = new CountdownEvent(1);
 
-            var xs = Observable.Using<int, IDisposable>(
-                ct => Task.Factory.StartNew<IDisposable>(() => Disposable.Create(() => done.Signal())),
-                (_, ct) => Task.Factory.StartNew<IObservable<int>>(() => Observable.Return(42))
+            var xs = Observable.Using(
+                ct => Task.Factory.StartNew(() => Disposable.Create(() => done.Signal())),
+                (_, ct) => Task.Factory.StartNew(() => Observable.Return(42))
             );
 
             var res = xs.ToEnumerable().ToList();
@@ -52,8 +52,8 @@ namespace ReactiveTests.Tests
                 var e = new ManualResetEvent(false);
                 var x = new ManualResetEvent(false);
 
-                var xs = Observable.Using<int, IDisposable>(
-                    ct => Task.Factory.StartNew<IDisposable>(() =>
+                var xs = Observable.Using(
+                    ct => Task.Factory.StartNew(() =>
                     {
                         s.Set();
                         e.WaitOne();
@@ -68,7 +68,7 @@ namespace ReactiveTests.Tests
                     (_, ct) =>
                     {
                         called = true;
-                        return Task.Factory.StartNew<IObservable<int>>(() =>
+                        return Task.Factory.StartNew(() =>
                             Observable.Return(42)
                         );
                     }
@@ -100,8 +100,8 @@ namespace ReactiveTests.Tests
                 var e = new ManualResetEvent(false);
                 var x = new ManualResetEvent(false);
 
-                var xs = Observable.Using<int, IDisposable>(
-                    ct => Task.Factory.StartNew<IDisposable>(() =>
+                var xs = Observable.Using(
+                    ct => Task.Factory.StartNew(() =>
                         Disposable.Create(() =>
                         {
                             lock (gate)
@@ -110,7 +110,7 @@ namespace ReactiveTests.Tests
                             }
                         })
                     ),
-                    (_, ct) => Task.Factory.StartNew<IObservable<int>>(() =>
+                    (_, ct) => Task.Factory.StartNew(() =>
                     {
                         s.Set();
                         e.WaitOne();
@@ -120,7 +120,7 @@ namespace ReactiveTests.Tests
                         }
 
                         x.Set();
-                        return Observable.Defer<int>(() =>
+                        return Observable.Defer(() =>
                         {
                             called = true;
                             return Observable.Return(42);

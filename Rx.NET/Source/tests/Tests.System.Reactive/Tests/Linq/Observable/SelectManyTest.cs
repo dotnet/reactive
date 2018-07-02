@@ -416,7 +416,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SelectMany_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int>(DummyFunc<int, IObservable<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, IObservable<int>>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, IObservable<int>>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, IObservable<int>>.Instance).Subscribe(null));
         }
@@ -1003,7 +1003,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SelectManyWithIndex_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int>(DummyFunc<int, int, IObservable<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, int, IObservable<int>>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, IObservable<int>>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, IObservable<int>>.Instance).Subscribe(null));
         }
@@ -1622,11 +1622,11 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SelectMany_Enumerable_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int>(DummyFunc<int, IEnumerable<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, IEnumerable<int>>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, IEnumerable<int>>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, IEnumerable<int>>.Instance).Subscribe(null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int, int>(DummyFunc<int, IEnumerable<int>>.Instance, DummyFunc<int, int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, IEnumerable<int>>.Instance, DummyFunc<int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, IEnumerable<int>>)null, DummyFunc<int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, IEnumerable<int>>.Instance, (Func<int, int, int>)null));
         }
@@ -2063,18 +2063,18 @@ namespace ReactiveTests.Tests
 
         private class CurrentThrowsEnumerable<T> : IEnumerable<T>
         {
-            private IEnumerable<T> e;
-            private readonly Exception ex;
+            private IEnumerable<T> _e;
+            private readonly Exception _ex;
 
             public CurrentThrowsEnumerable(IEnumerable<T> e, Exception ex)
             {
-                this.e = e;
-                this.ex = ex;
+                _e = e;
+                _ex = ex;
             }
 
             public IEnumerator<T> GetEnumerator()
             {
-                return new Enumerator(e.GetEnumerator(), ex);
+                return new Enumerator(_e.GetEnumerator(), _ex);
             }
 
             System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -2084,23 +2084,23 @@ namespace ReactiveTests.Tests
 
             private class Enumerator : IEnumerator<T>
             {
-                private IEnumerator<T> e;
-                private readonly Exception ex;
+                private IEnumerator<T> _e;
+                private readonly Exception _ex;
 
                 public Enumerator(IEnumerator<T> e, Exception ex)
                 {
-                    this.e = e;
-                    this.ex = ex;
+                    _e = e;
+                    _ex = ex;
                 }
 
                 public T Current
                 {
-                    get { throw ex; }
+                    get { throw _ex; }
                 }
 
                 public void Dispose()
                 {
-                    e.Dispose();
+                    _e.Dispose();
                 }
 
                 object System.Collections.IEnumerator.Current
@@ -2110,12 +2110,12 @@ namespace ReactiveTests.Tests
 
                 public bool MoveNext()
                 {
-                    return e.MoveNext();
+                    return _e.MoveNext();
                 }
 
                 public void Reset()
                 {
-                    e.Reset();
+                    _e.Reset();
                 }
             }
         }
@@ -2178,18 +2178,18 @@ namespace ReactiveTests.Tests
 
         private class MoveNextThrowsEnumerable<T> : IEnumerable<T>
         {
-            private IEnumerable<T> e;
-            private readonly Exception ex;
+            private IEnumerable<T> _e;
+            private readonly Exception _ex;
 
             public MoveNextThrowsEnumerable(IEnumerable<T> e, Exception ex)
             {
-                this.e = e;
-                this.ex = ex;
+                _e = e;
+                _ex = ex;
             }
 
             public IEnumerator<T> GetEnumerator()
             {
-                return new Enumerator(e.GetEnumerator(), ex);
+                return new Enumerator(_e.GetEnumerator(), _ex);
             }
 
             System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -2199,23 +2199,23 @@ namespace ReactiveTests.Tests
 
             private class Enumerator : IEnumerator<T>
             {
-                private IEnumerator<T> e;
-                private readonly Exception ex;
+                private IEnumerator<T> _e;
+                private readonly Exception _ex;
 
                 public Enumerator(IEnumerator<T> e, Exception ex)
                 {
-                    this.e = e;
-                    this.ex = ex;
+                    _e = e;
+                    _ex = ex;
                 }
 
                 public T Current
                 {
-                    get { return e.Current; }
+                    get { return _e.Current; }
                 }
 
                 public void Dispose()
                 {
-                    e.Dispose();
+                    _e.Dispose();
                 }
 
                 object System.Collections.IEnumerator.Current
@@ -2225,12 +2225,12 @@ namespace ReactiveTests.Tests
 
                 public bool MoveNext()
                 {
-                    throw ex;
+                    throw _ex;
                 }
 
                 public void Reset()
                 {
-                    e.Reset();
+                    _e.Reset();
                 }
             }
         }
@@ -2322,11 +2322,11 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SelectManyWithIndex_Enumerable_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int>(DummyFunc<int, int, IEnumerable<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, int, IEnumerable<int>>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, IEnumerable<int>>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, IEnumerable<int>>.Instance).Subscribe(null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int, int>(DummyFunc<int, int, IEnumerable<int>>.Instance, DummyFunc<int, int, int, int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, int, IEnumerable<int>>.Instance, DummyFunc<int, int, int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, IEnumerable<int>>)null, DummyFunc<int, int, int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, IEnumerable<int>>.Instance, (Func<int, int, int, int, int>)null));
         }
@@ -2974,23 +2974,23 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SelectMany_QueryOperator_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int, int>(DummyFunc<int, IObservable<int>>.Instance, DummyFunc<int, int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, IObservable<int>>.Instance, DummyFunc<int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, IObservable<int>>)null, DummyFunc<int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, IObservable<int>>.Instance, ((Func<int, int, int>)null)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, IObservable<int>>.Instance, DummyFunc<int, int, int>.Instance).Subscribe(null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int, int>(DummyFunc<int, Task<int>>.Instance, DummyFunc<int, int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, Task<int>>.Instance, DummyFunc<int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, Task<int>>)null, DummyFunc<int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, Task<int>>.Instance, ((Func<int, int, int>)null)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int, int>(DummyFunc<int, CancellationToken, Task<int>>.Instance, DummyFunc<int, int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, CancellationToken, Task<int>>.Instance, DummyFunc<int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, CancellationToken, Task<int>>)null, DummyFunc<int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, CancellationToken, Task<int>>.Instance, ((Func<int, int, int>)null)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int>(DummyFunc<int, Task<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, Task<int>>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, Task<int>>)null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int>(DummyFunc<int, CancellationToken, Task<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, CancellationToken, Task<int>>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, CancellationToken, Task<int>>)null));
         }
 
@@ -3248,7 +3248,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SelectManyWithIndex_QueryOperator_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int, int>(DummyFunc<int, int, IObservable<int>>.Instance, DummyFunc<int, int, int, int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, int, IObservable<int>>.Instance, DummyFunc<int, int, int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, IObservable<int>>)null, DummyFunc<int, int, int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, IObservable<int>>.Instance, ((Func<int, int, int, int, int>)null)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, IObservable<int>>.Instance, DummyFunc<int, int, int, int, int>.Instance).Subscribe(null));
@@ -5960,17 +5960,17 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SelectManyWithIndex_Task_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int>(DummyFunc<int, int, Task<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, int, Task<int>>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, Task<int>>)null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int>(DummyFunc<int, int, CancellationToken, Task<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, int, CancellationToken, Task<int>>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, CancellationToken, Task<int>>)null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int, int>(DummyFunc<int, int, Task<int>>.Instance, DummyFunc<int, int, int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, int, Task<int>>.Instance, DummyFunc<int, int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, Task<int>>)null, DummyFunc<int, int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, Task<int>>.Instance, ((Func<int, int, int, int>)null)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int, int>(DummyFunc<int, int, CancellationToken, Task<int>>.Instance, DummyFunc<int, int, int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany(DummyFunc<int, int, CancellationToken, Task<int>>.Instance, DummyFunc<int, int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, CancellationToken, Task<int>>)null, DummyFunc<int, int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, CancellationToken, Task<int>>.Instance, ((Func<int, int, int, int>)null)));
         }

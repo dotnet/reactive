@@ -28,10 +28,10 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip<int, int, int>(someObservable, someObservable, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip<int, int, int>(null, someObservable, (_, __) => 0));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip<int, int, int>(someObservable, default(IObservable<int>), (_, __) => 0));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(someObservable, default(IObservable<int>), (_, __) => 0));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip<int, int, int>(someObservable, someEnumerable, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip<int, int, int>(null, someEnumerable, (_, __) => 0));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip<int, int, int>(someObservable, default(IEnumerable<int>), (_, __) => 0));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(someObservable, default(IEnumerable<int>), (_, __) => 0));
         }
 
         [Fact]
@@ -2831,7 +2831,7 @@ namespace ReactiveTests.Tests
 
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 42),
                 OnNext(220, 43),
                 OnCompleted<int>(230)
@@ -2868,7 +2868,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 10),
+                OnNext(210, 10),
                 OnCompleted<int>(220)
             );
 
@@ -2899,7 +2899,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 15),
+                OnNext(210, 15),
                 OnCompleted<int>(230)
             );
 
@@ -2931,7 +2931,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 20),
+                OnNext(210, 20),
                 OnCompleted<int>(240)
             );
 
@@ -2964,7 +2964,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 25),
+                OnNext(210, 25),
                 OnCompleted<int>(250)
             );
 
@@ -2998,7 +2998,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 30),
+                OnNext(210, 30),
                 OnCompleted<int>(260)
             );
 
@@ -3033,7 +3033,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 35),
+                OnNext(210, 35),
                 OnCompleted<int>(270)
             );
 
@@ -3069,7 +3069,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 40),
+                OnNext(210, 40),
                 OnCompleted<int>(280)
             );
 
@@ -3106,7 +3106,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 45),
+                OnNext(210, 45),
                 OnCompleted<int>(290)
             );
 
@@ -3144,7 +3144,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 50),
+                OnNext(210, 50),
                 OnCompleted<int>(300)
             );
 
@@ -3183,7 +3183,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 55),
+                OnNext(210, 55),
                 OnCompleted<int>(310)
             );
 
@@ -3223,7 +3223,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 60),
+                OnNext(210, 60),
                 OnCompleted<int>(320)
             );
 
@@ -3264,7 +3264,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 65),
+                OnNext(210, 65),
                 OnCompleted<int>(330)
             );
 
@@ -3306,7 +3306,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 70),
+                OnNext(210, 70),
                 OnCompleted<int>(340)
             );
 
@@ -3349,7 +3349,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 75),
+                OnNext(210, 75),
                 OnCompleted<int>(350)
             );
 
@@ -3393,7 +3393,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(210, 80),
+                OnNext(210, 80),
                 OnCompleted<int>(360)
             );
 
@@ -4201,8 +4201,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(230, new[] { 1, 2, 3 }.Sum()),
-                OnNext<int>(260, new[] { 4, 5, 6 }.Sum()),
+                OnNext(230, new[] { 1, 2, 3 }.Sum()),
+                OnNext(260, new[] { 4, 5, 6 }.Sum()),
                 OnCompleted<int>(420)
             );
 
@@ -4265,8 +4265,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(230, new[] { 1, 2, 3 }.Sum()),
-                OnNext<int>(260, new[] { 4, 5, 6 }.Sum()),
+                OnNext(230, new[] { 1, 2, 3 }.Sum()),
+                OnNext(260, new[] { 4, 5, 6 }.Sum()),
                 OnCompleted<int>(310)
             );
 
@@ -4332,7 +4332,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(230, new[] { 1, 2, 3 }.Sum()),
+                OnNext(230, new[] { 1, 2, 3 }.Sum()),
                 OnError<int>(250, ex)
             );
 

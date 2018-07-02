@@ -122,7 +122,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _gate = new object();
 
-                    Disposable.SetSingle(ref _task, parent._scheduler.Schedule(this, parent._duration, (_, state) => state.Tick()));
+                    Disposable.SetSingle(ref _task, parent._scheduler.ScheduleAction(this, parent._duration, state => state.Tick()));
                     Run(parent._source);
                 }
 
@@ -135,13 +135,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     base.Dispose(disposing);
                 }
 
-                private IDisposable Tick()
+                private void Tick()
                 {
                     lock (_gate)
                     {
                         ForwardOnCompleted();
                     }
-                    return Disposable.Empty;
                 }
 
                 public override void OnNext(TSource value)

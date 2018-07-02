@@ -428,7 +428,7 @@ namespace System.Reactive.Concurrency
             private readonly SingleAssignmentDisposable _disposable;
             private int _hasRun;
 
-            public WorkItem(LocalScheduler scheduler, DateTimeOffset dueTime)
+            protected WorkItem(LocalScheduler scheduler, DateTimeOffset dueTime)
             {
                 Scheduler = scheduler;
                 DueTime = dueTime;

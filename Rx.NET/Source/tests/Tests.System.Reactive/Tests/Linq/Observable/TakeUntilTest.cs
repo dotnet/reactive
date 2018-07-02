@@ -416,7 +416,7 @@ namespace ReactiveTests.Tests
 
             var r = scheduler.CreateHotObservable(
                 OnNext(150, 1),
-                OnNext<int>(240, 2)
+                OnNext(240, 2)
             );
 
             var res = scheduler.Start(() =>
@@ -472,7 +472,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnCompleted<int>(230)
@@ -496,7 +496,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3),
@@ -523,7 +523,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnCompleted<int>(230)
@@ -551,7 +551,7 @@ namespace ReactiveTests.Tests
 
             var ex = new Exception();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnError<int>(210, ex)
             );
 
@@ -598,7 +598,7 @@ namespace ReactiveTests.Tests
 
             var ex = new Exception();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3),
@@ -631,7 +631,7 @@ namespace ReactiveTests.Tests
 
             var ex = new Exception();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3),
@@ -685,7 +685,7 @@ namespace ReactiveTests.Tests
         public void TakeUntil_Predicate_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TakeUntil<int>(null, v => true));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TakeUntil<int>(DummyObservable<int>.Instance, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.TakeUntil(DummyObservable<int>.Instance, null));
         }
 
         [Fact]

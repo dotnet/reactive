@@ -30,7 +30,7 @@ namespace Microsoft.Reactive.Testing
                 dueTime = Clock + 1;
             }
 
-            return base.ScheduleAbsolute<TState>(state, dueTime, action);
+            return base.ScheduleAbsolute(state, dueTime, action);
         }
 
         /// <summary>

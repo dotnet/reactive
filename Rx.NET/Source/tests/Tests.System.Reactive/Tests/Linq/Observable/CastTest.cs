@@ -26,7 +26,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<object>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext<object>(210, new B(0)),
                 OnNext<object>(220, new D(1)),
                 OnNext<object>(240, new B(2)),
@@ -39,9 +39,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<B>(210, new B(0)),
+                OnNext(210, new B(0)),
                 OnNext<B>(220, new D(1)),
-                OnNext<B>(240, new B(2)),
+                OnNext(240, new B(2)),
                 OnNext<B>(270, new D(3)),
                 OnCompleted<B>(300)
             );
@@ -58,7 +58,7 @@ namespace ReactiveTests.Tests
 
             var ex = new Exception();
 
-            var xs = scheduler.CreateHotObservable<object>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext<object>(210, new B(0)),
                 OnNext<object>(220, new D(1)),
                 OnNext<object>(240, new B(2)),
@@ -71,9 +71,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<B>(210, new B(0)),
+                OnNext(210, new B(0)),
                 OnNext<B>(220, new D(1)),
-                OnNext<B>(240, new B(2)),
+                OnNext(240, new B(2)),
                 OnNext<B>(270, new D(3)),
                 OnError<B>(300, ex)
             );
@@ -88,7 +88,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<object>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext<object>(210, new B(0)),
                 OnNext<object>(220, new D(1)),
                 OnNext<object>(240, new B(2)),
@@ -102,9 +102,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<B>(210, new B(0)),
+                OnNext(210, new B(0)),
                 OnNext<B>(220, new D(1)),
-                OnNext<B>(240, new B(2))
+                OnNext(240, new B(2))
             );
 
             xs.Subscriptions.AssertEqual(
@@ -117,7 +117,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<object>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext<object>(210, new B(0)),
                 OnNext<object>(220, new D(1)),
                 OnNext<object>(240, new B(2)),
@@ -131,9 +131,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<B>(210, new B(0)),
+                OnNext(210, new B(0)),
                 OnNext<B>(220, new D(1)),
-                OnNext<B>(240, new B(2)),
+                OnNext(240, new B(2)),
                 OnError<B>(250, e => e is InvalidCastException)
             );
 
@@ -149,7 +149,7 @@ namespace ReactiveTests.Tests
 
         public A(int id)
         {
-            this._id = id;
+            _id = id;
         }
 
         public bool Equals(A other)
@@ -203,7 +203,7 @@ namespace ReactiveTests.Tests
 
         public E(int id)
         {
-            this._id = id;
+            _id = id;
         }
 
         public bool Equals(E other)

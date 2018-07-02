@@ -14,8 +14,8 @@ namespace Tests.System.Reactive.Tests
     /// </summary>
     public class LicenseHeaderTest
     {
-        private static readonly bool fixHeaders = true;
-        private static readonly string[] lines = {
+        private static readonly bool FixHeaders = true;
+        private static readonly string[] Lines = {
             "// Licensed to the .NET Foundation under one or more agreements.",
             "// The .NET Foundation licenses this file to you under the Apache 2.0 License.",
             "// See the LICENSE file in the project root for more information.",
@@ -64,17 +64,17 @@ namespace Tests.System.Reactive.Tests
                 // analysis
                 var content = File.ReadAllText(file);
 
-                if (!content.StartsWith(lines[0]))
+                if (!content.StartsWith(Lines[0]))
                 {
                     count++;
                     error.Append(file).Append("\r\n");
 
-                    if (fixHeaders)
+                    if (FixHeaders)
                     {
                         var newContent = new StringBuilder();
                         var separator = content.Contains("\r\n") ? "\r\n" : "\n";
 
-                        foreach (var s in lines)
+                        foreach (var s in Lines)
                         {
                             newContent.Append(s).Append(separator);
                         }

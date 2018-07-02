@@ -11,7 +11,7 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly IObservable<TSource> _source;
         private readonly IScheduler _scheduler;
 
-        public DelaySubscription(IObservable<TSource> source, IScheduler scheduler)
+        protected DelaySubscription(IObservable<TSource> source, IScheduler scheduler)
         {
             _source = source;
             _scheduler = scheduler;
@@ -56,12 +56,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(IObservable<TSource> source, IScheduler scheduler, DateTimeOffset dueTime)
             {
-                SetUpstream(scheduler.Schedule((@this: this, source), dueTime, (self, tuple) => tuple.source.SubscribeSafe(tuple.@this)));
+                SetUpstream(scheduler.ScheduleAction((@this: this, source), dueTime, tuple => tuple.source.SubscribeSafe(tuple.@this)));
             }
 
             public void Run(IObservable<TSource> source, IScheduler scheduler, TimeSpan dueTime)
             {
-                SetUpstream(scheduler.Schedule((@this: this, source), dueTime, (self, tuple) => tuple.source.SubscribeSafe(tuple.@this)));
+                SetUpstream(scheduler.ScheduleAction((@this: this, source), dueTime, tuple => tuple.source.SubscribeSafe(tuple.@this)));
             }
         }
     }

@@ -94,7 +94,7 @@ namespace ReactiveTests.Tests
                         _d = d;
                         createInvoked++;
                         xs = scheduler.CreateColdObservable(
-                            OnNext<long>(100, scheduler.Clock),
+                            OnNext(100, scheduler.Clock),
                             OnCompleted<long>(200));
                         return xs;
                     }
@@ -146,7 +146,7 @@ namespace ReactiveTests.Tests
                         _d = d;
                         createInvoked++;
                         xs = scheduler.CreateColdObservable(
-                            OnNext<long>(100, scheduler.Clock),
+                            OnNext(100, scheduler.Clock),
                             OnError<long>(200, ex));
                         return xs;
                     }
@@ -197,8 +197,8 @@ namespace ReactiveTests.Tests
                         _d = d;
                         createInvoked++;
                         xs = scheduler.CreateColdObservable(
-                            OnNext<long>(100, scheduler.Clock),
-                            OnNext<long>(1000, scheduler.Clock + 1));
+                            OnNext(100, scheduler.Clock),
+                            OnNext(1000, scheduler.Clock + 1));
                         return xs;
                     }
                 )

@@ -19,9 +19,9 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Where_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Where<int>(DummyFunc<int, bool>.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Where<int>((Func<int, bool>)null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Where<int>(DummyFunc<int, bool>.Instance).Subscribe(null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Where(DummyFunc<int, bool>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Where((Func<int, bool>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Where(DummyFunc<int, bool>.Instance).Subscribe(null));
         }
 
         private static bool IsPrime(int i)
@@ -465,9 +465,9 @@ namespace ReactiveTests.Tests
         [Fact]
         public void WhereIndex_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Where<int>(DummyFunc<int, int, bool>.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Where<int>((Func<int, int, bool>)null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Where<int>(DummyFunc<int, int, bool>.Instance).Subscribe(null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Where(DummyFunc<int, int, bool>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Where((Func<int, int, bool>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Where(DummyFunc<int, int, bool>.Instance).Subscribe(null));
         }
 
         [Fact]

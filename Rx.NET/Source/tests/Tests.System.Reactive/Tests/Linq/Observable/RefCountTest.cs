@@ -24,7 +24,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3),
@@ -112,7 +112,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3),
@@ -188,7 +188,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3),
@@ -284,7 +284,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3),

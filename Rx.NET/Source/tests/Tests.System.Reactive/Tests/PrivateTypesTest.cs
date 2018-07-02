@@ -113,12 +113,12 @@ namespace ReactiveTests.Tests
             {
                 var value = 42;
                 var left = (Either<int, string>.Left)Either<int, string>.CreateLeft(value);
-                Assert.Equal(left.Switch<int>(l => l, r => r.Length), value);
+                Assert.Equal(left.Switch(l => l, r => r.Length), value);
             }
             {
                 var value = "42";
                 var right = (Either<int, string>.Right)Either<int, string>.CreateRight(value);
-                Assert.Equal(right.Switch<int>(l => l, r => r.Length), value.Length);
+                Assert.Equal(right.Switch(l => l, r => r.Length), value.Length);
             }
         }
 
@@ -170,7 +170,7 @@ namespace ReactiveTests.Tests
             var tpe = typeof(Observable).GetTypeInfo().Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
             var mth = tpe.GetMethod(nameof(CreateLeft));
             var res = mth.Invoke(null, new object[] { value });
-            return new Either<TLeft, TRight>.Left(res);
+            return new Left(res);
         }
 
         public static Either<TLeft, TRight> CreateRight(TRight value)
@@ -178,7 +178,7 @@ namespace ReactiveTests.Tests
             var tpe = typeof(Observable).GetTypeInfo().Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
             var mth = tpe.GetMethod(nameof(CreateRight));
             var res = mth.Invoke(null, new object[] { value });
-            return new Either<TLeft, TRight>.Right(res);
+            return new Right(res);
         }
 
         public TResult Switch<TResult>(Func<TLeft, TResult> caseLeft, Func<TRight, TResult> caseRight)

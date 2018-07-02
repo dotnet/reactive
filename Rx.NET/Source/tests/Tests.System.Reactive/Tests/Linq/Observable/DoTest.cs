@@ -18,20 +18,20 @@ namespace ReactiveTests.Tests
         {
             var someObservable = Observable.Empty<int>();
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, (Action<int>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, (Action<int>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(null, _ => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, x => { }, (Action)null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, null, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, x => { }, (Action)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, null, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(null, x => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, x => { }, (Action<Exception>)null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, null, (Exception _) => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, x => { }, (Action<Exception>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, null, (Exception _) => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(null, x => { }, (Exception _) => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, x => { }, (Exception _) => { }, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, x => { }, null, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, null, (Exception _) => { }, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, x => { }, (Exception _) => { }, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, x => { }, null, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, null, (Exception _) => { }, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(null, x => { }, (Exception _) => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(null, Observer.Create<int>(i => { })));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do<int>(someObservable, default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(null, Observer.Create<int>(i => { })));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Do(someObservable, default(IObserver<int>)));
         }
 
         [Fact]

@@ -25,7 +25,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void DeferAsync_Simple()
         {
-            var xs = Observable.Defer<int>(() => Task.Factory.StartNew(() => Observable.Return(42)));
+            var xs = Observable.Defer(() => Task.Factory.StartNew(() => Observable.Return(42)));
 
             var res = xs.ToEnumerable().ToList();
 
@@ -35,7 +35,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void DeferAsync_WithCancel_Simple()
         {
-            var xs = Observable.DeferAsync<int>(ct => Task.Factory.StartNew(() => Observable.Return(42)));
+            var xs = Observable.DeferAsync(ct => Task.Factory.StartNew(() => Observable.Return(42)));
 
             var res = xs.ToEnumerable().ToList();
 
@@ -51,7 +51,7 @@ namespace ReactiveTests.Tests
                 var e = new ManualResetEvent(false);
                 var called = false;
 
-                var xs = Observable.DeferAsync<int>(ct => Task.Factory.StartNew(() =>
+                var xs = Observable.DeferAsync(ct => Task.Factory.StartNew(() =>
                 {
                     e.Set();
 

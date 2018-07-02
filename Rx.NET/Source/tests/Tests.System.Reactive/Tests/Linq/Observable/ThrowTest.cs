@@ -19,11 +19,11 @@ namespace ReactiveTests.Tests
         public void Throw_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Throw<int>(null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Throw<int>(null, 42));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Throw(null, 42));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Throw<int>(new Exception(), null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Throw<int>(new Exception(), null, 42));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Throw(new Exception(), null, 42));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Throw<int>(null, DummyScheduler.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Throw<int>(null, DummyScheduler.Instance, 42));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Throw(null, DummyScheduler.Instance, 42));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Throw<int>(new Exception(), DummyScheduler.Instance).Subscribe(null));
         }
 
@@ -84,7 +84,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
 
             var res = scheduler.Start(() =>
-                Observable.Throw<int>(ex, scheduler, 42)
+                Observable.Throw(ex, scheduler, 42)
             );
 
             res.Messages.AssertEqual(
@@ -101,7 +101,7 @@ namespace ReactiveTests.Tests
 
             var res = default(Exception);
 
-            Observable.Throw<int>(ex, 42).Subscribe(
+            Observable.Throw(ex, 42).Subscribe(
                 _ => { Assert.True(false); },
                 err => { res = err; e.Set(); },
                 () => { Assert.True(false); }

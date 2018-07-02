@@ -17,13 +17,13 @@ namespace ReactiveTests.Tests
 
     public class TaskObservableExtensionsTest : ReactiveTest
     {
-        private readonly Task<int> doneTask;
+        private readonly Task<int> _doneTask;
 
         public TaskObservableExtensionsTest()
         {
             var tcs = new TaskCompletionSource<int>();
             tcs.SetResult(42);
-            doneTask = tcs.Task;
+            _doneTask = tcs.Task;
         }
 
         #region ToObservable
@@ -36,9 +36,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task<int>)null));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task<int>)null, s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(doneTask, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(_doneTask, default));
 
-            var tcs = new System.Threading.Tasks.TaskCompletionSource<int>();
+            var tcs = new TaskCompletionSource<int>();
             var task = tcs.Task;
             ReactiveAssert.Throws<ArgumentNullException>(() => task.ToObservable().Subscribe(null));
         }
@@ -396,10 +396,10 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(null));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(null, s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)doneTask, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)_doneTask, default));
 
-            var tcs = new System.Threading.Tasks.TaskCompletionSource<int>();
-            System.Threading.Tasks.Task task = tcs.Task;
+            var tcs = new TaskCompletionSource<int>();
+            Task task = tcs.Task;
             ReactiveAssert.Throws<ArgumentNullException>(() => task.ToObservable().Subscribe(null));
         }
 

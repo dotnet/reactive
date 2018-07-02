@@ -177,7 +177,7 @@ namespace System.Reactive.Concurrency
 
             protected readonly CompositeDisposable Group;
 
-            public InvokeRecBaseState(IScheduler scheduler)
+            protected InvokeRecBaseState(IScheduler scheduler)
             {
                 Scheduler = scheduler;
                 Group = new CompositeDisposable();
@@ -204,12 +204,12 @@ namespace System.Reactive.Concurrency
             internal void InvokeNext(TState state)
             {
                 var sad = new SingleAssignmentDisposable();
+
                 Group.Add(sad);
-                sad.Disposable = Scheduler.Schedule((state, sad, @this: this), (_, nextState) =>
+                sad.Disposable = scheduler.ScheduleAction((state, sad, @this: this), nextState =>
                 {
                     nextState.@this.Group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
-                    return Disposable.Empty;
                 });
             }
 
@@ -233,12 +233,11 @@ namespace System.Reactive.Concurrency
             internal void InvokeNext(TState state, TimeSpan time)
             {
                 var sad = new SingleAssignmentDisposable();
+
                 Group.Add(sad);
-                sad.Disposable = Scheduler.Schedule((state, sad, @this: this), time, (_, nextState) =>
-                {
-                    nextState.@this.Group.Remove(nextState.sad);
+                sad.Disposable = scheduler.ScheduleAction((state, sad, @this: this), time, nextState => {
+                    nextState.@this.group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
-                    return Disposable.Empty;
                 });
             }
 
@@ -262,12 +261,11 @@ namespace System.Reactive.Concurrency
             internal void InvokeNext(TState state, DateTimeOffset dtOffset)
             {
                 var sad = new SingleAssignmentDisposable();
+
                 Group.Add(sad);
-                sad.Disposable = Scheduler.Schedule((state, sad, @this: this), dtOffset, (_, nextState) =>
-                {
-                    nextState.@this.Group.Remove(nextState.sad);
+                sad.Disposable = scheduler.ScheduleAction((state, sad, @this: this), dtOffset, nextState => {
+                    nextState.@this.group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
-                    return Disposable.Empty;
                 });
             }
 

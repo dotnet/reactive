@@ -195,12 +195,12 @@ namespace ReactiveTests.Tests
 
         public IObservable<int> Return(int value)
         {
-            return Observable.Return<int>(value).Remotable();
+            return Observable.Return(value).Remotable();
         }
 
         public IObservable<int> ReturnLongLease(int value)
         {
-            return Observable.Return<int>(value).Remotable(null);
+            return Observable.Return(value).Remotable(null);
         }
 
         public IObservable<int> Throw(Exception ex)

@@ -12,7 +12,7 @@ namespace System.Reactive.Linq.ObservableImpl
     {
         private readonly IObservable<TSource> _source;
 
-        public PushToPullAdapter(IObservable<TSource> source)
+        protected PushToPullAdapter(IObservable<TSource> source)
         {
             _source = source;
         }

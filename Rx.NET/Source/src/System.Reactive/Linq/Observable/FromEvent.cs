@@ -195,7 +195,7 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly IScheduler _scheduler;
         private readonly object _gate;
 
-        public EventProducer(IScheduler scheduler)
+        protected EventProducer(IScheduler scheduler)
         {
             _scheduler = scheduler;
             _gate = new object();
@@ -321,11 +321,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     // the GetSchedulerForCurrentContext method).
                     //
                     var onNext = _parent.GetHandler(_subject.OnNext);
-                    _parent._scheduler.Schedule(onNext, AddHandler);
+                    _parent._scheduler.ScheduleAction(onNext, AddHandler);
                 }
             }
 
-            private IDisposable AddHandler(IScheduler self, TDelegate onNext)
+            private void AddHandler(TDelegate onNext)
             {
                 var removeHandler = default(IDisposable);
                 try
@@ -335,7 +335,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 catch (Exception exception)
                 {
                     _subject.OnError(exception);
-                    return Disposable.Empty;
+                    return;
                 }
 
                 //
@@ -347,8 +347,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 // remove handler to run on the scheduler.
                 //
                 _removeHandler.Disposable = removeHandler;
-
-                return Disposable.Empty;
             }
         }
     }
@@ -358,7 +356,7 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly Action<TDelegate> _addHandler;
         private readonly Action<TDelegate> _removeHandler;
 
-        public ClassicEventProducer(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+        protected ClassicEventProducer(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
             : base(scheduler)
         {
             _addHandler = addHandler;

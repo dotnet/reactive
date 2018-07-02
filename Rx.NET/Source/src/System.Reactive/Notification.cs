@@ -665,7 +665,7 @@ namespace System.Reactive
 
             protected override IDisposable SubscribeCore(IObserver<T> observer)
             {
-                return _scheduler.Schedule((_parent, observer), (scheduler, state) =>
+                return _scheduler.ScheduleAction((_parent, observer), state =>
                 {
                     var parent = state._parent;
                     var o = state.observer;
@@ -676,7 +676,6 @@ namespace System.Reactive
                     {
                         o.OnCompleted();
                     }
-                    return Disposable.Empty;
                 });
             }
         }

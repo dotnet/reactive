@@ -325,11 +325,11 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 20, 0),
-                OnNext<int>(280 + 20, 1),
-                OnNext<int>(310 + 20, 2),
-                OnNext<int>(350 + 20, 3),
-                OnNext<int>(400 + 20, 4),
+                OnNext(250 + 20, 0),
+                OnNext(280 + 20, 1),
+                OnNext(310 + 20, 2),
+                OnNext(350 + 20, 3),
+                OnNext(400 + 20, 4),
                 OnCompleted<int>(550)
             );
 
@@ -387,9 +387,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 20, 0),
-                OnNext<int>(310 + 20, 2),
-                OnNext<int>(400 + 20, 4),
+                OnNext(250 + 20, 0),
+                OnNext(310 + 20, 2),
+                OnNext(400 + 20, 4),
                 OnCompleted<int>(550)
             );
 
@@ -447,9 +447,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 20, 0),
-                OnNext<int>(310 + 20, 2),
-                OnNext<int>(410, 4),
+                OnNext(250 + 20, 0),
+                OnNext(310 + 20, 2),
+                OnNext(410, 4),
                 OnCompleted<int>(410)
             );
 
@@ -492,8 +492,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 2 * 10, 2),
-                OnNext<int>(350 + 3 * 10, 3),
+                OnNext(250 + 2 * 10, 2),
+                OnNext(350 + 3 * 10, 3),
                 OnError<int>(450 + 4 * 10, ex)
             );
 
@@ -527,8 +527,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 2 * 10, 2),
-                OnNext<int>(350 + 3 * 10, 3),
+                OnNext(250 + 2 * 10, 2),
+                OnNext(350 + 3 * 10, 3),
                 OnError<int>(460, ex)
             );
 
@@ -570,8 +570,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 2 * 10, 2),
-                OnNext<int>(350 + 3 * 10, 3),
+                OnNext(250 + 2 * 10, 2),
+                OnNext(350 + 3 * 10, 3),
                 OnError<int>(450, ex)
             );
 
@@ -604,9 +604,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 2 * 10, 2),
-                OnNext<int>(350 + 3 * 10, 3),
-                OnNext<int>(450 + 4 * 10, 4),
+                OnNext(250 + 2 * 10, 2),
+                OnNext(350 + 3 * 10, 3),
+                OnNext(450 + 4 * 10, 4),
                 OnCompleted<int>(550)
             );
 
@@ -641,9 +641,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 2 * 10, 2),
-                OnNext<int>(300 + 4 * 10, 4),
-                OnNext<int>(410 + 6 * 10, 6),
+                OnNext(250 + 2 * 10, 2),
+                OnNext(300 + 4 * 10, 4),
+                OnNext(410 + 6 * 10, 6),
                 OnCompleted<int>(550)
             );
 

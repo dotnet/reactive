@@ -18,8 +18,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SubscribeSafe_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe<int>(default, Observer.Create<int>(_ => { })));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe<int>(Observable.Return(42), default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe(default, Observer.Create<int>(_ => { })));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe(Observable.Return(42), default));
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace ReactiveTests.Tests
 
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 42),
                 OnNext(220, 43),
                 OnNext(230, 44),
@@ -165,13 +165,13 @@ namespace ReactiveTests.Tests
 
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3)
             );
 
-            var ys = scheduler.CreateHotObservable<int>(
+            var ys = scheduler.CreateHotObservable(
                 OnNext(215, 1),
                 OnNext(225, 2),
                 OnNext(235, 3)
@@ -218,13 +218,13 @@ namespace ReactiveTests.Tests
 
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3)
             );
 
-            var ys = scheduler.CreateHotObservable<int>(
+            var ys = scheduler.CreateHotObservable(
                 OnNext(215, 1),
                 OnNext(225, 2),
                 OnNext(235, 3)

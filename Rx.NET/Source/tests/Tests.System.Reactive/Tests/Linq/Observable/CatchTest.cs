@@ -22,9 +22,9 @@ namespace ReactiveTests.Tests
         public void Catch_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int>(null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int>((IEnumerable<IObservable<int>>)null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int>(DummyObservable<int>.Instance, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int>(null, DummyObservable<int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch((IEnumerable<IObservable<int>>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch(DummyObservable<int>.Instance, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch(null, DummyObservable<int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int, Exception>(null, _ => DummyObservable<int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Catch<int, Exception>(DummyObservable<int>.Instance, null));
         }
@@ -52,20 +52,20 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs1 = scheduler.CreateColdObservable<int>(
+            var xs1 = scheduler.CreateColdObservable(
                 OnNext(10, 1),
                 OnNext(20, 2),
                 OnNext(30, 3),
                 OnError<int>(40, new Exception())
             );
 
-            var xs2 = scheduler.CreateColdObservable<int>(
+            var xs2 = scheduler.CreateColdObservable(
                 OnNext(10, 4),
                 OnNext(20, 5),
                 OnError<int>(30, new Exception())
             );
 
-            var xs3 = scheduler.CreateColdObservable<int>(
+            var xs3 = scheduler.CreateColdObservable(
                 OnNext(10, 6),
                 OnNext(20, 7),
                 OnNext(30, 8),
@@ -728,7 +728,7 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
 
             var res = scheduler.Start(() =>
-                Observable.Catch<int>((IEnumerable<IObservable<int>>)new IObservable<int>[0])
+                Observable.Catch((IEnumerable<IObservable<int>>)new IObservable<int>[0])
             );
 
             res.Messages.AssertEqual(
@@ -743,7 +743,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
 
             var res = scheduler.Start(() =>
-                Observable.Catch<int>(Catch_IteratorThrows_Source(ex, true))
+                Observable.Catch(Catch_IteratorThrows_Source(ex, true))
             );
 
             res.Messages.AssertEqual(
@@ -928,7 +928,7 @@ namespace ReactiveTests.Tests
 
             var scheduler = new TestScheduler();
 
-            var o = scheduler.CreateColdObservable<int>(
+            var o = scheduler.CreateColdObservable(
                 OnNext(10, 1),
                 OnNext(20, 2),
                 OnNext(30, 3),

@@ -19,7 +19,7 @@ namespace ReactiveTests.Tests
         public void Empty_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Empty<int>(null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Empty<int>(null, 42));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Empty(null, 42));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Empty<int>(DummyScheduler.Instance).Subscribe(null));
         }
 
@@ -75,7 +75,7 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
 
             var res = scheduler.Start(() =>
-                Observable.Empty<int>(scheduler, 42)
+                Observable.Empty(scheduler, 42)
             );
 
             res.Messages.AssertEqual(
@@ -88,7 +88,7 @@ namespace ReactiveTests.Tests
         {
             var e = new ManualResetEvent(false);
 
-            Observable.Empty<int>(42).Subscribe(
+            Observable.Empty(42).Subscribe(
                 _ => { Assert.True(false); },
                 _ => { Assert.True(false); },
                 () => e.Set()

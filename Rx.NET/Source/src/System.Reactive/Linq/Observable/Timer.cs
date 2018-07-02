@@ -14,7 +14,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly IScheduler _scheduler;
 
-            public Single(IScheduler scheduler)
+            protected Single(IScheduler scheduler)
             {
                 _scheduler = scheduler;
             }
@@ -58,19 +58,18 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Run(Single parent, DateTimeOffset dueTime)
                 {
-                    SetUpstream(parent._scheduler.Schedule(this, dueTime, (_, state) => state.Invoke()));
+                    SetUpstream(parent._scheduler.ScheduleAction(this, dueTime, state => state.Invoke()));
                 }
 
                 public void Run(Single parent, TimeSpan dueTime)
                 {
-                    SetUpstream(parent._scheduler.Schedule(this, dueTime, (_, state) => state.Invoke()));
+                    SetUpstream(parent._scheduler.ScheduleAction(this, dueTime, state => state.Invoke()));
                 }
 
-                private IDisposable Invoke()
+                private void Invoke()
                 {
                     ForwardOnNext(0);
                     ForwardOnCompleted();
-                    return Disposable.Empty;
                 }
             }
         }
@@ -80,7 +79,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly TimeSpan _period;
             private readonly IScheduler _scheduler;
 
-            public Periodic(TimeSpan period, IScheduler scheduler)
+            protected Periodic(TimeSpan period, IScheduler scheduler)
             {
                 _period = period;
                 _scheduler = scheduler;

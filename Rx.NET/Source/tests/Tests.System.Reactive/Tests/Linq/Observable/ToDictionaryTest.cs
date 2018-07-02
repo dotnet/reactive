@@ -18,16 +18,16 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToDictionary_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int>(null, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int>(DummyObservable<int>.Instance, null, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int>(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int>(null, DummyFunc<int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary(null, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary(DummyObservable<int>.Instance, null, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary(null, DummyFunc<int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int>(DummyObservable<int>.Instance, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int, int>(null, DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int, int>(DummyObservable<int>.Instance, null, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary(null, DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary(DummyObservable<int>.Instance, null, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int, int>(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, null, EqualityComparer<int>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int, int>(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int, int>(null, DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary(null, DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int, int>(DummyObservable<int>.Instance, null, DummyFunc<int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int, int>(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, null));
         }
