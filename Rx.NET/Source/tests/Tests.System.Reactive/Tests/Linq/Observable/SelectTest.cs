@@ -19,36 +19,36 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Select_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Select<int, int>(DummyFunc<int, int>.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Select<int, int>((Func<int, int>)null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Select<int, int>(DummyFunc<int, int>.Instance).Subscribe(null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Select(DummyFunc<int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Select((Func<int, int>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Select(DummyFunc<int, int>.Instance).Subscribe(null));
         }
 
         [Fact]
         public void Select_Throws()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() =>
-                Observable.Return(1).Select<int, int>(x => x).Subscribe(
+                Observable.Return(1).Select(x => x).Subscribe(
                  x =>
                  {
                      throw new InvalidOperationException();
                  }));
             ReactiveAssert.Throws<InvalidOperationException>(() =>
-                Observable.Throw<int>(new Exception()).Select<int, int>(x => x).Subscribe(
+                Observable.Throw<int>(new Exception()).Select(x => x).Subscribe(
                  x => { },
                  exception =>
                  {
                      throw new InvalidOperationException();
                  }));
             ReactiveAssert.Throws<InvalidOperationException>(() =>
-                 Observable.Empty<int>().Select<int, int>(x => x).Subscribe(
+                 Observable.Empty<int>().Select(x => x).Subscribe(
                  x => { },
                  exception => { },
                  () =>
                  {
                      throw new InvalidOperationException();
                  }));
-            ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Create<int>(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Select(x => x).Subscribe());
+            ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Create(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Select(x => x).Subscribe());
         }
 
         [Fact]
@@ -268,36 +268,36 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SelectWithIndex_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Select<int, int>(DummyFunc<int, int, int>.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Select<int, int>((Func<int, int, int>)null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Select<int, int>(DummyFunc<int, int, int>.Instance).Subscribe(null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).Select(DummyFunc<int, int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Select((Func<int, int, int>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Select(DummyFunc<int, int, int>.Instance).Subscribe(null));
         }
 
         [Fact]
         public void SelectWithIndex_Throws()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() =>
-                Observable.Return(1).Select<int, int>((x, index) => x).Subscribe(
+                Observable.Return(1).Select((x, index) => x).Subscribe(
                  x =>
                  {
                      throw new InvalidOperationException();
                  }));
             ReactiveAssert.Throws<InvalidOperationException>(() =>
-                Observable.Throw<int>(new Exception()).Select<int, int>((x, index) => x).Subscribe(
+                Observable.Throw<int>(new Exception()).Select((x, index) => x).Subscribe(
                  x => { },
                  exception =>
                  {
                      throw new InvalidOperationException();
                  }));
             ReactiveAssert.Throws<InvalidOperationException>(() =>
-                 Observable.Empty<int>().Select<int, int>((x, index) => x).Subscribe(
+                 Observable.Empty<int>().Select((x, index) => x).Subscribe(
                  x => { },
                  exception => { },
                  () =>
                  {
                      throw new InvalidOperationException();
                  }));
-            ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Create<int>(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Select((x, index) => x).Subscribe());
+            ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Create(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Select((x, index) => x).Subscribe());
         }
 
         [Fact]

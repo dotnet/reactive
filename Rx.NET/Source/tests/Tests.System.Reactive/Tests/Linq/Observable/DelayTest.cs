@@ -1191,7 +1191,7 @@ namespace ReactiveTests.Tests
             );
 
             var ys = scheduler.CreateColdObservable(
-                OnNext<string>(80, "")
+                OnNext(80, "")
             );
 
             var res = scheduler.Start(() =>
@@ -1244,9 +1244,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 2 * 10, 2),
-                OnNext<int>(350 + 3 * 10, 3),
-                OnNext<int>(450 + 4 * 10, 4),
+                OnNext(250 + 2 * 10, 2),
+                OnNext(350 + 3 * 10, 3),
+                OnNext(450 + 4 * 10, 4),
                 OnCompleted<int>(550)
             );
 
@@ -1278,9 +1278,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 2 * 10, 2),
-                OnNext<int>(350 + 3 * 10, 3),
-                OnNext<int>(450 + 4 * 10, 4),
+                OnNext(250 + 2 * 10, 2),
+                OnNext(350 + 3 * 10, 3),
+                OnNext(450 + 4 * 10, 4),
                 OnCompleted<int>(450 + 4 * 10)
             );
 
@@ -1317,8 +1317,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 2 * 10, 2),
-                OnNext<int>(350 + 3 * 10, 3),
+                OnNext(250 + 2 * 10, 2),
+                OnNext(350 + 3 * 10, 3),
                 OnError<int>(450 + 4 * 10, ex)
             );
 
@@ -1352,8 +1352,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 2 * 10, 2),
-                OnNext<int>(350 + 3 * 10, 3),
+                OnNext(250 + 2 * 10, 2),
+                OnNext(350 + 3 * 10, 3),
                 OnError<int>(460, ex)
             );
 
@@ -1395,8 +1395,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 2 * 10, 2),
-                OnNext<int>(350 + 3 * 10, 3),
+                OnNext(250 + 2 * 10, 2),
+                OnNext(350 + 3 * 10, 3),
                 OnError<int>(450, ex)
             );
 
@@ -1429,9 +1429,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 2 * 10, 2),
-                OnNext<int>(350 + 3 * 10, 3),
-                OnNext<int>(450 + 4 * 10, 4),
+                OnNext(250 + 2 * 10, 2),
+                OnNext(350 + 3 * 10, 3),
+                OnNext(450 + 4 * 10, 4),
                 OnCompleted<int>(550)
             );
 
@@ -1473,9 +1473,9 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(250 + 20, 0),
-                OnNext<int>(350 + 10, 1),
-                OnNext<int>(450 + 30, 2),
+                OnNext(250 + 20, 0),
+                OnNext(350 + 10, 1),
+                OnNext(450 + 30, 2),
                 OnCompleted<int>(550)
             );
 
@@ -1584,7 +1584,7 @@ namespace ReactiveTests.Tests
             );
 
             var ys = scheduler.CreateColdObservable(
-                OnNext<string>(10, "!")
+                OnNext(10, "!")
             );
 
             var res = scheduler.Start(() =>
@@ -1621,7 +1621,7 @@ namespace ReactiveTests.Tests
             );
 
             var ys = scheduler.CreateColdObservable(
-                OnNext<string>(100, "!")
+                OnNext(100, "!")
             );
 
             var res = scheduler.Start(() =>

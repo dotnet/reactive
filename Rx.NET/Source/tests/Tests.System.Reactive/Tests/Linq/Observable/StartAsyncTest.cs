@@ -17,13 +17,13 @@ namespace ReactiveTests.Tests
     public class StartAsyncTest : ReactiveTest
     {
 
-        private readonly Task<int> doneTask;
+        private readonly Task<int> _doneTask;
 
         public StartAsyncTest()
         {
             var tcs = new TaskCompletionSource<int>();
             tcs.SetResult(42);
-            doneTask = tcs.Task;
+            _doneTask = tcs.Task;
         }
 
         #region Func
@@ -33,14 +33,14 @@ namespace ReactiveTests.Tests
         {
             var s = Scheduler.Immediate;
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(default(Func<Task<int>>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(default(Func<CancellationToken, Task<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<Task<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<CancellationToken, Task<int>>)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(default(Func<Task<int>>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(default(Func<CancellationToken, Task<int>>), s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<Task<int>>), s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<CancellationToken, Task<int>>), s));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(() => doneTask, default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(ct => doneTask, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(() => _doneTask, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(ct => _doneTask, default));
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace ReactiveTests.Tests
         {
             var ex = new Exception();
 
-            var xs = Observable.StartAsync<int>(() =>
+            var xs = Observable.StartAsync(() =>
                 Task.Factory.StartNew<int>(() =>
                 {
                     throw ex;
@@ -128,7 +128,7 @@ namespace ReactiveTests.Tests
         {
             var ex = new Exception();
 
-            var xs = Observable.StartAsync<int>(ct =>
+            var xs = Observable.StartAsync(ct =>
                 Task.Factory.StartNew<int>(() => { throw ex; })
             );
 
@@ -245,8 +245,8 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<Task>), s));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<CancellationToken, Task>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(() => (Task)doneTask, default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(ct => (Task)doneTask, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(() => (Task)_doneTask, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(ct => (Task)_doneTask, default));
         }
 
         [Fact]

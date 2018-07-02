@@ -757,17 +757,17 @@ namespace ReactiveTests.Tests
 
         public IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
-            return _scheduler.Schedule<TState>(state, GetCatch(action));
+            return _scheduler.Schedule(state, GetCatch(action));
         }
 
         public IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
-            return _scheduler.Schedule<TState>(state, dueTime, GetCatch(action));
+            return _scheduler.Schedule(state, dueTime, GetCatch(action));
         }
 
         public IDisposable Schedule<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action)
         {
-            return _scheduler.Schedule<TState>(state, dueTime, GetCatch(action));
+            return _scheduler.Schedule(state, dueTime, GetCatch(action));
         }
 
         private Func<IScheduler, TState, IDisposable> GetCatch<TState>(Func<IScheduler, TState, IDisposable> action)

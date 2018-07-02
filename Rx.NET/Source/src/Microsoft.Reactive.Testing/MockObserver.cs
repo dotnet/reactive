@@ -10,33 +10,33 @@ namespace Microsoft.Reactive.Testing
 {
     internal class MockObserver<T> : ITestableObserver<T>
     {
-        private TestScheduler scheduler;
-        private List<Recorded<Notification<T>>> messages;
+        private TestScheduler _scheduler;
+        private List<Recorded<Notification<T>>> _messages;
 
         public MockObserver(TestScheduler scheduler)
         {
-            this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
-            messages = new List<Recorded<Notification<T>>>();
+            this._scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
+            _messages = new List<Recorded<Notification<T>>>();
         }
 
         public void OnNext(T value)
         {
-            messages.Add(new Recorded<Notification<T>>(scheduler.Clock, Notification.CreateOnNext<T>(value)));
+            _messages.Add(new Recorded<Notification<T>>(_scheduler.Clock, Notification.CreateOnNext(value)));
         }
 
         public void OnError(Exception exception)
         {
-            messages.Add(new Recorded<Notification<T>>(scheduler.Clock, Notification.CreateOnError<T>(exception)));
+            _messages.Add(new Recorded<Notification<T>>(_scheduler.Clock, Notification.CreateOnError<T>(exception)));
         }
 
         public void OnCompleted()
         {
-            messages.Add(new Recorded<Notification<T>>(scheduler.Clock, Notification.CreateOnCompleted<T>()));
+            _messages.Add(new Recorded<Notification<T>>(_scheduler.Clock, Notification.CreateOnCompleted<T>()));
         }
 
         public IList<Recorded<Notification<T>>> Messages
         {
-            get { return messages; }
+            get { return _messages; }
         }
     }
 }

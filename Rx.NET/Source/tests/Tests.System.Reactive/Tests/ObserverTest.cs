@@ -20,7 +20,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToObserver_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToObserver<int>(default(Action<Notification<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToObserver(default(Action<Notification<int>>)));
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace ReactiveTests.Tests
         public void ToNotifier_Forwards()
         {
             var obsn = new MyObserver();
-            obsn.ToNotifier()(Notification.CreateOnNext<int>(42));
+            obsn.ToNotifier()(Notification.CreateOnNext(42));
             Assert.Equal(obsn.HasOnNext, 42);
 
             var ex = new Exception();
@@ -248,7 +248,7 @@ namespace ReactiveTests.Tests
             var obs = new MyObserver();
             var res = obs.AsObserver();
 
-            Assert.False(object.ReferenceEquals(obs, res));
+            Assert.False(ReferenceEquals(obs, res));
         }
 
         [Fact]
@@ -836,7 +836,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(default, s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(o, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress(o, default));
         }
 
         [Fact]

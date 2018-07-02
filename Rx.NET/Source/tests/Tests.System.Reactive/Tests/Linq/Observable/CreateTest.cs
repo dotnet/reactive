@@ -21,7 +21,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Create_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Create<int>(default(Func<IObserver<int>, Action>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Create(default(Func<IObserver<int>, Action>)));
 
             //
             // BREAKING CHANGE v2.0 > v1.x - Returning null from Subscribe means "nothing to do upon unsubscription"
@@ -121,7 +121,7 @@ namespace ReactiveTests.Tests
         public void Create_Exception()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() =>
-                Observable.Create<int>(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Subscribe());
+                Observable.Create(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Subscribe());
         }
 
         [Fact]
@@ -203,7 +203,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void CreateWithDisposable_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Create<int>(default(Func<IObserver<int>, IDisposable>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Create(default(Func<IObserver<int>, IDisposable>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Create<int>(o => DummyDisposable.Instance).Subscribe(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Create<int>(o =>
             {
@@ -296,7 +296,7 @@ namespace ReactiveTests.Tests
         public void CreateWithDisposable_Exception()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() =>
-                Observable.Create<int>(new Func<IObserver<int>, IDisposable>(o => { throw new InvalidOperationException(); })).Subscribe());
+                Observable.Create(new Func<IObserver<int>, IDisposable>(o => { throw new InvalidOperationException(); })).Subscribe());
         }
 
         [Fact]
@@ -379,20 +379,20 @@ namespace ReactiveTests.Tests
         public void Iterate_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create<int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create(DummyFunc<IObserver<int>, IEnumerable<IObservable<Object>>>.Instance).Subscribe(null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create(DummyFunc<IObserver<int>, IEnumerable<IObservable<object>>>.Instance).Subscribe(null));
         }
 
-        private IEnumerable<IObservable<Object>> ToIterate_Complete(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs, IObserver<int> observer)
+        private IEnumerable<IObservable<object>> ToIterate_Complete(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs, IObserver<int> observer)
         {
             observer.OnNext(1);
-            yield return xs.Select(x => new Object());
+            yield return xs.Select(x => new object());
 
             observer.OnNext(2);
-            yield return ys.Select(x => new Object());
+            yield return ys.Select(x => new object());
 
             observer.OnNext(3);
             observer.OnCompleted();
-            yield return zs.Select(x => new Object());
+            yield return zs.Select(x => new object());
 
             observer.OnNext(4);
         }
@@ -447,16 +447,16 @@ namespace ReactiveTests.Tests
             );
         }
 
-        private IEnumerable<IObservable<Object>> ToIterate_Complete_Implicit(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs, IObserver<int> observer)
+        private IEnumerable<IObservable<object>> ToIterate_Complete_Implicit(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs, IObserver<int> observer)
         {
             observer.OnNext(1);
-            yield return xs.Select(x => new Object());
+            yield return xs.Select(x => new object());
 
             observer.OnNext(2);
-            yield return ys.Select(x => new Object());
+            yield return ys.Select(x => new object());
 
             observer.OnNext(3);
-            yield return zs.Select(x => new Object());
+            yield return zs.Select(x => new object());
 
             observer.OnNext(4);
         }
@@ -512,13 +512,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        private IEnumerable<IObservable<Object>> ToIterate_Throw(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs, IObserver<int> observer, Exception ex)
+        private IEnumerable<IObservable<object>> ToIterate_Throw(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs, IObserver<int> observer, Exception ex)
         {
             observer.OnNext(1);
-            yield return xs.Select(x => new Object());
+            yield return xs.Select(x => new object());
 
             observer.OnNext(2);
-            yield return ys.Select(x => new Object());
+            yield return ys.Select(x => new object());
 
             observer.OnNext(3);
 
@@ -527,7 +527,7 @@ namespace ReactiveTests.Tests
                 throw ex;
             }
 
-            yield return zs.Select(x => new Object());
+            yield return zs.Select(x => new object());
 
             observer.OnNext(4);
             observer.OnCompleted();
@@ -584,19 +584,19 @@ namespace ReactiveTests.Tests
             );
         }
 
-        private IEnumerable<IObservable<Object>> ToIterate_Error(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs, IObserver<int> observer, Exception ex)
+        private IEnumerable<IObservable<object>> ToIterate_Error(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs, IObserver<int> observer, Exception ex)
         {
             observer.OnNext(1);
-            yield return xs.Select(x => new Object());
+            yield return xs.Select(x => new object());
 
             observer.OnNext(2);
             observer.OnError(ex);
 
-            yield return ys.Select(x => new Object());
+            yield return ys.Select(x => new object());
 
             observer.OnNext(3);
 
-            yield return zs.Select(x => new Object());
+            yield return zs.Select(x => new object());
 
             observer.OnNext(4);
             observer.OnCompleted();
@@ -652,16 +652,16 @@ namespace ReactiveTests.Tests
             );
         }
 
-        private IEnumerable<IObservable<Object>> ToIterate_Complete_Dispose(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs, IObserver<int> observer)
+        private IEnumerable<IObservable<object>> ToIterate_Complete_Dispose(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs, IObserver<int> observer)
         {
             observer.OnNext(1);
-            yield return xs.Select(x => new Object());
+            yield return xs.Select(x => new object());
 
             observer.OnNext(2);
-            yield return ys.Select(x => new Object());
+            yield return ys.Select(x => new object());
 
             observer.OnNext(3);
-            yield return zs.Select(x => new Object());
+            yield return zs.Select(x => new object());
 
             observer.OnNext(4);
         }
@@ -727,7 +727,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(new[] { 100, 1000 }.ToObservable());
         }
 
-        private static IEnumerable<IObservable<Object>> _IteratorScenario(int x, int y, IObserver<int> results)
+        private static IEnumerable<IObservable<object>> _IteratorScenario(int x, int y, IObserver<int> results)
         {
             var xs = Observable.Range(1, x).ToListObservable();
             yield return xs;
@@ -744,16 +744,16 @@ namespace ReactiveTests.Tests
         public void Iterate_Void_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create(DummyFunc<IEnumerable<IObservable<Object>>>.Instance).Subscribe(null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableEx.Create(DummyFunc<IEnumerable<IObservable<object>>>.Instance).Subscribe(null));
         }
 
-        private IEnumerable<IObservable<Object>> ToIterate_Void_Complete(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs)
+        private IEnumerable<IObservable<object>> ToIterate_Void_Complete(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs)
         {
-            yield return xs.Select(x => new Object());
+            yield return xs.Select(x => new object());
 
-            yield return ys.Select(x => new Object());
+            yield return ys.Select(x => new object());
 
-            yield return zs.Select(x => new Object());
+            yield return zs.Select(x => new object());
         }
 
         [Fact]
@@ -803,13 +803,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        private IEnumerable<IObservable<Object>> ToIterate_Void_Complete_Implicit(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs)
+        private IEnumerable<IObservable<object>> ToIterate_Void_Complete_Implicit(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs)
         {
-            yield return xs.Select(x => new Object());
+            yield return xs.Select(x => new object());
 
-            yield return ys.Select(x => new Object());
+            yield return ys.Select(x => new object());
 
-            yield return zs.Select(x => new Object());
+            yield return zs.Select(x => new object());
         }
 
         [Fact]
@@ -859,18 +859,18 @@ namespace ReactiveTests.Tests
             );
         }
 
-        private IEnumerable<IObservable<Object>> ToIterate_Void_Throw(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs, Exception ex)
+        private IEnumerable<IObservable<object>> ToIterate_Void_Throw(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs, Exception ex)
         {
-            yield return xs.Select(x => new Object());
+            yield return xs.Select(x => new object());
 
-            yield return ys.Select(x => new Object());
+            yield return ys.Select(x => new object());
 
             if (xs != null)
             {
                 throw ex;
             }
 
-            yield return zs.Select(x => new Object());
+            yield return zs.Select(x => new object());
         }
 
         [Fact]
@@ -921,13 +921,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        private IEnumerable<IObservable<Object>> ToIterate_Void_Complete_Dispose(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs)
+        private IEnumerable<IObservable<object>> ToIterate_Void_Complete_Dispose(IObservable<int> xs, IObservable<int> ys, IObservable<int> zs)
         {
-            yield return xs.Select(x => new Object());
+            yield return xs.Select(x => new object());
 
-            yield return ys.Select(x => new Object());
+            yield return ys.Select(x => new object());
 
-            yield return zs.Select(x => new Object());
+            yield return zs.Select(x => new object());
         }
 
         [Fact]
@@ -994,7 +994,7 @@ namespace ReactiveTests.Tests
             Assert.IsType<InvalidOperationException>(notification.Exception);
         }
 
-        private static IEnumerable<IObservable<Object>> _IteratorScenario_Void(int x, int y)
+        private static IEnumerable<IObservable<object>> _IteratorScenario_Void(int x, int y)
         {
             var xs = Observable.Range(1, x).ToListObservable();
             yield return xs;

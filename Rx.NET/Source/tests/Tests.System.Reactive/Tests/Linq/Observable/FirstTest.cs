@@ -38,21 +38,21 @@ namespace ReactiveTests.Tests
         public void First_Return()
         {
             var value = 42;
-            Assert.Equal(value, Observable.Return<int>(value).First());
+            Assert.Equal(value, Observable.Return(value).First());
         }
 
         [Fact]
         public void FirstPredicate_Return()
         {
             var value = 42;
-            Assert.Equal(value, Observable.Return<int>(value).First(i => i % 2 == 0));
+            Assert.Equal(value, Observable.Return(value).First(i => i % 2 == 0));
         }
 
         [Fact]
         public void FirstPredicate_Return_NoMatch()
         {
             var value = 42;
-            ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Return<int>(value).First(i => i % 2 != 0));
+            ReactiveAssert.Throws<InvalidOperationException>(() => Observable.Return(value).First(i => i % 2 != 0));
         }
 
         [Fact]

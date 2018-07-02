@@ -38,7 +38,7 @@ namespace ReactiveTests.Tests
         public void LastOrDefault_Return()
         {
             var value = 42;
-            Assert.Equal(value, Observable.Return<int>(value).LastOrDefault());
+            Assert.Equal(value, Observable.Return(value).LastOrDefault());
         }
 
         [Fact]

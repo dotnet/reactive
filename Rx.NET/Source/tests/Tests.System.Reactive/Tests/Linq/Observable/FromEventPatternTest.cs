@@ -832,7 +832,7 @@ namespace ReactiveTests.Tests
         public event EventHandler E5;
         public void M5(int i)
         {
-            E5?.Invoke(this, new FromEventPattern.TestEventArgs { Id = i });
+            E5?.Invoke(this, new TestEventArgs { Id = i });
         }
 
         public static event EventHandler<TestEventArgs> E6;
@@ -944,8 +944,8 @@ namespace ReactiveTests.Tests
 
         public override void Post(SendOrPostCallback d, object state)
         {
-            var old = SynchronizationContext.Current;
-            SynchronizationContext.SetSynchronizationContext(this);
+            var old = Current;
+            SetSynchronizationContext(this);
             try
             {
                 PostCount++;
@@ -953,7 +953,7 @@ namespace ReactiveTests.Tests
             }
             finally
             {
-                SynchronizationContext.SetSynchronizationContext(old);
+                SetSynchronizationContext(old);
             }
         }
     }

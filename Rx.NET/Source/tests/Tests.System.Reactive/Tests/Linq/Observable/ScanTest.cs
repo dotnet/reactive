@@ -18,9 +18,9 @@ namespace ReactiveTests.Tests
             var someObservable = Observable.Empty<int>();
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Scan<int>(null, (_, __) => 0));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Scan<int>(someObservable, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Scan(someObservable, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Scan<int, int>(null, 0, (_, __) => 0));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Scan<int, int>(someObservable, 0, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Scan(someObservable, 0, null));
         }
 
         [Fact]

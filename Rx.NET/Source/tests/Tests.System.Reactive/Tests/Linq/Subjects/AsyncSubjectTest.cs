@@ -425,16 +425,16 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.True(ctx.ran);
+            Assert.True(ctx.Ran);
         }
 
         private class MyContext : SynchronizationContext
         {
-            public bool ran;
+            public bool Ran;
 
             public override void Post(SendOrPostCallback d, object state)
             {
-                ran = true;
+                Ran = true;
                 d(state);
             }
         }

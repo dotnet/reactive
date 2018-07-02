@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly TResult _value;
 
-                IDisposable _task;
+                private IDisposable _task;
 
                 public _(TResult value, IObserver<TResult> observer)
                     : base(observer)
@@ -127,9 +127,9 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly TResult _value;
 
-                int _remaining;
+                private int _remaining;
 
-                IDisposable _task;
+                private IDisposable _task;
 
                 public _(TResult value, int repeatCount, IObserver<TResult> observer)
                     : base(observer)
@@ -197,8 +197,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly TResult _value;
 
-                int _remaining;
-
+                private readonly int _remaining;
                 public _(TResult value, int remaining, IObserver<TResult> observer)
                     : base(observer)
                 {

@@ -358,7 +358,7 @@ namespace ReactiveTests.Tests
 
             scheduler3.Start();
 
-            var xss = Observable.Create<int>(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Repeat();
+            var xss = Observable.Create(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Repeat();
 
             ReactiveAssert.Throws<InvalidOperationException>(() => xss.Subscribe());
         }
@@ -529,7 +529,7 @@ namespace ReactiveTests.Tests
 
             scheduler3.Start();
 
-            var xss = Observable.Create<int>(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Repeat(3);
+            var xss = Observable.Create(new Func<IObserver<int>, Action>(o => { throw new InvalidOperationException(); })).Repeat(3);
 
             ReactiveAssert.Throws<InvalidOperationException>(() => xss.Subscribe());
         }
@@ -537,7 +537,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Repeat_Observable_RepeatCount_Default_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat<int>(default(IObservable<int>), 0));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Repeat(default(IObservable<int>), 0));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => DummyObservable<int>.Instance.Repeat(-1));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Repeat(0).Subscribe(null));
         }

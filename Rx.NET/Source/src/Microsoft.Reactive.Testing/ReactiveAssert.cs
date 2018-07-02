@@ -285,7 +285,7 @@ namespace Microsoft.Reactive.Testing
                 throw new ArgumentNullException(nameof(expected));
             }
 
-            ReactiveAssert.AreElementsEqual(expected, actual);
+            AreElementsEqual(expected, actual);
         }
 
         /// <summary>
@@ -329,7 +329,7 @@ namespace Microsoft.Reactive.Testing
                 throw new ArgumentNullException(nameof(expected));
             }
 
-            ReactiveAssert.AreElementsEqual(expected, actual);
+            AreElementsEqual(expected, actual);
         }
     }
 }

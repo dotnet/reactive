@@ -24,7 +24,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Start(null, someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Start<int>(null, someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Start(() => { }, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Start<int>(() => 1, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Start(() => 1, null));
         }
 
 

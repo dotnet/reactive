@@ -38,7 +38,7 @@ namespace ReactiveTests.Tests
         public void Single_Return()
         {
             var value = 42;
-            Assert.Equal(value, Observable.Return<int>(value).Single());
+            Assert.Equal(value, Observable.Return(value).Single());
         }
 
         [Fact]

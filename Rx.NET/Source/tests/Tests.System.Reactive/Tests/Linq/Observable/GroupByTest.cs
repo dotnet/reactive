@@ -3480,18 +3480,18 @@ namespace ReactiveTests.Tests
 
     internal class GroupByComparer : IEqualityComparer<string>
     {
-        private TestScheduler scheduler;
-        private readonly int equalsThrowsAfter;
-        private readonly ushort getHashCodeThrowsAfter;
+        private TestScheduler _scheduler;
+        private readonly int _equalsThrowsAfter;
+        private readonly ushort _getHashCodeThrowsAfter;
 
         public Exception HashCodeException = new Exception();
         public Exception EqualsException = new Exception();
 
         public GroupByComparer(TestScheduler scheduler, ushort equalsThrowsAfter, ushort getHashCodeThrowsAfter)
         {
-            this.scheduler = scheduler;
-            this.equalsThrowsAfter = equalsThrowsAfter;
-            this.getHashCodeThrowsAfter = getHashCodeThrowsAfter;
+            this._scheduler = scheduler;
+            this._equalsThrowsAfter = equalsThrowsAfter;
+            this._getHashCodeThrowsAfter = getHashCodeThrowsAfter;
         }
 
         public GroupByComparer(TestScheduler scheduler)
@@ -3501,7 +3501,7 @@ namespace ReactiveTests.Tests
 
         public bool Equals(string x, string y)
         {
-            if (scheduler.Clock > equalsThrowsAfter)
+            if (_scheduler.Clock > _equalsThrowsAfter)
             {
                 throw EqualsException;
             }
@@ -3511,7 +3511,7 @@ namespace ReactiveTests.Tests
 
         public int GetHashCode(string obj)
         {
-            if (scheduler.Clock > getHashCodeThrowsAfter)
+            if (_scheduler.Clock > _getHashCodeThrowsAfter)
             {
                 throw HashCodeException;
             }

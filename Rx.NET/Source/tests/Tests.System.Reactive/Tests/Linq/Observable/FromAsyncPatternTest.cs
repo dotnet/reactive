@@ -28,7 +28,7 @@ namespace ReactiveTests.Tests
         public void FromAsyncPattern_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern(null, iar => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int>(null, iar => 0));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern(null, iar => 0));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int>(null, iar => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int>(null, iar => 0));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int>(null, iar => { }));
@@ -99,7 +99,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)().Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]
@@ -154,7 +154,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]
@@ -215,7 +215,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]
@@ -278,7 +278,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
         [Fact]
         public void FromAsyncPatternAction3()
@@ -342,7 +342,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]
@@ -409,7 +409,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]
@@ -478,7 +478,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]
@@ -549,7 +549,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]
@@ -622,7 +622,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]
@@ -697,7 +697,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]
@@ -774,7 +774,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]
@@ -853,7 +853,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]
@@ -934,7 +934,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]
@@ -1017,7 +1017,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]
@@ -1102,7 +1102,7 @@ namespace ReactiveTests.Tests
             Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).Materialize().ToEnumerable().ToArray();
-            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext(1), Notification.CreateOnCompleted<int>() }));
         }
 
         [Fact]

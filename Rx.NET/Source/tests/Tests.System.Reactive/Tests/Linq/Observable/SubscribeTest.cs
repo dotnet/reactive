@@ -20,12 +20,12 @@ namespace ReactiveTests.Tests
         [Fact]
         public void SubscribeToEnumerable_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Subscribe<int>(null, DummyObserver<int>.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Subscribe<int>(DummyEnumerable<int>.Instance, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Subscribe(null, DummyObserver<int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Subscribe(DummyEnumerable<int>.Instance, null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Subscribe<int>(null, DummyObserver<int>.Instance, DummyScheduler.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Subscribe<int>(DummyEnumerable<int>.Instance, DummyObserver<int>.Instance, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Subscribe<int>(DummyEnumerable<int>.Instance, null, DummyScheduler.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Subscribe(null, DummyObserver<int>.Instance, DummyScheduler.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Subscribe(DummyEnumerable<int>.Instance, DummyObserver<int>.Instance, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Subscribe(DummyEnumerable<int>.Instance, null, DummyScheduler.Instance));
             ReactiveAssert.Throws<NullReferenceException>(() => NullEnumeratorEnumerable<int>.Instance.Subscribe(Observer.Create<int>(x => { }), Scheduler.CurrentThread));
         }
 
@@ -180,20 +180,20 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(default, _ => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, default(Action<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, default(Action<int>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(default, _ => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, default, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, _ => { }, default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, default, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, _ => { }, default(Action)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(default, _ => { }, (Exception _) => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, default, (Exception _) => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, _ => { }, default(Action<Exception>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, default, (Exception _) => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, _ => { }, default(Action<Exception>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(default, _ => { }, (Exception _) => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, default, (Exception _) => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, _ => { }, default, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, _ => { }, (Exception _) => { }, default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, default, (Exception _) => { }, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, _ => { }, default, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, _ => { }, (Exception _) => { }, default(Action)));
         }
 
         [Fact]
@@ -281,26 +281,26 @@ namespace ReactiveTests.Tests
             var someObserver = Observer.Create<int>(_ => { });
             var ct = CancellationToken.None;
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(default, someObserver, ct));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, default(IObserver<int>), ct));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(default, someObserver, ct));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, default(IObserver<int>), ct));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(default, ct));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(default, _ => { }, ct));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, default(Action<int>), ct));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, default(Action<int>), ct));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(default, _ => { }, () => { }, ct));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, default, () => { }, ct));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, _ => { }, default(Action), ct));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, default, () => { }, ct));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, _ => { }, default(Action), ct));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(default, _ => { }, (Exception _) => { }, ct));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, default, (Exception _) => { }, ct));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, _ => { }, default(Action<Exception>), ct));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, default, (Exception _) => { }, ct));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, _ => { }, default(Action<Exception>), ct));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(default, _ => { }, (Exception _) => { }, () => { }, ct));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, default, (Exception _) => { }, () => { }, ct));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, _ => { }, default, () => { }, ct));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe<int>(someObservable, _ => { }, (Exception _) => { }, default, ct));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, default, (Exception _) => { }, () => { }, ct));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, _ => { }, default, () => { }, ct));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.Subscribe(someObservable, _ => { }, (Exception _) => { }, default, ct));
         }
 
         [Fact]
@@ -462,7 +462,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Subscribe_CT_Overloads_AlreadyCancelled()
         {
-            var xs = Observable.Defer<int>(() =>
+            var xs = Observable.Defer(() =>
             {
                 Assert.True(false);
                 return Observable.Return(42, Scheduler.Immediate);
@@ -487,7 +487,7 @@ namespace ReactiveTests.Tests
             var e = 0;
             var c = 0;
 
-            var xs = Observable.Defer<int>(() =>
+            var xs = Observable.Defer(() =>
             {
                 i++;
                 return Observable.Return(42, Scheduler.Immediate);

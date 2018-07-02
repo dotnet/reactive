@@ -36,7 +36,7 @@ namespace Microsoft.Reactive.Testing
         /// <returns>Recorded OnNext notification.</returns>
         public static Recorded<Notification<T>> OnNext<T>(long ticks, T value)
         {
-            return new Recorded<Notification<T>>(ticks, Notification.CreateOnNext<T>(value));
+            return new Recorded<Notification<T>>(ticks, Notification.CreateOnNext(value));
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace Microsoft.Reactive.Testing
 
             public override bool Equals(Notification<T> other)
             {
-                if (Object.ReferenceEquals(this, other))
+                if (ReferenceEquals(this, other))
                 {
                     return true;
                 }
@@ -218,7 +218,7 @@ namespace Microsoft.Reactive.Testing
 
             public override bool Equals(Notification<T> other)
             {
-                if (Object.ReferenceEquals(this, other))
+                if (ReferenceEquals(this, other))
                 {
                     return true;
                 }

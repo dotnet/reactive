@@ -2026,7 +2026,7 @@ namespace ReactiveTests.Tests
             var l = 0L;
 
             var o = Observer.Create<int>(
-                x => { ns.Add(OnNext<int>(l++, x)); },
+                x => { ns.Add(OnNext(l++, x)); },
                 ex => { ns.Add(OnError<int>(l++, ex)); },
                 () => { ns.Add(OnCompleted<int>(l++)); }
             );

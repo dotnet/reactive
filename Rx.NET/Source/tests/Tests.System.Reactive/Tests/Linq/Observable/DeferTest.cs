@@ -16,9 +16,9 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Defer_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Defer<int>(default(Func<IObservable<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Defer(default(Func<IObservable<int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Defer(() => DummyObservable<int>.Instance).Subscribe(null));
-            ReactiveAssert.Throws</*some*/Exception>(() => Observable.Defer<int>(() => default(IObservable<int>)).Subscribe());
+            ReactiveAssert.Throws</*some*/Exception>(() => Observable.Defer(() => default(IObservable<int>)).Subscribe());
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace ReactiveTests.Tests
                 {
                     invoked++;
                     xs = scheduler.CreateColdObservable(
-                        OnNext<long>(100, scheduler.Clock),
+                        OnNext(100, scheduler.Clock),
                         OnCompleted<long>(200));
                     return xs;
                 })
@@ -66,7 +66,7 @@ namespace ReactiveTests.Tests
                 {
                     invoked++;
                     xs = scheduler.CreateColdObservable(
-                        OnNext<long>(100, scheduler.Clock),
+                        OnNext(100, scheduler.Clock),
                         OnError<long>(200, ex));
                     return xs;
                 })
@@ -97,7 +97,7 @@ namespace ReactiveTests.Tests
                 {
                     invoked++;
                     xs = scheduler.CreateColdObservable(
-                        OnNext<long>(100, scheduler.Clock),
+                        OnNext(100, scheduler.Clock),
                         OnNext<long>(200, invoked),
                         OnNext<long>(1100, 1000));
                     return xs;
@@ -125,7 +125,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
 
             var res = scheduler.Start(() =>
-                Observable.Defer<int>(new Func<IObservable<int>>(() =>
+                Observable.Defer(new Func<IObservable<int>>(() =>
                 {
                     invoked++;
                     throw ex;

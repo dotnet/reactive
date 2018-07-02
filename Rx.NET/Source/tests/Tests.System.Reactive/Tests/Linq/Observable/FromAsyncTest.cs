@@ -32,13 +32,13 @@ namespace ReactiveTests.Tests
         {
             var s = Scheduler.Immediate;
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<Task<int>>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<CancellationToken, Task<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<Task<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<CancellationToken, Task<int>>)));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<Task<int>>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(() => _doneTask, default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<CancellationToken, Task<int>>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(ct => _doneTask, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<Task<int>>), s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(() => _doneTask, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<CancellationToken, Task<int>>), s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(ct => _doneTask, default));
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace ReactiveTests.Tests
         {
             var ex = new Exception();
 
-            var xs = Observable.FromAsync<int>(() =>
+            var xs = Observable.FromAsync(() =>
                 Task.Factory.StartNew<int>(() => { throw ex; })
             );
 
@@ -122,7 +122,7 @@ namespace ReactiveTests.Tests
         {
             var ex = new Exception();
 
-            var xs = Observable.FromAsync<int>(ct =>
+            var xs = Observable.FromAsync(ct =>
                 Task.Factory.StartNew<int>(() => { throw ex; })
             );
 

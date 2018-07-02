@@ -19,79 +19,79 @@ namespace ReactiveTests.Tests
         public void ToAsync_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int>(default(Action<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int>(default(Action<int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int>(default(Action<int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int>(default(Action<int, int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int>(default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int>(default(Action<int, int, int, int, int>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int>(default(Action<int, int, int, int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default));
 
             var someScheduler = new TestScheduler();
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int>(default(Action<int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int>(default(Action<int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int>(default(Action<int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int>(default(Action<int, int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int>(default, someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int>(default(Action<int, int, int, int, int>), someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int>(default(Action<int, int, int, int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default, someScheduler));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default, someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default, someScheduler));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(() => { }, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int>(a => { }, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int>(() => 1, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(() => 1, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int>((a, b) => { }, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int>(a => 1, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int>((a, b, c) => { }, null));
@@ -128,8 +128,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToAsync0()
         {
-            Assert.True(Observable.ToAsync<int>(() => 0)().ToEnumerable().SequenceEqual(new[] { 0 }));
-            Assert.True(Observable.ToAsync<int>(() => 0, Scheduler.Default)().ToEnumerable().SequenceEqual(new[] { 0 }));
+            Assert.True(Observable.ToAsync(() => 0)().ToEnumerable().SequenceEqual(new[] { 0 }));
+            Assert.True(Observable.ToAsync(() => 0, Scheduler.Default)().ToEnumerable().SequenceEqual(new[] { 0 }));
         }
 
         [Fact]

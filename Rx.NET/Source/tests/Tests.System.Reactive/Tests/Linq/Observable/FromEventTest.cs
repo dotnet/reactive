@@ -283,7 +283,7 @@ namespace ReactiveTests.Tests
 
                 addEvt.WaitOne();
 
-                subscribeOnCtx = object.ReferenceEquals(addCtx, ctx);
+                subscribeOnCtx = ReferenceEquals(addCtx, ctx);
 
                 src.OnBar(42);
                 fstNext = res.SequenceEqual(new[] { 42 });
@@ -303,7 +303,7 @@ namespace ReactiveTests.Tests
 
                 remEvt.WaitOne();
 
-                disposeOnCtx = object.ReferenceEquals(remCtx, ctx);
+                disposeOnCtx = ReferenceEquals(remCtx, ctx);
 
                 src.OnBar(44);
                 thdNext = res.SequenceEqual(new[] { 42, 43 });

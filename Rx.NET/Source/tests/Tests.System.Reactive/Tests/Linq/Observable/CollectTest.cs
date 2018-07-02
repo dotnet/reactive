@@ -181,7 +181,7 @@ namespace ReactiveTests.Tests
 
             var ex = new Exception();
             var n = 0;
-            var ys = xs.Collect<int, int>(() =>
+            var ys = xs.Collect(() =>
             {
                 if (n++ == 0)
                 {
@@ -232,7 +232,7 @@ namespace ReactiveTests.Tests
             );
 
             var ex = new Exception();
-            var ys = xs.Collect<int, int>(() => 0, (x, y) => x + y, x => { throw ex; });
+            var ys = xs.Collect(() => 0, (x, y) => x + y, x => { throw ex; });
             var e = default(IEnumerator<int>);
 
             var ex_ = default(Exception);
@@ -273,7 +273,7 @@ namespace ReactiveTests.Tests
             );
 
             var ex = new Exception();
-            var ys = xs.Collect<int, int>(() => 0, (x, y) => { throw ex; });
+            var ys = xs.Collect(() => 0, (x, y) => { throw ex; });
             var e = default(IEnumerator<int>);
 
             var ex_ = default(Exception);

@@ -330,7 +330,7 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
 
             var xs = scheduler.CreateHotObservable(
-                OnNext<int>(500, 42)
+                OnNext(500, 42)
             );
 
             var ys = scheduler.CreateColdObservable(
@@ -688,7 +688,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(450)
             );
 
-            var ys = scheduler.CreateColdObservable<string>(
+            var ys = scheduler.CreateColdObservable(
                 OnNext(100, "Boo!")
             );
 
@@ -727,14 +727,14 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(450)
             );
 
-            var ys = scheduler.CreateColdObservable<string>(
+            var ys = scheduler.CreateColdObservable(
                 OnNext(100, "Boo!")
             );
 
             var zs = scheduler.CreateColdObservable<string>(
             );
 
-            var ts = scheduler.CreateColdObservable<int>(
+            var ts = scheduler.CreateColdObservable(
                 OnNext(50, 42),
                 OnCompleted<int>(70)
             );
@@ -779,7 +779,7 @@ namespace ReactiveTests.Tests
             var ys = scheduler.CreateColdObservable<string>(
             );
 
-            var zs = scheduler.CreateColdObservable<string>(
+            var zs = scheduler.CreateColdObservable(
                 OnNext(50, "Boo!")
             );
 
@@ -788,8 +788,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(310, 1),
-                OnNext<int>(350, 2),
+                OnNext(310, 1),
+                OnNext(350, 2),
                 OnError<int>(400, ex => ex is TimeoutException)
             );
 
@@ -822,11 +822,11 @@ namespace ReactiveTests.Tests
             var ys = scheduler.CreateColdObservable<string>(
             );
 
-            var zs = scheduler.CreateColdObservable<string>(
+            var zs = scheduler.CreateColdObservable(
                 OnNext(50, "Boo!")
             );
 
-            var ts = scheduler.CreateColdObservable<int>(
+            var ts = scheduler.CreateColdObservable(
                 OnNext(50, 42),
                 OnCompleted<int>(70)
             );
@@ -872,7 +872,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(450)
             );
 
-            var zs = scheduler.CreateColdObservable<string>(
+            var zs = scheduler.CreateColdObservable(
                 OnNext(50, "Boo!")
             );
 
@@ -881,8 +881,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(310, 1),
-                OnNext<int>(350, 2),
+                OnNext(310, 1),
+                OnNext(350, 2),
                 OnError<int>(400, ex => ex is TimeoutException)
             );
 
@@ -908,11 +908,11 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(450)
             );
 
-            var zs = scheduler.CreateColdObservable<string>(
+            var zs = scheduler.CreateColdObservable(
                 OnNext(50, "Boo!")
             );
 
-            var ts = scheduler.CreateColdObservable<int>(
+            var ts = scheduler.CreateColdObservable(
                 OnNext(50, 42),
                 OnCompleted<int>(70)
             );
@@ -957,7 +957,7 @@ namespace ReactiveTests.Tests
             var ys = scheduler.CreateColdObservable<string>(
             );
 
-            var zs = scheduler.CreateColdObservable<string>(
+            var zs = scheduler.CreateColdObservable(
                 OnCompleted<string>(50)
             );
 
@@ -966,8 +966,8 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnNext<int>(310, 1),
-                OnNext<int>(350, 2),
+                OnNext(310, 1),
+                OnNext(350, 2),
                 OnError<int>(400, ex => ex is TimeoutException)
             );
 
@@ -1057,7 +1057,7 @@ namespace ReactiveTests.Tests
             var ys = scheduler.CreateColdObservable<string>(
             );
 
-            var zs = scheduler.CreateColdObservable<string>(
+            var zs = scheduler.CreateColdObservable(
                 OnError<string>(50, ex)
             );
 
@@ -1099,7 +1099,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(450)
             );
 
-            var ys = scheduler.CreateColdObservable<string>(
+            var ys = scheduler.CreateColdObservable(
                 OnError<string>(50, ex)
             );
 

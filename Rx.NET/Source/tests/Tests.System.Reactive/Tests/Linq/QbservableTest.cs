@@ -234,9 +234,9 @@ namespace ReactiveTests.Tests
         public void Catch_ArgumentNullChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch<int, Exception>(_qbMy, null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch<int, Exception>(_qbNull, (Exception ex) => null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch<int>(_qbMy, _qbNull));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch<int>(_qbNull, _qbMy));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch(_qbNull, (Exception ex) => null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch(_qbMy, _qbNull));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch(_qbNull, _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch(default(IQbservableProvider), _qbMy));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch(_qbp, default(IQbservable<int>[])));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Catch(default, new MyQueryable<IObservable<int>>()));
@@ -316,7 +316,7 @@ namespace ReactiveTests.Tests
         public void Create_ArgumentNullChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Create<int>(null, o => default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Create<int>(_qbp, default(Expression<Func<IObserver<int>, Action>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Create(_qbp, default(Expression<Func<IObserver<int>, Action>>)));
         }
 
         [Fact]
@@ -329,7 +329,7 @@ namespace ReactiveTests.Tests
         public void CreateWithDisposable_ArgumentNullChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Create<int>(null, o => default(IDisposable)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Create<int>(_qbp, default(Expression<Func<IObserver<int>, IDisposable>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Create(_qbp, default(Expression<Func<IObserver<int>, IDisposable>>)));
         }
 
         [Fact]
@@ -342,13 +342,13 @@ namespace ReactiveTests.Tests
         public void Defer_ArgumentNullChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Defer(null, () => _qbMy));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Defer<int>(_qbp, default(Expression<Func<IObservable<int>>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Defer(_qbp, default(Expression<Func<IObservable<int>>>)));
         }
 
         [Fact]
         public void Defer()
         {
-            _qbp.Defer<int>(() => _qbMy);
+            _qbp.Defer(() => _qbMy);
         }
 
         [Fact]
@@ -687,8 +687,8 @@ namespace ReactiveTests.Tests
         public void Max_ArgumentNullChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Max<string>(null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Max<string>(null, Comparer<string>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Max<string>(new MyQbservable<string>(), default(IComparer<string>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Max(null, Comparer<string>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Max(new MyQbservable<string>(), default(IComparer<string>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Max(default(IQbservable<decimal?>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Max(default(IQbservable<decimal>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Max(default(IQbservable<double?>)));
@@ -772,8 +772,8 @@ namespace ReactiveTests.Tests
         public void Min_ArgumentNullChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Min<string>(null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Min<string>(null, Comparer<string>.Default));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Min<string>(new MyQbservable<string>(), default(IComparer<string>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Min(null, Comparer<string>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Min(new MyQbservable<string>(), default(IComparer<string>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Min(default(IQbservable<decimal?>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Min(default(IQbservable<decimal>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Min(default(IQbservable<double?>)));
@@ -1210,7 +1210,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Switch_ArgumentNullChecks()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Switch<int>(default(IQbservable<IObservable<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Switch(default(IQbservable<IObservable<int>>)));
         }
 
         [Fact]
@@ -1909,7 +1909,7 @@ namespace ReactiveTests.Tests
         {
             return source.Provider.CreateQuery<R>(
                 Expression.Call(
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(R)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(R)),
                     source.Expression,
                     f
                 )
@@ -1926,7 +1926,7 @@ namespace ReactiveTests.Tests
         {
             return source.Provider.CreateQuery<string>(
                 Expression.Call(
-                    (MethodInfo)MethodInfo.GetCurrentMethod(),
+                    (MethodInfo)MethodBase.GetCurrentMethod(),
                     source.Expression
                 )
             );
@@ -1943,7 +1943,7 @@ namespace ReactiveTests.Tests
         {
             return provider.CreateQuery<T>(
                 Expression.Call(
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(T)),
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(value, typeof(T))
                 )
@@ -1961,7 +1961,7 @@ namespace ReactiveTests.Tests
         {
             return source.Provider.CreateQuery<R>(
                 Expression.Call(
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(R)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(R)),
                     source.Expression,
                     f
                 )

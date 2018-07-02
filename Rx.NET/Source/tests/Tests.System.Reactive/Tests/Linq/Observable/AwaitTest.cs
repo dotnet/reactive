@@ -18,7 +18,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Await_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GetAwaiter<int>(default(IObservable<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GetAwaiter(default(IObservable<int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GetAwaiter<int>(default));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GetAwaiter(Observable.Empty<int>()).OnCompleted(null));
