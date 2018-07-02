@@ -64,10 +64,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 Disposable.TrySetSerial(ref _serialCancelable, null);
-                Disposable.TrySetSerial(ref _serialCancelable, _scheduler.Schedule((@this: this, currentid), _dueTime, (_, tuple) => tuple.@this.Propagate(tuple.currentid)));
+                Disposable.TrySetSerial(ref _serialCancelable, _scheduler.ScheduleAction((@this: this, currentid), _dueTime, tuple => tuple.@this.Propagate(tuple.currentid)));
             }
 
-            private IDisposable Propagate(ulong currentid)
+            private void Propagate(ulong currentid)
             {
                 lock (_gate)
                 {
@@ -78,8 +78,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     _hasValue = false;
                 }
-
-                return Disposable.Empty;
             }
 
             public override void OnError(Exception error)

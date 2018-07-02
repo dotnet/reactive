@@ -208,10 +208,10 @@ namespace System.Reactive.Linq.ObservableImpl
                         _nextShift += _timeShift;
                     }
 
-                    m.Disposable = _scheduler.Schedule((@this: this, isSpan, isShift), ts, (_, tuple) => tuple.@this.Tick(tuple.isSpan, tuple.isShift));
+                    m.Disposable = _scheduler.ScheduleAction((@this: this, isSpan, isShift), ts, tuple => tuple.@this.Tick(tuple.isSpan, tuple.isShift));
                 }
 
-                private IDisposable Tick(bool isSpan, bool isShift)
+                private void Tick(bool isSpan, bool isShift)
                 {
                     lock (_gate)
                     {
@@ -234,8 +234,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     CreateTimer();
-
-                    return Disposable.Empty;
                 }
 
                 public override void OnNext(TSource value)
@@ -424,19 +422,17 @@ namespace System.Reactive.Linq.ObservableImpl
                     var m = new SingleAssignmentDisposable();
                     _timerD.Disposable = m;
 
-                    m.Disposable = _scheduler.Schedule((@this: this, window), _timeSpan, (_, tuple) => tuple.@this.Tick(tuple.window));
+                    m.Disposable = _scheduler.ScheduleAction((@this: this, window), _timeSpan, tuple => tuple.@this.Tick(tuple.window));
                 }
 
-                private IDisposable Tick(Subject<TSource> window)
+                private void Tick(Subject<TSource> window)
                 {
-                    var d = Disposable.Empty;
-
                     var newWindow = default(Subject<TSource>);
                     lock (_gate)
                     {
                         if (window != _s)
                         {
-                            return d;
+                            return;
                         }
 
                         _n = 0;
@@ -448,8 +444,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     CreateTimer(newWindow);
-
-                    return d;
                 }
 
                 public override void OnNext(TSource value)

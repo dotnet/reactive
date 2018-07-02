@@ -205,11 +205,10 @@ namespace System.Reactive.Concurrency
             {
                 var sad = new SingleAssignmentDisposable();
                 group.Add(sad);
-                sad.Disposable = scheduler.Schedule((state, sad, @this: this), (_, nextState) =>
+                sad.Disposable = scheduler.ScheduleAction((state, sad, @this: this), nextState =>
                 {
                     nextState.@this.group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
-                    return Disposable.Empty;
                 });
             }
 
@@ -234,11 +233,9 @@ namespace System.Reactive.Concurrency
             {
                 var sad = new SingleAssignmentDisposable();
                 group.Add(sad);
-                sad.Disposable = scheduler.Schedule((state, sad, @this: this), time, (_, nextState) =>
-                {
+                sad.Disposable = scheduler.ScheduleAction((state, sad, @this: this), time, nextState => {
                     nextState.@this.group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
-                    return Disposable.Empty;
                 });
             }
 
@@ -263,11 +260,9 @@ namespace System.Reactive.Concurrency
             {
                 var sad = new SingleAssignmentDisposable();
                 group.Add(sad);
-                sad.Disposable = scheduler.Schedule((state, sad, @this: this), dtOffset, (_, nextState) =>
-                {
+                sad.Disposable = scheduler.ScheduleAction((state, sad, @this: this), dtOffset, nextState => {
                     nextState.@this.group.Remove(nextState.sad);
                     nextState.@this.InvokeFirst(nextState.state);
-                    return Disposable.Empty;
                 });
             }
 
