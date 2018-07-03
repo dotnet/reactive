@@ -1,4 +1,4 @@
-<Project>  
+﻿<Project>  
   <!-- This has to be set in targets as the default props will overwrite -->
   <PropertyGroup>
     <DebugType Condition="'$(IsTestProject)' != 'true'">embedded</DebugType>
@@ -15,6 +15,9 @@
     <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Product>$(AssemblyName) ($(TargetFramework))</Product>
+  </PropertyGroup>
 
   <Target Name="GetRefsForPackage" BeforeTargets="_GetPackageFiles" 
           Condition=" Exists('$(MSBuildThisFileDirectory)refs\$(MSBuildProjectName)\$(MSBuildProjectName).csproj') ">
