@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive", "refs\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive.Providers", "refs\System.Interactive.Providers\System.Interactive.Providers.csproj", "{5DF341BE-B369-4250-AFD4-604DE8C95E45}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks.System.Interactive", "Benchmarks.System.Interactive\Benchmarks.System.Interactive.csproj", "{3285529A-8227-4D40-B524-1A1F919F0E7B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{5DF341BE-B369-4250-AFD4-604DE8C95E45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DF341BE-B369-4250-AFD4-604DE8C95E45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DF341BE-B369-4250-AFD4-604DE8C95E45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3285529A-8227-4D40-B524-1A1F919F0E7B}.Debug|Any CPU.ActiveCfg = Current Sources|Any CPU
+		{3285529A-8227-4D40-B524-1A1F919F0E7B}.Debug|Any CPU.Build.0 = Current Sources|Any CPU
+		{3285529A-8227-4D40-B524-1A1F919F0E7B}.Release|Any CPU.ActiveCfg = Current Sources|Any CPU
+		{3285529A-8227-4D40-B524-1A1F919F0E7B}.Release|Any CPU.Build.0 = Current Sources|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
