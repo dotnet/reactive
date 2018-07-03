@@ -140,7 +140,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly TimeSpan _duration;
                 private readonly IScheduler _loopScheduler;
-                private Queue<Reactive.TimeInterval<TSource>> _queue;
+                private readonly Queue<Reactive.TimeInterval<TSource>> _queue;
 
                 public _(Time parent, IObserver<TSource> observer)
                     : base(observer)

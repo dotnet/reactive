@@ -18,7 +18,7 @@ namespace System.Reactive
         private bool _isDisposed;
         private int _trampoline;
         private IDisposable _currentSubscription;
-        private Stack<IEnumerator<IObservable<TSource>>> _stack = new Stack<IEnumerator<IObservable<TSource>>>();
+        private readonly Stack<IEnumerator<IObservable<TSource>>> _stack = new Stack<IEnumerator<IObservable<TSource>>>();
 
         public void Run(IEnumerable<IObservable<TSource>> sources)
         {

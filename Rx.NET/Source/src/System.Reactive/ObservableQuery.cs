@@ -364,7 +364,7 @@ namespace System.Reactive
                 }
             }
 
-            private static Lazy<ILookup<string, MethodInfo>> _observableMethods = new Lazy<ILookup<string, MethodInfo>>(() => GetMethods(typeof(Observable)));
+            private static readonly Lazy<ILookup<string, MethodInfo>> _observableMethods = new Lazy<ILookup<string, MethodInfo>>(() => GetMethods(typeof(Observable)));
 
             private static MethodCallExpression FindObservableMethod(MethodInfo method, IList<Expression> arguments)
             {

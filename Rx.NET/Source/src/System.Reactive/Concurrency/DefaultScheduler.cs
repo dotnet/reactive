@@ -13,7 +13,7 @@ namespace System.Reactive.Concurrency
     public sealed class DefaultScheduler : LocalScheduler, ISchedulerPeriodic
     {
         private static readonly Lazy<DefaultScheduler> _instance = new Lazy<DefaultScheduler>(() => new DefaultScheduler());
-        private static IConcurrencyAbstractionLayer _cal = ConcurrencyAbstractionLayer.Current;
+        private static readonly IConcurrencyAbstractionLayer _cal = ConcurrencyAbstractionLayer.Current;
 
         /// <summary>
         /// Gets the singleton instance of the default scheduler.
@@ -192,7 +192,7 @@ namespace System.Reactive.Concurrency
                 public bool IsDisposed => Disposable.GetIsDisposed(ref _cancel);
             }
 
-            public static ISchedulerLongRunning Instance = new LongRunning();
+            public static readonly ISchedulerLongRunning Instance = new LongRunning();
 
             public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
             {

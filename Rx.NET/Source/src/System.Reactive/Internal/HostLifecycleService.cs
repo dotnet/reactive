@@ -13,7 +13,7 @@ namespace System.Reactive.PlatformServices
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class HostLifecycleService
     {
-        private static Lazy<IHostLifecycleNotifications> _notifications = new Lazy<IHostLifecycleNotifications>(InitializeNotifications);
+        private static readonly Lazy<IHostLifecycleNotifications> _notifications = new Lazy<IHostLifecycleNotifications>(InitializeNotifications);
 
         private static int _refCount;
 

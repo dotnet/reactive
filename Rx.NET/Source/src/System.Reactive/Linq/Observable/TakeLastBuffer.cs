@@ -27,7 +27,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly int _count;
-                private Queue<TSource> _queue;
+                private readonly Queue<TSource> _queue;
 
                 public _(int count, IObserver<IList<TSource>> observer)
                     : base(observer)
@@ -79,7 +79,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly TimeSpan _duration;
-                private Queue<Reactive.TimeInterval<TSource>> _queue;
+                private readonly Queue<Reactive.TimeInterval<TSource>> _queue;
 
                 public _(TimeSpan duration, IObserver<IList<TSource>> observer)
                     : base(observer)
