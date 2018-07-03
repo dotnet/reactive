@@ -27,8 +27,7 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return MinBy(source, x => x, comparer)
-                .First();
+            return Extrema(source, x => x, comparer, -1);
         }
 
         /// <summary>
@@ -80,7 +79,7 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return ExtremaBy(source, keySelector, (key, minValue) => -comparer.Compare(key, minValue));
+            return ExtremaBy(source, keySelector, comparer, -1);
         }
     }
 }

@@ -27,8 +27,7 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return MaxBy(source, x => x, comparer)
-                .First();
+            return Extrema(source, x => x, comparer, 1);
         }
 
         /// <summary>
@@ -80,10 +79,46 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
             }
 
-            return ExtremaBy(source, keySelector, (key, minValue) => comparer.Compare(key, minValue));
+            return ExtremaBy(source, keySelector, comparer, 1);
         }
 
-        private static IList<TSource> ExtremaBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, TKey, int> compare)
+        private static TSource Extrema<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> compare, int direction)
+        {
+            var result = default(TSource);
+
+            using (var e = source.GetEnumerator())
+            {
+                if (!e.MoveNext())
+                {
+                    throw new InvalidOperationException("Source sequence doesn't contain any elements.");
+                }
+
+                var current = e.Current;
+                var resKey = keySelector(current);
+                result = current;
+
+                while (e.MoveNext())
+                {
+                    var cur = e.Current;
+                    var key = keySelector(cur);
+
+                    var cmp = compare.Compare(key, resKey) * direction;
+                    if (cmp == 0)
+                    {
+                        result = cur;
+                    }
+                    else if (cmp > 0)
+                    {
+                        result = cur;
+                        resKey = key;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static IList<TSource> ExtremaBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> compare, int direction)
         {
             var result = new List<TSource>();
 
@@ -103,7 +138,7 @@ namespace System.Linq
                     var cur = e.Current;
                     var key = keySelector(cur);
 
-                    var cmp = compare(key, resKey);
+                    var cmp = compare.Compare(key, resKey) * direction;
                     if (cmp == 0)
                     {
                         result.Add(cur);
