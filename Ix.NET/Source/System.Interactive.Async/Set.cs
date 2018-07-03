@@ -32,7 +32,7 @@ namespace System.Linq
         public bool Add(TElement value)
         {
 #if DEBUG
-            Debug.Assert(!_haveRemoved, "This class is optimised for never calling Add after Remove. If your changes need to do so, undo that optimization.");
+            Debug.Assert(!_haveRemoved, "This class is optimized for never calling Add after Remove. If your changes need to do so, undo that optimization.");
 #endif
             var hashCode = InternalGetHashCode(value);
             for (var i = _buckets[hashCode % _buckets.Length] - 1; i >= 0; i = _slots[i]._next)
@@ -99,7 +99,7 @@ namespace System.Linq
         internal TElement[] ToArray()
         {
 #if DEBUG
-            Debug.Assert(!_haveRemoved, "Optimised ToArray cannot be called if Remove has been called.");
+            Debug.Assert(!_haveRemoved, "Optimized ToArray cannot be called if Remove has been called.");
 #endif
             var array = new TElement[Count];
             for (var i = 0; i != array.Length; ++i)
@@ -113,7 +113,7 @@ namespace System.Linq
         internal List<TElement> ToList()
         {
 #if DEBUG
-            Debug.Assert(!_haveRemoved, "Optimised ToList cannot be called if Remove has been called.");
+            Debug.Assert(!_haveRemoved, "Optimized ToList cannot be called if Remove has been called.");
 #endif
             var count = Count;
             var list = new List<TElement>(count);

@@ -19,6 +19,7 @@ namespace Benchmarks.System.Interactive
             var switcher = new BenchmarkSwitcher(new[] {
                 typeof(BufferCountBenchmark),
                 typeof(IgnoreElementsBenchmark),
+                typeof(DeferBenchmark),
             });
 
             switcher.Run();

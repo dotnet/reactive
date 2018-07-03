@@ -27,7 +27,7 @@ namespace System.Linq
                 throw new ArgumentOutOfRangeException(nameof(count));
             }
 
-            return source.Buffer_(count, count);
+            return BufferExact(source, count);
         }
 
         /// <summary>
@@ -53,6 +53,15 @@ namespace System.Linq
             if (skip <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(skip));
+            }
+
+            if (count == skip)
+            {
+                return BufferExact(source, count);
+            }
+            if (count < skip)
+            {
+                return BufferSkip(source, count, skip);
             }
 
             return source.Buffer_(count, skip);
@@ -87,6 +96,63 @@ namespace System.Linq
             while (buffers.Count > 0)
             {
                 yield return buffers.Dequeue();
+            }
+        }
+
+        private static IEnumerable<IList<TSource>> BufferExact<TSource>(IEnumerable<TSource> source, int count)
+        {
+            IList<TSource> buffer = null;
+
+            foreach (var v in source)
+            {
+                if (buffer == null)
+                {
+                    buffer = new List<TSource>();
+                }
+
+                buffer.Add(v);
+                if (buffer.Count == count)
+                {
+                    yield return buffer;
+                    buffer = null;
+                }
+            }
+
+            if (buffer != null)
+            {
+                yield return buffer;
+            }
+        }
+
+        private static IEnumerable<IList<TSource>> BufferSkip<TSource>(IEnumerable<TSource> source, int count, int skip)
+        {
+            IList<TSource> buffer = null;
+
+            var index = 0;
+
+            foreach (var v in source)
+            {
+                if (index == 0)
+                {
+                    buffer = new List<TSource>();
+                }
+
+                buffer?.Add(v);
+                if (++index == count)
+                {
+                    yield return buffer;
+                    buffer = null;
+                }
+
+                if (index == skip)
+                {
+                    index = 0;
+                }
+            }
+
+            if (buffer != null)
+            {
+                yield return buffer;
             }
         }
     }

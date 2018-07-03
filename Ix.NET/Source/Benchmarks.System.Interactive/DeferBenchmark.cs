@@ -11,33 +11,16 @@ using BenchmarkDotNet.Attributes;
 namespace Benchmarks.System.Interactive
 {
     [MemoryDiagnoser]
-    public class BufferCountBenchmark
+    public class DeferBenchmark
     {
         [Params(1, 10, 100, 1000, 10000, 100000, 1000000)]
         public int N;
-        private IList<int> _store;
+        private int _store;
 
         [Benchmark]
-        public void Exact()
+        public void Defer()
         {
-            Enumerable.Range(1, N)
-                .Buffer(1)
-                .Subscribe(v => Volatile.Write(ref _store, v));
-        }
-
-        [Benchmark]
-        public void Skip()
-        {
-            Enumerable.Range(1, N)
-                .Buffer(1, 2)
-                .Subscribe(v => Volatile.Write(ref _store, v));
-        }
-
-        [Benchmark]
-        public void Overlap()
-        {
-            Enumerable.Range(1, N)
-                .Buffer(2, 1)
+            EnumerableEx.Defer(() => Enumerable.Range(1, N))
                 .Subscribe(v => Volatile.Write(ref _store, v));
         }
     }
