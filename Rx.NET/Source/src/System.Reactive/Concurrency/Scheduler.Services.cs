@@ -13,7 +13,7 @@ namespace System.Reactive.Concurrency
         internal static Type[] OPTIMIZATIONS = {
             typeof(ISchedulerLongRunning),
             typeof(IStopwatchProvider),
-            typeof(ISchedulerPeriodic),
+            typeof(ISchedulerPeriodic)
             /* update this list if new interface-based optimizations are added */
         };
 

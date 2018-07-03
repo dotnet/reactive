@@ -395,9 +395,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     try
                     {
                         var hasNext = true;
+
                         while (hasNext)
                         {
-                            hasNext = false;
                             var current = default(TResult);
 
                             try
@@ -422,10 +422,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     finally
                     {
-                        if (e != null)
-                        {
-                            e.Dispose();
-                        }
+                        e.Dispose();
                     }
                 }
             }
@@ -492,9 +489,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         var eIndex = 0;
                         var hasNext = true;
+
                         while (hasNext)
                         {
-                            hasNext = false;
                             var current = default(TResult);
 
                             try
@@ -519,10 +516,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     finally
                     {
-                        if (e != null)
-                        {
-                            e.Dispose();
-                        }
+                        e.Dispose();
                     }
                 }
             }
@@ -1370,9 +1364,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     try
                     {
                         var hasNext = true;
+
                         while (hasNext)
                         {
-                            hasNext = false;
                             var current = default(TResult);
 
                             try
@@ -1397,10 +1391,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     finally
                     {
-                        if (e != null)
-                        {
-                            e.Dispose();
-                        }
+                        e.Dispose();
                     }
                 }
             }
@@ -1460,9 +1451,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     try
                     {
                         var hasNext = true;
+
                         while (hasNext)
                         {
-                            hasNext = false;
                             var current = default(TResult);
 
                             try
@@ -1487,10 +1478,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     finally
                     {
-                        if (e != null)
-                        {
-                            e.Dispose();
-                        }
+                        e.Dispose();
                     }
                 }
             }
