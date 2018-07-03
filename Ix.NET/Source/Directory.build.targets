@@ -6,21 +6,17 @@
   
   <!-- This props all need to be set in targets as they depend on the values set earlier -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
-    <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY;NO_CODE_COVERAGE_ATTRIBUTE;CRIPPLED_REFLECTION;PLIB;</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY;NO_CODE_COVERAGE_ATTRIBUTE;CRIPPLED_REFLECTION</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-    <DefineConstants>$(DefineConstants);NO_CODE_COVERAGE_ATTRIBUTE;CRIPPLED_REFLECTION;PLIB;</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <DefineConstants>$(DefineConstants);PLIB;</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_CODE_COVERAGE_ATTRIBUTE;CRIPPLED_REFLECTION</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
     <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY</DefineConstants>
   </PropertyGroup>
 
 
-  <Target Name="GetRefsWithoutLib" 
-          BeforeTargets="_GetPackageFiles" 
+  <Target Name="GetRefsForPackage" BeforeTargets="_GetPackageFiles" 
           Condition=" Exists('$(MSBuildThisFileDirectory)refs\$(MSBuildProjectName)\$(MSBuildProjectName).csproj') ">
     
     <MSBuild Projects="$(MSBuildThisFileDirectory)refs\$(MSBuildProjectName)\$(MSBuildProjectName).csproj" 
