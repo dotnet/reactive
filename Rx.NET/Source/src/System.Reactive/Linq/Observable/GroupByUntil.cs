@@ -297,9 +297,9 @@ namespace System.Reactive.Linq.ObservableImpl
         // and blocking, but also the more expensive operations that require all locks become (e.g. table
         // resizing, ToArray, Count, etc). According to brief benchmarks that we ran, 4 seems like a good
         // compromise.
-        private const int DEFAULT_CONCURRENCY_MULTIPLIER = 4;
+        private const int DefaultConcurrencyMultiplier = 4;
 
-        private static int DefaultConcurrencyLevel => DEFAULT_CONCURRENCY_MULTIPLIER * Environment.ProcessorCount;
+        private static int DefaultConcurrencyLevel => DefaultConcurrencyMultiplier * Environment.ProcessorCount;
 
         private readonly ConcurrentDictionary<TKey, TValue> _map;
 

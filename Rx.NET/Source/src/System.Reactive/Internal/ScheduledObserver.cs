@@ -14,10 +14,10 @@ namespace System.Reactive
     internal class ScheduledObserver<T> : ObserverBase<T>, IScheduledObserver<T>
     {
         private int _state;
-        private const int STOPPED = 0;
-        private const int RUNNING = 1;
-        private const int PENDING = 2;
-        private const int FAULTED = 9;
+        private const int Stopped = 0;
+        private const int Running = 1;
+        private const int Pending = 2;
+        private const int Faulted = 9;
         private readonly ConcurrentQueue<T> _queue = new ConcurrentQueue<T>();
         private bool _failed;
         private Exception _error;
@@ -156,14 +156,14 @@ namespace System.Reactive
 
             while (true)
             {
-                var old = Interlocked.CompareExchange(ref _state, RUNNING, STOPPED);
-                if (old == STOPPED)
+                var old = Interlocked.CompareExchange(ref _state, Running, Stopped);
+                if (old == Stopped)
                 {
                     isOwner = true; // RUNNING
                     break;
                 }
 
-                if (old == FAULTED)
+                if (old == Faulted)
                 {
                     return;
                 }
@@ -191,7 +191,7 @@ namespace System.Reactive
                 // should only be called after invocation of IObserver<T> methods that touch
                 // this state.
                 //
-                if (old == PENDING || old == RUNNING && Interlocked.CompareExchange(ref _state, PENDING, RUNNING) == RUNNING)
+                if (old == Pending || old == Running && Interlocked.CompareExchange(ref _state, Pending, Running) == Running)
                 {
                     break;
                 }
@@ -229,7 +229,7 @@ namespace System.Reactive
                         continue;
                     }
 
-                    Interlocked.Exchange(ref _state, STOPPED);
+                    Interlocked.Exchange(ref _state, Stopped);
                     _observer.OnError(_error);
                     Dispose();
                     return;
@@ -256,26 +256,26 @@ namespace System.Reactive
                         continue;
                     }
 
-                    Interlocked.Exchange(ref _state, STOPPED);
+                    Interlocked.Exchange(ref _state, Stopped);
                     _observer.OnCompleted();
                     Dispose();
                     return;
                 }
 
-                var old = Interlocked.CompareExchange(ref _state, STOPPED, RUNNING);
-                if (old == RUNNING || old == FAULTED)
+                var old = Interlocked.CompareExchange(ref _state, Stopped, Running);
+                if (old == Running || old == Faulted)
                 {
                     return;
                 }
 
-                Debug.Assert(old == PENDING);
+                Debug.Assert(old == Pending);
 
                 // The producer has put us in the PENDING state to prevent us from
                 // transitioning to STOPPED, so we go RUNNING again and re-check our state.
-                _state = RUNNING;
+                _state = Running;
             }
 
-            Interlocked.Exchange(ref _state, RUNNING);
+            Interlocked.Exchange(ref _state, Running);
 
             try
             {
@@ -283,7 +283,7 @@ namespace System.Reactive
             }
             catch
             {
-                Interlocked.Exchange(ref _state, FAULTED);
+                Interlocked.Exchange(ref _state, Faulted);
 
                 while (_queue.TryDequeue(out _))
                 {

@@ -24,10 +24,10 @@ namespace System.Reactive.PlatformServices
 
     internal class DefaultSystemClockMonitor : PeriodicTimerSystemClockMonitor
     {
-        private static readonly TimeSpan DEFAULT_PERIOD = TimeSpan.FromSeconds(1);
+        private static readonly TimeSpan DefaultPeriod = TimeSpan.FromSeconds(1);
 
         public DefaultSystemClockMonitor()
-            : base(DEFAULT_PERIOD)
+            : base(DefaultPeriod)
         {
         }
     }
@@ -49,9 +49,9 @@ namespace System.Reactive.PlatformServices
 
         private EventHandler<SystemClockChangedEventArgs> _systemClockChanged;
 
-        private const int SYNC_MAXRETRIES = 100;
-        private const double SYNC_MAXDELTA = 10;
-        private const int MAXERROR = 100;
+        private const int SyncMaxRetries = 100;
+        private const double SyncMaxDelta = 10;
+        private const int MaxError = 100;
 
         /// <summary>
         /// Creates a new monitor for system clock changes with the specified polling frequency.
@@ -94,7 +94,7 @@ namespace System.Reactive.PlatformServices
 
                 Disposable.TrySetSerial(ref _timer, ConcurrencyAbstractionLayer.Current.StartPeriodicTimer(TimeChanged, _period));
 
-                if (Math.Abs(SystemClock.UtcNow.ToUnixTimeMilliseconds() - now) <= SYNC_MAXDELTA)
+                if (Math.Abs(SystemClock.UtcNow.ToUnixTimeMilliseconds() - now) <= SyncMaxDelta)
                 {
                     break;
                 }
@@ -102,9 +102,9 @@ namespace System.Reactive.PlatformServices
                 {
                     break;
                 }
-                if (++n >= SYNC_MAXRETRIES)
+                if (++n >= SyncMaxRetries)
                 {
-                    Task.Delay((int)SYNC_MAXDELTA).Wait();
+                    Task.Delay((int)SyncMaxDelta).Wait();
                 }
             };
         }
@@ -117,7 +117,7 @@ namespace System.Reactive.PlatformServices
 
             var oldTime = (long)(last + _period.TotalMilliseconds);
             var diff = now - oldTime;
-            if (Math.Abs(diff) >= MAXERROR)
+            if (Math.Abs(diff) >= MaxError)
             {
                 _systemClockChanged?.Invoke(this, new SystemClockChangedEventArgs(
                     DateTimeOffset.FromUnixTimeMilliseconds(oldTime), newTime));

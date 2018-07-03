@@ -18,11 +18,11 @@ namespace System.Reactive.Disposables
         private bool _disposed;
         private List<IDisposable> _disposables;
         private int _count;
-        private const int SHRINK_THRESHOLD = 64;
+        private const int ShrinkThreshold = 64;
 
         // Default initial capacity of the _disposables list in case
         // The number of items is not known upfront
-        private const int DEFAULT_CAPACITY = 16;
+        private const int DefaultCapacity = 16;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompositeDisposable"/> class with no disposables contained by it initially.
@@ -85,7 +85,7 @@ namespace System.Reactive.Disposables
             else
             {
                 // Unknown sized disposables, use the default capacity hint
-                Init(disposables, DEFAULT_CAPACITY);
+                Init(disposables, DefaultCapacity);
             }
         }
 
@@ -190,7 +190,7 @@ namespace System.Reactive.Disposables
 
                 current[i] = null;
 
-                if (current.Capacity > SHRINK_THRESHOLD && _count < current.Capacity / 2)
+                if (current.Capacity > ShrinkThreshold && _count < current.Capacity / 2)
                 {
                     var fresh = new List<IDisposable>(current.Capacity / 2);
 
@@ -357,7 +357,7 @@ namespace System.Reactive.Disposables
             {
                 if (_disposed || _count == 0)
                 {
-                    return EMPTY_ENUMERATOR;
+                    return EmptyEnumerator;
                 }
                 // the copy is unavoidable but the creation
                 // of an outer IEnumerable is avoidable
@@ -380,7 +380,7 @@ namespace System.Reactive.Disposables
         /// An empty enumerator for the <see cref="GetEnumerator"/>
         /// method to avoid allocation on disposed or empty composites.
         /// </summary>
-        private static readonly CompositeEnumerator EMPTY_ENUMERATOR =
+        private static readonly CompositeEnumerator EmptyEnumerator =
             new CompositeEnumerator(new IDisposable[0]);
 
         /// <summary>

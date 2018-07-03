@@ -18,9 +18,9 @@ namespace System.Reactive.Subjects
 
         private SubjectDisposable[] _observers;
         private Exception _exception;
-        private static readonly SubjectDisposable[] EMPTY = new SubjectDisposable[0];
-        private static readonly SubjectDisposable[] TERMINATED = new SubjectDisposable[0];
-        private static readonly SubjectDisposable[] DISPOSED = new SubjectDisposable[0];
+        private static readonly SubjectDisposable[] Empty = new SubjectDisposable[0];
+        private static readonly SubjectDisposable[] Terminated = new SubjectDisposable[0];
+        private static readonly SubjectDisposable[] Disposed = new SubjectDisposable[0];
 
         #endregion
 
@@ -31,7 +31,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         public Subject()
         {
-            Volatile.Write(ref _observers, EMPTY);
+            Volatile.Write(ref _observers, Empty);
         }
 
         #endregion
@@ -52,7 +52,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Indicates whether the subject has been disposed.
         /// </summary>
-        public override bool IsDisposed => Volatile.Read(ref _observers) == DISPOSED;
+        public override bool IsDisposed => Volatile.Read(ref _observers) == Disposed;
 
         #endregion
 
@@ -73,17 +73,17 @@ namespace System.Reactive.Subjects
             for (; ; )
             {
                 var observers = Volatile.Read(ref _observers);
-                if (observers == DISPOSED)
+                if (observers == Disposed)
                 {
                     _exception = null;
                     ThrowDisposed();
                     break;
                 }
-                if (observers == TERMINATED)
+                if (observers == Terminated)
                 {
                     break;
                 }
-                if (Interlocked.CompareExchange(ref _observers, TERMINATED, observers) == observers)
+                if (Interlocked.CompareExchange(ref _observers, Terminated, observers) == observers)
                 {
                     foreach (var observer in observers)
                     {
@@ -109,18 +109,18 @@ namespace System.Reactive.Subjects
             for (; ; )
             {
                 var observers = Volatile.Read(ref _observers);
-                if (observers == DISPOSED)
+                if (observers == Disposed)
                 {
                     _exception = null;
                     ThrowDisposed();
                     break;
                 }
-                if (observers == TERMINATED)
+                if (observers == Terminated)
                 {
                     break;
                 }
                 _exception = error;
-                if (Interlocked.CompareExchange(ref _observers, TERMINATED, observers) == observers)
+                if (Interlocked.CompareExchange(ref _observers, Terminated, observers) == observers)
                 {
                     foreach (var observer in observers)
                     {
@@ -138,7 +138,7 @@ namespace System.Reactive.Subjects
         public override void OnNext(T value)
         {
             var observers = Volatile.Read(ref _observers);
-            if (observers == DISPOSED)
+            if (observers == Disposed)
             {
                 _exception = null;
                 ThrowDisposed();
@@ -171,13 +171,13 @@ namespace System.Reactive.Subjects
             for (; ; )
             {
                 var observers = Volatile.Read(ref _observers);
-                if (observers == DISPOSED)
+                if (observers == Disposed)
                 {
                     _exception = null;
                     ThrowDisposed();
                     break;
                 }
-                if (observers == TERMINATED)
+                if (observers == Terminated)
                 {
                     var ex = _exception;
                     if (ex != null)
@@ -229,7 +229,7 @@ namespace System.Reactive.Subjects
                 var b = default(SubjectDisposable[]);
                 if (n == 1)
                 {
-                    b = EMPTY;
+                    b = Empty;
                 }
                 else
                 {
@@ -279,7 +279,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         public override void Dispose()
         {
-            Interlocked.Exchange(ref _observers, DISPOSED);
+            Interlocked.Exchange(ref _observers, Disposed);
             _exception = null;
         }
 

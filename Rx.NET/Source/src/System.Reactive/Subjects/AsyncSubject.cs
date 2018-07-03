@@ -25,17 +25,17 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// A pre-allocated empty array for the no-observers state.
         /// </summary>
-        private static readonly AsyncSubjectDisposable[] EMPTY = new AsyncSubjectDisposable[0];
+        private static readonly AsyncSubjectDisposable[] Empty = new AsyncSubjectDisposable[0];
 
         /// <summary>
         /// A pre-allocated empty array indicating the AsyncSubject has terminated
         /// </summary>
-        private static readonly AsyncSubjectDisposable[] TERMINATED = new AsyncSubjectDisposable[0];
+        private static readonly AsyncSubjectDisposable[] Terminated = new AsyncSubjectDisposable[0];
 
         /// <summary>
         /// A pre-allocated empty array indicating the AsyncSubject has terminated
         /// </summary>
-        private static readonly AsyncSubjectDisposable[] DISPOSED = new AsyncSubjectDisposable[0];
+        private static readonly AsyncSubjectDisposable[] Disposed = new AsyncSubjectDisposable[0];
 
         #endregion
 
@@ -46,7 +46,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         public AsyncSubject()
         {
-            _observers = EMPTY;
+            _observers = Empty;
         }
 
         #endregion
@@ -61,7 +61,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Indicates whether the subject has been disposed.
         /// </summary>
-        public override bool IsDisposed => Volatile.Read(ref _observers) == DISPOSED;
+        public override bool IsDisposed => Volatile.Read(ref _observers) == Disposed;
 
         #endregion
 
@@ -77,17 +77,17 @@ namespace System.Reactive.Subjects
             for (; ; )
             {
                 var observers = Volatile.Read(ref _observers);
-                if (observers == DISPOSED)
+                if (observers == Disposed)
                 {
                     _exception = null;
                     ThrowDisposed();
                     break;
                 }
-                if (observers == TERMINATED)
+                if (observers == Terminated)
                 {
                     break;
                 }
-                if (Interlocked.CompareExchange(ref _observers, TERMINATED, observers) == observers)
+                if (Interlocked.CompareExchange(ref _observers, Terminated, observers) == observers)
                 {
                     var hasValue = _hasValue;
                     if (hasValue)
@@ -132,19 +132,19 @@ namespace System.Reactive.Subjects
             for (; ; )
             {
                 var observers = Volatile.Read(ref _observers);
-                if (observers == DISPOSED)
+                if (observers == Disposed)
                 {
                     _exception = null;
                     _value = default;
                     ThrowDisposed();
                     break;
                 }
-                if (observers == TERMINATED)
+                if (observers == Terminated)
                 {
                     break;
                 }
                 _exception = error;
-                if (Interlocked.CompareExchange(ref _observers, TERMINATED, observers) == observers)
+                if (Interlocked.CompareExchange(ref _observers, Terminated, observers) == observers)
                 {
                     foreach (var o in observers)
                     {
@@ -165,14 +165,14 @@ namespace System.Reactive.Subjects
         public override void OnNext(T value)
         {
             var observers = Volatile.Read(ref _observers);
-            if (observers == DISPOSED)
+            if (observers == Disposed)
             {
                 _value = default;
                 _exception = null;
                 ThrowDisposed();
                 return;
             }
-            if (observers == TERMINATED)
+            if (observers == Terminated)
             {
                 return;
             }
@@ -226,7 +226,7 @@ namespace System.Reactive.Subjects
             for (; ; )
             {
                 var a = Volatile.Read(ref _observers);
-                if (a == DISPOSED)
+                if (a == Disposed)
                 {
                     _value = default;
                     _exception = null;
@@ -234,7 +234,7 @@ namespace System.Reactive.Subjects
                     return true;
                 }
 
-                if (a == TERMINATED)
+                if (a == Terminated)
                 {
                     return false;
                 }
@@ -282,7 +282,7 @@ namespace System.Reactive.Subjects
                 var b = default(AsyncSubjectDisposable[]);
                 if (n == 1)
                 {
-                    b = EMPTY;
+                    b = Empty;
                 }
                 else
                 {
@@ -337,7 +337,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         public override void Dispose()
         {
-            if (Interlocked.Exchange(ref _observers, DISPOSED) != DISPOSED)
+            if (Interlocked.Exchange(ref _observers, Disposed) != Disposed)
             {
                 _exception = null;
                 _value = default;
@@ -422,7 +422,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Gets whether the AsyncSubject has completed.
         /// </summary>
-        public bool IsCompleted => Volatile.Read(ref _observers) == TERMINATED;
+        public bool IsCompleted => Volatile.Read(ref _observers) == Terminated;
 
         /// <summary>
         /// Gets the last element of the subject, potentially blocking until the subject completes successfully or exceptionally.
@@ -432,7 +432,7 @@ namespace System.Reactive.Subjects
         [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Await pattern for C# and VB compilers.")]
         public T GetResult()
         {
-            if (Volatile.Read(ref _observers) != TERMINATED)
+            if (Volatile.Read(ref _observers) != Terminated)
             {
                 var e = new ManualResetEvent(initialState: false);
                 OnCompleted(() => e.Set(), originalContext: false);

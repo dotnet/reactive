@@ -330,7 +330,7 @@ namespace System.Reactive.Concurrency
                 _stopwatchProvider = stopwatchProvider;
 
                 _state = state;
-                _runState = STOPPED;
+                _runState = Stopped;
             }
 
             private TState _state;
@@ -362,10 +362,10 @@ namespace System.Reactive.Concurrency
             //  (d) Dispose returned object from Start --> scheduled work is cancelled
             //  (e) Dispose returned object from Start --> unblocks _resumeEvent, Tick exits
             //
-            private const int STOPPED = 0;
-            private const int RUNNING = 1;
-            private const int SUSPENDED = 2;
-            private const int DISPOSED = 3;
+            private const int Stopped = 0;
+            private const int Running = 1;
+            private const int Suspended = 2;
+            private const int Disposed = 3;
 
             private IDisposable _task;
 
@@ -375,7 +375,7 @@ namespace System.Reactive.Concurrency
 
                 _stopwatch = _stopwatchProvider.StartStopwatch();
                 _nextDue = _period;
-                _runState = RUNNING;
+                _runState = Running;
 
                 Disposable.TrySetSingle(ref _task, _scheduler.Schedule(this, _nextDue, (@this, a) => @this.Tick(a)));
                 return this;
@@ -398,7 +398,7 @@ namespace System.Reactive.Concurrency
                 {
                     lock (_gate)
                     {
-                        if (_runState == RUNNING)
+                        if (_runState == Running)
                         {
                             //
                             // This is the fast path. We just let the stopwatch continue to
@@ -410,7 +410,7 @@ namespace System.Reactive.Concurrency
                             break;
                         }
 
-                        if (_runState == DISPOSED)
+                        if (_runState == Disposed)
                         {
                             //
                             // In case the periodic job gets disposed but we are currently
@@ -427,7 +427,7 @@ namespace System.Reactive.Concurrency
                         // to block such that future reevaluations of the next due time
                         // will pick up the cumulative inactive time delta.
                         //
-                        Debug.Assert(_runState == SUSPENDED);
+                        Debug.Assert(_runState == Suspended);
                     }
 
                     //
@@ -449,7 +449,7 @@ namespace System.Reactive.Concurrency
 
                 lock (_gate)
                 {
-                    _runState = DISPOSED;
+                    _runState = Disposed;
 
                     if (!Environment.HasShutdownStarted)
                     {
@@ -476,10 +476,10 @@ namespace System.Reactive.Concurrency
                 //
                 lock (_gate)
                 {
-                    if (_runState == RUNNING)
+                    if (_runState == Running)
                     {
                         _suspendedAt = _stopwatch.Elapsed;
-                        _runState = SUSPENDED;
+                        _runState = Suspended;
 
                         if (!Environment.HasShutdownStarted)
                         {
@@ -510,10 +510,10 @@ namespace System.Reactive.Concurrency
                 //
                 lock (_gate)
                 {
-                    if (_runState == SUSPENDED)
+                    if (_runState == Suspended)
                     {
                         _inactiveTime += _stopwatch.Elapsed - _suspendedAt;
-                        _runState = RUNNING;
+                        _runState = Running;
 
                         if (!Environment.HasShutdownStarted)
                         {
@@ -573,8 +573,8 @@ namespace System.Reactive.Concurrency
             // The protocol using the three commands is explained in the Tick implementation below.
             //
             private const int TICK = 0;
-            private const int DISPATCH_START = 1;
-            private const int DISPATCH_END = 2;
+            private const int DispatchStart = 1;
+            private const int DispatchEnd = 2;
 
             private void Tick(int command, Action<int, TimeSpan> recurse)
             {
@@ -596,12 +596,12 @@ namespace System.Reactive.Concurrency
                         //
                         if (Interlocked.Increment(ref _pendingTickCount) == 1)
                         {
-                            goto case DISPATCH_START;
+                            goto case DispatchStart;
                         }
 
                         break;
 
-                    case DISPATCH_START:
+                    case DispatchStart:
                         try
                         {
                             _state = _action(_state);
@@ -625,11 +625,11 @@ namespace System.Reactive.Concurrency
                         // disabled using DisableOptimizations; legacy implementations of schedulers
                         // from the v1.x days will not have a stopwatch).
                         //
-                        recurse(DISPATCH_END, TimeSpan.Zero);
+                        recurse(DispatchEnd, TimeSpan.Zero);
 
                         break;
 
-                    case DISPATCH_END:
+                    case DispatchEnd:
                         //
                         // If work was due while we were still running user code, the count will have
                         // been incremented by the periodic tick handler above. In that case, we will
@@ -642,7 +642,7 @@ namespace System.Reactive.Concurrency
                         //
                         if (Interlocked.Decrement(ref _pendingTickCount) > 0)
                         {
-                            recurse(DISPATCH_START, TimeSpan.Zero);
+                            recurse(DispatchStart, TimeSpan.Zero);
                         }
 
                         break;

@@ -25,7 +25,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<IObservable<TResult>> FromAsyncPattern<TResult>(Func<AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -53,7 +53,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, IObservable<TResult>> FromAsyncPattern<TArg1, TResult>(Func<TArg1, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -82,7 +82,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TResult>(Func<TArg1, TArg2, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -112,7 +112,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TResult>(Func<TArg1, TArg2, TArg3, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -143,7 +143,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TResult>(Func<TArg1, TArg2, TArg3, TArg4, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -175,7 +175,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -208,7 +208,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -242,7 +242,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -277,7 +277,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -313,7 +313,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -350,7 +350,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -388,7 +388,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -427,7 +427,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -467,7 +467,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -508,7 +508,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IObservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
@@ -538,7 +538,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<IObservable<Unit>> FromAsyncPattern(Func<AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -565,7 +565,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, IObservable<Unit>> FromAsyncPattern<TArg1>(Func<TArg1, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -593,7 +593,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, IObservable<Unit>> FromAsyncPattern<TArg1, TArg2>(Func<TArg1, TArg2, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -622,7 +622,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, IObservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3>(Func<TArg1, TArg2, TArg3, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -652,7 +652,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, IObservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4>(Func<TArg1, TArg2, TArg3, TArg4, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -683,7 +683,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IObservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -715,7 +715,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IObservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -748,7 +748,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IObservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -782,7 +782,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IObservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -817,7 +817,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IObservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -853,7 +853,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IObservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -890,7 +890,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IObservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -928,7 +928,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IObservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -967,7 +967,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IObservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
@@ -1007,7 +1007,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="begin"/> or <paramref name="end"/> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFER_ASYNC
-        [Obsolete(Constants_Linq.USE_TASK_FROMASYNCPATTERN)]
+        [Obsolete(Constants_Linq.UseTaskFromAsyncPattern)]
 #endif
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IObservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
