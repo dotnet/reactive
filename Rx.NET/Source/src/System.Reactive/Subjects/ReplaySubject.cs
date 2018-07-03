@@ -880,7 +880,8 @@ namespace System.Reactive.Subjects
                             observer.OnError(error);
                             break;
                         }
-                        else if (done)
+
+                        if (done)
                         {
                             var observer = Done();
                             observer.OnCompleted();

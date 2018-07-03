@@ -108,7 +108,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         else if (_other.Done)
                         {
                             _parent.ForwardOnCompleted();
-                            return;
                         }
                     }
                 }
@@ -130,7 +129,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         if (_other.Done)
                         {
                             _parent.ForwardOnCompleted();
-                            return;
                         }
                         else
                         {
@@ -181,7 +179,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         else if (_other.Done)
                         {
                             _parent.ForwardOnCompleted();
-                            return;
                         }
                     }
                 }
@@ -203,7 +200,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         if (_other.Done)
                         {
                             _parent.ForwardOnCompleted();
-                            return;
                         }
                         else
                         {
@@ -323,7 +319,6 @@ namespace System.Reactive.Linq.ObservableImpl
             if (allDone)
             {
                 ForwardOnCompleted();
-                return;
             }
         }
     }
@@ -472,7 +467,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     else if (_isDone.AllExcept(index))
                     {
                         ForwardOnCompleted();
-                        return;
                     }
                 }
             }
@@ -494,7 +488,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (_isDone.All())
                     {
                         ForwardOnCompleted();
-                        return;
                     }
                     else
                     {

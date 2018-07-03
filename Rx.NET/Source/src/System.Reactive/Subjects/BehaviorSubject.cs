@@ -118,15 +118,14 @@ namespace System.Reactive.Subjects
                     value = default;
                     return false;
                 }
-                else if (_exception != null)
+
+                if (_exception != null)
                 {
                     throw _exception;
                 }
-                else
-                {
-                    value = _value;
-                    return true;
-                }
+
+                value = _value;
+                return true;
             }
         }
 

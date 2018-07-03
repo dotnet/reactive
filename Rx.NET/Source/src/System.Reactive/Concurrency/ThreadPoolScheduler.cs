@@ -141,10 +141,8 @@ namespace System.Reactive.Concurrency
             {
                 return new FastPeriodicTimer<TState>(state, action);
             }
-            else
-            {
-                return new PeriodicTimer<TState>(state, period, action);
-            }
+
+            return new PeriodicTimer<TState>(state, period, action);
         }
 
         private sealed class FastPeriodicTimer<TState> : IDisposable

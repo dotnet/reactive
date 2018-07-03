@@ -44,10 +44,8 @@ namespace System.Reactive.Concurrency
             {
                 return new FastPeriodicTimer(action);
             }
-            else
-            {
-                return new PeriodicTimer(action, period);
-            }
+
+            return new PeriodicTimer(action, period);
         }
 
         public IDisposable QueueUserWorkItem(Action<object> action, object state)

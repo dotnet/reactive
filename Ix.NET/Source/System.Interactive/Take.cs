@@ -8,6 +8,7 @@ namespace System.Linq
 {
     public static partial class EnumerableEx
     {
+#if !(REF_ASSM && NETCOREAPP2_0)
         /// <summary>
         ///     Returns a specified number of contiguous elements from the end of the sequence.
         /// </summary>
@@ -29,6 +30,7 @@ namespace System.Linq
 
             return source.TakeLast_(count);
         }
+#endif
 
         private static IEnumerable<TSource> TakeLast_<TSource>(this IEnumerable<TSource> source, int count)
         {

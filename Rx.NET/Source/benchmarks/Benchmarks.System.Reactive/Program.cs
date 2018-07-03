@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Reactive.Linq;
 using BenchmarkDotNet.Running;
 
 namespace Benchmarks.System.Reactive
@@ -11,6 +12,8 @@ namespace Benchmarks.System.Reactive
     {
         private static void Main()
         {
+            Console.WriteLine("Effective Rx-version: " + typeof(Observable).Assembly.GetName().Version);
+
             var switcher = new BenchmarkSwitcher(new[] {
                 typeof(ZipBenchmark),
                 typeof(CombineLatestBenchmark),
@@ -22,6 +25,9 @@ namespace Benchmarks.System.Reactive
                 typeof(AppendPrependBenchmark),
                 typeof(ComparisonBenchmark),
                 typeof(ComparisonAsyncBenchmark)
+#if (CURRENT)
+                ,typeof(AppendPrependBenchmark)
+#endif
             });
 
             switcher.Run();

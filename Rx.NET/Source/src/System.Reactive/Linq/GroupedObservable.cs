@@ -38,13 +38,11 @@ namespace System.Reactive.Linq
                 var subscription = _subject.Subscribe/*Unsafe*/(observer);
                 return StableCompositeDisposable.Create(release, subscription);
             }
-            else
-            {
-                //
-                // [OK] Use of unsafe Subscribe: called on a known subject implementation.
-                //
-                return _subject.Subscribe/*Unsafe*/(observer);
-            }
+
+            //
+            // [OK] Use of unsafe Subscribe: called on a known subject implementation.
+            //
+            return _subject.Subscribe/*Unsafe*/(observer);
         }
     }
 }

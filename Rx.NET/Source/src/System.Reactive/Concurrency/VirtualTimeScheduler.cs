@@ -320,7 +320,7 @@ namespace System.Reactive.Concurrency
         {
             if (serviceType == typeof(IStopwatchProvider))
             {
-                return this as IStopwatchProvider;
+                return this;
             }
 
             return null;

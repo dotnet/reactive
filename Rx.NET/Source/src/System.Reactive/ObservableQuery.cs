@@ -177,10 +177,8 @@ namespace System.Reactive
                     {
                         return Expression.Constant(source);
                     }
-                    else
-                    {
-                        return Visit(query.Expression);
-                    }
+
+                    return Visit(query.Expression);
                 }
 
                 return node;
@@ -208,7 +206,8 @@ namespace System.Reactive
                         var then = Expression.Call(pattern, "Then", method.GetGenericArguments(), arguments);
                         return then;
                     }
-                    else if (method.Name == "And")
+
+                    if (method.Name == "And")
                     {
                         //
                         // Retarget And to the corresponding pattern.

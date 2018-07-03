@@ -12,7 +12,7 @@ namespace System.Reactive.Linq
     /// target class type.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public sealed class LocalQueryMethodImplementationTypeAttribute : Attribute
     {
         private readonly Type _targetType;

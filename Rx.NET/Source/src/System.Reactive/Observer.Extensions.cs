@@ -226,10 +226,8 @@ namespace System.Reactive
             {
                 return new AsyncLockObserver<T>(observer, new AsyncLock());
             }
-            else
-            {
-                return new SynchronizedObserver<T>(observer, new object());
-            }
+
+            return new SynchronizedObserver<T>(observer, new object());
         }
 
         /// <summary>

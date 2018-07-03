@@ -396,8 +396,6 @@ namespace System.Reactive.Concurrency
 
                 while (true)
                 {
-                    var shouldWaitForResume = false;
-
                     lock (_gate)
                     {
                         if (_runState == RUNNING)
@@ -411,7 +409,8 @@ namespace System.Reactive.Concurrency
                             next = Normalize(_nextDue - (_stopwatch.Elapsed - _inactiveTime));
                             break;
                         }
-                        else if (_runState == DISPOSED)
+
+                        if (_runState == DISPOSED)
                         {
                             //
                             // In case the periodic job gets disposed but we are currently
@@ -422,16 +421,13 @@ namespace System.Reactive.Concurrency
                             //
                             return;
                         }
-                        else
-                        {
-                            //
-                            // This is the least common case where we got suspended and need
-                            // to block such that future reevaluations of the next due time
-                            // will pick up the cumulative inactive time delta.
-                            //
-                            Debug.Assert(_runState == SUSPENDED);
-                            shouldWaitForResume = true;
-                        }
+
+                        //
+                        // This is the least common case where we got suspended and need
+                        // to block such that future reevaluations of the next due time
+                        // will pick up the cumulative inactive time delta.
+                        //
+                        Debug.Assert(_runState == SUSPENDED);
                     }
 
                     //
@@ -441,10 +437,7 @@ namespace System.Reactive.Concurrency
                     // be extremely unlucky to find ourselves SUSPENDED again and be blocked
                     // once more.
                     //
-                    if (shouldWaitForResume)
-                    {
-                        _resumeEvent.WaitOne();
-                    }
+                    _resumeEvent.WaitOne();
                 }
 
                 recurse(this, next);

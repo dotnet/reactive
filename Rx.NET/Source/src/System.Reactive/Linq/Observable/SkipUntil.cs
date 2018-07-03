@@ -147,10 +147,8 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 return this;
             }
-            else
-            {
-                return new SkipUntil<TSource>(_source, startTime, _scheduler);
-            }
+
+            return new SkipUntil<TSource>(_source, startTime, _scheduler);
         }
 
         protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);

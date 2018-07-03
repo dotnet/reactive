@@ -124,10 +124,8 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 return this;
             }
-            else
-            {
-                return new TakeUntil<TSource>(_source, endTime, _scheduler);
-            }
+
+            return new TakeUntil<TSource>(_source, endTime, _scheduler);
         }
 
         protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
