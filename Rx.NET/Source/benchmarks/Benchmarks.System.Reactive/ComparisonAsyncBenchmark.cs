@@ -38,7 +38,7 @@ namespace Benchmarks.System.Reactive
 
             if (N <= 1000)
             {
-                while (cde.CurrentCount == 0) ;
+                while (cde.CurrentCount != 0) ;
             }
             else
             {
@@ -52,11 +52,11 @@ namespace Benchmarks.System.Reactive
             var cde = new CountdownEvent(1);
 
             Observable.Range(1, N).SubscribeOn(_scheduler1)
-                .Subscribe(v => Volatile.Write(ref _store, v));
+                .Subscribe(v => Volatile.Write(ref _store, v), () => cde.Signal());
 
             if (N <= 1000)
             {
-                while (cde.CurrentCount == 0) ;
+                while (cde.CurrentCount != 0) ;
             }
             else
             {
@@ -72,11 +72,11 @@ namespace Benchmarks.System.Reactive
             Observable.Range(1, N)
                 .SubscribeOn(_scheduler1)
                 .ObserveOn(_scheduler2)
-                .Subscribe(v => Volatile.Write(ref _store, v));
+                .Subscribe(v => Volatile.Write(ref _store, v), () => cde.Signal());
 
             if (N <= 1000)
             {
-                while (cde.CurrentCount == 0) ;
+                while (cde.CurrentCount != 0) ;
             }
             else
             {

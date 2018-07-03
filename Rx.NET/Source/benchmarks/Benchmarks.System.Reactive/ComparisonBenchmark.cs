@@ -293,5 +293,14 @@ namespace Benchmarks.System.Reactive
             Observable.Generate(0, s => s < N, s => s + 1, s => s)
                 .Subscribe(v => Volatile.Write(ref _store, v));
         }
+
+        [Benchmark]
+        public void Collect()
+        {
+            foreach (var v in Observable.Range(1, N).Collect(() => new List<int>(), (a, b) => { a.Add(b); return a; }))
+            {
+                Volatile.Write(ref _bufferStore, v);
+            }
+        }
     }
 }
