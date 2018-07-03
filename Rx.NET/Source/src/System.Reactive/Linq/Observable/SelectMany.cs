@@ -392,7 +392,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    try
+                    using (e)
                     {
                         var hasNext = true;
 
@@ -419,10 +419,6 @@ namespace System.Reactive.Linq.ObservableImpl
                                 ForwardOnNext(current);
                             }
                         }
-                    }
-                    finally
-                    {
-                        e.Dispose();
                     }
                 }
             }
@@ -485,7 +481,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    try
+                    using (e)
                     {
                         var eIndex = 0;
                         var hasNext = true;
@@ -513,10 +509,6 @@ namespace System.Reactive.Linq.ObservableImpl
                                 ForwardOnNext(current);
                             }
                         }
-                    }
-                    finally
-                    {
-                        e.Dispose();
                     }
                 }
             }
@@ -1361,7 +1353,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    try
+                    using (e)
                     {
                         var hasNext = true;
 
@@ -1388,10 +1380,6 @@ namespace System.Reactive.Linq.ObservableImpl
                                 ForwardOnNext(current);
                             }
                         }
-                    }
-                    finally
-                    {
-                        e.Dispose();
                     }
                 }
             }
@@ -1448,7 +1436,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    try
+                    using (e)
                     {
                         var hasNext = true;
 
@@ -1475,10 +1463,6 @@ namespace System.Reactive.Linq.ObservableImpl
                                 ForwardOnNext(current);
                             }
                         }
-                    }
-                    finally
-                    {
-                        e.Dispose();
                     }
                 }
             }
