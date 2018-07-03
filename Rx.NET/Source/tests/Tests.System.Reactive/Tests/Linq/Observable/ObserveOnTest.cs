@@ -645,6 +645,19 @@ namespace ReactiveTests.Tests
             );
         }
 
+        [Fact]
+        public void ObserveOn_EventLoop_Long()
+        {
+            var _scheduler1 = new EventLoopScheduler();
+            var N = 1_000_000;
+
+            var cde = new CountdownEvent(1);
+
+            Observable.Range(1, N).ObserveOn(_scheduler1)
+                .Subscribe(v => { }, () => cde.Signal());
+
+            Assert.True(cde.Wait(5000), "Timeout!");
+        }
     }
 
     internal class MyCtx : SynchronizationContext

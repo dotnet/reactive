@@ -536,7 +536,10 @@ namespace System.Reactive
 
             if (Interlocked.Decrement(ref _wip) != 0)
             {
-                return recursiveScheduler.Schedule(this, DRAIN_SHORT_RUNNING);
+                // Don't return the disposable of Schedule() because that may chain together
+                // a long string of ScheduledItems causing StackOverflowException upon Dispose()
+                var d = recursiveScheduler.Schedule(this, DRAIN_SHORT_RUNNING);
+                Disposable.TrySetMultiple(ref _task, d);
             }
             return Disposable.Empty;
         }
