@@ -26,9 +26,11 @@ namespace System.Linq
 
         private static IEnumerable<TSource> IgnoreElements_<TSource>(this IEnumerable<TSource> source)
         {
-            var enumerator = source.GetEnumerator();
+            using (var enumerator = source.GetEnumerator())
+            {
 
-            while (enumerator.MoveNext()) ;
+                while (enumerator.MoveNext()) ;
+            }
 
             yield break;
         }
