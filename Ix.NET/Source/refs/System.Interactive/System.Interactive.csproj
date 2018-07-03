@@ -6,11 +6,16 @@
     <Authors>Microsoft</Authors>
     <TargetFrameworks>net45;netstandard1.0;netstandard2.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
+    <DefineConstants>$(DefineConstants);REF_ASSM</DefineConstants>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\refs\System.Interactive\System.Interactive.csproj" ReferenceOutputAssembly="false" PrivateAssets="all" />
-    <EmbeddedResource Include="Properties\System.Interactive.rd.xml" />
+
+    <Compile Include="..\..\System.Interactive\**\*.cs" Exclude="..\..\System.Interactive\obj\**" />
   </ItemGroup>
-  
+
+
 </Project>
