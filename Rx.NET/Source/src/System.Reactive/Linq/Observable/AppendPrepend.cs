@@ -7,16 +7,16 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal static class AppendPrepend
+    internal static class AppendPrepend<TSource>
     {
-        internal interface IAppendPrepend<TSource> : IObservable<TSource>
+        internal interface IAppendPrepend : IObservable<TSource>
         {
-            IAppendPrepend<TSource> Append(TSource value);
-            IAppendPrepend<TSource> Prepend(TSource value);
+            IAppendPrepend Append(TSource value);
+            IAppendPrepend Prepend(TSource value);
             IScheduler Scheduler { get; }
         }
 
-        internal sealed class SingleValue<TSource> : Producer<TSource, SingleValue<TSource>._>, IAppendPrepend<TSource>
+        internal sealed class SingleValue : Producer<TSource, SingleValue._>, IAppendPrepend
         {
             private readonly IObservable<TSource> _source;
             private readonly TSource _value;
@@ -32,7 +32,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 Scheduler = scheduler;
             }
 
-            public IAppendPrepend<TSource> Append(TSource value)
+            public IAppendPrepend Append(TSource value)
             {
                 var prev = new Node<TSource>(_value);
                 var appendNode = default(Node<TSource>);
@@ -51,7 +51,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return CreateAppendPrepend(prependNode, appendNode);
             }
 
-            public IAppendPrepend<TSource> Prepend(TSource value)
+            public IAppendPrepend Prepend(TSource value)
             {
                 var prev = new Node<TSource>(_value);
                 var appendNode = default(Node<TSource>);
@@ -70,14 +70,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 return CreateAppendPrepend(prependNode, appendNode);
             }
 
-            private IAppendPrepend<TSource> CreateAppendPrepend(Node<TSource> prepend, Node<TSource> append)
+            private IAppendPrepend CreateAppendPrepend(Node<TSource> prepend, Node<TSource> append)
             {
                 if (Scheduler is ISchedulerLongRunning longRunning)
                 {
-                    return new LongRunning<TSource>(_source, prepend, append, Scheduler, longRunning);
+                    return new LongRunning(_source, prepend, append, Scheduler, longRunning);
                 }
 
-                return new Recursive<TSource>(_source, prepend, append, Scheduler);
+                return new Recursive(_source, prepend, append, Scheduler);
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
@@ -92,7 +92,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly bool _append;
                 private IDisposable _schedulerDisposable;
 
-                public _(SingleValue<TSource> parent, IObserver<TSource> observer)
+                public _(SingleValue parent, IObserver<TSource> observer)
                     : base(observer)
                 {
                     _source = parent._source;
@@ -146,7 +146,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        private sealed class Recursive<TSource> : Producer<TSource, Recursive<TSource>._>, IAppendPrepend<TSource>
+        private sealed class Recursive : Producer<TSource, Recursive._>, IAppendPrepend
         {
             private readonly IObservable<TSource> _source;
             private readonly Node<TSource> _appends;
@@ -162,15 +162,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 Scheduler = scheduler;
             }
 
-            public IAppendPrepend<TSource> Append(TSource value)
+            public IAppendPrepend Append(TSource value)
             {
-                return new Recursive<TSource>(_source,
+                return new Recursive(_source,
                     _prepends, new Node<TSource>(_appends, value), Scheduler);
             }
 
-            public IAppendPrepend<TSource> Prepend(TSource value)
+            public IAppendPrepend Prepend(TSource value)
             {
-                return new Recursive<TSource>(_source,
+                return new Recursive(_source,
                     new Node<TSource>(_prepends, value), _appends, Scheduler);
             }
 
@@ -190,7 +190,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly IScheduler _scheduler;
                 private volatile bool _disposed;
 
-                public _(Recursive<TSource> parent, IObserver<TSource> observer)
+                public _(Recursive parent, IObserver<TSource> observer)
                     : base(observer)
                 {
                     _source = parent._source;
@@ -300,7 +300,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        private sealed class LongRunning<TSource> : Producer<TSource, LongRunning<TSource>._>, IAppendPrepend<TSource>
+        private sealed class LongRunning : Producer<TSource, LongRunning._>, IAppendPrepend
         {
             private readonly IObservable<TSource> _source;
             private readonly Node<TSource> _appends;
@@ -318,15 +318,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 _longRunningScheduler = longRunningScheduler;
             }
 
-            public IAppendPrepend<TSource> Append(TSource value)
+            public IAppendPrepend Append(TSource value)
             {
-                return new LongRunning<TSource>(_source,
+                return new LongRunning(_source,
                     _prepends, new Node<TSource>(_appends, value), Scheduler, _longRunningScheduler);
             }
 
-            public IAppendPrepend<TSource> Prepend(TSource value)
+            public IAppendPrepend Prepend(TSource value)
             {
-                return new LongRunning<TSource>(_source,
+                return new LongRunning(_source,
                     new Node<TSource>(_prepends, value), _appends, Scheduler, _longRunningScheduler);
             }
 
@@ -346,7 +346,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly ISchedulerLongRunning _scheduler;
                 private IDisposable _schedulerDisposable;
 
-                public _(LongRunning<TSource> parent, IObserver<TSource> observer)
+                public _(LongRunning parent, IObserver<TSource> observer)
                     : base(observer)
                 {
                     _source = parent._source;

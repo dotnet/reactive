@@ -26,15 +26,15 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Append_<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
-            if (source is AppendPrepend.IAppendPrepend<TSource> ap && ap.Scheduler == scheduler)
+            if (source is AppendPrepend<TSource>.IAppendPrepend ap && ap.Scheduler == scheduler)
             {
                 return ap.Append(value);
             }
             if (scheduler == ImmediateScheduler.Instance)
             {
-                return new AppendPrepend.AppendPrependSingleImmediate<TSource>(source, value, true);
+                return new AppendPrepend<TSource>.SingleImmediate<TSource>(source, value, true);
             }
-            return new AppendPrepend.AppendPrependSingle<TSource>(source, value, scheduler, append: true);
+            return new AppendPrepend<TSource>.SingleValue(source, value, scheduler, append: true);
         }
 
         #endregion
@@ -206,7 +206,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Prepend_<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
         {
-            if (source is AppendPrepend.IAppendPrepend<TSource> ap && ap.Scheduler == scheduler)
+            if (source is AppendPrepend<TSource>.IAppendPrepend ap && ap.Scheduler == scheduler)
             {
                 return ap.Prepend(value);
             }
@@ -216,7 +216,7 @@ namespace System.Reactive.Linq
                 return new AppendPrepend.AppendPrependSingleImmediate<TSource>(source, value, false);
             }
 
-            return new AppendPrepend.SingleValue<TSource>(source, value, scheduler, append: false);
+            return new AppendPrepend<TSource>.SingleValue(source, value, scheduler, append: false);
         }
 
         #endregion
