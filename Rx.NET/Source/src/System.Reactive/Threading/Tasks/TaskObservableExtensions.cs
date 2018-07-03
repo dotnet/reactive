@@ -80,23 +80,15 @@ namespace System.Reactive.Threading.Tasks
             }
             else
             {
-                //
-                // Separate method to avoid closure in synchronous completion case.
-                //
-                res = ToObservableSlow(task, scheduler);
+                var subject = new AsyncSubject<Unit>();
+                var options = GetTaskContinuationOptions(scheduler);
+
+                task.ContinueWith((t, subjectObject) => ToObservableDone(t, (AsyncSubject<Unit>)subjectObject), subject, options);
+
+                return ToObservableResult(subject, scheduler);
             }
 
             return res;
-        }
-
-        private static IObservable<Unit> ToObservableSlow(Task task, IScheduler scheduler)
-        {
-            var subject = new AsyncSubject<Unit>();
-            var options = GetTaskContinuationOptions(scheduler);
-
-            task.ContinueWith((t, subjectObject) => ToObservableDone(t, (AsyncSubject<Unit>)subjectObject), subject, options);
-
-            return ToObservableResult(subject, scheduler);
         }
 
         private static void ToObservableDone(Task task, IObserver<Unit> subject)
@@ -201,24 +193,15 @@ namespace System.Reactive.Threading.Tasks
             }
             else
             {
-                //
-                // Separate method to avoid closure in synchronous completion case.
-                //
-                res = ToObservableSlow(task, scheduler);
+                var subject = new AsyncSubject<TResult>();
+                var options = GetTaskContinuationOptions(scheduler);
+
+                task.ContinueWith((t, subjectObject) => ToObservableDone(t, (AsyncSubject<TResult>)subjectObject), subject, options);
+
+                return ToObservableResult(subject, scheduler);
             }
 
             return res;
-        }
-
-        private static IObservable<TResult> ToObservableSlow<TResult>(Task<TResult> task, IScheduler scheduler)
-        {
-            var subject = new AsyncSubject<TResult>();
-
-            var options = GetTaskContinuationOptions(scheduler);
-
-            task.ContinueWith((t, subjectObject) => ToObservableDone(t, (AsyncSubject<TResult>)subjectObject), subject, options);
-
-            return ToObservableResult(subject, scheduler);
         }
 
         private static void ToObservableDone<TResult>(Task<TResult> task, IObserver<TResult> subject)
