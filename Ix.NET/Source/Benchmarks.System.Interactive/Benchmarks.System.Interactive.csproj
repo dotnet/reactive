@@ -3,11 +3,32 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <LangVersion>latest</LangVersion>
+    <Optimize>true</Optimize>
+    <Configurations>Current Sources;Ix.net 3.1.1;Ix.net 3.2</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Ix.net 3.1.1|AnyCPU'">
+    <DefineConstants>$(DefineConstants);IX3_1_1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Ix.net 3.2|AnyCPU'">
+    <DefineConstants>$(DefineConstants);IX3_2</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Current Sources|AnyCPU'">
+    <DefineConstants>$(DefineConstants);CURRENT</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.10.14" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Ix.net 3.1.1|AnyCPU'">
+    <PackageReference Include="System.Interactive" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Ix.net 3.2|AnyCPU'">
+    <PackageReference Include="System.Interactive" Version="3.2.0-preview.635" />
   </ItemGroup>
 
   <ItemGroup>

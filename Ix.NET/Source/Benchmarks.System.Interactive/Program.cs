@@ -14,6 +14,8 @@ namespace Benchmarks.System.Interactive
         {
             Console.WriteLine("Effective Ix-version: " + typeof(EnumerableEx).Assembly.GetName().Version);
 
+            //Available compiler directives: IX3_1_1, IX3_2, CURRENT.
+
             var switcher = new BenchmarkSwitcher(new[] {
                 typeof(BufferCountBenchmark),
             });
