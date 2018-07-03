@@ -15,10 +15,7 @@
     <DefineConstants>$(DefineConstants);PLIB;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
-    <DefineConstants>$(DefineConstants);HAS_APTCA;NO_ARRAY_EMPTY</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
-    <DefineConstants>$(DefineConstants);HAS_APTCA;</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY</DefineConstants>
   </PropertyGroup>
 
 

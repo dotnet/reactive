@@ -10,8 +10,3 @@ using System.Runtime.InteropServices;
 #endif
 
 [assembly: CLSCompliant(true)]
-
-#if HAS_APTCA && NO_CODECOVERAGE
-[assembly: AllowPartiallyTrustedCallers]
-#endif
-
