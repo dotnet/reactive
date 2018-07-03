@@ -9,8 +9,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\refs\System.Interactive\System.Interactive.csproj" ReferenceOutputAssembly="false" PrivateAssets="all" />
+    <!--<ProjectReference Include="..\refs\System.Interactive\System.Interactive.csproj" ReferenceOutputAssembly="false" PrivateAssets="all" />-->
     <EmbeddedResource Include="Properties\System.Interactive.rd.xml" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);GetRefs</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+
+  <Target Name="GetRefs">
+
+    <MSBuild Condition="'$(IncludeBuildOutput)' == 'true'" Projects="..\refs\System.Interactive\System.Interactive.csproj" Targets="_GetReferenceAssemblies" Properties="TargetFramework=$(TargetFramework);">
+
+      <Output TaskParameter="TargetOutputs" ItemName="_refAssms" />
+    </MSBuild>
+
+
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="@(_refAssms)" PackagePath="ref/$(TargetFramework)" />
+    </ItemGroup>
+  </Target>
   
 </Project>
