@@ -14,9 +14,9 @@
     <NoWarn>$(NoWarn);1701;1702;CS1591;NU5105</NoWarn>
     <DefaultLanguage>en-US</DefaultLanguage>
     <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
+    <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
     
