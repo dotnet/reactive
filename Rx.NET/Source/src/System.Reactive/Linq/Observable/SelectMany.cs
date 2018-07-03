@@ -392,12 +392,12 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    try
+                    using (e)
                     {
                         var hasNext = true;
+
                         while (hasNext)
                         {
-                            hasNext = false;
                             var current = default(TResult);
 
                             try
@@ -418,13 +418,6 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 ForwardOnNext(current);
                             }
-                        }
-                    }
-                    finally
-                    {
-                        if (e != null)
-                        {
-                            e.Dispose();
                         }
                     }
                 }
@@ -488,13 +481,13 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    try
+                    using (e)
                     {
                         var eIndex = 0;
                         var hasNext = true;
+
                         while (hasNext)
                         {
-                            hasNext = false;
                             var current = default(TResult);
 
                             try
@@ -515,13 +508,6 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 ForwardOnNext(current);
                             }
-                        }
-                    }
-                    finally
-                    {
-                        if (e != null)
-                        {
-                            e.Dispose();
                         }
                     }
                 }
@@ -1367,12 +1353,12 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    try
+                    using (e)
                     {
                         var hasNext = true;
+
                         while (hasNext)
                         {
-                            hasNext = false;
                             var current = default(TResult);
 
                             try
@@ -1393,13 +1379,6 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 ForwardOnNext(current);
                             }
-                        }
-                    }
-                    finally
-                    {
-                        if (e != null)
-                        {
-                            e.Dispose();
                         }
                     }
                 }
@@ -1457,12 +1436,12 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    try
+                    using (e)
                     {
                         var hasNext = true;
+
                         while (hasNext)
                         {
-                            hasNext = false;
                             var current = default(TResult);
 
                             try
@@ -1483,13 +1462,6 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 ForwardOnNext(current);
                             }
-                        }
-                    }
-                    finally
-                    {
-                        if (e != null)
-                        {
-                            e.Dispose();
                         }
                     }
                 }

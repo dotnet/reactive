@@ -179,7 +179,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         else if (_other.Done)
                         {
                             _parent.ForwardOnCompleted();
-                            return;
                         }
                     }
                 }

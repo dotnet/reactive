@@ -396,8 +396,6 @@ namespace System.Reactive.Concurrency
 
                 while (true)
                 {
-                    var shouldWaitForResume = false;
-
                     lock (_gate)
                     {
                         if (_runState == RUNNING)
@@ -430,7 +428,6 @@ namespace System.Reactive.Concurrency
                         // will pick up the cumulative inactive time delta.
                         //
                         Debug.Assert(_runState == SUSPENDED);
-                        shouldWaitForResume = true;
                     }
 
                     //
@@ -440,10 +437,7 @@ namespace System.Reactive.Concurrency
                     // be extremely unlucky to find ourselves SUSPENDED again and be blocked
                     // once more.
                     //
-                    if (shouldWaitForResume)
-                    {
-                        _resumeEvent.WaitOne();
-                    }
+                    _resumeEvent.WaitOne();
                 }
 
                 recurse(this, next);
