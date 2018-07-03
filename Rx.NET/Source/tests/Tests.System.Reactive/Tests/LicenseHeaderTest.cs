@@ -48,14 +48,12 @@ namespace Tests.System.Reactive.Tests
             foreach (var file in Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories))
             {
                 // exclusions
-                if (file.Contains("obj/Debug")
-                    || file.Contains(@"obj\Debug")
+                if (file.Contains("/obj/")
+                    || file.Contains(@"\obj\")
                     || file.Contains("AssemblyInfo.cs")
                     || file.Contains(".Designer.cs")
                     || file.Contains(".Generated.cs")
                     || file.Contains("Uwp.DeviceRunner")
-                    || file.Contains(@"obj\Release")
-                    || file.Contains("obj/Release")
                 )
                 {
                     continue;
