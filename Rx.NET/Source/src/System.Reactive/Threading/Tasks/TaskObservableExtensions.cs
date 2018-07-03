@@ -91,10 +91,9 @@ namespace System.Reactive.Threading.Tasks
         private static IObservable<Unit> ToObservableSlow(Task task, IScheduler scheduler)
         {
             var subject = new AsyncSubject<Unit>();
-
             var options = GetTaskContinuationOptions(scheduler);
 
-            task.ContinueWith(t => ToObservableDone(task, subject), options);
+            task.ContinueWith((t, subjectObject) => ToObservableDone(t, (AsyncSubject<Unit>)subjectObject), subject, options);
 
             return ToObservableResult(subject, scheduler);
         }
