@@ -13,12 +13,14 @@ namespace Benchmarks.System.Interactive
     [MemoryDiagnoser]
     public class BufferCountBenchmark
     {
+        [Params(1, 10, 100, 1000, 10000, 100000, 1000000)]
+        public int N;
         private IList<int> _store;
 
         [Benchmark]
         public void Exact()
         {
-            Enumerable.Range(1, 1000)
+            Enumerable.Range(1, N)
                 .Buffer(1)
                 .Subscribe(v => Volatile.Write(ref _store, v));
         }
@@ -26,7 +28,7 @@ namespace Benchmarks.System.Interactive
         [Benchmark]
         public void Skip()
         {
-            Enumerable.Range(1, 1000)
+            Enumerable.Range(1, N)
                 .Buffer(1, 2)
                 .Subscribe(v => Volatile.Write(ref _store, v));
         }
@@ -34,7 +36,7 @@ namespace Benchmarks.System.Interactive
         [Benchmark]
         public void Overlap()
         {
-            Enumerable.Range(1, 1000)
+            Enumerable.Range(1, N)
                 .Buffer(2, 1)
                 .Subscribe(v => Volatile.Write(ref _store, v));
         }
