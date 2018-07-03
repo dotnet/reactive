@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
         protected abstract PushToPullSink<TSource, TResult> Run();
     }
 
-    internal abstract class PushToPullSink<TSource, TResult> : IObserver<TSource>, IEnumerator<TResult>, IDisposable
+    internal abstract class PushToPullSink<TSource, TResult> : IObserver<TSource>, IEnumerator<TResult>
     {
         private IDisposable _upstream;
 

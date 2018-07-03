@@ -13,7 +13,7 @@ namespace System.Reactive.Subjects
     /// The last value before the OnCompleted notification, or the error received through OnError, is sent to all subscribed observers.
     /// </summary>
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
-    public sealed class AsyncSubject<T> : SubjectBase<T>, IDisposable, INotifyCompletion
+    public sealed class AsyncSubject<T> : SubjectBase<T>, INotifyCompletion
     {
         #region Fields
 
@@ -146,7 +146,6 @@ namespace System.Reactive.Subjects
                 _exception = error;
                 if (Interlocked.CompareExchange(ref _observers, TERMINATED, observers) == observers)
                 {
-                    var ex = _exception;
                     foreach (var o in observers)
                     {
                         if (!o.IsDisposed())

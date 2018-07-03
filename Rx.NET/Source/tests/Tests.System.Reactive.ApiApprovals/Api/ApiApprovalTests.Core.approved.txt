@@ -83,6 +83,7 @@ namespace System.Reactive
         TResult OnError(System.Exception exception);
         TResult OnNext(TValue value);
     }
+    [System.Runtime.CompilerServices.AsyncMethodBuilderAttribute(typeof(System.Runtime.CompilerServices.TaskObservableMethodBuilder<>))]
     public interface ITaskObservable<out T> : System.IObservable<T>
     {
         System.Reactive.ITaskObservableAwaiter<T> GetAwaiter();
@@ -2406,7 +2407,7 @@ namespace System.Reactive.PlatformServices
 }
 namespace System.Reactive.Subjects
 {
-    public sealed class AsyncSubject<T> : System.Reactive.Subjects.SubjectBase<T>, System.IDisposable, System.Runtime.CompilerServices.INotifyCompletion
+    public sealed class AsyncSubject<T> : System.Reactive.Subjects.SubjectBase<T>, System.Runtime.CompilerServices.INotifyCompletion
     {
         public AsyncSubject() { }
         public override bool HasObservers { get; }
@@ -2421,7 +2422,7 @@ namespace System.Reactive.Subjects
         public override void OnNext(T value) { }
         public override System.IDisposable Subscribe(System.IObserver<T> observer) { }
     }
-    public sealed class BehaviorSubject<T> : System.Reactive.Subjects.SubjectBase<T>, System.IDisposable
+    public sealed class BehaviorSubject<T> : System.Reactive.Subjects.SubjectBase<T>
     {
         public BehaviorSubject(T value) { }
         public override bool HasObservers { get; }
@@ -2440,7 +2441,7 @@ namespace System.Reactive.Subjects
     }
     public interface ISubject<T> : System.IObservable<T>, System.IObserver<T>, System.Reactive.Subjects.ISubject<T, T> { }
     public interface ISubject<in TSource, out TResult> : System.IObservable<TResult>, System.IObserver<TSource> { }
-    public sealed class ReplaySubject<T> : System.Reactive.Subjects.SubjectBase<T>, System.IDisposable
+    public sealed class ReplaySubject<T> : System.Reactive.Subjects.SubjectBase<T>
     {
         public ReplaySubject() { }
         public ReplaySubject(System.Reactive.Concurrency.IScheduler scheduler) { }
@@ -2467,7 +2468,7 @@ namespace System.Reactive.Subjects
         public static System.Reactive.Subjects.ISubject<TSource, TResult> Synchronize<TSource, TResult>(System.Reactive.Subjects.ISubject<TSource, TResult> subject, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.Reactive.Subjects.ISubject<TSource> Synchronize<TSource>(System.Reactive.Subjects.ISubject<TSource> subject, System.Reactive.Concurrency.IScheduler scheduler) { }
     }
-    public sealed class Subject<T> : System.Reactive.Subjects.SubjectBase<T>, System.IDisposable
+    public sealed class Subject<T> : System.Reactive.Subjects.SubjectBase<T>
     {
         public Subject() { }
         public override bool HasObservers { get; }

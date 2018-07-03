@@ -171,7 +171,7 @@ namespace System.Reactive.Concurrency
             return recursiveInvoker;
         }
 
-        private abstract class InvokeRecBaseState<TState> : IDisposable
+        private abstract class InvokeRecBaseState : IDisposable
         {
             protected readonly IScheduler Scheduler;
 
@@ -190,7 +190,7 @@ namespace System.Reactive.Concurrency
 
         }
 
-        private sealed class InvokeRec1State<TState> : InvokeRecBaseState<TState>
+        private sealed class InvokeRec1State<TState> : InvokeRecBaseState
         {
             private readonly Action<TState, Action<TState>> _action;
             private readonly Action<TState> _recurseCallback;
@@ -219,7 +219,7 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        private sealed class InvokeRec2State<TState> : InvokeRecBaseState<TState>
+        private sealed class InvokeRec2State<TState> : InvokeRecBaseState
         {
             private readonly Action<TState, Action<TState, TimeSpan>> _action;
             private readonly Action<TState, TimeSpan> _recurseCallback;
@@ -247,7 +247,7 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        private sealed class InvokeRec3State<TState> : InvokeRecBaseState<TState>
+        private sealed class InvokeRec3State<TState> : InvokeRecBaseState
         {
             private readonly Action<TState, Action<TState, DateTimeOffset>> _action;
             private readonly Action<TState, DateTimeOffset> _recurseCallback;

@@ -333,7 +333,7 @@ namespace System.Reactive.Concurrency
                 var dueCapped = TimeSpan.FromTicks(Math.Min(dueEarly.Ticks, MAXSUPPORTEDTIMER.Ticks));
 
                 _nextLongTermWorkItem = next;
-                _nextLongTermTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(_ => EvaluateLongTermQueue(_), null, dueCapped);
+                _nextLongTermTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(_ => EvaluateLongTermQueue(), null, dueCapped);
             }
         }
 
@@ -341,8 +341,7 @@ namespace System.Reactive.Concurrency
         /// Evaluates the long term queue, transitioning short term work to the short term list,
         /// and adjusting the new long term processing timer accordingly.
         /// </summary>
-        /// <param name="state">Ignored.</param>
-        private static void EvaluateLongTermQueue(object state)
+        private static void EvaluateLongTermQueue()
         {
             lock (_staticGate)
             {
@@ -408,7 +407,7 @@ namespace System.Reactive.Concurrency
                     // method to create a new timer for the new first long term item.
                     //
                     _nextLongTermWorkItem = null;
-                    EvaluateLongTermQueue(null);
+                    EvaluateLongTermQueue();
                 }
             }
         }
