@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!--<ProjectReference Include="..\refs\System.Interactive\System.Interactive.csproj" ReferenceOutputAssembly="false" PrivateAssets="all" />-->
     <EmbeddedResource Include="Properties\System.Interactive.rd.xml" />
   </ItemGroup>
 
@@ -20,15 +19,30 @@
 
   <Target Name="GetRefs">
 
-    <MSBuild Condition="'$(IncludeBuildOutput)' == 'true'" Projects="..\refs\System.Interactive\System.Interactive.csproj" Targets="_GetReferenceAssemblies" Properties="TargetFramework=$(TargetFramework);">
+    <MSBuild Projects="..\refs\System.Interactive\System.Interactive.csproj" 
+             Targets="_GetReferenceAssemblies" 
+             Properties="TargetFramework=$(TargetFramework)">
 
       <Output TaskParameter="TargetOutputs" ItemName="_refAssms" />
     </MSBuild>
 
-
     <ItemGroup>
       <TfmSpecificPackageFile Include="@(_refAssms)" PackagePath="ref/$(TargetFramework)" />
     </ItemGroup>
+  </Target>
+
+  <Target Name="GetRefsWithoutLib" BeforeTargets="_GetPackageFiles">
+    <MSBuild Projects="..\refs\System.Interactive\System.Interactive.csproj"
+             Targets="_GetReferenceAssemblies"
+             Properties="TargetFramework=netcoreapp2.0">
+
+      <Output TaskParameter="TargetOutputs" ItemName="_refAssms20" />
+    </MSBuild>
+
+    <ItemGroup>
+      <None Include="@(_refAssms20)" PackagePath="ref/netcoreapp2.0" Pack="true" />
+    </ItemGroup>
+
   </Target>
   
 </Project>
