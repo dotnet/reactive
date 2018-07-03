@@ -220,7 +220,6 @@ namespace System.Reactive.Linq
             {
                 private readonly IObserver<TResult> _observer;
                 private Action _disposable;
-                private static readonly Action DisposedAction = () => { };
 
                 public TaskDisposeCompletionObserver(IObserver<TResult> observer)
                 {
@@ -229,7 +228,7 @@ namespace System.Reactive.Linq
 
                 public void Dispose()
                 {
-                    Interlocked.Exchange(ref _disposable, DisposedAction)?.Invoke();
+                    Interlocked.Exchange(ref _disposable, Stubs.Nop)?.Invoke();
                 }
 
                 public void OnCompleted()
