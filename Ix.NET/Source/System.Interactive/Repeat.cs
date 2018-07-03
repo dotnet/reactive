@@ -12,7 +12,7 @@ namespace System.Linq
         ///     Generates a sequence by repeating the given value infinitely.
         /// </summary>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
-        /// <param name="value">Value to repreat in the resulting sequence.</param>
+        /// <param name="value">Value to repeat in the resulting sequence.</param>
         /// <returns>Sequence repeating the given value infinitely.</returns>
         public static IEnumerable<TResult> Repeat<TResult>(TResult value)
         {
