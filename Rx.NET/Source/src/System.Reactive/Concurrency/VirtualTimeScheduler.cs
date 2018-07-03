@@ -363,7 +363,6 @@ namespace System.Reactive.Concurrency
         /// Creates a new virtual time scheduler with the default value of TAbsolute as the initial clock value.
         /// </summary>
         protected VirtualTimeScheduler()
-            : base()
         {
         }
 

@@ -123,7 +123,7 @@ namespace System.Reactive.PlatformServices
 
                 foreach (var handler in _systemClockChanged)
                 {
-                    if (!handler.TryGetTarget(out var scheduler))
+                    if (!handler.TryGetTarget(out _))
                     {
                         if (remove == null)
                         {

@@ -14,7 +14,7 @@ namespace System.Reactive.Subjects
     /// Each notification is broadcasted to all subscribed and future observers, subject to buffer trimming policies.
     /// </summary>
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
-    public sealed class ReplaySubject<T> : SubjectBase<T>, IDisposable
+    public sealed class ReplaySubject<T> : SubjectBase<T>
     {
         #region Fields
 
@@ -656,7 +656,6 @@ namespace System.Reactive.Subjects
             protected readonly Queue<T> _queue;
 
             protected ReplayManyBase(int queueSize)
-                : base()
             {
                 _queue = new Queue<T>(Math.Min(queueSize, 64));
             }

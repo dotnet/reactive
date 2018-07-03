@@ -12,7 +12,7 @@ namespace System.Reactive.Subjects
     /// Each notification is broadcasted to all subscribed observers.
     /// </summary>
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
-    public sealed class Subject<T> : SubjectBase<T>, IDisposable
+    public sealed class Subject<T> : SubjectBase<T>
     {
         #region Fields
 

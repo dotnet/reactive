@@ -75,7 +75,6 @@ namespace System.Reactive.Concurrency
         /// Creates a new historical scheduler with the minimum value of <see cref="DateTimeOffset"/> as the initial clock value.
         /// </summary>
         public HistoricalScheduler()
-            : base()
         {
         }
 

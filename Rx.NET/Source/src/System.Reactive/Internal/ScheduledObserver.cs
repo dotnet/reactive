@@ -100,10 +100,8 @@ namespace System.Reactive
                     }
                     catch
                     {
-                        var nop = default(T);
-                        while (_queue.TryDequeue(out nop))
+                        while (_queue.TryDequeue(out _))
                         {
-                            ;
                         }
 
                         throw;
@@ -287,10 +285,8 @@ namespace System.Reactive
             {
                 Interlocked.Exchange(ref _state, FAULTED);
 
-                var nop = default(T);
-                while (_queue.TryDequeue(out nop))
+                while (_queue.TryDequeue(out _))
                 {
-                    ;
                 }
 
                 throw;

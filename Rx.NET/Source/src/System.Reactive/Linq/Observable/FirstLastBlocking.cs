@@ -52,8 +52,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
     internal sealed class FirstBlocking<T> : BaseBlocking<T>
     {
-        internal FirstBlocking() : base() { }
-
         public override void OnCompleted()
         {
             Unblock();
@@ -86,8 +84,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
     internal sealed class LastBlocking<T> : BaseBlocking<T>
     {
-        internal LastBlocking() : base() { }
-
         public override void OnCompleted()
         {
             Unblock();

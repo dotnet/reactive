@@ -407,7 +407,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="int.MaxValue"/>.</exception>
         public static IObservable<int> Range(int start, int count)
         {
-            var max = ((long)start) + count - 1;
+            var max = (long)start + count - 1;
             if (count < 0 || max > int.MaxValue)
             {
                 throw new ArgumentOutOfRangeException(nameof(count));
@@ -427,7 +427,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
         public static IObservable<int> Range(int start, int count, IScheduler scheduler)
         {
-            var max = ((long)start) + count - 1;
+            var max = (long)start + count - 1;
             if (count < 0 || max > int.MaxValue)
             {
                 throw new ArgumentOutOfRangeException(nameof(count));
