@@ -216,7 +216,7 @@ namespace System.Reactive.Linq
                 return new AppendPrepend.AppendPrependSingleImmediate<TSource>(source, value, false);
             }
 
-            return new AppendPrepend.AppendPrependSingle<TSource>(source, value, scheduler, append: false);
+            return new AppendPrepend.SingleValue<TSource>(source, value, scheduler, append: false);
         }
 
         #endregion
