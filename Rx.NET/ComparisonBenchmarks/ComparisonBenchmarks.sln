@@ -3,18 +3,53 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComparisonBenchmarks", "ComparisonBenchmarks\ComparisonBenchmarks.csproj", "{50DDB92A-793F-43DF-A84E-1759A235A15D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks.System.Reactive", "..\Source\benchmarks\Benchmarks.System.Reactive\Benchmarks.System.Reactive.csproj", "{4BECFB1A-6B40-43E0-9C2F-6325D710C7C4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.System.Reactive", "..\Source\tests\Tests.System.Reactive\Tests.System.Reactive.csproj", "{CC4D6362-36EF-415E-97E2-B7B9F5AF36FA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive", "..\Source\src\System.Reactive\System.Reactive.csproj", "{EFC62191-4BC2-44C7-81F8-C04875F08A8A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Reactive.Testing", "..\Source\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj", "{0308DD95-89FF-4FA3-B387-4A7F7BB4A83A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Observable.Aliases", "..\Source\src\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj", "{6C3FE047-8E5F-4472-9261-7AE1E40F9AE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		Current Sources|Any CPU = Current Sources|Any CPU
+		Rx.net 3.1.1|Any CPU = Rx.net 3.1.1|Any CPU
+		Rx.net 4.0|Any CPU = Rx.net 4.0|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{50DDB92A-793F-43DF-A84E-1759A235A15D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50DDB92A-793F-43DF-A84E-1759A235A15D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50DDB92A-793F-43DF-A84E-1759A235A15D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50DDB92A-793F-43DF-A84E-1759A235A15D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BECFB1A-6B40-43E0-9C2F-6325D710C7C4}.Current Sources|Any CPU.ActiveCfg = Current Sources|Any CPU
+		{4BECFB1A-6B40-43E0-9C2F-6325D710C7C4}.Current Sources|Any CPU.Build.0 = Current Sources|Any CPU
+		{4BECFB1A-6B40-43E0-9C2F-6325D710C7C4}.Rx.net 3.1.1|Any CPU.ActiveCfg = Rx.net 3.1.1|Any CPU
+		{4BECFB1A-6B40-43E0-9C2F-6325D710C7C4}.Rx.net 3.1.1|Any CPU.Build.0 = Rx.net 3.1.1|Any CPU
+		{4BECFB1A-6B40-43E0-9C2F-6325D710C7C4}.Rx.net 4.0|Any CPU.ActiveCfg = Rx.net 4.0|Any CPU
+		{4BECFB1A-6B40-43E0-9C2F-6325D710C7C4}.Rx.net 4.0|Any CPU.Build.0 = Rx.net 4.0|Any CPU
+		{CC4D6362-36EF-415E-97E2-B7B9F5AF36FA}.Current Sources|Any CPU.ActiveCfg = Release|Any CPU
+		{CC4D6362-36EF-415E-97E2-B7B9F5AF36FA}.Current Sources|Any CPU.Build.0 = Release|Any CPU
+		{CC4D6362-36EF-415E-97E2-B7B9F5AF36FA}.Rx.net 3.1.1|Any CPU.ActiveCfg = Release|Any CPU
+		{CC4D6362-36EF-415E-97E2-B7B9F5AF36FA}.Rx.net 3.1.1|Any CPU.Build.0 = Release|Any CPU
+		{CC4D6362-36EF-415E-97E2-B7B9F5AF36FA}.Rx.net 4.0|Any CPU.ActiveCfg = Release|Any CPU
+		{CC4D6362-36EF-415E-97E2-B7B9F5AF36FA}.Rx.net 4.0|Any CPU.Build.0 = Release|Any CPU
+		{EFC62191-4BC2-44C7-81F8-C04875F08A8A}.Current Sources|Any CPU.ActiveCfg = Release|Any CPU
+		{EFC62191-4BC2-44C7-81F8-C04875F08A8A}.Current Sources|Any CPU.Build.0 = Release|Any CPU
+		{EFC62191-4BC2-44C7-81F8-C04875F08A8A}.Rx.net 3.1.1|Any CPU.ActiveCfg = Release|Any CPU
+		{EFC62191-4BC2-44C7-81F8-C04875F08A8A}.Rx.net 3.1.1|Any CPU.Build.0 = Release|Any CPU
+		{EFC62191-4BC2-44C7-81F8-C04875F08A8A}.Rx.net 4.0|Any CPU.ActiveCfg = Release|Any CPU
+		{EFC62191-4BC2-44C7-81F8-C04875F08A8A}.Rx.net 4.0|Any CPU.Build.0 = Release|Any CPU
+		{0308DD95-89FF-4FA3-B387-4A7F7BB4A83A}.Current Sources|Any CPU.ActiveCfg = Release|Any CPU
+		{0308DD95-89FF-4FA3-B387-4A7F7BB4A83A}.Current Sources|Any CPU.Build.0 = Release|Any CPU
+		{0308DD95-89FF-4FA3-B387-4A7F7BB4A83A}.Rx.net 3.1.1|Any CPU.ActiveCfg = Release|Any CPU
+		{0308DD95-89FF-4FA3-B387-4A7F7BB4A83A}.Rx.net 3.1.1|Any CPU.Build.0 = Release|Any CPU
+		{0308DD95-89FF-4FA3-B387-4A7F7BB4A83A}.Rx.net 4.0|Any CPU.ActiveCfg = Release|Any CPU
+		{0308DD95-89FF-4FA3-B387-4A7F7BB4A83A}.Rx.net 4.0|Any CPU.Build.0 = Release|Any CPU
+		{6C3FE047-8E5F-4472-9261-7AE1E40F9AE7}.Current Sources|Any CPU.ActiveCfg = Release|Any CPU
+		{6C3FE047-8E5F-4472-9261-7AE1E40F9AE7}.Current Sources|Any CPU.Build.0 = Release|Any CPU
+		{6C3FE047-8E5F-4472-9261-7AE1E40F9AE7}.Rx.net 3.1.1|Any CPU.ActiveCfg = Release|Any CPU
+		{6C3FE047-8E5F-4472-9261-7AE1E40F9AE7}.Rx.net 3.1.1|Any CPU.Build.0 = Release|Any CPU
+		{6C3FE047-8E5F-4472-9261-7AE1E40F9AE7}.Rx.net 4.0|Any CPU.ActiveCfg = Release|Any CPU
+		{6C3FE047-8E5F-4472-9261-7AE1E40F9AE7}.Rx.net 4.0|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
