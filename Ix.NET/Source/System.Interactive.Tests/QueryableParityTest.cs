@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Tests
 {
-    public partial class Tests
+    public class QueryableParity : Tests
     {
         [Fact]
         public void Queryable_Enumerable_Parity()
