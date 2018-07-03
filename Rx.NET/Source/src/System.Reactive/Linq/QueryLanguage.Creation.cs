@@ -68,6 +68,50 @@ namespace System.Reactive.Linq
 
         private sealed class CreateWithTaskTokenObservable<TResult> : ObservableBase<TResult>
         {
+            private sealed class Subscription : IDisposable
+            {
+                private sealed class TaskCompletionObserver : IObserver<Unit>
+                {
+                    private readonly IObserver<TResult> _observer;
+
+                    public TaskCompletionObserver(IObserver<TResult> observer)
+                    {
+                        _observer = observer;
+                    }
+
+                    public void OnCompleted()
+                    {
+                        _observer.OnCompleted();
+                    }
+
+                    public void OnError(Exception error)
+                    {
+                        _observer.OnError(error);
+                    }
+
+                    public void OnNext(Unit value)
+                    {
+                        // deliberately ignored
+                    }
+                }
+
+                private readonly IDisposable _subscription;
+                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+
+                public Subscription(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync, IObserver<TResult> observer)
+                {
+                    _subscription = subscribeAsync(observer, _cts.Token)
+                        .ToObservable()
+                        .Subscribe(new TaskCompletionObserver(observer));
+                }
+
+                public void Dispose()
+                {
+                    _cts.Cancel();
+                    _subscription.Dispose();
+                }
+            }
+
             private readonly Func<IObserver<TResult>, CancellationToken, Task> _subscribeAsync;
 
             public CreateWithTaskTokenObservable(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync)
@@ -77,38 +121,7 @@ namespace System.Reactive.Linq
 
             protected override IDisposable SubscribeCore(IObserver<TResult> observer)
             {
-                var cancellable = new CancellationDisposable();
-
-                var taskObservable = _subscribeAsync(observer, cancellable.Token).ToObservable();
-                var taskCompletionObserver = new TaskCompletionObserver(observer);
-                var subscription = taskObservable.Subscribe(taskCompletionObserver);
-
-                return StableCompositeDisposable.Create(cancellable, subscription);
-            }
-
-            private sealed class TaskCompletionObserver : IObserver<Unit>
-            {
-                private readonly IObserver<TResult> _observer;
-
-                public TaskCompletionObserver(IObserver<TResult> observer)
-                {
-                    _observer = observer;
-                }
-
-                public void OnCompleted()
-                {
-                    _observer.OnCompleted();
-                }
-
-                public void OnError(Exception error)
-                {
-                    _observer.OnError(error);
-                }
-
-                public void OnNext(Unit value)
-                {
-                    // deliberately ignored
-                }
+                return new Subscription(_subscribeAsync, observer);
             }
         }
 
