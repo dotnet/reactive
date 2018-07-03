@@ -753,7 +753,7 @@ namespace System.Linq
         /// </summary>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
         /// <param name="provider">Query provider.</param>
-        /// <param name="value">Value to repreat in the resulting sequence.</param>
+        /// <param name="value">Value to repeat in the resulting sequence.</param>
         /// <returns>Sequence repeating the given value infinitely.</returns>
         public static IEnumerable<TResult> Repeat<TResult>(this IQueryProvider provider, TResult value)
         {
@@ -1594,7 +1594,7 @@ namespace System.Linq
         /// <typeparam name="TSource">First source sequence element type.</typeparam>
         /// <typeparam name="TOther">Second source sequence element type.</typeparam>
         /// <param name="source">A sequence of values to project.</param>
-        /// <param name="other">Inner sequence each source sequenec element is projected onto.</param>
+        /// <param name="other">Inner sequence each source sequence element is projected onto.</param>
         /// <returns>Sequence flattening the sequences that result from projecting elements in the source sequence.</returns>
         public static IQueryable<TOther> SelectMany<TSource, TOther>(this IQueryable<TSource> source, IEnumerable<TOther> other)
         {

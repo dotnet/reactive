@@ -28,7 +28,7 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(moveNext));
             }
 
-            // Note: Many methods pass null in for the second two params. We're assuming
+            // Note: Many methods pass null in for the second two parameters. We're assuming
             // That the caller is responsible and knows what they're doing
             return new AnonymousAsyncIterator<T>(moveNext, current, dispose);
         }
