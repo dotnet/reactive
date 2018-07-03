@@ -602,7 +602,7 @@ namespace System.Reactive
                 }
                 return true;
             }
-            else
+            
             // the queue is empty and the upstream hasn't completed yet
             if (empty)
             {

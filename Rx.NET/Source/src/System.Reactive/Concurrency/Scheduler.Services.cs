@@ -10,7 +10,7 @@ namespace System.Reactive.Concurrency
     //
     public static partial class Scheduler
     {
-        internal static Type[] OPTIMIZATIONS = new Type[] {
+        internal static Type[] OPTIMIZATIONS = {
             typeof(ISchedulerLongRunning),
             typeof(IStopwatchProvider),
             typeof(ISchedulerPeriodic),

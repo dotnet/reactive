@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 
 #pragma warning disable 0659
 #pragma warning disable 0661
@@ -31,7 +30,7 @@ namespace System.Reactive
         /// <summary>
         /// Represents an OnCompleted notification.
         /// </summary>
-        OnCompleted,
+        OnCompleted
     }
 
     /// <summary>

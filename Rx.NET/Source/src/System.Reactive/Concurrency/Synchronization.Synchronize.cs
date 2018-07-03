@@ -27,14 +27,12 @@ namespace System.Reactive.Concurrency
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private readonly Synchronize<TSource> _parent;
             private readonly object _gate;
 
             public _(Synchronize<TSource> parent, IObserver<TSource> observer)
                 : base(observer)
             {
-                _parent = parent;
-                _gate = _parent._gate ?? new object();
+                _gate = parent._gate ?? new object();
             }
 
             public override void OnNext(TSource value)

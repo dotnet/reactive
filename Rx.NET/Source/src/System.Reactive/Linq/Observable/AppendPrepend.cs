@@ -41,11 +41,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     return new AppendPrependMultiple<TSource>(_source,
                         null, new Node<TSource>(prev, value), Scheduler);
                 }
-                else
-                {
-                    return new AppendPrependMultiple<TSource>(_source,
-                        prev, new Node<TSource>(value), Scheduler);
-                }
+
+                return new AppendPrependMultiple<TSource>(_source,
+                    prev, new Node<TSource>(value), Scheduler);
             }
 
             public IAppendPrepend<TSource> Prepend(TSource value)
@@ -57,11 +55,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     return new AppendPrependMultiple<TSource>(_source,
                         new Node<TSource>(value), prev, Scheduler);
                 }
-                else
-                {
-                    return new AppendPrependMultiple<TSource>(_source,
-                        new Node<TSource>(prev, value), null, Scheduler);
-                }
+
+                return new AppendPrependMultiple<TSource>(_source,
+                    new Node<TSource>(prev, value), null, Scheduler);
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
@@ -239,17 +235,15 @@ namespace System.Reactive.Linq.ObservableImpl
                         //
                         return longRunning.ScheduleLongRunning(new State(null, this, array, continueWith), Loop);
                     }
-                    else
-                    {
-                        //
-                        // We never allow the scheduled work to be cancelled. Instead, the flag
-                        // is used to have LoopRec bail out and perform proper clean-up of the
-                        // enumerator.
-                        //
-                        var flag = new BooleanDisposable();
-                        _scheduler.Schedule(new State(flag, this, array, continueWith), LoopRec);
-                        return flag;
-                    }
+
+                    //
+                    // We never allow the scheduled work to be cancelled. Instead, the flag
+                    // is used to have LoopRec bail out and perform proper clean-up of the
+                    // enumerator.
+                    //
+                    var flag = new BooleanDisposable();
+                    _scheduler.Schedule(new State(flag, this, array, continueWith), LoopRec);
+                    return flag;
                 }
 
                 private struct State

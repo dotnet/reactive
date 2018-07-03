@@ -5,7 +5,6 @@
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Security;
 
@@ -296,16 +295,15 @@ namespace System.Runtime.CompilerServices
                 {
                     return _subject.Subscribe(observer);
                 }
-                else if (_exception != null)
+
+                if (_exception != null)
                 {
                     observer.OnError(_exception);
                     return Disposable.Empty;
                 }
-                else
-                {
-                    observer.OnNext(_result);
-                    return Disposable.Empty;
-                }
+
+                observer.OnNext(_result);
+                return Disposable.Empty;
             }
 
             /// <summary>

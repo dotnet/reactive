@@ -50,11 +50,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     Current = current;
                     return true;
                 }
-                else
-                {
-                    _done = true;
-                    Dispose();
-                }
+
+                _done = true;
+                Dispose();
             }
 
             return false;

@@ -684,10 +684,8 @@ namespace System.Reactive.Linq
             {
                 return task.ToObservable(scheduler);
             }
-            else
-            {
-                return task.ToObservable();
-            }
+            
+            return task.ToObservable();
         }
 
         public virtual IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync)
@@ -789,10 +787,8 @@ namespace System.Reactive.Linq
             {
                 return task.ToObservable(scheduler);
             }
-            else
-            {
-                return task.ToObservable();
-            }
+            
+            return task.ToObservable();
         }
 
         public virtual IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync)
@@ -929,7 +925,7 @@ namespace System.Reactive.Linq
 
         public virtual Func<T, IObservable<TResult>> ToAsync<T, TResult>(Func<T, TResult> function, IScheduler scheduler)
         {
-            return (first) =>
+            return first =>
             {
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((function, subject, first), state =>
@@ -1426,7 +1422,7 @@ namespace System.Reactive.Linq
 
         public virtual Func<TSource, IObservable<Unit>> ToAsync<TSource>(Action<TSource> action, IScheduler scheduler)
         {
-            return (first) =>
+            return first =>
             {
                 var subject = new AsyncSubject<Unit>();
                 scheduler.ScheduleAction((subject, action, first), state =>

@@ -88,10 +88,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     return this;
                 }
-                else
-                {
-                    return new Time(_source, duration, _scheduler);
-                }
+
+                return new Time(_source, duration, _scheduler);
             }
 
             protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
