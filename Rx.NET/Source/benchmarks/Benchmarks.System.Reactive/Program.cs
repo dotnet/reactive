@@ -22,7 +22,6 @@ namespace Benchmarks.System.Reactive
                 typeof(RangeBenchmark),
                 typeof(ToObservableBenchmark),
                 typeof(RepeatBenchmark),
-                typeof(AppendPrependBenchmark),
                 typeof(ComparisonBenchmark),
                 typeof(ComparisonAsyncBenchmark)
 #if (CURRENT)
