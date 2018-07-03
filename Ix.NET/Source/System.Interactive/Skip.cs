@@ -8,6 +8,7 @@ namespace System.Linq
 {
     public static partial class EnumerableEx
     {
+#if !(REF_ASSM && NETCOREAPP2_0)
         /// <summary>
         ///     Bypasses a specified number of contiguous elements from the end of the sequence and returns the remaining elements.
         /// </summary>
@@ -32,6 +33,7 @@ namespace System.Linq
 
             return source.SkipLast_(count);
         }
+#endif
 
         private static IEnumerable<TSource> SkipLast_<TSource>(this IEnumerable<TSource> source, int count)
         {

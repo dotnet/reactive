@@ -9,6 +9,7 @@
     <DefineConstants>$(DefineConstants);REF_ASSM</DefineConstants>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <Deterministic>true</Deterministic>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
