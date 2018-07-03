@@ -1,0 +1,19 @@
+<Project>  
+  
+  <Import Project="..\Directory.Build.props" />
+  
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);REF_ASSM</DefineConstants>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <Deterministic>true</Deterministic>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <Target Name="_GetReferenceAssemblies" DependsOnTargets="Build" Returns="@(ReferenceAssembliesOutput)">
+    <ItemGroup>
+      <ReferenceAssembliesOutput Include="@(IntermediateRefAssembly->'%(FullPath)')" />
+      <ReferenceAssembliesOutput Include="@(DocumentationProjectOutputGroupOutput->'%(FullPath)')" />
+    </ItemGroup>
+  </Target>
+  
+</Project>

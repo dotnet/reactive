@@ -19,5 +19,32 @@
     <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);GetRefs</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
 
+
+  <Target Name="GetRefs">
+
+    <MSBuild Projects="..\refs\System.Interactive\System.Interactive.csproj" Targets="_GetReferenceAssemblies" Properties="TargetFramework=$(TargetFramework)">
+
+      <Output TaskParameter="TargetOutputs" ItemName="_refAssms" />
+    </MSBuild>
+
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="@(_refAssms)" PackagePath="ref/$(TargetFramework)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="GetRefsWithoutLib" BeforeTargets="_GetPackageFiles">
+    <MSBuild Projects="..\refs\System.Interactive.Providers\System.Interactive.Providers.csproj" Targets="_GetReferenceAssemblies" Properties="TargetFramework=netcoreapp2.0">
+
+      <Output TaskParameter="TargetOutputs" ItemName="_refAssms20" />
+    </MSBuild>
+
+    <ItemGroup>
+      <None Include="@(_refAssms20)" PackagePath="ref/netcoreapp2.0" Pack="true" />
+    </ItemGroup>
+
+  </Target>
 </Project>

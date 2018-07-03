@@ -2425,6 +2425,7 @@ namespace System.Linq
         }
 #pragma warning restore 1591
 
+#if !(REF_ASSM && NETCOREAPP2_0)
         /// <summary>
         /// Returns a specified number of contiguous elements from the end of the sequence.
         /// </summary>
@@ -2496,6 +2497,8 @@ namespace System.Linq
             return EnumerableEx.SkipLast(source, count);
         }
 #pragma warning restore 1591
+
+#endif
 
         /// <summary>
         /// Repeats and concatenates the source sequence infinitely.
