@@ -137,6 +137,60 @@ namespace System.Reactive.Linq
 
         private sealed class CreateWithTaskDisposable<TResult> : ObservableBase<TResult>
         {
+            private sealed class Subscription : IDisposable
+            {
+                private sealed class TaskDisposeCompletionObserver : IObserver<IDisposable>, IDisposable
+                {
+                    private readonly IObserver<TResult> _observer;
+                    private IDisposable _disposable;
+
+                    public TaskDisposeCompletionObserver(IObserver<TResult> observer)
+                    {
+                        _observer = observer;
+                    }
+
+                    public void Dispose()
+                    {
+                        Disposable.TryDispose(ref _disposable);
+                    }
+
+                    public void OnCompleted()
+                    {
+                        _observer.OnCompleted();
+                    }
+
+                    public void OnError(Exception error)
+                    {
+                        _observer.OnError(error);
+                    }
+
+                    public void OnNext(IDisposable value)
+                    {
+                        Disposable.SetSingle(ref _disposable, value);
+                    }
+                }
+
+                private readonly TaskDisposeCompletionObserver _observer;
+                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+
+                public Subscription(Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync, IObserver<TResult> observer)
+                {
+                    //
+                    // We don't cancel the subscription below *ever* and want to make sure the returned resource gets disposed eventually.
+                    // Notice because we're using the AnonymousObservable<T> type, we get auto-detach behavior for free.
+                    //
+                    subscribeAsync(observer, _cts.Token)
+                        .ToObservable()
+                        .Subscribe(_observer = new TaskDisposeCompletionObserver(observer));
+                }
+
+                public void Dispose()
+                {
+                    _cts.Cancel();
+                    _observer.Dispose();
+                }
+            }
+
             private readonly Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> _subscribeAsync;
 
             public CreateWithTaskDisposable(Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync)
@@ -146,50 +200,7 @@ namespace System.Reactive.Linq
 
             protected override IDisposable SubscribeCore(IObserver<TResult> observer)
             {
-                var cancellable = new CancellationDisposable();
-
-                var taskObservable = _subscribeAsync(observer, cancellable.Token).ToObservable();
-
-                var taskCompletionObserver = new TaskDisposeCompletionObserver(observer);
-
-                //
-                // We don't cancel the subscription below *ever* and want to make sure the returned resource gets disposed eventually.
-                // Notice because we're using the AnonymousObservable<T> type, we get auto-detach behavior for free.
-                //
-                taskObservable.Subscribe(taskCompletionObserver);
-
-                return StableCompositeDisposable.Create(cancellable, taskCompletionObserver);
-            }
-
-            private sealed class TaskDisposeCompletionObserver : IObserver<IDisposable>, IDisposable
-            {
-                private readonly IObserver<TResult> _observer;
-                private IDisposable _disposable;
-
-                public TaskDisposeCompletionObserver(IObserver<TResult> observer)
-                {
-                    _observer = observer;
-                }
-
-                public void Dispose()
-                {
-                    Disposable.TryDispose(ref _disposable);
-                }
-
-                public void OnCompleted()
-                {
-                    _observer.OnCompleted();
-                }
-
-                public void OnError(Exception error)
-                {
-                    _observer.OnError(error);
-                }
-
-                public void OnNext(IDisposable value)
-                {
-                    Disposable.SetSingle(ref _disposable, value);
-                }
+                return new Subscription(_subscribeAsync, observer);
             }
         }
 
