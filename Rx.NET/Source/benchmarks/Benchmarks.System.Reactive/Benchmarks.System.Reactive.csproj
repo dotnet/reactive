@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.10.14" />
+    <PackageReference Include="WindowsBase" Version="4.6.1055" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Rx.net 3.1.1|AnyCPU'">
@@ -33,6 +34,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\tests\Tests.System.Reactive\Tests.System.Reactive.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
 
 </Project>
