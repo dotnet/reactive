@@ -20,5 +20,20 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
     <DefineConstants>$(DefineConstants);HAS_APTCA;DESKTOPCLR;DESKTOPCLR46;SIGNED</DefineConstants>
   </PropertyGroup>
-  
+
+
+  <Target Name="GetRefsWithoutLib" BeforeTargets="_GetPackageFiles" Condition="'$(RefTargetFrameworks)' != '' and Exists('$(MSBuildThisFileDirectory)refs\$(MSBuildProjectName)\$(MSBuildProjectName).csproj') ">
+    <ItemGroup>
+      <_RefTargetFrameworks Include="$(RefTargetFrameworks.Split(';'))" />
+    </ItemGroup>
+    <MSBuild Projects="$(MSBuildThisFileDirectory)refs\$(MSBuildProjectName)\$(MSBuildProjectName).csproj" Targets="_GetReferenceAssemblies" Properties="TargetFramework=%(_RefTargetFrameworks.Identity)">
+
+      <Output TaskParameter="TargetOutputs" ItemName="_refAssms" />
+    </MSBuild>
+
+    <ItemGroup>
+      <None Include="@(_refAssms)" PackagePath="ref/%(_refAssms.TargetFramework)" Pack="true" />
+    </ItemGroup>
+
+  </Target>
 </Project>

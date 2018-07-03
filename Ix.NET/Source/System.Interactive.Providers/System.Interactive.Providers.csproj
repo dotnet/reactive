@@ -4,6 +4,7 @@
     <Description>Interactive Extensions Providers Library used to build query providers and express queries over enumerable sequences.</Description>
     <AssemblyTitle>Interactive Extensions - Providers Library</AssemblyTitle>
     <TargetFrameworks>net45;netstandard1.0;netstandard2.0</TargetFrameworks>
+    <RefTargetFrameworks>netstandard1.0;netcoreapp2.0;netstandard2.1</RefTargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
   </PropertyGroup>
 
@@ -19,32 +20,4 @@
     <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);GetRefs</TargetsForTfmSpecificContentInPackage>
-  </PropertyGroup>
-
-
-  <Target Name="GetRefs">
-
-    <MSBuild Projects="..\refs\System.Interactive\System.Interactive.csproj" Targets="_GetReferenceAssemblies" Properties="TargetFramework=$(TargetFramework)">
-
-      <Output TaskParameter="TargetOutputs" ItemName="_refAssms" />
-    </MSBuild>
-
-    <ItemGroup>
-      <TfmSpecificPackageFile Include="@(_refAssms)" PackagePath="ref/$(TargetFramework)" />
-    </ItemGroup>
-  </Target>
-
-  <Target Name="GetRefsWithoutLib" BeforeTargets="_GetPackageFiles">
-    <MSBuild Projects="..\refs\System.Interactive.Providers\System.Interactive.Providers.csproj" Targets="_GetReferenceAssemblies" Properties="TargetFramework=netcoreapp2.0">
-
-      <Output TaskParameter="TargetOutputs" ItemName="_refAssms20" />
-    </MSBuild>
-
-    <ItemGroup>
-      <None Include="@(_refAssms20)" PackagePath="ref/netcoreapp2.0" Pack="true" />
-    </ItemGroup>
-
-  </Target>
 </Project>

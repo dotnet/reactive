@@ -3,6 +3,8 @@
   <Import Project="..\Directory.Build.props" />
   
   <PropertyGroup>
+    <!-- This is here so we can create a fake .NET Standard 2.1 facade -->
+    <NETStandardMaximumVersion>2.1</NETStandardMaximumVersion>
     <DefineConstants>$(DefineConstants);REF_ASSM</DefineConstants>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <Deterministic>true</Deterministic>
@@ -11,8 +13,8 @@
 
   <Target Name="_GetReferenceAssemblies" DependsOnTargets="Build" Returns="@(ReferenceAssembliesOutput)">
     <ItemGroup>
-      <ReferenceAssembliesOutput Include="@(IntermediateRefAssembly->'%(FullPath)')" />
-      <ReferenceAssembliesOutput Include="@(DocumentationProjectOutputGroupOutput->'%(FullPath)')" />
+      <ReferenceAssembliesOutput Include="@(IntermediateRefAssembly->'%(FullPath)')" TargetFramework="$(TargetFramework)" />
+      <ReferenceAssembliesOutput Include="@(DocumentationProjectOutputGroupOutput->'%(FullPath)')" TargetFramework="$(TargetFramework)" />
     </ItemGroup>
   </Target>
   

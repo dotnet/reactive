@@ -16,6 +16,8 @@ local.properties
 .settings/
 .loadpath
 
+*.binlog
+
 # External tool builders
 .externalToolBuilders/
 

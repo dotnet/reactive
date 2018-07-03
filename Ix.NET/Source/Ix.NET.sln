@@ -29,6 +29,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive.Async.Tests", "System.Interactive.Async.Tests\System.Interactive.Async.Tests.csproj", "{172BD8C4-5C3E-4928-9D3F-746CF336FFEC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Refs", "Refs", "{A3D72E6E-4ADA-42E0-8B2A-055B1F244281}"
+	ProjectSection(SolutionItems) = preProject
+		refs\Directory.build.props = refs\Directory.build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive", "refs\System.Interactive\System.Interactive.csproj", "{2EC0C302-B029-4DDB-AC91-000BF11006AD}"
 EndProject
