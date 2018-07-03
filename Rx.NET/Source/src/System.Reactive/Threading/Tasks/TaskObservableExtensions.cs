@@ -85,7 +85,7 @@ namespace System.Reactive.Threading.Tasks
 
                 task.ContinueWith((t, subjectObject) => t.EmitTaskResult((AsyncSubject<Unit>)subjectObject), subject, options);
 
-                return ToObservableResult(subject, scheduler);
+                return subject.ToObservableResult(scheduler);
             }
 
             return res;
@@ -198,7 +198,7 @@ namespace System.Reactive.Threading.Tasks
 
                 task.ContinueWith((t, subjectObject) => t.EmitTaskResult((AsyncSubject<TResult>)subjectObject), subject, options);
 
-                return ToObservableResult(subject, scheduler);
+                return subject.ToObservableResult(scheduler);
             }
 
             return res;
@@ -243,7 +243,7 @@ namespace System.Reactive.Threading.Tasks
             return options;
         }
 
-        private static IObservable<TResult> ToObservableResult<TResult>(AsyncSubject<TResult> subject, IScheduler scheduler)
+        private static IObservable<TResult> ToObservableResult<TResult>(this AsyncSubject<TResult> subject, IScheduler scheduler)
         {
             if (scheduler != null)
             {
