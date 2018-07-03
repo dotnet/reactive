@@ -1,7 +1,8 @@
 ﻿<Project>  
   <!-- This has to be set in targets as the default props will overwrite -->
   <PropertyGroup>
-    <DebugType Condition="'$(IsTestProject)' != 'true'">embedded</DebugType>
+    <!--<DebugType Condition="'$(IsTestProject)' != 'true' and '$(BuildingInsideVisualStudio)' != 'true' ">embedded</DebugType>-->
+    <DebugType Condition="'$(IsTestProject)' != 'true' ">embedded</DebugType>
   </PropertyGroup>
   
   <!-- This props all need to be set in targets as they depend on the values set earlier -->
