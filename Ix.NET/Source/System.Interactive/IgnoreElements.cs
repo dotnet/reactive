@@ -28,10 +28,8 @@ namespace System.Linq
         {
             using (var enumerator = source.GetEnumerator())
             {
-
                 while (enumerator.MoveNext()) ;
             }
-
             yield break;
         }
     }

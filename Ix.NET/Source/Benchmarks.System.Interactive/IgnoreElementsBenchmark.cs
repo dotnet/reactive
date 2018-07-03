@@ -18,12 +18,43 @@ namespace Benchmarks.System.Interactive
 
         private int _store;
 
+        private int[] _array;
+        private List<int> _list;
+
         [Benchmark]
         public void Ignore()
         {
             Enumerable.Range(1, N)
                 .IgnoreElements()
                 .Subscribe(v => Volatile.Write(ref _store, v));
+        }
+
+        [Benchmark]
+        public void IgnoreList()
+        {
+            _list
+                .IgnoreElements()
+                .Subscribe(v => Volatile.Write(ref _store, v));
+        }
+
+        [Benchmark]
+        public void IgnoreArray()
+        {
+            _array
+                .IgnoreElements()
+                .Subscribe(v => Volatile.Write(ref _store, v));
+        }
+
+        [GlobalSetup]
+        public void Setup()
+        {
+            _array = new int[N];
+            _list = new List<int>(N);
+            for (var i = 0; i < N; i++)
+            {
+                _array[i] = i;
+                _list.Add(i);
+            }
         }
     }
 }
