@@ -216,6 +216,63 @@ namespace System.Reactive.Linq
 
         private sealed class CreateWithTaskActionObservable<TResult> : ObservableBase<TResult>
         {
+            private sealed class Subscription : IDisposable
+            {
+                private sealed class TaskDisposeCompletionObserver : IObserver<Action>, IDisposable
+                {
+                    private readonly IObserver<TResult> _observer;
+                    private Action _disposable;
+
+                    public TaskDisposeCompletionObserver(IObserver<TResult> observer)
+                    {
+                        _observer = observer;
+                    }
+
+                    public void Dispose()
+                    {
+                        Interlocked.Exchange(ref _disposable, Stubs.Nop)?.Invoke();
+                    }
+
+                    public void OnCompleted()
+                    {
+                        _observer.OnCompleted();
+                    }
+
+                    public void OnError(Exception error)
+                    {
+                        _observer.OnError(error);
+                    }
+
+                    public void OnNext(Action value)
+                    {
+                        if (Interlocked.CompareExchange(ref _disposable, value, null) != null)
+                        {
+                            value?.Invoke();
+                        }
+                    }
+                }
+
+                private readonly TaskDisposeCompletionObserver _observer;
+                private readonly CancellationTokenSource _cts = new CancellationTokenSource();
+
+                public Subscription(Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync, IObserver<TResult> observer)
+                {
+                    //
+                    // We don't cancel the subscription below *ever* and want to make sure the returned resource gets disposed eventually.
+                    // Notice because we're using the AnonymousObservable<T> type, we get auto-detach behavior for free.
+                    //
+                    subscribeAsync(observer, _cts.Token)
+                        .ToObservable()
+                        .Subscribe(_observer = new TaskDisposeCompletionObserver(observer));
+                }
+
+                public void Dispose()
+                {
+                    _cts.Cancel();
+                    _observer.Dispose();
+                }
+            }
+
             private readonly Func<IObserver<TResult>, CancellationToken, Task<Action>> _subscribeAsync;
 
             public CreateWithTaskActionObservable(Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync)
@@ -225,53 +282,7 @@ namespace System.Reactive.Linq
 
             protected override IDisposable SubscribeCore(IObserver<TResult> observer)
             {
-                var cancellable = new CancellationDisposable();
-
-                var taskObservable = _subscribeAsync(observer, cancellable.Token).ToObservable();
-
-                var taskCompletionObserver = new TaskDisposeCompletionObserver(observer);
-
-                //
-                // We don't cancel the subscription below *ever* and want to make sure the returned resource gets disposed eventually.
-                // Notice because we're using the AnonymousObservable<T> type, we get auto-detach behavior for free.
-                //
-                taskObservable.Subscribe(taskCompletionObserver);
-
-                return StableCompositeDisposable.Create(cancellable, taskCompletionObserver);
-            }
-
-            private sealed class TaskDisposeCompletionObserver : IObserver<Action>, IDisposable
-            {
-                private readonly IObserver<TResult> _observer;
-                private Action _disposable;
-
-                public TaskDisposeCompletionObserver(IObserver<TResult> observer)
-                {
-                    _observer = observer;
-                }
-
-                public void Dispose()
-                {
-                    Interlocked.Exchange(ref _disposable, Stubs.Nop)?.Invoke();
-                }
-
-                public void OnCompleted()
-                {
-                    _observer.OnCompleted();
-                }
-
-                public void OnError(Exception error)
-                {
-                    _observer.OnError(error);
-                }
-
-                public void OnNext(Action value)
-                {
-                    if (Interlocked.CompareExchange(ref _disposable, value, null) != null)
-                    {
-                        value?.Invoke();
-                    }
-                }
+                return new Subscription(_subscribeAsync, observer);
             }
         }
 
