@@ -33,7 +33,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(IScheduler scheduler)
             {
-                SetUpstream(scheduler.ScheduleAction(this, @this => @this.Invoke()));
+                if (scheduler is IOneTimeScheduler ot)
+                {
+                    SetUpstream(ot.ScheduleAction(this, @this => @this.Invoke()));
+                }
+                else
+                {
+                    SetUpstream(scheduler.ScheduleAction(this, @this => @this.Invoke()));
+                }
             }
 
             private void Invoke()
