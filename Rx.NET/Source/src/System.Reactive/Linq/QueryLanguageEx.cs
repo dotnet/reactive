@@ -458,10 +458,7 @@ namespace System.Reactive.Linq
                         {
                             var curr = new ChainObservable<TSource>(x);
 
-                            if (chain != null)
-                            {
-                                chain.OnNext(curr);
-                            }
+                            chain?.OnNext(curr);
 
                             chain = curr;
 
@@ -471,17 +468,11 @@ namespace System.Reactive.Linq
                         _ => { },
                         exception =>
                         {
-                            if (chain != null)
-                            {
-                                chain.OnError(exception);
-                            }
+                            chain?.OnError(exception);
                         },
                         () =>
                         {
-                            if (chain != null)
-                            {
-                                chain.OnCompleted();
-                            }
+                            chain?.OnCompleted();
                         })
                     .ObserveOn(scheduler)
                     .Select(selector);

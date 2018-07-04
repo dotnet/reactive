@@ -101,12 +101,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 HalfSerializer.ForwardOnNext(this, value, ref _halfSerializer, ref _error);
             }
 
-            internal void HandlerError(Exception error)
+            private void HandlerError(Exception error)
             {
                 HalfSerializer.ForwardOnError(this, error, ref _halfSerializer, ref _error);
             }
 
-            internal void HandlerComplete()
+            private void HandlerComplete()
             {
                 HalfSerializer.ForwardOnCompleted(this, ref _halfSerializer, ref _error);
             }
@@ -194,9 +194,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private void Clear()
         {
-            while (_queue.TryDequeue(out var _))
+            while (_queue.TryDequeue(out _))
             {
-                ;
             }
         }
 

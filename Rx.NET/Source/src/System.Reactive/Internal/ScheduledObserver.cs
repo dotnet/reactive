@@ -446,7 +446,6 @@ namespace System.Reactive
         {
             while (q.TryDequeue(out var _))
             {
-                ;
             }
         }
 

@@ -28,10 +28,7 @@ namespace System.Reactive.Windows.Foundation
                     _subject.OnNext(getResult(iai));
                 }
 
-                if (progress != null)
-                {
-                    progress.Report(p);
-                }
+                progress?.Report(p);
             });
 
             Done(info, info.Status, true);

@@ -307,9 +307,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class Node<T>
         {
-            public readonly Node<T> Parent;
-            public readonly T Value;
-            public readonly int Count;
+            private readonly Node<T> _parent;
+            private readonly T _value;
+            private readonly int _count;
 
             public Node(T value)
                 : this(null, value)
@@ -318,44 +318,44 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public Node(Node<T> parent, T value)
             {
-                Parent = parent;
-                Value = value;
+                _parent = parent;
+                _value = value;
 
                 if (parent == null)
                 {
-                    Count = 1;
+                    _count = 1;
                 }
                 else
                 {
-                    if (parent.Count == int.MaxValue)
+                    if (parent._count == int.MaxValue)
                     {
                         throw new NotSupportedException($"Consecutive appends or prepends with a count of more than int.MaxValue ({int.MaxValue}) are not supported.");
                     }
 
-                    Count = parent.Count + 1;
+                    _count = parent._count + 1;
                 }
             }
 
             public T[] ToArray()
             {
-                var array = new T[Count];
+                var array = new T[_count];
                 var current = this;
-                for (var i = 0; i < Count; i++)
+                for (var i = 0; i < _count; i++)
                 {
-                    array[i] = current.Value;
-                    current = current.Parent;
+                    array[i] = current._value;
+                    current = current._parent;
                 }
                 return array;
             }
 
             public T[] ToReverseArray()
             {
-                var array = new T[Count];
+                var array = new T[_count];
                 var current = this;
-                for (var i = Count - 1; i >= 0; i--)
+                for (var i = _count - 1; i >= 0; i--)
                 {
-                    array[i] = current.Value;
-                    current = current.Parent;
+                    array[i] = current._value;
+                    current = current._parent;
                 }
                 return array;
             }

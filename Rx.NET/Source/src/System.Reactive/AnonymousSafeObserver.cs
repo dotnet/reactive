@@ -37,15 +37,15 @@ namespace System.Reactive
         {
             if (_isStopped == 0)
             {
-                var __noError = false;
+                var noError = false;
                 try
                 {
                     _onNext(value);
-                    __noError = true;
+                    noError = true;
                 }
                 finally
                 {
-                    if (!__noError)
+                    if (!noError)
                     {
                         Dispose();
                     }

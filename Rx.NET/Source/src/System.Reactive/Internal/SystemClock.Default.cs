@@ -106,7 +106,7 @@ namespace System.Reactive.PlatformServices
                 {
                     Task.Delay((int)SyncMaxDelta).Wait();
                 }
-            };
+            }
         }
 
         private void TimeChanged()
