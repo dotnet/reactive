@@ -11,9 +11,9 @@ namespace System.Reactive
         private readonly IObserver<T> _observer;
         private int _state;
 
-        private const int IDLE = 0;
-        private const int BUSY = 1;
-        private const int DONE = 2;
+        private const int Idle = 0;
+        private const int Busy = 1;
+        private const int Done = 2;
 
         public CheckedObserver(IObserver<T> observer)
         {
@@ -30,7 +30,7 @@ namespace System.Reactive
             }
             finally
             {
-                Interlocked.Exchange(ref _state, IDLE);
+                Interlocked.Exchange(ref _state, Idle);
             }
         }
 
@@ -44,7 +44,7 @@ namespace System.Reactive
             }
             finally
             {
-                Interlocked.Exchange(ref _state, DONE);
+                Interlocked.Exchange(ref _state, Done);
             }
         }
 
@@ -58,17 +58,17 @@ namespace System.Reactive
             }
             finally
             {
-                Interlocked.Exchange(ref _state, DONE);
+                Interlocked.Exchange(ref _state, Done);
             }
         }
 
         private void CheckAccess()
         {
-            switch (Interlocked.CompareExchange(ref _state, BUSY, IDLE))
+            switch (Interlocked.CompareExchange(ref _state, Busy, Idle))
             {
-                case BUSY:
+                case Busy:
                     throw new InvalidOperationException(Strings_Core.REENTRANCY_DETECTED);
-                case DONE:
+                case Done:
                     throw new InvalidOperationException(Strings_Core.OBSERVER_TERMINATED);
             }
         }

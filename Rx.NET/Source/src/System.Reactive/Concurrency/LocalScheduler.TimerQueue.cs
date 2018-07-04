@@ -61,7 +61,7 @@ namespace System.Reactive.Concurrency
         /// Threshold where an item is considered to be short term work or gets moved from
         /// long term to short term.
         /// </summary>
-        private static readonly TimeSpan SHORTTERM = TimeSpan.FromSeconds(10);
+        private static readonly TimeSpan ShortTerm = TimeSpan.FromSeconds(10);
 
         /// <summary>
         /// Maximum error ratio for timer drift. We've seen machines with 10s drift on a
@@ -79,14 +79,14 @@ namespace System.Reactive.Concurrency
         /// enough time to transition work to short term and as a courtesy to the
         /// destination scheduler to manage its queues etc.
         /// </summary>
-        private const int MAXERRORRATIO = 1000;
+        private const int MaxErrorRatio = 1000;
 
         /// <summary>
         /// Minimum threshold for the long term timer to fire before the queue is reevaluated
         /// for short term work. This value is chosen to be less than SHORTTERM in order to
         /// ensure the timer fires and has work to transition to the short term queue.
         /// </summary>
-        private static readonly TimeSpan LONGTOSHORT = TimeSpan.FromSeconds(5);
+        private static readonly TimeSpan LongToShort = TimeSpan.FromSeconds(5);
 
         /// <summary>
         /// Threshold used to determine when a short term timer has fired too early compared
@@ -94,12 +94,12 @@ namespace System.Reactive.Concurrency
         /// completion of scheduled work, which can happen in case of time adjustment in the
         /// operating system (cf. GetSystemTimeAdjustment).
         /// </summary>
-        private static readonly TimeSpan RETRYSHORT = TimeSpan.FromMilliseconds(50);
+        private static readonly TimeSpan RetryShort = TimeSpan.FromMilliseconds(50);
 
         /// <summary>
         /// Longest interval supported by timers in the BCL.
         /// </summary>
-        private static readonly TimeSpan MAXSUPPORTEDTIMER = TimeSpan.FromMilliseconds((1L << 32) - 2);
+        private static readonly TimeSpan MaxSupportedTimer = TimeSpan.FromMilliseconds((1L << 32) - 2);
 
         /// <summary>
         /// Creates a new local scheduler.
@@ -153,7 +153,7 @@ namespace System.Reactive.Concurrency
 
             var workItem = new WorkItem<TState>(this, state, dueTime, action);
 
-            if (due <= SHORTTERM)
+            if (due <= ShortTerm)
             {
                 ScheduleShortTermWork(workItem);
             }
@@ -242,7 +242,7 @@ namespace System.Reactive.Concurrency
                 // have only "little" impact (range of 100s of ms). On an absolute time scale, we
                 // don't provide stronger guarantees.
                 //
-                if (next.DueTime - next.Scheduler.Now >= RETRYSHORT)
+                if (next.DueTime - next.Scheduler.Now >= RetryShort)
                 {
                     ScheduleShortTermWork(next);
                 }
@@ -324,13 +324,13 @@ namespace System.Reactive.Concurrency
                 // error due to drift is negligible.
                 //
                 var due = Scheduler.Normalize(next.DueTime - next.Scheduler.Now);
-                var remainder = TimeSpan.FromTicks(Math.Max(due.Ticks / MAXERRORRATIO, LONGTOSHORT.Ticks));
+                var remainder = TimeSpan.FromTicks(Math.Max(due.Ticks / MaxErrorRatio, LongToShort.Ticks));
                 var dueEarly = due - remainder;
 
                 //
                 // Limit the interval to maximum supported by underlying Timer.
                 //
-                var dueCapped = TimeSpan.FromTicks(Math.Min(dueEarly.Ticks, MAXSUPPORTEDTIMER.Ticks));
+                var dueCapped = TimeSpan.FromTicks(Math.Min(dueEarly.Ticks, MaxSupportedTimer.Ticks));
 
                 _nextLongTermWorkItem = next;
                 _nextLongTermTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(_ => EvaluateLongTermQueue(), null, dueCapped);
@@ -352,7 +352,7 @@ namespace System.Reactive.Concurrency
                     next = _longTerm.Peek();
 
                     var due = Scheduler.Normalize(next.DueTime - next.Scheduler.Now);
-                    if (due >= SHORTTERM)
+                    if (due >= ShortTerm)
                     {
                         break;
                     }

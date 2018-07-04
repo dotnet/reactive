@@ -14,7 +14,7 @@ namespace System.Reactive.Concurrency
         public DisableOptimizationsScheduler(IScheduler scheduler)
             : base(scheduler)
         {
-            _optimizationInterfaces = Scheduler.OPTIMIZATIONS;
+            _optimizationInterfaces = Scheduler.Optimizations;
         }
 
         public DisableOptimizationsScheduler(IScheduler scheduler, Type[] optimizationInterfaces)

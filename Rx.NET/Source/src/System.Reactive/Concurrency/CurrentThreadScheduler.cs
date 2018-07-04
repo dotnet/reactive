@@ -57,7 +57,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Now marked as obsolete.")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete(Constants_Core.OBSOLETE_SCHEDULEREQUIRED)] // Preferring static method call over instance method call.
+        [Obsolete(Constants_Core.ObsoleteSchedulerequired)] // Preferring static method call over instance method call.
         public bool ScheduleRequired => IsScheduleRequired;
 
         /// <summary>
