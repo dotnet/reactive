@@ -63,7 +63,6 @@ namespace System.Linq
 
                 using (enumerator)
                 {
-                    var continueOuter = false;
                     while (true)
                     {
                         var v = default(TSource);
@@ -78,17 +77,13 @@ namespace System.Linq
                         }
                         catch
                         {
-                            continueOuter = true;
                             break;
                         }
 
                         yield return v;
                     }
 
-                    if (continueOuter)
-                    {
-                        continue;
-                    }
+                    continue;
                 }
             }
         }
@@ -112,7 +107,6 @@ namespace System.Linq
 
                 using (enumerator)
                 {
-                    var continueOuter = false;
                     while (true)
                     {
                         var v = default(TSource);
@@ -128,17 +122,13 @@ namespace System.Linq
                         catch (Exception ex)
                         {
                             lastException = ex;
-                            continueOuter = true;
                             break;
                         }
 
                         yield return v;
                     }
 
-                    if (continueOuter)
-                    {
-                        continue;
-                    }
+                    continue;
                 }
             }
 
