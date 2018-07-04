@@ -307,7 +307,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 private void CreateWindow()
                 {
                     var s = new List<TSource>();
-                    _q.Enqueue(s);
+
+                    lock (_gate)
+                    {
+                        _q.Enqueue(s);
+                    }
                 }
 
                 private void CreateTimer()
@@ -444,7 +448,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Run(TimeHopping parent)
                 {
-                    _list = new List<TSource>();
+                    lock (_gate)
+                    {
+                        _list = new List<TSource>();
+                    }
 
                     Disposable.SetSingle(ref _periodicDisposable, parent._scheduler.SchedulePeriodic(this, parent._timeSpan, @this => @this.Tick()));
                     Run(parent._source);
