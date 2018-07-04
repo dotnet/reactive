@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -35,6 +36,25 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 SetUpstream(scheduler.ScheduleAction(this, @this => @this.ForwardOnError(@this._exception)));
             }
+        }
+    }
+
+    // There is no need for a full Producer/IdentitySink as there is no
+    // way to stop a first task running on the immediate scheduler
+    // as it is always synchronous.
+    internal sealed class ThrowImmediate<TSource> : BasicProducer<TSource>
+    {
+        private readonly Exception _exception;
+
+        public ThrowImmediate(Exception exception)
+        {
+            _exception = exception;
+        }
+
+        protected override IDisposable Run(IObserver<TSource> observer)
+        {
+            observer.OnError(_exception);
+            return Disposable.Empty;
         }
     }
 }

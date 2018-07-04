@@ -360,5 +360,86 @@ namespace System.Reactive.Linq.ObservableImpl
                 return array;
             }
         }
+
+        internal sealed class AppendPrependSingleImmediate<TSource> : Producer<TSource, AppendPrependSingleImmediate<TSource>._>, IAppendPrepend<TSource>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly TSource _value;
+            private readonly bool _append;
+
+            public IScheduler Scheduler { get { return ImmediateScheduler.Instance; } }
+
+            public AppendPrependSingleImmediate(IObservable<TSource> source, TSource value, bool append)
+            {
+                _source = source;
+                _value = value;
+                _append = append;
+            }
+
+            public IAppendPrepend<TSource> Append(TSource value)
+            {
+                var prev = new Node<TSource>(_value);
+
+                if (_append)
+                {
+                    return new AppendPrependMultiple<TSource>(_source,
+                        null, new Node<TSource>(prev, value), Scheduler);
+                }
+
+                return new AppendPrependMultiple<TSource>(_source,
+                    prev, new Node<TSource>(value), Scheduler);
+            }
+
+            public IAppendPrepend<TSource> Prepend(TSource value)
+            {
+                var prev = new Node<TSource>(_value);
+
+                if (_append)
+                {
+                    return new AppendPrependMultiple<TSource>(_source,
+                        new Node<TSource>(value), prev, Scheduler);
+                }
+
+                return new AppendPrependMultiple<TSource>(_source,
+                    new Node<TSource>(prev, value), null, Scheduler);
+            }
+
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
+
+            protected override void Run(_ sink) => sink.Run();
+
+            internal sealed class _ : IdentitySink<TSource>
+            {
+                private readonly IObservable<TSource> _source;
+                private readonly TSource _value;
+                private readonly bool _append;
+
+                public _(AppendPrependSingleImmediate<TSource> parent, IObserver<TSource> observer)
+                    : base(observer)
+                {
+                    _source = parent._source;
+                    _value = parent._value;
+                    _append = parent._append;
+                }
+
+                public void Run()
+                {
+                    if (!_append)
+                    {
+                        ForwardOnNext(_value);
+                    }
+                    Run(_source);
+                }
+
+                public override void OnCompleted()
+                {
+                    if (_append)
+                    {
+                        ForwardOnNext(_value);
+                    }
+                    ForwardOnCompleted();
+                }
+            }
+        }
     }
 }
