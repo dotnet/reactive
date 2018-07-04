@@ -38,9 +38,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, TResult> : Plan<TResult>
     {
-        internal Pattern<T1> Expression { get; private set; }
+        internal Pattern<T1> Expression { get; }
 
-        internal Func<T1, TResult> Selector { get; private set; }
+        internal Func<T1, TResult> Selector { get; }
 
         internal Plan(Pattern<T1> expression, Func<T1, TResult> selector)
         {
@@ -83,9 +83,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2> Expression { get; private set; }
+        internal Pattern<T1, T2> Expression { get; }
 
-        internal Func<T1, T2, TResult> Selector { get; private set; }
+        internal Func<T1, T2, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2> expression, Func<T1, T2, TResult> selector)
         {
@@ -131,9 +131,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, T3, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3> Expression { get; private set; }
+        internal Pattern<T1, T2, T3> Expression { get; }
 
-        internal Func<T1, T2, T3, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3> expression, Func<T1, T2, T3, TResult> selector)
         {
@@ -183,9 +183,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, T3, T4, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3, T4> Expression { get; private set; }
+        internal Pattern<T1, T2, T3, T4> Expression { get; }
 
-        internal Func<T1, T2, T3, T4, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, T4, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3, T4> expression,
                       Func<T1, T2, T3, T4, TResult> selector)
@@ -238,9 +238,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, T3, T4, T5, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3, T4, T5> Expression { get; private set; }
+        internal Pattern<T1, T2, T3, T4, T5> Expression { get; }
 
-        internal Func<T1, T2, T3, T4, T5, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, T4, T5, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3, T4, T5> expression,
                       Func<T1, T2, T3, T4, T5, TResult> selector)
@@ -296,9 +296,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, T3, T4, T5, T6, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3, T4, T5, T6> Expression { get; private set; }
+        internal Pattern<T1, T2, T3, T4, T5, T6> Expression { get; }
 
-        internal Func<T1, T2, T3, T4, T5, T6, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, T4, T5, T6, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3, T4, T5, T6> expression,
                       Func<T1, T2, T3, T4, T5, T6, TResult> selector)
@@ -358,9 +358,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, T3, T4, T5, T6, T7, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3, T4, T5, T6, T7> Expression { get; private set; }
+        internal Pattern<T1, T2, T3, T4, T5, T6, T7> Expression { get; }
 
-        internal Func<T1, T2, T3, T4, T5, T6, T7, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, T4, T5, T6, T7, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3, T4, T5, T6, T7> expression,
                       Func<T1, T2, T3, T4, T5, T6, T7, TResult> selector)
@@ -423,9 +423,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8> Expression { get; private set; }
+        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8> Expression { get; }
 
-        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3, T4, T5, T6, T7, T8> expression,
                       Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> selector)
@@ -491,9 +491,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9> Expression { get; private set; }
+        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9> Expression { get; }
 
-        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9> expression,
                       Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> selector)
@@ -562,9 +562,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Expression { get; private set; }
+        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Expression { get; }
 
-        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> expression,
                       Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> selector)
@@ -636,9 +636,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Expression { get; private set; }
+        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Expression { get; }
 
-        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> expression,
                       Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> selector)
@@ -714,9 +714,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Expression { get; private set; }
+        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Expression { get; }
 
-        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> expression,
                       Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> selector)
@@ -797,9 +797,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Expression { get; private set; }
+        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> Expression { get; }
 
-        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> expression,
                       Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> selector)
@@ -883,9 +883,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Expression { get; private set; }
+        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> Expression { get; }
 
-        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> expression,
                       Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> selector)
@@ -975,9 +975,9 @@ namespace System.Reactive.Joins
 
     internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Expression { get; private set; }
+        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> Expression { get; }
 
-        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> expression,
                       Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> selector)
@@ -1069,9 +1069,9 @@ namespace System.Reactive.Joins
     }
     internal class Plan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> : Plan<TResult>
     {
-        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> Expression { get; private set; }
+        internal Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> Expression { get; }
 
-        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> Selector { get; private set; }
+        internal Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> Selector { get; }
 
         internal Plan(Pattern<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> expression,
                       Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> selector)

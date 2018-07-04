@@ -29,7 +29,7 @@ namespace System.Reactive.Joins
             First = first;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
+        internal IObservable<TSource1> First { get; }
 
         /// <summary>
         /// Matches when all observable sequences have an available element and projects the elements by invoking the selector function.
@@ -63,8 +63,8 @@ namespace System.Reactive.Joins
             Second = second;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all three observable sequences have an available element.
@@ -117,9 +117,9 @@ namespace System.Reactive.Joins
             Third = third;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all four observable sequences have an available element.
@@ -174,10 +174,10 @@ namespace System.Reactive.Joins
             Fourth = fourth;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
-        internal IObservable<TSource4> Fourth { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
+        internal IObservable<TSource4> Fourth { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all five observable sequences have an available element.
@@ -234,11 +234,11 @@ namespace System.Reactive.Joins
             Fifth = fifth;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
-        internal IObservable<TSource4> Fourth { get; private set; }
-        internal IObservable<TSource5> Fifth { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
+        internal IObservable<TSource4> Fourth { get; }
+        internal IObservable<TSource5> Fifth { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all six observable sequences have an available element.
@@ -297,12 +297,12 @@ namespace System.Reactive.Joins
             Sixth = sixth;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
-        internal IObservable<TSource4> Fourth { get; private set; }
-        internal IObservable<TSource5> Fifth { get; private set; }
-        internal IObservable<TSource6> Sixth { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
+        internal IObservable<TSource4> Fourth { get; }
+        internal IObservable<TSource5> Fifth { get; }
+        internal IObservable<TSource6> Sixth { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all seven observable sequences have an available element.
@@ -363,13 +363,13 @@ namespace System.Reactive.Joins
             Seventh = seventh;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
-        internal IObservable<TSource4> Fourth { get; private set; }
-        internal IObservable<TSource5> Fifth { get; private set; }
-        internal IObservable<TSource6> Sixth { get; private set; }
-        internal IObservable<TSource7> Seventh { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
+        internal IObservable<TSource4> Fourth { get; }
+        internal IObservable<TSource5> Fifth { get; }
+        internal IObservable<TSource6> Sixth { get; }
+        internal IObservable<TSource7> Seventh { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all eight observable sequences have an available element.
@@ -432,14 +432,14 @@ namespace System.Reactive.Joins
             Eighth = eighth;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
-        internal IObservable<TSource4> Fourth { get; private set; }
-        internal IObservable<TSource5> Fifth { get; private set; }
-        internal IObservable<TSource6> Sixth { get; private set; }
-        internal IObservable<TSource7> Seventh { get; private set; }
-        internal IObservable<TSource8> Eighth { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
+        internal IObservable<TSource4> Fourth { get; }
+        internal IObservable<TSource5> Fifth { get; }
+        internal IObservable<TSource6> Sixth { get; }
+        internal IObservable<TSource7> Seventh { get; }
+        internal IObservable<TSource8> Eighth { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all nine observable sequences have an available element.
@@ -504,15 +504,15 @@ namespace System.Reactive.Joins
             Ninth = ninth;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
-        internal IObservable<TSource4> Fourth { get; private set; }
-        internal IObservable<TSource5> Fifth { get; private set; }
-        internal IObservable<TSource6> Sixth { get; private set; }
-        internal IObservable<TSource7> Seventh { get; private set; }
-        internal IObservable<TSource8> Eighth { get; private set; }
-        internal IObservable<TSource9> Ninth { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
+        internal IObservable<TSource4> Fourth { get; }
+        internal IObservable<TSource5> Fifth { get; }
+        internal IObservable<TSource6> Sixth { get; }
+        internal IObservable<TSource7> Seventh { get; }
+        internal IObservable<TSource8> Eighth { get; }
+        internal IObservable<TSource9> Ninth { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all ten observable sequences have an available element.
@@ -579,16 +579,16 @@ namespace System.Reactive.Joins
             Tenth = tenth;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
-        internal IObservable<TSource4> Fourth { get; private set; }
-        internal IObservable<TSource5> Fifth { get; private set; }
-        internal IObservable<TSource6> Sixth { get; private set; }
-        internal IObservable<TSource7> Seventh { get; private set; }
-        internal IObservable<TSource8> Eighth { get; private set; }
-        internal IObservable<TSource9> Ninth { get; private set; }
-        internal IObservable<TSource10> Tenth { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
+        internal IObservable<TSource4> Fourth { get; }
+        internal IObservable<TSource5> Fifth { get; }
+        internal IObservable<TSource6> Sixth { get; }
+        internal IObservable<TSource7> Seventh { get; }
+        internal IObservable<TSource8> Eighth { get; }
+        internal IObservable<TSource9> Ninth { get; }
+        internal IObservable<TSource10> Tenth { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all eleven observable sequences have an available element.
@@ -657,17 +657,17 @@ namespace System.Reactive.Joins
             Eleventh = eleventh;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
-        internal IObservable<TSource4> Fourth { get; private set; }
-        internal IObservable<TSource5> Fifth { get; private set; }
-        internal IObservable<TSource6> Sixth { get; private set; }
-        internal IObservable<TSource7> Seventh { get; private set; }
-        internal IObservable<TSource8> Eighth { get; private set; }
-        internal IObservable<TSource9> Ninth { get; private set; }
-        internal IObservable<TSource10> Tenth { get; private set; }
-        internal IObservable<TSource11> Eleventh { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
+        internal IObservable<TSource4> Fourth { get; }
+        internal IObservable<TSource5> Fifth { get; }
+        internal IObservable<TSource6> Sixth { get; }
+        internal IObservable<TSource7> Seventh { get; }
+        internal IObservable<TSource8> Eighth { get; }
+        internal IObservable<TSource9> Ninth { get; }
+        internal IObservable<TSource10> Tenth { get; }
+        internal IObservable<TSource11> Eleventh { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all twelve observable sequences have an available element.
@@ -738,18 +738,18 @@ namespace System.Reactive.Joins
             Twelfth = twelfth;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
-        internal IObservable<TSource4> Fourth { get; private set; }
-        internal IObservable<TSource5> Fifth { get; private set; }
-        internal IObservable<TSource6> Sixth { get; private set; }
-        internal IObservable<TSource7> Seventh { get; private set; }
-        internal IObservable<TSource8> Eighth { get; private set; }
-        internal IObservable<TSource9> Ninth { get; private set; }
-        internal IObservable<TSource10> Tenth { get; private set; }
-        internal IObservable<TSource11> Eleventh { get; private set; }
-        internal IObservable<TSource12> Twelfth { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
+        internal IObservable<TSource4> Fourth { get; }
+        internal IObservable<TSource5> Fifth { get; }
+        internal IObservable<TSource6> Sixth { get; }
+        internal IObservable<TSource7> Seventh { get; }
+        internal IObservable<TSource8> Eighth { get; }
+        internal IObservable<TSource9> Ninth { get; }
+        internal IObservable<TSource10> Tenth { get; }
+        internal IObservable<TSource11> Eleventh { get; }
+        internal IObservable<TSource12> Twelfth { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all thirteen observable sequences have an available element.
@@ -822,19 +822,19 @@ namespace System.Reactive.Joins
             Thirteenth = thirteenth;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
-        internal IObservable<TSource4> Fourth { get; private set; }
-        internal IObservable<TSource5> Fifth { get; private set; }
-        internal IObservable<TSource6> Sixth { get; private set; }
-        internal IObservable<TSource7> Seventh { get; private set; }
-        internal IObservable<TSource8> Eighth { get; private set; }
-        internal IObservable<TSource9> Ninth { get; private set; }
-        internal IObservable<TSource10> Tenth { get; private set; }
-        internal IObservable<TSource11> Eleventh { get; private set; }
-        internal IObservable<TSource12> Twelfth { get; private set; }
-        internal IObservable<TSource13> Thirteenth { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
+        internal IObservable<TSource4> Fourth { get; }
+        internal IObservable<TSource5> Fifth { get; }
+        internal IObservable<TSource6> Sixth { get; }
+        internal IObservable<TSource7> Seventh { get; }
+        internal IObservable<TSource8> Eighth { get; }
+        internal IObservable<TSource9> Ninth { get; }
+        internal IObservable<TSource10> Tenth { get; }
+        internal IObservable<TSource11> Eleventh { get; }
+        internal IObservable<TSource12> Twelfth { get; }
+        internal IObservable<TSource13> Thirteenth { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all fourteen observable sequences have an available element.
@@ -909,20 +909,20 @@ namespace System.Reactive.Joins
             Fourteenth = fourteenth;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
-        internal IObservable<TSource4> Fourth { get; private set; }
-        internal IObservable<TSource5> Fifth { get; private set; }
-        internal IObservable<TSource6> Sixth { get; private set; }
-        internal IObservable<TSource7> Seventh { get; private set; }
-        internal IObservable<TSource8> Eighth { get; private set; }
-        internal IObservable<TSource9> Ninth { get; private set; }
-        internal IObservable<TSource10> Tenth { get; private set; }
-        internal IObservable<TSource11> Eleventh { get; private set; }
-        internal IObservable<TSource12> Twelfth { get; private set; }
-        internal IObservable<TSource13> Thirteenth { get; private set; }
-        internal IObservable<TSource14> Fourteenth { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
+        internal IObservable<TSource4> Fourth { get; }
+        internal IObservable<TSource5> Fifth { get; }
+        internal IObservable<TSource6> Sixth { get; }
+        internal IObservable<TSource7> Seventh { get; }
+        internal IObservable<TSource8> Eighth { get; }
+        internal IObservable<TSource9> Ninth { get; }
+        internal IObservable<TSource10> Tenth { get; }
+        internal IObservable<TSource11> Eleventh { get; }
+        internal IObservable<TSource12> Twelfth { get; }
+        internal IObservable<TSource13> Thirteenth { get; }
+        internal IObservable<TSource14> Fourteenth { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all fifteen observable sequences have an available element.
@@ -999,21 +999,21 @@ namespace System.Reactive.Joins
             Fifteenth = fifteenth;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
-        internal IObservable<TSource4> Fourth { get; private set; }
-        internal IObservable<TSource5> Fifth { get; private set; }
-        internal IObservable<TSource6> Sixth { get; private set; }
-        internal IObservable<TSource7> Seventh { get; private set; }
-        internal IObservable<TSource8> Eighth { get; private set; }
-        internal IObservable<TSource9> Ninth { get; private set; }
-        internal IObservable<TSource10> Tenth { get; private set; }
-        internal IObservable<TSource11> Eleventh { get; private set; }
-        internal IObservable<TSource12> Twelfth { get; private set; }
-        internal IObservable<TSource13> Thirteenth { get; private set; }
-        internal IObservable<TSource14> Fourteenth { get; private set; }
-        internal IObservable<TSource15> Fifteenth { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
+        internal IObservable<TSource4> Fourth { get; }
+        internal IObservable<TSource5> Fifth { get; }
+        internal IObservable<TSource6> Sixth { get; }
+        internal IObservable<TSource7> Seventh { get; }
+        internal IObservable<TSource8> Eighth { get; }
+        internal IObservable<TSource9> Ninth { get; }
+        internal IObservable<TSource10> Tenth { get; }
+        internal IObservable<TSource11> Eleventh { get; }
+        internal IObservable<TSource12> Twelfth { get; }
+        internal IObservable<TSource13> Thirteenth { get; }
+        internal IObservable<TSource14> Fourteenth { get; }
+        internal IObservable<TSource15> Fifteenth { get; }
 
         /// <summary>
         /// Creates a pattern that matches when all sixteen observable sequences have an available element.
@@ -1092,22 +1092,22 @@ namespace System.Reactive.Joins
             Sixteenth = sixteenth;
         }
 
-        internal IObservable<TSource1> First { get; private set; }
-        internal IObservable<TSource2> Second { get; private set; }
-        internal IObservable<TSource3> Third { get; private set; }
-        internal IObservable<TSource4> Fourth { get; private set; }
-        internal IObservable<TSource5> Fifth { get; private set; }
-        internal IObservable<TSource6> Sixth { get; private set; }
-        internal IObservable<TSource7> Seventh { get; private set; }
-        internal IObservable<TSource8> Eighth { get; private set; }
-        internal IObservable<TSource9> Ninth { get; private set; }
-        internal IObservable<TSource10> Tenth { get; private set; }
-        internal IObservable<TSource11> Eleventh { get; private set; }
-        internal IObservable<TSource12> Twelfth { get; private set; }
-        internal IObservable<TSource13> Thirteenth { get; private set; }
-        internal IObservable<TSource14> Fourteenth { get; private set; }
-        internal IObservable<TSource15> Fifteenth { get; private set; }
-        internal IObservable<TSource16> Sixteenth { get; private set; }
+        internal IObservable<TSource1> First { get; }
+        internal IObservable<TSource2> Second { get; }
+        internal IObservable<TSource3> Third { get; }
+        internal IObservable<TSource4> Fourth { get; }
+        internal IObservable<TSource5> Fifth { get; }
+        internal IObservable<TSource6> Sixth { get; }
+        internal IObservable<TSource7> Seventh { get; }
+        internal IObservable<TSource8> Eighth { get; }
+        internal IObservable<TSource9> Ninth { get; }
+        internal IObservable<TSource10> Tenth { get; }
+        internal IObservable<TSource11> Eleventh { get; }
+        internal IObservable<TSource12> Twelfth { get; }
+        internal IObservable<TSource13> Thirteenth { get; }
+        internal IObservable<TSource14> Fourteenth { get; }
+        internal IObservable<TSource15> Fifteenth { get; }
+        internal IObservable<TSource16> Sixteenth { get; }
 
         /// <summary>
         /// Matches when all observable sequences have an available element and projects the elements by invoking the selector function.
