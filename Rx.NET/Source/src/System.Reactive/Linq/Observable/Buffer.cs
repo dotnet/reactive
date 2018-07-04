@@ -562,7 +562,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private void Tick(int id)
                 {
-                    var newId = 0;
                     lock (_gate)
                     {
                         if (id != _windowId)
@@ -571,7 +570,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
 
                         _n = 0;
-                        newId = ++_windowId;
+                        var newId = ++_windowId;
 
                         var res = _s;
                         _s = new List<TSource>();

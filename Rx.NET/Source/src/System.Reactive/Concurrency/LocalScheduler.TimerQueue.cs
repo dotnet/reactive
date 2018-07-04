@@ -345,11 +345,9 @@ namespace System.Reactive.Concurrency
         {
             lock (StaticGate)
             {
-                var next = default(WorkItem);
-
                 while (LongTerm.Count > 0)
                 {
-                    next = LongTerm.Peek();
+                    var next = LongTerm.Peek();
 
                     var due = Scheduler.Normalize(next.DueTime - next.Scheduler.Now);
                     if (due >= ShortTerm)
