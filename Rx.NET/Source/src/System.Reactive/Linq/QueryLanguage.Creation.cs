@@ -101,7 +101,6 @@ namespace System.Reactive.Linq
                 public Subscription(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync, IObserver<TResult> observer)
                 {
                     _subscription = subscribeAsync(observer, _cts.Token)
-                        .ToObservable()
                         .Subscribe(new TaskCompletionObserver(observer));
                 }
 
@@ -180,7 +179,6 @@ namespace System.Reactive.Linq
                     // Notice because we're using the AnonymousObservable<T> type, we get auto-detach behavior for free.
                     //
                     subscribeAsync(observer, _cts.Token)
-                        .ToObservable()
                         .Subscribe(_observer = new TaskDisposeCompletionObserver(observer));
                 }
 
@@ -262,7 +260,6 @@ namespace System.Reactive.Linq
                     // Notice because we're using the AnonymousObservable<T> type, we get auto-detach behavior for free.
                     //
                     subscribeAsync(observer, _cts.Token)
-                        .ToObservable()
                         .Subscribe(_observer = new TaskDisposeCompletionObserver(observer));
                 }
 
