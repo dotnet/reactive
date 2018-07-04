@@ -127,7 +127,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (IsDisposed())
                     {
-                        while (_queue.TryDequeue(out var _))
+                        while (_queue.TryDequeue(out _))
                         {
                         }
                     }

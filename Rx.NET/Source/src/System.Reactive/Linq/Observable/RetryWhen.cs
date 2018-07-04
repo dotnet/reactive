@@ -195,7 +195,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private void Clear()
         {
-            while (_queue.TryDequeue(out var _))
+            while (_queue.TryDequeue(out _))
             {
                 ;
             }
