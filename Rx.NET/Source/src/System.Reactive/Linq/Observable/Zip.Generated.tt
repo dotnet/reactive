@@ -97,7 +97,7 @@ for (var j = 1; j <= i; j++)
 }
 #>
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(<#=vs#>);

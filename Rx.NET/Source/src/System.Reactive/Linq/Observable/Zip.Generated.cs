@@ -65,7 +65,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer2.SetResource(source2.SubscribeSafe(_observer2));
                 _observer3.SetResource(source3.SubscribeSafe(_observer3));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue());
@@ -133,7 +133,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer3.SetResource(source3.SubscribeSafe(_observer3));
                 _observer4.SetResource(source4.SubscribeSafe(_observer4));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue(), _observer4.Values.Dequeue());
@@ -209,7 +209,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer4.SetResource(source4.SubscribeSafe(_observer4));
                 _observer5.SetResource(source5.SubscribeSafe(_observer5));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue(), _observer4.Values.Dequeue(), _observer5.Values.Dequeue());
@@ -293,7 +293,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer5.SetResource(source5.SubscribeSafe(_observer5));
                 _observer6.SetResource(source6.SubscribeSafe(_observer6));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue(), _observer4.Values.Dequeue(), _observer5.Values.Dequeue(), _observer6.Values.Dequeue());
@@ -385,7 +385,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer6.SetResource(source6.SubscribeSafe(_observer6));
                 _observer7.SetResource(source7.SubscribeSafe(_observer7));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue(), _observer4.Values.Dequeue(), _observer5.Values.Dequeue(), _observer6.Values.Dequeue(), _observer7.Values.Dequeue());
@@ -485,7 +485,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer7.SetResource(source7.SubscribeSafe(_observer7));
                 _observer8.SetResource(source8.SubscribeSafe(_observer8));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue(), _observer4.Values.Dequeue(), _observer5.Values.Dequeue(), _observer6.Values.Dequeue(), _observer7.Values.Dequeue(), _observer8.Values.Dequeue());
@@ -593,7 +593,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer8.SetResource(source8.SubscribeSafe(_observer8));
                 _observer9.SetResource(source9.SubscribeSafe(_observer9));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue(), _observer4.Values.Dequeue(), _observer5.Values.Dequeue(), _observer6.Values.Dequeue(), _observer7.Values.Dequeue(), _observer8.Values.Dequeue(), _observer9.Values.Dequeue());
@@ -709,7 +709,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer9.SetResource(source9.SubscribeSafe(_observer9));
                 _observer10.SetResource(source10.SubscribeSafe(_observer10));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue(), _observer4.Values.Dequeue(), _observer5.Values.Dequeue(), _observer6.Values.Dequeue(), _observer7.Values.Dequeue(), _observer8.Values.Dequeue(), _observer9.Values.Dequeue(), _observer10.Values.Dequeue());
@@ -833,7 +833,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer10.SetResource(source10.SubscribeSafe(_observer10));
                 _observer11.SetResource(source11.SubscribeSafe(_observer11));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue(), _observer4.Values.Dequeue(), _observer5.Values.Dequeue(), _observer6.Values.Dequeue(), _observer7.Values.Dequeue(), _observer8.Values.Dequeue(), _observer9.Values.Dequeue(), _observer10.Values.Dequeue(), _observer11.Values.Dequeue());
@@ -965,7 +965,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer11.SetResource(source11.SubscribeSafe(_observer11));
                 _observer12.SetResource(source12.SubscribeSafe(_observer12));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue(), _observer4.Values.Dequeue(), _observer5.Values.Dequeue(), _observer6.Values.Dequeue(), _observer7.Values.Dequeue(), _observer8.Values.Dequeue(), _observer9.Values.Dequeue(), _observer10.Values.Dequeue(), _observer11.Values.Dequeue(), _observer12.Values.Dequeue());
@@ -1105,7 +1105,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer12.SetResource(source12.SubscribeSafe(_observer12));
                 _observer13.SetResource(source13.SubscribeSafe(_observer13));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue(), _observer4.Values.Dequeue(), _observer5.Values.Dequeue(), _observer6.Values.Dequeue(), _observer7.Values.Dequeue(), _observer8.Values.Dequeue(), _observer9.Values.Dequeue(), _observer10.Values.Dequeue(), _observer11.Values.Dequeue(), _observer12.Values.Dequeue(), _observer13.Values.Dequeue());
@@ -1253,7 +1253,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer13.SetResource(source13.SubscribeSafe(_observer13));
                 _observer14.SetResource(source14.SubscribeSafe(_observer14));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue(), _observer4.Values.Dequeue(), _observer5.Values.Dequeue(), _observer6.Values.Dequeue(), _observer7.Values.Dequeue(), _observer8.Values.Dequeue(), _observer9.Values.Dequeue(), _observer10.Values.Dequeue(), _observer11.Values.Dequeue(), _observer12.Values.Dequeue(), _observer13.Values.Dequeue(), _observer14.Values.Dequeue());
@@ -1409,7 +1409,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer14.SetResource(source14.SubscribeSafe(_observer14));
                 _observer15.SetResource(source15.SubscribeSafe(_observer15));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue(), _observer4.Values.Dequeue(), _observer5.Values.Dequeue(), _observer6.Values.Dequeue(), _observer7.Values.Dequeue(), _observer8.Values.Dequeue(), _observer9.Values.Dequeue(), _observer10.Values.Dequeue(), _observer11.Values.Dequeue(), _observer12.Values.Dequeue(), _observer13.Values.Dequeue(), _observer14.Values.Dequeue(), _observer15.Values.Dequeue());
@@ -1573,7 +1573,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer15.SetResource(source15.SubscribeSafe(_observer15));
                 _observer16.SetResource(source16.SubscribeSafe(_observer16));
 
-                SetUpstream(StableCompositeDisposable.Create(disposables));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(disposables));
             }
 
             protected override TResult GetResult() => _resultSelector(_observer1.Values.Dequeue(), _observer2.Values.Dequeue(), _observer3.Values.Dequeue(), _observer4.Values.Dequeue(), _observer5.Values.Dequeue(), _observer6.Values.Dequeue(), _observer7.Values.Dequeue(), _observer8.Values.Dequeue(), _observer9.Values.Dequeue(), _observer10.Values.Dequeue(), _observer11.Values.Dequeue(), _observer12.Values.Dequeue(), _observer13.Values.Dequeue(), _observer14.Values.Dequeue(), _observer15.Values.Dequeue(), _observer16.Values.Dequeue());
