@@ -9,15 +9,15 @@ namespace System.Reactive
 {
     internal static class ExceptionHelpers
     {
-        private static readonly Lazy<IExceptionServices> _services = new Lazy<IExceptionServices>(Initialize);
+        private static readonly Lazy<IExceptionServices> Services = new Lazy<IExceptionServices>(Initialize);
 
-        public static void Throw(this Exception exception) => _services.Value.Rethrow(exception);
+        public static void Throw(this Exception exception) => Services.Value.Rethrow(exception);
 
         public static void ThrowIfNotNull(this Exception exception)
         {
             if (exception != null)
             {
-                _services.Value.Rethrow(exception);
+                Services.Value.Rethrow(exception);
             }
         }
 

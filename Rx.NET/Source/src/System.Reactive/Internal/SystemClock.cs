@@ -19,9 +19,9 @@ namespace System.Reactive.PlatformServices
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class SystemClock
     {
-        private static readonly Lazy<ISystemClock> _serviceSystemClock = new Lazy<ISystemClock>(InitializeSystemClock);
-        private static readonly Lazy<INotifySystemClockChanged> _serviceSystemClockChanged = new Lazy<INotifySystemClockChanged>(InitializeSystemClockChanged);
-        private static readonly HashSet<WeakReference<LocalScheduler>> _systemClockChanged = new HashSet<WeakReference<LocalScheduler>>();
+        private static readonly Lazy<ISystemClock> ServiceSystemClock = new Lazy<ISystemClock>(InitializeSystemClock);
+        private static readonly Lazy<INotifySystemClockChanged> ServiceSystemClockChanged = new Lazy<INotifySystemClockChanged>(InitializeSystemClockChanged);
+        private static readonly HashSet<WeakReference<LocalScheduler>> SystemClockChanged = new HashSet<WeakReference<LocalScheduler>>();
         private static IDisposable _systemClockChangedHandlerCollector;
 
         private static int _refCount;
@@ -29,7 +29,7 @@ namespace System.Reactive.PlatformServices
         /// <summary>
         /// Gets the local system clock time.
         /// </summary>
-        public static DateTimeOffset UtcNow => _serviceSystemClock.Value.UtcNow;
+        public static DateTimeOffset UtcNow => ServiceSystemClock.Value.UtcNow;
 
         /// <summary>
         /// Adds a reference to the system clock monitor, causing it to be sending notifications.
@@ -39,7 +39,7 @@ namespace System.Reactive.PlatformServices
         {
             if (Interlocked.Increment(ref _refCount) == 1)
             {
-                _serviceSystemClockChanged.Value.SystemClockChanged += OnSystemClockChanged;
+                ServiceSystemClockChanged.Value.SystemClockChanged += OnSystemClockChanged;
             }
         }
 
@@ -51,15 +51,15 @@ namespace System.Reactive.PlatformServices
         {
             if (Interlocked.Decrement(ref _refCount) == 0)
             {
-                _serviceSystemClockChanged.Value.SystemClockChanged -= OnSystemClockChanged;
+                ServiceSystemClockChanged.Value.SystemClockChanged -= OnSystemClockChanged;
             }
         }
 
         private static void OnSystemClockChanged(object sender, SystemClockChangedEventArgs e)
         {
-            lock (_systemClockChanged)
+            lock (SystemClockChanged)
             {
-                foreach (var entry in _systemClockChanged)
+                foreach (var entry in SystemClockChanged)
                 {
                     if (entry.TryGetTarget(out var scheduler))
                     {
@@ -93,15 +93,15 @@ namespace System.Reactive.PlatformServices
             // can have a lot of instances, so we need to collect spurious handlers
             // at regular times.
             //
-            lock (_systemClockChanged)
+            lock (SystemClockChanged)
             {
-                _systemClockChanged.Add(new WeakReference<LocalScheduler>(scheduler));
+                SystemClockChanged.Add(new WeakReference<LocalScheduler>(scheduler));
 
-                if (_systemClockChanged.Count == 1)
+                if (SystemClockChanged.Count == 1)
                 {
                     _systemClockChangedHandlerCollector = ConcurrencyAbstractionLayer.Current.StartPeriodicTimer(CollectHandlers, TimeSpan.FromSeconds(30));
                 }
-                else if (_systemClockChanged.Count % 64 == 0)
+                else if (SystemClockChanged.Count % 64 == 0)
                 {
                     CollectHandlers();
                 }
@@ -117,11 +117,11 @@ namespace System.Reactive.PlatformServices
             // the ConditionalWeakTable<TKey, TValue> type here because we need to
             // be able to enumerate the keys.
             //
-            lock (_systemClockChanged)
+            lock (SystemClockChanged)
             {
                 var remove = default(HashSet<WeakReference<LocalScheduler>>);
 
-                foreach (var handler in _systemClockChanged)
+                foreach (var handler in SystemClockChanged)
                 {
                     if (!handler.TryGetTarget(out _))
                     {
@@ -138,11 +138,11 @@ namespace System.Reactive.PlatformServices
                 {
                     foreach (var handler in remove)
                     {
-                        _systemClockChanged.Remove(handler);
+                        SystemClockChanged.Remove(handler);
                     }
                 }
 
-                if (_systemClockChanged.Count == 0)
+                if (SystemClockChanged.Count == 0)
                 {
                     _systemClockChangedHandlerCollector.Dispose();
                     _systemClockChangedHandlerCollector = null;

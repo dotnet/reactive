@@ -14,26 +14,26 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gate to protect local scheduler queues.
         /// </summary>
-        private static readonly object _gate = new object();
+        private static readonly object Gate = new object();
 
         /// <summary>
         /// Gate to protect queues and to synchronize scheduling decisions and system clock
         /// change management.
         /// </summary>
-        private static readonly object _staticGate = new object();
+        private static readonly object StaticGate = new object();
 
         /// <summary>
         /// Long term work queue. Contains work that's due beyond SHORTTERM, computed at the
         /// time of enqueueing.
         /// </summary>
-        private static readonly PriorityQueue<WorkItem/*!*/> _longTerm = new PriorityQueue<WorkItem/*!*/>();
+        private static readonly PriorityQueue<WorkItem/*!*/> LongTerm = new PriorityQueue<WorkItem/*!*/>();
 
         /// <summary>
         /// Disposable resource for the long term timer that will reevaluate and dispatch the
         /// first item in the long term queue. A serial disposable is used to make "dispose
         /// current and assign new" logic easier. The disposable itself is never disposed.
         /// </summary>
-        private static readonly SerialDisposable _nextLongTermTimer = new SerialDisposable();
+        private static readonly SerialDisposable NextLongTermTimer = new SerialDisposable();
 
         /// <summary>
         /// Item at the head of the long term queue for which the current long term timer is
@@ -173,7 +173,7 @@ namespace System.Reactive.Concurrency
         /// <param name="item">Work item to schedule in the short term. The caller is responsible to determine the work is indeed short term.</param>
         private void ScheduleShortTermWork(WorkItem/*!*/ item)
         {
-            lock (_gate)
+            lock (Gate)
             {
                 _shortTerm.Enqueue(item);
 
@@ -209,7 +209,7 @@ namespace System.Reactive.Concurrency
         {
             var next = default(WorkItem);
 
-            lock (_gate)
+            lock (Gate)
             {
                 //
                 // Notice that even though we try to cancel all work in the short term queue upon a
@@ -277,9 +277,9 @@ namespace System.Reactive.Concurrency
         /// <param name="item">Work item to schedule on the long term. The caller is responsible to determine the work is indeed long term.</param>
         private static void ScheduleLongTermWork(WorkItem/*!*/ item)
         {
-            lock (_staticGate)
+            lock (StaticGate)
             {
-                _longTerm.Enqueue(item);
+                LongTerm.Enqueue(item);
 
                 //
                 // In case we're the first long-term item in the queue now, the timer will have
@@ -301,7 +301,7 @@ namespace System.Reactive.Concurrency
              * 
             lock (s_gate) */
             {
-                if (_longTerm.Count == 0)
+                if (LongTerm.Count == 0)
                 {
                     return;
                 }
@@ -310,7 +310,7 @@ namespace System.Reactive.Concurrency
                 // To avoid setting the timer all over again for the first work item if it hasn't changed,
                 // we keep track of the next long term work item that will be processed by the timer.
                 //
-                var next = _longTerm.Peek();
+                var next = LongTerm.Peek();
                 if (next == _nextLongTermWorkItem)
                 {
                     return;
@@ -333,7 +333,7 @@ namespace System.Reactive.Concurrency
                 var dueCapped = TimeSpan.FromTicks(Math.Min(dueEarly.Ticks, MaxSupportedTimer.Ticks));
 
                 _nextLongTermWorkItem = next;
-                _nextLongTermTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(_ => EvaluateLongTermQueue(), null, dueCapped);
+                NextLongTermTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(_ => EvaluateLongTermQueue(), null, dueCapped);
             }
         }
 
@@ -343,13 +343,13 @@ namespace System.Reactive.Concurrency
         /// </summary>
         private static void EvaluateLongTermQueue()
         {
-            lock (_staticGate)
+            lock (StaticGate)
             {
                 var next = default(WorkItem);
 
-                while (_longTerm.Count > 0)
+                while (LongTerm.Count > 0)
                 {
-                    next = _longTerm.Peek();
+                    next = LongTerm.Peek();
 
                     var due = Scheduler.Normalize(next.DueTime - next.Scheduler.Now);
                     if (due >= ShortTerm)
@@ -357,7 +357,7 @@ namespace System.Reactive.Concurrency
                         break;
                     }
 
-                    var item = _longTerm.Dequeue();
+                    var item = LongTerm.Dequeue();
                     item.Scheduler.ScheduleShortTermWork(item);
                 }
 
@@ -374,9 +374,9 @@ namespace System.Reactive.Concurrency
         /// <param name="sender">Currently not used.</param>
         internal void SystemClockChanged(object sender, SystemClockChangedEventArgs args)
         {
-            lock (_staticGate)
+            lock (StaticGate)
             {
-                lock (_gate)
+                lock (Gate)
                 {
                     //
                     // Best-effort cancellation of short term work. A check for presence in the hash set
@@ -399,7 +399,7 @@ namespace System.Reactive.Concurrency
                     while (_shortTerm.Count > 0)
                     {
                         var next = _shortTerm.Dequeue();
-                        _longTerm.Enqueue(next);
+                        LongTerm.Enqueue(next);
                     }
 
                     //

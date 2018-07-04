@@ -13,7 +13,7 @@ namespace System.Reactive.Concurrency
     public sealed class DefaultScheduler : LocalScheduler, ISchedulerPeriodic
     {
         private static readonly Lazy<DefaultScheduler> _instance = new Lazy<DefaultScheduler>(() => new DefaultScheduler());
-        private static readonly IConcurrencyAbstractionLayer _cal = ConcurrencyAbstractionLayer.Current;
+        private static readonly IConcurrencyAbstractionLayer Cal = ConcurrencyAbstractionLayer.Current;
 
         /// <summary>
         /// Gets the singleton instance of the default scheduler.
@@ -41,7 +41,7 @@ namespace System.Reactive.Concurrency
 
             var workItem = new UserWorkItem<TState>(this, state, action);
 
-            workItem.CancelQueueDisposable = _cal.QueueUserWorkItem(
+            workItem.CancelQueueDisposable = Cal.QueueUserWorkItem(
                 closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
                 workItem);
 
@@ -72,7 +72,7 @@ namespace System.Reactive.Concurrency
 
             var workItem = new UserWorkItem<TState>(this, state, action);
 
-            workItem.CancelQueueDisposable = _cal.StartTimer(
+            workItem.CancelQueueDisposable = Cal.StartTimer(
                 closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
                 workItem,
                 dt);
@@ -117,7 +117,7 @@ namespace System.Reactive.Concurrency
                 _state = state;
                 _action = action;
 
-                _cancel = _cal.StartPeriodicTimer(Tick, period);
+                _cancel = Cal.StartPeriodicTimer(Tick, period);
             }
 
             private void Tick()
@@ -145,7 +145,7 @@ namespace System.Reactive.Concurrency
         {
             if (serviceType == typeof(ISchedulerLongRunning))
             {
-                if (_cal.SupportsLongRunning)
+                if (Cal.SupportsLongRunning)
                 {
                     return LongRunning.Instance;
                 }
@@ -168,7 +168,7 @@ namespace System.Reactive.Concurrency
                     _state = state;
                     _action = action;
 
-                    _cal.StartThread(
+                    Cal.StartThread(
                         thisObject =>
                         {
                             var @this = (LongScheduledWorkItem<TState>)thisObject;

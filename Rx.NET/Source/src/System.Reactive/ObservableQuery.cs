@@ -364,7 +364,7 @@ namespace System.Reactive
                 }
             }
 
-            private static readonly Lazy<ILookup<string, MethodInfo>> _observableMethods = new Lazy<ILookup<string, MethodInfo>>(() => GetMethods(typeof(Observable)));
+            private static readonly Lazy<ILookup<string, MethodInfo>> ObservableMethods = new Lazy<ILookup<string, MethodInfo>>(() => GetMethods(typeof(Observable)));
 
             private static MethodCallExpression FindObservableMethod(MethodInfo method, IList<Expression> arguments)
             {
@@ -376,7 +376,7 @@ namespace System.Reactive
                 if (method.DeclaringType == typeof(Qbservable))
                 {
                     targetType = typeof(Observable);
-                    methods = _observableMethods.Value;
+                    methods = ObservableMethods.Value;
                 }
                 else
                 {

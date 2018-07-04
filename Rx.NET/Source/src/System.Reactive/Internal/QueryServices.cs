@@ -8,9 +8,9 @@ namespace System.Reactive.Linq
 {
     internal static class QueryServices
     {
-        private static readonly IQueryServices _services = Initialize();
+        private static readonly IQueryServices Services = Initialize();
 
-        public static T GetQueryImpl<T>(T defaultInstance) => _services.Extend(defaultInstance);
+        public static T GetQueryImpl<T>(T defaultInstance) => Services.Extend(defaultInstance);
 
         private static IQueryServices Initialize()
         {
