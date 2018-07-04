@@ -201,7 +201,7 @@ namespace System.Reactive.Concurrency
                 _recurseCallback = state => InvokeNext(state);
             }
 
-            internal void InvokeNext(TState state)
+            private void InvokeNext(TState state)
             {
                 var sad = new SingleAssignmentDisposable();
 
@@ -230,7 +230,7 @@ namespace System.Reactive.Concurrency
                 _recurseCallback = (state, time) => InvokeNext(state, time);
             }
 
-            internal void InvokeNext(TState state, TimeSpan time)
+            private void InvokeNext(TState state, TimeSpan time)
             {
                 var sad = new SingleAssignmentDisposable();
 
@@ -258,7 +258,7 @@ namespace System.Reactive.Concurrency
                 _recurseCallback = (state, dtOffset) => InvokeNext(state, dtOffset);
             }
 
-            internal void InvokeNext(TState state, DateTimeOffset dtOffset)
+            private void InvokeNext(TState state, DateTimeOffset dtOffset)
             {
                 var sad = new SingleAssignmentDisposable();
 
