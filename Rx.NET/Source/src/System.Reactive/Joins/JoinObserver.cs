@@ -20,7 +20,7 @@ namespace System.Reactive.Joins
         private readonly IObservable<T> _source;
         private readonly Action<Exception> _onError;
         private readonly List<ActivePlan> _activePlans;
-        public Queue<Notification<T>> Queue { get; private set; }
+        public Queue<Notification<T>> Queue { get; }
         private IDisposable _subscription;
         private bool _isDisposed;
 
