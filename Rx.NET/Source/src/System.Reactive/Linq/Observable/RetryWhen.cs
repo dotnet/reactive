@@ -197,7 +197,6 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             while (_queue.TryDequeue(out _))
             {
-                ;
             }
         }
 
