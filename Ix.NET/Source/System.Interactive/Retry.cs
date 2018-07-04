@@ -21,8 +21,7 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return new[] { source }.Repeat()
-                                 .Catch();
+            return RetryInfinite(source);
         }
 
         /// <summary>
@@ -45,8 +44,94 @@ namespace System.Linq
                 throw new ArgumentOutOfRangeException(nameof(retryCount));
             }
 
-            return new[] { source }.Repeat(retryCount)
-                                 .Catch();
+            return RetryFinite(source, retryCount);
+        }
+
+        private static IEnumerable<TSource> RetryInfinite<TSource>(IEnumerable<TSource> source)
+        {
+            while (true)
+            {
+                var enumerator = default(IEnumerator<TSource>);
+                try
+                {
+                    enumerator = source.GetEnumerator();
+                }
+                catch
+                {
+                    continue;
+                }
+
+                using (enumerator)
+                {
+                    while (true)
+                    {
+                        var v = default(TSource);
+
+                        try
+                        {
+                            if (!enumerator.MoveNext())
+                            {
+                                yield break;
+                            }
+                            v = enumerator.Current;
+                        }
+                        catch
+                        {
+                            break;
+                        }
+
+                        yield return v;
+                    }
+                }
+            }
+        }
+
+        private static IEnumerable<TSource> RetryFinite<TSource>(IEnumerable<TSource> source, int retryCount)
+        {
+            var lastException = default(Exception);
+
+            for (var i = 0; i < retryCount; i++)
+            {
+                var enumerator = default(IEnumerator<TSource>);
+                try
+                {
+                    enumerator = source.GetEnumerator();
+                }
+                catch (Exception ex)
+                {
+                    lastException = ex;
+                    continue;
+                }
+
+                using (enumerator)
+                {
+                    while (true)
+                    {
+                        var v = default(TSource);
+
+                        try
+                        {
+                            if (!enumerator.MoveNext())
+                            {
+                                yield break;
+                            }
+                            v = enumerator.Current;
+                        }
+                        catch (Exception ex)
+                        {
+                            lastException = ex;
+                            break;
+                        }
+
+                        yield return v;
+                    }
+                }
+            }
+
+            if (lastException != null)
+            {
+                throw lastException;
+            }
         }
     }
 }
