@@ -45,7 +45,19 @@ namespace System.Reactive.Disposables
                 throw new ArgumentNullException(nameof(disposables));
             }
 
-            return new NAry(disposables);
+            return new NAryArray(disposables);
+        }
+
+        /// <summary>
+        /// Creates a group of disposable resources that are disposed together
+        /// and without copying or checking for nulls inside the group.
+        /// </summary>
+        /// <param name="disposables">The array of disposables that is trusted
+        /// to not contain nulls and gives no need to defensively copy it.</param>
+        /// <returns>Group of disposable resources that are disposed together.</returns>
+        internal static ICancelable CreateTrusted(params IDisposable[] disposables)
+        {
+            return new NAryTrustedArray(disposables);
         }
 
         /// <summary>
@@ -60,7 +72,7 @@ namespace System.Reactive.Disposables
                 throw new ArgumentNullException(nameof(disposables));
             }
 
-            return new NAry(disposables);
+            return new NAryEnumerable(disposables);
         }
 
         /// <summary>
@@ -96,16 +108,11 @@ namespace System.Reactive.Disposables
             }
         }
 
-        private sealed class NAry : StableCompositeDisposable
+        private sealed class NAryEnumerable : StableCompositeDisposable
         {
             private volatile List<IDisposable> _disposables;
 
-            public NAry(IDisposable[] disposables)
-                : this((IEnumerable<IDisposable>)disposables)
-            {
-            }
-
-            public NAry(IEnumerable<IDisposable> disposables)
+            public NAryEnumerable(IEnumerable<IDisposable> disposables)
             {
                 _disposables = new List<IDisposable>(disposables);
 
@@ -119,6 +126,67 @@ namespace System.Reactive.Disposables
             }
 
             public override bool IsDisposed => _disposables == null;
+
+            public override void Dispose()
+            {
+                var old = Interlocked.Exchange(ref _disposables, null);
+                if (old != null)
+                {
+                    foreach (var d in old)
+                    {
+                        d.Dispose();
+                    }
+                }
+            }
+        }
+
+        private sealed class NAryArray : StableCompositeDisposable
+        {
+            private IDisposable[] _disposables;
+
+            public NAryArray(IDisposable[] disposables)
+            {
+                var n = disposables.Length;
+                var ds = new IDisposable[n];
+                // These are likely already vectorized in the framework
+                // At least they are faster than loop-copying
+                Array.Copy(disposables, 0, ds, 0, n);
+                if (Array.IndexOf(ds, null) != -1)
+                {
+                    throw new ArgumentException(Strings_Core.DISPOSABLES_CANT_CONTAIN_NULL, nameof(disposables));
+                }
+                Volatile.Write(ref _disposables, ds);
+            }
+
+            public override bool IsDisposed => Volatile.Read(ref _disposables) == null;
+
+            public override void Dispose()
+            {
+                var old = Interlocked.Exchange(ref _disposables, null);
+                if (old != null)
+                {
+                    foreach (var d in old)
+                    {
+                        d.Dispose();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// A stable composite that doesn't do defensive copy of
+        /// the input disposable array nor checks it for null.
+        /// </summary>
+        private sealed class NAryTrustedArray : StableCompositeDisposable
+        {
+            private IDisposable[] _disposables;
+
+            public NAryTrustedArray(IDisposable[] disposables)
+            {
+                Volatile.Write(ref _disposables, disposables);
+            }
+
+            public override bool IsDisposed => Volatile.Read(ref _disposables) == null;
 
             public override void Dispose()
             {

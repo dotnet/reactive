@@ -438,7 +438,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     d.Disposable = srcs[j].SubscribeSafe(o);
                 }
 
-                SetUpstream(StableCompositeDisposable.Create(_subscriptions));
+                SetUpstream(StableCompositeDisposable.CreateTrusted(_subscriptions));
             }
 
             private void OnNext(int index, TSource value)

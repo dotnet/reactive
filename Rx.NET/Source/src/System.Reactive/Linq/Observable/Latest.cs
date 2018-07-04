@@ -116,7 +116,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 switch (kind)
                 {
                     case NotificationKind.OnNext:
-                        current = _value;
+                        current = value;
                         return true;
                     case NotificationKind.OnError:
                         error.Throw();
