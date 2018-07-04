@@ -54,7 +54,7 @@ namespace System.Linq
                 var enumerator = default(IEnumerator<TSource>);
                 try
                 {
-                    enumerator = source.GetEnumerator() ?? throw new NullReferenceException();
+                    enumerator = source.GetEnumerator();
                 }
                 catch
                 {
@@ -102,7 +102,7 @@ namespace System.Linq
                 var enumerator = default(IEnumerator<TSource>);
                 try
                 {
-                    enumerator = source.GetEnumerator() ?? throw new NullReferenceException();
+                    enumerator = source.GetEnumerator();
                 }
                 catch (Exception ex)
                 {
