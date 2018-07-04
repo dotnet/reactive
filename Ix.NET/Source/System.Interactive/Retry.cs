@@ -82,8 +82,6 @@ namespace System.Linq
 
                         yield return v;
                     }
-
-                    continue;
                 }
             }
         }
@@ -127,8 +125,6 @@ namespace System.Linq
 
                         yield return v;
                     }
-
-                    continue;
                 }
             }
 
