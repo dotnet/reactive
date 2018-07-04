@@ -30,7 +30,10 @@ namespace System.Reactive.Linq
             {
                 return ap.Append(value);
             }
-
+            if (scheduler == ImmediateScheduler.Instance)
+            {
+                return new AppendPrepend.AppendPrependSingleImmediate<TSource>(source, value, true);
+            }
             return new AppendPrepend.AppendPrependSingle<TSource>(source, value, scheduler, append: true);
         }
 
@@ -206,6 +209,11 @@ namespace System.Reactive.Linq
             if (source is AppendPrepend.IAppendPrepend<TSource> ap && ap.Scheduler == scheduler)
             {
                 return ap.Prepend(value);
+            }
+
+            if (scheduler == ImmediateScheduler.Instance)
+            {
+                return new AppendPrepend.AppendPrependSingleImmediate<TSource>(source, value, false);
             }
 
             return new AppendPrepend.AppendPrependSingle<TSource>(source, value, scheduler, append: false);

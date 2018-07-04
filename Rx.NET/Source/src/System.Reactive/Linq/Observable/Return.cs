@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -41,6 +42,26 @@ namespace System.Reactive.Linq.ObservableImpl
                 ForwardOnNext(_value);
                 ForwardOnCompleted();
             }
+        }
+    }
+
+    // There is no need for a full Producer/IdentitySink as there is no
+    // way to stop a first task running on the immediate scheduler
+    // as it is always synchronous.
+    internal sealed class ReturnImmediate<TSource> : BasicProducer<TSource>
+    {
+        private readonly TSource _value;
+
+        public ReturnImmediate(TSource value)
+        {
+            _value = value;
+        }
+
+        protected override IDisposable Run(IObserver<TSource> observer)
+        {
+            observer.OnNext(_value);
+            observer.OnCompleted();
+            return Disposable.Empty;
         }
     }
 }

@@ -422,11 +422,18 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Return<TResult>(TResult value)
         {
-            return new Return<TResult>(value, SchedulerDefaults.ConstantTimeOperations);
+            // ConstantTimeOperations is a mutable field so we'd have to
+            // check if it points to the immediate scheduler instance
+            // which is done in the other Return overload anyway
+            return Return(value, SchedulerDefaults.ConstantTimeOperations);
         }
 
         public virtual IObservable<TResult> Return<TResult>(TResult value, IScheduler scheduler)
         {
+            if (scheduler == ImmediateScheduler.Instance)
+            {
+                return new ReturnImmediate<TResult>(value);
+            }
             return new Return<TResult>(value, scheduler);
         }
 
@@ -436,11 +443,18 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Throw<TResult>(Exception exception)
         {
-            return new Throw<TResult>(exception, SchedulerDefaults.ConstantTimeOperations);
+            // ConstantTimeOperations is a mutable field so we'd have to
+            // check if it points to the immediate scheduler instance
+            // which is done in the other Return overload anyway
+            return Throw<TResult>(exception, SchedulerDefaults.ConstantTimeOperations);
         }
 
         public virtual IObservable<TResult> Throw<TResult>(Exception exception, IScheduler scheduler)
         {
+            if (scheduler == ImmediateScheduler.Instance)
+            {
+                return new ThrowImmediate<TResult>(exception);
+            }
             return new Throw<TResult>(exception, scheduler);
         }
 
