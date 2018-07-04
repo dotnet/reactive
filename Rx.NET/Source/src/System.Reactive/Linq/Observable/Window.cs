@@ -169,7 +169,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 private void CreateWindow()
                 {
                     var s = new Subject<TSource>();
-                    _q.Enqueue(s);
+
+                    lock (_gate)
+                    {
+                        _q.Enqueue(s);
+                    }
+
                     ForwardOnNext(new WindowObservable<TSource>(s, _refCountDisposable));
                 }
 
@@ -328,8 +333,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private void CreateWindow()
                 {
-                    _subject = new Subject<TSource>();
-                    ForwardOnNext(new WindowObservable<TSource>(_subject, _refCountDisposable));
+                    var newSubject = new Subject<TSource>();
+
+                    lock (_gate)
+                    {
+                        _subject = newSubject;
+                    }
+
+                    ForwardOnNext(new WindowObservable<TSource>(newSubject, _refCountDisposable));
                 }
 
                 public override void OnNext(TSource value)
