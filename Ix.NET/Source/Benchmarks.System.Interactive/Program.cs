@@ -8,9 +8,9 @@ using BenchmarkDotNet.Running;
 
 namespace Benchmarks.System.Interactive
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        internal static void Main(string[] args)
         {
             Console.WriteLine("Effective Ix-version: " + typeof(EnumerableEx).Assembly.GetName().Version);
 

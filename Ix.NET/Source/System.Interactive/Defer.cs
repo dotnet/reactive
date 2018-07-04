@@ -27,18 +27,12 @@ namespace System.Linq
 
         private static IEnumerable<TSource> Defer_<TSource>(Func<IEnumerable<TSource>> enumerableFactory)
         {
-            /*
-            foreach (var item in enumerableFactory())
-            {
-                yield return item;
-            }
-            */
             return new DeferEnumerable<TSource>(enumerableFactory);
         }
 
         private sealed class DeferEnumerable<TSource> : IEnumerable<TSource>
         {
-            readonly Func<IEnumerable<TSource>> _enumerableFactory;
+            private readonly Func<IEnumerable<TSource>> _enumerableFactory;
 
             public DeferEnumerable(Func<IEnumerable<TSource>> enumerableFactory)
             {
