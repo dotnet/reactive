@@ -123,7 +123,7 @@ namespace System.Reactive.Concurrency
                 }
             });
 
-            return new CompositeDisposable(
+            return StableCompositeDisposable.Create(
                 d,
                 res.AsDisposable()
             );
