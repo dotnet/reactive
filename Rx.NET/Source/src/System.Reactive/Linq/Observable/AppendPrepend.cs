@@ -185,10 +185,11 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly IObservable<TSource> _source;
-                private readonly TSource[] _appends;
+                private readonly Node<TSource> _appends;
                 private readonly IScheduler _scheduler;
 
                 private Node<TSource> _currentPrependNode;
+                private TSource[] _appendArray;
                 private int _currentAppendIndex;
                 private volatile bool _disposed;
 
@@ -198,11 +199,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _source = parent._source;
                     _scheduler = parent.Scheduler;
                     _currentPrependNode = parent._prepends;
-
-                    if (parent._appends != null)
-                    {
-                        _appends = parent._appends.ToReverseArray();
-                    }
+                    _appends = parent._appends;
                 }
 
                 public void Run()
@@ -230,6 +227,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
+                        _appendArray = _appends.ToReverseArray();
                         //
                         // We never allow the scheduled work to be cancelled. Instead, the _disposed flag
                         // is used to have LoopRec bail out and perform proper clean-up of the
@@ -284,12 +282,12 @@ namespace System.Reactive.Linq.ObservableImpl
                         return Disposable.Empty;
                     }
 
-                    var current = _appends[_currentAppendIndex];
+                    var current = _appendArray[_currentAppendIndex];
                     ForwardOnNext(current);
 
                     _currentAppendIndex++;
 
-                    if (_currentAppendIndex == _appends.Length)
+                    if (_currentAppendIndex == _appendArray.Length)
                     {
                         ForwardOnCompleted();
                     }
@@ -350,7 +348,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly IObservable<TSource> _source;
                 private readonly Node<TSource> _prepends; 
-                private readonly TSource[] _appends;
+                private readonly Node<TSource> _appends;
                 private readonly ISchedulerLongRunning _scheduler;
 
                 private IDisposable _schedulerDisposable;
@@ -360,12 +358,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _source = parent._source;
                     _scheduler = parent._longRunningScheduler;
-
                     _prepends = parent._prepends;
-                    if (parent._appends != null)
-                    {
-                        _appends = parent._appends.ToReverseArray();
-                    }
+                    _appends = parent._appends;
                 }
 
                 public void Run()
@@ -423,7 +417,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private void AppendValues(ICancelable cancel)
                 {
-                    var array = _appends;
+                    var array = _appends.ToReverseArray();
                     var i = 0;
 
                     while (!cancel.IsDisposed)
