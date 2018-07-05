@@ -588,16 +588,8 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        AttachContinuation(value, task);
+                        task.ContinueWithState((t, tuple) => tuple.@this.OnCompletedTask(tuple.value, t), (@this: this, value), _cancel.Token);
                     }
-                }
-
-                private void AttachContinuation(TSource value, Task<TCollection> task)
-                {
-                    //
-                    // Separate method to avoid closure in synchronous completion case.
-                    //
-                    task.ContinueWithState((t, tuple) => tuple.@this.OnCompletedTask(tuple.value, t), (@this: this, value), _cancel.Token);
                 }
 
                 private void OnCompletedTask(TSource value, Task<TCollection> task)
@@ -749,16 +741,8 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        AttachContinuation(value, index, task);
+                        task.ContinueWithState((t, tuple) => tuple.@this.OnCompletedTask(tuple.value, tuple.index, t), (@this: this, value, index), _cancel.Token);
                     }
-                }
-
-                private void AttachContinuation(TSource value, int index, Task<TCollection> task)
-                {
-                    //
-                    // Separate method to avoid closure in synchronous completion case.
-                    //
-                    task.ContinueWithState((t, tuple) => tuple.@this.OnCompletedTask(tuple.value, tuple.index, t), (@this: this, value, index), _cancel.Token);
                 }
 
                 private void OnCompletedTask(TSource value, int index, Task<TCollection> task)
