@@ -23,17 +23,14 @@ namespace System.Reactive.Concurrency
                 action(new CancelableScheduler(self, _cts.Token), s, _cts.Token).ContinueWith(
                     (t, thisObject) =>
                     {
-                        if (!t.IsCanceled)
-                        {
-                            var @this = (AsyncInvocation<TState>)thisObject;
+                        var @this = (AsyncInvocation<TState>)thisObject;
 
-                            t.Exception?.Handle(e => e is OperationCanceledException);
+                        t.Exception?.Handle(e => e is OperationCanceledException);
 
-                            Disposable.SetSingle(ref @this._run, t.Result);
-                        }
+                        Disposable.SetSingle(ref @this._run, t.Result);
                     },
                     this,
-                    TaskContinuationOptions.ExecuteSynchronously);
+                    TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.NotOnCanceled);
 
                 return this;
             }
