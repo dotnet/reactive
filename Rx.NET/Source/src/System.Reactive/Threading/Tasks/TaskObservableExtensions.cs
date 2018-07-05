@@ -114,7 +114,7 @@ namespace System.Reactive.Threading.Tasks
                 observer, 
                 cts.Token, 
                 TaskContinuationOptions.ExecuteSynchronously, 
-                TaskScheduler.Default);
+                TaskScheduler.Current);
 
             return cts;
         }
@@ -250,7 +250,7 @@ namespace System.Reactive.Threading.Tasks
                 observer, 
                 cts.Token, 
                 TaskContinuationOptions.ExecuteSynchronously, 
-                TaskScheduler.Default);
+                TaskScheduler.Current);
 
             return cts;
         }
