@@ -41,7 +41,15 @@ namespace System.Reactive.Threading.Tasks
                 if (_scheduler == null)
                     _task.ContinueWith((t, subjectObject) => t.EmitTaskResult((IObserver<Unit>)subjectObject), observer, cts.Token, options, TaskScheduler.Current);
                 else
-                    _task.ContinueWith((t, subjectObject) => _scheduler.ScheduleAction((t, subjectObject), tuple => tuple.t.EmitTaskResult((IObserver<Unit>)tuple.subjectObject)), observer, cts.Token, options, TaskScheduler.Current);
+                {
+                    _task.ContinueWithState(
+                        (task, tuple) => tuple.@this._scheduler.ScheduleAction(
+                            (task, tuple.observer),
+                            tuple2 => tuple2.task.EmitTaskResult(tuple2.observer)),
+                        (@this: this, observer),
+                        cts.Token,
+                        options);
+                }
 
                 return cts;
             }
@@ -71,7 +79,15 @@ namespace System.Reactive.Threading.Tasks
                 if (_scheduler == null)
                     _task.ContinueWith((t, subjectObject) => t.EmitTaskResult((IObserver<TResult>)subjectObject), observer, cts.Token, options, TaskScheduler.Current);
                 else
-                    _task.ContinueWith((t, subjectObject) => _scheduler.ScheduleAction((t, subjectObject), tuple => tuple.t.EmitTaskResult((IObserver<TResult>)tuple.subjectObject)), observer, cts.Token, options, TaskScheduler.Current);
+                {
+                    _task.ContinueWithState(
+                        (task, tuple) => tuple.@this._scheduler.ScheduleAction(
+                            (task, tuple.observer),
+                            tuple2 => tuple2.task.EmitTaskResult(tuple2.observer)),
+                        (@this: this, observer),
+                        cts.Token,
+                        options);
+                }
 
                 return cts;
             }
