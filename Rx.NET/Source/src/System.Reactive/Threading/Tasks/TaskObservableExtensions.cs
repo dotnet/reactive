@@ -274,16 +274,6 @@ namespace System.Reactive.Threading.Tasks
             return options;
         }
 
-        private static IObservable<TResult> ToObservableResult<TResult>(this AsyncSubject<TResult> subject, IScheduler scheduler)
-        {
-            if (scheduler != null)
-            {
-                return subject.ObserveOn(scheduler);
-            }
-
-            return subject.AsObservable();
-        }
-
         internal static IDisposable Subscribe<TResult>(this Task<TResult> task, IObserver<TResult> observer)
         {
             if (task.IsCompleted)
