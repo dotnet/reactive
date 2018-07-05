@@ -17,6 +17,65 @@ namespace System.Reactive.Threading.Tasks
     /// </summary>
     public static class TaskObservableExtensions
     {
+        private sealed class SlowTaskObservable : IObservable<Unit>
+        {
+            private readonly Task _task;
+            private readonly IScheduler _scheduler;
+
+            public SlowTaskObservable(Task task, IScheduler scheduler)
+            {
+                _task = task;
+                _scheduler = scheduler;
+            }
+
+            public IDisposable Subscribe(IObserver<Unit> observer)
+            {
+                if (observer == null)
+                {
+                    throw new ArgumentNullException(nameof(observer));
+                }
+
+                var cts = new CancellationDisposable();
+                var options = GetTaskContinuationOptions(_scheduler);
+
+                if (_scheduler == null)
+                    _task.ContinueWith((t, subjectObject) => t.EmitTaskResult((IObserver<Unit>)subjectObject), observer, cts.Token, options, TaskScheduler.Current);
+                else
+                    _task.ContinueWith((t, subjectObject) => _scheduler.ScheduleAction((t, subjectObject), tuple => tuple.t.EmitTaskResult((IObserver<Unit>)tuple.subjectObject)), observer, cts.Token, options, TaskScheduler.Current);
+
+                return cts;
+            }
+        }
+
+        private sealed class SlowTaskObservable<TResult> : IObservable<TResult>
+        {
+            private readonly Task<TResult> _task;
+            private readonly IScheduler _scheduler;
+
+            public SlowTaskObservable(Task<TResult> task, IScheduler scheduler)
+            {
+                _task = task;
+                _scheduler = scheduler;
+            }
+
+            public IDisposable Subscribe(IObserver<TResult> observer)
+            {
+                if (observer == null)
+                {
+                    throw new ArgumentNullException(nameof(observer));
+                }
+
+                var cts = new CancellationDisposable();
+                var options = GetTaskContinuationOptions(_scheduler);
+
+                if (_scheduler == null)
+                    _task.ContinueWith((t, subjectObject) => t.EmitTaskResult((IObserver<TResult>)subjectObject), observer, cts.Token, options, TaskScheduler.Current);
+                else
+                    _task.ContinueWith((t, subjectObject) => _scheduler.ScheduleAction((t, subjectObject), tuple => tuple.t.EmitTaskResult((IObserver<TResult>)tuple.subjectObject)), observer, cts.Token, options, TaskScheduler.Current);
+
+                return cts;
+            }
+        }
         /// <summary>
         /// Returns an observable sequence that signals when the task completes.
         /// </summary>
@@ -74,12 +133,7 @@ namespace System.Reactive.Threading.Tasks
                 return new Return<Unit>(Unit.Default, scheduler);
             }
 
-            var subject = new AsyncSubject<Unit>();
-            var options = GetTaskContinuationOptions(scheduler);
-
-            task.ContinueWith((t, subjectObject) => t.EmitTaskResult((AsyncSubject<Unit>)subjectObject), subject, options);
-
-            return subject.ToObservableResult(scheduler);
+            return new SlowTaskObservable(task, scheduler);
         }
 
         private static void EmitTaskResult(this Task task, IObserver<Unit> subject)
@@ -178,12 +232,7 @@ namespace System.Reactive.Threading.Tasks
                 return new Return<TResult>(task.Result, scheduler);
             }
 
-            var subject = new AsyncSubject<TResult>();
-            var options = GetTaskContinuationOptions(scheduler);
-
-            task.ContinueWith((t, subjectObject) => t.EmitTaskResult((AsyncSubject<TResult>)subjectObject), subject, options);
-
-            return subject.ToObservableResult(scheduler);
+            return new SlowTaskObservable<TResult>(task, scheduler);
         }
 
         private static void EmitTaskResult<TResult>(this Task<TResult> task, IObserver<TResult> subject)
@@ -223,16 +272,6 @@ namespace System.Reactive.Threading.Tasks
             }
 
             return options;
-        }
-
-        private static IObservable<TResult> ToObservableResult<TResult>(this AsyncSubject<TResult> subject, IScheduler scheduler)
-        {
-            if (scheduler != null)
-            {
-                return subject.ObserveOn(scheduler);
-            }
-
-            return subject.AsObservable();
         }
 
         internal static IDisposable Subscribe<TResult>(this Task<TResult> task, IObserver<TResult> observer)

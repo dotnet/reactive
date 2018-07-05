@@ -597,7 +597,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     //
                     // Separate method to avoid closure in synchronous completion case.
                     //
-                    task.ContinueWith(t => OnCompletedTask(value, t));
+                    task.ContinueWith(t => OnCompletedTask(value, t), _cancel.Token);
                 }
 
                 private void OnCompletedTask(TSource value, Task<TCollection> task)
@@ -758,7 +758,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     //
                     // Separate method to avoid closure in synchronous completion case.
                     //
-                    task.ContinueWith(t => OnCompletedTask(value, index, t));
+                    task.ContinueWith(t => OnCompletedTask(value, index, t), _cancel.Token);
                 }
 
                 private void OnCompletedTask(TSource value, int index, Task<TCollection> task)
@@ -1538,7 +1538,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        task.ContinueWith((closureTask, thisObject) => ((_)thisObject).OnCompletedTask(closureTask), this);
+                        task.ContinueWith((closureTask, thisObject) => ((_)thisObject).OnCompletedTask(closureTask), this, _cts.Token);
                     }
                 }
 
@@ -1670,7 +1670,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        task.ContinueWith((closureTask, thisObject) => ((_)thisObject).OnCompletedTask(closureTask), this);
+                        task.ContinueWith((closureTask, thisObject) => ((_)thisObject).OnCompletedTask(closureTask), this, _cts.Token);
                     }
                 }
 
