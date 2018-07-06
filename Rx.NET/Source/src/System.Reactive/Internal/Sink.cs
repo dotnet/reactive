@@ -26,7 +26,7 @@ namespace System.Reactive
 
         public void Dispose()
         {
-            if (_observer != NopObserver<TTarget>.Instance && Interlocked.Exchange(ref _observer, NopObserver<TTarget>.Instance) != NopObserver<TTarget>.Instance)
+            if (Interlocked.Exchange(ref _observer, NopObserver<TTarget>.Instance) != NopObserver<TTarget>.Instance)
                 Dispose(true);
         }
 
