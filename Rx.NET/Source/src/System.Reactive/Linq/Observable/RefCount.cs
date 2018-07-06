@@ -14,7 +14,6 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class Eager : Producer<TSource, Eager._>
         {
             private readonly IConnectableObservable<TSource> _source;
-
             private readonly object _gate;
             private int _count;
             private IDisposable _connectableSubscription;
@@ -23,45 +22,54 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 _source = source;
                 _gate = new object();
-                _count = 0;
-                _connectableSubscription = default(IDisposable);
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer, this);
 
-            protected override void Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run();
 
             internal sealed class _ : IdentitySink<TSource>
             {
-                public _(IObserver<TSource> observer)
+                private readonly Eager _parent;
+
+                public _(IObserver<TSource> observer, Eager parent)
                     : base(observer)
                 {
+                    _parent = parent;
                 }
 
-                public void Run(Eager parent)
+                public void Run()
                 {
-                    var subscription = parent._source.SubscribeSafe(this);
+                    Run(_parent._source);
 
-                    lock (parent._gate)
+                    lock (_parent._gate)
                     {
-                        if (++parent._count == 1)
+                        if (++_parent._count == 1)
                         {
-                            parent._connectableSubscription = parent._source.Connect();
+                            var connection = _parent._source.Connect();
+
+                            if (_parent._count == 0)
+                                connection.Dispose(); //If here, Connect has terminated synchronously but Dispose(bool) could not dispose the connection.
+                            else
+                                _parent._connectableSubscription = connection;
                         }
                     }
+                }
 
-                    SetUpstream(Disposable.Create(() =>
+                protected override void Dispose(bool disposing)
+                {
+                    base.Dispose(disposing);
+
+                    if (disposing)
                     {
-                        subscription.Dispose();
-
-                        lock (parent._gate)
+                        lock (_parent._gate)
                         {
-                            if (--parent._count == 0)
+                            if (--_parent._count == 0)
                             {
-                                parent._connectableSubscription.Dispose();
+                                _parent._connectableSubscription?.Dispose();
                             }
                         }
-                    }));
+                    }
                 }
             }
         }
