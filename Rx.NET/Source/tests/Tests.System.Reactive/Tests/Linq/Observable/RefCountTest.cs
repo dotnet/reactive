@@ -236,6 +236,31 @@ namespace ReactiveTests.Tests
                 Assert.False(terminated);
             }
         }
+
+        [Fact]
+        public void RefCount_source_already_completed_synchronously()
+        {
+            var subscribed = 0;
+            var unsubscribed = 0;
+            
+            var o1 = Observable.Create<string>(observer =>
+            {
+                subscribed++;
+                observer.OnCompleted();
+
+                return Disposable.Create(() => unsubscribed++);
+            });
+
+            var o2 = o1.Publish().RefCount();
+
+            var s1 = o2.Subscribe();
+            Assert.Equal(1, subscribed);
+            Assert.Equal(1, unsubscribed);
+
+            var s2 = o2.Subscribe();
+            Assert.Equal(1, subscribed);
+            Assert.Equal(1, unsubscribed);
+        }
         
         [Fact]
         public void LazyRefCount_ArgumentChecking()
