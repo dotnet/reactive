@@ -3,8 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
 using Xunit;
 
@@ -12,6 +15,25 @@ namespace ReactiveTests.Tests
 {
     public class RefCountTest : ReactiveTest
     {
+        private sealed class DematerializingConnectableObservable<T> : IConnectableObservable<T>
+        {
+            private readonly IConnectableObservable<Notification<T>> _subject;
+
+            public DematerializingConnectableObservable(IConnectableObservable<Notification<T>> subject)
+            {
+                _subject = subject;
+            }
+
+            public IDisposable Subscribe(IObserver<T> observer)
+            {
+                return _subject.Dematerialize().Subscribe(observer);
+            }
+
+            public IDisposable Connect()
+            {
+                return _subject.Connect();
+            }
+        }
 
         [Fact]
         public void RefCount_ArgumentChecking()
@@ -177,6 +199,44 @@ namespace ReactiveTests.Tests
             );
         }
 
+        [Fact]
+        public void RefCount_can_connect_again_if_previous_subscription_terminated_synchronously()
+        {
+            var seen = 0;
+            var terminated = false;
+
+            var subject = new ReplaySubject<Notification<int>>(1);
+            var connectable = new DematerializingConnectableObservable<int>(subject.Publish());
+            var refCount = connectable.RefCount();
+
+            subject.OnNext(Notification.CreateOnNext(36));
+
+            using (refCount.Subscribe(value => seen = value, () => terminated = true))
+            {
+                Assert.Equal(36, seen);
+            }
+
+            seen = 0;
+            terminated = false;
+            subject.OnNext(Notification.CreateOnCompleted<int>());
+
+            using (refCount.Subscribe(value => seen = value, () => terminated = true))
+            {
+                Assert.Equal(0, seen);
+                Assert.True(terminated);
+            }
+
+            seen = 0;
+            terminated = false;
+            subject.OnNext(Notification.CreateOnNext(36));
+
+            using (refCount.Subscribe(value => seen = value, () => terminated = true))
+            {
+                Assert.Equal(36, seen);
+                Assert.False(terminated);
+            }
+        }
+        
         [Fact]
         public void LazyRefCount_ArgumentChecking()
         {
