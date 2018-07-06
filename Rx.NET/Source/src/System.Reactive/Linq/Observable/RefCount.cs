@@ -76,7 +76,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     // subscribe to the source first
                     Run(_parent._source);
                     // then connect the source if necessary
-                    if (doConnect)
+                    if (doConnect && !Disposable.GetIsDisposed(ref conn._disposable))
                     {
                         // this makes sure if the connection ends synchronously
                         // only the currently known connection is affected
