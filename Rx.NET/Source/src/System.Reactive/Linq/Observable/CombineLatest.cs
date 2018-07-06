@@ -431,11 +431,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     var j = i;
 
-                    var d = new SingleAssignmentDisposable();
-                    _subscriptions[j] = d;
-
                     var o = new SourceObserver(this, j);
-                    d.Disposable = srcs[j].SubscribeSafe(o);
+                    _subscriptions[j] = o;
+
+                    o.SetResource(srcs[j].SubscribeSafe(o));
                 }
 
                 SetUpstream(StableCompositeDisposable.CreateTrusted(_subscriptions));
@@ -496,7 +495,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            private sealed class SourceObserver : IObserver<TSource>
+            private sealed class SourceObserver : SafeObserver<TSource>
             {
                 private readonly _ _parent;
                 private readonly int _index;
@@ -507,17 +506,17 @@ namespace System.Reactive.Linq.ObservableImpl
                     _index = index;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     _parent.OnNext(_index, value);
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     _parent.OnError(error);
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     _parent.OnCompleted(_index);
                 }
