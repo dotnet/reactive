@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive
 {
@@ -25,12 +26,16 @@ namespace System.Reactive
 
         public void Dispose()
         {
-            Dispose(true);
+            if (Interlocked.Exchange(ref _observer, NopObserver<TTarget>.Instance) != NopObserver<TTarget>.Instance)
+                Dispose(true);
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            _observer = NopObserver<TTarget>.Instance;
+            //Calling base.Dispose(true) is not a proper disposal, so we can omit the assignment here.
+            //Sink is internal so this can pretty much be enforced.
+            //_observer = NopObserver<TTarget>.Instance;
+
             Disposable.TryDispose(ref _upstream);
         }
 
