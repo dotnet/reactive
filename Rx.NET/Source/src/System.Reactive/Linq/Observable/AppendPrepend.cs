@@ -224,8 +224,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         //
                         // We never allow the scheduled work to be cancelled. Instead, the _disposed flag
-                        // is used to have LoopRec bail out and perform proper clean-up of the
-                        // enumerator.
+                        // is used to have PrependValues() bail out.
                         //
                         _scheduler.Schedule(this, (innerScheduler, @this) => @this.PrependValues(innerScheduler));
                     }
@@ -242,8 +241,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         _appendArray = _appends.ToReverseArray();
                         //
                         // We never allow the scheduled work to be cancelled. Instead, the _disposed flag
-                        // is used to have LoopRec bail out and perform proper clean-up of the
-                        // enumerator.
+                        // is used to have `AppendValues` bail out.
                         //
                         _scheduler.Schedule(this, (innerScheduler, @this) => @this.AppendValues(innerScheduler));
                     }
@@ -278,8 +276,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     { 
                         //
                         // We never allow the scheduled work to be cancelled. Instead, the _disposed flag
-                        // is used to have LoopRec bail out and perform proper clean-up of the
-                        // enumerator.
+                        // is used to have PrependValues() bail out.
                         //
                         scheduler.Schedule(this, (innerScheduler, @this) => @this.PrependValues(innerScheduler));
                     }
@@ -307,8 +304,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     { 
                         //
                         // We never allow the scheduled work to be cancelled. Instead, the _disposed flag
-                        // is used to have LoopRec bail out and perform proper clean-up of the
-                        // enumerator.
+                        // is used to have AppendValues() bail out.
                         //
                         scheduler.Schedule(this, (innerScheduler, @this) => @this.AppendValues(innerScheduler));
                     }
