@@ -30,6 +30,11 @@ namespace System.Reactive
                 Dispose(true);
         }
 
+        /// <summary>
+        /// Override this method to dispose additional resources.
+        /// The method is guaranteed to be called at most once.
+        /// </summary>
+        /// <param name="disposing">If true, the method was called from <see cref="Dispose()"/>.</param>
         protected virtual void Dispose(bool disposing)
         {
             //Calling base.Dispose(true) is not a proper disposal, so we can omit the assignment here.
