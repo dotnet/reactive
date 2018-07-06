@@ -534,7 +534,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly object _gate = new object();
-                private readonly CancellationDisposable _cancel = new CancellationDisposable();
+                private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
 
                 private readonly Func<TSource, CancellationToken, Task<TCollection>> _collectionSelector;
                 private readonly Func<TSource, TCollection, TResult> _resultSelector;
@@ -559,7 +559,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        _cancel.Dispose();
+                        _cancel.Cancel();
                     }
                     base.Dispose(disposing);
                 }
@@ -642,7 +642,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         case TaskStatus.Canceled:
                         {
-                            if (!_cancel.IsDisposed)
+                            if (!_cancel.IsCancellationRequested)
                             {
                                 lock (_gate)
                                 {
@@ -696,7 +696,7 @@ namespace System.Reactive.Linq.ObservableImpl
             internal sealed class _ : Sink<TSource, TResult>
             {
                 private readonly object _gate = new object();
-                private readonly CancellationDisposable _cancel = new CancellationDisposable();
+                private readonly CancellationTokenSource _cancel = new CancellationTokenSource();
 
                 private readonly Func<TSource, int, CancellationToken, Task<TCollection>> _collectionSelector;
                 private readonly Func<TSource, int, TCollection, TResult> _resultSelector;
@@ -722,7 +722,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        _cancel.Dispose();
+                        _cancel.Cancel();
                     }
                     base.Dispose(disposing);
                 }
@@ -806,7 +806,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         case TaskStatus.Canceled:
                         {
-                            if (!_cancel.IsDisposed)
+                            if (!_cancel.IsCancellationRequested)
                             {
                                 lock (_gate)
                                 {
