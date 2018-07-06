@@ -89,25 +89,29 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected override void Dispose(bool disposing)
                 {
                     base.Dispose(disposing);
-                    // get and forget the saved connection
-                    var targetConnection = _targetConnection;
-                    _targetConnection = null;
+                    if (disposing)
+                    {
+                        // get and forget the saved connection
+                        var targetConnection = _targetConnection;
+                        _targetConnection = null;
 
-                    lock (_parent._gate) {
-                        // if the current connection is no longer the saved connection
-                        // or the counter hasn't reached zero yet
-                        if (targetConnection != _parent._connection
-                            || --targetConnection._count != 0)
+                        lock (_parent._gate)
                         {
-                            // nothing to do.
-                            return;
+                            // if the current connection is no longer the saved connection
+                            // or the counter hasn't reached zero yet
+                            if (targetConnection != _parent._connection
+                                || --targetConnection._count != 0)
+                            {
+                                // nothing to do.
+                                return;
+                            }
+                            // forget the current connection
+                            _parent._connection = null;
                         }
-                        // forget the current connection
-                        _parent._connection = null;
-                    }
 
-                    // disconnect
-                    Disposable.TryDispose(ref targetConnection._disposable);
+                        // disconnect
+                        Disposable.TryDispose(ref targetConnection._disposable);
+                    }
                 }
             }
 
