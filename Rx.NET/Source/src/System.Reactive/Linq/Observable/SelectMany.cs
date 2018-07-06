@@ -627,16 +627,19 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
 
                             OnCompleted();
+
+                            break;
                         }
-                        break;
+                        
                         case TaskStatus.Faulted:
                         {
                             lock (_gate)
                             {
                                 ForwardOnError(task.Exception.InnerException);
                             }
+
+                            break;
                         }
-                        break;
                         case TaskStatus.Canceled:
                         {
                             if (!_cancel.IsDisposed)
@@ -646,8 +649,9 @@ namespace System.Reactive.Linq.ObservableImpl
                                     ForwardOnError(new TaskCanceledException(task));
                                 }
                             }
+
+                            break;
                         }
-                        break;
                     }
                 }
 
@@ -788,16 +792,18 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
 
                             OnCompleted();
+
+                            break;
                         }
-                        break;
                         case TaskStatus.Faulted:
                         {
                             lock (_gate)
                             {
                                 ForwardOnError(task.Exception.InnerException);
                             }
+
+                            break;
                         }
-                        break;
                         case TaskStatus.Canceled:
                         {
                             if (!_cancel.IsDisposed)
@@ -807,8 +813,9 @@ namespace System.Reactive.Linq.ObservableImpl
                                     ForwardOnError(new TaskCanceledException(task));
                                 }
                             }
+
+                            break;
                         }
-                        break;
                     }
                 }
 
@@ -1554,16 +1561,18 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
 
                             OnCompleted();
+
+                            break;
                         }
-                        break;
                         case TaskStatus.Faulted:
                         {
                             lock (_gate)
                             {
                                 ForwardOnError(task.Exception.InnerException);
                             }
+
+                            break;
                         }
-                        break;
                         case TaskStatus.Canceled:
                         {
                             if (!_cts.IsCancellationRequested)
@@ -1573,8 +1582,9 @@ namespace System.Reactive.Linq.ObservableImpl
                                     ForwardOnError(new TaskCanceledException(task));
                                 }
                             }
+
+                            break;
                         }
-                        break;
                     }
                 }
 
@@ -1686,16 +1696,18 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
 
                             OnCompleted();
+
+                            break;
                         }
-                        break;
                         case TaskStatus.Faulted:
                         {
                             lock (_gate)
                             {
                                 ForwardOnError(task.Exception.InnerException);
                             }
+
+                            break;
                         }
-                        break;
                         case TaskStatus.Canceled:
                         {
                             if (!_cts.IsCancellationRequested)
@@ -1705,8 +1717,9 @@ namespace System.Reactive.Linq.ObservableImpl
                                     ForwardOnError(new TaskCanceledException(task));
                                 }
                             }
+
+                            break;
                         }
-                        break;
                     }
                 }
 
