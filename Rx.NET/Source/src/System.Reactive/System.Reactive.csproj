@@ -12,7 +12,8 @@
     <EmbeddedResource Remove="Platforms\**\*.*" />
     <!-- Workaround so the files appear in VS -->
     <None Include="Platforms\**\*.*" />
-    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />    
+    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />    
     <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />     
     <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />      
   </ItemGroup>
