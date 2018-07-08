@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Reactive.Disposables;
 using System.Threading;
 
@@ -14,11 +16,18 @@ namespace System.Reactive.Subjects
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
     public sealed class Subject<T> : SubjectBase<T>
     {
-        #region Fields
+        private sealed class SubjectDisposableComparer : IComparer<SubjectDisposable>
+        {
+            public int Compare(SubjectDisposable x, SubjectDisposable y)
+            {
+                return x.GetHashCode().CompareTo(y.GetHashCode());
+            }
+        }
 
-        private SubjectDisposable[] _observers;
+        #region Fields
+        private static readonly ImmutableSortedDictionary<SubjectDisposable, int> Empty = ImmutableSortedDictionary<SubjectDisposable, int>.Empty.WithComparers(new SubjectDisposableComparer());
+        private ImmutableSortedDictionary<SubjectDisposable, int> _observers;
         private Exception _exception;
-        private static readonly SubjectDisposable[] Empty = new SubjectDisposable[0];
         #endregion
 
         #region Constructors
@@ -42,7 +51,7 @@ namespace System.Reactive.Subjects
         {
             get
             {
-                return (Volatile.Read(ref _observers)?.Length).GetValueOrDefault() != 0;
+                return (Volatile.Read(ref _observers)?.Count).GetValueOrDefault() != 0;
             }
         }
 
@@ -75,11 +84,14 @@ namespace System.Reactive.Subjects
                 {
                     var observers = Volatile.Read(ref _observers);
 
-                    if (observers != null && Interlocked.CompareExchange(ref _observers, new SubjectDisposable[0], observers) == observers)
+                    if (observers != null && Interlocked.CompareExchange(ref _observers, Empty, observers) == observers)
                     {
-                        foreach (var observer in observers)
+                        foreach (var kvp in observers)
                         {
-                            observer.Observer?.OnCompleted();
+                            for (var i = 0; i < kvp.Value; i++)
+                            {
+                                kvp.Key.Observer?.OnCompleted();
+                            }
                         }
 
                         break;
@@ -112,11 +124,14 @@ namespace System.Reactive.Subjects
                 {
                     var observers = Volatile.Read(ref _observers);
 
-                    if (observers != null && Interlocked.CompareExchange(ref _observers, new SubjectDisposable[0], observers) == observers)
+                    if (observers != null && Interlocked.CompareExchange(ref _observers, Empty, observers) == observers)
                     {
-                        foreach (var observer in observers)
+                        foreach (var kvp in observers)
                         {
-                            observer.Observer?.OnError(error);
+                            for (var i = 0; i < kvp.Value; i++)
+                            {
+                                kvp.Key.Observer?.OnError(error);
+                            }
                         }
 
                         break;
@@ -143,9 +158,12 @@ namespace System.Reactive.Subjects
                 return;
             }
 
-            foreach (var observer in observers)
+            foreach (var kvp in observers)
             {
-                observer.Observer?.OnNext(value);
+                for (var i = 0; i < kvp.Value; i++)
+                {
+                    kvp.Key.Observer?.OnNext(value);
+                }
             }
         }
 
@@ -199,12 +217,11 @@ namespace System.Reactive.Subjects
 
                 if (observers != null)
                 {
-                    var n = observers.Length;
-                    var b = new SubjectDisposable[n + 1];
-                    Array.Copy(observers, 0, b, 0, n);
-                    b[n] = disposable;
+                    var newObservers = observers.TryGetValue(disposable, out var existingCount)
+                        ? observers.SetItem(disposable, existingCount + 1)
+                        : observers.Add(disposable, 1);
 
-                    if (Interlocked.CompareExchange(ref _observers, b, observers) == observers)
+                    if (Interlocked.CompareExchange(ref _observers, newObservers, observers) == observers)
                     {
                         return disposable;
                     }
@@ -223,31 +240,11 @@ namespace System.Reactive.Subjects
                 if (observers == null)
                     return;
 
-                var n = observers.Length;
-                if (n == 0)
-                {
-                    break;
-                }
-
-                var j = Array.IndexOf(observers, observer);
-
-                if (j < 0)
-                {
-                    break;
-                }
-
-                var b = default(SubjectDisposable[]);
-                if (n == 1)
-                {
-                    b = Empty;
-                }
-                else
-                {
-                    b = new SubjectDisposable[n - 1];
-                    Array.Copy(observers, 0, b, 0, j);
-                    Array.Copy(observers, j + 1, b, j, n - j - 1);
-                }
-                if (Interlocked.CompareExchange(ref _observers, b, observers) == observers)
+                var newObservers = observers.TryGetValue(observer, out var existingCount) && existingCount > 1
+                    ? observers.SetItem(observer, existingCount - 1)
+                    : observers.Remove(observer);
+                    
+                if (Interlocked.CompareExchange(ref _observers, newObservers, observers) == observers)
                 {
                     break;
                 }
