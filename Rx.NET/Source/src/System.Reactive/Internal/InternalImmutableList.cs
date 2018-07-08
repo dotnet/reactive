@@ -4,35 +4,35 @@
 
 namespace System.Reactive
 {
-    internal sealed class ImmutableList<T>
+    internal sealed class InternalImmutableList<T>
     {
-        public static readonly ImmutableList<T> Empty = new ImmutableList<T>();
+        public static readonly InternalImmutableList<T> Empty = new InternalImmutableList<T>();
 
         private readonly T[] _data;
 
-        private ImmutableList()
+        private InternalImmutableList()
         {
             _data = new T[0];
         }
 
-        public ImmutableList(T[] data)
+        public InternalImmutableList(T[] data)
         {
             _data = data;
         }
 
         public T[] Data => _data;
 
-        public ImmutableList<T> Add(T value)
+        public InternalImmutableList<T> Add(T value)
         {
             var newData = new T[_data.Length + 1];
 
             Array.Copy(_data, newData, _data.Length);
             newData[_data.Length] = value;
 
-            return new ImmutableList<T>(newData);
+            return new InternalImmutableList<T>(newData);
         }
 
-        public ImmutableList<T> Remove(T value)
+        public InternalImmutableList<T> Remove(T value)
         {
             var i = IndexOf(value);
             if (i < 0)
@@ -51,7 +51,7 @@ namespace System.Reactive
             Array.Copy(_data, 0, newData, 0, i);
             Array.Copy(_data, i + 1, newData, i, length - i - 1);
 
-            return new ImmutableList<T>(newData);
+            return new InternalImmutableList<T>(newData);
         }
 
         private int IndexOf(T value)
