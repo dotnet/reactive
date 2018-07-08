@@ -19,9 +19,6 @@ namespace System.Reactive.Subjects
         private SubjectDisposable[] _observers;
         private Exception _exception;
         private static readonly SubjectDisposable[] Empty = new SubjectDisposable[0];
-        private static readonly SubjectDisposable[] Terminated = new SubjectDisposable[0];
-        private static readonly SubjectDisposable[] Disposed = new SubjectDisposable[0];
-
         #endregion
 
         #region Constructors
@@ -45,14 +42,14 @@ namespace System.Reactive.Subjects
         {
             get
             {
-                return Volatile.Read(ref _observers).Length != 0;
+                return (Volatile.Read(ref _observers)?.Length).GetValueOrDefault() != 0;
             }
         }
 
         /// <summary>
         /// Indicates whether the subject has been disposed.
         /// </summary>
-        public override bool IsDisposed => Volatile.Read(ref _observers) == Disposed;
+        public override bool IsDisposed => Volatile.Read(ref _exception) == ExceptionHelper.Disposed;
 
         #endregion
 
@@ -70,27 +67,28 @@ namespace System.Reactive.Subjects
         /// </summary>
         public override void OnCompleted()
         {
-            for (; ; )
+            for (;;)
             {
-                var observers = Volatile.Read(ref _observers);
-                if (observers == Disposed)
+                var exception = Interlocked.CompareExchange(ref _exception, ExceptionHelper.Terminated, null);
+
+                if (exception == null)
                 {
-                    _exception = null;
-                    ThrowDisposed();
-                    break;
-                }
-                if (observers == Terminated)
-                {
-                    break;
-                }
-                if (Interlocked.CompareExchange(ref _observers, Terminated, observers) == observers)
-                {
-                    foreach (var observer in observers)
+                    var observers = Volatile.Read(ref _observers);
+
+                    if (observers != null && Interlocked.CompareExchange(ref _observers, new SubjectDisposable[0], observers) == observers)
                     {
-                        observer.Observer?.OnCompleted();
+                        foreach (var observer in observers)
+                        {
+                            observer.Observer?.OnCompleted();
+                        }
+
+                        break;
                     }
-                    break;
                 }
+                else if (exception == ExceptionHelper.Disposed)
+                    ThrowDisposed();
+                else
+                    return;
             }
         }
 
@@ -106,28 +104,28 @@ namespace System.Reactive.Subjects
                 throw new ArgumentNullException(nameof(error));
             }
 
-            for (; ; )
+            for (;;)
             {
-                var observers = Volatile.Read(ref _observers);
-                if (observers == Disposed)
+                var exception = Interlocked.CompareExchange(ref _exception, error, null);
+
+                if (exception == null)
                 {
-                    _exception = null;
-                    ThrowDisposed();
-                    break;
-                }
-                if (observers == Terminated)
-                {
-                    break;
-                }
-                _exception = error;
-                if (Interlocked.CompareExchange(ref _observers, Terminated, observers) == observers)
-                {
-                    foreach (var observer in observers)
+                    var observers = Volatile.Read(ref _observers);
+
+                    if (observers != null && Interlocked.CompareExchange(ref _observers, new SubjectDisposable[0], observers) == observers)
                     {
-                        observer.Observer?.OnError(error);
+                        foreach (var observer in observers)
+                        {
+                            observer.Observer?.OnError(error);
+                        }
+
+                        break;
                     }
-                    break;
                 }
+                else if (exception == ExceptionHelper.Disposed)
+                    ThrowDisposed();
+                else
+                    return;
             }
         }
 
@@ -138,12 +136,13 @@ namespace System.Reactive.Subjects
         public override void OnNext(T value)
         {
             var observers = Volatile.Read(ref _observers);
-            if (observers == Disposed)
+
+            if (observers == null)
             {
-                _exception = null;
                 ThrowDisposed();
                 return;
             }
+
             foreach (var observer in observers)
             {
                 observer.Observer?.OnNext(value);
@@ -168,26 +167,26 @@ namespace System.Reactive.Subjects
             }
 
             var disposable = default(SubjectDisposable);
+
             for (; ; )
             {
-                var observers = Volatile.Read(ref _observers);
-                if (observers == Disposed)
+                var exception = Volatile.Read(ref _exception);
+
+                if (exception != null)
                 {
-                    _exception = null;
-                    ThrowDisposed();
-                    break;
-                }
-                if (observers == Terminated)
-                {
-                    var ex = _exception;
-                    if (ex != null)
+                    if (exception == ExceptionHelper.Disposed)
                     {
-                        observer.OnError(ex);
+                        ThrowDisposed();
                     }
-                    else
+                    else if (exception == ExceptionHelper.Terminated)
                     {
                         observer.OnCompleted();
                     }
+                    else
+                    {
+                        observer.OnError(exception);
+                    }
+
                     break;
                 }
 
@@ -196,15 +195,22 @@ namespace System.Reactive.Subjects
                     disposable = new SubjectDisposable(this, observer);
                 }
 
-                var n = observers.Length;
-                var b = new SubjectDisposable[n + 1];
-                Array.Copy(observers, 0, b, 0, n);
-                b[n] = disposable;
-                if (Interlocked.CompareExchange(ref _observers, b, observers) == observers)
+                var observers = Volatile.Read(ref _observers);
+
+                if (observers != null)
                 {
-                    return disposable;
+                    var n = observers.Length;
+                    var b = new SubjectDisposable[n + 1];
+                    Array.Copy(observers, 0, b, 0, n);
+                    b[n] = disposable;
+
+                    if (Interlocked.CompareExchange(ref _observers, b, observers) == observers)
+                    {
+                        return disposable;
+                    }
                 }
             }
+
             return Disposable.Empty;
         }
 
@@ -212,14 +218,18 @@ namespace System.Reactive.Subjects
         {
             for (; ; )
             {
-                var a = Volatile.Read(ref _observers);
-                var n = a.Length;
+                var observers = Volatile.Read(ref _observers);
+
+                if (observers == null)
+                    return;
+
+                var n = observers.Length;
                 if (n == 0)
                 {
                     break;
                 }
 
-                var j = Array.IndexOf(a, observer);
+                var j = Array.IndexOf(observers, observer);
 
                 if (j < 0)
                 {
@@ -234,10 +244,10 @@ namespace System.Reactive.Subjects
                 else
                 {
                     b = new SubjectDisposable[n - 1];
-                    Array.Copy(a, 0, b, 0, j);
-                    Array.Copy(a, j + 1, b, j, n - j - 1);
+                    Array.Copy(observers, 0, b, 0, j);
+                    Array.Copy(observers, j + 1, b, j, n - j - 1);
                 }
-                if (Interlocked.CompareExchange(ref _observers, b, a) == a)
+                if (Interlocked.CompareExchange(ref _observers, b, observers) == observers)
                 {
                     break;
                 }
@@ -279,8 +289,8 @@ namespace System.Reactive.Subjects
         /// </summary>
         public override void Dispose()
         {
-            Interlocked.Exchange(ref _observers, Disposed);
-            _exception = null;
+            Interlocked.Exchange(ref _observers, null);
+            Interlocked.Exchange(ref _exception, ExceptionHelper.Disposed);
         }
 
         #endregion

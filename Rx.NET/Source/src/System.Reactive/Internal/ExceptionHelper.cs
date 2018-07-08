@@ -21,6 +21,12 @@ namespace System.Reactive
         public static Exception Terminated { get; } = new TerminatedException();
 
         /// <summary>
+        /// The singleton instance of the exception indicating a disposed state,
+        /// DO NOT LEAK or signal this via OnError!
+        /// </summary>
+        public static Exception Disposed { get; } = new ObjectDisposedException(string.Empty, "Object disposed.");
+        
+        /// <summary>
         /// Tries to atomically set the Exception on the given field if it is
         /// still null.
         /// </summary>
