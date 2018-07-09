@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\System.Interactive\System.Interactive.csproj" />
+    <ReferenceAssemblyProjectReference Include="..\refs\System.Interactive.Providers.Ref\System.Interactive.Providers.Ref.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
