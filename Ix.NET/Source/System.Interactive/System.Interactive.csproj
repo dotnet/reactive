@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
     <Description>Interactive Extensions Main Library used to express queries over enumerable sequences.</Description>
@@ -10,8 +10,8 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Properties\System.Interactive.rd.xml" />
+    <ReferenceAssemblyProjectReference Include="..\refs\System.Interactive.Ref\System.Interactive.Ref.csproj" />
   </ItemGroup>
-
 
 
   

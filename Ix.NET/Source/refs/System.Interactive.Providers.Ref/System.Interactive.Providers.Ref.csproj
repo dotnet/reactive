@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
     <Description>Interactive Extensions Providers Library used to build query providers and express queries over enumerable sequences.</Description>
@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\System.Interactive\System.Interactive.csproj" />
+    <ProjectReference Include="..\System.Interactive.Ref\System.Interactive.Ref.csproj" />
   </ItemGroup>
 
   <ItemGroup>

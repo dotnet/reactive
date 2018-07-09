@@ -16,15 +16,8 @@ steps:
 
 - task: DotNetCoreCLI@2
   inputs:
-    command: build
-    projects: Ix.NET/Source/refs/**/System.Interactive*.csproj
-    arguments: -c $(BuildConfiguration)   
-  displayName: Build reference assemblies
-
-- task: DotNetCoreCLI@2
-  inputs:
     command: pack
-    packagesToPack: Ix.NET/Source/**/System.Interactive*.csproj;!Ix.NET/Source/**/*.Tests*.csproj
+    packagesToPack: Ix.NET/Source/**/System.Interactive*.csproj;!Ix.NET/Source/**/*.Tests*.csproj;!Ix.NET/Source/refs/**
     configuration: $(BuildConfiguration)
     packDirectory: $(Build.ArtifactStagingDirectory)\artifacts    
     verbosityPack: Minimal
