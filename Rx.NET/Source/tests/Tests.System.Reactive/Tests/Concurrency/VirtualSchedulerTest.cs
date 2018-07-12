@@ -136,7 +136,7 @@ namespace ReactiveTests.Tests
             {
                 var scheduler = new TestScheduler();
                 var seq = Observable.Never<string>();
-                var d = default(IDisposable);
+                var disposable = default(IDisposable);
 
                 var sync = 2;
 
@@ -152,7 +152,7 @@ namespace ReactiveTests.Tests
 
                     Task.Delay(10).Wait();
 
-                    d = seq.Timeout(TimeSpan.FromSeconds(5), scheduler).Subscribe(s => { });
+                    disposable = seq.Timeout(TimeSpan.FromSeconds(5), scheduler).Subscribe(s => { });
                 });
 
                 var watch = scheduler.StartStopwatch();
@@ -166,12 +166,17 @@ namespace ReactiveTests.Tests
                         }
                     }
 
+                    var d = default(IDisposable);
                     while (watch.Elapsed < TimeSpan.FromSeconds(11))
                     {
+                        d = Volatile.Read(ref disposable);
                         scheduler.AdvanceBy(50);
                     }
 
-                    throw new Exception("Should have thrown!");
+                    if (d != null)
+                    {
+                        throw new Exception("Should have thrown!");
+                    }
                 }
                 catch (TimeoutException)
                 {
@@ -180,7 +185,7 @@ namespace ReactiveTests.Tests
                 {
                     Assert.True(false, string.Format("Virtual time {0}, exception {1}", watch.Elapsed, ex));
                 }
-                d?.Dispose();
+                disposable?.Dispose();
             }
         }
     }
