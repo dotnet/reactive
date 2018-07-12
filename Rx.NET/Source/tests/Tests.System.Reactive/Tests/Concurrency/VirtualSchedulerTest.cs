@@ -167,7 +167,7 @@ namespace ReactiveTests.Tests
                     }
 
                     var d = default(IDisposable);
-                    while (watch.Elapsed < TimeSpan.FromSeconds(11))
+                    while (watch.Elapsed < TimeSpan.FromSeconds(100))
                     {
                         d = Volatile.Read(ref disposable);
                         scheduler.AdvanceBy(50);
