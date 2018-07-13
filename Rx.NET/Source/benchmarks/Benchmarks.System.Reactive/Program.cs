@@ -30,6 +30,7 @@ namespace Benchmarks.System.Reactive
                 typeof(ComparisonAsyncBenchmark)
 #if (CURRENT)
                 ,typeof(AppendPrependBenchmark)
+                ,typeof(PrependVsStartWtihBenchmark)
 #endif
             });
 
