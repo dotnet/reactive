@@ -15,6 +15,7 @@ namespace Benchmarks.System.Reactive
     public class PrependVsStartWtihBenchmark
     {
         private int _store;
+        private IObservable<int> _obsStore;
 
         [Benchmark(Baseline = true)]
         public void Prepend()
@@ -28,7 +29,7 @@ namespace Benchmarks.System.Reactive
         [Benchmark]
         public void Prepend_Create()
         {
-            Observable
+            _obsStore = Observable
                 .Empty<int>()
                 .Prepend(0);
         }
@@ -54,7 +55,7 @@ namespace Benchmarks.System.Reactive
         [Benchmark]
         public void StartWith_Create()
         {
-            Observable
+            _obsStore = Observable
                 .Empty<int>()
                 .StartWith(0);
         }
