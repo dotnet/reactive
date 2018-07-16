@@ -23,11 +23,6 @@ namespace System.Reactive.Subjects
         private Exception _exception;
 
         /// <summary>
-        /// A pre-allocated empty array for the no-observers state.
-        /// </summary>
-        private static readonly AsyncSubjectDisposable[] Empty = new AsyncSubjectDisposable[0];
-
-        /// <summary>
         /// A pre-allocated empty array indicating the AsyncSubject has terminated
         /// </summary>
         private static readonly AsyncSubjectDisposable[] Terminated = new AsyncSubjectDisposable[0];
@@ -46,7 +41,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         public AsyncSubject()
         {
-            _observers = Empty;
+            _observers = Array.Empty<AsyncSubjectDisposable>();
         }
 
         #endregion
@@ -282,7 +277,7 @@ namespace System.Reactive.Subjects
                 var b = default(AsyncSubjectDisposable[]);
                 if (n == 1)
                 {
-                    b = Empty;
+                    b = Array.Empty<AsyncSubjectDisposable>();
                 }
                 else
                 {

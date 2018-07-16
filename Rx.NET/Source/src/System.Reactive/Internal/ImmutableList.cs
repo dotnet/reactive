@@ -12,7 +12,7 @@ namespace System.Reactive
 
         private ImmutableList()
         {
-            _data = new T[0];
+            _data = Array.Empty<T>();
         }
 
         public ImmutableList(T[] data)

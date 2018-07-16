@@ -381,7 +381,7 @@ namespace System.Reactive.Disposables
         /// method to avoid allocation on disposed or empty composites.
         /// </summary>
         private static readonly CompositeEnumerator EmptyEnumerator =
-            new CompositeEnumerator(new IDisposable[0]);
+            new CompositeEnumerator(Array.Empty<IDisposable>());
 
         /// <summary>
         /// An enumerator for an array of disposables.
