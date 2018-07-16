@@ -304,6 +304,7 @@ namespace ReactiveTests.Tests
 #endif
 
 #if DESKTOPCLR
+        [Trait("SkipCI", "true")]
         [Fact]
         public void No_ThreadPool_Starvation_Dispose()
         {
