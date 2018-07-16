@@ -17,7 +17,7 @@ namespace System.Reactive.Subjects
 
         private readonly object _gate = new object();
 
-        private ImmutableList<IObserver<T>> _observers;
+        private InternalImmutableList<IObserver<T>> _observers;
         private bool _isStopped;
         private T _value;
         private Exception _exception;
@@ -34,7 +34,7 @@ namespace System.Reactive.Subjects
         public BehaviorSubject(T value)
         {
             _value = value;
-            _observers = ImmutableList<IObserver<T>>.Empty;
+            _observers = InternalImmutableList<IObserver<T>>.Empty;
         }
 
         #endregion
@@ -144,7 +144,7 @@ namespace System.Reactive.Subjects
                 if (!_isStopped)
                 {
                     os = _observers.Data;
-                    _observers = ImmutableList<IObserver<T>>.Empty;
+                    _observers = InternalImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                 }
             }
@@ -178,7 +178,7 @@ namespace System.Reactive.Subjects
                 if (!_isStopped)
                 {
                     os = _observers.Data;
-                    _observers = ImmutableList<IObserver<T>>.Empty;
+                    _observers = InternalImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                     _exception = error;
                 }

@@ -223,7 +223,7 @@ namespace System.Reactive.Subjects
         {
             private readonly object _gate = new object();
 
-            private ImmutableList<IScheduledObserver<T>> _observers;
+            private InternalImmutableList<IScheduledObserver<T>> _observers;
 
             private bool _isStopped;
             private Exception _error;
@@ -231,7 +231,7 @@ namespace System.Reactive.Subjects
 
             protected ReplayBase()
             {
-                _observers = ImmutableList<IScheduledObserver<T>>.Empty;
+                _observers = InternalImmutableList<IScheduledObserver<T>>.Empty;
 
                 _isStopped = false;
                 _error = null;
@@ -298,7 +298,7 @@ namespace System.Reactive.Subjects
                             observer.OnError(error);
                         }
 
-                        _observers = ImmutableList<IScheduledObserver<T>>.Empty;
+                        _observers = InternalImmutableList<IScheduledObserver<T>>.Empty;
                     }
                 }
 
@@ -329,7 +329,7 @@ namespace System.Reactive.Subjects
                             observer.OnCompleted();
                         }
 
-                        _observers = ImmutableList<IScheduledObserver<T>>.Empty;
+                        _observers = InternalImmutableList<IScheduledObserver<T>>.Empty;
                     }
                 }
 
