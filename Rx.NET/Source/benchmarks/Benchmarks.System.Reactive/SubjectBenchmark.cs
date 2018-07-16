@@ -37,6 +37,70 @@ namespace Benchmarks.System.Reactive
             {
                 subj.OnNext(i);
             }
+            subj.OnCompleted();
+
+            return consumers;
+        }
+
+        [Benchmark]
+        public object AsyncSubjectPush()
+        {
+            var subj = new AsyncSubject<int>();
+            var consumers = new IDisposable[M];
+            var m = M;
+            for (var i = 0; i < m; i++)
+            {
+                consumers[i] = subj.Subscribe(v => Volatile.Write(ref _store, v));
+            }
+
+            var n = N;
+            for (var i = 0; i < n; i++)
+            {
+                subj.OnNext(i);
+            }
+            subj.OnCompleted();
+
+            return consumers;
+        }
+
+        [Benchmark]
+        public object BehaviorSubjectPush()
+        {
+            var subj = new BehaviorSubject<int>(-1);
+            var consumers = new IDisposable[M];
+            var m = M;
+            for (var i = 0; i < m; i++)
+            {
+                consumers[i] = subj.Subscribe(v => Volatile.Write(ref _store, v));
+            }
+
+            var n = N;
+            for (var i = 0; i < n; i++)
+            {
+                subj.OnNext(i);
+            }
+            subj.OnCompleted();
+
+            return consumers;
+        }
+
+        [Benchmark]
+        public object ReplaySubjectPush()
+        {
+            var subj = new ReplaySubject<int>();
+            var consumers = new IDisposable[M];
+            var m = M;
+            for (var i = 0; i < m; i++)
+            {
+                consumers[i] = subj.Subscribe(v => Volatile.Write(ref _store, v));
+            }
+
+            var n = N;
+            for (var i = 0; i < n; i++)
+            {
+                subj.OnNext(i);
+            }
+            subj.OnCompleted();
 
             return consumers;
         }
