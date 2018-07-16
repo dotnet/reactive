@@ -18,7 +18,6 @@ namespace System.Reactive.Subjects
 
         private SubjectDisposable[] _observers;
         private Exception _exception;
-        private static readonly SubjectDisposable[] Empty = new SubjectDisposable[0];
         private static readonly SubjectDisposable[] Terminated = new SubjectDisposable[0];
         private static readonly SubjectDisposable[] Disposed = new SubjectDisposable[0];
 
@@ -31,7 +30,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         public Subject()
         {
-            Volatile.Write(ref _observers, Empty);
+            Volatile.Write(ref _observers, Array.Empty<SubjectDisposable>());
         }
 
         #endregion
@@ -229,7 +228,7 @@ namespace System.Reactive.Subjects
                 var b = default(SubjectDisposable[]);
                 if (n == 1)
                 {
-                    b = Empty;
+                    b = Array.Empty<SubjectDisposable>();
                 }
                 else
                 {

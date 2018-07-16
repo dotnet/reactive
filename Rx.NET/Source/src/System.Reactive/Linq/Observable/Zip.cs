@@ -566,8 +566,6 @@ namespace System.Reactive.Linq.ObservableImpl
             private bool[] _isDone;
             private IDisposable[] _subscriptions;
 
-            private static readonly IDisposable[] Disposed = new IDisposable[0];
-
             public void Run(IEnumerable<IObservable<TSource>> sources)
             {
                 var srcs = sources.ToArray();
@@ -598,8 +596,8 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    var subscriptions = Interlocked.Exchange(ref _subscriptions, Disposed);
-                    if (subscriptions != null)
+                    var subscriptions = Interlocked.Exchange(ref _subscriptions, Array.Empty<IDisposable>());
+                    if (subscriptions != null && subscriptions != Array.Empty<IDisposable>())
                     {
                         for (var i = 0; i < subscriptions.Length; i++)
                         {
