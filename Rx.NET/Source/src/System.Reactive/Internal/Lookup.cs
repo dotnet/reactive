@@ -46,13 +46,12 @@ namespace System.Reactive
             }
         }
 
-        private IEnumerable<E> Hide(List<E> elements)
-        {
-            foreach (var x in elements)
-            {
-                yield return x;
-            }
-        }
+        // Instead of yielding the elements in a foreach loop, zero
+        // elements are skipped. Technically the result is the same
+        // with the benefit that the LINQ implementation can internally
+        // generate a type that keeps track of count of the enumerable.
+        // Consecutive operators can benefit from that knowledge.
+        private static IEnumerable<E> Hide(List<E> elements) => elements.Skip(0);
 
         public IEnumerator<IGrouping<K, E>> GetEnumerator()
         {
