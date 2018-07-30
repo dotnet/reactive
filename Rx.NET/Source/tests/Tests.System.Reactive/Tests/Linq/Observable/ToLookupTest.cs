@@ -200,6 +200,14 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
+        public void ToLookup_Hides_Internal_List()
+        {
+            var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();
+            Assert.False(d1["0"] is ICollection<int>);
+            Assert.False(d1["0"] is IList<int>);
+        }
+
+        [Fact]
         public void ToLookup_Groups()
         {
             var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();
