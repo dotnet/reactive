@@ -36,17 +36,15 @@ namespace System.Reactive
             }
 
             var parent = (index - 1) / 2;
-            if (parent < 0 || parent == index)
-            {
-                return index;
-            }
-
-            if (IsHigherPriority(index, parent))
-            {
+            while (parent >= 0 && parent != index && IsHigherPriority(index, parent))
+            { 
+                // swap index and parent
                 var temp = _items[index];
                 _items[index] = _items[parent];
                 _items[parent] = temp;
-                return Percolate(parent);
+
+                index = parent;
+                parent = (index - 1) / 2;
             }
 
             return index;
@@ -59,26 +57,33 @@ namespace System.Reactive
                 return;
             }
 
-            var left = 2 * index + 1;
-            var right = 2 * index + 2;
-            var first = index;
-
-            if (left < _size && IsHigherPriority(left, first))
+            while (true)
             {
-                first = left;
-            }
+                var left = 2 * index + 1;
+                var right = 2 * index + 2;
+                var first = index;
 
-            if (right < _size && IsHigherPriority(right, first))
-            {
-                first = right;
-            }
+                if (left < _size && IsHigherPriority(left, first))
+                {
+                    first = left;
+                }
 
-            if (first != index)
-            {
+                if (right < _size && IsHigherPriority(right, first))
+                {
+                    first = right;
+                }
+
+                if (first == index)
+                {
+                    break;
+                }
+
+                // swap index and first
                 var temp = _items[index];
                 _items[index] = _items[first];
                 _items[first] = temp;
-                Heapify(first);
+
+                index = first;
             }
         }
 
