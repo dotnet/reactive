@@ -3,6 +3,7 @@ trigger: none
 queue: Hosted VS2017
 variables: 
   BuildConfiguration: Release
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   
 steps:
 - template: .vsts.ix-shared.yml
