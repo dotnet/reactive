@@ -2,17 +2,21 @@ parameters:
   signStep: []
     
 steps:
+- task: DotNetCoreCLI@2  
+  inputs:
+    command: custom
+    custom: tool
+    arguments: install --tool-path . nbgv
+  displayName: Install NBGV tool
+  condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
+
+- script: nbgv cloud -p Ix.NET\Source
+  displayName: Set Version
+  condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
+  
 - task: DotNetCoreInstaller@0
   inputs:
     version: '2.1.400-preview-009171'
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: build
-    projects: Ix.NET/Source/build/setversion.csproj
-    arguments: -c $(BuildConfiguration)   
-  displayName: Set Version
-  condition: eq(variables['system.pullrequest.isfork'], false)
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -27,7 +31,7 @@ steps:
   inputs:
     command: test
     projects: Ix.NET/Source/**/*.Tests.csproj
-    arguments: -c $(BuildConfiguration) --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Ix.NET/Source/CodeCoverage.runsettings /p:DebugType=portable 
+    arguments: -c $(BuildConfiguration) --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Ix.NET/Source/CodeCoverage.runsettings /p:DebugType=Full 
   displayName: Run Tests
   
 - ${{ parameters.signStep }}
