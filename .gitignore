@@ -1,4 +1,5 @@
 Ix.NET/Layout
+Ix.NET/Layout
 Rx.NET/Layout
 
 
@@ -15,6 +16,8 @@ local.properties
 .classpath
 .settings/
 .loadpath
+*.exe
+.store/
 
 *.binlog
 
