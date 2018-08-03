@@ -947,6 +947,8 @@ namespace System.Reactive.Linq
         public static System.IObservable<TSource> Concat<TSource>(this System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
         public static System.IObservable<TSource> Concat<TSource>(this System.IObservable<System.IObservable<TSource>> sources) { }
         public static System.IObservable<TSource> Concat<TSource>(this System.IObservable<System.Threading.Tasks.Task<TSource>> sources) { }
+        public static System.IObservable<TSource> ConcatEager<TSource>(this System.IObservable<System.IObservable<TSource>> sources, bool delayErrors = False, int maxConcurrency = 2147483647) { }
+        public static System.IObservable<TResult> ConcatManyEager<TSource, TResult>(this System.IObservable<TSource> source, System.Func<TSource, System.IObservable<TResult>> mapper, bool delayErrors = False, int maxConcurrency = 2147483647) { }
         public static System.IObservable<bool> Contains<TSource>(this System.IObservable<TSource> source, TSource value) { }
         public static System.IObservable<bool> Contains<TSource>(this System.IObservable<TSource> source, TSource value, System.Collections.Generic.IEqualityComparer<TSource> comparer) { }
         public static System.IObservable<int> Count<TSource>(this System.IObservable<TSource> source) { }
@@ -1732,6 +1734,8 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TSource> Concat<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Collections.Generic.IEnumerable<System.IObservable<TSource>> sources) { }
         public static System.Reactive.Linq.IQbservable<TSource> Concat<TSource>(this System.Reactive.Linq.IQbservable<System.IObservable<TSource>> sources) { }
         public static System.Reactive.Linq.IQbservable<TSource> Concat<TSource>(this System.Reactive.Linq.IQbservable<System.Threading.Tasks.Task<TSource>> sources) { }
+        public static System.Reactive.Linq.IQbservable<TSource> ConcatEager<TSource>(this System.Reactive.Linq.IQbservable<System.IObservable<TSource>> sources, bool delayErrors = False, int maxConcurrency = 2147483647) { }
+        public static System.Reactive.Linq.IQbservable<TResult> ConcatManyEager<TSource, TResult>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, System.IObservable<TResult>>> mapper, bool delayErrors = False, int maxConcurrency = 2147483647) { }
         public static System.Reactive.Linq.IQbservable<bool> Contains<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, TSource value) { }
         public static System.Reactive.Linq.IQbservable<bool> Contains<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, TSource value, System.Collections.Generic.IEqualityComparer<TSource> comparer) { }
         public static System.Reactive.Linq.IQbservable<int> Count<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }

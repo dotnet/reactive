@@ -58,6 +58,7 @@ namespace ReactiveTests.Tests
                 { "IObservable`1[][Int32]", new[] { Observable.Return(1) } },
 
                 { "IConnectableObservable`1[Int32]", Observable.Return(1).Publish() },
+                { "Boolean", false },
                 { "Int32", 1 },
                 { "Int64", 1L },
                 { "IScheduler", Scheduler.Immediate },
@@ -200,15 +201,15 @@ namespace ReactiveTests.Tests
                 {
                     "Plan`1[][Int32]",
                     new Plan<int>[] {
-                    Observable.Return(1).Then(v => v)
-            }
+                        Observable.Return(1).Then(v => v)
+                    }
                 },
 
                 {
                     "IEnumerable`1[Plan`1[Int32]]",
                     new Plan<int>[] {
-                    Observable.Return(1).Then(v => v)
-            }
+                        Observable.Return(1).Then(v => v)
+                    }
                 },
 
                 { "Action`3[Int32, Int32, Int32]", new Action<int, int, int>((v1, v2, v3) => { }) },

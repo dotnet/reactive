@@ -516,6 +516,8 @@ namespace System.Reactive.Linq
         IObservable<TSource> Concat<TSource>(params IObservable<TSource>[] sources);
         IObservable<TSource> Concat<TSource>(IEnumerable<IObservable<TSource>> sources);
         IObservable<TSource> Concat<TSource>(IObservable<IObservable<TSource>> sources);
+        IObservable<TSource> ConcatEager<TSource>(IObservable<IObservable<TSource>> sources, bool delayErrors, int maxConcurrency);
+        IObservable<TResult> ConcatManyEager<TSource, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TResult>> mapper, bool delayErrors, int maxConcurrency);
         IObservable<TSource> Merge<TSource>(IObservable<IObservable<TSource>> sources);
         IObservable<TSource> Merge<TSource>(IObservable<IObservable<TSource>> sources, int maxConcurrent);
         IObservable<TSource> Merge<TSource>(IEnumerable<IObservable<TSource>> sources, int maxConcurrent);

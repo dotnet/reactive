@@ -1607,6 +1607,63 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + ConcatEager +
+
+        /// <summary>
+        /// Concatenates a sequence of observables eagerly by running some
+        /// or all of them at once and emitting their items in order.
+        /// </summary>
+        /// <typeparam name="TSource">The value type of the inner observables.</typeparam>
+        /// <param name="sources">The sequence of observables to concatenate eagerly.</param>
+        /// <param name="maxConcurrency">The maximum number of observables to run at a time.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="maxConcurrency"/> is non-positive.</exception>
+        /// <returns>An observable sequence that eagerly runs some or all inner sources but relays
+        /// their elements still in order.</returns>
+        public static IObservable<TSource> ConcatEager<TSource>(this IObservable<IObservable<TSource>> sources, bool delayErrors = false, int maxConcurrency = int.MaxValue)
+        {
+            if (sources == null)
+                throw new ArgumentNullException(nameof(sources));
+
+            if (maxConcurrency <= 0)
+                throw new ArgumentOutOfRangeException(nameof(maxConcurrency));
+
+            return s_impl.ConcatEager(sources, delayErrors, maxConcurrency);
+        }
+
+        #endregion
+
+        #region + ConcatManyEager +
+
+        /// <summary>
+        /// Maps the upstream items into observables, runs some or all of them at once, emits items from one
+        /// of the observables until it completes, then switches to the next observable.
+        /// </summary>
+        /// <typeparam name="TSource">The value type of the upstream.</typeparam>
+        /// <typeparam name="TResult">The output value type.</typeparam>
+        /// <param name="source">The source observable to be mapper and concatenated eagerly.</param>
+        /// <param name="mapper">The function that returns an observable for an upstream item.</param>
+        /// <param name="maxConcurrency">The maximum number of observables to run at a time.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="mapper"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="maxConcurrency"/> is non-positive.</exception>
+        /// <returns>An observable sequence that eagerly runs some or all mapped-in sources but relays
+        /// their elements still in order.</returns>
+        public static IObservable<TResult> ConcatManyEager<TSource, TResult>(this IObservable<TSource> source, Func<TSource, IObservable<TResult>> mapper, bool delayErrors = false, int maxConcurrency = int.MaxValue)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            if (mapper == null)
+                throw new ArgumentNullException(nameof(mapper));
+
+            if (maxConcurrency <= 0)
+                throw new ArgumentOutOfRangeException(nameof(maxConcurrency));
+
+            return s_impl.ConcatManyEager(source, mapper, delayErrors, maxConcurrency);
+        }
+
+        #endregion
+
         #region + Merge +
 
         /// <summary>
