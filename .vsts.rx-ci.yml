@@ -15,6 +15,7 @@ queue: Hosted VS2017
 variables: 
   BuildConfiguration: Release
   BuildPlatform: Any CPU
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
     
 steps:
 - template: .vsts.rx-shared.yml
