@@ -10,7 +10,7 @@ steps:
   displayName: Install NBGV tool
   condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
 
-- script: nbgv cloud -p Rx.NET\Source
+- script: nbgv cloud -a -p Rx.NET\Source
   displayName: Set Version
   condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
   
