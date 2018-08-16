@@ -16,7 +16,7 @@ steps:
   
 - task: DotNetCoreInstaller@0
   inputs:
-    version: '2.1.400-preview-009171'
+    version: '2.1.400'
 
 - task: MSBuild@1
   displayName: Build System.Reactive.sln
