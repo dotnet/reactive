@@ -4448,6 +4448,41 @@ namespace ReactiveTests.Tests
 
         #endregion
 
+        [Fact]
+        public void Zip2WithImmediateReturn()
+        {
+            Observable.Zip<Unit, Unit, Unit>(
+                Observable.Return(Unit.Default), 
+                Observable.Return(Unit.Default), 
+                (_, __) => Unit.Default
+            )
+            .Subscribe(_ => {  });
+        }
+
+        [Fact]
+        public void Zip3WithImmediateReturn()
+        {
+            Observable.Zip<Unit, Unit, Unit, Unit>(
+                Observable.Return(Unit.Default),
+                Observable.Return(Unit.Default),
+                Observable.Return(Unit.Default),
+                (_, __, ___) => Unit.Default
+            )
+            .Subscribe(_ => { });
+        }
+
+        [Fact]
+        public void ZipEnumerableWithImmediateReturn()
+        {
+            Enumerable.Range(0, 100)
+                .Select(_ => Observable.Return(Unit.Default))
+                .Zip()
+                .Subscribe(_ =>
+                {
+
+                }
+                );
+        }
     }
 #pragma warning restore IDE0039 // Use local function
 }
