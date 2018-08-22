@@ -661,7 +661,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        _subscriptions[index].Dispose();
+                        var subscriptions = Volatile.Read(ref _subscriptions);
+                        if (subscriptions != null && subscriptions != Array.Empty<IDisposable>())
+                        {
+                            Disposable.TryDispose(ref subscriptions[index]);
+                        }
                     }
                 }
             }
