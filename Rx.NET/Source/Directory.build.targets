@@ -1,7 +1,7 @@
 <Project>
   <!-- This props all need to be set in targets as they depend on the values set earlier -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
-    <DefineConstants>$(DefineConstants);HAS_WINRT;PREFER_ASYNC;HAS_TPL46;DESKTOPCLR</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;DESKTOPCLR</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
     <TargetPlatformVersion>10.0.16299.0</TargetPlatformVersion>
@@ -9,9 +9,9 @@
     <DefineConstants>$(DefineConstants);NO_CODE_COVERAGE_ATTRIBUTE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;WINDOWS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
-    <DefineConstants>$(DefineConstants);HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;WINDOWS</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;WINDOWS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netcoreapp2.0'">
-    <DefineConstants>$(DefineConstants);HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING</DefineConstants>
   </PropertyGroup>
 </Project>
