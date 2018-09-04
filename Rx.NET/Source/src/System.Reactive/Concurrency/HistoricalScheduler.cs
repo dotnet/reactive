@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace System.Reactive.Concurrency
 {
@@ -67,6 +68,10 @@ namespace System.Reactive.Concurrency
     /// <summary>
     /// Provides a virtual time scheduler that uses <see cref="DateTimeOffset"/> for absolute time and <see cref="TimeSpan"/> for relative time.
     /// </summary>
+    [DebuggerDisplay("\\{ " +
+        nameof(Clock) + " = {" + nameof(Clock) + "} " +
+        nameof(Now) + " = {" + nameof(Now) + ".ToString(\"O\")} " +
+    "\\}")]
     public class HistoricalScheduler : HistoricalSchedulerBase
     {
         private readonly SchedulerQueue<DateTimeOffset> _queue = new SchedulerQueue<DateTimeOffset>();

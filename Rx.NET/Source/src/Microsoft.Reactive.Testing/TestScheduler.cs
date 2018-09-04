@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -12,6 +13,10 @@ namespace Microsoft.Reactive.Testing
     /// <summary>
     /// Virtual time scheduler used for testing applications and libraries built using Reactive Extensions.
     /// </summary>
+    [DebuggerDisplay("\\{ " +
+        nameof(Clock) + " = {" + nameof(Clock) + "} " +
+        nameof(Now) + " = {" + nameof(Now) + ".ToString(\"O\")} " +
+    "\\}")]
     public class TestScheduler : VirtualTimeScheduler<long, long>
     {
         /// <summary>
