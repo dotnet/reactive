@@ -267,6 +267,7 @@ namespace System.Reactive.Concurrency
         public System.IDisposable SchedulePeriodic<TState>(TState state, System.TimeSpan period, System.Func<TState, TState> action) { }
         public override System.Reactive.Concurrency.IStopwatch StartStopwatch() { }
     }
+    [System.Diagnostics.DebuggerDisplayAttribute("\\{ Clock = {Clock} Now = {Now.ToString(\"O\")} \\}")]
     public class HistoricalScheduler : System.Reactive.Concurrency.HistoricalSchedulerBase
     {
         public HistoricalScheduler() { }
