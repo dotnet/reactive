@@ -1,6 +1,19 @@
-parameters: 
-  signStep: []
-    
+trigger:
+  branches:
+    include:
+      - master
+      - rel/*
+  paths:
+    include:
+      - Ix.NET/Source/*
+      - .editorconfig
+      - .vsts.ix-ci.yml
+      - NuGet.Config
+
+queue: Hosted VS2017
+variables: 
+  BuildConfiguration: Release
+  
 steps:
 - task: DotNetCoreCLI@2  
   inputs:
@@ -13,10 +26,6 @@ steps:
 - script: nbgv cloud -p Ix.NET\Source
   displayName: Set Version
   condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
-  
-- task: DotNetCoreInstaller@0
-  inputs:
-    version: '2.1.400'
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -34,11 +43,19 @@ steps:
     arguments: -c $(BuildConfiguration) --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Ix.NET/Source/CodeCoverage.runsettings /p:DebugType=Full 
   displayName: Run Tests
   
-- ${{ parameters.signStep }}
+- task: PowerShell@2
+  displayName: Authenticode Sign Packages
+  inputs:
+    filePath: Ix.NET/Source/build/Sign-Package.ps1
+  env:
+    SignClientUser: $(SignClientUser)
+    SignClientSecret: $(SignClientSecret)
+    ArtifactDirectory: $(Build.ArtifactStagingDirectory)\artifacts
+  condition: and(succeeded(), not(eq(variables['build.reason'], 'PullRequest')), not(eq(variables['SignClientSecret'], '')), not(eq(variables['SignClientUser'], '')))
 
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: $(Build.ArtifactStagingDirectory)\artifacts
     ArtifactName: artifacts
     publishLocation: Container
-  condition: eq(variables['system.pullrequest.isfork'], false)
+  condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
