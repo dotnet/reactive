@@ -1,5 +1,19 @@
-parameters: 
-  signStep: []
+trigger:
+  branches:
+    include:
+      - master
+      - rel/*
+  paths:
+    include:
+      - Rx.NET/Source/*
+      - .editorconfig
+      - .azure-pipelines.rx.yml
+
+queue: Hosted VS2017
+
+variables: 
+  BuildConfiguration: Release
+  BuildPlatform: Any CPU
     
 steps:
 - task: DotNetCoreCLI@2  
@@ -13,10 +27,6 @@ steps:
 - script: nbgv cloud -a -p Rx.NET\Source
   displayName: Set Version
   condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
-  
-- task: DotNetCoreInstaller@0
-  inputs:
-    version: '2.1.400'
 
 - task: MSBuild@1
   displayName: Build System.Reactive.sln
@@ -57,11 +67,19 @@ steps:
     arguments: -c $(BuildConfiguration) --no-build --no-restore 
   displayName: Run Api Approvals Tests
   
-- ${{ parameters.signStep }}
+- task: PowerShell@2
+  displayName: Authenticode Sign Packages
+  inputs:
+    filePath: Rx.NET/Source/build/Sign-Package.ps1
+  env:
+    SignClientUser: $(SignClientUser)
+    SignClientSecret: $(SignClientSecret)
+    ArtifactDirectory: $(Build.ArtifactStagingDirectory)\artifacts
+  condition: and(succeeded(), not(eq(variables['build.reason'], 'PullRequest')), not(eq(variables['SignClientSecret'], '')), not(eq(variables['SignClientUser'], '')))
 
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: $(Build.ArtifactStagingDirectory)\artifacts
     ArtifactName: artifacts
     publishLocation: Container
-  condition: eq(variables['system.pullrequest.isfork'], false)
+  condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
