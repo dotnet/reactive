@@ -7,8 +7,7 @@ trigger:
     include:
       - Ix.NET/Source/*
       - .editorconfig
-      - .vsts.ix-ci.yml
-      - NuGet.Config
+      - .azure-pipelines.ix.yml
 
 queue: Hosted VS2017
 variables: 
