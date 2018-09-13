@@ -3,7 +3,7 @@
 
 Channel  | Rx | Ix |
 -------- | :------------: | :-------------: |
-VSTS | ![#](https://dotnetfoundation.visualstudio.com/_apis/public/build/definitions/ba70dafd-6b93-4176-b27f-975148db36bd/9/badge) | 
+Build | [![Build Status](https://dev.azure.com/dotnet/Rx.NET/_apis/build/status/Rx.NET-CI?branchName=master)](https://dev.azure.com/dotnet/Rx.NET/_build/latest?definitionId=9) | [![Build Status](https://dev.azure.com/dotnet/Rx.NET/_apis/build/status/Ix.NET-CI?branchName=master)](https://dev.azure.com/dotnet/Rx.NET/_build/latest?definitionId=28)
 NuGet.org | [![#](https://img.shields.io/nuget/v/System.Reactive.svg)](https://www.nuget.org/packages/System.Reactive/) | [![#](https://img.shields.io/nuget/v/System.Interactive.svg)](https://www.nuget.org/packages/System.Interactive/)
 MyGet<br>([gallery](https://dotnet.myget.org/gallery/rx)) | ![#](https://img.shields.io/dotnet.myget/rx/vpre/System.Reactive.svg)<br>![#](https://img.shields.io/dotnet.myget/rx/v/System.Reactive.svg) | ![#](https://img.shields.io/dotnet.myget/rx/vpre/System.Interactive.svg)<br>![#](https://img.shields.io/dotnet.myget/rx/v/System.Interactive.svg)  
 
