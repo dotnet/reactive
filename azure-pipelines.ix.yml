@@ -7,7 +7,7 @@ trigger:
     include:
       - Ix.NET/Source/*
       - .editorconfig
-      - .azure-pipelines.ix.yml
+      - azure-pipelines.ix.yml
 
 pool:
   vmImage: vs2017-win2016
