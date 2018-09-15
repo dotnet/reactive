@@ -18,7 +18,7 @@ Catch us in the #rxnet channel over at http://reactiveui.net/slack
 Due to the [overwhelming](https://github.com/dotnet/reactive/issues/299) [pain](https://github.com/dotnet/reactive/issues/305) that fixing [#205 - Implement assembly version strategy](https://github.com/dotnet/reactive/issues/205) caused, we have refactored the libraries into a single library `System.Reactive`. To prevent breaking existing code that references the v3 libraries, we have facades with TypeForwarders to the new assembly. If you have a reference to a binary built against v3.0, then use the new `System.Reactive.Compatibility` package. 
 
 #### Supported Platforms
-Rx 4.0 supports the following platforms
+Rx 4.1 supports the following platforms
 
 - .NET Framework 4.6+
 - .NET Standard 2.0+ (including .NET Core, Xamarin and others)
