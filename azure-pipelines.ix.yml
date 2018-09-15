@@ -9,7 +9,9 @@ trigger:
       - .editorconfig
       - .azure-pipelines.ix.yml
 
-queue: Hosted VS2017
+pool:
+  vmImage: vs2017-win2016
+
 variables: 
   BuildConfiguration: Release
   
