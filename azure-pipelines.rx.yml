@@ -7,9 +7,10 @@ trigger:
     include:
       - Rx.NET/Source/*
       - .editorconfig
-      - .azure-pipelines.rx.yml
+      - azure-pipelines.rx.yml
 
-queue: Hosted VS2017
+pool:
+  vmImage: vs2017-win2016
 
 variables: 
   BuildConfiguration: Release
