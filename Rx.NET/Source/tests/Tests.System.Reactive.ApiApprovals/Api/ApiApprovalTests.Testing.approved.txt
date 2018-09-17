@@ -71,6 +71,7 @@ namespace Microsoft.Reactive.Testing
         public override int GetHashCode() { }
         public override string ToString() { }
     }
+    [System.Diagnostics.DebuggerDisplayAttribute("\\{ Clock = {Clock} Now = {Now.ToString(\"O\")} \\}")]
     public class TestScheduler : System.Reactive.Concurrency.VirtualTimeScheduler<long, long>
     {
         public TestScheduler() { }
