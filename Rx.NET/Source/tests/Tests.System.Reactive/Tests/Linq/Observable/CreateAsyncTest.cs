@@ -705,5 +705,46 @@ namespace ReactiveTests.Tests
             Assert.True(lst.Take(10).SequenceEqual(Enumerable.Repeat(42, 10)));
         }
 
+
+        [Fact]
+        public void CreateWithTaskDisposable_NoPrematureTermination()
+        {
+            var obs = Observable.Create<int>(async o =>
+            {
+                // avoid warning on async o due to no await
+                await Task.CompletedTask;
+
+                var inner = Observable.Range(1, 3);
+
+                return inner.Subscribe(x =>
+                {
+                    o.OnNext(x);
+                });
+            });
+
+            var result = obs.Take(1).Wait();
+        }
+
+        [Fact]
+        public void CreateWithTaskAction_NoPrematureTermination()
+        {
+            var obs = Observable.Create<int>(async o =>
+            {
+                // avoid warning on async o due to no await
+                await Task.CompletedTask;
+
+                var inner = Observable.Range(1, 3);
+
+                var d = inner.Subscribe(x =>
+                {
+                    o.OnNext(x);
+                });
+
+                Action a = () => d.Dispose();
+                return a;
+            });
+
+            var result = obs.Take(1).Wait();
+        }
     }
 }
