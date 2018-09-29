@@ -155,7 +155,6 @@ namespace System.Reactive.Linq
 
                     public void OnCompleted()
                     {
-                        _observer.OnCompleted();
                     }
 
                     public void OnError(Exception error)
@@ -233,7 +232,6 @@ namespace System.Reactive.Linq
 
                     public void OnCompleted()
                     {
-                        _observer.OnCompleted();
                     }
 
                     public void OnError(Exception error)
