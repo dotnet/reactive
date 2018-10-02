@@ -92,8 +92,7 @@ namespace System.Reactive
         {
             lock (_subscriptions)
             {
-                var l = new Stack<IDisposable>();
-                if (!_subscriptions.TryGetValue(handler, out l))
+                if (!_subscriptions.TryGetValue(handler, out var l))
                 {
                     _subscriptions[handler] = l = new Stack<IDisposable>();
                 }
@@ -118,8 +117,7 @@ namespace System.Reactive
 
             lock (_subscriptions)
             {
-                var l = new Stack<IDisposable>();
-                if (_subscriptions.TryGetValue(handler, out l))
+                if (_subscriptions.TryGetValue(handler, out var l))
                 {
                     d = l.Pop();
 
