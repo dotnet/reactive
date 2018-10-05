@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 #if WINDOWS
-using System.Reactive.Disposables;
+using System.ComponentModel;
 using Windows.System.Threading;
 
 namespace System.Reactive.Concurrency
@@ -11,11 +11,11 @@ namespace System.Reactive.Concurrency
     /// <summary>
     /// Represents an object that schedules units of work on the Windows Runtime thread pool.
     /// </summary>
-    /// <seealso cref="ThreadPoolScheduler.Default">Singleton instance of this type exposed through this static property.</seealso>
+    /// <seealso cref="Default">Singleton instance of this type exposed through this static property.</seealso>
     [CLSCompliant(false)]
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerPeriodic
     {
-        private static Lazy<ThreadPoolScheduler> s_default = new Lazy<ThreadPoolScheduler>(() => new ThreadPoolScheduler());
+        private static readonly Lazy<ThreadPoolScheduler> LazyDefault = new Lazy<ThreadPoolScheduler>(() => new ThreadPoolScheduler());
 
         /// <summary>
         /// Constructs a ThreadPoolScheduler that schedules units of work on the Windows ThreadPool.
@@ -48,7 +48,14 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the singleton instance of the Windows Runtime thread pool scheduler.
         /// </summary>
-        public static ThreadPoolScheduler Default => s_default.Value;
+        [Obsolete("Use the Instance property", false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static ThreadPoolScheduler Default => LazyDefault.Value;
+
+        /// <summary>
+        /// Gets the singleton instance of the Windows Runtime thread pool scheduler.
+        /// </summary>
+        public static ThreadPoolScheduler Instance => LazyDefault.Value;
 
         /// <summary>
         /// Gets the priority at which work is scheduled.
@@ -73,20 +80,16 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var d = new SingleAssignmentDisposable();
+            var userWorkItem = new UserWorkItem<TState>(this, state, action);
+            
+            var res = ThreadPool.RunAsync(
+                iaa => userWorkItem.Run(),
+                Priority,
+                Options);
 
-            var res = global::Windows.System.Threading.ThreadPool.RunAsync(iaa =>
-            {
-                if (!d.IsDisposed)
-                {
-                    d.Disposable = action(this, state);
-                }
-            }, Priority, Options);
+            userWorkItem.CancelQueueDisposable = res.AsDisposable();
 
-            return new CompositeDisposable(
-                d,
-                Disposable.Create(res.Cancel)
-            );
+            return userWorkItem;
         }
 
         /// <summary>
@@ -115,23 +118,15 @@ namespace System.Reactive.Concurrency
 
         private IDisposable ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
-            var d = new SingleAssignmentDisposable();
+            var userWorkItem = new UserWorkItem<TState>(this, state, action);
 
-            var res = global::Windows.System.Threading.ThreadPoolTimer.CreateTimer(
-                tpt =>
-                {
-                    if (!d.IsDisposed)
-                    {
-                        d.Disposable = action(this, state);
-                    }
-                },
-                dueTime
-            );
+            var res = ThreadPoolTimer.CreateTimer(
+                tpt => userWorkItem.Run(),
+                dueTime);
 
-            return new CompositeDisposable(
-                d,
-                Disposable.Create(res.Cancel)
-            );
+            userWorkItem.CancelQueueDisposable = res.AsDisposable();
+
+            return userWorkItem;
         }
 
         /// <summary>
@@ -157,26 +152,40 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var state1 = state;
-            var gate = new AsyncLock();
+            return new PeriodicallyScheduledWorkItem<TState>(state, period, action);
+        }
 
-            var res = global::Windows.System.Threading.ThreadPoolTimer.CreatePeriodicTimer(
-                tpt =>
-                {
-                    gate.Wait(() =>
-                    {
-                        state1 = action(state1);
-                    });
-                },
-                period
-            );
+        private sealed class PeriodicallyScheduledWorkItem<TState> : IDisposable
+        {
+            private TState _state;
+            private Func<TState, TState> _action;
 
-            return Disposable.Create(() =>
+            private readonly ThreadPoolTimer _timer;
+            private readonly AsyncLock _gate = new AsyncLock();
+
+            public PeriodicallyScheduledWorkItem(TState state, TimeSpan period, Func<TState, TState> action)
             {
-                res.Cancel();
-                gate.Dispose();
-                action = Stubs<TState>.I;
-            });
+                _state = state;
+                _action = action;
+
+                _timer = ThreadPoolTimer.CreatePeriodicTimer(
+                    Tick,
+                    period);
+            }
+
+            private void Tick(ThreadPoolTimer timer)
+            {
+                _gate.Wait(
+                    this,
+                    @this => @this._state = @this._action(@this._state));
+            }
+
+            public void Dispose()
+            {
+                _timer.Cancel();
+                _gate.Dispose();
+                _action = Stubs<TState>.I;
+            }
         }
     }
 }

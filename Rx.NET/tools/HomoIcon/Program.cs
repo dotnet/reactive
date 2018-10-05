@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -19,40 +20,38 @@ namespace HomoIconize
 
             var uri = new Uri(Assembly.GetEntryAssembly().CodeBase);
 
-            var root = Path.Combine(Path.GetDirectoryName(uri.LocalPath), @"..\..\..\..\Source");
+            var root = Path.Combine(Path.GetDirectoryName(uri.LocalPath), @"..\..\..\..\Source\src");
             if (!Directory.Exists(root))
             {
                 Console.WriteLine("Error:  Could not find directory \"" + root + "\"");
                 return;
             }
 
-            Process(root, 
-                "System.Reactive.Linq", 
-                "System.Reactive.Providers", 
-                @"Reactive\Linq\Qbservable.Generated.cs", 
-                "System.Reactive.Linq.Observable", "Qbservable", true);
+            Process(root,
+                "System.Reactive", 
+                @"System.Reactive\Linq\Qbservable.Generated.cs", 
+                "System.Reactive.Linq.Observable", "Qbservable",
+                includeAsync: true, exludeFromCodeCoverage:true);
             Console.WriteLine();
 
             Process(root, 
-                "System.Reactive.Experimental", 
-                "System.Reactive.Experimental", 
-                @"Reactive\Linq\QbservableEx.Generated.cs", 
+                "System.Reactive", 
+                @"System.Reactive\Linq\QbservableEx.Generated.cs", 
                 "System.Reactive.Linq.ObservableEx", "QbservableEx");            
             Console.WriteLine();
 
             Process(root, 
-                "System.Reactive.Observable.Aliases", 
-                "System.Reactive.Observable.Aliases", 
-                "Qbservable.Aliases.Generated.cs",
+                "System.Reactive.Observable.Aliases",
+                @"System.Reactive.Observable.Aliases\Qbservable.Aliases.Generated.cs",
                 "System.Reactive.Observable.Aliases.QueryLanguage", "QbservableAliases",
-                includeAsync: false, createAliases: true);
+                includeAsync: false, createAliases: true, exludeFromCodeCoverage: true);
             Console.WriteLine();
 
             Console.WriteLine("Processing complete, press enter to continue.");
             Console.ReadLine();
         }
 
-        static void Process(string root, string sourceAssembly, string targetAssembly, string targetFile, string sourceTypeName, string targetTypeName, bool includeAsync = false, bool createAliases = false)
+        static void Process(string root, string sourceAssembly, string targetFile, string sourceTypeName, string targetTypeName, bool includeAsync = false, bool createAliases = false, bool exludeFromCodeCoverage = false)
         {
             var rxRoot = Path.Combine(root, sourceAssembly);
             if (!Directory.Exists(rxRoot))
@@ -61,35 +60,28 @@ namespace HomoIconize
                 return;
             }
 
-            var qbRoot = Path.Combine(root, targetAssembly);
-            if (!Directory.Exists(qbRoot))
-            {
-                Console.WriteLine("Error:  Could not find directory \"" + qbRoot + "\"");
-                return;
-            }
-
-            var dll = Path.Combine(rxRoot, @"..\bin\debug40\" + sourceAssembly + ".dll");
+            var dll = Path.Combine(rxRoot, @"bin\debug\netstandard2.0\" + sourceAssembly + ".dll");
             if (!File.Exists(dll))
             {
                 Console.WriteLine("Error:  Could not find file \"" + dll + "\"");
                 return;
             }
 
-            var xml = Path.Combine(rxRoot, @"..\bin\debug40\" + sourceAssembly + ".xml");
+            var xml = Path.Combine(rxRoot, @"bin\debug\netstandard2.0\" + sourceAssembly + ".xml");
             if (!File.Exists(xml))
             {
                 Console.WriteLine("Error:  Could not find file \"" + xml + "\"");
                 return;
             }
 
-            var qbsgen = Path.Combine(qbRoot, targetFile);
+            var qbsgen = Path.Combine(root, targetFile);
             if (!File.Exists(qbsgen))
             {
                 Console.WriteLine("Error:  Could not find file \"" + qbsgen + "\"");
                 return;
             }
 
-            Generate(dll, xml, qbsgen, sourceTypeName, targetTypeName, includeAsync, createAliases);
+            Generate(dll, xml, qbsgen, sourceTypeName, targetTypeName, includeAsync, createAliases, exludeFromCodeCoverage);
         }
 
         // Prototype interface to break dependencies. Only used for ToString2 ultimately.
@@ -97,7 +89,7 @@ namespace HomoIconize
         {
         }
 
-        static void Generate(string input, string xml, string output, string sourceTypeName, string targetTypeName, bool includeAsync, bool createAliases)
+        static void Generate(string input, string xml, string output, string sourceTypeName, string targetTypeName, bool includeAsync, bool createAliases, bool exludeFromCodeCoverage)
         {
             var docs = XDocument.Load(xml).Root.Element("members").Elements("member").ToDictionary(m => m.Attribute("name").Value, m => m);
 
@@ -105,7 +97,7 @@ namespace HomoIconize
 
             var asm = Assembly.LoadFrom(input);
             var t = asm.GetType(sourceTypeName);
-            _qbs = typeof(IQbservable<>); //asm.GetType("System.Reactive.Linq.IQbservable`1");
+            _qbs = typeof(IQbservable<>); 
 
             Console.WriteLine("Checking {0}...", output);
             var attr = File.GetAttributes(output);
@@ -145,45 +137,42 @@ namespace HomoIconize
             {
                 using (Out = new StreamWriter(fs))
                 {
-                    Generate(t, docs, targetTypeName, includeAsync, createAliases);
+                    Generate(t, docs, targetTypeName, includeAsync, createAliases, exludeFromCodeCoverage);
                 }
             }
         }
 
         static Type _qbs;
 
-        static void Generate(Type t, IDictionary<string, XElement> docs, string typeName, bool includeAsync, bool createAliases)
+        static void Generate(Type t, IDictionary<string, XElement> docs, string typeName, bool includeAsync, bool createAliases, bool exludeFromCodeCoverage)
         {
             WriteLine(
 @"/*
- * WARNING: Auto-generated file (" + DateTime.Now + @")
+ * WARNING: Auto-generated file (" + DateTime.Now.ToString(CultureInfo.InvariantCulture) + @")
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 ");
             WriteLine(
 @"#pragma warning disable 1591
 ");
-            WriteLine(
-@"#if !NO_EXPRESSIONS
-");
 
             WriteLine(
 @"using System;
 using System.Reactive.Concurrency;
-using System.Collections.Generic;
-using System.Reactive.Joins;
+using System.Collections.Generic;");
+
+            if (exludeFromCodeCoverage)
+                WriteLine("using System.Diagnostics.CodeAnalysis;");
+
+            WriteLine(
+@"using System.Reactive.Joins;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Reactive;
 using System.Reactive.Subjects;
-#if !NO_TPL
-using System.Threading.Tasks;
-#endif
-#if !NO_REMOTING
-using System.Runtime.Remoting.Lifetime;
-#endif
 ");
             WriteLine(
 @"namespace System.Reactive.Linq
@@ -191,13 +180,16 @@ using System.Runtime.Remoting.Lifetime;
 
             Indent();
 
+            if (exludeFromCodeCoverage)
+                WriteLine("[ExcludeFromCodeCoverage]");
+
             WriteLine(
 @"public static partial class " + typeName + @"
 {");
 
             Indent();
 
-            var except = new[] { "ToAsync", "FromAsyncPattern", "And", "Then", "GetEnumerator", "get_Provider", "Wait", "ForEach", "ForEachAsync", "GetAwaiter", "First", "FirstOrDefault", "Last", "LastOrDefault", "Single", "SingleOrDefault", "Subscribe", "AsQbservable", "AsObservable", "ToEvent", "ToEventPattern" };
+            var except = new[] { "ToAsync", "FromAsyncPattern", "And", "Then", "GetEnumerator", "get_Provider", "Wait", "ForEach", "ForEachAsync", "GetAwaiter", "RunAsync", "First", "FirstOrDefault", "Last", "LastOrDefault", "Single", "SingleOrDefault", "Subscribe", "AsQbservable", "AsObservable", "ToEvent", "ToEventPattern" };
 
             foreach (var m in t.GetMethods(BindingFlags.Public | BindingFlags.Static).OrderBy(m => m.Name).ThenBy(m => !m.IsGenericMethod ? "" : string.Join(",", m.GetGenericArguments().Select(p => p.Name))).ThenBy(m => string.Join(",", m.GetParameters().Select(p => p.Name + ":" + p.ParameterType.FullName))).Where(m => !except.Contains(m.Name)))
             {
@@ -221,10 +213,6 @@ using System.Runtime.Remoting.Lifetime;
                             where ptgtd.Name.StartsWith("Func")
                             where ptgtd.GetGenericArguments().Count() > 5
                             select pi;
-
-                //var isLargeArity = funky.Any();
-
-                var hasTask = p.Any(pa => ContainsTask(pa.ParameterType));
 
                 var ret = m.ReturnType;
                 if (ret.IsGenericType)
@@ -341,53 +329,26 @@ using System.Runtime.Remoting.Lifetime;
                     WriteLine("#if !MONO", true);
                     poundIf = true;
                 }
-                if (isCreateAsync || hasTask)
-                {
-                    WriteLine("#if !NO_TPL", true);
-                    poundIf = true;
-                }
-                //if (name == "Remotable")
-                //{
-                //    WriteLine("#if DESKTOPCLR", true);
-                //    poundIf = true;
-                //    if (nulls.Contains("lease"))
-                //        nulls.Remove("lease");
-                //}
-                //if (isLargeArity)
-                //{
-                //    WriteLine("#if !NO_LARGEARITY", true);
-                //}
 
-                var isFep = m.Name == "FromEventPattern";
-                var isGenFep = isFep && m.GetGenericArguments().Any(a => a.Name == "TEventArgs");
-                var isNonGenFep = isFep && !isGenFep;
-
-                for (var r = 0; r < (isNonGenFep ? 2 : 1); r++)
                 {
                     var retStr = ret.ToString2();
 
-                    if (isNonGenFep)
-                    {
-                        if (r == 0)
-                        {
-                            WriteLine("#if !NO_EVENTARGS_CONSTRAINT", true);
-                        }
-                        else if (r == 1)
-                        {
-                            WriteLine("#else", true);
-                            retStr = retStr.Replace("EventPattern<EventArgs>", "EventPattern<object>");
-                        }
-                    }
-
                     if (xmlDoc != null)
                     {
+                        SimplifyCrefAttribute(xmlDoc);
+
                         foreach (var docLine in xmlDoc.Element("summary").ToString().Split('\n'))
                             WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
 
                         if (hasProvider)
-                            WriteLine("/// <param name=\"provider\">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>");
+                            WriteLine("/// <param name=\"provider\">Query provider used to construct the <see cref=\"IQbservable{T}\"/> data source.</param>");
 
-                        foreach (var docLine in xmlDoc.Elements().Where(e => e.Name != "summary").SelectMany(e => e.ToString().Split('\n')))
+                        var rest = xmlDoc
+                            .Elements()
+                            .Where(e => e.Name != "summary")
+                            .SelectMany(e => e.ToString().Split('\n'));
+
+                        foreach (var docLine in rest)
                             WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
 
                         if (requiresQueryProvider)
@@ -401,28 +362,18 @@ using System.Runtime.Remoting.Lifetime;
                         WriteLine("[Obsolete(\"" + obsolete.Message + "\")]");
 
                     WriteLine("public static " + retStr + " " + name + g + "(" + string.Join(", ", pars) + ")");
-                    if (isGenFep)
-                    {
-                        WriteLine("#if !NO_EVENTARGS_CONSTRAINT", true);
-                        Indent();
-                        WriteLine("where TEventArgs : EventArgs");
-                        Outdent();
-                        WriteLine("#endif", true);
-                    }
-                    else
-                    {
-                        var genCons = (from a in m.GetGenericArguments()
-                                       from c in a.GetGenericParameterConstraints()
-                                       select new { a, c })
-                                      .ToList();
 
-                        if (genCons.Count > 0)
-                        {
-                            Indent();
-                            foreach (var gc in genCons)
-                                WriteLine("where " + gc.a.Name + " : " + gc.c.Name);
-                            Outdent();
-                        }
+                    var genCons = (from a in m.GetGenericArguments()
+                                   from c in a.GetGenericParameterConstraints()
+                                   select new { a, c })
+                                  .ToList();
+
+                    if (genCons.Count > 0)
+                    {
+                        Indent();
+                        foreach (var gc in genCons)
+                            WriteLine("where " + gc.a.Name + " : " + gc.c.Name);
+                        Outdent();
                     }
 
                     if (createAliases)
@@ -431,13 +382,13 @@ using System.Runtime.Remoting.Lifetime;
 
                         switch (name)
                         {
-                            case "Map": 
+                            case "Map":
                                 underlying = "Select";
                                 break;
                             case "FlatMap":
                                 underlying = "SelectMany";
                                 break;
-                            case "Filter": 
+                            case "Filter":
                                 underlying = "Where";
                                 break;
                         }
@@ -447,6 +398,7 @@ using System.Runtime.Remoting.Lifetime;
                         WriteLine("return Qbservable." + underlying + g + "(" + string.Join(", ", parNames) + ");");
                         Outdent();
                         WriteLine("}");
+                        WriteLine("");
                         continue;
                     }
 
@@ -456,16 +408,12 @@ using System.Runtime.Remoting.Lifetime;
                     {
                         WriteLine("if (" + n + " == null)");
                         Indent();
-                        WriteLine("throw new ArgumentNullException(\"" + n + "\");");
+                        WriteLine("throw new ArgumentNullException(nameof(" + n + "));");
                         Outdent();
                     }
                     WriteLine("");
 
                     var gArg = ret.GetGenericArguments().Single().ToString2();
-                    if (isNonGenFep && r == 1)
-                    {
-                        gArg = gArg.Replace("EventPattern<EventArgs>", "EventPattern<object>");
-                    }
 
                     WriteLine("return " + factory + ".CreateQuery<" + gArg + ">(");
                     Indent();
@@ -490,16 +438,12 @@ using System.Runtime.Remoting.Lifetime;
                     Outdent();
                     WriteLine("}");
 
-                    if (isNonGenFep && r == 1)
-                        WriteLine("#endif", true);
                 }
 
                 if (poundIf)
                     WriteLine("#endif", true);
                 if (isExp)
                     WriteLine("#endif", true);
-                //if (isLargeArity)
-                //    WriteLine("#endif", true);
                 WriteLine("");
             }
 
@@ -519,12 +463,41 @@ using System.Runtime.Remoting.Lifetime;
 @"}
 ");
             WriteLine(
-@"#endif
-");
-            WriteLine(
 @"#pragma warning restore 1591
 ");
 
+        }
+
+        private static void SimplifyCrefAttribute(XElement parent)
+        {
+            foreach (var element in parent.Descendants())
+            {
+                var att = element.Attribute("cref");
+                if (att != null)
+                {
+                    element.Attribute("cref").SetValue(SimplyfyDocType(att.Value as string));
+                }
+            }
+        }
+
+        private static string SimplyfyDocType(string cref)
+        {
+            var v = cref.Replace("T:System.", "")
+                 .Replace("F:System.", "");
+            switch (v)
+            {
+                case "Double": return "double";
+                // case "Decimal": return "decimal";
+                case "Int32": return "int";
+                case "Inte16": return "short";
+                case "Int64": return "long";
+                // case "Single": return "float";
+                case "IObservable`1": return "IObservable{T}";
+            }
+
+            if (v.Contains(".") || v.Contains("`"))
+                return cref;
+            return v;
         }
 
         static bool ContainsTask(Type t)
@@ -552,9 +525,6 @@ using System.Runtime.Remoting.Lifetime;
             {
                 for (int i = 0; i <= 16; i++)
                 {
-                    //if (i == 5)
-                    //    WriteLine("#if !NO_LARGEARITY", true);
-
                     foreach (var withScheduler in new[] { false, true })
                     {
                         var genArgs = default(string[]);
@@ -564,11 +534,6 @@ using System.Runtime.Remoting.Lifetime;
                             genArgs = new string[0];
                             lamPars = new string[0];
                         }
-                        //else if (i == 1)
-                        //{
-                        //    genArgs = new[] { "TSource" };
-                        //    lamPars = new[] { "t" };
-                        //}
                         else
                         {
                             genArgs = Enumerable.Range(1, i).Select(j => "TArg" + j).ToArray();
@@ -607,10 +572,12 @@ using System.Runtime.Remoting.Lifetime;
 
                         if (xmlDoc != null)
                         {
+                            SimplifyCrefAttribute(xmlDoc);
+
                             foreach (var docLine in xmlDoc.Element("summary").ToString().Split('\n'))
                                 WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
 
-                            WriteLine("/// <param name=\"provider\">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>");
+                            WriteLine("/// <param name=\"provider\">Query provider used to construct the <see cref=\"IQbservable{T}\"/> data source.</param>");
 
                             foreach (var docLine in xmlDoc.Elements().Where(e => e.Name != "summary").SelectMany(e => e.ToString().Split('\n')))
                                 WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
@@ -623,19 +590,19 @@ using System.Runtime.Remoting.Lifetime;
 
                         WriteLine("if (provider == null)");
                         Indent();
-                        WriteLine("throw new ArgumentNullException(\"provider\");");
+                        WriteLine("throw new ArgumentNullException(nameof(provider));");
                         Outdent();
 
                         WriteLine("if (" + fParam + " == null)");
                         Indent();
-                        WriteLine("throw new ArgumentNullException(\"" + fParam + "\");");
+                        WriteLine("throw new ArgumentNullException(nameof(" + fParam + "));");
                         Outdent();
 
                         if (withScheduler)
                         {
                             WriteLine("if (scheduler == null)");
                             Indent();
-                            WriteLine("throw new ArgumentNullException(\"scheduler\");");
+                            WriteLine("throw new ArgumentNullException(nameof(scheduler));");
                             Outdent();
                         }
 
@@ -682,9 +649,6 @@ using System.Runtime.Remoting.Lifetime;
                         WriteLine("}");
                         WriteLine("");
                     }
-
-                    //if (i == 16)
-                    //    WriteLine("#endif", true);
                 }
             }
 
@@ -694,9 +658,6 @@ using System.Runtime.Remoting.Lifetime;
             {
                 for (int i = 0; i < 15; i++)
                 {
-                    //if (i == 3)
-                    //    WriteLine("#if !NO_LARGEARITY", true);
-
                     var genArgs = default(string[]);
                     var lamPars = default(string[]);
                     if (i == 0)
@@ -749,10 +710,11 @@ using System.Runtime.Remoting.Lifetime;
 
                     if (xmlDoc != null)
                     {
+                        SimplifyCrefAttribute(xmlDoc);
                         foreach (var docLine in xmlDoc.Element("summary").ToString().Split('\n'))
                             WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
 
-                        WriteLine("/// <param name=\"provider\">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>");
+                        WriteLine("/// <param name=\"provider\">Query provider used to construct the <see cref=\"IQbservable{T}\"/> data source.</param>");
 
                         foreach (var docLine in xmlDoc.Elements().Where(e => e.Name != "summary").SelectMany(e => e.ToString().Split('\n')))
                             WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
@@ -769,17 +731,17 @@ using System.Runtime.Remoting.Lifetime;
 
                     WriteLine("if (provider == null)");
                     Indent();
-                    WriteLine("throw new ArgumentNullException(\"provider\");");
+                    WriteLine("throw new ArgumentNullException(nameof(provider));");
                     Outdent();
 
                     WriteLine("if (begin == null)");
                     Indent();
-                    WriteLine("throw new ArgumentNullException(\"begin\");");
+                    WriteLine("throw new ArgumentNullException(nameof(begin));");
                     Outdent();
 
                     WriteLine("if (end == null)");
                     Indent();
-                    WriteLine("throw new ArgumentNullException(\"end\");");
+                    WriteLine("throw new ArgumentNullException(nameof(end));");
                     Outdent();
 
                     WriteLine("");
@@ -822,9 +784,6 @@ using System.Runtime.Remoting.Lifetime;
 
                     WriteLine("}");
                     WriteLine("");
-
-                    //if (i == 14)
-                    //    WriteLine("#endif", true);
                 }
             }
         }
@@ -835,7 +794,12 @@ using System.Runtime.Remoting.Lifetime;
         static void WriteLine(string s, bool noIndent = false)
         {
             foreach (var t in s.Split('\n'))
-                Out.WriteLine((noIndent ? "" : new string(' ', _indent * 4)) + t.TrimEnd('\r'));
+            {
+                var indentspace = noIndent || string.IsNullOrWhiteSpace(t)
+                    ? "" 
+                    : new string(' ', _indent * 4);
+                Out.WriteLine(indentspace + t.TrimEnd('\r'));
+            }
         }
 
         static void Indent()

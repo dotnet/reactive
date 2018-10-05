@@ -17,7 +17,7 @@ namespace System.Reactive.PlatformServices
     public interface IPlatformEnlightenmentProvider
     {
         /// <summary>
-        /// (Infastructure) Tries to gets the specified service.
+        /// (Infrastructure) Tries to gets the specified service.
         /// </summary>
         /// <typeparam name="T">Service type.</typeparam>
         /// <param name="args">Optional set of arguments.</param>
@@ -34,7 +34,7 @@ namespace System.Reactive.PlatformServices
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class PlatformEnlightenmentProvider
     {
-        private static IPlatformEnlightenmentProvider s_current = CreatePlatformProvider();
+        private static IPlatformEnlightenmentProvider _current = CreatePlatformProvider();
 
         /// <summary>
         /// (Infrastructure) Gets the current enlightenment provider. If none is loaded yet, accessing this property triggers provider resolution.
@@ -47,17 +47,14 @@ namespace System.Reactive.PlatformServices
         {
             get
             {
-                return s_current;
+                return _current;
             }
 
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-
-                s_current = value;
+                _current = value ?? throw new ArgumentNullException(nameof(value));
             }
-            
+
         }
 
         private static IPlatformEnlightenmentProvider CreatePlatformProvider() => new CurrentPlatformEnlightenmentProvider();

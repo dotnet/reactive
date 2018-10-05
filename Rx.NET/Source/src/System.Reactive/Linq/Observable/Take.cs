@@ -30,50 +30,39 @@ namespace System.Reactive.Linq.ObservableImpl
                 //   xs.Take(5).Take(3)    --o--o--o|                 xs.Take(3).Take(5)    --o--o--o|
                 //
                 if (_count <= count)
+                {
                     return this;
-                else
-                    return new Count(_source, count);
+                }
+
+                return new Count(_source, count);
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_count, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(_count, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private int _remaining;
 
-                public _(int count, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(int count, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _remaining = count;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     if (_remaining > 0)
                     {
                         --_remaining;
-                        base._observer.OnNext(value);
+                        ForwardOnNext(value);
 
                         if (_remaining == 0)
                         {
-                            base._observer.OnCompleted();
-                            base.Dispose();
+                            ForwardOnCompleted();
                         }
                     }
-                }
-
-                public void OnError(Exception error)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    base._observer.OnCompleted();
-                    base.Dispose();
                 }
             }
         }
@@ -103,65 +92,74 @@ namespace System.Reactive.Linq.ObservableImpl
                 //   xs.Take(5s).Take(3s)  --o--o--o|                 xs.Take(3s).Take(5s)  --o--o--o|
                 //
                 if (_duration <= duration)
+                {
                     return this;
-                else
-                    return new Time(_source, duration, _scheduler);
+                }
+
+                return new Time(_source, duration, _scheduler);
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
-                public _(IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(IObserver<TSource> observer)
+                    : base(observer)
                 {
                 }
 
                 private object _gate;
 
-                public IDisposable Run(Time parent)
+                private IDisposable _task;
+
+                public void Run(Time parent)
                 {
                     _gate = new object();
 
-                    var t = parent._scheduler.Schedule(parent._duration, Tick);
-                    var d = parent._source.SubscribeSafe(this);
-                    return StableCompositeDisposable.Create(t, d);
+                    Disposable.SetSingle(ref _task, parent._scheduler.ScheduleAction(this, parent._duration, state => state.Tick()));
+                    Run(parent._source);
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _task);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private void Tick()
                 {
                     lock (_gate)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                     }
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
-                        base._observer.OnNext(value);
+                        ForwardOnNext(value);
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        ForwardOnError(error);
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                     }
                 }
             }

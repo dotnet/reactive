@@ -1,0 +1,143 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="System\Reactive\Linq\Operators\FromEvent.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FromEvent.Generated.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.Async.Concurrency\System.Reactive.Async.Concurrency.csproj" />
+    <ProjectReference Include="..\System.Reactive.Async.Core\System.Reactive.Async.Core.csproj" />
+    <ProjectReference Include="..\System.Reactive.Async.Disposables\System.Reactive.Async.Disposables.csproj" />
+    <ProjectReference Include="..\System.Reactive.Async.Interfaces\System.Reactive.Async.Interfaces.csproj" />
+    <ProjectReference Include="..\System.Reactive.Async.Subjects\System.Reactive.Async.Subjects.csproj" />
+    <ProjectReference Include="..\System.Reactive.Bcl\System.Reactive.Bcl.csproj" />
+    <ProjectReference Include="..\System.Reactive.Shared\System.Reactive.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="System\Reactive\Joins\ActiveAsyncPlan.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ActiveAsyncPlan.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Reactive\Joins\AsyncPattern.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AsyncPattern.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Reactive\Joins\AsyncPlan.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AsyncPlan.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\Average.Generated.cs">
+      <DependentUpon>Average.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\CombineLatest.Generated.cs">
+      <DependentUpon>CombineLatest.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\FromAsyncPattern.Generated.cs">
+      <DependentUpon>FromAsyncPattern.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\FromEvent.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FromEvent.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\Max.Generated.cs">
+      <DependentUpon>Max.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\Min.Generated.cs">
+      <DependentUpon>Min.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\Sum.Generated.cs">
+      <DependentUpon>Sum.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\ToAsync.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ToAsync.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\Zip.Generated.cs">
+      <DependentUpon>Zip.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="System\Reactive\Joins\ActiveAsyncPlan.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ActiveAsyncPlan.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="System\Reactive\Joins\AsyncPattern.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AsyncPattern.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="System\Reactive\Joins\AsyncPlan.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AsyncPlan.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\Average.Generated.tt">
+      <LastGenOutput>Average.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\CombineLatest.Generated.tt">
+      <LastGenOutput>CombineLatest.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\FromEvent.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FromEvent.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\ToAsync.Generated.tt">
+      <LastGenOutput>ToAsync.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\FromAsyncPattern.Generated.tt">
+      <LastGenOutput>FromAsyncPattern.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\Max.Generated.tt">
+      <LastGenOutput>Max.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\Min.Generated.tt">
+      <LastGenOutput>Min.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\Sum.Generated.tt">
+      <LastGenOutput>Sum.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\Zip.Generated.tt">
+      <LastGenOutput>Zip.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>

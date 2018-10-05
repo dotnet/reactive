@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 #if NO_THREAD && WINDOWS
-using System.Reactive.Disposables;
 using System.Threading;
 
 namespace System.Reactive.Concurrency
@@ -20,7 +19,7 @@ namespace System.Reactive.Concurrency
                 Normalize(dueTime)
             );
 
-            return Disposable.Create(res.Cancel);
+            return res.AsDisposable();
         }
 
         public IDisposable StartPeriodicTimer(Action action, TimeSpan period)
@@ -42,7 +41,7 @@ namespace System.Reactive.Concurrency
                 period
             );
 
-            return Disposable.Create(res.Cancel);
+            return res.AsDisposable();
         }
 
         public IDisposable QueueUserWorkItem(Action<object> action, object state)
@@ -52,7 +51,7 @@ namespace System.Reactive.Concurrency
                 action(state);
             });
 
-            return Disposable.Create(res.Cancel);
+            return res.AsDisposable();
         }
         
         public void Sleep(TimeSpan timeout)

@@ -7,12 +7,12 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
-using Xunit;
 using ReactiveTests.Dummies;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class ConnectableObservableTest : ReactiveTest
     {
         [Fact]
@@ -21,11 +21,11 @@ namespace ReactiveTests.Tests
             var y = 0;
 
             var s2 = new Subject<int>();
-            var co2 = new ConnectableObservable<int>(Observable.Return<int>(1), s2);
+            var co2 = new ConnectableObservable<int>(Observable.Return(1), s2);
 
             co2.Subscribe(x => y = x);
             Assert.NotEqual(1, y);
-            
+
             co2.Connect();
             Assert.Equal(1, y);
         }
@@ -35,7 +35,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3),
@@ -64,7 +64,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3),
@@ -87,7 +87,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3),
@@ -112,7 +112,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3),
@@ -137,7 +137,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ConnectableObservable_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Publish().Subscribe(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Publish().Subscribe(default));
         }
 
         [Fact]
@@ -145,7 +145,7 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3),

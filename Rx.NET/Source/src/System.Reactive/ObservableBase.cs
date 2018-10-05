@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 
 namespace System.Reactive
 {
@@ -27,7 +26,9 @@ namespace System.Reactive
         public IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             var autoDetachObserver = new AutoDetachObserver<T>(observer);
 
@@ -48,13 +49,13 @@ namespace System.Reactive
                 // exception thrown in OnNext to circle back to OnError, which looks like the
                 // sequence can't make up its mind.
                 //
-                CurrentThreadScheduler.Instance.Schedule(autoDetachObserver, ScheduledSubscribe);
+                CurrentThreadScheduler.Instance.ScheduleAction(autoDetachObserver, ScheduledSubscribe);
             }
             else
             {
                 try
                 {
-                    autoDetachObserver.Disposable = SubscribeCore(autoDetachObserver);
+                    autoDetachObserver.SetResource(SubscribeCore(autoDetachObserver));
                 }
                 catch (Exception exception)
                 {
@@ -68,18 +69,20 @@ namespace System.Reactive
                     // screwed up.
                     //
                     if (!autoDetachObserver.Fail(exception))
+                    {
                         throw;
+                    }
                 }
             }
 
             return autoDetachObserver;
         }
 
-        private IDisposable ScheduledSubscribe(IScheduler _, AutoDetachObserver<T> autoDetachObserver)
+        private void ScheduledSubscribe(AutoDetachObserver<T> autoDetachObserver)
         {
             try
             {
-                autoDetachObserver.Disposable = SubscribeCore(autoDetachObserver);
+                autoDetachObserver.SetResource(SubscribeCore(autoDetachObserver));
             }
             catch (Exception exception)
             {
@@ -93,10 +96,10 @@ namespace System.Reactive
                 // screwed up.
                 //
                 if (!autoDetachObserver.Fail(exception))
+                {
                     throw;
+                }
             }
-
-            return Disposable.Empty;
         }
 
         /// <summary>

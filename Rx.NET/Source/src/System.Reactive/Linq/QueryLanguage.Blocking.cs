@@ -24,12 +24,12 @@ namespace System.Reactive.Linq
 
         public virtual IEnumerable<TResult> Collect<TSource, TResult>(IObservable<TSource> source, Func<TResult> newCollector, Func<TResult, TSource, TResult> merge)
         {
-            return Collect_<TSource, TResult>(source, newCollector, merge, _ => newCollector());
+            return Collect_(source, newCollector, merge, _ => newCollector());
         }
 
         public virtual IEnumerable<TResult> Collect<TSource, TResult>(IObservable<TSource> source, Func<TResult> getInitialCollector, Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector)
         {
-            return Collect_<TSource, TResult>(source, getInitialCollector, merge, getNewCollector);
+            return Collect_(source, getInitialCollector, merge, getNewCollector);
         }
 
         private static IEnumerable<TResult> Collect_<TSource, TResult>(IObservable<TSource> source, Func<TResult> getInitialCollector, Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector)
@@ -67,45 +67,26 @@ namespace System.Reactive.Linq
 
         private static TSource FirstOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
         {
-            var value = default(TSource);
-            var seenValue = false;
-            var ex = default(Exception);
-
-            using (var evt = new WaitAndSetOnce())
+            using (var consumer = new FirstBlocking<TSource>())
             {
-                //
-                // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
-                //
-                using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
-                    v =>
-                    {
-                        if (!seenValue)
-                        {
-                            value = v;
-                        }
-                        seenValue = true;
-                        evt.Set();
-                    },
-                    e =>
-                    {
-                        ex = e;
-                        evt.Set();
-                    },
-                    () =>
-                    {
-                        evt.Set();
-                    })))
+                using (var d = source.Subscribe(consumer))
                 {
-                    evt.WaitOne();
+                    consumer.SetUpstream(d);
+
+                    if (consumer.CurrentCount != 0)
+                    {
+                        consumer.Wait();
+                    }
                 }
+
+                consumer._error.ThrowIfNotNull();
+
+                if (throwOnEmpty && !consumer._hasValue)
+                {
+                    throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                }
+                return consumer._value;
             }
-
-            ex.ThrowIfNotNull();
-
-            if (throwOnEmpty && !seenValue)
-                throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
-
-            return value;
         }
 
         #endregion
@@ -182,41 +163,27 @@ namespace System.Reactive.Linq
 
         private static TSource LastOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
         {
-            var value = default(TSource);
-            var seenValue = false;
-            var ex = default(Exception);
-
-            using (var evt = new WaitAndSetOnce())
+            using (var consumer = new LastBlocking<TSource>())
             {
-                //
-                // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
-                //
-                using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
-                    v =>
-                    {
-                        seenValue = true;
-                        value = v;
-                    },
-                    e =>
-                    {
-                        ex = e;
-                        evt.Set();
-                    },
-                    () =>
-                    {
-                        evt.Set();
-                    })))
+
+                using (var d = source.Subscribe(consumer))
                 {
-                    evt.WaitOne();
+                    consumer.SetUpstream(d);
+
+                    if (consumer.CurrentCount != 0)
+                    {
+                        consumer.Wait();
+                    }
                 }
+
+                consumer._error.ThrowIfNotNull();
+
+                if (throwOnEmpty && !consumer._hasValue)
+                {
+                    throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                }
+                return consumer._value;
             }
-
-            ex.ThrowIfNotNull();
-
-            if (throwOnEmpty && !seenValue)
-                throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
-
-            return value;
         }
 
         #endregion
@@ -314,7 +281,9 @@ namespace System.Reactive.Linq
             ex.ThrowIfNotNull();
 
             if (throwOnEmpty && !seenValue)
+            {
                 throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+            }
 
             return value;
         }
@@ -332,7 +301,7 @@ namespace System.Reactive.Linq
 
         #region |> Helpers <|
 
-        class WaitAndSetOnce : IDisposable
+        private class WaitAndSetOnce : IDisposable
         {
             private readonly ManualResetEvent _evt;
             private int _hasSet;
@@ -365,6 +334,6 @@ namespace System.Reactive.Linq
             }
         }
 
-#endregion
+        #endregion
     }
 }

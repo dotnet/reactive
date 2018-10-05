@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Globalization;
-using System.Reactive.Disposables;
 
 namespace System.Reactive.Concurrency
 {
@@ -20,7 +19,7 @@ namespace System.Reactive.Concurrency
         /// Creates a new virtual time scheduler with the default value of TAbsolute as the initial clock value.
         /// </summary>
         protected VirtualTimeSchedulerBase()
-            : this(default(TAbsolute), Comparer<TAbsolute>.Default)
+            : this(default, Comparer<TAbsolute>.Default)
         {
         }
 
@@ -32,11 +31,8 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="comparer"/> is <c>null</c>.</exception>
         protected VirtualTimeSchedulerBase(TAbsolute initialClock, IComparer<TAbsolute> comparer)
         {
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
-
             Clock = initialClock;
-            Comparer = comparer;
+            Comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
         }
 
         /// <summary>
@@ -92,7 +88,9 @@ namespace System.Reactive.Concurrency
         public IDisposable ScheduleRelative<TState>(TState state, TRelative dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var runAt = Add(Clock, dueTime);
 
@@ -110,7 +108,9 @@ namespace System.Reactive.Concurrency
         public IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleAbsolute(state, Clock, action);
         }
@@ -127,7 +127,9 @@ namespace System.Reactive.Concurrency
         public IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleRelative(state, ToRelative(dueTime), action);
         }
@@ -144,7 +146,9 @@ namespace System.Reactive.Concurrency
         public IDisposable Schedule<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return ScheduleRelative(state, ToRelative(dueTime - Now), action);
         }
@@ -195,10 +199,14 @@ namespace System.Reactive.Concurrency
         {
             var dueToClock = Comparer.Compare(time, Clock);
             if (dueToClock < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(time));
+            }
 
             if (dueToClock == 0)
+            {
                 return;
+            }
 
             if (!IsEnabled)
             {
@@ -241,10 +249,14 @@ namespace System.Reactive.Concurrency
 
             var dueToClock = Comparer.Compare(dt, Clock);
             if (dueToClock < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(time));
+            }
 
             if (dueToClock == 0)
+            {
                 return;
+            }
 
             if (!IsEnabled)
             {
@@ -267,7 +279,9 @@ namespace System.Reactive.Concurrency
 
             var dueToClock = Comparer.Compare(dt, Clock);
             if (dueToClock < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(time));
+            }
 
             Clock = dt;
         }
@@ -290,7 +304,7 @@ namespace System.Reactive.Concurrency
         /// Gets the next scheduled item to be executed.
         /// </summary>
         /// <returns>The next scheduled item.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "By design. Side-effecting operation to retrieve the next element.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "By design. Side-effecting operation to retrieve the next element.")]
         protected abstract IScheduledItem<TAbsolute> GetNext();
 
         object IServiceProvider.GetService(Type serviceType) => GetService(serviceType);
@@ -305,7 +319,9 @@ namespace System.Reactive.Concurrency
         protected virtual object GetService(Type serviceType)
         {
             if (serviceType == typeof(IStopwatchProvider))
-                return this as IStopwatchProvider;
+            {
+                return this;
+            }
 
             return null;
         }
@@ -341,13 +357,12 @@ namespace System.Reactive.Concurrency
     public abstract class VirtualTimeScheduler<TAbsolute, TRelative> : VirtualTimeSchedulerBase<TAbsolute, TRelative>
         where TAbsolute : IComparable<TAbsolute>
     {
-        private readonly SchedulerQueue<TAbsolute> queue = new SchedulerQueue<TAbsolute>();
+        private readonly SchedulerQueue<TAbsolute> _queue = new SchedulerQueue<TAbsolute>();
 
         /// <summary>
         /// Creates a new virtual time scheduler with the default value of TAbsolute as the initial clock value.
         /// </summary>
         protected VirtualTimeScheduler()
-            : base()
         {
         }
 
@@ -368,14 +383,14 @@ namespace System.Reactive.Concurrency
         /// <returns>The next scheduled item.</returns>
         protected override IScheduledItem<TAbsolute> GetNext()
         {
-            lock (queue)
+            lock (_queue)
             {
-                while (queue.Count > 0)
+                while (_queue.Count > 0)
                 {
-                    var next = queue.Peek();
+                    var next = _queue.Peek();
                     if (next.IsCanceled)
                     {
-                        queue.Dequeue();
+                        _queue.Dequeue();
                     }
                     else
                     {
@@ -399,15 +414,17 @@ namespace System.Reactive.Concurrency
         public override IDisposable ScheduleAbsolute<TState>(TState state, TAbsolute dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var si = default(ScheduledItem<TAbsolute, TState>);
 
             var run = new Func<IScheduler, TState, IDisposable>((scheduler, state1) =>
             {
-                lock (queue)
+                lock (_queue)
                 {
-                    queue.Remove(si);
+                    _queue.Remove(si);
                 }
 
                 return action(scheduler, state1);
@@ -415,12 +432,12 @@ namespace System.Reactive.Concurrency
 
             si = new ScheduledItem<TAbsolute, TState>(this, state, run, dueTime, Comparer);
 
-            lock (queue)
+            lock (_queue)
             {
-                queue.Enqueue(si);
+                _queue.Enqueue(si);
             }
 
-            return Disposable.Create(si.Cancel);
+            return si;
         }
     }
 }

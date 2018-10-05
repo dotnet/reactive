@@ -8,49 +8,59 @@ namespace System.Reactive.Joins
 {
     internal abstract class ActivePlan
     {
-        Dictionary<IJoinObserver, IJoinObserver> joinObservers = new Dictionary<IJoinObserver, IJoinObserver>();
+        private readonly Dictionary<IJoinObserver, IJoinObserver> _joinObservers = new Dictionary<IJoinObserver, IJoinObserver>();
+
+        protected readonly Action _onCompleted;
 
         internal abstract void Match();
 
+        protected ActivePlan(Action onCompleted)
+        {
+            _onCompleted = onCompleted;
+        }
         protected void AddJoinObserver(IJoinObserver joinObserver)
         {
-            joinObservers.Add(joinObserver, joinObserver);
+            if (!_joinObservers.ContainsKey(joinObserver))
+            {
+                _joinObservers.Add(joinObserver, joinObserver);
+            }
         }
 
         protected void Dequeue()
         {
-            foreach (var joinObserver in joinObservers.Values)
+            foreach (var joinObserver in _joinObservers.Values)
+            {
                 joinObserver.Dequeue();
+            }
         }
     }
 
     internal class ActivePlan<T1> : ActivePlan
     {
-        private readonly Action<T1> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
+        private readonly Action<T1> _onNext;
+        private readonly JoinObserver<T1> _first;
 
-        internal ActivePlan(JoinObserver<T1> first, Action<T1> onNext, Action onCompleted)
+        internal ActivePlan(JoinObserver<T1> first, Action<T1> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
+            _onNext = onNext;
+            _first = first;
             AddJoinObserver(first);
         }
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0)
+            if (_first.Queue.Count > 0)
             {
-                var n1 = first.Queue.Peek();
+                var n1 = _first.Queue.Peek();
 
                 if (n1.Kind == NotificationKind.OnCompleted)
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value
-                           );
+                    _onNext(n1.Value);
                 }
             }
         }
@@ -58,36 +68,36 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2> : ActivePlan
     {
-        private readonly Action<T1, T2> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
+        private readonly Action<T1, T2> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
 
-        internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, Action<T1, T2> onNext, Action onCompleted)
+        internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, Action<T1, T2> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
             AddJoinObserver(first);
             AddJoinObserver(second);
         }
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0)
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0)
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted)
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value
                            );
                 }
@@ -97,19 +107,17 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2, T3> : ActivePlan
     {
-        private readonly Action<T1, T2, T3> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
+        private readonly Action<T1, T2, T3> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
 
-        internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third, Action<T1, T2, T3> onNext, Action onCompleted)
+        internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third, Action<T1, T2, T3> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -117,22 +125,24 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0)
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0)
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted)
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value
                            );
@@ -143,21 +153,19 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2, T3, T4> : ActivePlan
     {
-        private readonly Action<T1, T2, T3, T4> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
-        private readonly JoinObserver<T4> fourth;
+        private readonly Action<T1, T2, T3, T4> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
+        private readonly JoinObserver<T4> _fourth;
 
-        internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third, JoinObserver<T4> fourth, Action<T1, T2, T3, T4> onNext, Action onCompleted)
+        internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third, JoinObserver<T4> fourth, Action<T1, T2, T3, T4> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
-            this.fourth = fourth;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
+            _fourth = fourth;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -166,25 +174,27 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0
-             && fourth.Queue.Count > 0)
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0
+             && _fourth.Queue.Count > 0)
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
-                var n4 = fourth.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
+                var n4 = _fourth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted)
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value,
                            n4.Value
@@ -196,24 +206,22 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2, T3, T4, T5> : ActivePlan
     {
-        private readonly Action<T1, T2, T3, T4, T5> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
-        private readonly JoinObserver<T4> fourth;
-        private readonly JoinObserver<T5> fifth;
+        private readonly Action<T1, T2, T3, T4, T5> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
+        private readonly JoinObserver<T4> _fourth;
+        private readonly JoinObserver<T5> _fifth;
 
         internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third,
-            JoinObserver<T4> fourth, JoinObserver<T5> fifth, Action<T1, T2, T3, T4, T5> onNext, Action onCompleted)
+            JoinObserver<T4> fourth, JoinObserver<T5> fifth, Action<T1, T2, T3, T4, T5> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
-            this.fourth = fourth;
-            this.fifth = fifth;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
+            _fourth = fourth;
+            _fifth = fifth;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -223,28 +231,30 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0
-             && fourth.Queue.Count > 0
-             && fifth.Queue.Count > 0)
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0
+             && _fourth.Queue.Count > 0
+             && _fifth.Queue.Count > 0)
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
-                var n4 = fourth.Queue.Peek();
-                var n5 = fifth.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
+                var n4 = _fourth.Queue.Peek();
+                var n5 = _fifth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
                     || n5.Kind == NotificationKind.OnCompleted)
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value,
                            n4.Value,
@@ -257,27 +267,25 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2, T3, T4, T5, T6> : ActivePlan
     {
-        private readonly Action<T1, T2, T3, T4, T5, T6> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
-        private readonly JoinObserver<T4> fourth;
-        private readonly JoinObserver<T5> fifth;
-        private readonly JoinObserver<T6> sixth;
+        private readonly Action<T1, T2, T3, T4, T5, T6> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
+        private readonly JoinObserver<T4> _fourth;
+        private readonly JoinObserver<T5> _fifth;
+        private readonly JoinObserver<T6> _sixth;
 
         internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third,
-            JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth, 
-            Action<T1, T2, T3, T4, T5, T6> onNext, Action onCompleted)
+            JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth,
+            Action<T1, T2, T3, T4, T5, T6> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
-            this.fourth = fourth;
-            this.fifth = fifth;
-            this.sixth = sixth;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
+            _fourth = fourth;
+            _fifth = fifth;
+            _sixth = sixth;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -288,31 +296,33 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0
-             && fourth.Queue.Count > 0
-             && fifth.Queue.Count > 0
-             && sixth.Queue.Count > 0)
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0
+             && _fourth.Queue.Count > 0
+             && _fifth.Queue.Count > 0
+             && _sixth.Queue.Count > 0)
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
-                var n4 = fourth.Queue.Peek();
-                var n5 = fifth.Queue.Peek();
-                var n6 = sixth.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
+                var n4 = _fourth.Queue.Peek();
+                var n5 = _fifth.Queue.Peek();
+                var n6 = _sixth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
                     || n5.Kind == NotificationKind.OnCompleted
                     || n6.Kind == NotificationKind.OnCompleted)
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value,
                            n4.Value,
@@ -326,29 +336,27 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7> : ActivePlan
     {
-        private readonly Action<T1, T2, T3, T4, T5, T6, T7> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
-        private readonly JoinObserver<T4> fourth;
-        private readonly JoinObserver<T5> fifth;
-        private readonly JoinObserver<T6> sixth;
-        private readonly JoinObserver<T7> seventh;
+        private readonly Action<T1, T2, T3, T4, T5, T6, T7> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
+        private readonly JoinObserver<T4> _fourth;
+        private readonly JoinObserver<T5> _fifth;
+        private readonly JoinObserver<T6> _sixth;
+        private readonly JoinObserver<T7> _seventh;
 
         internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third,
             JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth, JoinObserver<T7> seventh,
-            Action<T1, T2, T3, T4, T5, T6, T7> onNext, Action onCompleted)
+            Action<T1, T2, T3, T4, T5, T6, T7> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
-            this.fourth = fourth;
-            this.fifth = fifth;
-            this.sixth = sixth;
-            this.seventh = seventh;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
+            _fourth = fourth;
+            _fifth = fifth;
+            _sixth = sixth;
+            _seventh = seventh;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -360,34 +368,36 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0
-             && fourth.Queue.Count > 0
-             && fifth.Queue.Count > 0
-             && sixth.Queue.Count > 0
-             && seventh.Queue.Count > 0)
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0
+             && _fourth.Queue.Count > 0
+             && _fifth.Queue.Count > 0
+             && _sixth.Queue.Count > 0
+             && _seventh.Queue.Count > 0)
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
-                var n4 = fourth.Queue.Peek();
-                var n5 = fifth.Queue.Peek();
-                var n6 = sixth.Queue.Peek();
-                var n7 = seventh.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
+                var n4 = _fourth.Queue.Peek();
+                var n5 = _fifth.Queue.Peek();
+                var n6 = _sixth.Queue.Peek();
+                var n7 = _seventh.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
                     || n5.Kind == NotificationKind.OnCompleted
                     || n6.Kind == NotificationKind.OnCompleted
                     || n7.Kind == NotificationKind.OnCompleted)
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value,
                            n4.Value,
@@ -402,32 +412,30 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8> : ActivePlan
     {
-        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
-        private readonly JoinObserver<T4> fourth;
-        private readonly JoinObserver<T5> fifth;
-        private readonly JoinObserver<T6> sixth;
-        private readonly JoinObserver<T7> seventh;
-        private readonly JoinObserver<T8> eighth;
+        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
+        private readonly JoinObserver<T4> _fourth;
+        private readonly JoinObserver<T5> _fifth;
+        private readonly JoinObserver<T6> _sixth;
+        private readonly JoinObserver<T7> _seventh;
+        private readonly JoinObserver<T8> _eighth;
 
         internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third,
             JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth, JoinObserver<T7> seventh,
             JoinObserver<T8> eighth,
-            Action<T1, T2, T3, T4, T5, T6, T7, T8> onNext, Action onCompleted)
+            Action<T1, T2, T3, T4, T5, T6, T7, T8> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
-            this.fourth = fourth;
-            this.fifth = fifth;
-            this.sixth = sixth;
-            this.seventh = seventh;
-            this.eighth = eighth;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
+            _fourth = fourth;
+            _fifth = fifth;
+            _sixth = sixth;
+            _seventh = seventh;
+            _eighth = eighth;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -440,25 +448,25 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0
-             && fourth.Queue.Count > 0
-             && fifth.Queue.Count > 0
-             && sixth.Queue.Count > 0
-             && seventh.Queue.Count > 0
-             && eighth.Queue.Count > 0)
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0
+             && _fourth.Queue.Count > 0
+             && _fifth.Queue.Count > 0
+             && _sixth.Queue.Count > 0
+             && _seventh.Queue.Count > 0
+             && _eighth.Queue.Count > 0)
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
-                var n4 = fourth.Queue.Peek();
-                var n5 = fifth.Queue.Peek();
-                var n6 = sixth.Queue.Peek();
-                var n7 = seventh.Queue.Peek();
-                var n8 = eighth.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
+                var n4 = _fourth.Queue.Peek();
+                var n5 = _fifth.Queue.Peek();
+                var n6 = _sixth.Queue.Peek();
+                var n7 = _seventh.Queue.Peek();
+                var n8 = _eighth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -467,11 +475,13 @@ namespace System.Reactive.Joins
                     || n7.Kind == NotificationKind.OnCompleted
                     || n8.Kind == NotificationKind.OnCompleted
                     )
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value,
                            n4.Value,
@@ -487,34 +497,32 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9> : ActivePlan
     {
-        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
-        private readonly JoinObserver<T4> fourth;
-        private readonly JoinObserver<T5> fifth;
-        private readonly JoinObserver<T6> sixth;
-        private readonly JoinObserver<T7> seventh;
-        private readonly JoinObserver<T8> eighth;
-        private readonly JoinObserver<T9> ninth;
+        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
+        private readonly JoinObserver<T4> _fourth;
+        private readonly JoinObserver<T5> _fifth;
+        private readonly JoinObserver<T6> _sixth;
+        private readonly JoinObserver<T7> _seventh;
+        private readonly JoinObserver<T8> _eighth;
+        private readonly JoinObserver<T9> _ninth;
 
         internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third,
             JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth, JoinObserver<T7> seventh,
             JoinObserver<T8> eighth, JoinObserver<T9> ninth,
-            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> onNext, Action onCompleted)
+            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
-            this.fourth = fourth;
-            this.fifth = fifth;
-            this.sixth = sixth;
-            this.seventh = seventh;
-            this.eighth = eighth;
-            this.ninth = ninth;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
+            _fourth = fourth;
+            _fifth = fifth;
+            _sixth = sixth;
+            _seventh = seventh;
+            _eighth = eighth;
+            _ninth = ninth;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -528,28 +536,28 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0
-             && fourth.Queue.Count > 0
-             && fifth.Queue.Count > 0
-             && sixth.Queue.Count > 0
-             && seventh.Queue.Count > 0
-             && eighth.Queue.Count > 0
-             && ninth.Queue.Count > 0
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0
+             && _fourth.Queue.Count > 0
+             && _fifth.Queue.Count > 0
+             && _sixth.Queue.Count > 0
+             && _seventh.Queue.Count > 0
+             && _eighth.Queue.Count > 0
+             && _ninth.Queue.Count > 0
                 )
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
-                var n4 = fourth.Queue.Peek();
-                var n5 = fifth.Queue.Peek();
-                var n6 = sixth.Queue.Peek();
-                var n7 = seventh.Queue.Peek();
-                var n8 = eighth.Queue.Peek();
-                var n9 = ninth.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
+                var n4 = _fourth.Queue.Peek();
+                var n5 = _fifth.Queue.Peek();
+                var n6 = _sixth.Queue.Peek();
+                var n7 = _seventh.Queue.Peek();
+                var n8 = _eighth.Queue.Peek();
+                var n9 = _ninth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -559,11 +567,13 @@ namespace System.Reactive.Joins
                     || n8.Kind == NotificationKind.OnCompleted
                     || n9.Kind == NotificationKind.OnCompleted
                     )
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value,
                            n4.Value,
@@ -580,36 +590,34 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : ActivePlan
     {
-        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
-        private readonly JoinObserver<T4> fourth;
-        private readonly JoinObserver<T5> fifth;
-        private readonly JoinObserver<T6> sixth;
-        private readonly JoinObserver<T7> seventh;
-        private readonly JoinObserver<T8> eighth;
-        private readonly JoinObserver<T9> ninth;
-        private readonly JoinObserver<T10> tenth;
+        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
+        private readonly JoinObserver<T4> _fourth;
+        private readonly JoinObserver<T5> _fifth;
+        private readonly JoinObserver<T6> _sixth;
+        private readonly JoinObserver<T7> _seventh;
+        private readonly JoinObserver<T8> _eighth;
+        private readonly JoinObserver<T9> _ninth;
+        private readonly JoinObserver<T10> _tenth;
 
         internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third,
             JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth, JoinObserver<T7> seventh,
             JoinObserver<T8> eighth, JoinObserver<T9> ninth, JoinObserver<T10> tenth,
-            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> onNext, Action onCompleted)
+            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
-            this.fourth = fourth;
-            this.fifth = fifth;
-            this.sixth = sixth;
-            this.seventh = seventh;
-            this.eighth = eighth;
-            this.ninth = ninth;
-            this.tenth = tenth;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
+            _fourth = fourth;
+            _fifth = fifth;
+            _sixth = sixth;
+            _seventh = seventh;
+            _eighth = eighth;
+            _ninth = ninth;
+            _tenth = tenth;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -624,30 +632,30 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0
-             && fourth.Queue.Count > 0
-             && fifth.Queue.Count > 0
-             && sixth.Queue.Count > 0
-             && seventh.Queue.Count > 0
-             && eighth.Queue.Count > 0
-             && ninth.Queue.Count > 0
-             && tenth.Queue.Count > 0
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0
+             && _fourth.Queue.Count > 0
+             && _fifth.Queue.Count > 0
+             && _sixth.Queue.Count > 0
+             && _seventh.Queue.Count > 0
+             && _eighth.Queue.Count > 0
+             && _ninth.Queue.Count > 0
+             && _tenth.Queue.Count > 0
                 )
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
-                var n4 = fourth.Queue.Peek();
-                var n5 = fifth.Queue.Peek();
-                var n6 = sixth.Queue.Peek();
-                var n7 = seventh.Queue.Peek();
-                var n8 = eighth.Queue.Peek();
-                var n9 = ninth.Queue.Peek();
-                var n10 = tenth.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
+                var n4 = _fourth.Queue.Peek();
+                var n5 = _fifth.Queue.Peek();
+                var n6 = _sixth.Queue.Peek();
+                var n7 = _seventh.Queue.Peek();
+                var n8 = _eighth.Queue.Peek();
+                var n9 = _ninth.Queue.Peek();
+                var n10 = _tenth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -658,11 +666,13 @@ namespace System.Reactive.Joins
                     || n9.Kind == NotificationKind.OnCompleted
                     || n10.Kind == NotificationKind.OnCompleted
                     )
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value,
                            n4.Value,
@@ -680,38 +690,36 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> : ActivePlan
     {
-        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
-        private readonly JoinObserver<T4> fourth;
-        private readonly JoinObserver<T5> fifth;
-        private readonly JoinObserver<T6> sixth;
-        private readonly JoinObserver<T7> seventh;
-        private readonly JoinObserver<T8> eighth;
-        private readonly JoinObserver<T9> ninth;
-        private readonly JoinObserver<T10> tenth;
-        private readonly JoinObserver<T11> eleventh;
+        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
+        private readonly JoinObserver<T4> _fourth;
+        private readonly JoinObserver<T5> _fifth;
+        private readonly JoinObserver<T6> _sixth;
+        private readonly JoinObserver<T7> _seventh;
+        private readonly JoinObserver<T8> _eighth;
+        private readonly JoinObserver<T9> _ninth;
+        private readonly JoinObserver<T10> _tenth;
+        private readonly JoinObserver<T11> _eleventh;
 
         internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third,
             JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth, JoinObserver<T7> seventh,
             JoinObserver<T8> eighth, JoinObserver<T9> ninth, JoinObserver<T10> tenth, JoinObserver<T11> eleventh,
-            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> onNext, Action onCompleted)
+            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
-            this.fourth = fourth;
-            this.fifth = fifth;
-            this.sixth = sixth;
-            this.seventh = seventh;
-            this.eighth = eighth;
-            this.ninth = ninth;
-            this.tenth = tenth;
-            this.eleventh = eleventh;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
+            _fourth = fourth;
+            _fifth = fifth;
+            _sixth = sixth;
+            _seventh = seventh;
+            _eighth = eighth;
+            _ninth = ninth;
+            _tenth = tenth;
+            _eleventh = eleventh;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -727,32 +735,32 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0
-             && fourth.Queue.Count > 0
-             && fifth.Queue.Count > 0
-             && sixth.Queue.Count > 0
-             && seventh.Queue.Count > 0
-             && eighth.Queue.Count > 0
-             && ninth.Queue.Count > 0
-             && tenth.Queue.Count > 0
-             && eleventh.Queue.Count > 0
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0
+             && _fourth.Queue.Count > 0
+             && _fifth.Queue.Count > 0
+             && _sixth.Queue.Count > 0
+             && _seventh.Queue.Count > 0
+             && _eighth.Queue.Count > 0
+             && _ninth.Queue.Count > 0
+             && _tenth.Queue.Count > 0
+             && _eleventh.Queue.Count > 0
                 )
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
-                var n4 = fourth.Queue.Peek();
-                var n5 = fifth.Queue.Peek();
-                var n6 = sixth.Queue.Peek();
-                var n7 = seventh.Queue.Peek();
-                var n8 = eighth.Queue.Peek();
-                var n9 = ninth.Queue.Peek();
-                var n10 = tenth.Queue.Peek();
-                var n11 = eleventh.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
+                var n4 = _fourth.Queue.Peek();
+                var n5 = _fifth.Queue.Peek();
+                var n6 = _sixth.Queue.Peek();
+                var n7 = _seventh.Queue.Peek();
+                var n8 = _eighth.Queue.Peek();
+                var n9 = _ninth.Queue.Peek();
+                var n10 = _tenth.Queue.Peek();
+                var n11 = _eleventh.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -764,11 +772,13 @@ namespace System.Reactive.Joins
                     || n10.Kind == NotificationKind.OnCompleted
                     || n11.Kind == NotificationKind.OnCompleted
                     )
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value,
                            n4.Value,
@@ -787,41 +797,39 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> : ActivePlan
     {
-        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
-        private readonly JoinObserver<T4> fourth;
-        private readonly JoinObserver<T5> fifth;
-        private readonly JoinObserver<T6> sixth;
-        private readonly JoinObserver<T7> seventh;
-        private readonly JoinObserver<T8> eighth;
-        private readonly JoinObserver<T9> ninth;
-        private readonly JoinObserver<T10> tenth;
-        private readonly JoinObserver<T11> eleventh;
-        private readonly JoinObserver<T12> twelfth;
+        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
+        private readonly JoinObserver<T4> _fourth;
+        private readonly JoinObserver<T5> _fifth;
+        private readonly JoinObserver<T6> _sixth;
+        private readonly JoinObserver<T7> _seventh;
+        private readonly JoinObserver<T8> _eighth;
+        private readonly JoinObserver<T9> _ninth;
+        private readonly JoinObserver<T10> _tenth;
+        private readonly JoinObserver<T11> _eleventh;
+        private readonly JoinObserver<T12> _twelfth;
 
         internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third,
             JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth, JoinObserver<T7> seventh,
             JoinObserver<T8> eighth, JoinObserver<T9> ninth, JoinObserver<T10> tenth, JoinObserver<T11> eleventh,
             JoinObserver<T12> twelfth,
-            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> onNext, Action onCompleted)
+            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
-            this.fourth = fourth;
-            this.fifth = fifth;
-            this.sixth = sixth;
-            this.seventh = seventh;
-            this.eighth = eighth;
-            this.ninth = ninth;
-            this.tenth = tenth;
-            this.eleventh = eleventh;
-            this.twelfth = twelfth;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
+            _fourth = fourth;
+            _fifth = fifth;
+            _sixth = sixth;
+            _seventh = seventh;
+            _eighth = eighth;
+            _ninth = ninth;
+            _tenth = tenth;
+            _eleventh = eleventh;
+            _twelfth = twelfth;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -838,34 +846,34 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0
-             && fourth.Queue.Count > 0
-             && fifth.Queue.Count > 0
-             && sixth.Queue.Count > 0
-             && seventh.Queue.Count > 0
-             && eighth.Queue.Count > 0
-             && ninth.Queue.Count > 0
-             && tenth.Queue.Count > 0
-             && eleventh.Queue.Count > 0
-             && twelfth.Queue.Count > 0
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0
+             && _fourth.Queue.Count > 0
+             && _fifth.Queue.Count > 0
+             && _sixth.Queue.Count > 0
+             && _seventh.Queue.Count > 0
+             && _eighth.Queue.Count > 0
+             && _ninth.Queue.Count > 0
+             && _tenth.Queue.Count > 0
+             && _eleventh.Queue.Count > 0
+             && _twelfth.Queue.Count > 0
                 )
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
-                var n4 = fourth.Queue.Peek();
-                var n5 = fifth.Queue.Peek();
-                var n6 = sixth.Queue.Peek();
-                var n7 = seventh.Queue.Peek();
-                var n8 = eighth.Queue.Peek();
-                var n9 = ninth.Queue.Peek();
-                var n10 = tenth.Queue.Peek();
-                var n11 = eleventh.Queue.Peek();
-                var n12 = twelfth.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
+                var n4 = _fourth.Queue.Peek();
+                var n5 = _fifth.Queue.Peek();
+                var n6 = _sixth.Queue.Peek();
+                var n7 = _seventh.Queue.Peek();
+                var n8 = _eighth.Queue.Peek();
+                var n9 = _ninth.Queue.Peek();
+                var n10 = _tenth.Queue.Peek();
+                var n11 = _eleventh.Queue.Peek();
+                var n12 = _twelfth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -878,11 +886,13 @@ namespace System.Reactive.Joins
                     || n11.Kind == NotificationKind.OnCompleted
                     || n12.Kind == NotificationKind.OnCompleted
                     )
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value,
                            n4.Value,
@@ -902,43 +912,41 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> : ActivePlan
     {
-        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
-        private readonly JoinObserver<T4> fourth;
-        private readonly JoinObserver<T5> fifth;
-        private readonly JoinObserver<T6> sixth;
-        private readonly JoinObserver<T7> seventh;
-        private readonly JoinObserver<T8> eighth;
-        private readonly JoinObserver<T9> ninth;
-        private readonly JoinObserver<T10> tenth;
-        private readonly JoinObserver<T11> eleventh;
-        private readonly JoinObserver<T12> twelfth;
-        private readonly JoinObserver<T13> thirteenth;
+        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
+        private readonly JoinObserver<T4> _fourth;
+        private readonly JoinObserver<T5> _fifth;
+        private readonly JoinObserver<T6> _sixth;
+        private readonly JoinObserver<T7> _seventh;
+        private readonly JoinObserver<T8> _eighth;
+        private readonly JoinObserver<T9> _ninth;
+        private readonly JoinObserver<T10> _tenth;
+        private readonly JoinObserver<T11> _eleventh;
+        private readonly JoinObserver<T12> _twelfth;
+        private readonly JoinObserver<T13> _thirteenth;
 
         internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third,
             JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth, JoinObserver<T7> seventh,
             JoinObserver<T8> eighth, JoinObserver<T9> ninth, JoinObserver<T10> tenth, JoinObserver<T11> eleventh,
             JoinObserver<T12> twelfth, JoinObserver<T13> thirteenth,
-            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> onNext, Action onCompleted)
+            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
-            this.fourth = fourth;
-            this.fifth = fifth;
-            this.sixth = sixth;
-            this.seventh = seventh;
-            this.eighth = eighth;
-            this.ninth = ninth;
-            this.tenth = tenth;
-            this.eleventh = eleventh;
-            this.twelfth = twelfth;
-            this.thirteenth = thirteenth;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
+            _fourth = fourth;
+            _fifth = fifth;
+            _sixth = sixth;
+            _seventh = seventh;
+            _eighth = eighth;
+            _ninth = ninth;
+            _tenth = tenth;
+            _eleventh = eleventh;
+            _twelfth = twelfth;
+            _thirteenth = thirteenth;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -956,36 +964,36 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0
-             && fourth.Queue.Count > 0
-             && fifth.Queue.Count > 0
-             && sixth.Queue.Count > 0
-             && seventh.Queue.Count > 0
-             && eighth.Queue.Count > 0
-             && ninth.Queue.Count > 0
-             && tenth.Queue.Count > 0
-             && eleventh.Queue.Count > 0
-             && twelfth.Queue.Count > 0
-             && thirteenth.Queue.Count > 0
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0
+             && _fourth.Queue.Count > 0
+             && _fifth.Queue.Count > 0
+             && _sixth.Queue.Count > 0
+             && _seventh.Queue.Count > 0
+             && _eighth.Queue.Count > 0
+             && _ninth.Queue.Count > 0
+             && _tenth.Queue.Count > 0
+             && _eleventh.Queue.Count > 0
+             && _twelfth.Queue.Count > 0
+             && _thirteenth.Queue.Count > 0
                 )
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
-                var n4 = fourth.Queue.Peek();
-                var n5 = fifth.Queue.Peek();
-                var n6 = sixth.Queue.Peek();
-                var n7 = seventh.Queue.Peek();
-                var n8 = eighth.Queue.Peek();
-                var n9 = ninth.Queue.Peek();
-                var n10 = tenth.Queue.Peek();
-                var n11 = eleventh.Queue.Peek();
-                var n12 = twelfth.Queue.Peek();
-                var n13 = thirteenth.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
+                var n4 = _fourth.Queue.Peek();
+                var n5 = _fifth.Queue.Peek();
+                var n6 = _sixth.Queue.Peek();
+                var n7 = _seventh.Queue.Peek();
+                var n8 = _eighth.Queue.Peek();
+                var n9 = _ninth.Queue.Peek();
+                var n10 = _tenth.Queue.Peek();
+                var n11 = _eleventh.Queue.Peek();
+                var n12 = _twelfth.Queue.Peek();
+                var n13 = _thirteenth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -999,11 +1007,13 @@ namespace System.Reactive.Joins
                     || n12.Kind == NotificationKind.OnCompleted
                     || n13.Kind == NotificationKind.OnCompleted
                     )
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value,
                            n4.Value,
@@ -1024,45 +1034,43 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> : ActivePlan
     {
-        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
-        private readonly JoinObserver<T4> fourth;
-        private readonly JoinObserver<T5> fifth;
-        private readonly JoinObserver<T6> sixth;
-        private readonly JoinObserver<T7> seventh;
-        private readonly JoinObserver<T8> eighth;
-        private readonly JoinObserver<T9> ninth;
-        private readonly JoinObserver<T10> tenth;
-        private readonly JoinObserver<T11> eleventh;
-        private readonly JoinObserver<T12> twelfth;
-        private readonly JoinObserver<T13> thirteenth;
-        private readonly JoinObserver<T14> fourteenth;
+        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
+        private readonly JoinObserver<T4> _fourth;
+        private readonly JoinObserver<T5> _fifth;
+        private readonly JoinObserver<T6> _sixth;
+        private readonly JoinObserver<T7> _seventh;
+        private readonly JoinObserver<T8> _eighth;
+        private readonly JoinObserver<T9> _ninth;
+        private readonly JoinObserver<T10> _tenth;
+        private readonly JoinObserver<T11> _eleventh;
+        private readonly JoinObserver<T12> _twelfth;
+        private readonly JoinObserver<T13> _thirteenth;
+        private readonly JoinObserver<T14> _fourteenth;
 
         internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third,
             JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth, JoinObserver<T7> seventh,
             JoinObserver<T8> eighth, JoinObserver<T9> ninth, JoinObserver<T10> tenth, JoinObserver<T11> eleventh,
             JoinObserver<T12> twelfth, JoinObserver<T13> thirteenth, JoinObserver<T14> fourteenth,
-            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> onNext, Action onCompleted)
+            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
-            this.fourth = fourth;
-            this.fifth = fifth;
-            this.sixth = sixth;
-            this.seventh = seventh;
-            this.eighth = eighth;
-            this.ninth = ninth;
-            this.tenth = tenth;
-            this.eleventh = eleventh;
-            this.twelfth = twelfth;
-            this.thirteenth = thirteenth;
-            this.fourteenth = fourteenth;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
+            _fourth = fourth;
+            _fifth = fifth;
+            _sixth = sixth;
+            _seventh = seventh;
+            _eighth = eighth;
+            _ninth = ninth;
+            _tenth = tenth;
+            _eleventh = eleventh;
+            _twelfth = twelfth;
+            _thirteenth = thirteenth;
+            _fourteenth = fourteenth;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -1081,38 +1089,38 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0
-             && fourth.Queue.Count > 0
-             && fifth.Queue.Count > 0
-             && sixth.Queue.Count > 0
-             && seventh.Queue.Count > 0
-             && eighth.Queue.Count > 0
-             && ninth.Queue.Count > 0
-             && tenth.Queue.Count > 0
-             && eleventh.Queue.Count > 0
-             && twelfth.Queue.Count > 0
-             && thirteenth.Queue.Count > 0
-             && fourteenth.Queue.Count > 0
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0
+             && _fourth.Queue.Count > 0
+             && _fifth.Queue.Count > 0
+             && _sixth.Queue.Count > 0
+             && _seventh.Queue.Count > 0
+             && _eighth.Queue.Count > 0
+             && _ninth.Queue.Count > 0
+             && _tenth.Queue.Count > 0
+             && _eleventh.Queue.Count > 0
+             && _twelfth.Queue.Count > 0
+             && _thirteenth.Queue.Count > 0
+             && _fourteenth.Queue.Count > 0
                 )
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
-                var n4 = fourth.Queue.Peek();
-                var n5 = fifth.Queue.Peek();
-                var n6 = sixth.Queue.Peek();
-                var n7 = seventh.Queue.Peek();
-                var n8 = eighth.Queue.Peek();
-                var n9 = ninth.Queue.Peek();
-                var n10 = tenth.Queue.Peek();
-                var n11 = eleventh.Queue.Peek();
-                var n12 = twelfth.Queue.Peek();
-                var n13 = thirteenth.Queue.Peek();
-                var n14 = fourteenth.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
+                var n4 = _fourth.Queue.Peek();
+                var n5 = _fifth.Queue.Peek();
+                var n6 = _sixth.Queue.Peek();
+                var n7 = _seventh.Queue.Peek();
+                var n8 = _eighth.Queue.Peek();
+                var n9 = _ninth.Queue.Peek();
+                var n10 = _tenth.Queue.Peek();
+                var n11 = _eleventh.Queue.Peek();
+                var n12 = _twelfth.Queue.Peek();
+                var n13 = _thirteenth.Queue.Peek();
+                var n14 = _fourteenth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -1127,11 +1135,13 @@ namespace System.Reactive.Joins
                     || n13.Kind == NotificationKind.OnCompleted
                     || n14.Kind == NotificationKind.OnCompleted
                     )
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value,
                            n4.Value,
@@ -1153,48 +1163,46 @@ namespace System.Reactive.Joins
 
     internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> : ActivePlan
     {
-        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
-        private readonly JoinObserver<T4> fourth;
-        private readonly JoinObserver<T5> fifth;
-        private readonly JoinObserver<T6> sixth;
-        private readonly JoinObserver<T7> seventh;
-        private readonly JoinObserver<T8> eighth;
-        private readonly JoinObserver<T9> ninth;
-        private readonly JoinObserver<T10> tenth;
-        private readonly JoinObserver<T11> eleventh;
-        private readonly JoinObserver<T12> twelfth;
-        private readonly JoinObserver<T13> thirteenth;
-        private readonly JoinObserver<T14> fourteenth;
-        private readonly JoinObserver<T15> fifteenth;
+        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
+        private readonly JoinObserver<T4> _fourth;
+        private readonly JoinObserver<T5> _fifth;
+        private readonly JoinObserver<T6> _sixth;
+        private readonly JoinObserver<T7> _seventh;
+        private readonly JoinObserver<T8> _eighth;
+        private readonly JoinObserver<T9> _ninth;
+        private readonly JoinObserver<T10> _tenth;
+        private readonly JoinObserver<T11> _eleventh;
+        private readonly JoinObserver<T12> _twelfth;
+        private readonly JoinObserver<T13> _thirteenth;
+        private readonly JoinObserver<T14> _fourteenth;
+        private readonly JoinObserver<T15> _fifteenth;
 
         internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third,
             JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth, JoinObserver<T7> seventh,
             JoinObserver<T8> eighth, JoinObserver<T9> ninth, JoinObserver<T10> tenth, JoinObserver<T11> eleventh,
             JoinObserver<T12> twelfth, JoinObserver<T13> thirteenth, JoinObserver<T14> fourteenth,
             JoinObserver<T15> fifteenth,
-            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> onNext, Action onCompleted)
+            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
-            this.fourth = fourth;
-            this.fifth = fifth;
-            this.sixth = sixth;
-            this.seventh = seventh;
-            this.eighth = eighth;
-            this.ninth = ninth;
-            this.tenth = tenth;
-            this.eleventh = eleventh;
-            this.twelfth = twelfth;
-            this.thirteenth = thirteenth;
-            this.fourteenth = fourteenth;
-            this.fifteenth = fifteenth;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
+            _fourth = fourth;
+            _fifth = fifth;
+            _sixth = sixth;
+            _seventh = seventh;
+            _eighth = eighth;
+            _ninth = ninth;
+            _tenth = tenth;
+            _eleventh = eleventh;
+            _twelfth = twelfth;
+            _thirteenth = thirteenth;
+            _fourteenth = fourteenth;
+            _fifteenth = fifteenth;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -1214,40 +1222,40 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0
-             && fourth.Queue.Count > 0
-             && fifth.Queue.Count > 0
-             && sixth.Queue.Count > 0
-             && seventh.Queue.Count > 0
-             && eighth.Queue.Count > 0
-             && ninth.Queue.Count > 0
-             && tenth.Queue.Count > 0
-             && eleventh.Queue.Count > 0
-             && twelfth.Queue.Count > 0
-             && thirteenth.Queue.Count > 0
-             && fourteenth.Queue.Count > 0
-             && fifteenth.Queue.Count > 0
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0
+             && _fourth.Queue.Count > 0
+             && _fifth.Queue.Count > 0
+             && _sixth.Queue.Count > 0
+             && _seventh.Queue.Count > 0
+             && _eighth.Queue.Count > 0
+             && _ninth.Queue.Count > 0
+             && _tenth.Queue.Count > 0
+             && _eleventh.Queue.Count > 0
+             && _twelfth.Queue.Count > 0
+             && _thirteenth.Queue.Count > 0
+             && _fourteenth.Queue.Count > 0
+             && _fifteenth.Queue.Count > 0
                 )
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
-                var n4 = fourth.Queue.Peek();
-                var n5 = fifth.Queue.Peek();
-                var n6 = sixth.Queue.Peek();
-                var n7 = seventh.Queue.Peek();
-                var n8 = eighth.Queue.Peek();
-                var n9 = ninth.Queue.Peek();
-                var n10 = tenth.Queue.Peek();
-                var n11 = eleventh.Queue.Peek();
-                var n12 = twelfth.Queue.Peek();
-                var n13 = thirteenth.Queue.Peek();
-                var n14 = fourteenth.Queue.Peek();
-                var n15 = fifteenth.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
+                var n4 = _fourth.Queue.Peek();
+                var n5 = _fifth.Queue.Peek();
+                var n6 = _sixth.Queue.Peek();
+                var n7 = _seventh.Queue.Peek();
+                var n8 = _eighth.Queue.Peek();
+                var n9 = _ninth.Queue.Peek();
+                var n10 = _tenth.Queue.Peek();
+                var n11 = _eleventh.Queue.Peek();
+                var n12 = _twelfth.Queue.Peek();
+                var n13 = _thirteenth.Queue.Peek();
+                var n14 = _fourteenth.Queue.Peek();
+                var n15 = _fifteenth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -1263,11 +1271,13 @@ namespace System.Reactive.Joins
                     || n14.Kind == NotificationKind.OnCompleted
                     || n15.Kind == NotificationKind.OnCompleted
                     )
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value,
                            n4.Value,
@@ -1288,53 +1298,50 @@ namespace System.Reactive.Joins
         }
     }
 
-
     internal class ActivePlan<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> : ActivePlan
     {
-        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> onNext;
-        private readonly Action onCompleted;
-        private readonly JoinObserver<T1> first;
-        private readonly JoinObserver<T2> second;
-        private readonly JoinObserver<T3> third;
-        private readonly JoinObserver<T4> fourth;
-        private readonly JoinObserver<T5> fifth;
-        private readonly JoinObserver<T6> sixth;
-        private readonly JoinObserver<T7> seventh;
-        private readonly JoinObserver<T8> eighth;
-        private readonly JoinObserver<T9> ninth;
-        private readonly JoinObserver<T10> tenth;
-        private readonly JoinObserver<T11> eleventh;
-        private readonly JoinObserver<T12> twelfth;
-        private readonly JoinObserver<T13> thirteenth;
-        private readonly JoinObserver<T14> fourteenth;
-        private readonly JoinObserver<T15> fifteenth;
-        private readonly JoinObserver<T16> sixteenth;
+        private readonly Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> _onNext;
+        private readonly JoinObserver<T1> _first;
+        private readonly JoinObserver<T2> _second;
+        private readonly JoinObserver<T3> _third;
+        private readonly JoinObserver<T4> _fourth;
+        private readonly JoinObserver<T5> _fifth;
+        private readonly JoinObserver<T6> _sixth;
+        private readonly JoinObserver<T7> _seventh;
+        private readonly JoinObserver<T8> _eighth;
+        private readonly JoinObserver<T9> _ninth;
+        private readonly JoinObserver<T10> _tenth;
+        private readonly JoinObserver<T11> _eleventh;
+        private readonly JoinObserver<T12> _twelfth;
+        private readonly JoinObserver<T13> _thirteenth;
+        private readonly JoinObserver<T14> _fourteenth;
+        private readonly JoinObserver<T15> _fifteenth;
+        private readonly JoinObserver<T16> _sixteenth;
 
         internal ActivePlan(JoinObserver<T1> first, JoinObserver<T2> second, JoinObserver<T3> third,
             JoinObserver<T4> fourth, JoinObserver<T5> fifth, JoinObserver<T6> sixth, JoinObserver<T7> seventh,
             JoinObserver<T8> eighth, JoinObserver<T9> ninth, JoinObserver<T10> tenth, JoinObserver<T11> eleventh,
             JoinObserver<T12> twelfth, JoinObserver<T13> thirteenth, JoinObserver<T14> fourteenth,
             JoinObserver<T15> fifteenth, JoinObserver<T16> sixteenth,
-            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> onNext, Action onCompleted)
+            Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> onNext, Action onCompleted) : base(onCompleted)
         {
-            this.onNext = onNext;
-            this.onCompleted = onCompleted;
-            this.first = first;
-            this.second = second;
-            this.third = third;
-            this.fourth = fourth;
-            this.fifth = fifth;
-            this.sixth = sixth;
-            this.seventh = seventh;
-            this.eighth = eighth;
-            this.ninth = ninth;
-            this.tenth = tenth;
-            this.eleventh = eleventh;
-            this.twelfth = twelfth;
-            this.thirteenth = thirteenth;
-            this.fourteenth = fourteenth;
-            this.fifteenth = fifteenth;
-            this.sixteenth = sixteenth;
+            _onNext = onNext;
+            _first = first;
+            _second = second;
+            _third = third;
+            _fourth = fourth;
+            _fifth = fifth;
+            _sixth = sixth;
+            _seventh = seventh;
+            _eighth = eighth;
+            _ninth = ninth;
+            _tenth = tenth;
+            _eleventh = eleventh;
+            _twelfth = twelfth;
+            _thirteenth = thirteenth;
+            _fourteenth = fourteenth;
+            _fifteenth = fifteenth;
+            _sixteenth = sixteenth;
             AddJoinObserver(first);
             AddJoinObserver(second);
             AddJoinObserver(third);
@@ -1355,42 +1362,42 @@ namespace System.Reactive.Joins
 
         internal override void Match()
         {
-            if (first.Queue.Count > 0
-             && second.Queue.Count > 0
-             && third.Queue.Count > 0
-             && fourth.Queue.Count > 0
-             && fifth.Queue.Count > 0
-             && sixth.Queue.Count > 0
-             && seventh.Queue.Count > 0
-             && eighth.Queue.Count > 0
-             && ninth.Queue.Count > 0
-             && tenth.Queue.Count > 0
-             && eleventh.Queue.Count > 0
-             && twelfth.Queue.Count > 0
-             && thirteenth.Queue.Count > 0
-             && fourteenth.Queue.Count > 0
-             && fifteenth.Queue.Count > 0
-             && sixteenth.Queue.Count > 0
+            if (_first.Queue.Count > 0
+             && _second.Queue.Count > 0
+             && _third.Queue.Count > 0
+             && _fourth.Queue.Count > 0
+             && _fifth.Queue.Count > 0
+             && _sixth.Queue.Count > 0
+             && _seventh.Queue.Count > 0
+             && _eighth.Queue.Count > 0
+             && _ninth.Queue.Count > 0
+             && _tenth.Queue.Count > 0
+             && _eleventh.Queue.Count > 0
+             && _twelfth.Queue.Count > 0
+             && _thirteenth.Queue.Count > 0
+             && _fourteenth.Queue.Count > 0
+             && _fifteenth.Queue.Count > 0
+             && _sixteenth.Queue.Count > 0
                 )
             {
-                var n1 = first.Queue.Peek();
-                var n2 = second.Queue.Peek();
-                var n3 = third.Queue.Peek();
-                var n4 = fourth.Queue.Peek();
-                var n5 = fifth.Queue.Peek();
-                var n6 = sixth.Queue.Peek();
-                var n7 = seventh.Queue.Peek();
-                var n8 = eighth.Queue.Peek();
-                var n9 = ninth.Queue.Peek();
-                var n10 = tenth.Queue.Peek();
-                var n11 = eleventh.Queue.Peek();
-                var n12 = twelfth.Queue.Peek();
-                var n13 = thirteenth.Queue.Peek();
-                var n14 = fourteenth.Queue.Peek();
-                var n15 = fifteenth.Queue.Peek();
-                var n16 = sixteenth.Queue.Peek();
+                var n1 = _first.Queue.Peek();
+                var n2 = _second.Queue.Peek();
+                var n3 = _third.Queue.Peek();
+                var n4 = _fourth.Queue.Peek();
+                var n5 = _fifth.Queue.Peek();
+                var n6 = _sixth.Queue.Peek();
+                var n7 = _seventh.Queue.Peek();
+                var n8 = _eighth.Queue.Peek();
+                var n9 = _ninth.Queue.Peek();
+                var n10 = _tenth.Queue.Peek();
+                var n11 = _eleventh.Queue.Peek();
+                var n12 = _twelfth.Queue.Peek();
+                var n13 = _thirteenth.Queue.Peek();
+                var n14 = _fourteenth.Queue.Peek();
+                var n15 = _fifteenth.Queue.Peek();
+                var n16 = _sixteenth.Queue.Peek();
 
-                if (   n1.Kind == NotificationKind.OnCompleted
+                if (n1.Kind == NotificationKind.OnCompleted
                     || n2.Kind == NotificationKind.OnCompleted
                     || n3.Kind == NotificationKind.OnCompleted
                     || n4.Kind == NotificationKind.OnCompleted
@@ -1407,11 +1414,13 @@ namespace System.Reactive.Joins
                     || n15.Kind == NotificationKind.OnCompleted
                     || n16.Kind == NotificationKind.OnCompleted
                     )
-                    onCompleted();
+                {
+                    _onCompleted();
+                }
                 else
                 {
                     Dequeue();
-                    onNext(n1.Value,
+                    _onNext(n1.Value,
                            n2.Value,
                            n3.Value,
                            n4.Value,

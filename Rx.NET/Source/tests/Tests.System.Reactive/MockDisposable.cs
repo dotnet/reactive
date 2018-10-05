@@ -4,28 +4,23 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Reactive.Testing;
 
 namespace ReactiveTests
 {
     public class MockDisposable : List<long>, IDisposable
     {
-        TestScheduler scheduler;
+        private TestScheduler _scheduler;
 
         public MockDisposable(TestScheduler scheduler)
         {
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-
-            this.scheduler = scheduler;
+            this._scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             Add(scheduler.Clock);
         }
 
         public void Dispose()
         {
-            Add(scheduler.Clock);
+            Add(_scheduler.Clock);
         }
     }
 }

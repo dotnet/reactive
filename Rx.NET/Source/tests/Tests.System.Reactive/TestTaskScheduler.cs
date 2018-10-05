@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ReactiveTests
 {
-    class TestTaskScheduler : TaskScheduler
+    internal class TestTaskScheduler : TaskScheduler
     {
         protected override void QueueTask(Task task)
         {

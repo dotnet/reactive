@@ -1,15 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
     <Description>Interactive Extensions Main Library used to express queries over enumerable sequences.</Description>
     <AssemblyTitle>Interactive Extensions - Main Library</AssemblyTitle>
     <Authors>Microsoft</Authors>
-    <TargetFrameworks>net45;netstandard1.0</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard1.0;netstandard2.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Properties\System.Interactive.rd.xml" />
+    <ReferenceAssemblyProjectReference Include="..\refs\System.Interactive.Ref\System.Interactive.Ref.csproj" />
   </ItemGroup>
 
+
+  
 </Project>

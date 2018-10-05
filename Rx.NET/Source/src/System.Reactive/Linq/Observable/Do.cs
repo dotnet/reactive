@@ -17,21 +17,21 @@ namespace System.Reactive.Linq.ObservableImpl
                 _onNext = onNext;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_onNext, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(_onNext, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly Action<TSource> _onNext;
 
-                public _(Action<TSource> onNext, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Action<TSource> onNext, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _onNext = onNext;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     try
                     {
@@ -39,24 +39,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        ForwardOnError(ex);
                         return;
                     }
 
-                    base._observer.OnNext(value);
-                }
-
-                public void OnError(Exception error)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnNext(value);
                 }
             }
         }
@@ -72,21 +59,21 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer = observer;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_observer, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(_observer, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly IObserver<TSource> _doObserver;
 
-                public _(IObserver<TSource> doObserver, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(IObserver<TSource> doObserver, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _doObserver = doObserver;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     try
                     {
@@ -94,15 +81,14 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        ForwardOnError(ex);
                         return;
                     }
 
-                    base._observer.OnNext(value);
+                    ForwardOnNext(value);
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     try
                     {
@@ -110,16 +96,14 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        ForwardOnError(ex);
                         return;
                     }
 
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    ForwardOnError(error);
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     try
                     {
@@ -127,13 +111,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        ForwardOnError(ex);
                         return;
                     }
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
                 }
             }
         }
@@ -153,23 +135,23 @@ namespace System.Reactive.Linq.ObservableImpl
                 _onCompleted = onCompleted;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 
                 private readonly Actions _parent;
 
-                public _(Actions parent, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Actions parent, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _parent = parent;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     try
                     {
@@ -177,15 +159,14 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        ForwardOnError(ex);
                         return;
                     }
 
-                    base._observer.OnNext(value);
+                    ForwardOnNext(value);
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     try
                     {
@@ -193,16 +174,14 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        ForwardOnError(ex);
                         return;
                     }
 
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    ForwardOnError(error);
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     try
                     {
@@ -210,13 +189,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        ForwardOnError(ex);
                         return;
                     }
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
                 }
             }
         }

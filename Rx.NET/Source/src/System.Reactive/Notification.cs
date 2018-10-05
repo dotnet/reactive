@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Collections.Generic;
 using System.Reactive.Concurrency;
 
 #pragma warning disable 0659
@@ -30,7 +30,7 @@ namespace System.Reactive
         /// <summary>
         /// Represents an OnCompleted notification.
         /// </summary>
-        OnCompleted,
+        OnCompleted
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ namespace System.Reactive
 #if !NO_SERIALIZABLE
     [Serializable]
 #endif
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2218:OverrideGetHashCodeOnOverridingEquals", Justification = "Resembles a discriminated union with finite number of subclasses (external users shouldn't create their own subtypes), each of which does override GetHashCode itself.")]
+    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2218:OverrideGetHashCodeOnOverridingEquals", Justification = "Resembles a discriminated union with finite number of subclasses (external users shouldn't create their own subtypes), each of which does override GetHashCode itself.")]
     public abstract class Notification<T> : IEquatable<Notification<T>>
     {
         /// <summary>
@@ -120,11 +120,19 @@ namespace System.Reactive
             public override bool Equals(Notification<T> other)
             {
                 if (ReferenceEquals(this, other))
+                {
                     return true;
-                if (ReferenceEquals(other, null))
+                }
+
+                if (other is null)
+                {
                     return false;
+                }
+
                 if (other.Kind != NotificationKind.OnNext)
+                {
                     return false;
+                }
 
                 return EqualityComparer<T>.Default.Equals(Value, other.Value);
             }
@@ -132,7 +140,7 @@ namespace System.Reactive
             /// <summary>
             /// Returns a string representation of this instance.
             /// </summary>
-            public override string ToString() => String.Format(CultureInfo.CurrentCulture, "OnNext({0})", Value);
+            public override string ToString() => string.Format(CultureInfo.CurrentCulture, "OnNext({0})", Value);
 
             /// <summary>
             /// Invokes the observer's method corresponding to the notification.
@@ -141,7 +149,9 @@ namespace System.Reactive
             public override void Accept(IObserver<T> observer)
             {
                 if (observer == null)
+                {
                     throw new ArgumentNullException(nameof(observer));
+                }
 
                 observer.OnNext(Value);
             }
@@ -154,7 +164,9 @@ namespace System.Reactive
             public override TResult Accept<TResult>(IObserver<T, TResult> observer)
             {
                 if (observer == null)
+                {
                     throw new ArgumentNullException(nameof(observer));
+                }
 
                 return observer.OnNext(Value);
             }
@@ -168,11 +180,19 @@ namespace System.Reactive
             public override void Accept(Action<T> onNext, Action<Exception> onError, Action onCompleted)
             {
                 if (onNext == null)
+                {
                     throw new ArgumentNullException(nameof(onNext));
+                }
+
                 if (onError == null)
+                {
                     throw new ArgumentNullException(nameof(onError));
+                }
+
                 if (onCompleted == null)
+                {
                     throw new ArgumentNullException(nameof(onCompleted));
+                }
 
                 onNext(Value);
             }
@@ -187,11 +207,19 @@ namespace System.Reactive
             public override TResult Accept<TResult>(Func<T, TResult> onNext, Func<Exception, TResult> onError, Func<TResult> onCompleted)
             {
                 if (onNext == null)
+                {
                     throw new ArgumentNullException(nameof(onNext));
+                }
+
                 if (onError == null)
+                {
                     throw new ArgumentNullException(nameof(onError));
+                }
+
                 if (onCompleted == null)
+                {
                     throw new ArgumentNullException(nameof(onCompleted));
+                }
 
                 return onNext(Value);
             }
@@ -219,7 +247,7 @@ namespace System.Reactive
             /// <summary>
             /// Throws the exception.
             /// </summary>
-            public override T Value { get { Exception.Throw(); return default(T); } }
+            public override T Value { get { Exception.Throw(); return default; } }
 
             /// <summary>
             /// Returns the exception.
@@ -247,11 +275,19 @@ namespace System.Reactive
             public override bool Equals(Notification<T> other)
             {
                 if (ReferenceEquals(this, other))
+                {
                     return true;
-                if (ReferenceEquals(other, null))
+                }
+
+                if (other is null)
+                {
                     return false;
+                }
+
                 if (other.Kind != NotificationKind.OnError)
+                {
                     return false;
+                }
 
                 return Equals(Exception, other.Exception);
             }
@@ -259,7 +295,7 @@ namespace System.Reactive
             /// <summary>
             /// Returns a string representation of this instance.
             /// </summary>
-            public override string ToString() => String.Format(CultureInfo.CurrentCulture, "OnError({0})", Exception.GetType().FullName);
+            public override string ToString() => string.Format(CultureInfo.CurrentCulture, "OnError({0})", Exception.GetType().FullName);
 
             /// <summary>
             /// Invokes the observer's method corresponding to the notification.
@@ -268,7 +304,9 @@ namespace System.Reactive
             public override void Accept(IObserver<T> observer)
             {
                 if (observer == null)
+                {
                     throw new ArgumentNullException(nameof(observer));
+                }
 
                 observer.OnError(Exception);
             }
@@ -281,7 +319,9 @@ namespace System.Reactive
             public override TResult Accept<TResult>(IObserver<T, TResult> observer)
             {
                 if (observer == null)
+                {
                     throw new ArgumentNullException(nameof(observer));
+                }
 
                 return observer.OnError(Exception);
             }
@@ -295,11 +335,19 @@ namespace System.Reactive
             public override void Accept(Action<T> onNext, Action<Exception> onError, Action onCompleted)
             {
                 if (onNext == null)
+                {
                     throw new ArgumentNullException(nameof(onNext));
+                }
+
                 if (onError == null)
+                {
                     throw new ArgumentNullException(nameof(onError));
+                }
+
                 if (onCompleted == null)
+                {
                     throw new ArgumentNullException(nameof(onCompleted));
+                }
 
                 onError(Exception);
             }
@@ -314,11 +362,19 @@ namespace System.Reactive
             public override TResult Accept<TResult>(Func<T, TResult> onNext, Func<Exception, TResult> onError, Func<TResult> onCompleted)
             {
                 if (onNext == null)
+                {
                     throw new ArgumentNullException(nameof(onNext));
+                }
+
                 if (onError == null)
+                {
                     throw new ArgumentNullException(nameof(onError));
+                }
+
                 if (onCompleted == null)
+                {
                     throw new ArgumentNullException(nameof(onCompleted));
+                }
 
                 return onError(Exception);
             }
@@ -336,9 +392,15 @@ namespace System.Reactive
         internal sealed class OnCompletedNotification : Notification<T>
         {
             /// <summary>
+            /// Complete notifications are stateless thus only one instance
+            /// can ever exist per type.
+            /// </summary>
+            internal static readonly Notification<T> Instance = new OnCompletedNotification();
+
+            /// <summary>
             /// Constructs a notification of the end of a sequence.
             /// </summary>
-            public OnCompletedNotification()
+            private OnCompletedNotification()
             {
             }
 
@@ -373,9 +435,14 @@ namespace System.Reactive
             public override bool Equals(Notification<T> other)
             {
                 if (ReferenceEquals(this, other))
+                {
                     return true;
-                if (ReferenceEquals(other, null))
+                }
+
+                if (other is null)
+                {
                     return false;
+                }
 
                 return other.Kind == NotificationKind.OnCompleted;
             }
@@ -392,7 +459,9 @@ namespace System.Reactive
             public override void Accept(IObserver<T> observer)
             {
                 if (observer == null)
+                {
                     throw new ArgumentNullException(nameof(observer));
+                }
 
                 observer.OnCompleted();
             }
@@ -405,7 +474,9 @@ namespace System.Reactive
             public override TResult Accept<TResult>(IObserver<T, TResult> observer)
             {
                 if (observer == null)
+                {
                     throw new ArgumentNullException(nameof(observer));
+                }
 
                 return observer.OnCompleted();
             }
@@ -419,11 +490,19 @@ namespace System.Reactive
             public override void Accept(Action<T> onNext, Action<Exception> onError, Action onCompleted)
             {
                 if (onNext == null)
+                {
                     throw new ArgumentNullException(nameof(onNext));
+                }
+
                 if (onError == null)
+                {
                     throw new ArgumentNullException(nameof(onError));
+                }
+
                 if (onCompleted == null)
+                {
                     throw new ArgumentNullException(nameof(onCompleted));
+                }
 
                 onCompleted();
             }
@@ -438,11 +517,19 @@ namespace System.Reactive
             public override TResult Accept<TResult>(Func<T, TResult> onNext, Func<Exception, TResult> onError, Func<TResult> onCompleted)
             {
                 if (onNext == null)
+                {
                     throw new ArgumentNullException(nameof(onNext));
+                }
+
                 if (onError == null)
+                {
                     throw new ArgumentNullException(nameof(onError));
+                }
+
                 if (onCompleted == null)
+                {
                     throw new ArgumentNullException(nameof(onCompleted));
+                }
 
                 return onCompleted();
             }
@@ -474,10 +561,14 @@ namespace System.Reactive
         public static bool operator ==(Notification<T> left, Notification<T> right)
         {
             if (ReferenceEquals(left, right))
+            {
                 return true;
+            }
 
             if ((object)left == null || (object)right == null)
+            {
                 return false;
+            }
 
             return left.Equals(right);
         }
@@ -528,7 +619,7 @@ namespace System.Reactive
         /// <param name="onError">Delegate to invoke for an OnError notification.</param>
         /// <param name="onCompleted">Delegate to invoke for an OnCompleted notification.</param>
         public abstract void Accept(Action<T> onNext, Action<Exception> onError, Action onCompleted);
-        
+
         /// <summary>
         /// Invokes the delegate corresponding to the notification and returns the produced result.
         /// </summary>
@@ -553,17 +644,39 @@ namespace System.Reactive
         public IObservable<T> ToObservable(IScheduler scheduler)
         {
             if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-
-            return new AnonymousObservable<T>(observer => scheduler.Schedule(() =>
             {
-                Accept(observer);
+                throw new ArgumentNullException(nameof(scheduler));
+            }
 
-                if (Kind == NotificationKind.OnNext)
+            return new NotificationToObservable(scheduler, this);
+        }
+
+        private sealed class NotificationToObservable : ObservableBase<T>
+        {
+            private readonly IScheduler _scheduler;
+            private readonly Notification<T> _parent;
+
+            public NotificationToObservable(IScheduler scheduler, Notification<T> parent)
+            {
+                _scheduler = scheduler;
+                _parent = parent;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<T> observer)
+            {
+                return _scheduler.ScheduleAction((_parent, observer), state =>
                 {
-                    observer.OnCompleted();
-                }
-            }));
+                    var parent = state._parent;
+                    var o = state.observer;
+
+                    parent.Accept(o);
+
+                    if (parent.Kind == NotificationKind.OnNext)
+                    {
+                        o.OnCompleted();
+                    }
+                });
+            }
         }
     }
 
@@ -593,7 +706,9 @@ namespace System.Reactive
         public static Notification<T> CreateOnError<T>(Exception error)
         {
             if (error == null)
+            {
                 throw new ArgumentNullException(nameof(error));
+            }
 
             return new Notification<T>.OnErrorNotification(error);
         }
@@ -605,7 +720,7 @@ namespace System.Reactive
         /// <returns>The OnCompleted notification.</returns>
         public static Notification<T> CreateOnCompleted<T>()
         {
-            return new Notification<T>.OnCompletedNotification();
+            return Notification<T>.OnCompletedNotification.Instance;
         }
     }
 }

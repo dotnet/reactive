@@ -21,7 +21,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Hide<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return HideCore(source);
         }

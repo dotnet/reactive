@@ -9,18 +9,18 @@ namespace System.Reactive.Concurrency
 {
     internal static class TaskHelpers
     {
-        private const int MAX_DELAY = int.MaxValue;
+        private const int MaxDelay = int.MaxValue;
 
         public static Task Delay(TimeSpan delay, CancellationToken token)
         {
             var milliseconds = (long)delay.TotalMilliseconds;
 
-            if (milliseconds > MAX_DELAY)
+            if (milliseconds > MaxDelay)
             {
-                var remainder = delay - TimeSpan.FromMilliseconds(MAX_DELAY);
+                var remainder = delay - TimeSpan.FromMilliseconds(MaxDelay);
 
                 return
-                    Task.Delay(MAX_DELAY, token)
+                    Task.Delay(MaxDelay, token)
                         .ContinueWith(_ => Delay(remainder, token), TaskContinuationOptions.ExecuteSynchronously)
                         .Unwrap();
             }

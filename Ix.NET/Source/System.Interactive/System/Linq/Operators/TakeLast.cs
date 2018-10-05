@@ -8,6 +8,7 @@ namespace System.Linq
 {
     public static partial class EnumerableEx
     {
+#if !(REFERENCE_ASSEMBLY && (NETCOREAPP2_0 || NETSTANDARD2_1))
         /// <summary>
         /// Returns a specified number of contiguous elements from the end of the sequence.
         /// </summary>
@@ -18,12 +19,18 @@ namespace System.Linq
         public static IEnumerable<TSource> TakeLast<TSource>(this IEnumerable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return TakeLastCore(source, count);
         }
+#endif
 
         private static IEnumerable<TSource> TakeLastCore<TSource>(IEnumerable<TSource> source, int count)
         {

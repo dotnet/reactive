@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Reactive.PlatformServices;
 using System.Globalization;
+using System.Reactive.PlatformServices;
 
 namespace System.Reactive.Concurrency
 {
@@ -60,29 +60,29 @@ namespace System.Reactive.Concurrency
         //
 
 
-        private static Lazy<IScheduler> s_threadPool = new Lazy<IScheduler>(() => Initialize("ThreadPool"));
+        private static readonly Lazy<IScheduler> _threadPool = new Lazy<IScheduler>(() => Initialize("ThreadPool"));
 
         /// <summary>
         /// Gets a scheduler that schedules work on the thread pool.
         /// </summary>
-        [Obsolete(Constants_Core.OBSOLETE_SCHEDULER_THREADPOOL)]
-        public static IScheduler ThreadPool => s_threadPool.Value;
+        [Obsolete(Constants_Core.ObsoleteSchedulerThreadpool)]
+        public static IScheduler ThreadPool => _threadPool.Value;
 
-        private static Lazy<IScheduler> s_newThread = new Lazy<IScheduler>(() => Initialize("NewThread"));
+        private static readonly Lazy<IScheduler> _newThread = new Lazy<IScheduler>(() => Initialize("NewThread"));
 
         /// <summary>
         /// Gets a scheduler that schedules work on a new thread using default thread creation options.
         /// </summary>
-        [Obsolete(Constants_Core.OBSOLETE_SCHEDULER_NEWTHREAD)]
-        public static IScheduler NewThread => s_newThread.Value;
+        [Obsolete(Constants_Core.ObsoleteSchedulerNewthread)]
+        public static IScheduler NewThread => _newThread.Value;
 
-        private static Lazy<IScheduler> s_taskPool = new Lazy<IScheduler>(() => Initialize("TaskPool"));
+        private static readonly Lazy<IScheduler> _taskPool = new Lazy<IScheduler>(() => Initialize("TaskPool"));
 
         /// <summary>
         /// Gets a scheduler that schedules work on Task Parallel Library (TPL) task pool using the default TaskScheduler.
         /// </summary>
-        [Obsolete(Constants_Core.OBSOLETE_SCHEDULER_TASKPOOL)]
-        public static IScheduler TaskPool => s_taskPool.Value;
+        [Obsolete(Constants_Core.ObsoleteSchedulerTaskpool)]
+        public static IScheduler TaskPool => _taskPool.Value;
 
         private static IScheduler Initialize(string name)
         {
@@ -90,7 +90,10 @@ namespace System.Reactive.Concurrency
             var res = PlatformEnlightenmentProvider.Current.GetService<IScheduler>(name);
 #pragma warning restore CS0618 // Type or member is obsolete
             if (res == null)
+            {
                 throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, Strings_Core.CANT_OBTAIN_SCHEDULER, name));
+            }
+
             return res;
         }
     }

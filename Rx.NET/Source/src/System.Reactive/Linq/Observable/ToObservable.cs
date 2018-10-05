@@ -8,95 +8,85 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class ToObservable<TSource> : Producer<TSource, ToObservable<TSource>._>
+    internal sealed class ToObservableRecursive<TSource> : Producer<TSource, ToObservableRecursive<TSource>._>
     {
         private readonly IEnumerable<TSource> _source;
         private readonly IScheduler _scheduler;
 
-        public ToObservable(IEnumerable<TSource> source, IScheduler scheduler)
+        public ToObservableRecursive(IEnumerable<TSource> source, IScheduler scheduler)
         {
             _source = source;
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(_source, _scheduler);
 
-        internal sealed class _ : Sink<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            private IEnumerator<TSource> _enumerator;
+
+            private volatile bool _disposed;
+
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
-            public IDisposable Run(ToObservable<TSource> parent)
+            public void Run(IEnumerable<TSource> source, IScheduler scheduler)
             {
-                var e = default(IEnumerator<TSource>);
                 try
                 {
-                    e = parent._source.GetEnumerator();
+                    _enumerator = source.GetEnumerator();
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return Disposable.Empty;
+                    ForwardOnError(exception);
+
+                    return;
                 }
 
-                var longRunning = parent._scheduler.AsLongRunning();
-                if (longRunning != null)
-                {
-                    //
-                    // Long-running schedulers have the contract they should *never* prevent
-                    // the work from starting, such that the scheduled work has the chance
-                    // to observe the cancellation and perform proper clean-up. In this case,
-                    // we're sure Loop will be entered, allowing us to dispose the enumerator.
-                    //
-                    return longRunning.ScheduleLongRunning(e, Loop);
-                }
-                else
-                {
-                    //
-                    // We never allow the scheduled work to be cancelled. Instead, the flag
-                    // is used to have LoopRec bail out and perform proper clean-up of the
-                    // enumerator.
-                    //
-                    var flag = new BooleanDisposable();
-                    parent._scheduler.Schedule(new State(flag, e), LoopRec);
-                    return flag;
-                }
+                //
+                // We never allow the scheduled work to be cancelled. Instead, the _disposed flag
+                // is used to have LoopRec bail out and perform proper clean-up of the
+                // enumerator.
+                //
+                scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
             }
 
-            private sealed class State
+            protected override void Dispose(bool disposing)
             {
-                public readonly ICancelable flag;
-                public readonly IEnumerator<TSource> enumerator;
-
-                public State(ICancelable flag, IEnumerator<TSource> enumerator)
+                base.Dispose(disposing);
+                if (disposing)
                 {
-                    this.flag = flag;
-                    this.enumerator = enumerator;
+                    _disposed = true;
                 }
             }
 
-            private void LoopRec(State state, Action<State> recurse)
+            private IDisposable LoopRec(IScheduler scheduler)
             {
                 var hasNext = false;
                 var ex = default(Exception);
                 var current = default(TSource);
 
-                if (state.flag.IsDisposed)
+                var enumerator = _enumerator;
+
+                if (_disposed)
                 {
-                    state.enumerator.Dispose();
-                    return;
+                    _enumerator.Dispose();
+                    _enumerator = null;
+
+                    return Disposable.Empty;
                 }
 
                 try
                 {
-                    hasNext = state.enumerator.MoveNext();
+                    hasNext = enumerator.MoveNext();
                     if (hasNext)
-                        current = state.enumerator.Current;
+                    {
+                        current = enumerator.Current;
+                    }
                 }
                 catch (Exception exception)
                 {
@@ -105,24 +95,73 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 if (ex != null)
                 {
-                    state.enumerator.Dispose();
+                    enumerator.Dispose();
+                    _enumerator = null;
 
-                    base._observer.OnError(ex);
-                    base.Dispose();
-                    return;
+                    ForwardOnError(ex);
+                    return Disposable.Empty;
                 }
 
                 if (!hasNext)
                 {
-                    state.enumerator.Dispose();
+                    enumerator.Dispose();
+                    _enumerator = null;
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
+                    return Disposable.Empty;
+                }
+
+                ForwardOnNext(current);
+
+                //
+                // We never allow the scheduled work to be cancelled. Instead, the _disposed flag
+                // is used to have LoopRec bail out and perform proper clean-up of the
+                // enumerator.
+                //
+                scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
+
+                return Disposable.Empty;
+            }
+        }
+    }
+
+    internal sealed class ToObservableLongRunning<TSource> : Producer<TSource, ToObservableLongRunning<TSource>._>
+    {
+        private readonly IEnumerable<TSource> _source;
+        private readonly ISchedulerLongRunning _scheduler;
+
+        public ToObservableLongRunning(IEnumerable<TSource> source, ISchedulerLongRunning scheduler)
+        {
+            _source = source;
+            _scheduler = scheduler;
+        }
+
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+
+        protected override void Run(_ sink) => sink.Run(_source, _scheduler);
+
+        internal sealed class _ : IdentitySink<TSource>
+        {
+            public _(IObserver<TSource> observer)
+                : base(observer)
+            {
+            }
+
+            public void Run(IEnumerable<TSource> source, ISchedulerLongRunning scheduler)
+            {
+                var e = default(IEnumerator<TSource>);
+                try
+                {
+                    e = source.GetEnumerator();
+                }
+                catch (Exception exception)
+                {
+                    ForwardOnError(exception);
+
                     return;
                 }
 
-                base._observer.OnNext(current);
-                recurse(state);
+                SetUpstream(scheduler.ScheduleLongRunning((@this: this, e), (tuple, cancelable) => tuple.@this.Loop(tuple.e, cancelable)));
             }
 
             private void Loop(IEnumerator<TSource> enumerator, ICancelable cancel)
@@ -137,7 +176,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         hasNext = enumerator.MoveNext();
                         if (hasNext)
+                        {
                             current = enumerator.Current;
+                        }
                     }
                     catch (Exception exception)
                     {
@@ -146,21 +187,21 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (ex != null)
                     {
-                        base._observer.OnError(ex);
+                        ForwardOnError(ex);
                         break;
                     }
 
                     if (!hasNext)
                     {
-                        base._observer.OnCompleted();
+                        ForwardOnCompleted();
                         break;
                     }
 
-                    base._observer.OnNext(current);
+                    ForwardOnNext(current);
                 }
 
                 enumerator.Dispose();
-                base.Dispose();
+                Dispose();
             }
         }
     }

@@ -20,46 +20,42 @@ namespace System.Reactive.Concurrency
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
-            private readonly Synchronize<TSource> _parent;
             private readonly object _gate;
 
-            public _(Synchronize<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Synchronize<TSource> parent, IObserver<TSource> observer)
+                : base(observer)
             {
-                _parent = parent;
-                _gate = _parent._gate ?? new object();
+                _gate = parent._gate ?? new object();
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 lock (_gate)
                 {
-                    _observer.OnNext(value);
+                    ForwardOnNext(value);
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 lock (_gate)
                 {
-                    _observer.OnError(error);
-                    Dispose();
+                    ForwardOnError(error);
                 }
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 lock (_gate)
                 {
-                    _observer.OnCompleted();
-                    Dispose();
+                    ForwardOnCompleted();
                 }
             }
         }

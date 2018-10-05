@@ -20,39 +20,29 @@ namespace System.Reactive.Linq.ObservableImpl
                 _count = count;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_count, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(_count, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
-                private int _count;
-                private Queue<TSource> _queue;
+                private readonly int _count;
+                private readonly Queue<TSource> _queue;
 
-                public _(int count, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(int count, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _count = count;
                     _queue = new Queue<TSource>();
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     _queue.Enqueue(value);
                     if (_queue.Count > _count)
-                        base._observer.OnNext(_queue.Dequeue());
-                }
-
-                public void OnError(Exception error)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    {
+                        ForwardOnNext(_queue.Dequeue());
+                    }
                 }
             }
         }
@@ -70,53 +60,50 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_duration, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(_duration, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly TimeSpan _duration;
-                private Queue<System.Reactive.TimeInterval<TSource>> _queue;
+                private readonly Queue<Reactive.TimeInterval<TSource>> _queue;
 
-                public _(TimeSpan duration, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(TimeSpan duration, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _duration = duration;
-                    _queue = new Queue<System.Reactive.TimeInterval<TSource>>();
+                    _queue = new Queue<Reactive.TimeInterval<TSource>>();
                 }
 
                 private IStopwatch _watch;
 
-                public IDisposable Run(Time parent)
+                public void Run(Time parent)
                 {
                     _watch = parent._scheduler.StartStopwatch();
 
-                    return parent._source.SubscribeSafe(this);
+                    SetUpstream(parent._source.SubscribeSafe(this));
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var now = _watch.Elapsed;
-                    _queue.Enqueue(new System.Reactive.TimeInterval<TSource>(value, now));
+                    _queue.Enqueue(new Reactive.TimeInterval<TSource>(value, now));
                     while (_queue.Count > 0 && now - _queue.Peek().Interval >= _duration)
-                        base._observer.OnNext(_queue.Dequeue().Value);
+                    {
+                        ForwardOnNext(_queue.Dequeue().Value);
+                    }
                 }
 
-                public void OnError(Exception error)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     var now = _watch.Elapsed;
                     while (_queue.Count > 0 && now - _queue.Peek().Interval >= _duration)
-                        base._observer.OnNext(_queue.Dequeue().Value);
+                    {
+                        ForwardOnNext(_queue.Dequeue().Value);
+                    }
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
                 }
             }
         }

@@ -12,7 +12,7 @@ namespace System.Reactive
 
         private ImmutableList()
         {
-            _data = new T[0];
+            _data = Array.Empty<T>();
         }
 
         public ImmutableList(T[] data)
@@ -58,7 +58,7 @@ namespace System.Reactive
         {
             for (var i = 0; i < _data.Length; ++i)
             {
-                if (object.Equals(_data[i], value))
+                if (Equals(_data[i], value))
                 {
                     return i;
                 }

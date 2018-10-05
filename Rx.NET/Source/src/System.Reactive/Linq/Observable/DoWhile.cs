@@ -17,33 +17,24 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(GetSources());
+        protected override void Run(_ sink) => sink.Run(GetSources());
 
         public IEnumerable<IObservable<TSource>> GetSources()
         {
             yield return _source;
             while (_condition())
+            {
                 yield return _source;
+            }
         }
 
         internal sealed class _ : ConcatSink<TSource>
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
-            }
-
-            public override void OnNext(TSource value)
-            {
-                base._observer.OnNext(value);
-            }
-
-            public override void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
             }
         }
     }

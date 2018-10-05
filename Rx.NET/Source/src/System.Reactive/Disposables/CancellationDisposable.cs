@@ -20,10 +20,7 @@ namespace System.Reactive.Disposables
         /// <exception cref="ArgumentNullException"><paramref name="cts"/> is <c>null</c>.</exception>
         public CancellationDisposable(CancellationTokenSource cts)
         {
-            if (cts == null)
-                throw new ArgumentNullException(nameof(cts));
-
-            _cts = cts;
+            _cts = cts ?? throw new ArgumentNullException(nameof(cts));
         }
 
         /// <summary>

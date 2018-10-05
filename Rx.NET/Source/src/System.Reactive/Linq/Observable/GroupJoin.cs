@@ -25,24 +25,24 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TResult>
+        internal sealed class _ : IdentitySink<TResult>
         {
             private readonly object _gate = new object();
             private readonly CompositeDisposable _group = new CompositeDisposable();
             private readonly RefCountDisposable _refCount;
-            private readonly SortedDictionary<int, IObserver<TRight>> _leftMap = new SortedDictionary<int, IObserver<TRight>>();
-            private readonly SortedDictionary<int, TRight> _rightMap = new SortedDictionary<int, TRight>();
+            private readonly SortedDictionary<int, IObserver<TRight>> _leftMap;
+            private readonly SortedDictionary<int, TRight> _rightMap;
 
             private readonly Func<TLeft, IObservable<TLeftDuration>> _leftDurationSelector;
             private readonly Func<TRight, IObservable<TRightDuration>> _rightDurationSelector;
             private readonly Func<TLeft, IObservable<TRight>, TResult> _resultSelector;
 
-            public _(GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent, IObserver<TResult> observer)
+                : base(observer)
             {
                 _refCount = new RefCountDisposable(_group);
                 _leftMap = new SortedDictionary<int, IObserver<TRight>>();
@@ -56,31 +56,27 @@ namespace System.Reactive.Linq.ObservableImpl
             private int _leftID;
             private int _rightID;
 
-            public IDisposable Run(GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent)
+            public void Run(GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent)
             {
-                var leftSubscription = new SingleAssignmentDisposable();
-                _group.Add(leftSubscription);
-                _leftID = 0;
+                var leftObserver = new LeftObserver(this);
+                _group.Add(leftObserver);
 
-                var rightSubscription = new SingleAssignmentDisposable();
-                _group.Add(rightSubscription);
-                _rightID = 0;
+                var rightObserver = new RightObserver(this);
+                _group.Add(rightObserver);
 
-                leftSubscription.Disposable = parent._left.SubscribeSafe(new LeftObserver(this, leftSubscription));
-                rightSubscription.Disposable = parent._right.SubscribeSafe(new RightObserver(this, rightSubscription));
+                leftObserver.SetResource(parent._left.SubscribeSafe(leftObserver));
+                rightObserver.SetResource(parent._right.SubscribeSafe(rightObserver));
 
-                return _refCount;
+                SetUpstream(_refCount);
             }
 
-            private sealed class LeftObserver : IObserver<TLeft>
+            private sealed class LeftObserver : SafeObserver<TLeft>
             {
                 private readonly _ _parent;
-                private readonly IDisposable _self;
 
-                public LeftObserver(_ parent, IDisposable self)
+                public LeftObserver(_ parent)
                 {
                     _parent = parent;
-                    _self = self;
                 }
 
                 private void Expire(int id, IObserver<TRight> group, IDisposable resource)
@@ -96,7 +92,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _parent._group.Remove(resource);
                 }
 
-                public void OnNext(TLeft value)
+                public override void OnNext(TLeft value)
                 {
                     var s = new Subject<TRight>();
                     var id = 0;
@@ -111,8 +107,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     var window = new WindowObservable<TRight>(s, _parent._refCount);
 
                     // BREAKING CHANGE v2 > v1.x - Order of evaluation or the _leftDurationSelector and _resultSelector now consistent with Join.
-                    var md = new SingleAssignmentDisposable();
-                    _parent._group.Add(md);
 
                     var duration = default(IObservable<TLeftDuration>);
                     try
@@ -125,8 +119,10 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
+                    var durationObserver = new DurationObserver(this, id, s);
+                    _parent._group.Add(durationObserver);
                     // BREAKING CHANGE v2 > v1.x - The duration sequence is subscribed to before the result sequence is evaluated.
-                    md.Disposable = duration.SubscribeSafe(new DurationObserver(this, id, s, md));
+                    durationObserver.SetResource(duration.SubscribeSafe(durationObserver));
 
                     var result = default(TResult);
                     try
@@ -141,7 +137,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     lock (_parent._gate)
                     {
-                        _parent._observer.OnNext(result);
+                        _parent.ForwardOnNext(result);
 
                         foreach (var rightValue in _parent._rightMap)
                         {
@@ -153,38 +149,36 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                private sealed class DurationObserver : IObserver<TLeftDuration>
+                private sealed class DurationObserver : SafeObserver<TLeftDuration>
                 {
                     private readonly LeftObserver _parent;
                     private readonly int _id;
                     private readonly IObserver<TRight> _group;
-                    private readonly IDisposable _self;
 
-                    public DurationObserver(LeftObserver parent, int id, IObserver<TRight> group, IDisposable self)
+                    public DurationObserver(LeftObserver parent, int id, IObserver<TRight> group)
                     {
                         _parent = parent;
                         _id = id;
                         _group = group;
-                        _self = self;
                     }
 
-                    public void OnNext(TLeftDuration value)
+                    public override void OnNext(TLeftDuration value)
                     {
-                        _parent.Expire(_id, _group, _self);
+                        _parent.Expire(_id, _group, this);
                     }
 
-                    public void OnError(Exception error)
+                    public override void OnError(Exception error)
                     {
                         _parent.OnError(error);
                     }
 
-                    public void OnCompleted()
+                    public override void OnCompleted()
                     {
-                        _parent.Expire(_id, _group, _self);
+                        _parent.Expire(_id, _group, this);
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_parent._gate)
                     {
@@ -193,32 +187,28 @@ namespace System.Reactive.Linq.ObservableImpl
                             o.Value.OnError(error);
                         }
 
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_parent._gate)
                     {
-                        _parent._observer.OnCompleted();
-                        _parent.Dispose();
+                        _parent.ForwardOnCompleted();
                     }
 
-                    _self.Dispose();
+                    Dispose();
                 }
             }
 
-            private sealed class RightObserver : IObserver<TRight>
+            private sealed class RightObserver : SafeObserver<TRight>
             {
                 private readonly _ _parent;
-                private readonly IDisposable _self;
 
-                public RightObserver(_ parent, IDisposable self)
+                public RightObserver(_ parent)
                 {
                     _parent = parent;
-                    _self = self;
                 }
 
                 private void Expire(int id, IDisposable resource)
@@ -231,7 +221,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _parent._group.Remove(resource);
                 }
 
-                public void OnNext(TRight value)
+                public override void OnNext(TRight value)
                 {
                     var id = 0;
                     var leftID = 0;
@@ -241,9 +231,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         leftID = _parent._leftID;
                         _parent._rightMap.Add(id, value);
                     }
-
-                    var md = new SingleAssignmentDisposable();
-                    _parent._group.Add(md);
 
                     var duration = default(IObservable<TRightDuration>);
                     try
@@ -256,7 +243,9 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    md.Disposable = duration.SubscribeSafe(new DurationObserver(this, id, md));
+                    var durationObserver = new DurationObserver(this, id);
+                    _parent._group.Add(durationObserver);
+                    durationObserver.SetResource(duration.SubscribeSafe(durationObserver));
 
                     lock (_parent._gate)
                     {
@@ -270,36 +259,34 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                private sealed class DurationObserver : IObserver<TRightDuration>
+                private sealed class DurationObserver : SafeObserver<TRightDuration>
                 {
                     private readonly RightObserver _parent;
                     private readonly int _id;
-                    private readonly IDisposable _self;
 
-                    public DurationObserver(RightObserver parent, int id, IDisposable self)
+                    public DurationObserver(RightObserver parent, int id)
                     {
                         _parent = parent;
                         _id = id;
-                        _self = self;
                     }
 
-                    public void OnNext(TRightDuration value)
+                    public override void OnNext(TRightDuration value)
                     {
-                        _parent.Expire(_id, _self);
+                        _parent.Expire(_id, this);
                     }
 
-                    public void OnError(Exception error)
+                    public override void OnError(Exception error)
                     {
                         _parent.OnError(error);
                     }
 
-                    public void OnCompleted()
+                    public override void OnCompleted()
                     {
-                        _parent.Expire(_id, _self);
+                        _parent.Expire(_id, this);
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_parent._gate)
                     {
@@ -308,14 +295,13 @@ namespace System.Reactive.Linq.ObservableImpl
                             o.Value.OnError(error);
                         }
 
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
-                    _self.Dispose();
+                    Dispose();
                 }
             }
         }

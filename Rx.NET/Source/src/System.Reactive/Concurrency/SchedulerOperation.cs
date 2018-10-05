@@ -68,7 +68,7 @@ namespace System.Reactive.Concurrency
 
             if (cancellationToken.CanBeCanceled)
             {
-                _ctr = _cancellationToken.Register(Cancel);
+                _ctr = _cancellationToken.Register(@this => ((SchedulerOperationAwaiter)@this).Cancel(), this);
             }
         }
 
@@ -89,10 +89,14 @@ namespace System.Reactive.Concurrency
         public void OnCompleted(Action continuation)
         {
             if (continuation == null)
+            {
                 throw new ArgumentNullException(nameof(continuation));
+            }
 
             if (_continuation != null)
+            {
                 throw new InvalidOperationException(Strings_Core.SCHEDULER_OPERATION_ALREADY_AWAITED);
+            }
 
             if (_postBackToOriginalContext)
             {
@@ -113,8 +117,8 @@ namespace System.Reactive.Concurrency
                         // contexts objects at the scheduler level. It's possible to start
                         // async operations by calling Schedule, without a way to observe
                         // their completion. Not interacting with SynchronizationContext
-                        // is a concious design decision as the performance impact was non
-                        // negligable and our schedulers abstract over more constructs.
+                        // is a conscious design decision as the performance impact was non
+                        // negligible and our schedulers abstract over more constructs.
                         //
                         ctx.Post(a => ((Action)a)(), original);
                     };

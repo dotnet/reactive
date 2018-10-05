@@ -29,12 +29,13 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_source);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<IGroupedObservable<TKey, TElement>>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource, IGroupedObservable<TKey, TElement>>
         {
+            private readonly object _gate = new object();
             private readonly object _nullGate = new object();
             private readonly CompositeDisposable _groupDisposable = new CompositeDisposable();
             private readonly RefCountDisposable _refCountDisposable;
@@ -46,8 +47,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private ISubject<TElement> _null;
 
-            public _(GroupByUntil<TSource, TKey, TElement, TDuration> parent, IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(GroupByUntil<TSource, TKey, TElement, TDuration> parent, IObserver<IGroupedObservable<TKey, TElement>> observer)
+                : base(observer)
             {
                 _refCountDisposable = new RefCountDisposable(_groupDisposable);
                 _map = new Map<TKey, ISubject<TElement>>(parent._capacity, parent._comparer);
@@ -57,11 +58,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _durationSelector = parent._durationSelector;
             }
 
-            public IDisposable Run(IObservable<TSource> source)
+            public override void Run(IObservable<TSource> source)
             {
                 _groupDisposable.Add(source.SubscribeSafe(this));
 
-                return _refCountDisposable;
+                SetUpstream(_refCountDisposable);
             }
 
             private ISubject<TElement> NewSubject()
@@ -71,7 +72,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return Subject.Create<TElement>(new AsyncLockObserver<TElement>(sub, new Concurrency.AsyncLock()), sub);
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var key = default(TKey);
                 try
@@ -137,12 +138,14 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    lock (base._observer)
-                        base._observer.OnNext(group);
+                    lock (_gate)
+                    {
+                        ForwardOnNext(group);
+                    }
 
-                    var md = new SingleAssignmentDisposable();
-                    _groupDisposable.Add(md);
-                    md.Disposable = duration.SubscribeSafe(new DurationObserver(this, key, writer, md));
+                    var durationObserver = new DurationObserver(this, key, writer);
+                    _groupDisposable.Add(durationObserver);
+                    durationObserver.SetResource(duration.SubscribeSafe(durationObserver));
                 }
 
                 var element = default(TElement);
@@ -177,33 +180,31 @@ namespace System.Reactive.Linq.ObservableImpl
                 writer.OnNext(element);
             }
 
-            private sealed class DurationObserver : IObserver<TDuration>
+            private sealed class DurationObserver : SafeObserver<TDuration>
             {
                 private readonly _ _parent;
                 private readonly TKey _key;
                 private readonly ISubject<TElement> _writer;
-                private readonly IDisposable _self;
 
-                public DurationObserver(_ parent, TKey key, ISubject<TElement> writer, IDisposable self)
+                public DurationObserver(_ parent, TKey key, ISubject<TElement> writer)
                 {
                     _parent = parent;
                     _key = key;
                     _writer = writer;
-                    _self = self;
                 }
 
-                public void OnNext(TDuration value)
+                public override void OnNext(TDuration value)
                 {
                     OnCompleted();
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     _parent.Error(error);
-                    _self.Dispose();
+                    Dispose();
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     if (_key == null)
                     {
@@ -224,16 +225,16 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                     }
 
-                    _parent._groupDisposable.Remove(_self);
+                    _parent._groupDisposable.Remove(this);
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 Error(error);
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 //
                 // NOTE: A race with OnCompleted triggered by a duration selector is fine when
@@ -242,17 +243,21 @@ namespace System.Reactive.Linq.ObservableImpl
                 //
                 var @null = default(ISubject<TElement>);
                 lock (_nullGate)
+                {
                     @null = _null;
+                }
 
                 @null?.OnCompleted();
 
                 foreach (var w in _map.Values)
+                {
                     w.OnCompleted();
+                }
 
-                lock (base._observer)
-                    base._observer.OnCompleted();
-
-                base.Dispose();
+                lock (_gate)
+                {
+                    ForwardOnCompleted();
+                }
             }
 
             private void Error(Exception exception)
@@ -264,17 +269,21 @@ namespace System.Reactive.Linq.ObservableImpl
                 //
                 var @null = default(ISubject<TElement>);
                 lock (_nullGate)
+                {
                     @null = _null;
+                }
 
                 @null?.OnError(exception);
 
                 foreach (var w in _map.Values)
+                {
                     w.OnError(exception);
+                }
 
-                lock (base._observer)
-                    base._observer.OnError(exception);
-
-                base.Dispose();
+                lock (_gate)
+                {
+                    ForwardOnError(exception);
+                }
             }
         }
     }
@@ -288,9 +297,9 @@ namespace System.Reactive.Linq.ObservableImpl
         // and blocking, but also the more expensive operations that require all locks become (e.g. table
         // resizing, ToArray, Count, etc). According to brief benchmarks that we ran, 4 seems like a good
         // compromise.
-        private const int DEFAULT_CONCURRENCY_MULTIPLIER = 4;
+        private const int DefaultConcurrencyMultiplier = 4;
 
-        private static int DefaultConcurrencyLevel => DEFAULT_CONCURRENCY_MULTIPLIER * Environment.ProcessorCount;
+        private static int DefaultConcurrencyLevel => DefaultConcurrencyMultiplier * Environment.ProcessorCount;
 
         private readonly ConcurrentDictionary<TKey, TValue> _map;
 
@@ -316,7 +325,9 @@ namespace System.Reactive.Linq.ObservableImpl
             while (true)
             {
                 if (_map.TryGetValue(key, out value))
+                {
                     break;
+                }
 
                 if (!hasNewValue)
                 {
@@ -339,7 +350,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public bool Remove(TKey key)
         {
-            return _map.TryRemove(key, out var value);
+            return _map.TryRemove(key, out _);
         }
     }
 }

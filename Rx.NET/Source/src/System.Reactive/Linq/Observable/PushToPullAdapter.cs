@@ -12,7 +12,7 @@ namespace System.Reactive.Linq.ObservableImpl
     {
         private readonly IObservable<TSource> _source;
 
-        public PushToPullAdapter(IObservable<TSource> source)
+        protected PushToPullAdapter(IObservable<TSource> source)
         {
             _source = source;
         }
@@ -21,23 +21,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public IEnumerator<TResult> GetEnumerator()
         {
-            var d = new SingleAssignmentDisposable();
-            var res = Run(d);
-            d.Disposable = _source.SubscribeSafe(res);
+            var res = Run();
+            res.SetUpstream(_source.SubscribeSafe(res));
             return res;
         }
 
-        protected abstract PushToPullSink<TSource, TResult> Run(IDisposable subscription);
+        protected abstract PushToPullSink<TSource, TResult> Run();
     }
 
-    internal abstract class PushToPullSink<TSource, TResult> : IObserver<TSource>, IEnumerator<TResult>, IDisposable
+    internal abstract class PushToPullSink<TSource, TResult> : IObserver<TSource>, IEnumerator<TResult>
     {
-        private readonly IDisposable _subscription;
-
-        public PushToPullSink(IDisposable subscription)
-        {
-            _subscription = subscription;
-        }
+        private IDisposable _upstream;
 
         public abstract void OnNext(TSource value);
         public abstract void OnError(Exception error);
@@ -56,11 +50,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     Current = current;
                     return true;
                 }
-                else
-                {
-                    _done = true;
-                    _subscription.Dispose();
-                }
+
+                _done = true;
+                Dispose();
             }
 
             return false;
@@ -81,7 +73,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public void Dispose()
         {
-            _subscription.Dispose();
+            Disposable.TryDispose(ref _upstream);
+        }
+
+        public void SetUpstream(IDisposable d)
+        {
+            Disposable.SetSingle(ref _upstream, d);
         }
     }
 }

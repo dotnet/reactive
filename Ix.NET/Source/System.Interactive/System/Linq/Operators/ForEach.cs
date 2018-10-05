@@ -17,9 +17,14 @@ namespace System.Linq
         public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> onNext)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
 
             foreach (var item in source)
             {
@@ -36,9 +41,14 @@ namespace System.Linq
         public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource, int> onNext)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (onNext == null)
+            {
                 throw new ArgumentNullException(nameof(onNext));
+            }
 
             var i = 0;
             foreach (var item in source)

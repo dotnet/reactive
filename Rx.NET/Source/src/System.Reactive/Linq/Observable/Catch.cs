@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -16,28 +17,25 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_sources);
+        protected override void Run(_ sink) => sink.Run(_sources);
 
         internal sealed class _ : TailRecursiveSink<TSource>
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
             protected override IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source)
             {
                 if (source is Catch<TSource> @catch)
+                {
                     return @catch._sources;
+                }
 
                 return null;
-            }
-
-            public override void OnNext(TSource value)
-            {
-                base._observer.OnNext(value);
             }
 
             private Exception _lastException;
@@ -45,23 +43,19 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnError(Exception error)
             {
                 _lastException = error;
-                _recurse();
-            }
-
-            public override void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
+                Recurse();
             }
 
             protected override void Done()
             {
                 if (_lastException != null)
-                    base._observer.OnError(_lastException);
+                {
+                    ForwardOnError(_lastException);
+                }
                 else
-                    base._observer.OnCompleted();
-
-                base.Dispose();
+                {
+                    ForwardOnCompleted();
+                }
             }
 
             protected override bool Fail(Exception error)
@@ -88,41 +82,40 @@ namespace System.Reactive.Linq.ObservableImpl
             _handler = handler;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_handler, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(_handler, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_source);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private readonly Func<TException, IObservable<TSource>> _handler;
 
-            public _(Func<TException, IObservable<TSource>> handler, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Func<TException, IObservable<TSource>> handler, IObserver<TSource> observer)
+                : base(observer)
             {
                 _handler = handler;
             }
 
-            private SerialDisposable _subscription;
+            private bool _once;
+            private IDisposable _subscription;
 
-            public IDisposable Run(IObservable<TSource> source)
+            public override void Run(IObservable<TSource> source)
             {
-                _subscription = new SerialDisposable();
-
-                var d1 = new SingleAssignmentDisposable();
-                _subscription.Disposable = d1;
-                d1.Disposable = source.SubscribeSafe(this);
-
-                return _subscription;
+                Disposable.TrySetSingle(ref _subscription, source.SubscribeSafe(this));
             }
 
-            public void OnNext(TSource value)
+            protected override void Dispose(bool disposing)
             {
-                base._observer.OnNext(value);
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _subscription);
+                }
+                base.Dispose(disposing);
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
-                if (error is TException e)
+                if (!Volatile.Read(ref _once) && error is TException e)
                 {
                     var result = default(IObservable<TSource>);
                     try
@@ -131,52 +124,16 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        ForwardOnError(ex);
                         return;
                     }
 
-                    var d = new SingleAssignmentDisposable();
-                    _subscription.Disposable = d;
-                    d.Disposable = result.SubscribeSafe(new HandlerObserver(this));
+                    Volatile.Write(ref _once, true);
+                    Disposable.TrySetSerial(ref _subscription, result.SubscribeSafe(this));
                 }
                 else
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
-            }
-
-            private sealed class HandlerObserver : IObserver<TSource>
-            {
-                private readonly _ _parent;
-
-                public HandlerObserver(_ parent)
-                {
-                    _parent = parent;
-                }
-
-                public void OnNext(TSource value)
-                {
-                    _parent._observer.OnNext(value);
-                }
-
-                public void OnError(Exception error)
-                {
-                    _parent._observer.OnError(error);
-                    _parent.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    _parent._observer.OnCompleted();
-                    _parent.Dispose();
+                    ForwardOnError(error);
                 }
             }
         }

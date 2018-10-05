@@ -5,7 +5,6 @@
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Security;
 
@@ -32,7 +31,7 @@ namespace System.Runtime.CompilerServices
         /// Creates an instance of the <see cref="TaskObservableMethodBuilder{T}"/> struct.
         /// </summary>
         /// <returns>A new instance of the struct.</returns>
-        public static TaskObservableMethodBuilder<T> Create() => default(TaskObservableMethodBuilder<T>);
+        public static TaskObservableMethodBuilder<T> Create() => default;
 
         /// <summary>
         /// Begins running the builder with the associated state machine.
@@ -44,7 +43,9 @@ namespace System.Runtime.CompilerServices
             where TStateMachine : IAsyncStateMachine
         {
             if (stateMachine == null)
+            {
                 throw new ArgumentNullException(nameof(stateMachine));
+            }
 
             stateMachine.MoveNext();
         }
@@ -57,13 +58,12 @@ namespace System.Runtime.CompilerServices
         /// <exception cref="InvalidOperationException">The state machine was previously set.</exception>
         public void SetStateMachine(IAsyncStateMachine stateMachine)
         {
-            if (stateMachine == null)
-                throw new ArgumentNullException(nameof(stateMachine));
-
             if (_stateMachine != null)
+            {
                 throw new InvalidOperationException();
+            }
 
-            _stateMachine = stateMachine;
+            _stateMachine = stateMachine ?? throw new ArgumentNullException(nameof(stateMachine));
         }
 
         /// <summary>
@@ -92,7 +92,9 @@ namespace System.Runtime.CompilerServices
         public void SetException(Exception exception)
         {
             if (exception == null)
+            {
                 throw new ArgumentNullException(nameof(exception));
+            }
 
             if (_inner == null)
             {
@@ -203,7 +205,6 @@ namespace System.Runtime.CompilerServices
         /// }
         /// </code>
         /// </remarks>
-        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
         internal sealed class TaskObservable : ITaskObservable<T>, ITaskObservableAwaiter<T>
         {
             /// <summary>
@@ -258,7 +259,9 @@ namespace System.Runtime.CompilerServices
             public void SetResult(T result)
             {
                 if (IsCompleted)
+                {
                     throw new InvalidOperationException();
+                }
 
                 _subject.OnNext(result);
                 _subject.OnCompleted();
@@ -273,7 +276,9 @@ namespace System.Runtime.CompilerServices
             public void SetException(Exception exception)
             {
                 if (IsCompleted)
+                {
                     throw new InvalidOperationException();
+                }
 
                 _subject.OnError(exception);
             }
@@ -290,16 +295,15 @@ namespace System.Runtime.CompilerServices
                 {
                     return _subject.Subscribe(observer);
                 }
-                else if (_exception != null)
+
+                if (_exception != null)
                 {
                     observer.OnError(_exception);
                     return Disposable.Empty;
                 }
-                else
-                {
-                    observer.OnNext(_result);
-                    return Disposable.Empty;
-                }
+
+                observer.OnNext(_result);
+                return Disposable.Empty;
             }
 
             /// <summary>

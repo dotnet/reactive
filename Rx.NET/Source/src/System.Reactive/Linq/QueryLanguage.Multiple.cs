@@ -18,27 +18,17 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Amb<TSource>(IObservable<TSource> first, IObservable<TSource> second)
         {
-            return Amb_(first, second);
+            return new Amb<TSource>(first, second);
         }
 
         public virtual IObservable<TSource> Amb<TSource>(params IObservable<TSource>[] sources)
         {
-            return Amb_(sources);
+            return new AmbManyArray<TSource>(sources);
         }
 
         public virtual IObservable<TSource> Amb<TSource>(IEnumerable<IObservable<TSource>> sources)
         {
-            return Amb_(sources);
-        }
-
-        private static IObservable<TSource> Amb_<TSource>(IEnumerable<IObservable<TSource>> sources)
-        {
-            return sources.Aggregate(Observable.Never<TSource>(), (previous, current) => previous.Amb(current));
-        }
-
-        private static IObservable<TSource> Amb_<TSource>(IObservable<TSource> leftSource, IObservable<TSource> rightSource)
-        {
-            return new Amb<TSource>(leftSource, rightSource);
+            return new AmbManyEnumerable<TSource>(sources);
         }
 
         #endregion
@@ -71,17 +61,17 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Catch<TSource>(IObservable<TSource> first, IObservable<TSource> second)
         {
-            return Catch_<TSource>(new[] { first, second });
+            return Catch_(new[] { first, second });
         }
 
         public virtual IObservable<TSource> Catch<TSource>(params IObservable<TSource>[] sources)
         {
-            return Catch_<TSource>(sources);
+            return Catch_(sources);
         }
 
         public virtual IObservable<TSource> Catch<TSource>(IEnumerable<IObservable<TSource>> sources)
         {
-            return Catch_<TSource>(sources);
+            return Catch_(sources);
         }
 
         private static IObservable<TSource> Catch_<TSource>(IEnumerable<IObservable<TSource>> sources)
@@ -176,17 +166,17 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> CombineLatest<TSource, TResult>(IEnumerable<IObservable<TSource>> sources, Func<IList<TSource>, TResult> resultSelector)
         {
-            return CombineLatest_<TSource, TResult>(sources, resultSelector);
+            return CombineLatest_(sources, resultSelector);
         }
 
         public virtual IObservable<IList<TSource>> CombineLatest<TSource>(IEnumerable<IObservable<TSource>> sources)
         {
-            return CombineLatest_<TSource, IList<TSource>>(sources, res => res.ToList());
+            return CombineLatest_(sources, res => res.ToList());
         }
 
         public virtual IObservable<IList<TSource>> CombineLatest<TSource>(params IObservable<TSource>[] sources)
         {
-            return CombineLatest_<TSource, IList<TSource>>(sources, res => res.ToList());
+            return CombineLatest_(sources, res => res.ToList());
         }
 
         private static IObservable<TResult> CombineLatest_<TSource, TResult>(IEnumerable<IObservable<TSource>> sources, Func<IList<TSource>, TResult> resultSelector)
@@ -200,17 +190,17 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Concat<TSource>(IObservable<TSource> first, IObservable<TSource> second)
         {
-            return Concat_<TSource>(new[] { first, second });
+            return Concat_(new[] { first, second });
         }
 
         public virtual IObservable<TSource> Concat<TSource>(params IObservable<TSource>[] sources)
         {
-            return Concat_<TSource>(sources);
+            return Concat_(sources);
         }
 
         public virtual IObservable<TSource> Concat<TSource>(IEnumerable<IObservable<TSource>> sources)
         {
-            return Concat_<TSource>(sources);
+            return Concat_(sources);
         }
 
         private static IObservable<TSource> Concat_<TSource>(IEnumerable<IObservable<TSource>> sources)
@@ -220,17 +210,17 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Concat<TSource>(IObservable<IObservable<TSource>> sources)
         {
-            return Concat_<TSource>(sources);
+            return Concat_(sources);
         }
 
         public virtual IObservable<TSource> Concat<TSource>(IObservable<Task<TSource>> sources)
         {
-            return Concat_<TSource>(Select(sources, TaskObservableExtensions.ToObservable));
+            return Concat_(Select(sources, TaskObservableExtensions.ToObservable));
         }
 
         private IObservable<TSource> Concat_<TSource>(IObservable<IObservable<TSource>> sources)
         {
-            return Merge(sources, 1);
+            return new ConcatMany<TSource>(sources);
         }
 
         #endregion
@@ -239,7 +229,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Merge<TSource>(IObservable<IObservable<TSource>> sources)
         {
-            return Merge_<TSource>(sources);
+            return Merge_(sources);
         }
 
         public virtual IObservable<TSource> Merge<TSource>(IObservable<Task<TSource>> sources)
@@ -249,47 +239,47 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Merge<TSource>(IObservable<IObservable<TSource>> sources, int maxConcurrent)
         {
-            return Merge_<TSource>(sources, maxConcurrent);
+            return Merge_(sources, maxConcurrent);
         }
 
         public virtual IObservable<TSource> Merge<TSource>(IEnumerable<IObservable<TSource>> sources, int maxConcurrent)
         {
-            return Merge_<TSource>(sources.ToObservable(SchedulerDefaults.ConstantTimeOperations), maxConcurrent);
+            return Merge_(sources.ToObservable(SchedulerDefaults.ConstantTimeOperations), maxConcurrent);
         }
 
         public virtual IObservable<TSource> Merge<TSource>(IEnumerable<IObservable<TSource>> sources, int maxConcurrent, IScheduler scheduler)
         {
-            return Merge_<TSource>(sources.ToObservable(scheduler), maxConcurrent);
+            return Merge_(sources.ToObservable(scheduler), maxConcurrent);
         }
 
         public virtual IObservable<TSource> Merge<TSource>(IObservable<TSource> first, IObservable<TSource> second)
         {
-            return Merge_<TSource>(new[] { first, second }.ToObservable(SchedulerDefaults.ConstantTimeOperations));
+            return Merge_(new[] { first, second }.ToObservable(SchedulerDefaults.ConstantTimeOperations));
         }
 
         public virtual IObservable<TSource> Merge<TSource>(IObservable<TSource> first, IObservable<TSource> second, IScheduler scheduler)
         {
-            return Merge_<TSource>(new[] { first, second }.ToObservable(scheduler));
+            return Merge_(new[] { first, second }.ToObservable(scheduler));
         }
 
         public virtual IObservable<TSource> Merge<TSource>(params IObservable<TSource>[] sources)
         {
-            return Merge_<TSource>(sources.ToObservable(SchedulerDefaults.ConstantTimeOperations));
+            return Merge_(sources.ToObservable(SchedulerDefaults.ConstantTimeOperations));
         }
 
         public virtual IObservable<TSource> Merge<TSource>(IScheduler scheduler, params IObservable<TSource>[] sources)
         {
-            return Merge_<TSource>(sources.ToObservable(scheduler));
+            return Merge_(sources.ToObservable(scheduler));
         }
 
         public virtual IObservable<TSource> Merge<TSource>(IEnumerable<IObservable<TSource>> sources)
         {
-            return Merge_<TSource>(sources.ToObservable(SchedulerDefaults.ConstantTimeOperations));
+            return Merge_(sources.ToObservable(SchedulerDefaults.ConstantTimeOperations));
         }
 
         public virtual IObservable<TSource> Merge<TSource>(IEnumerable<IObservable<TSource>> sources, IScheduler scheduler)
         {
-            return Merge_<TSource>(sources.ToObservable(scheduler));
+            return Merge_(sources.ToObservable(scheduler));
         }
 
         private static IObservable<TSource> Merge_<TSource>(IObservable<IObservable<TSource>> sources)
@@ -308,17 +298,17 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> OnErrorResumeNext<TSource>(IObservable<TSource> first, IObservable<TSource> second)
         {
-            return OnErrorResumeNext_<TSource>(new[] { first, second });
+            return OnErrorResumeNext_(new[] { first, second });
         }
 
         public virtual IObservable<TSource> OnErrorResumeNext<TSource>(params IObservable<TSource>[] sources)
         {
-            return OnErrorResumeNext_<TSource>(sources);
+            return OnErrorResumeNext_(sources);
         }
 
         public virtual IObservable<TSource> OnErrorResumeNext<TSource>(IEnumerable<IObservable<TSource>> sources)
         {
-            return OnErrorResumeNext_<TSource>(sources);
+            return OnErrorResumeNext_(sources);
         }
 
         private static IObservable<TSource> OnErrorResumeNext_<TSource>(IEnumerable<IObservable<TSource>> sources)
@@ -341,12 +331,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Switch<TSource>(IObservable<IObservable<TSource>> sources)
         {
-            return Switch_<TSource>(sources);
+            return Switch_(sources);
         }
 
         public virtual IObservable<TSource> Switch<TSource>(IObservable<Task<TSource>> sources)
         {
-            return Switch_<TSource>(Select(sources, TaskObservableExtensions.ToObservable));
+            return Switch_(Select(sources, TaskObservableExtensions.ToObservable));
         }
 
         private IObservable<TSource> Switch_<TSource>(IObservable<IObservable<TSource>> sources)
@@ -361,6 +351,11 @@ namespace System.Reactive.Linq
         public virtual IObservable<TSource> TakeUntil<TSource, TOther>(IObservable<TSource> source, IObservable<TOther> other)
         {
             return new TakeUntil<TSource, TOther>(source, other);
+        }
+
+        public virtual IObservable<TSource> TakeUntil<TSource>(IObservable<TSource> source, Func<TSource, bool> stopPredicate)
+        {
+            return new TakeUntilPredicate<TSource>(source, stopPredicate);
         }
 
         #endregion
@@ -402,17 +397,17 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Zip<TSource, TResult>(IEnumerable<IObservable<TSource>> sources, Func<IList<TSource>, TResult> resultSelector)
         {
-            return Zip_<TSource>(sources).Select(resultSelector);
+            return Zip_(sources).Select(resultSelector);
         }
 
         public virtual IObservable<IList<TSource>> Zip<TSource>(IEnumerable<IObservable<TSource>> sources)
         {
-            return Zip_<TSource>(sources);
+            return Zip_(sources);
         }
 
         public virtual IObservable<IList<TSource>> Zip<TSource>(params IObservable<TSource>[] sources)
         {
-            return Zip_<TSource>(sources);
+            return Zip_(sources);
         }
 
         private static IObservable<IList<TSource>> Zip_<TSource>(IEnumerable<IObservable<TSource>> sources)

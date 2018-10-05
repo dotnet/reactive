@@ -14,14 +14,19 @@ namespace System.Linq
         /// <typeparam name="TSource">First source sequence element type.</typeparam>
         /// <typeparam name="TOther">Second source sequence element type.</typeparam>
         /// <param name="source">A sequence of values to project.</param>
-        /// <param name="other">Inner sequence each source sequenec element is projected onto.</param>
+        /// <param name="other">Inner sequence each source sequence element is projected onto.</param>
         /// <returns>Sequence flattening the sequences that result from projecting elements in the source sequence.</returns>
         public static IEnumerable<TOther> SelectMany<TSource, TOther>(this IEnumerable<TSource> source, IEnumerable<TOther> other)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (other == null)
+            {
                 throw new ArgumentNullException(nameof(other));
+            }
 
             return source.SelectMany(_ => other);
         }

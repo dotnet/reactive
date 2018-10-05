@@ -14,7 +14,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class SubjectTest : ReactiveTest
     {
         [Fact]
@@ -368,10 +368,10 @@ namespace ReactiveTests.Tests
         public void Subject_Create_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int, int>(null, Observable.Return(42)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int, int>(Observer.Create<int>(x => {}), null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int, int>(Observer.Create<int>(x => { }), null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int>(null, Observable.Return(42)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int>(Observer.Create<int>(x => { }), null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create(null, Observable.Return(42)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create(Observer.Create<int>(x => { }), null));
         }
 
         [Fact]
@@ -458,16 +458,20 @@ namespace ReactiveTests.Tests
             var t = Enumerable.Range(0, N).Select(x => new Thread(() => { e.WaitOne(); s.OnNext(x); })).ToArray();
 
             foreach (var u in t)
+            {
                 u.Start();
+            }
 
             e.Set();
 
             foreach (var u in t)
+            {
                 u.Join();
+            }
 
             Assert.Equal(Enumerable.Range(0, N).Sum(), y);
         }
-        
+
         [Fact]
         public void Subject_Synchronize2()
         {
@@ -482,12 +486,16 @@ namespace ReactiveTests.Tests
             var t = Enumerable.Range(0, N).Select(x => new Thread(() => { e.WaitOne(); s.OnNext(x); })).ToArray();
 
             foreach (var u in t)
+            {
                 u.Start();
+            }
 
             e.Set();
 
             foreach (var u in t)
+            {
                 u.Join();
+            }
 
             Assert.Equal(Enumerable.Range(0, N).Sum(), y);
         }

@@ -17,35 +17,23 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<Timestamped<TSource>> observer, IDisposable cancel) => new _(_scheduler, observer, cancel);
+        protected override _ CreateSink(IObserver<Timestamped<TSource>> observer) => new _(_scheduler, observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<Timestamped<TSource>>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource, Timestamped<TSource>>
         {
             private readonly IScheduler _scheduler;
 
-            public _(IScheduler scheduler, IObserver<Timestamped<TSource>> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IScheduler scheduler, IObserver<Timestamped<TSource>> observer)
+                : base(observer)
             {
                 _scheduler = scheduler;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
-                base._observer.OnNext(new Timestamped<TSource>(value, _scheduler.Now));
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(new Timestamped<TSource>(value, _scheduler.Now));
             }
         }
     }

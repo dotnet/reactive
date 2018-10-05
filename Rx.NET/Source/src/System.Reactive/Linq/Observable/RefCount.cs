@@ -2,79 +2,205 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
+using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class RefCount<TSource> : Producer<TSource, RefCount<TSource>._>
+    internal static class RefCount<TSource>
     {
-        private readonly IConnectableObservable<TSource> _source;
-
-        private readonly object _gate;
-        private int _count;
-        private IDisposable _connectableSubscription;
-
-        public RefCount(IConnectableObservable<TSource> source)
+        internal sealed class Eager : Producer<TSource, Eager._>
         {
-            _source = source;
-            _gate = new object();
-            _count = 0;
-            _connectableSubscription = default(IDisposable);
-        }
+            private readonly IConnectableObservable<TSource> _source;
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+            private readonly object _gate;
+            /// <summary>
+            /// Contains the current active connection's state or null
+            /// if no connection is active at the moment.
+            /// Should be manipulated while holding the <see cref="_gate"/> lock.
+            /// </summary>
+            private RefConnection _connection;
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
-
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
-        {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public Eager(IConnectableObservable<TSource> source)
             {
+                _source = source;
+                _gate = new object();
             }
 
-            public IDisposable Run(RefCount<TSource> parent)
-            {
-                var subscription = parent._source.SubscribeSafe(this);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer, this);
 
-                lock (parent._gate)
+            protected override void Run(_ sink) => sink.Run();
+
+            internal sealed class _ : IdentitySink<TSource>
+            {
+                private readonly Eager _parent;
+                /// <summary>
+                /// Contains the connection reference the downstream observer
+                /// has subscribed to. Its purpose is to
+                /// avoid subscribing, connecting and disconnecting
+                /// while holding a lock.
+                /// </summary>
+                private RefConnection _targetConnection;
+
+                public _(IObserver<TSource> observer, Eager parent)
+                    : base(observer)
                 {
-                    if (++parent._count == 1)
+                    _parent = parent;
+                }
+
+                public void Run()
+                {
+                    var doConnect = false;
+                    var conn = default(RefConnection);
+
+                    lock (_parent._gate)
                     {
-                        parent._connectableSubscription = parent._source.Connect();
+                        // get the active connection state
+                        conn = _parent._connection;
+                        // if null, a new connection should be established
+                        if (conn == null)
+                        {
+                            conn = new RefConnection();
+                            // make it the active one
+                            _parent._connection = conn;
+                        }
+
+                        // this is the first observer, then connect
+                        doConnect = conn._count++ == 0;
+                        // save the current connection for this observer
+                        _targetConnection = conn;
+                    }
+
+                    // subscribe to the source first
+                    Run(_parent._source);
+                    // then connect the source if necessary
+                    if (doConnect && !Disposable.GetIsDisposed(ref conn._disposable))
+                    {
+                        // this makes sure if the connection ends synchronously
+                        // only the currently known connection is affected
+                        // and a connection from a concurrent reconnection won't
+                        // interfere
+                        Disposable.SetSingle(ref conn._disposable, _parent._source.Connect());
                     }
                 }
 
-                return Disposable.Create(() =>
+                protected override void Dispose(bool disposing)
                 {
-                    subscription.Dispose();
+                    base.Dispose(disposing);
+                    if (disposing)
+                    {
+                        // get and forget the saved connection
+                        var targetConnection = _targetConnection;
+                        _targetConnection = null;
+
+                        lock (_parent._gate)
+                        {
+                            // if the current connection is no longer the saved connection
+                            // or the counter hasn't reached zero yet
+                            if (targetConnection != _parent._connection
+                                || --targetConnection._count != 0)
+                            {
+                                // nothing to do.
+                                return;
+                            }
+                            // forget the current connection
+                            _parent._connection = null;
+                        }
+
+                        // disconnect
+                        Disposable.TryDispose(ref targetConnection._disposable);
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Holds an individual connection state: the observer count and
+            /// the connection's IDisposable.
+            /// </summary>
+            private sealed class RefConnection
+            {
+                internal int _count;
+                internal IDisposable _disposable;
+            }
+        }
+
+        internal sealed class Lazy : Producer<TSource, Lazy._>
+        {
+            private readonly object _gate;
+            private readonly IScheduler _scheduler;
+            private readonly TimeSpan _disconnectTime;
+            private readonly IConnectableObservable<TSource> _source;
+            private IDisposable _serial;
+            private int _count;
+            private IDisposable _connectableSubscription;
+
+            public Lazy(IConnectableObservable<TSource> source, TimeSpan disconnectTime, IScheduler scheduler)
+            {
+                _source = source;
+                _gate = new object();
+                _disconnectTime = disconnectTime;
+                _scheduler = scheduler;
+            }
+
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
+
+            protected override void Run(_ sink) => sink.Run(this);
+
+            internal sealed class _ : IdentitySink<TSource>
+            {
+                public _(IObserver<TSource> observer)
+                    : base(observer)
+                {
+                }
+
+                public void Run(Lazy parent)
+                {
+                    var subscription = parent._source.SubscribeSafe(this);
 
                     lock (parent._gate)
                     {
-                        if (--parent._count == 0)
+                        if (++parent._count == 1)
                         {
-                            parent._connectableSubscription.Dispose();
+                            if (parent._connectableSubscription == null)
+                            {
+                                parent._connectableSubscription = parent._source.Connect();
+                            }
+
+                            Disposable.TrySetSerial(ref parent._serial, new SingleAssignmentDisposable());
                         }
                     }
-                });
-            }
 
-            public void OnNext(TSource value)
-            {
-                base._observer.OnNext(value);
-            }
+                    SetUpstream(Disposable.Create(
+                        (parent, subscription),
+                        tuple =>
+                        {
+                            var (closureParent, closureSubscription) = tuple;
 
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
+                            closureSubscription.Dispose();
 
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
+                            lock (closureParent._gate)
+                            {
+                                if (--closureParent._count == 0)
+                                {
+                                    var cancelable = (SingleAssignmentDisposable)Volatile.Read(ref closureParent._serial);
+
+                                    cancelable.Disposable = closureParent._scheduler.ScheduleAction((cancelable, closureParent), closureParent._disconnectTime, tuple2 =>
+                                    {
+                                        lock (tuple2.closureParent._gate)
+                                        {
+                                            if (ReferenceEquals(Volatile.Read(ref tuple2.closureParent._serial), tuple2.cancelable))
+                                            {
+                                                tuple2.closureParent._connectableSubscription.Dispose();
+                                                tuple2.closureParent._connectableSubscription = null;
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }));
+                }
             }
         }
     }

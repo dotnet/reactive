@@ -14,7 +14,7 @@ namespace System.Reactive.Subjects
     /// Each notification is broadcasted to all subscribed and future observers, subject to buffer trimming policies.
     /// </summary>
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
-    public sealed class ReplaySubject<T> : SubjectBase<T>, IDisposable
+    public sealed class ReplaySubject<T> : SubjectBase<T>
     {
         #region Fields
 
@@ -174,7 +174,9 @@ namespace System.Reactive.Subjects
         public override void OnError(Exception error)
         {
             if (error == null)
+            {
                 throw new ArgumentNullException(nameof(error));
+            }
 
             _implementation.OnError(error);
         }
@@ -197,7 +199,9 @@ namespace System.Reactive.Subjects
         public override IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             return _implementation.Subscribe(observer);
         }
@@ -225,7 +229,7 @@ namespace System.Reactive.Subjects
             private Exception _error;
             private bool _isDisposed;
 
-            public ReplayBase()
+            protected ReplayBase()
             {
                 _observers = ImmutableList<IScheduledObserver<T>>.Empty;
 
@@ -419,7 +423,9 @@ namespace System.Reactive.Subjects
             private void CheckDisposed()
             {
                 if (_isDisposed)
+                {
                     throw new ObjectDisposedException(string.Empty);
+                }
             }
 
             private void Unsubscribe(IScheduledObserver<T> observer)
@@ -469,15 +475,18 @@ namespace System.Reactive.Subjects
             public ReplayByTime(int bufferSize, TimeSpan window, IScheduler scheduler)
             {
                 if (bufferSize < 0)
+                {
                     throw new ArgumentOutOfRangeException(nameof(bufferSize));
+                }
+
                 if (window < TimeSpan.Zero)
+                {
                     throw new ArgumentOutOfRangeException(nameof(window));
-                if (scheduler == null)
-                    throw new ArgumentNullException(nameof(scheduler));
+                }
 
                 _bufferSize = bufferSize;
                 _window = window;
-                _scheduler = scheduler;
+                _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
 
                 _stopwatch = _scheduler.StartStopwatch();
                 _queue = new Queue<TimeInterval<T>>();
@@ -592,7 +601,7 @@ namespace System.Reactive.Subjects
 
             protected override void DisposeCore()
             {
-                _value = default(T);
+                _value = default;
             }
         }
 
@@ -647,7 +656,6 @@ namespace System.Reactive.Subjects
             protected readonly Queue<T> _queue;
 
             protected ReplayManyBase(int queueSize)
-                : base()
             {
                 _queue = new Queue<T>(Math.Min(queueSize, 64));
             }
@@ -871,7 +879,8 @@ namespace System.Reactive.Subjects
                             observer.OnError(error);
                             break;
                         }
-                        else if (done)
+
+                        if (done)
                         {
                             var observer = Done();
                             observer.OnCompleted();

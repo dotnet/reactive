@@ -6,19 +6,20 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive
 {
-    internal sealed class AutoDetachObserver<T> : ObserverBase<T>
+    internal sealed class AutoDetachObserver<T> : ObserverBase<T>, ISafeObserver<T>
     {
         private readonly IObserver<T> _observer;
-        private readonly SingleAssignmentDisposable _disposable = new SingleAssignmentDisposable();
+
+        private IDisposable _disposable;
 
         public AutoDetachObserver(IObserver<T> observer)
         {
             _observer = observer;
         }
 
-        public IDisposable Disposable
+        public void SetResource(IDisposable resource)
         {
-            set { _disposable.Disposable = value; }
+            Disposable.SetSingle(ref _disposable, resource);
         }
 
         protected override void OnNextCore(T value)
@@ -99,7 +100,7 @@ namespace System.Reactive
 
             if (disposing)
             {
-                _disposable.Dispose();
+                Disposable.TryDispose(ref _disposable);
             }
         }
     }

@@ -5,7 +5,6 @@
 using System;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using Xunit;
@@ -19,12 +18,12 @@ namespace ReactiveTests.Tests
         public void NewThread_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new NewThreadScheduler(null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule<int>(42, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule<int>(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule<int>(42, TimeSpan.Zero, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.SchedulePeriodic<int>(42, TimeSpan.FromSeconds(1), default(Func<int, int>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.ScheduleLongRunning<int>(42, default(Action<int, ICancelable>)));
-            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => NewThreadScheduler.Default.SchedulePeriodic<int>(42, TimeSpan.FromSeconds(-1), _ => _));
+            ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule(42, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule(42, DateTimeOffset.Now, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule(42, TimeSpan.Zero, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.SchedulePeriodic(42, TimeSpan.FromSeconds(1), default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.ScheduleLongRunning(42, default));
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => NewThreadScheduler.Default.SchedulePeriodic(42, TimeSpan.FromSeconds(-1), _ => _));
         }
 
         [Fact]
@@ -75,11 +74,15 @@ namespace ReactiveTests.Tests
             var d = NewThreadScheduler.Default.SchedulePeriodic(TimeSpan.FromMilliseconds(25), () =>
             {
                 if (Interlocked.Increment(ref n) == 10)
+                {
                     e.Set();
+                }
             });
 
             if (!e.WaitOne(10000))
+            {
                 Assert.True(false);
+            }
 
             d.Dispose();
         }
@@ -96,7 +99,9 @@ namespace ReactiveTests.Tests
                 try
                 {
                     if (Interlocked.Increment(ref n) > 1) // Without an AsyncLock this would fail.
+                    {
                         fail = true;
+                    }
 
                     Thread.Sleep(100);
 

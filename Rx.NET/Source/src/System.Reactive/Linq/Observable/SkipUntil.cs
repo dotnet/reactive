@@ -18,103 +18,102 @@ namespace System.Reactive.Linq.ObservableImpl
             _other = other;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            private IDisposable _otherDisposable;
+            private bool _forward;
+            private int _halfSerializer;
+            private Exception _error;
+
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
-            public IDisposable Run(SkipUntil<TSource, TOther> parent)
+            public void Run(SkipUntil<TSource, TOther> parent)
             {
-                var sourceObserver = new SourceObserver(this);
-                var otherObserver = new OtherObserver(this, sourceObserver);
-
-                var sourceSubscription = parent._source.SubscribeSafe(sourceObserver);
-                var otherSubscription = parent._other.SubscribeSafe(otherObserver);
-
-                sourceObserver.Disposable = sourceSubscription;
-                otherObserver.Disposable = otherSubscription;
-
-                return StableCompositeDisposable.Create(
-                    sourceSubscription,
-                    otherSubscription
-                );
+                Disposable.TrySetSingle(ref _otherDisposable, parent._other.Subscribe(new OtherObserver(this)));
+                Run(parent._source);
             }
 
-            private sealed class SourceObserver : IObserver<TSource>
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    if (!Disposable.GetIsDisposed(ref _otherDisposable))
+                    {
+                        Disposable.TryDispose(ref _otherDisposable);
+                    }
+                }
+
+                base.Dispose(disposing);
+            }
+
+            public override void OnNext(TSource value)
+            {
+                if (_forward)
+                {
+                    HalfSerializer.ForwardOnNext(this, value, ref _halfSerializer, ref _error);
+                }
+            }
+
+            public override void OnError(Exception ex)
+            {
+                HalfSerializer.ForwardOnError(this, ex, ref _halfSerializer, ref _error);
+            }
+
+            public override void OnCompleted()
+            {
+                if (_forward)
+                {
+                    HalfSerializer.ForwardOnCompleted(this, ref _halfSerializer, ref _error);
+                }
+                else
+                {
+                    DisposeUpstream();
+                }
+            }
+
+            private void OtherComplete()
+            {
+                _forward = true;
+            }
+
+            private sealed class OtherObserver : IObserver<TOther>, IDisposable
             {
                 private readonly _ _parent;
-                public volatile IObserver<TSource> _observer;
-                private readonly SingleAssignmentDisposable _subscription;
 
-                public SourceObserver(_ parent)
+                public OtherObserver(_ parent)
                 {
                     _parent = parent;
-                    _observer = NopObserver<TSource>.Instance;
-                    _subscription = new SingleAssignmentDisposable();
                 }
 
-                public IDisposable Disposable
+                public void Dispose()
                 {
-                    set { _subscription.Disposable = value; }
-                }
-
-                public void OnNext(TSource value)
-                {
-                    _observer.OnNext(value);
-                }
-
-                public void OnError(Exception error)
-                {
-                    _parent._observer.OnError(error);
-                    _parent.Dispose();
+                    if (!Disposable.GetIsDisposed(ref _parent._otherDisposable))
+                    {
+                        Disposable.TryDispose(ref _parent._otherDisposable);
+                    }
                 }
 
                 public void OnCompleted()
                 {
-                    _observer.OnCompleted();
-                    _subscription.Dispose(); // We can't cancel the other stream yet, it may be on its way to dispatch an OnError message and we don't want to have a race.
-                }
-            }
-
-            private sealed class OtherObserver : IObserver<TOther>
-            {
-                private readonly _ _parent;
-                private readonly SourceObserver _sourceObserver;
-                private readonly SingleAssignmentDisposable _subscription;
-
-                public OtherObserver(_ parent, SourceObserver sourceObserver)
-                {
-                    _parent = parent;
-                    _sourceObserver = sourceObserver;
-                    _subscription = new SingleAssignmentDisposable();
+                    Dispose();
                 }
 
-                public IDisposable Disposable
+                public void OnError(Exception error)
                 {
-                    set { _subscription.Disposable = value; }
+                    HalfSerializer.ForwardOnError(_parent, error, ref _parent._halfSerializer, ref _parent._error);
                 }
 
                 public void OnNext(TOther value)
                 {
-                    _sourceObserver._observer = _parent._observer;
-                    _subscription.Dispose();
-                }
-
-                public void OnError(Exception error)
-                {
-                    _parent._observer.OnError(error);
-                    _parent.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    _subscription.Dispose();
+                    _parent.OtherComplete();
+                    Dispose();
                 }
             }
         }
@@ -145,29 +144,41 @@ namespace System.Reactive.Linq.ObservableImpl
             //   xs.SU(5AM).SU(3AM)    xxxxxxxxx--------o--|      xs.SU(3AM).SU(5AM)    xxxxxxxxxxxxxxxx-o--|
             //
             if (startTime <= _startTime)
+            {
                 return this;
-            else
-                return new SkipUntil<TSource>(_source, startTime, _scheduler);
+            }
+
+            return new SkipUntil<TSource>(_source, startTime, _scheduler);
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
-            private volatile bool _open;
+            private bool _open;
 
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
-            public IDisposable Run(SkipUntil<TSource> parent)
+            private IDisposable _task;
+
+            public void Run(SkipUntil<TSource> parent)
             {
-                var t = parent._scheduler.Schedule(parent._startTime, Tick);
-                var d = parent._source.SubscribeSafe(this);
-                return StableCompositeDisposable.Create(t, d);
+                Disposable.SetSingle(ref _task, parent._scheduler.ScheduleAction(this, parent._startTime, state => state.Tick()));
+                Run(parent._source);
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _task);
+                }
+                base.Dispose(disposing);
             }
 
             private void Tick()
@@ -175,22 +186,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 _open = true;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 if (_open)
-                    base._observer.OnNext(value);
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
+                {
+                    ForwardOnNext(value);
+                }
             }
         }
     }

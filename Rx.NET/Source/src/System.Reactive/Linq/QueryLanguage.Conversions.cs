@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq
 {
@@ -16,20 +15,28 @@ namespace System.Reactive.Linq
 
         public virtual IDisposable Subscribe<TSource>(IEnumerable<TSource> source, IObserver<TSource> observer)
         {
-            return Subscribe_<TSource>(source, observer, SchedulerDefaults.Iteration);
+            return Subscribe_(source, observer, SchedulerDefaults.Iteration);
         }
 
         public virtual IDisposable Subscribe<TSource>(IEnumerable<TSource> source, IObserver<TSource> observer, IScheduler scheduler)
         {
-            return Subscribe_<TSource>(source, observer, scheduler);
+            return Subscribe_(source, observer, scheduler);
         }
 
         private static IDisposable Subscribe_<TSource>(IEnumerable<TSource> source, IObserver<TSource> observer, IScheduler scheduler)
         {
+            var longRunning = scheduler.AsLongRunning();
+            if (longRunning != null)
+            {
+                //
+                // [OK] Use of unsafe Subscribe: we're calling into a known producer implementation.
+                //
+                return new ToObservableLongRunning<TSource>(source, longRunning).Subscribe/*Unsafe*/(observer);
+            }
             //
             // [OK] Use of unsafe Subscribe: we're calling into a known producer implementation.
             //
-            return new ToObservable<TSource>(source, scheduler).Subscribe/*Unsafe*/(observer);
+            return new ToObservableRecursive<TSource>(source, scheduler).Subscribe/*Unsafe*/(observer);
         }
 
         #endregion
@@ -73,12 +80,28 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> ToObservable<TSource>(IEnumerable<TSource> source)
         {
-            return new ToObservable<TSource>(source, SchedulerDefaults.Iteration);
+            return ToObservable_(source, SchedulerDefaults.Iteration);
         }
 
         public virtual IObservable<TSource> ToObservable<TSource>(IEnumerable<TSource> source, IScheduler scheduler)
         {
-            return new ToObservable<TSource>(source, scheduler);
+            return ToObservable_(source, scheduler);
+        }
+
+        private static IObservable<TSource> ToObservable_<TSource>(IEnumerable<TSource> source, IScheduler scheduler)
+        {
+            var longRunning = scheduler.AsLongRunning();
+            if (longRunning != null)
+            {
+                //
+                // [OK] Use of unsafe Subscribe: we're calling into a known producer implementation.
+                //
+                return new ToObservableLongRunning<TSource>(source, longRunning);
+            }
+            //
+            // [OK] Use of unsafe Subscribe: we're calling into a known producer implementation.
+            //
+            return new ToObservableRecursive<TSource>(source, scheduler);
         }
 
         #endregion

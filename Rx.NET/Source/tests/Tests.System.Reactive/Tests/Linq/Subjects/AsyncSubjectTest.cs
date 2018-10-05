@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class AsyncSubjectTest : ReactiveTest
     {
         [Fact]
@@ -347,7 +347,9 @@ namespace ReactiveTests.Tests
             t.Start();
 
             while (t.ThreadState != ThreadState.WaitSleepJoin)
+            {
                 ;
+            }
 
             e.Set();
             t.Join();
@@ -387,7 +389,9 @@ namespace ReactiveTests.Tests
             t.Start();
 
             while (t.ThreadState != ThreadState.WaitSleepJoin)
+            {
                 ;
+            }
 
             e.Set();
             t.Join();
@@ -396,7 +400,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsCompleted);
         }
 #endif
-        
+
         [Fact]
         public void GetResult_Context()
         {
@@ -421,16 +425,16 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.True(ctx.ran);
+            Assert.True(ctx.Ran);
         }
 
-        class MyContext : SynchronizationContext
+        private class MyContext : SynchronizationContext
         {
-            public bool ran;
+            public bool Ran;
 
             public override void Post(SendOrPostCallback d, object state)
             {
-                ran = true;
+                Ran = true;
                 d(state);
             }
         }

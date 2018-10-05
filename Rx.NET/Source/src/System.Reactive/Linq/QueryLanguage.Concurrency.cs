@@ -13,12 +13,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> ObserveOn<TSource>(IObservable<TSource> source, IScheduler scheduler)
         {
-            return Synchronization.ObserveOn<TSource>(source, scheduler);
+            return Synchronization.ObserveOn(source, scheduler);
         }
 
         public virtual IObservable<TSource> ObserveOn<TSource>(IObservable<TSource> source, SynchronizationContext context)
         {
-            return Synchronization.ObserveOn<TSource>(source, context);
+            return Synchronization.ObserveOn(source, context);
         }
 
         #endregion
@@ -27,12 +27,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> SubscribeOn<TSource>(IObservable<TSource> source, IScheduler scheduler)
         {
-            return Synchronization.SubscribeOn<TSource>(source, scheduler);
+            return Synchronization.SubscribeOn(source, scheduler);
         }
 
         public virtual IObservable<TSource> SubscribeOn<TSource>(IObservable<TSource> source, SynchronizationContext context)
         {
-            return Synchronization.SubscribeOn<TSource>(source, context);
+            return Synchronization.SubscribeOn(source, context);
         }
 
         #endregion

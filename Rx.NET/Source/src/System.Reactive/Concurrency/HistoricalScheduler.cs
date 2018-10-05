@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Reactive.Disposables;
+using System.Diagnostics;
 
 namespace System.Reactive.Concurrency
 {
@@ -68,15 +68,18 @@ namespace System.Reactive.Concurrency
     /// <summary>
     /// Provides a virtual time scheduler that uses <see cref="DateTimeOffset"/> for absolute time and <see cref="TimeSpan"/> for relative time.
     /// </summary>
+    [DebuggerDisplay("\\{ " +
+        nameof(Clock) + " = {" + nameof(Clock) + "} " +
+        nameof(Now) + " = {" + nameof(Now) + ".ToString(\"O\")} " +
+    "\\}")]
     public class HistoricalScheduler : HistoricalSchedulerBase
     {
-        private readonly SchedulerQueue<DateTimeOffset> queue = new SchedulerQueue<DateTimeOffset>();
+        private readonly SchedulerQueue<DateTimeOffset> _queue = new SchedulerQueue<DateTimeOffset>();
 
         /// <summary>
         /// Creates a new historical scheduler with the minimum value of <see cref="DateTimeOffset"/> as the initial clock value.
         /// </summary>
         public HistoricalScheduler()
-            : base()
         {
         }
 
@@ -106,13 +109,13 @@ namespace System.Reactive.Concurrency
         /// <returns>The next scheduled item.</returns>
         protected override IScheduledItem<DateTimeOffset> GetNext()
         {
-            while (queue.Count > 0)
+            while (_queue.Count > 0)
             {
-                var next = queue.Peek();
+                var next = _queue.Peek();
 
                 if (next.IsCanceled)
                 {
-                    queue.Dequeue();
+                    _queue.Dequeue();
                 }
                 else
                 {
@@ -135,20 +138,22 @@ namespace System.Reactive.Concurrency
         public override IDisposable ScheduleAbsolute<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var si = default(ScheduledItem<DateTimeOffset, TState>);
 
             var run = new Func<IScheduler, TState, IDisposable>((scheduler, state1) =>
             {
-                queue.Remove(si);
+                _queue.Remove(si);
                 return action(scheduler, state1);
             });
 
             si = new ScheduledItem<DateTimeOffset, TState>(this, state, run, dueTime, Comparer);
-            queue.Enqueue(si);
+            _queue.Enqueue(si);
 
-            return Disposable.Create(si.Cancel);
+            return si;
         }
     }
 }

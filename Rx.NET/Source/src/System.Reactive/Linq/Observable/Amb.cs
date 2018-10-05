@@ -2,11 +2,11 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Amb<TSource> : Producer<TSource, Amb<TSource>._>
+    internal sealed class Amb<TSource> : Producer<TSource, Amb<TSource>.AmbCoordinator>
     {
         private readonly IObservable<TSource> _left;
         private readonly IObservable<TSource> _right;
@@ -17,151 +17,119 @@ namespace System.Reactive.Linq.ObservableImpl
             _right = right;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override AmbCoordinator CreateSink(IObserver<TSource> observer) => new AmbCoordinator(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(AmbCoordinator sink) => sink.Run(_left, _right);
 
-        internal sealed class _ : Sink<TSource>
+        internal sealed class AmbCoordinator : IDisposable
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            private readonly AmbObserver _leftObserver;
+            private readonly AmbObserver _rightObserver;
+            private int _winner;
+
+            public AmbCoordinator(IObserver<TSource> observer)
             {
+                _leftObserver = new AmbObserver(observer, this, true);
+                _rightObserver = new AmbObserver(observer, this, false);
             }
 
-            private AmbState _choice;
-
-            public IDisposable Run(Amb<TSource> parent)
+            public void Run(IObservable<TSource> left, IObservable<TSource> right)
             {
-                var ls = new SingleAssignmentDisposable();
-                var rs = new SingleAssignmentDisposable();
-                var d = StableCompositeDisposable.Create(ls, rs);
-
-                var gate = new object();
-
-                var lo = new AmbObserver();
-                lo._disposable = d;
-                lo._target = new DecisionObserver(this, gate, AmbState.Left, ls, rs, lo);
-
-                var ro = new AmbObserver();
-                ro._disposable = d;
-                ro._target = new DecisionObserver(this, gate, AmbState.Right, rs, ls, ro);
-
-                _choice = AmbState.Neither;
-
-                ls.Disposable = parent._left.SubscribeSafe(lo);
-                rs.Disposable = parent._right.SubscribeSafe(ro);
-
-                return d;
+                _leftObserver.Run(left);
+                _rightObserver.Run(right);
             }
 
-            private sealed class DecisionObserver : IObserver<TSource>
+            public void Dispose()
             {
-                private readonly _ _parent;
-                private readonly AmbState _me;
-                private readonly IDisposable _subscription;
-                private readonly IDisposable _otherSubscription;
-                private readonly object _gate;
-                private readonly AmbObserver _observer;
+                _leftObserver.Dispose();
+                _rightObserver.Dispose();
+            }
 
-                public DecisionObserver(_ parent, object gate, AmbState me, IDisposable subscription, IDisposable otherSubscription, AmbObserver observer)
+            /// <summary>
+            /// Try winning the race for the right of emission.
+            /// </summary>
+            /// <param name="isLeft">If true, the contender is the left source.</param>
+            /// <returns>True if the contender has won the race.</returns>
+            public bool TryWin(bool isLeft)
+            {
+                var index = isLeft ? 1 : 2;
+
+                if (Volatile.Read(ref _winner) == index)
+                {
+                    return true;
+                }
+                if (Interlocked.CompareExchange(ref _winner, index, 0) == 0)
+                {
+                    (isLeft ? _rightObserver : _leftObserver).Dispose();
+                    return true;
+                }
+                return false;
+            }
+
+            private sealed class AmbObserver : IdentitySink<TSource>
+            {
+                private readonly AmbCoordinator _parent;
+                private readonly bool _isLeft;
+
+                /// <summary>
+                /// If true, this observer won the race and now can emit
+                /// on a fast path.
+                /// </summary>
+                private bool _iwon;
+
+                public AmbObserver(IObserver<TSource> downstream, AmbCoordinator parent, bool isLeft) : base(downstream)
                 {
                     _parent = parent;
-                    _gate = gate;
-                    _me = me;
-                    _subscription = subscription;
-                    _otherSubscription = otherSubscription;
-                    _observer = observer;
+                    _isLeft = isLeft;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnCompleted()
                 {
-                    lock (_gate)
+                    if (_iwon)
                     {
-                        if (_parent._choice == AmbState.Neither)
-                        {
-                            _parent._choice = _me;
-                            _otherSubscription.Dispose();
-                            _observer._disposable = _subscription;
-                            _observer._target = _parent._observer;
-                        }
-
-                        if (_parent._choice == _me)
-                        {
-                            _parent._observer.OnNext(value);
-                        }
+                        ForwardOnCompleted();
+                    }
+                    else if (_parent.TryWin(_isLeft))
+                    {
+                        _iwon = true;
+                        ForwardOnCompleted();
+                    }
+                    else
+                    {
+                        Dispose();
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
-                    lock (_gate)
+                    if (_iwon)
                     {
-                        if (_parent._choice == AmbState.Neither)
-                        {
-                            _parent._choice = _me;
-                            _otherSubscription.Dispose();
-                            _observer._disposable = _subscription;
-                            _observer._target = _parent._observer;
-                        }
-
-                        if (_parent._choice == _me)
-                        {
-                            _parent._observer.OnError(error);
-                            _parent.Dispose();
-                        }
+                        ForwardOnError(error);
+                    }
+                    else if (_parent.TryWin(_isLeft))
+                    {
+                        _iwon = true;
+                        ForwardOnError(error);
+                    }
+                    else
+                    {
+                        Dispose();
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnNext(TSource value)
                 {
-                    lock (_gate)
+                    if (_iwon)
                     {
-                        if (_parent._choice == AmbState.Neither)
-                        {
-                            _parent._choice = _me;
-                            _otherSubscription.Dispose();
-                            _observer._disposable = _subscription;
-                            _observer._target = _parent._observer;
-                        }
-
-                        if (_parent._choice == _me)
-                        {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
-                        }
+                        ForwardOnNext(value);
+                    }
+                    else
+                    if (_parent.TryWin(_isLeft))
+                    {
+                        _iwon = true;
+                        ForwardOnNext(value);
                     }
                 }
-            }
-
-            private sealed class AmbObserver : IObserver<TSource>
-            {
-                public IObserver<TSource> _target;
-
-                public IDisposable _disposable;
-
-                public void OnNext(TSource value)
-                {
-                    _target.OnNext(value);
-                }
-
-                public void OnError(Exception error)
-                {
-                    _target.OnError(error);
-                    _disposable.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    _target.OnCompleted();
-                    _disposable.Dispose();
-                }
-            }
-
-            private enum AmbState
-            {
-                Left,
-                Right,
-                Neither,
             }
         }
     }

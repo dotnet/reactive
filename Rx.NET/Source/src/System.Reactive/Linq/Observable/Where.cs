@@ -22,50 +22,37 @@ namespace System.Reactive.Linq.ObservableImpl
                 return new Predicate(_source, x => _predicate(x) && predicate(x));
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_predicate, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(_predicate, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly Func<TSource, bool> _predicate;
 
-                public _(Func<TSource, bool> predicate, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Func<TSource, bool> predicate, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _predicate = predicate;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
-                    var shouldRun = default(bool);
+                    var shouldRun = false;
                     try
                     {
                         shouldRun = _predicate(value);
                     }
                     catch (Exception exception)
                     {
-                        base._observer.OnError(exception);
-                        base.Dispose();
+                        ForwardOnError(exception);
                         return;
                     }
 
                     if (shouldRun)
                     {
-                        base._observer.OnNext(value);
+                        ForwardOnNext(value);
                     }
-                }
-
-                public void OnError(Exception error)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    base._observer.OnCompleted();
-                    base.Dispose();
                 }
             }
         }
@@ -81,52 +68,37 @@ namespace System.Reactive.Linq.ObservableImpl
                 _predicate = predicate;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_predicate, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(_predicate, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly Func<TSource, int, bool> _predicate;
                 private int _index;
 
-                public _(Func<TSource, int, bool> predicate, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Func<TSource, int, bool> predicate, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _predicate = predicate;
-                    _index = 0;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
-                    var shouldRun = default(bool);
+                    var shouldRun = false;
                     try
                     {
                         shouldRun = _predicate(value, checked(_index++));
                     }
                     catch (Exception exception)
                     {
-                        base._observer.OnError(exception);
-                        base.Dispose();
-                        return;
+                        ForwardOnError(exception);
                     }
 
                     if (shouldRun)
                     {
-                        base._observer.OnNext(value);
+                        ForwardOnNext(value);
                     }
-                }
-
-                public void OnError(Exception error)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    base._observer.OnCompleted();
-                    base.Dispose();
                 }
             }
         }

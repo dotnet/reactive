@@ -684,10 +684,8 @@ namespace System.Reactive.Linq
             {
                 return task.ToObservable(scheduler);
             }
-            else
-            {
-                return task.ToObservable();
-            }
+            
+            return task.ToObservable();
         }
 
         public virtual IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync)
@@ -725,14 +723,28 @@ namespace System.Reactive.Linq
                 result = task.ToObservable();
             }
 
-            return new AnonymousObservable<TSource>(observer =>
+            return new StartAsyncObservable<TSource>(cancellable, result);
+        }
+
+        private sealed class StartAsyncObservable<TSource> : ObservableBase<TSource>
+        {
+            private readonly CancellationDisposable _cancellable;
+            private readonly IObservable<TSource> _result;
+
+            public StartAsyncObservable(CancellationDisposable cancellable, IObservable<TSource> result)
+            {
+                _cancellable = cancellable;
+                _result = result;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TSource> observer)
             {
                 //
                 // [OK] Use of unsafe Subscribe: result is an AsyncSubject<TSource>.
                 //
-                var subscription = result.Subscribe/*Unsafe*/(observer);
-                return StableCompositeDisposable.Create(cancellable, subscription);
-            });
+                var subscription = _result.Subscribe/*Unsafe*/(observer);
+                return StableCompositeDisposable.Create(_cancellable, subscription);
+            }
         }
 
         #endregion
@@ -775,10 +787,8 @@ namespace System.Reactive.Linq
             {
                 return task.ToObservable(scheduler);
             }
-            else
-            {
-                return task.ToObservable();
-            }
+            
+            return task.ToObservable();
         }
 
         public virtual IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync)
@@ -816,14 +826,7 @@ namespace System.Reactive.Linq
                 result = task.ToObservable();
             }
 
-            return new AnonymousObservable<Unit>(observer =>
-            {
-                //
-                // [OK] Use of unsafe Subscribe: result is an AsyncSubject<TSource>.
-                //
-                var subscription = result.Subscribe/*Unsafe*/(observer);
-                return StableCompositeDisposable.Create(cancellable, subscription);
-            });
+            return new StartAsyncObservable<Unit>(cancellable, result);
         }
 
         #endregion
@@ -896,20 +899,20 @@ namespace System.Reactive.Linq
             return () =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((function, subject), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function();
+                        result = state.function();
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -922,23 +925,23 @@ namespace System.Reactive.Linq
 
         public virtual Func<T, IObservable<TResult>> ToAsync<T, TResult>(Func<T, TResult> function, IScheduler scheduler)
         {
-            return (first) =>
+            return first =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((function, subject, first), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first);
+                        result = state.function(state.first);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -954,20 +957,20 @@ namespace System.Reactive.Linq
             return (first, second) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second);
+                        result = state.function(state.first, state.second);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -983,20 +986,20 @@ namespace System.Reactive.Linq
             return (first, second, third) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third);
+                        result = state.function(state.first, state.second, state.third);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1012,20 +1015,20 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third, fourth);
+                        result = state.function(state.first, state.second, state.third, state.fourth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1041,20 +1044,20 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third, fourth, fifth);
+                        result = state.function(state.first, state.second, state.third, state.fourth, state.fifth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1070,20 +1073,20 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third, fourth, fifth, sixth);
+                        result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1099,20 +1102,20 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third, fourth, fifth, sixth, seventh);
+                        result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1128,20 +1131,20 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight);
+                        result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1157,20 +1160,20 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth);
+                        result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1186,20 +1189,20 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth);
+                        result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1215,20 +1218,20 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh);
+                        result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth, state.eleventh);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1244,20 +1247,20 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth);
+                        result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth, state.eleventh, state.twelfth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1273,20 +1276,20 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth);
+                        result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth, state.eleventh, state.twelfth, state.thirteenth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1302,20 +1305,20 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth);
+                        result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth, state.eleventh, state.twelfth, state.thirteenth, state.fourteenth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1331,20 +1334,20 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth);
+                        result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth, state.eleventh, state.twelfth, state.thirteenth, state.fourteenth, state.fifteenth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1360,20 +1363,20 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth), state =>
                 {
                     var result = default(TResult);
                     try
                     {
-                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth);
+                        result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth, state.eleventh, state.twelfth, state.thirteenth, state.fourteenth, state.fifteenth, state.sixteenth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(result);
-                    subject.OnCompleted();
+                    state.subject.OnNext(result);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1393,19 +1396,19 @@ namespace System.Reactive.Linq
             return () =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action), state =>
                 {
                     try
                     {
-                        action();
+                        state.action();
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
 
                 return subject.AsObservable();
@@ -1419,22 +1422,22 @@ namespace System.Reactive.Linq
 
         public virtual Func<TSource, IObservable<Unit>> ToAsync<TSource>(Action<TSource> action, IScheduler scheduler)
         {
-            return (first) =>
+            return first =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first), state =>
                 {
                     try
                     {
-                        action(first);
+                        state.action(state.first);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1450,19 +1453,19 @@ namespace System.Reactive.Linq
             return (first, second) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second), state =>
                 {
                     try
                     {
-                        action(first, second);
+                        state.action(state.first, state.second);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1478,19 +1481,19 @@ namespace System.Reactive.Linq
             return (first, second, third) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third), state =>
                 {
                     try
                     {
-                        action(first, second, third);
+                        state.action(state.first, state.second, state.third);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1506,19 +1509,19 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth), state =>
                 {
                     try
                     {
-                        action(first, second, third, fourth);
+                        state.action(state.first, state.second, state.third, state.fourth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1534,19 +1537,19 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth), state =>
                 {
                     try
                     {
-                        action(first, second, third, fourth, fifth);
+                        state.action(state.first, state.second, state.third, state.fourth, state.fifth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1562,19 +1565,19 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth), state =>
                 {
                     try
                     {
-                        action(first, second, third, fourth, fifth, sixth);
+                        state.action(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1590,19 +1593,19 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh), state =>
                 {
                     try
                     {
-                        action(first, second, third, fourth, fifth, sixth, seventh);
+                        state.action(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1615,22 +1618,22 @@ namespace System.Reactive.Linq
 
         public virtual Func<T1, T2, T3, T4, T5, T6, T7, T8, IObservable<Unit>> ToAsync<T1, T2, T3, T4, T5, T6, T7, T8>(Action<T1, T2, T3, T4, T5, T6, T7, T8> action, IScheduler scheduler)
         {
-            return (first, second, third, fourth, fifth, sixth, seventh, eight) =>
+            return (first, second, third, fourth, fifth, sixth, seventh, eighth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth), state =>
                 {
                     try
                     {
-                        action(first, second, third, fourth, fifth, sixth, seventh, eight);
+                        state.action(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eighth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1646,19 +1649,19 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth), state =>
                 {
                     try
                     {
-                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth);
+                        state.action(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eighth, state.ninth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1674,19 +1677,19 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth), state =>
                 {
                     try
                     {
-                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth);
+                        state.action(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eighth, state.ninth, state.tenth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1702,19 +1705,19 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh), state =>
                 {
                     try
                     {
-                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh);
+                        state.action(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eighth, state.ninth, state.tenth, state.eleventh);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1730,19 +1733,19 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth), state =>
                 {
                     try
                     {
-                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth);
+                        state.action(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eighth, state.ninth, state.tenth, state.eleventh, state.twelfth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1758,19 +1761,19 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth), state =>
                 {
                     try
                     {
-                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth);
+                        state.action(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eighth, state.ninth, state.tenth, state.eleventh, state.twelfth, state.thirteenth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1786,19 +1789,19 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth), state =>
                 {
                     try
                     {
-                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth);
+                        state.action(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eighth, state.ninth, state.tenth, state.eleventh, state.twelfth, state.thirteenth, state.fourteenth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1814,19 +1817,19 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth), state =>
                 {
                     try
                     {
-                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth);
+                        state.action(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eighth, state.ninth, state.tenth, state.eleventh, state.twelfth, state.thirteenth, state.fourteenth, state.fifteenth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };
@@ -1842,19 +1845,19 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule(() =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth), state =>
                 {
                     try
                     {
-                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth);
+                        state.action(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eighth, state.ninth, state.tenth, state.eleventh, state.twelfth, state.thirteenth, state.fourteenth, state.fifteenth, state.sixteenth);
                     }
                     catch (Exception exception)
                     {
-                        subject.OnError(exception);
+                        state.subject.OnError(exception);
                         return;
                     }
-                    subject.OnNext(Unit.Default);
-                    subject.OnCompleted();
+                    state.subject.OnNext(Unit.Default);
+                    state.subject.OnCompleted();
                 });
                 return subject.AsObservable();
             };

@@ -11,7 +11,7 @@ namespace System.Reactive.Subjects
     /// Observers can subscribe to the subject to receive the last (or initial) value and all subsequent notifications.
     /// </summary>
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
-    public sealed class BehaviorSubject<T> : SubjectBase<T>, IDisposable
+    public sealed class BehaviorSubject<T> : SubjectBase<T>
     {
         #region Fields
 
@@ -115,18 +115,17 @@ namespace System.Reactive.Subjects
             {
                 if (_isDisposed)
                 {
-                    value = default(T);
+                    value = default;
                     return false;
                 }
-                else if (_exception != null)
+
+                if (_exception != null)
                 {
                     throw _exception;
                 }
-                else
-                {
-                    value = _value;
-                    return true;
-                }
+
+                value = _value;
+                return true;
             }
         }
 
@@ -167,7 +166,9 @@ namespace System.Reactive.Subjects
         public override void OnError(Exception error)
         {
             if (error == null)
+            {
                 throw new ArgumentNullException(nameof(error));
+            }
 
             var os = default(IObserver<T>[]);
             lock (_gate)
@@ -232,7 +233,9 @@ namespace System.Reactive.Subjects
         public override IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
+            {
                 throw new ArgumentNullException(nameof(observer));
+            }
 
             var ex = default(Exception);
 
@@ -275,7 +278,7 @@ namespace System.Reactive.Subjects
             {
                 _isDisposed = true;
                 _observers = null;
-                _value = default(T);
+                _value = default;
                 _exception = null;
             }
         }
@@ -283,7 +286,9 @@ namespace System.Reactive.Subjects
         private void CheckDisposed()
         {
             if (_isDisposed)
+            {
                 throw new ObjectDisposedException(string.Empty);
+            }
         }
 
         #endregion

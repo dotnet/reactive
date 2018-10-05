@@ -4,7 +4,6 @@
 
 #if !NO_REMOTING
 using System;
-using System.IO;
 using System.Reactive.Concurrency;
 using System.Reactive.PlatformServices;
 using System.Runtime.CompilerServices;
@@ -13,7 +12,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     [Serializable]
     public class DefaultConcurrencyAbstractionLayerTest
     {
@@ -115,7 +114,9 @@ namespace ReactiveTests.Tests
                     var state = (MarshalByRefCell<ManualResetEvent>)_domain.GetData("state");
 
                     if (n++ == 10)
+                    {
                         state.Value.Set();
+                    }
                 });
             });
 
@@ -151,7 +152,9 @@ namespace ReactiveTests.Tests
                     var state = (MarshalByRefCell<ManualResetEvent>)_domain.GetData("state");
 
                     if (n++ == 10)
+                    {
                         state.Value.Set();
+                    }
                 });
             });
 
@@ -261,7 +264,9 @@ namespace ReactiveTests.Tests
                 var d = slr.ScheduleLongRunning(cancel =>
                 {
                     while (!cancel.IsDisposed)
+                    {
                         ;
+                    }
 
                     w.Set();
                 });
@@ -281,9 +286,9 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Cant_Locate_Scheduler()
         {
-           
-                Cant_Locate_Scheduler_NoPlib();
-           
+
+            Cant_Locate_Scheduler_NoPlib();
+
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

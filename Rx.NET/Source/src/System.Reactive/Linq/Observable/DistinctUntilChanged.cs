@@ -19,11 +19,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private readonly Func<TSource, TKey> _keySelector;
             private readonly IEqualityComparer<TKey> _comparer;
@@ -31,17 +31,14 @@ namespace System.Reactive.Linq.ObservableImpl
             private TKey _currentKey;
             private bool _hasCurrentKey;
 
-            public _(DistinctUntilChanged<TSource, TKey> parent, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(DistinctUntilChanged<TSource, TKey> parent, IObserver<TSource> observer)
+                : base(observer)
             {
                 _keySelector = parent._keySelector;
                 _comparer = parent._comparer;
-
-                _currentKey = default(TKey);
-                _hasCurrentKey = false;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var key = default(TKey);
                 try
@@ -50,8 +47,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    ForwardOnError(exception);
                     return;
                 }
 
@@ -64,8 +60,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
-                        base._observer.OnError(exception);
-                        base.Dispose();
+                        ForwardOnError(exception);
                         return;
                     }
                 }
@@ -74,20 +69,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _hasCurrentKey = true;
                     _currentKey = key;
-                    base._observer.OnNext(value);
+                    ForwardOnNext(value);
                 }
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
             }
         }
     }

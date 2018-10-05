@@ -12,14 +12,14 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class ObservableSafetyTest : ReactiveTest
     {
         [Fact]
         public void SubscribeSafe_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe<int>(default(IObservable<int>), Observer.Create<int>(_ => { })));
-            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe<int>(Observable.Return(42), default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe(default, Observer.Create<int>(_ => { })));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ObservableExtensions.SubscribeSafe(Observable.Return(42), default));
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace ReactiveTests.Tests
 
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 42),
                 OnNext(220, 43),
                 OnNext(230, 44),
@@ -68,7 +68,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class RogueObservable : IObservable<int>
+        private class RogueObservable : IObservable<int>
         {
             private readonly Exception _ex;
 
@@ -165,13 +165,13 @@ namespace ReactiveTests.Tests
 
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3)
             );
 
-            var ys = scheduler.CreateHotObservable<int>(
+            var ys = scheduler.CreateHotObservable(
                 OnNext(215, 1),
                 OnNext(225, 2),
                 OnNext(235, 3)
@@ -184,7 +184,9 @@ namespace ReactiveTests.Tests
                 res.Subscribe(z =>
                 {
                     if (z == 4)
+                    {
                         throw ex;
+                    }
                 });
             });
 
@@ -216,13 +218,13 @@ namespace ReactiveTests.Tests
 
             var scheduler = new TestScheduler();
 
-            var xs = scheduler.CreateHotObservable<int>(
+            var xs = scheduler.CreateHotObservable(
                 OnNext(210, 1),
                 OnNext(220, 2),
                 OnNext(230, 3)
             );
 
-            var ys = scheduler.CreateHotObservable<int>(
+            var ys = scheduler.CreateHotObservable(
                 OnNext(215, 1),
                 OnNext(225, 2),
                 OnNext(235, 3)
@@ -256,7 +258,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        class MyObserver : ObserverBase<int>
+        private class MyObserver : ObserverBase<int>
         {
             private readonly Func<int, bool> _predicate;
             private readonly Exception _exception;
@@ -270,7 +272,9 @@ namespace ReactiveTests.Tests
             protected override void OnNextCore(int value)
             {
                 if (_predicate(value))
+                {
                     throw _exception;
+                }
             }
 
             protected override void OnErrorCore(Exception error)

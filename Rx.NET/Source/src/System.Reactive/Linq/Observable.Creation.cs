@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,9 +27,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, IDisposable> subscribe)
         {
             if (subscribe == null)
+            {
                 throw new ArgumentNullException(nameof(subscribe));
+            }
 
-            return s_impl.Create<TResult>(subscribe);
+            return s_impl.Create(subscribe);
         }
 
         /// <summary>
@@ -48,9 +49,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Action> subscribe)
         {
             if (subscribe == null)
+            {
                 throw new ArgumentNullException(nameof(subscribe));
+            }
 
-            return s_impl.Create<TResult>(subscribe);
+            return s_impl.Create(subscribe);
         }
 
         #endregion
@@ -70,9 +73,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync)
         {
             if (subscribeAsync == null)
+            {
                 throw new ArgumentNullException(nameof(subscribeAsync));
+            }
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return s_impl.Create(subscribeAsync);
         }
 
         /// <summary>
@@ -86,9 +91,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task> subscribeAsync)
         {
             if (subscribeAsync == null)
+            {
                 throw new ArgumentNullException(nameof(subscribeAsync));
+            }
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return s_impl.Create(subscribeAsync);
         }
 
         /// <summary>
@@ -104,9 +111,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync)
         {
             if (subscribeAsync == null)
+            {
                 throw new ArgumentNullException(nameof(subscribeAsync));
+            }
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return s_impl.Create(subscribeAsync);
         }
 
         /// <summary>
@@ -120,9 +129,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task<IDisposable>> subscribeAsync)
         {
             if (subscribeAsync == null)
+            {
                 throw new ArgumentNullException(nameof(subscribeAsync));
+            }
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return s_impl.Create(subscribeAsync);
         }
 
         /// <summary>
@@ -138,9 +149,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync)
         {
             if (subscribeAsync == null)
+            {
                 throw new ArgumentNullException(nameof(subscribeAsync));
+            }
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return s_impl.Create(subscribeAsync);
         }
 
         /// <summary>
@@ -154,9 +167,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task<Action>> subscribeAsync)
         {
             if (subscribeAsync == null)
+            {
                 throw new ArgumentNullException(nameof(subscribeAsync));
+            }
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return s_impl.Create(subscribeAsync);
         }
 
         #endregion
@@ -173,9 +188,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Defer<TResult>(Func<IObservable<TResult>> observableFactory)
         {
             if (observableFactory == null)
+            {
                 throw new ArgumentNullException(nameof(observableFactory));
+            }
 
-            return s_impl.Defer<TResult>(observableFactory);
+            return s_impl.Defer(observableFactory);
         }
 
         #endregion
@@ -193,9 +210,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Defer<TResult>(Func<Task<IObservable<TResult>>> observableFactoryAsync)
         {
             if (observableFactoryAsync == null)
+            {
                 throw new ArgumentNullException(nameof(observableFactoryAsync));
+            }
 
-            return s_impl.Defer<TResult>(observableFactoryAsync);
+            return s_impl.Defer(observableFactoryAsync);
         }
 
         /// <summary>
@@ -211,9 +230,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> DeferAsync<TResult>(Func<CancellationToken, Task<IObservable<TResult>>> observableFactoryAsync)
         {
             if (observableFactoryAsync == null)
+            {
                 throw new ArgumentNullException(nameof(observableFactoryAsync));
+            }
 
-            return s_impl.Defer<TResult>(observableFactoryAsync);
+            return s_impl.Defer(observableFactoryAsync);
         }
 
         #endregion
@@ -251,7 +272,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Empty<TResult>(IScheduler scheduler)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Empty<TResult>(scheduler);
         }
@@ -267,7 +290,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Empty<TResult>(IScheduler scheduler, TResult witness)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Empty<TResult>(scheduler); // Pure inference - no specialized target method.
         }
@@ -290,13 +315,21 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
-            if (iterate == null)
-                throw new ArgumentNullException(nameof(iterate));
-            if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+            }
 
-            return s_impl.Generate<TState, TResult>(initialState, condition, iterate, resultSelector);
+            if (iterate == null)
+            {
+                throw new ArgumentNullException(nameof(iterate));
+            }
+
+            if (resultSelector == null)
+            {
+                throw new ArgumentNullException(nameof(resultSelector));
+            }
+
+            return s_impl.Generate(initialState, condition, iterate, resultSelector);
         }
 
         /// <summary>
@@ -314,15 +347,26 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, IScheduler scheduler)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
-            if (iterate == null)
-                throw new ArgumentNullException(nameof(iterate));
-            if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
+            }
 
-            return s_impl.Generate<TState, TResult>(initialState, condition, iterate, resultSelector, scheduler);
+            if (iterate == null)
+            {
+                throw new ArgumentNullException(nameof(iterate));
+            }
+
+            if (resultSelector == null)
+            {
+                throw new ArgumentNullException(nameof(resultSelector));
+            }
+
+            if (scheduler == null)
+            {
+                throw new ArgumentNullException(nameof(scheduler));
+            }
+
+            return s_impl.Generate(initialState, condition, iterate, resultSelector, scheduler);
         }
 
         #endregion
@@ -360,12 +404,14 @@ namespace System.Reactive.Linq
         /// <param name="start">The value of the first integer in the sequence.</param>
         /// <param name="count">The number of sequential integers to generate.</param>
         /// <returns>An observable sequence that contains a range of sequential integral numbers.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="Int32.MaxValue"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="int.MaxValue"/>.</exception>
         public static IObservable<int> Range(int start, int count)
         {
-            var max = ((long)start) + count - 1;
+            var max = (long)start + count - 1;
             if (count < 0 || max > int.MaxValue)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return s_impl.Range(start, count);
         }
@@ -377,16 +423,20 @@ namespace System.Reactive.Linq
         /// <param name="count">The number of sequential integers to generate.</param>
         /// <param name="scheduler">Scheduler to run the generator loop on.</param>
         /// <returns>An observable sequence that contains a range of sequential integral numbers.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="Int32.MaxValue"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="int.MaxValue"/>.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
         public static IObservable<int> Range(int start, int count, IScheduler scheduler)
         {
-            var max = ((long)start) + count - 1;
+            var max = (long)start + count - 1;
             if (count < 0 || max > int.MaxValue)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Range(start, count, scheduler);
         }
@@ -403,7 +453,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that repeats the given element infinitely.</returns>
         public static IObservable<TResult> Repeat<TResult>(TResult value)
         {
-            return s_impl.Repeat<TResult>(value);
+            return s_impl.Repeat(value);
         }
 
         /// <summary>
@@ -417,9 +467,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Repeat<TResult>(TResult value, IScheduler scheduler)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
-            return s_impl.Repeat<TResult>(value, scheduler);
+            return s_impl.Repeat(value, scheduler);
         }
 
         /// <summary>
@@ -433,9 +485,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Repeat<TResult>(TResult value, int repeatCount)
         {
             if (repeatCount < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(repeatCount));
+            }
 
-            return s_impl.Repeat<TResult>(value, repeatCount);
+            return s_impl.Repeat(value, repeatCount);
         }
 
         /// <summary>
@@ -451,11 +505,16 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Repeat<TResult>(TResult value, int repeatCount, IScheduler scheduler)
         {
             if (repeatCount < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(repeatCount));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
+            }
 
-            return s_impl.Repeat<TResult>(value, repeatCount, scheduler);
+            if (scheduler == null)
+            {
+                throw new ArgumentNullException(nameof(scheduler));
+            }
+
+            return s_impl.Repeat(value, repeatCount, scheduler);
         }
 
         #endregion
@@ -470,7 +529,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the single specified element.</returns>
         public static IObservable<TResult> Return<TResult>(TResult value)
         {
-            return s_impl.Return<TResult>(value);
+            return s_impl.Return(value);
         }
 
         /// <summary>
@@ -484,9 +543,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Return<TResult>(TResult value, IScheduler scheduler)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
-            return s_impl.Return<TResult>(value, scheduler);
+            return s_impl.Return(value, scheduler);
         }
 
         #endregion
@@ -503,7 +564,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Throw<TResult>(Exception exception)
         {
             if (exception == null)
+            {
                 throw new ArgumentNullException(nameof(exception));
+            }
 
             return s_impl.Throw<TResult>(exception);
         }
@@ -519,7 +582,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Throw<TResult>(Exception exception, TResult witness)
         {
             if (exception == null)
+            {
                 throw new ArgumentNullException(nameof(exception));
+            }
 
             return s_impl.Throw<TResult>(exception); // Pure inference - no specialized target method.
         }
@@ -535,9 +600,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Throw<TResult>(Exception exception, IScheduler scheduler)
         {
             if (exception == null)
+            {
                 throw new ArgumentNullException(nameof(exception));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Throw<TResult>(exception, scheduler);
         }
@@ -554,9 +624,14 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Throw<TResult>(Exception exception, IScheduler scheduler, TResult witness)
         {
             if (exception == null)
+            {
                 throw new ArgumentNullException(nameof(exception));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return s_impl.Throw<TResult>(exception, scheduler); // Pure inference - no specialized target method.
         }
@@ -569,7 +644,7 @@ namespace System.Reactive.Linq
         /// Constructs an observable sequence that depends on a resource object, whose lifetime is tied to the resulting observable sequence's lifetime.
         /// </summary>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="System.IDisposable"/>.</typeparam>
+        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="IDisposable"/>.</typeparam>
         /// <param name="resourceFactory">Factory function to obtain a resource object.</param>
         /// <param name="observableFactory">Factory function to obtain an observable sequence that depends on the obtained resource.</param>
         /// <returns>An observable sequence whose lifetime controls the lifetime of the dependent resource object.</returns>
@@ -577,11 +652,16 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Using<TResult, TResource>(Func<TResource> resourceFactory, Func<TResource, IObservable<TResult>> observableFactory) where TResource : IDisposable
         {
             if (resourceFactory == null)
+            {
                 throw new ArgumentNullException(nameof(resourceFactory));
-            if (observableFactory == null)
-                throw new ArgumentNullException(nameof(observableFactory));
+            }
 
-            return s_impl.Using<TResult, TResource>(resourceFactory, observableFactory);
+            if (observableFactory == null)
+            {
+                throw new ArgumentNullException(nameof(observableFactory));
+            }
+
+            return s_impl.Using(resourceFactory, observableFactory);
         }
 
         #endregion
@@ -593,7 +673,7 @@ namespace System.Reactive.Linq
         /// The CancellationToken passed to the asynchronous methods is tied to the returned disposable subscription, allowing best-effort cancellation at any stage of the resource acquisition or usage.
         /// </summary>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="System.IDisposable"/>.</typeparam>
+        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="IDisposable"/>.</typeparam>
         /// <param name="resourceFactoryAsync">Asynchronous factory function to obtain a resource object.</param>
         /// <param name="observableFactoryAsync">Asynchronous factory function to obtain an observable sequence that depends on the obtained resource.</param>
         /// <returns>An observable sequence whose lifetime controls the lifetime of the dependent resource object.</returns>
@@ -603,11 +683,16 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Using<TResult, TResource>(Func<CancellationToken, Task<TResource>> resourceFactoryAsync, Func<TResource, CancellationToken, Task<IObservable<TResult>>> observableFactoryAsync) where TResource : IDisposable
         {
             if (resourceFactoryAsync == null)
+            {
                 throw new ArgumentNullException(nameof(resourceFactoryAsync));
-            if (observableFactoryAsync == null)
-                throw new ArgumentNullException(nameof(observableFactoryAsync));
+            }
 
-            return s_impl.Using<TResult, TResource>(resourceFactoryAsync, observableFactoryAsync);
+            if (observableFactoryAsync == null)
+            {
+                throw new ArgumentNullException(nameof(observableFactoryAsync));
+            }
+
+            return s_impl.Using(resourceFactoryAsync, observableFactoryAsync);
         }
 
         #endregion

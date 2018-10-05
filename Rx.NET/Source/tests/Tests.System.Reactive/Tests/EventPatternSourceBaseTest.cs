@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class EventPatternSourceBaseTest
     {
         [Fact]
@@ -21,8 +21,10 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new MyEventPatternSource(null, (a, x) => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => new MyEventPatternSource(xs, null));
 
-            var e = new MyEventPatternSource(xs, (a, x) => { });
-            e.GetInvoke = h => (_, __) => { };
+            var e = new MyEventPatternSource(xs, (a, x) => { })
+            {
+                GetInvoke = h => (_, __) => { }
+            };
 
             ReactiveAssert.Throws<ArgumentNullException>(() => e.OnNext += null);
 
@@ -34,7 +36,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class MyEventPatternSource : EventPatternSourceBase<object, EventArgs>
+    internal class MyEventPatternSource : EventPatternSourceBase<object, EventArgs>
     {
         public MyEventPatternSource(IObservable<EventPattern<object, EventArgs>> source, Action<Action<object, EventArgs>, EventPattern<object, EventArgs>> invokeHandler)
             : base(source, invokeHandler)
@@ -47,7 +49,7 @@ namespace ReactiveTests.Tests
         {
             add
             {
-                base.Add(value, GetInvoke(value));
+                Add(value, GetInvoke(value));
             }
 
             remove

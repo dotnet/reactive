@@ -13,7 +13,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> IgnoreElements<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return new IgnoreElementsAsyncIterator<TSource>(source);
         }

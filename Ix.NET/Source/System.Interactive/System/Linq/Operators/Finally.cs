@@ -18,9 +18,14 @@ namespace System.Linq
         public static IEnumerable<TSource> Finally<TSource>(this IEnumerable<TSource> source, Action finallyAction)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (finallyAction == null)
+            {
                 throw new ArgumentNullException(nameof(finallyAction));
+            }
 
             return FinallyCore(source, finallyAction);
         }

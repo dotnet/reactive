@@ -18,9 +18,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable Schedule(this IScheduler scheduler, Action<Action> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return scheduler.Schedule(action, (_action, self) => _action(() => self(_action)));
         }
@@ -37,56 +42,23 @@ namespace System.Reactive.Concurrency
         public static IDisposable Schedule<TState>(this IScheduler scheduler, TState state, Action<TState, Action<TState>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
+            }
 
-            return scheduler.Schedule(new Pair<TState, Action<TState, Action<TState>>> { First = state, Second = action }, InvokeRec1);
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return scheduler.Schedule((state, action), (s, p) => InvokeRec1(s, p));
         }
 
-        private static IDisposable InvokeRec1<TState>(IScheduler scheduler, Pair<TState, Action<TState, Action<TState>>> pair)
+        private static IDisposable InvokeRec1<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState>> action) tuple)
         {
-            var group = new CompositeDisposable(1);
-            var gate = new object();
-            var state = pair.First;
-            var action = pair.Second;
-
-            Action<TState> recursiveAction = null;
-            recursiveAction = state1 => action(state1, state2 =>
-            {
-                var isAdded = false;
-                var isDone = false;
-                var d = default(IDisposable);
-                d = scheduler.Schedule(state2, (scheduler1, state3) =>
-                {
-                    lock (gate)
-                    {
-                        if (isAdded)
-                        {
-                            group.Remove(d);
-                        }
-                        else
-                        {
-                            isDone = true;
-                        }
-                    }
-                    recursiveAction(state3);
-                    return Disposable.Empty;
-                });
-
-                lock (gate)
-                {
-                    if (!isDone)
-                    {
-                        group.Add(d);
-                        isAdded = true;
-                    }
-                }
-            });
-
-            recursiveAction(state);
-
-            return group;
+            var recursiveInvoker = new InvokeRec1State<TState>(scheduler, tuple.action);
+            recursiveInvoker.InvokeFirst(tuple.state);
+            return recursiveInvoker;
         }
 
         /// <summary>
@@ -100,9 +72,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable Schedule(this IScheduler scheduler, TimeSpan dueTime, Action<Action<TimeSpan>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return scheduler.Schedule(action, dueTime, (_action, self) => _action(dt => self(_action, dt)));
         }
@@ -120,56 +97,23 @@ namespace System.Reactive.Concurrency
         public static IDisposable Schedule<TState>(this IScheduler scheduler, TState state, TimeSpan dueTime, Action<TState, Action<TState, TimeSpan>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
+            }
 
-            return scheduler.Schedule(new Pair<TState, Action<TState, Action<TState, TimeSpan>>> { First = state, Second = action }, dueTime, InvokeRec2);
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return scheduler.Schedule((state, action), dueTime, (s, p) => InvokeRec2(s, p));
         }
 
-        private static IDisposable InvokeRec2<TState>(IScheduler scheduler, Pair<TState, Action<TState, Action<TState, TimeSpan>>> pair)
+        private static IDisposable InvokeRec2<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState, TimeSpan>> action) tuple)
         {
-            var group = new CompositeDisposable(1);
-            var gate = new object();
-            var state = pair.First;
-            var action = pair.Second;
-
-            Action<TState> recursiveAction = null;
-            recursiveAction = state1 => action(state1, (state2, dueTime1) =>
-            {
-                var isAdded = false;
-                var isDone = false;
-                var d = default(IDisposable);
-                d = scheduler.Schedule(state2, dueTime1, (scheduler1, state3) =>
-                {
-                    lock (gate)
-                    {
-                        if (isAdded)
-                        {
-                            group.Remove(d);
-                        }
-                        else
-                        {
-                            isDone = true;
-                        }
-                    }
-                    recursiveAction(state3);
-                    return Disposable.Empty;
-                });
-                
-                lock (gate)
-                {
-                    if (!isDone)
-                    {
-                        group.Add(d);
-                        isAdded = true;
-                    }
-                }
-            });
-
-            recursiveAction(state);
-
-            return group;
+            var recursiveInvoker = new InvokeRec2State<TState>(scheduler, tuple.action);
+            recursiveInvoker.InvokeFirst(tuple.state);
+            return recursiveInvoker;
         }
 
         /// <summary>
@@ -183,9 +127,14 @@ namespace System.Reactive.Concurrency
         public static IDisposable Schedule(this IScheduler scheduler, DateTimeOffset dueTime, Action<Action<DateTimeOffset>> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return scheduler.Schedule(action, dueTime, (_action, self) => _action(dt => self(_action, dt)));
         }
@@ -203,65 +152,127 @@ namespace System.Reactive.Concurrency
         public static IDisposable Schedule<TState>(this IScheduler scheduler, TState state, DateTimeOffset dueTime, Action<TState, Action<TState, DateTimeOffset>> action)
         {
             if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
-
-            return scheduler.Schedule(new Pair<TState, Action<TState, Action<TState, DateTimeOffset>>> { First = state, Second = action }, dueTime, InvokeRec3);
-        }
-
-        private static IDisposable InvokeRec3<TState>(IScheduler scheduler, Pair<TState, Action<TState, Action<TState, DateTimeOffset>>> pair)
-        {
-            var group = new CompositeDisposable(1);
-            var gate = new object();
-            var state = pair.First;
-            var action = pair.Second;
-
-            Action<TState> recursiveAction = null;
-            recursiveAction = state1 => action(state1, (state2, dueTime1) =>
             {
-                var isAdded = false;
-                var isDone = false;
-                var d = default(IDisposable);
-                d = scheduler.Schedule(state2, dueTime1, (scheduler1, state3) =>
-                {
-                    lock (gate)
-                    {
-                        if (isAdded)
-                        {
-                            group.Remove(d);
-                        }
-                        else
-                        {
-                            isDone = true;
-                        }
-                    }
-                    recursiveAction(state3);
-                    return Disposable.Empty;
-                });
+                throw new ArgumentNullException(nameof(scheduler));
+            }
 
-                lock (gate)
-                {
-                    if (!isDone)
-                    {
-                        group.Add(d);
-                        isAdded = true;
-                    }
-                }
-            });
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
 
-            recursiveAction(state);
-
-            return group;
+            return scheduler.Schedule((state, action), dueTime, (s, p) => InvokeRec3(s, p));
         }
 
-#if !NO_SERIALIZABLE
-        [Serializable]
-#endif
-        private struct Pair<T1, T2>
+        private static IDisposable InvokeRec3<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState, DateTimeOffset>> action) tuple)
         {
-            public T1 First;
-            public T2 Second;
+            var recursiveInvoker = new InvokeRec3State<TState>(scheduler, tuple.action);
+            recursiveInvoker.InvokeFirst(tuple.state);
+            return recursiveInvoker;
+        }
+
+        private abstract class InvokeRecBaseState : IDisposable
+        {
+            protected readonly IScheduler Scheduler;
+
+            protected readonly CompositeDisposable Group;
+
+            protected InvokeRecBaseState(IScheduler scheduler)
+            {
+                Scheduler = scheduler;
+                Group = new CompositeDisposable();
+            }
+
+            public void Dispose()
+            {
+                Group.Dispose();
+            }
+
+        }
+
+        private sealed class InvokeRec1State<TState> : InvokeRecBaseState
+        {
+            private readonly Action<TState, Action<TState>> _action;
+            private readonly Action<TState> _recurseCallback;
+
+            public InvokeRec1State(IScheduler scheduler, Action<TState, Action<TState>> action) : base(scheduler)
+            {
+                _action = action;
+                _recurseCallback = state => InvokeNext(state);
+            }
+
+            private void InvokeNext(TState state)
+            {
+                var sad = new SingleAssignmentDisposable();
+
+                Group.Add(sad);
+                sad.Disposable = Scheduler.ScheduleAction((state, sad, @this: this), nextState =>
+                {
+                    nextState.@this.Group.Remove(nextState.sad);
+                    nextState.@this.InvokeFirst(nextState.state);
+                });
+            }
+
+            internal void InvokeFirst(TState state)
+            {
+                _action(state, _recurseCallback);
+            }
+        }
+
+        private sealed class InvokeRec2State<TState> : InvokeRecBaseState
+        {
+            private readonly Action<TState, Action<TState, TimeSpan>> _action;
+            private readonly Action<TState, TimeSpan> _recurseCallback;
+
+            public InvokeRec2State(IScheduler scheduler, Action<TState, Action<TState, TimeSpan>> action) : base(scheduler)
+            {
+                _action = action;
+                _recurseCallback = (state, time) => InvokeNext(state, time);
+            }
+
+            private void InvokeNext(TState state, TimeSpan time)
+            {
+                var sad = new SingleAssignmentDisposable();
+
+                Group.Add(sad);
+                sad.Disposable = Scheduler.ScheduleAction((state, sad, @this: this), time, nextState => {
+                    nextState.@this.Group.Remove(nextState.sad);
+                    nextState.@this.InvokeFirst(nextState.state);
+                });
+            }
+
+            internal void InvokeFirst(TState state)
+            {
+                _action(state, _recurseCallback);
+            }
+        }
+
+        private sealed class InvokeRec3State<TState> : InvokeRecBaseState
+        {
+            private readonly Action<TState, Action<TState, DateTimeOffset>> _action;
+            private readonly Action<TState, DateTimeOffset> _recurseCallback;
+
+            public InvokeRec3State(IScheduler scheduler, Action<TState, Action<TState, DateTimeOffset>> action) : base(scheduler)
+            {
+                _action = action;
+                _recurseCallback = (state, dtOffset) => InvokeNext(state, dtOffset);
+            }
+
+            private void InvokeNext(TState state, DateTimeOffset dtOffset)
+            {
+                var sad = new SingleAssignmentDisposable();
+
+                Group.Add(sad);
+                sad.Disposable = Scheduler.ScheduleAction((state, sad, @this: this), dtOffset, nextState => {
+                    nextState.@this.Group.Remove(nextState.sad);
+                    nextState.@this.InvokeFirst(nextState.state);
+                });
+            }
+
+            internal void InvokeFirst(TState state)
+            {
+                _action(state, _recurseCallback);
+            }
         }
     }
 }

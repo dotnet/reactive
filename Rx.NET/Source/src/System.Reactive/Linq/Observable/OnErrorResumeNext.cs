@@ -15,38 +15,35 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_sources);
+        protected override void Run(_ sink) => sink.Run(_sources);
 
         internal sealed class _ : TailRecursiveSink<TSource>
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
             protected override IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source)
             {
                 if (source is OnErrorResumeNext<TSource> oern)
+                {
                     return oern._sources;
+                }
 
                 return null;
             }
 
-            public override void OnNext(TSource value)
-            {
-                base._observer.OnNext(value);
-            }
-
             public override void OnError(Exception error)
             {
-                _recurse();
+                Recurse();
             }
 
             public override void OnCompleted()
             {
-                _recurse();
+                Recurse();
             }
 
             protected override bool Fail(Exception error)

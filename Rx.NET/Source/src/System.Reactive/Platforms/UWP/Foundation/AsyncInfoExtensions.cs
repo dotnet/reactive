@@ -3,10 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 #if HAS_WINRT
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Threading;
 using Windows.Foundation;
 
 namespace System.Reactive.Windows.Foundation
@@ -29,7 +26,9 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<Unit> ToObservable(this IAsyncAction source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return new AsyncInfoToObservableBridge<Unit, Unit>(
                 source,
@@ -52,7 +51,9 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<Unit> ToObservable<TProgress>(this IAsyncActionWithProgress<TProgress> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.ToObservable_(null);
         }
@@ -69,16 +70,21 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<Unit> ToObservable<TProgress>(this IAsyncActionWithProgress<TProgress> source, IProgress<TProgress> progress)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (progress == null)
+            {
                 throw new ArgumentNullException(nameof(progress));
+            }
 
             return source.ToObservable_(progress);
         }
 
         /// <summary>
         /// Converts a Windows Runtime asynchronous action to an observable sequence reporting its progress.
-        /// Each observer subscribed to the resulting observable sequence will be notified about the action's succesful or exceptional completion.
+        /// Each observer subscribed to the resulting observable sequence will be notified about the action's successful or exceptional completion.
         /// </summary>
         /// <typeparam name="TProgress">The type of the reported progress objects.</typeparam>
         /// <param name="source">Asynchronous action to convert.</param>
@@ -87,7 +93,9 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<TProgress> ToObservableProgress<TProgress>(this IAsyncActionWithProgress<TProgress> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return Observable.Create<TProgress>(observer =>
             {
@@ -124,7 +132,9 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<TResult> ToObservable<TResult>(this IAsyncOperation<TResult> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return new AsyncInfoToObservableBridge<TResult, Unit>(
                 source,
@@ -148,7 +158,9 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<TResult> ToObservable<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.ToObservable_(null, false);
         }
@@ -166,26 +178,33 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<TResult> ToObservable<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source, IProgress<TProgress> progress)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (progress == null)
+            {
                 throw new ArgumentNullException(nameof(progress));
+            }
 
             return source.ToObservable_(progress, false);
         }
 
         /// <summary>
         /// Converts a Windows Runtime asynchronous operation to an observable sequence reporting its progress but ignoring its result value.
-        /// Each observer subscribed to the resulting observable sequence will be notified about the action's succesful or exceptional completion.
+        /// Each observer subscribed to the resulting observable sequence will be notified about the action's successful or exceptional completion.
         /// </summary>
         /// <typeparam name="TResult">The type of the asynchronous operation's result, which gets ignored by this conversion.</typeparam>
         /// <typeparam name="TProgress">The type of the reported progress objects.</typeparam>
         /// <param name="source">Asynchronous action to convert.</param>
-        /// <returns>An observable sequence that produces progress values from the asynchronous operatin and notifies observers about the operations's completion.</returns>
+        /// <returns>An observable sequence that produces progress values from the asynchronous operation and notifies observers about the operations's completion.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IObservable<TProgress> ToObservableProgress<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return Observable.Create<TProgress>(observer =>
             {
@@ -197,7 +216,7 @@ namespace System.Reactive.Windows.Foundation
 
         /// <summary>
         /// Converts a Windows Runtime asynchronous operation to an observable sequence by retrieving the operation's results whenever progress is reported and when the operation completes.
-        /// Each observer subscribed to the resulting observable sequence will be notified about the action's succesful or exceptional completion.
+        /// Each observer subscribed to the resulting observable sequence will be notified about the action's successful or exceptional completion.
         /// </summary>
         /// <typeparam name="TResult">The type of the asynchronous operation's result.</typeparam>
         /// <typeparam name="TProgress">The type of the reported progress objects, which are used internally in the conversion but aren't exposed.</typeparam>
@@ -208,14 +227,16 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<TResult> ToObservableMultiple<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return source.ToObservable_(null, true);
         }
 
         /// <summary>
         /// Converts a Windows Runtime asynchronous operation to an observable sequence by retrieving the operation's results whenever progress is reported and when the operation completes. The operation's progress is reported through the supplied progress object.
-        /// Each observer subscribed to the resulting observable sequence will be notified about the action's succesful or exceptional completion.
+        /// Each observer subscribed to the resulting observable sequence will be notified about the action's successful or exceptional completion.
         /// </summary>
         /// <typeparam name="TResult">The type of the asynchronous operation's result.</typeparam>
         /// <typeparam name="TProgress">The type of the reported progress objects.</typeparam>
@@ -227,9 +248,14 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<TResult> ToObservableMultiple<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source, IProgress<TProgress> progress)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (progress == null)
+            {
                 throw new ArgumentNullException(nameof(progress));
+            }
 
             return source.ToObservable_(progress, true);
         }

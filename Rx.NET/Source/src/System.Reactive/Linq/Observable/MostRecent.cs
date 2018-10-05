@@ -14,15 +14,14 @@ namespace System.Reactive.Linq.ObservableImpl
             _initialValue = initialValue;
         }
 
-        protected override PushToPullSink<TSource, TSource> Run(IDisposable subscription)
+        protected override PushToPullSink<TSource, TSource> Run()
         {
-            return new _(_initialValue, subscription);
+            return new _(_initialValue);
         }
 
         private sealed class _ : PushToPullSink<TSource, TSource>
         {
-            public _(TSource initialValue, IDisposable subscription)
-                : base(subscription)
+            public _(TSource initialValue)
             {
                 _kind = NotificationKind.OnNext;
                 _value = initialValue;
@@ -40,7 +39,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception error)
             {
-                base.Dispose();
+                Dispose();
 
                 _error = error;
                 _kind = NotificationKind.OnError;      // Write last!
@@ -48,7 +47,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                base.Dispose();
+                Dispose();
 
                 _kind = NotificationKind.OnCompleted;  // Write last!
             }
@@ -73,7 +72,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         break;
                 }
 
-                current = default(TSource);
+                current = default;
                 return false;
             }
         }

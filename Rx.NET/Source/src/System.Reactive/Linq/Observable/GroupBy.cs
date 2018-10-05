@@ -25,11 +25,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_source);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<IGroupedObservable<TKey, TElement>>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource, IGroupedObservable<TKey, TElement>>
         {
             private readonly Func<TSource, TKey> _keySelector;
             private readonly Func<TSource, TElement> _elementSelector;
@@ -38,8 +38,8 @@ namespace System.Reactive.Linq.ObservableImpl
             private RefCountDisposable _refCountDisposable;
             private Subject<TElement> _null;
 
-            public _(GroupBy<TSource, TKey, TElement> parent, IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(GroupBy<TSource, TKey, TElement> parent, IObserver<IGroupedObservable<TKey, TElement>> observer)
+                : base(observer)
             {
                 _keySelector = parent._keySelector;
                 _elementSelector = parent._elementSelector;
@@ -54,15 +54,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public IDisposable Run(IObservable<TSource> source)
+            public override void Run(IObservable<TSource> source)
             {
                 var sourceSubscription = new SingleAssignmentDisposable();
                 _refCountDisposable = new RefCountDisposable(sourceSubscription);
                 sourceSubscription.Disposable = source.SubscribeSafe(this);
-                return _refCountDisposable;
+
+                SetUpstream(_refCountDisposable);
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var key = default(TKey);
                 try
@@ -126,7 +127,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 if (fireNewMapEntry)
                 {
                     var group = new GroupedObservable<TKey, TElement>(key, writer, _refCountDisposable);
-                    _observer.OnNext(group);
+                    ForwardOnNext(group);
                 }
 
                 var element = default(TElement);
@@ -143,20 +144,21 @@ namespace System.Reactive.Linq.ObservableImpl
                 writer.OnNext(element);
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 Error(error);
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 _null?.OnCompleted();
 
                 foreach (var w in _map.Values)
+                {
                     w.OnCompleted();
+                }
 
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnCompleted();
             }
 
             private void Error(Exception exception)
@@ -164,10 +166,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _null?.OnError(exception);
 
                 foreach (var w in _map.Values)
+                {
                     w.OnError(exception);
+                }
 
-                base._observer.OnError(exception);
-                base.Dispose();
+                ForwardOnError(exception);
             }
         }
     }

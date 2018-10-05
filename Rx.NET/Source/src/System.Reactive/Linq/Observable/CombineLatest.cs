@@ -24,51 +24,57 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_first, _second);
+        protected override void Run(_ sink) => sink.Run(_first, _second);
 
-        internal sealed class _ : Sink<TResult>
+        internal sealed class _ : IdentitySink<TResult>
         {
             private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
-            public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer)
+                : base(observer)
             {
                 _resultSelector = resultSelector;
             }
 
             private object _gate;
 
-            public IDisposable Run(IObservable<TFirst> first, IObservable<TSecond> second)
+            private IDisposable _firstDisposable;
+            private IDisposable _secondDisposable;
+
+            public void Run(IObservable<TFirst> first, IObservable<TSecond> second)
             {
                 _gate = new object();
 
-                var fstSubscription = new SingleAssignmentDisposable();
-                var sndSubscription = new SingleAssignmentDisposable();
-
-                var fstO = new FirstObserver(this, fstSubscription);
-                var sndO = new SecondObserver(this, sndSubscription);
+                var fstO = new FirstObserver(this);
+                var sndO = new SecondObserver(this);
 
                 fstO.Other = sndO;
                 sndO.Other = fstO;
 
-                fstSubscription.Disposable = first.SubscribeSafe(fstO);
-                sndSubscription.Disposable = second.SubscribeSafe(sndO);
+                Disposable.SetSingle(ref _firstDisposable, first.SubscribeSafe(fstO));
+                Disposable.SetSingle(ref _secondDisposable, second.SubscribeSafe(sndO));
+            }
 
-                return StableCompositeDisposable.Create(fstSubscription, sndSubscription);
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _firstDisposable);
+                    Disposable.TryDispose(ref _secondDisposable);
+                }
+                base.Dispose(disposing);
             }
 
             private sealed class FirstObserver : IObserver<TFirst>
             {
                 private readonly _ _parent;
-                private readonly IDisposable _self;
                 private SecondObserver _other;
 
-                public FirstObserver(_ parent, IDisposable self)
+                public FirstObserver(_ parent)
                 {
                     _parent = parent;
-                    _self = self;
                 }
 
                 public SecondObserver Other { set { _other = value; } }
@@ -93,18 +99,15 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
                             catch (Exception ex)
                             {
-                                _parent._observer.OnError(ex);
-                                _parent.Dispose();
+                                _parent.ForwardOnError(ex);
                                 return;
                             }
 
-                            _parent._observer.OnNext(res);
+                            _parent.ForwardOnNext(res);
                         }
                         else if (_other.Done)
                         {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
-                            return;
+                            _parent.ForwardOnCompleted();
                         }
                     }
                 }
@@ -113,8 +116,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent._gate)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 
@@ -126,13 +128,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (_other.Done)
                         {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
-                            return;
+                            _parent.ForwardOnCompleted();
                         }
                         else
                         {
-                            _self.Dispose();
+                            Disposable.TryDispose(ref _parent._firstDisposable);
                         }
                     }
                 }
@@ -141,13 +141,11 @@ namespace System.Reactive.Linq.ObservableImpl
             private sealed class SecondObserver : IObserver<TSecond>
             {
                 private readonly _ _parent;
-                private readonly IDisposable _self;
                 private FirstObserver _other;
 
-                public SecondObserver(_ parent, IDisposable self)
+                public SecondObserver(_ parent)
                 {
                     _parent = parent;
-                    _self = self;
                 }
 
                 public FirstObserver Other { set { _other = value; } }
@@ -172,18 +170,15 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
                             catch (Exception ex)
                             {
-                                _parent._observer.OnError(ex);
-                                _parent.Dispose();
+                                _parent.ForwardOnError(ex);
                                 return;
                             }
 
-                            _parent._observer.OnNext(res);
+                            _parent.ForwardOnNext(res);
                         }
                         else if (_other.Done)
                         {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
-                            return;
+                            _parent.ForwardOnCompleted();
                         }
                     }
                 }
@@ -192,8 +187,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent._gate)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 
@@ -205,13 +199,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (_other.Done)
                         {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
-                            return;
+                            _parent.ForwardOnCompleted();
                         }
                         else
                         {
-                            _self.Dispose();
+                            Disposable.TryDispose(ref _parent._secondDisposable);
                         }
                     }
                 }
@@ -232,7 +224,7 @@ namespace System.Reactive.Linq.ObservableImpl
         void Done(int index);
     }
 
-    internal abstract class CombineLatestSink<TResult> : Sink<TResult>, ICombineLatest
+    internal abstract class CombineLatestSink<TResult> : IdentitySink<TResult>, ICombineLatest
     {
         protected readonly object _gate;
 
@@ -240,8 +232,8 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly bool[] _hasValue;
         private readonly bool[] _isDone;
 
-        public CombineLatestSink(int arity, IObserver<TResult> observer, IDisposable cancel)
-            : base(observer, cancel)
+        protected CombineLatestSink(int arity, IObserver<TResult> observer)
+            : base(observer)
         {
             _gate = new object();
 
@@ -277,17 +269,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception ex)
                 {
-                    base._observer.OnError(ex);
-                    base.Dispose();
+                    ForwardOnError(ex);
+
                     return;
                 }
 
-                base._observer.OnNext(res);
+                ForwardOnNext(res);
             }
             else
             {
                 var allOthersDone = true;
-                for (int i = 0; i < _isDone.Length; i++)
+                for (var i = 0; i < _isDone.Length; i++)
                 {
                     if (i != index && !_isDone[i])
                     {
@@ -298,8 +290,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 if (allOthersDone)
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
                 }
             }
         }
@@ -308,8 +299,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public void Fail(Exception error)
         {
-            base._observer.OnError(error);
-            base.Dispose();
+            ForwardOnError(error);
         }
 
         public void Done(int index)
@@ -328,32 +318,28 @@ namespace System.Reactive.Linq.ObservableImpl
 
             if (allDone)
             {
-                base._observer.OnCompleted();
-                base.Dispose();
-                return;
+                ForwardOnCompleted();
             }
         }
     }
 
-    internal sealed class CombineLatestObserver<T> : IObserver<T>
+    internal sealed class CombineLatestObserver<T> : SafeObserver<T>
     {
         private readonly object _gate;
         private readonly ICombineLatest _parent;
         private readonly int _index;
-        private readonly IDisposable _self;
         private T _value;
 
-        public CombineLatestObserver(object gate, ICombineLatest parent, int index, IDisposable self)
+        public CombineLatestObserver(object gate, ICombineLatest parent, int index)
         {
             _gate = gate;
             _parent = parent;
             _index = index;
-            _self = self;
         }
 
         public T Value => _value;
 
-        public void OnNext(T value)
+        public override void OnNext(T value)
         {
             lock (_gate)
             {
@@ -362,9 +348,9 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        public void OnError(Exception error)
+        public override void OnError(Exception error)
         {
-            _self.Dispose();
+            Dispose();
 
             lock (_gate)
             {
@@ -372,10 +358,9 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        public void OnCompleted()
+        public override void OnCompleted()
         {
-            _self.Dispose();
-
+            Dispose();
             lock (_gate)
             {
                 _parent.Done(_index);
@@ -400,16 +385,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_sources);
+        protected override void Run(_ sink) => sink.Run(_sources);
 
-        internal sealed class _ : Sink<TResult>
+        internal sealed class _ : IdentitySink<TResult>
         {
             private readonly Func<IList<TSource>, TResult> _resultSelector;
 
-            public _(Func<IList<TSource>, TResult> resultSelector, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Func<IList<TSource>, TResult> resultSelector, IObserver<TResult> observer)
+                : base(observer)
             {
                 _resultSelector = resultSelector;
             }
@@ -421,7 +406,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private bool[] _isDone;
             private IDisposable[] _subscriptions;
 
-            public IDisposable Run(IEnumerable<IObservable<TSource>> sources)
+            public void Run(IEnumerable<IObservable<TSource>> sources)
             {
                 var srcs = sources.ToArray();
 
@@ -431,8 +416,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 _hasValueAll = false;
 
                 _values = new List<TSource>(N);
-                for (int i = 0; i < N; i++)
-                    _values.Add(default(TSource));
+                for (var i = 0; i < N; i++)
+                {
+                    _values.Add(default);
+                }
 
                 _isDone = new bool[N];
 
@@ -440,18 +427,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 _gate = new object();
 
-                for (int i = 0; i < N; i++)
+                for (var i = 0; i < N; i++)
                 {
                     var j = i;
 
-                    var d = new SingleAssignmentDisposable();
-                    _subscriptions[j] = d;
-
                     var o = new SourceObserver(this, j);
-                    d.Disposable = srcs[j].SubscribeSafe(o);
+                    _subscriptions[j] = o;
+
+                    o.SetResource(srcs[j].SubscribeSafe(o));
                 }
 
-                return StableCompositeDisposable.Create(_subscriptions);
+                SetUpstream(StableCompositeDisposable.CreateTrusted(_subscriptions));
             }
 
             private void OnNext(int index, TSource value)
@@ -471,28 +457,24 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         catch (Exception ex)
                         {
-                            base._observer.OnError(ex);
-                            base.Dispose();
+                            ForwardOnError(ex);
                             return;
                         }
 
-                        _observer.OnNext(res);
+                        ForwardOnNext(res);
                     }
                     else if (_isDone.AllExcept(index))
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
-                        return;
+                        ForwardOnCompleted();
                     }
                 }
             }
 
-            private void OnError(Exception error)
+            private new void OnError(Exception error)
             {
                 lock (_gate)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    ForwardOnError(error);
                 }
             }
 
@@ -504,9 +486,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (_isDone.All())
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
-                        return;
+                        ForwardOnCompleted();
                     }
                     else
                     {
@@ -515,36 +495,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            private static bool All(bool[] values)
-            {
-                foreach (var value in values)
-                {
-                    if (!value)
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            private static bool AllExcept(bool[] values, int index)
-            {
-                for (var i = 0; i < values.Length; i++)
-                {
-                    if (i != index)
-                    {
-                        if (!values[i])
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                return true;
-            }
-
-            private sealed class SourceObserver : IObserver<TSource>
+            private sealed class SourceObserver : SafeObserver<TSource>
             {
                 private readonly _ _parent;
                 private readonly int _index;
@@ -555,17 +506,17 @@ namespace System.Reactive.Linq.ObservableImpl
                     _index = index;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     _parent.OnNext(_index, value);
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     _parent.OnError(error);
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     _parent.OnCompleted(_index);
                 }

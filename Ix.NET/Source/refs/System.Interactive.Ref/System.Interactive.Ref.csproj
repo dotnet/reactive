@@ -1,0 +1,15 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras">
+
+  <PropertyGroup>
+    <Description>Interactive Extensions Main Library used to express queries over enumerable sequences.</Description>
+    <AssemblyTitle>Interactive Extensions - Main Library</AssemblyTitle>
+    <Authors>Microsoft</Authors>
+    <TargetFrameworks>netstandard1.0;netcoreapp2.0;netstandard2.1</TargetFrameworks>
+    <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\System.Interactive\**\*.cs" Exclude="..\..\System.Interactive\obj\**" />
+  </ItemGroup>
+  
+</Project>

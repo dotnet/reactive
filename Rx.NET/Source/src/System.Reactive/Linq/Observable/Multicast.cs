@@ -20,55 +20,46 @@ namespace System.Reactive.Linq.ObservableImpl
             _selector = selector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TResult>, IObserver<TResult>
+        internal sealed class _ : IdentitySink<TResult>
         {
-            public _(IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            private IDisposable _connection;
+
+            public _(IObserver<TResult> observer)
+                : base(observer)
             {
             }
 
-            public IDisposable Run(Multicast<TSource, TIntermediate, TResult> parent)
+            public void Run(Multicast<TSource, TIntermediate, TResult> parent)
             {
                 var observable = default(IObservable<TResult>);
                 var connectable = default(IConnectableObservable<TIntermediate>);
                 try
                 {
-                    var subject =parent._subjectSelector();
+                    var subject = parent._subjectSelector();
                     connectable = new ConnectableObservable<TSource, TIntermediate>(parent._source, subject);
                     observable = parent._selector(connectable);
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return Disposable.Empty;
+                    ForwardOnError(exception);
+                    return;
                 }
 
-                var subscription = observable.SubscribeSafe(this);
-                var connection = connectable.Connect();
-
-                return StableCompositeDisposable.Create(subscription, connection);
+                Run(observable);
+                Disposable.SetSingle(ref _connection, connectable.Connect());
             }
 
-            public void OnNext(TResult value)
+            protected override void Dispose(bool disposing)
             {
-                base._observer.OnNext(value);
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _connection);
+                }
+                base.Dispose(disposing);
             }
         }
     }

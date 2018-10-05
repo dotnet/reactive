@@ -12,13 +12,13 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.Default">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class DefaultScheduler : LocalScheduler, ISchedulerPeriodic
     {
-        private static readonly Lazy<DefaultScheduler> s_instance = new Lazy<DefaultScheduler>(() => new DefaultScheduler());
-        private static IConcurrencyAbstractionLayer s_cal = ConcurrencyAbstractionLayer.Current;
+        private static readonly Lazy<DefaultScheduler> _instance = new Lazy<DefaultScheduler>(() => new DefaultScheduler());
+        private static readonly IConcurrencyAbstractionLayer Cal = ConcurrencyAbstractionLayer.Current;
 
         /// <summary>
         /// Gets the singleton instance of the default scheduler.
         /// </summary>
-        public static DefaultScheduler Instance => s_instance.Value;
+        public static DefaultScheduler Instance => _instance.Value;
 
         private DefaultScheduler()
         {
@@ -35,22 +35,17 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException(nameof(action));
-
-            var d = new SingleAssignmentDisposable();
-
-            var cancel = s_cal.QueueUserWorkItem(_ =>
             {
-                if (!d.IsDisposed)
-                {
-                    d.Disposable = action(this, state);
-                }
-            }, null);
+                throw new ArgumentNullException(nameof(action));
+            }
 
-            return StableCompositeDisposable.Create(
-                d,
-                cancel
-            );
+            var workItem = new UserWorkItem<TState>(this, state, action);
+
+            workItem.CancelQueueDisposable = Cal.QueueUserWorkItem(
+                closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
+                workItem);
+
+            return workItem;
         }
 
         /// <summary>
@@ -65,26 +60,24 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
-                return Schedule(state, action);
-
-            var d = new SingleAssignmentDisposable();
-
-            var cancel = s_cal.StartTimer(_ =>
             {
-                if (!d.IsDisposed)
-                {
-                    d.Disposable = action(this, state);
-                }
-            }, null, dt);
+                return Schedule(state, action);
+            }
 
-            return StableCompositeDisposable.Create(
-                d,
-                cancel
-            );
+            var workItem = new UserWorkItem<TState>(this, state, action);
+
+            workItem.CancelQueueDisposable = Cal.StartTimer(
+                closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
+                workItem,
+                dt);
+
+            return workItem;
         }
 
         /// <summary>
@@ -100,28 +93,48 @@ namespace System.Reactive.Concurrency
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
-            var state1 = state;
-            var gate = new AsyncLock();
-
-            var cancel = s_cal.StartPeriodicTimer(() =>
-            {
-                gate.Wait(() =>
-                {
-                    state1 = action(state1);
-                });
-            }, period);
-
-            return Disposable.Create(() =>
-            {
-                cancel.Dispose();
-                gate.Dispose();
-                action = Stubs<TState>.I;
-            });
+            return new PeriodicallyScheduledWorkItem<TState>(state, period, action);
         }
+
+        private sealed class PeriodicallyScheduledWorkItem<TState> : IDisposable
+        {
+            private TState _state;
+            private Func<TState, TState> _action;
+            private readonly IDisposable _cancel;
+            private readonly AsyncLock _gate = new AsyncLock();
+
+            public PeriodicallyScheduledWorkItem(TState state, TimeSpan period, Func<TState, TState> action)
+            {
+                _state = state;
+                _action = action;
+
+                _cancel = Cal.StartPeriodicTimer(Tick, period);
+            }
+
+            private void Tick()
+            {
+                _gate.Wait(
+                    this,
+                    closureWorkItem => closureWorkItem._state = closureWorkItem._action(closureWorkItem._state));
+            }
+
+            public void Dispose()
+            {
+                _cancel.Dispose();
+                _gate.Dispose();
+                _action = Stubs<TState>.I;
+            }
+        }
+
 
         /// <summary>
         /// Discovers scheduler services by interface type.
@@ -132,7 +145,7 @@ namespace System.Reactive.Concurrency
         {
             if (serviceType == typeof(ISchedulerLongRunning))
             {
-                if (s_cal.SupportsLongRunning)
+                if (Cal.SupportsLongRunning)
                 {
                     return LongRunning.Instance;
                 }
@@ -143,31 +156,52 @@ namespace System.Reactive.Concurrency
 
         private sealed class LongRunning : ISchedulerLongRunning
         {
-            public static ISchedulerLongRunning Instance = new LongRunning();
+            private sealed class LongScheduledWorkItem<TState> : ICancelable
+            {
+                private readonly TState _state;
+                private readonly Action<TState, ICancelable> _action;
+
+                private IDisposable _cancel;
+
+                public LongScheduledWorkItem(TState state, Action<TState, ICancelable> action)
+                {
+                    _state = state;
+                    _action = action;
+
+                    Cal.StartThread(
+                        thisObject =>
+                        {
+                            var @this = (LongScheduledWorkItem<TState>)thisObject;
+
+                            //
+                            // Notice we don't check d.IsDisposed. The contract for ISchedulerLongRunning
+                            // requires us to ensure the scheduled work gets an opportunity to observe
+                            // the cancellation request.
+                            //
+                            @this._action(@this._state, @this);
+                        },
+                        this
+                    );
+                }
+
+                public void Dispose()
+                {
+                    Disposable.TryDispose(ref _cancel);
+                }
+
+                public bool IsDisposed => Disposable.GetIsDisposed(ref _cancel);
+            }
+
+            public static readonly ISchedulerLongRunning Instance = new LongRunning();
 
             public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
             {
                 if (action == null)
+                {
                     throw new ArgumentNullException(nameof(action));
+                }
 
-                var cancel = new BooleanDisposable();
-
-                DefaultScheduler.s_cal.StartThread(
-                    arg =>
-                    {
-                        var d = (ICancelable)arg;
-
-                        //
-                        // Notice we don't check d.IsDisposed. The contract for ISchedulerLongRunning
-                        // requires us to ensure the scheduled work gets an opportunity to observe
-                        // the cancellation request.
-                        //
-                        action(state, d);
-                    },
-                    cancel
-                );
-
-                return cancel;
+                return new LongScheduledWorkItem<TState>(state, action);
             }
         }
     }

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -15,16 +14,16 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class TaskObservableExtensionsTest : ReactiveTest
     {
-        private Task<int> doneTask;
+        private readonly Task<int> _doneTask;
 
         public TaskObservableExtensionsTest()
         {
             var tcs = new TaskCompletionSource<int>();
             tcs.SetResult(42);
-            doneTask = tcs.Task;
+            _doneTask = tcs.Task;
         }
 
         #region ToObservable
@@ -37,9 +36,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task<int>)null));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task<int>)null, s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(_doneTask, default));
 
-            var tcs = new System.Threading.Tasks.TaskCompletionSource<int>();
+            var tcs = new TaskCompletionSource<int>();
             var task = tcs.Task;
             ReactiveAssert.Throws<ArgumentNullException>(() => task.ToObservable().Subscribe(null));
         }
@@ -394,13 +393,13 @@ namespace ReactiveTests.Tests
         {
             var s = Scheduler.Immediate;
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)null, s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(null, s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)_doneTask, default));
 
-            var tcs = new System.Threading.Tasks.TaskCompletionSource<int>();
-            System.Threading.Tasks.Task task = tcs.Task;
+            var tcs = new TaskCompletionSource<int>();
+            Task task = tcs.Task;
             ReactiveAssert.Throws<ArgumentNullException>(() => task.ToObservable().Subscribe(null));
         }
 
@@ -873,10 +872,10 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
 
             var xs = Observable.Return(5, scheduler);
-            
+
             var continuation = xs.ToTask(state);
             Assert.Same(continuation.AsyncState, state);
-            
+
             scheduler.Start();
 
             Assert.True(continuation.IsCompleted);

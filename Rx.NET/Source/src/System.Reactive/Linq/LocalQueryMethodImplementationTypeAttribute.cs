@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.ComponentModel;
 
 namespace System.Reactive.Linq
@@ -13,7 +12,7 @@ namespace System.Reactive.Linq
     /// target class type.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public sealed class LocalQueryMethodImplementationTypeAttribute : Attribute
     {
         private readonly Type _targetType;

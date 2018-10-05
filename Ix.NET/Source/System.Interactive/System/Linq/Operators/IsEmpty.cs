@@ -17,7 +17,9 @@ namespace System.Linq
         public static bool IsEmpty<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return !source.Any();
         }

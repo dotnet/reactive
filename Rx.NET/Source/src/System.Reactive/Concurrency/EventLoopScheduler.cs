@@ -18,7 +18,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Counter for diagnostic purposes, to name the threads.
         /// </summary>
-        private static int s_counter;
+        private static int _counter;
 
         /// <summary>
         /// Thread factory function.
@@ -28,7 +28,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Stopwatch for timing free of absolute time dependencies.
         /// </summary>
-        private IStopwatch _stopwatch;
+        private readonly IStopwatch _stopwatch;
 
         /// <summary>
         /// Thread used by the event loop to run work items on. No work should be run on any other thread.
@@ -66,7 +66,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Disposable that always holds the timer to dispatch the first element in the queue.
         /// </summary>
-        private readonly SerialDisposable _nextTimer;
+        private IDisposable _nextTimer;
 
         /// <summary>
         /// Flag indicating whether the event loop should quit. When set, the event should be signaled as well to
@@ -82,7 +82,7 @@ namespace System.Reactive.Concurrency
         /// Creates an object that schedules units of work on a designated thread.
         /// </summary>
         public EventLoopScheduler()
-            : this(a => new Thread(a) { Name = "Event Loop " + Interlocked.Increment(ref s_counter), IsBackground = true })
+            : this(a => new Thread(a) { Name = "Event Loop " + Interlocked.Increment(ref _counter), IsBackground = true })
         {
         }
 
@@ -94,13 +94,11 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="threadFactory"/> is <c>null</c>.</exception>
         public EventLoopScheduler(Func<ThreadStart, Thread> threadFactory)
         {
-            if (threadFactory == null)
-                throw new ArgumentNullException(nameof(threadFactory));
 #else
         internal EventLoopScheduler(Func<ThreadStart, Thread> threadFactory)
         {
 #endif
-            _threadFactory = threadFactory;
+            _threadFactory = threadFactory ?? throw new ArgumentNullException(nameof(threadFactory));
             _stopwatch = ConcurrencyAbstractionLayer.Current.StartStopwatch();
 
             _gate = new object();
@@ -108,8 +106,6 @@ namespace System.Reactive.Concurrency
             _evt = new SemaphoreSlim(0);
             _queue = new SchedulerQueue<TimeSpan>();
             _readyList = new Queue<ScheduledItem<TimeSpan>>();
-
-            _nextTimer = new SerialDisposable();
 
             ExitIfEmpty = false;
         }
@@ -146,7 +142,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var due = _stopwatch.Elapsed + dueTime;
             var si = new ScheduledItem<TimeSpan, TState>(this, state, action, due);
@@ -154,7 +152,9 @@ namespace System.Reactive.Concurrency
             lock (_gate)
             {
                 if (_disposed)
+                {
                     throw new ObjectDisposedException("");
+                }
 
                 if (dueTime <= TimeSpan.Zero)
                 {
@@ -170,7 +170,7 @@ namespace System.Reactive.Concurrency
                 EnsureThread();
             }
 
-            return Disposable.Create(si.Cancel);
+            return si;
         }
 
         /// <summary>
@@ -187,36 +187,58 @@ namespace System.Reactive.Concurrency
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (period < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException(nameof(period));
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
-
-            var start = _stopwatch.Elapsed;
-            var next = start + period;
-
-            var state1 = state;
-
-            var d = new MultipleAssignmentDisposable();
-            var gate = new AsyncLock();
-
-            var tick = default(Func<IScheduler, object, IDisposable>);
-            tick = (self_, _) =>
             {
-                next += period;
+                throw new ArgumentOutOfRangeException(nameof(period));
+            }
 
-                d.Disposable = self_.Schedule(null, next - _stopwatch.Elapsed, tick);
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
 
-                gate.Wait(() =>
-                {
-                    state1 = action(state1);
-                });
+            return new PeriodicallyScheduledWorkItem<TState>(this, state, period, action);
+        }
+
+        private sealed class PeriodicallyScheduledWorkItem<TState> : IDisposable
+        {
+            private readonly TimeSpan _period;
+            private readonly Func<TState, TState> _action;
+            private readonly EventLoopScheduler _scheduler;
+            private readonly AsyncLock _gate = new AsyncLock();
+
+            private TState _state;
+            private TimeSpan _next;
+            private IDisposable _task;
+
+            public PeriodicallyScheduledWorkItem(EventLoopScheduler scheduler, TState state, TimeSpan period, Func<TState, TState> action)
+            {
+                _state = state;
+                _period = period;
+                _action = action;
+                _scheduler = scheduler;
+                _next = scheduler._stopwatch.Elapsed + period;
+
+                Disposable.TrySetSingle(ref _task, scheduler.Schedule(this, _next - scheduler._stopwatch.Elapsed, (_, s) => s.Tick(_)));
+            }
+
+            private IDisposable Tick(IScheduler self)
+            {
+                _next += _period;
+
+                Disposable.TrySetMultiple(ref _task, self.Schedule(this, _next - _scheduler._stopwatch.Elapsed, (_, s) => s.Tick(_)));
+
+                _gate.Wait(
+                    this,
+                    closureWorkItem => closureWorkItem._state = closureWorkItem._action(closureWorkItem._state));
 
                 return Disposable.Empty;
-            };
+            }
 
-            d.Disposable = Schedule(null, next - _stopwatch.Elapsed, tick);
-
-            return StableCompositeDisposable.Create(d, gate);
+            public void Dispose()
+            {
+                Disposable.TryDispose(ref _task);
+                _gate.Dispose();
+            }
         }
 
         /// <summary>
@@ -243,7 +265,7 @@ namespace System.Reactive.Concurrency
                 if (!_disposed)
                 {
                     _disposed = true;
-                    _nextTimer.Dispose();
+                    Disposable.TryDispose(ref _nextTimer);
                     _evt.Release();
                 }
             }
@@ -283,7 +305,10 @@ namespace System.Reactive.Concurrency
                     // Bug fix that ensures the number of calls to Release never greatly exceeds the number of calls to Wait.
                     // See work item #37: https://rx.codeplex.com/workitem/37
                     //
-                    while (_evt.CurrentCount > 0) _evt.Wait();
+                    while (_evt.CurrentCount > 0)
+                    {
+                        _evt.Wait();
+                    }
 
                     //
                     // The event could have been set by a call to Dispose. This takes priority over anything else. We quit the
@@ -291,7 +316,7 @@ namespace System.Reactive.Concurrency
                     //
                     if (_disposed)
                     {
-                        ((IDisposable)_evt).Dispose();
+                        _evt.Dispose();
                         return;
                     }
 
@@ -309,7 +334,7 @@ namespace System.Reactive.Concurrency
                             _nextItem = next;
 
                             var due = next.DueTime - _stopwatch.Elapsed;
-                            _nextTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(Tick, next, due);
+                            Disposable.TrySetSerial(ref _nextTimer, ConcurrencyAbstractionLayer.Current.StartTimer(Tick, next, due));
                         }
                     }
 
@@ -352,6 +377,10 @@ namespace System.Reactive.Concurrency
                 if (!_disposed)
                 {
                     var item = (ScheduledItem<TimeSpan>)state;
+                    if (item == _nextItem)
+                    {
+                        _nextItem = null;
+                    }
                     if (_queue.Remove(item))
                     {
                         _readyList.Enqueue(item);

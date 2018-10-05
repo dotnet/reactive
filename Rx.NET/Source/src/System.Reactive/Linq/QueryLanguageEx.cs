@@ -16,14 +16,71 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, IEnumerable<IObservable<object>>> iteratorMethod)
         {
-            return new AnonymousObservable<TResult>(observer =>
-                iteratorMethod(observer).Concat().Subscribe(_ => { }, observer.OnError, observer.OnCompleted));
+            return new CreateWithEnumerableObservable<TResult>(iteratorMethod);
+        }
+
+        private sealed class CreateWithEnumerableObservable<TResult> : ObservableBase<TResult>
+        {
+            private readonly Func<IObserver<TResult>, IEnumerable<IObservable<object>>> _iteratorMethod;
+
+            public CreateWithEnumerableObservable(Func<IObserver<TResult>, IEnumerable<IObservable<object>>> iteratorMethod)
+            {
+                _iteratorMethod = iteratorMethod;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TResult> observer)
+            {
+                return _iteratorMethod(observer)
+                    .Concat()
+                    .Subscribe(new TerminalOnlyObserver<TResult>(observer));
+            }
+        }
+
+        private sealed class TerminalOnlyObserver<TResult> : IObserver<object>
+        {
+            private readonly IObserver<TResult> _observer;
+
+            public TerminalOnlyObserver(IObserver<TResult> observer)
+            {
+                _observer = observer;
+            }
+
+            public void OnCompleted()
+            {
+                _observer.OnCompleted();
+            }
+
+            public void OnError(Exception error)
+            {
+                _observer.OnError(error);
+            }
+
+            public void OnNext(object value)
+            {
+                // deliberately ignored
+            }
         }
 
         public virtual IObservable<Unit> Create(Func<IEnumerable<IObservable<object>>> iteratorMethod)
         {
-            return new AnonymousObservable<Unit>(observer =>
-                iteratorMethod().Concat().Subscribe(_ => { }, observer.OnError, observer.OnCompleted));
+            return new CreateWithOnlyEnumerableObservable<Unit>(iteratorMethod);
+        }
+
+        private sealed class CreateWithOnlyEnumerableObservable<TResult> : ObservableBase<TResult>
+        {
+            private readonly Func<IEnumerable<IObservable<object>>> _iteratorMethod;
+
+            public CreateWithOnlyEnumerableObservable(Func<IEnumerable<IObservable<object>>> iteratorMethod)
+            {
+                _iteratorMethod = iteratorMethod;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TResult> observer)
+            {
+                return _iteratorMethod()
+                    .Concat()
+                    .Subscribe(new TerminalOnlyObserver<TResult>(observer));
+            }
         }
 
         #endregion
@@ -32,7 +89,23 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Expand<TSource>(IObservable<TSource> source, Func<TSource, IObservable<TSource>> selector, IScheduler scheduler)
         {
-            return new AnonymousObservable<TSource>(observer =>
+            return new ExpandObservable<TSource>(source, selector, scheduler);
+        }
+
+        private sealed class ExpandObservable<TSource> : ObservableBase<TSource>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, IObservable<TSource>> _selector;
+            private readonly IScheduler _scheduler;
+
+            public ExpandObservable(IObservable<TSource> source, Func<TSource, IObservable<TSource>> selector, IScheduler scheduler)
+            {
+                _source = source;
+                _selector = selector;
+                _scheduler = scheduler;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TSource> observer)
             {
                 var outGate = new object();
                 var q = new Queue<IObservable<TSource>>();
@@ -41,9 +114,7 @@ namespace System.Reactive.Linq
                 var activeCount = 0;
                 var isAcquired = false;
 
-                var ensureActive = default(Action);
-
-                ensureActive = () =>
+                void ensureActive()
                 {
                     var isOwner = false;
 
@@ -58,14 +129,16 @@ namespace System.Reactive.Linq
 
                     if (isOwner)
                     {
-                        m.Disposable = scheduler.Schedule(self =>
+                        m.Disposable = _scheduler.Schedule(self =>
                         {
                             var work = default(IObservable<TSource>);
 
                             lock (q)
                             {
                                 if (q.Count > 0)
+                                {
                                     work = q.Dequeue();
+                                }
                                 else
                                 {
                                     isAcquired = false;
@@ -79,17 +152,21 @@ namespace System.Reactive.Linq
                                 x =>
                                 {
                                     lock (outGate)
+                                    {
                                         observer.OnNext(x);
+                                    }
 
                                     var result = default(IObservable<TSource>);
                                     try
                                     {
-                                        result = selector(x);
+                                        result = _selector(x);
                                     }
                                     catch (Exception exception)
                                     {
                                         lock (outGate)
+                                        {
                                             observer.OnError(exception);
+                                        }
                                     }
 
                                     lock (q)
@@ -103,7 +180,9 @@ namespace System.Reactive.Linq
                                 exception =>
                                 {
                                     lock (outGate)
+                                    {
                                         observer.OnError(exception);
+                                    }
                                 },
                                 () =>
                                 {
@@ -114,26 +193,32 @@ namespace System.Reactive.Linq
                                     {
                                         activeCount--;
                                         if (activeCount == 0)
+                                        {
                                             done = true;
+                                        }
                                     }
                                     if (done)
+                                    {
                                         lock (outGate)
+                                        {
                                             observer.OnCompleted();
+                                        }
+                                    }
                                 });
                             self();
                         });
                     }
-                };
+                }
 
                 lock (q)
                 {
-                    q.Enqueue(source);
+                    q.Enqueue(_source);
                     activeCount++;
                 }
                 ensureActive();
 
                 return d;
-            });
+            }
         }
 
         public virtual IObservable<TSource> Expand<TSource>(IObservable<TSource> source, Func<TSource, IObservable<TSource>> selector)
@@ -174,9 +259,13 @@ namespace System.Reactive.Linq
                                 if (rightStopped)
                                 {
                                     if (!hasLeft)
+                                    {
                                         observer.OnCompleted();
+                                    }
                                     else if (!hasRight)
+                                    {
                                         observer.OnCompleted();
+                                    }
                                     else
                                     {
                                         TResult result;
@@ -213,9 +302,13 @@ namespace System.Reactive.Linq
                                 if (leftStopped)
                                 {
                                     if (!hasLeft)
+                                    {
                                         observer.OnCompleted();
+                                    }
                                     else if (!hasRight)
+                                    {
                                         observer.OnCompleted();
+                                    }
                                     else
                                     {
                                         TResult result;
@@ -245,14 +338,26 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource[]> ForkJoin<TSource>(IEnumerable<IObservable<TSource>> sources)
         {
-            return new AnonymousObservable<TSource[]>(subscriber =>
+            return new ForkJoinObservable<TSource>(sources);
+        }
+
+        private sealed class ForkJoinObservable<TSource> : ObservableBase<TSource[]>
+        {
+            private readonly IEnumerable<IObservable<TSource>> _sources;
+
+            public ForkJoinObservable(IEnumerable<IObservable<TSource>> sources)
             {
-                var allSources = sources.ToArray();
+                _sources = sources;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TSource[]> observer)
+            {
+                var allSources = _sources.ToArray();
                 var count = allSources.Length;
 
                 if (count == 0)
                 {
-                    subscriber.OnCompleted();
+                    observer.OnCompleted();
                     return Disposable.Empty;
                 }
 
@@ -270,7 +375,7 @@ namespace System.Reactive.Linq
                     {
                         var currentIndex = index;
                         var source = allSources[index];
-                        results.Add(default(TSource));
+                        results.Add(default);
                         group.Add(source.Subscribe(
                             value =>
                             {
@@ -288,7 +393,7 @@ namespace System.Reactive.Linq
                                 lock (gate)
                                 {
                                     finished = true;
-                                    subscriber.OnError(error);
+                                    observer.OnError(error);
                                     group.Dispose();
                                 }
                             },
@@ -300,25 +405,27 @@ namespace System.Reactive.Linq
                                     {
                                         if (!hasResults[currentIndex])
                                         {
-                                            subscriber.OnCompleted();
+                                            observer.OnCompleted();
                                             return;
                                         }
                                         hasCompleted[currentIndex] = true;
                                         foreach (var completed in hasCompleted)
                                         {
                                             if (!completed)
+                                            {
                                                 return;
+                                            }
                                         }
                                         finished = true;
-                                        subscriber.OnNext(results.ToArray());
-                                        subscriber.OnCompleted();
+                                        observer.OnNext(results.ToArray());
+                                        observer.OnCompleted();
                                     }
                                 }
                             }));
                     }
                 }
                 return group;
-            });
+            }
         }
 
         #endregion
@@ -341,7 +448,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> ManySelect<TSource, TResult>(IObservable<TSource> source, Func<IObservable<TSource>, TResult> selector, IScheduler scheduler)
         {
-            return Observable.Defer<TResult>(() =>
+            return Observable.Defer(() =>
             {
                 var chain = default(ChainObservable<TSource>);
 
@@ -351,8 +458,8 @@ namespace System.Reactive.Linq
                         {
                             var curr = new ChainObservable<TSource>(x);
 
-                            if (chain != null)
-                                chain.OnNext(curr);
+                            chain?.OnNext(curr);
+
                             chain = curr;
 
                             return (IObservable<TSource>)curr;
@@ -361,36 +468,35 @@ namespace System.Reactive.Linq
                         _ => { },
                         exception =>
                         {
-                            if (chain != null)
-                                chain.OnError(exception);
+                            chain?.OnError(exception);
                         },
                         () =>
                         {
-                            if (chain != null)
-                                chain.OnCompleted();
+                            chain?.OnCompleted();
                         })
                     .ObserveOn(scheduler)
                     .Select(selector);
             });
         }
 
-        class ChainObservable<T> : ISubject<IObservable<T>, T>
+        private class ChainObservable<T> : ISubject<IObservable<T>, T>
         {
-            T head;
-            AsyncSubject<IObservable<T>> tail = new AsyncSubject<IObservable<T>>();
+            private readonly T _head;
+            private readonly AsyncSubject<IObservable<T>> _tail = new AsyncSubject<IObservable<T>>();
 
             public ChainObservable(T head)
             {
-                this.head = head;
+                _head = head;
             }
 
             public IDisposable Subscribe(IObserver<T> observer)
             {
                 var g = new CompositeDisposable();
-                g.Add(CurrentThreadScheduler.Instance.Schedule(() =>
+                g.Add(CurrentThreadScheduler.Instance.ScheduleAction((observer, g, @this: this),
+                state =>
                 {
-                    observer.OnNext(head);
-                    g.Add(tail.Merge().Subscribe(observer));
+                    state.observer.OnNext(state.@this._head);
+                    state.g.Add(state.@this._tail.Merge().Subscribe(state.observer));
                 }));
                 return g;
             }
@@ -407,8 +513,8 @@ namespace System.Reactive.Linq
 
             public void OnNext(IObservable<T> value)
             {
-                tail.OnNext(value);
-                tail.OnCompleted();
+                _tail.OnNext(value);
+                _tail.OnCompleted();
             }
         }
 
@@ -427,19 +533,36 @@ namespace System.Reactive.Linq
 
         private static IObservable<TResult> Combine<TLeft, TRight, TResult>(IObservable<TLeft> leftSource, IObservable<TRight> rightSource, Func<IObserver<TResult>, IDisposable, IDisposable, IObserver<Either<Notification<TLeft>, Notification<TRight>>>> combinerSelector)
         {
-            return new AnonymousObservable<TResult>(observer =>
+            return new CombineObservable<TLeft, TRight, TResult>(leftSource, rightSource, combinerSelector);
+        }
+
+        private sealed class CombineObservable<TLeft, TRight, TResult> : ObservableBase<TResult>
+        {
+            private readonly IObservable<TLeft> _leftSource;
+            private readonly IObservable<TRight> _rightSource;
+            private readonly Func<IObserver<TResult>, IDisposable, IDisposable, IObserver<Either<Notification<TLeft>, Notification<TRight>>>> _combinerSelector;
+
+            public CombineObservable(IObservable<TLeft> leftSource, IObservable<TRight> rightSource, Func<IObserver<TResult>, IDisposable, IDisposable, IObserver<Either<Notification<TLeft>, Notification<TRight>>>> combinerSelector)
+            {
+                _leftSource = leftSource;
+                _rightSource = rightSource;
+                _combinerSelector = combinerSelector;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TResult> observer)
             {
                 var leftSubscription = new SingleAssignmentDisposable();
                 var rightSubscription = new SingleAssignmentDisposable();
 
-                var combiner = combinerSelector(observer, leftSubscription, rightSubscription);
+                var combiner = _combinerSelector(observer, leftSubscription, rightSubscription);
                 var gate = new object();
 
-                leftSubscription.Disposable = leftSource.Materialize().Select(x => Either<Notification<TLeft>, Notification<TRight>>.CreateLeft(x)).Synchronize(gate).Subscribe(combiner);
-                rightSubscription.Disposable = rightSource.Materialize().Select(x => Either<Notification<TLeft>, Notification<TRight>>.CreateRight(x)).Synchronize(gate).Subscribe(combiner);
+                leftSubscription.Disposable = _leftSource.Materialize().Select(x => Either<Notification<TLeft>, Notification<TRight>>.CreateLeft(x)).Synchronize(gate).Subscribe(combiner);
+                rightSubscription.Disposable = _rightSource.Materialize().Select(x => Either<Notification<TLeft>, Notification<TRight>>.CreateRight(x)).Synchronize(gate).Subscribe(combiner);
 
                 return StableCompositeDisposable.Create(leftSubscription, rightSubscription);
-            });
+
+            }
         }
 
         #endregion

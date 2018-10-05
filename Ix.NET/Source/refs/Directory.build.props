@@ -1,0 +1,10 @@
+<Project>  
+  
+  <Import Project="..\Directory.Build.props" />
+  
+  <PropertyGroup>
+    <!-- This is here so we can create a fake .NET Standard 2.1 facade -->
+    <NETStandardMaximumVersion>2.1</NETStandardMaximumVersion>
+  </PropertyGroup>
+
+</Project>

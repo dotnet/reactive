@@ -22,10 +22,7 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="context"/> is <c>null</c>.</exception>
         public SynchronizationContextScheduler(SynchronizationContext context)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
             _alwaysPost = true;
         }
 
@@ -37,10 +34,7 @@ namespace System.Reactive.Concurrency
         /// <exception cref="ArgumentNullException"><paramref name="context"/> is <c>null</c>.</exception>
         public SynchronizationContextScheduler(SynchronizationContext context, bool alwaysPost)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
             _alwaysPost = alwaysPost;
         }
 
@@ -55,24 +49,24 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
-
-            var d = new SingleAssignmentDisposable();
+            }
 
             if (!_alwaysPost && _context == SynchronizationContext.Current)
             {
-                d.Disposable = action(this, state);
+                return action(this, state);
             }
-            else
+
+            var d = new SingleAssignmentDisposable();
+
+            _context.PostWithStartComplete(() =>
             {
-                _context.PostWithStartComplete(() =>
+                if (!d.IsDisposed)
                 {
-                    if (!d.IsDisposed)
-                    {
-                        d.Disposable = action(this, state);
-                    }
-                });
-            }
+                    d.Disposable = action(this, state);
+                }
+            });
 
             return d;
         }
@@ -89,7 +83,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
@@ -97,7 +93,7 @@ namespace System.Reactive.Concurrency
                 return Schedule(state, action);
             }
 
-            return DefaultScheduler.Instance.Schedule(state, dt, (_, state1) => Schedule(state1, action));
+            return DefaultScheduler.Instance.Schedule((scheduler: this, action, state), dt, (_, tuple) => tuple.scheduler.Schedule(tuple.state, tuple.action));
         }
     }
 }

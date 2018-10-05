@@ -17,15 +17,14 @@ namespace System.Reactive.Linq.ObservableImpl
         private Exception _error;
         private bool _done;
         private bool _disposed;
+        private IDisposable _subscription;
 
         private readonly SemaphoreSlim _gate;
-        private readonly SingleAssignmentDisposable _subscription;
 
         public GetEnumerator()
         {
             _queue = new ConcurrentQueue<TSource>();
             _gate = new SemaphoreSlim(0);
-            _subscription = new SingleAssignmentDisposable();
         }
 
         public IEnumerator<TSource> Run(IObservable<TSource> source)
@@ -33,7 +32,7 @@ namespace System.Reactive.Linq.ObservableImpl
             //
             // [OK] Use of unsafe Subscribe: non-pretentious exact mirror with the dual GetEnumerator method.
             //
-            _subscription.Disposable = source.Subscribe/*Unsafe*/(this);
+            Disposable.TrySetSingle(ref _subscription, source.Subscribe/*Unsafe*/(this));
             return this;
         }
 
@@ -46,14 +45,14 @@ namespace System.Reactive.Linq.ObservableImpl
         public void OnError(Exception error)
         {
             _error = error;
-            _subscription.Dispose();
+            Disposable.TryDispose(ref _subscription);
             _gate.Release();
         }
 
         public void OnCompleted()
         {
             _done = true;
-            _subscription.Dispose();
+            Disposable.TryDispose(ref _subscription);
             _gate.Release();
         }
 
@@ -62,10 +61,14 @@ namespace System.Reactive.Linq.ObservableImpl
             _gate.Wait();
 
             if (_disposed)
+            {
                 throw new ObjectDisposedException("");
+            }
 
             if (_queue.TryDequeue(out _current))
+            {
                 return true;
+            }
 
             _error.ThrowIfNotNull();
 
@@ -81,7 +84,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public void Dispose()
         {
-            _subscription.Dispose();
+            Disposable.TryDispose(ref _subscription);
 
             _disposed = true;
             _gate.Release();

@@ -8,13 +8,13 @@ namespace System.Reactive
 {
     internal abstract class ConcatSink<TSource> : TailRecursiveSink<TSource>
     {
-        public ConcatSink(IObserver<TSource> observer, IDisposable cancel)
-            : base(observer, cancel)
+        protected ConcatSink(IObserver<TSource> observer)
+            : base(observer)
         {
         }
 
         protected override IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source) => (source as IConcatenatable<TSource>)?.GetSources();
 
-        public override void OnCompleted() => _recurse();
+        public override void OnCompleted() => Recurse();
     }
 }

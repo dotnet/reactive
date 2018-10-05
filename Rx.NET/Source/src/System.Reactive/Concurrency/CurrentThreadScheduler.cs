@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.ComponentModel;
-using System.Threading;
-using System.Reactive.Disposables;
 
 namespace System.Reactive.Concurrency
 {
@@ -14,7 +12,7 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.CurrentThread">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class CurrentThreadScheduler : LocalScheduler
     {
-        private static readonly Lazy<CurrentThreadScheduler> s_instance = new Lazy<CurrentThreadScheduler>(() => new CurrentThreadScheduler());
+        private static readonly Lazy<CurrentThreadScheduler> StaticInstance = new Lazy<CurrentThreadScheduler>(() => new CurrentThreadScheduler());
 
         private CurrentThreadScheduler()
         {
@@ -23,45 +21,50 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the singleton instance of the current thread scheduler.
         /// </summary>
-        public static CurrentThreadScheduler Instance => s_instance.Value;
+        public static CurrentThreadScheduler Instance => StaticInstance.Value;
 
         [ThreadStatic]
-        private static SchedulerQueue<TimeSpan> s_threadLocalQueue;
+        private static SchedulerQueue<TimeSpan> _threadLocalQueue;
 
         [ThreadStatic]
-        private static IStopwatch s_clock;
+        private static IStopwatch _clock;
 
-        private static SchedulerQueue<TimeSpan> GetQueue() => s_threadLocalQueue;
+        [ThreadStatic]
+        private static bool _running;
+
+        private static SchedulerQueue<TimeSpan> GetQueue() => _threadLocalQueue;
 
         private static void SetQueue(SchedulerQueue<TimeSpan> newQueue)
         {
-            s_threadLocalQueue = newQueue;
+            _threadLocalQueue = newQueue;
         }
 
         private static TimeSpan Time
         {
             get
             {
-                if (s_clock == null)
-                    s_clock = ConcurrencyAbstractionLayer.Current.StartStopwatch();
+                if (_clock == null)
+                {
+                    _clock = ConcurrencyAbstractionLayer.Current.StartStopwatch();
+                }
 
-                return s_clock.Elapsed;
+                return _clock.Elapsed;
             }
         }
 
         /// <summary>
         /// Gets a value that indicates whether the caller must call a Schedule method.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Now marked as obsolete.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Now marked as obsolete.")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete(Constants_Core.OBSOLETE_SCHEDULEREQUIRED)] // Preferring static method call over instance method call.
+        [Obsolete(Constants_Core.ObsoleteSchedulerequired)] // Preferring static method call over instance method call.
         public bool ScheduleRequired => IsScheduleRequired;
 
         /// <summary>
         /// Gets a value that indicates whether the caller must call a Schedule method.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static bool IsScheduleRequired => GetQueue() == null;
+        public static bool IsScheduleRequired => !_running;
 
         /// <summary>
         /// Schedules an action to be executed after dueTime.
@@ -75,35 +78,74 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
-            var dt = Time + Scheduler.Normalize(dueTime);
+            var queue = default(SchedulerQueue<TimeSpan>);
 
-            var si = new ScheduledItem<TimeSpan, TState>(this, state, action, dt);
+            // There is no timed task and no task is currently running
+            if (!_running)
+            {
+                _running = true;
 
-            var queue = GetQueue();
+                if (dueTime > TimeSpan.Zero)
+                {
+                    ConcurrencyAbstractionLayer.Current.Sleep(dueTime);
+                }
 
+                // execute directly without queueing
+                IDisposable d;
+                try
+                {
+                    d = action(this, state);
+                }
+                catch
+                {
+                    SetQueue(null);
+                    _running = false;
+                    throw;
+                }
+
+                // did recursive tasks arrive?
+                queue = GetQueue();
+
+                // yes, run those in the queue as well
+                if (queue != null)
+                {
+                    try
+                    {
+                        Trampoline.Run(queue);
+                    }
+                    finally
+                    {
+                        SetQueue(null);
+                        _running = false;
+                    }
+                }
+                else
+                {
+                    _running = false;
+                }
+
+                return d;
+            }
+
+            queue = GetQueue();
+
+            // if there is a task running or there is a queue
             if (queue == null)
             {
                 queue = new SchedulerQueue<TimeSpan>(4);
-                queue.Enqueue(si);
-
                 SetQueue(queue);
-                try
-                {
-                    Trampoline.Run(queue);
-                }
-                finally
-                {
-                    SetQueue(null);
-                }
-            }
-            else
-            {
-                queue.Enqueue(si);
             }
 
-            return Disposable.Create(si.Cancel);
+            var dt = Time + Scheduler.Normalize(dueTime);
+
+            // queue up more work
+            var si = new ScheduledItem<TimeSpan, TState>(this, state, action, dt);
+            queue.Enqueue(si);
+            return si;
         }
 
         private static class Trampoline

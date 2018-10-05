@@ -12,9 +12,12 @@ namespace System.Reactive.Disposables
     public sealed class RefCountDisposable : ICancelable
     {
         private readonly bool _throwWhenDisposed;
-        private readonly object _gate = new object();
         private IDisposable _disposable;
-        private bool _isPrimaryDisposed;
+        /// <summary>
+        /// Holds the number of active child disposables and the
+        /// indicator bit (31) if the main _disposable has been marked
+        /// for disposition.
+        /// </summary>
         private int _count;
 
         /// <summary>
@@ -34,11 +37,7 @@ namespace System.Reactive.Disposables
         /// <exception cref="ArgumentNullException"><paramref name="disposable"/> is null.</exception>
         public RefCountDisposable(IDisposable disposable, bool throwWhenDisposed)
         {
-            if (disposable == null)
-                throw new ArgumentNullException(nameof(disposable));
-
-            _disposable = disposable;
-            _isPrimaryDisposed = false;
+            _disposable = disposable ?? throw new ArgumentNullException(nameof(disposable));
             _count = 0;
             _throwWhenDisposed = throwWhenDisposed;
         }
@@ -46,30 +45,46 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed => _disposable == null;
+        public bool IsDisposed => Volatile.Read(ref _count) == int.MinValue;
 
         /// <summary>
         /// Returns a dependent disposable that when disposed decreases the refcount on the underlying disposable.
         /// </summary>
         /// <returns>A dependent disposable contributing to the reference count that manages the underlying disposable's lifetime.</returns>
         /// <exception cref="ObjectDisposedException">This instance has been disposed and is configured to throw in this case by <see cref="RefCountDisposable(IDisposable, bool)"/>.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Backward compat + non-trivial work for a property getter.")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Backward compat + non-trivial work for a property getter.")]
         public IDisposable GetDisposable()
         {
-            lock (_gate)
+            // the current state
+            var cnt = Volatile.Read(ref _count);
+
+            for (; ; )
             {
-                if (_disposable == null)
+                // If bit 31 is set and the active count is zero, don't create an inner
+                if (cnt == int.MinValue)
                 {
                     if (_throwWhenDisposed)
+                    {
                         throw new ObjectDisposedException("RefCountDisposable");
+                    }
 
                     return Disposable.Empty;
                 }
-                else
+
+                // Should not overflow the bits 0..30
+                if ((cnt & 0x7FFFFFFF) == int.MaxValue)
                 {
-                    _count++;
+                    throw new OverflowException($"RefCountDisposable can't handle more than {int.MaxValue} disposables");
+                }
+
+                // Increment the active count by one, works because the increment
+                // won't affect bit 31
+                var u = Interlocked.CompareExchange(ref _count, cnt + 1, cnt);
+                if (u == cnt)
+                {
                     return new InnerDisposable(this);
                 }
+                cnt = u;
             }
         }
 
@@ -78,50 +93,74 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-            var disposable = default(IDisposable);
-            lock (_gate)
+            var cnt = Volatile.Read(ref _count);
+
+            for (; ; )
             {
-                if (_disposable != null)
+
+                // already marked as disposed via bit 31?
+                if ((cnt & 0x80000000) != 0)
                 {
-                    if (!_isPrimaryDisposed)
-                    {
-                        _isPrimaryDisposed = true;
-
-                        if (_count == 0)
-                        {
-                            disposable = _disposable;
-                            _disposable = null;
-                        }
-                    }
+                    // yes, nothing to do
+                    break;
                 }
-            }
 
-            disposable?.Dispose();
+                // how many active disposables are there?
+                var active = cnt & 0x7FFFFFFF;
+
+                // keep the active count but set the dispose marker of bit 31
+                var u = int.MinValue | active;
+
+                var b = Interlocked.CompareExchange(ref _count, u, cnt);
+
+                if (b == cnt)
+                {
+                    // if there were 0 active disposables, there can't be any more after
+                    // the CAS so we can dispose the underlying disposable
+                    if (active == 0)
+                    {
+                        _disposable?.Dispose();
+                        _disposable = null;
+                    }
+                    break;
+                }
+                cnt = b;
+            }
         }
 
         private void Release()
         {
-            var disposable = default(IDisposable);
-            lock (_gate)
+            var cnt = Volatile.Read(ref _count);
+
+            for (; ; )
             {
-                if (_disposable != null)
+                // extract the main disposed state (bit 31)
+                var main = (int)(cnt & 0x80000000);
+                // get the active count
+                var active = cnt & 0x7FFFFFFF;
+
+                // keep the main disposed state but decrement the counter
+                // in theory, active should be always > 0 at this point,
+                // guaranteed by the InnerDisposable.Dispose's Exchange operation.
+                Diagnostics.Debug.Assert(active > 0);
+                var u = main | (active - 1);
+
+                var b = Interlocked.CompareExchange(ref _count, u, cnt);
+
+                if (b == cnt)
                 {
-                    _count--;
-
-                    System.Diagnostics.Debug.Assert(_count >= 0);
-
-                    if (_isPrimaryDisposed)
+                    // if after the CAS there was zero active disposables and
+                    // the main has been also marked for disposing,
+                    // it is safe to dispose the underlying disposable
+                    if (u == int.MinValue)
                     {
-                        if (_count == 0)
-                        {
-                            disposable = _disposable;
-                            _disposable = null;
-                        }
+                        _disposable?.Dispose();
+                        _disposable = null;
                     }
+                    break;
                 }
+                cnt = b;
             }
-
-            disposable?.Dispose();
         }
 
         private sealed class InnerDisposable : IDisposable

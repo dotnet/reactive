@@ -5,10 +5,12 @@
 #pragma warning disable 1591
 
 using System.Collections.Generic;
-using System.Reactive.Joins;
-using System.Linq.Expressions;
-using System.Reflection;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reactive.Joins;
+#if !CRIPPLED_REFLECTION
+using System.Reflection;
+#endif
 
 namespace System.Reactive.Linq
 {
@@ -28,17 +30,22 @@ namespace System.Reactive.Linq
         public static QueryablePattern<TLeft, TRight> And<TLeft, TRight>(this IQbservable<TLeft> left, IObservable<TRight> right)
         {
             if (left == null)
+            {
                 throw new ArgumentNullException(nameof(left));
+            }
+
             if (right == null)
+            {
                 throw new ArgumentNullException(nameof(right));
+            }
 
             return new QueryablePattern<TLeft, TRight>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.And<TLeft, TRight>(default(IQbservable<TLeft>), default(IObservable<TRight>))),
+                    InfoOf(() => And<TLeft, TRight>(default, default)),
 #else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TLeft), typeof(TRight)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TLeft), typeof(TRight)),
 #endif
                     left.Expression,
                     GetSourceExpression(right)
@@ -58,17 +65,22 @@ namespace System.Reactive.Linq
         public static QueryablePlan<TResult> Then<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.Then<TSource, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, TResult>>))),
+                    InfoOf(() => Then<TSource, TResult>(default, default)),
 #else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
 #endif
                     source.Expression,
                     selector
@@ -87,17 +99,22 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> When<TResult>(this IQbservableProvider provider, params QueryablePlan<TResult>[] plans)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (plans == null)
+            {
                 throw new ArgumentNullException(nameof(plans));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.When<TResult>(default(IQbservableProvider), default(QueryablePlan<TResult>[]))),
+                    InfoOf(() => When<TResult>(default, default)),
 #else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.NewArrayInit(
@@ -119,17 +136,22 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> When<TResult>(this IQbservableProvider provider, IEnumerable<QueryablePlan<TResult>> plans)
         {
             if (provider == null)
+            {
                 throw new ArgumentNullException(nameof(provider));
+            }
+
             if (plans == null)
+            {
                 throw new ArgumentNullException(nameof(plans));
+            }
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
 #if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.When<TResult>(default(IQbservableProvider), default(IEnumerable<QueryablePlan<TResult>>))),
+                    InfoOf(() => When(default, default(IEnumerable<QueryablePlan<TResult>>))),
 #else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
+                    ((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(plans, typeof(IEnumerable<QueryablePlan<TResult>>))

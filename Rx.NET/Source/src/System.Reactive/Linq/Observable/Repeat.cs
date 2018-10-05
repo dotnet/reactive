@@ -9,132 +9,221 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Repeat<TResult>
     {
-        internal sealed class Forever : Producer<TResult, Forever._>
+        internal sealed class ForeverRecursive : Producer<TResult, ForeverRecursive._>
         {
             private readonly TResult _value;
             private readonly IScheduler _scheduler;
 
-            public Forever(TResult value, IScheduler scheduler)
+            public ForeverRecursive(TResult value, IScheduler scheduler)
             {
                 _value = value;
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_value, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(_value, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(_scheduler);
 
-            internal sealed class _ : Sink<TResult>
+            internal sealed class _ : IdentitySink<TResult>
             {
                 private readonly TResult _value;
 
-                public _(TResult value, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                private IDisposable _task;
+
+                public _(TResult value, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _value = value;
                 }
 
-                public IDisposable Run(Forever parent)
+                public void Run(IScheduler scheduler)
                 {
-                    var longRunning = parent._scheduler.AsLongRunning();
-                    if (longRunning != null)
+                    var first = scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRecInf(innerScheduler));
+                    Disposable.TrySetSingle(ref _task, first);
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    base.Dispose(disposing);
+                    if (disposing)
                     {
-                        return longRunning.ScheduleLongRunning(LoopInf);
-                    }
-                    else
-                    {
-                        return parent._scheduler.Schedule(LoopRecInf);
+                        Disposable.TryDispose(ref _task);
                     }
                 }
 
-                private void LoopRecInf(Action recurse)
+                private IDisposable LoopRecInf(IScheduler scheduler)
                 {
-                    base._observer.OnNext(_value);
-                    recurse();
+                    ForwardOnNext(_value);
+
+                    var next = scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRecInf(innerScheduler));
+                    Disposable.TrySetMultiple(ref _task, next);
+
+                    return Disposable.Empty;
+                }
+            }
+        }
+
+        internal sealed class ForeverLongRunning : Producer<TResult, ForeverLongRunning._>
+        {
+            private readonly TResult _value;
+            private readonly ISchedulerLongRunning _scheduler;
+
+            public ForeverLongRunning(TResult value, ISchedulerLongRunning scheduler)
+            {
+                _value = value;
+                _scheduler = scheduler;
+            }
+
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(_value, observer);
+
+            protected override void Run(_ sink) => sink.Run(_scheduler);
+
+            internal sealed class _ : IdentitySink<TResult>
+            {
+                private readonly TResult _value;
+
+                public _(TResult value, IObserver<TResult> observer)
+                    : base(observer)
+                {
+                    _value = value;
+                }
+
+                public void Run(ISchedulerLongRunning longRunning)
+                {
+                    SetUpstream(longRunning.ScheduleLongRunning(this, (@this, c) => @this.LoopInf(c)));
                 }
 
                 private void LoopInf(ICancelable cancel)
                 {
                     var value = _value;
                     while (!cancel.IsDisposed)
-                        base._observer.OnNext(value);
+                    {
+                        ForwardOnNext(value);
+                    }
 
-                    base.Dispose();
+                    Dispose();
                 }
             }
         }
 
-        internal sealed class Count : Producer<TResult, Count._>
+        internal sealed class CountRecursive : Producer<TResult, CountRecursive._>
         {
             private readonly TResult _value;
             private readonly IScheduler _scheduler;
             private readonly int _repeatCount;
 
-            public Count(TResult value, int repeatCount, IScheduler scheduler)
+            public CountRecursive(TResult value, int repeatCount, IScheduler scheduler)
             {
                 _value = value;
                 _scheduler = scheduler;
                 _repeatCount = repeatCount;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_value, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(_value, _repeatCount, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(_scheduler);
 
-            internal sealed class _ : Sink<TResult>
+            internal sealed class _ : IdentitySink<TResult>
             {
                 private readonly TResult _value;
 
-                public _(TResult value, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                private int _remaining;
+
+                private IDisposable _task;
+
+                public _(TResult value, int repeatCount, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _value = value;
+                    _remaining = repeatCount;
                 }
 
-                public IDisposable Run(Count parent)
+                public void Run(IScheduler scheduler)
                 {
-                    var longRunning = parent._scheduler.AsLongRunning();
-                    if (longRunning != null)
+                    var first = scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
+                    Disposable.TrySetSingle(ref _task, first);
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    base.Dispose(disposing);
+                    if (disposing)
                     {
-                        return longRunning.ScheduleLongRunning(parent._repeatCount, Loop);
+                        Disposable.TryDispose(ref _task);
+                    }
+                }
+
+                private IDisposable LoopRec(IScheduler scheduler)
+                {
+                    var remaining = _remaining;
+                    if (remaining > 0)
+                    {
+                        ForwardOnNext(_value);
+                        _remaining = --remaining;
+                    }
+
+                    if (remaining == 0)
+                    {
+                        ForwardOnCompleted();
                     }
                     else
                     {
-                        return parent._scheduler.Schedule(parent._repeatCount, LoopRec);
+                        var next = scheduler.Schedule(this, (innerScheduler, @this) => @this.LoopRec(innerScheduler));
+                        Disposable.TrySetMultiple(ref _task, next);
                     }
+                    return Disposable.Empty;
                 }
+            }
+        }
 
-                private void LoopRec(int n, Action<int> recurse)
+        internal sealed class CountLongRunning : Producer<TResult, CountLongRunning._>
+        {
+            private readonly TResult _value;
+            private readonly ISchedulerLongRunning _scheduler;
+            private readonly int _repeatCount;
+
+            public CountLongRunning(TResult value, int repeatCount, ISchedulerLongRunning scheduler)
+            {
+                _value = value;
+                _scheduler = scheduler;
+                _repeatCount = repeatCount;
+            }
+
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(_value, _repeatCount, observer);
+
+            protected override void Run(_ sink) => sink.Run(_scheduler);
+
+            internal sealed class _ : IdentitySink<TResult>
+            {
+                private readonly TResult _value;
+                private readonly int _remaining;
+
+                public _(TResult value, int remaining, IObserver<TResult> observer)
+                    : base(observer)
                 {
-                    if (n > 0)
-                    {
-                        base._observer.OnNext(_value);
-                        n--;
-                    }
-
-                    if (n == 0)
-                    {
-                        base._observer.OnCompleted();
-                        base.Dispose();
-                        return;
-                    }
-
-                    recurse(n);
+                    _value = value;
+                    _remaining = remaining;
                 }
 
-                private void Loop(int n, ICancelable cancel)
+                public void Run(ISchedulerLongRunning longRunning)
+                {
+                    SetUpstream(longRunning.ScheduleLongRunning(this, (@this, cancel) => @this.Loop(cancel)));
+                }
+
+                private void Loop(ICancelable cancel)
                 {
                     var value = _value;
+                    var n = _remaining;
                     while (n > 0 && !cancel.IsDisposed)
                     {
-                        base._observer.OnNext(value);
+                        ForwardOnNext(value);
                         n--;
                     }
 
                     if (!cancel.IsDisposed)
-                        base._observer.OnCompleted();
-
-                    base.Dispose();
+                    {
+                        ForwardOnCompleted();
+                    }
                 }
             }
         }

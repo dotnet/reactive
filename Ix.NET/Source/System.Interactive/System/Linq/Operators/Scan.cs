@@ -23,9 +23,14 @@ namespace System.Linq
         public static IEnumerable<TAccumulate> Scan<TSource, TAccumulate>(this IEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (accumulator == null)
+            {
                 throw new ArgumentNullException(nameof(accumulator));
+            }
 
             return ScanCore(source, seed, accumulator);
         }
@@ -43,9 +48,14 @@ namespace System.Linq
         public static IEnumerable<TSource> Scan<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (accumulator == null)
+            {
                 throw new ArgumentNullException(nameof(accumulator));
+            }
 
             return ScanCore(source, accumulator);
         }

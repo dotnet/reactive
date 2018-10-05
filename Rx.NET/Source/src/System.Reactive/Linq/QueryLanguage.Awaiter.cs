@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Threading;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
+using System.Threading;
 
 namespace System.Reactive.Linq
 {
@@ -12,12 +12,12 @@ namespace System.Reactive.Linq
     {
         public virtual AsyncSubject<TSource> GetAwaiter<TSource>(IObservable<TSource> source)
         {
-            return RunAsync<TSource>(source, CancellationToken.None);
+            return RunAsync(source, CancellationToken.None);
         }
 
         public virtual AsyncSubject<TSource> GetAwaiter<TSource>(IConnectableObservable<TSource> source)
         {
-            return RunAsync<TSource>(source, CancellationToken.None);
+            return RunAsync(source, CancellationToken.None);
         }
 
         public virtual AsyncSubject<TSource> RunAsync<TSource>(IObservable<TSource> source, CancellationToken cancellationToken)

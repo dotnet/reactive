@@ -15,7 +15,7 @@ namespace System.Reactive
 #if !NO_SERIALIZABLE
     [Serializable]
 #endif
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Timestamped", Justification = "Reviewed and agreed upon.")]
+    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Timestamped", Justification = "Reviewed and agreed upon.")]
     public struct Timestamped<T> : IEquatable<Timestamped<T>>
     {
         /// <summary>
@@ -79,7 +79,9 @@ namespace System.Reactive
         public override bool Equals(object obj)
         {
             if (!(obj is Timestamped<T>))
+            {
                 return false;
+            }
 
             var other = (Timestamped<T>)obj;
             return Equals(other);
@@ -100,7 +102,7 @@ namespace System.Reactive
         /// <returns>String representation of the current <see cref="Timestamped{T}" /> value.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.CurrentCulture, "{0}@{1}", Value, Timestamp);
+            return string.Format(CultureInfo.CurrentCulture, "{0}@{1}", Value, Timestamp);
         }
     }
 

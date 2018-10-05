@@ -15,17 +15,16 @@ namespace System.Linq
     /// </summary>
     internal class AsyncEnumerableRewriter : ExpressionVisitor
     {
-        private static volatile ILookup<string, MethodInfo> s_methods;
+        private static volatile ILookup<string, MethodInfo> _methods;
 
         protected override Expression VisitConstant(ConstantExpression node)
         {
-            var enumerableQuery = node.Value as AsyncEnumerableQuery;
 
             //
             // Not an expression representation obtained from the async enumerable query provider,
             // so just a plain constant that can be returned as-is.
             //
-            if (enumerableQuery == null)
+            if (!(node.Value is AsyncEnumerableQuery enumerableQuery))
             {
                 return node;
             }
@@ -395,15 +394,15 @@ namespace System.Linq
             //
             // Ensure the cached lookup table for AsyncEnumerable methods is initialized.
             //
-            if (s_methods == null)
+            if (_methods == null)
             {
-                s_methods = typeof(AsyncEnumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).ToLookup(m => m.Name);
+                _methods = typeof(AsyncEnumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).ToLookup(m => m.Name);
             }
 
             //
             // Find a match based on the method name and the argument types.
             //
-            var method = s_methods[name].FirstOrDefault(m => ArgsMatch(m, args, typeArgs));
+            var method = _methods[name].FirstOrDefault(m => ArgsMatch(m, args, typeArgs));
             if (method == null)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not find method with name '{0}' on type '{1}'.", name, typeof(Enumerable)));

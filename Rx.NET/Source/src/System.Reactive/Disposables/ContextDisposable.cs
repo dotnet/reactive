@@ -12,7 +12,7 @@ namespace System.Reactive.Disposables
     /// </summary>
     public sealed class ContextDisposable : ICancelable
     {
-        private volatile IDisposable _disposable;
+        private IDisposable _disposable;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContextDisposable"/> class that uses the specified <see cref="SynchronizationContext"/> on which to dispose the specified disposable resource.
@@ -22,13 +22,13 @@ namespace System.Reactive.Disposables
         /// <exception cref="ArgumentNullException"><paramref name="context"/> or <paramref name="disposable"/> is null.</exception>
         public ContextDisposable(SynchronizationContext context, IDisposable disposable)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
             if (disposable == null)
+            {
                 throw new ArgumentNullException(nameof(disposable));
+            }
 
-            Context = context;
-            _disposable = disposable;
+            Context = context ?? throw new ArgumentNullException(nameof(context));
+            Disposable.SetSingle(ref _disposable, disposable);
         }
 
         /// <summary>
@@ -39,19 +39,14 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed => _disposable == BooleanDisposable.True;
+        public bool IsDisposed => Disposable.GetIsDisposed(ref _disposable);
 
         /// <summary>
         /// Disposes the underlying disposable on the provided <see cref="SynchronizationContext"/>.
         /// </summary>
         public void Dispose()
         {
-            var disposable = Interlocked.Exchange(ref _disposable, BooleanDisposable.True);
-
-            if (disposable != BooleanDisposable.True)
-            {
-                Context.PostWithStartComplete(d => d.Dispose(), disposable);
-            }
+            Disposable.TryRelease(ref _disposable, Context, (disposable, context) => context.PostWithStartComplete(d => d.Dispose(), disposable));
         }
     }
 }

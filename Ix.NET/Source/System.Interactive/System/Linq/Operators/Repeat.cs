@@ -12,7 +12,7 @@ namespace System.Linq
         /// Generates a sequence by repeating the given value infinitely.
         /// </summary>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
-        /// <param name="value">Value to repreat in the resulting sequence.</param>
+        /// <param name="value">Value to repeat in the resulting sequence.</param>
         /// <returns>Sequence repeating the given value infinitely.</returns>
         public static IEnumerable<TResult> Repeat<TResult>(TResult value)
         {
@@ -43,7 +43,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Repeat<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return RepeatCore(source);
         }
@@ -58,9 +60,14 @@ namespace System.Linq
         public static IEnumerable<TSource> Repeat<TSource>(this IEnumerable<TSource> source, int count)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (count < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(count));
+            }
 
             return RepeatCore(source, count);
         }

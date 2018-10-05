@@ -18,37 +18,26 @@ namespace System.Reactive.Linq.ObservableImpl
             _getNewCollector = getNewCollector;
         }
 
-        protected override PushToPullSink<TSource, TResult> Run(IDisposable subscription)
-        {
-            var sink = new _(this, subscription);
-            sink.Initialize();
-            return sink;
-        }
+        protected override PushToPullSink<TSource, TResult> Run() => new _(_merge, _getNewCollector, _getInitialCollector());
 
         private sealed class _ : PushToPullSink<TSource, TResult>
         {
-            // CONSIDER: This sink has a parent reference that can be considered for removal.
+            private readonly object _gate;
+            private readonly Func<TResult, TSource, TResult> _merge;
+            private readonly Func<TResult, TResult> _getNewCollector;
 
-            private readonly Collect<TSource, TResult> _parent;
-
-            public _(Collect<TSource, TResult> parent, IDisposable subscription)
-                : base(subscription)
+            public _(Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector, TResult collector)
             {
-                _parent = parent;
+                _gate = new object();
+                _merge = merge;
+                _getNewCollector = getNewCollector;
+                _collector = collector;
             }
 
-            private object _gate;
             private TResult _collector;
-            private bool _hasFailed;
             private Exception _error;
             private bool _hasCompleted;
             private bool _done;
-
-            public void Initialize()
-            {
-                _gate = new object();
-                _collector = _parent._getInitialCollector();
-            }
 
             public override void OnNext(TSource value)
             {
@@ -56,32 +45,30 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     try
                     {
-                        _collector = _parent._merge(_collector, value);
+                        _collector = _merge(_collector, value);
                     }
                     catch (Exception ex)
                     {
                         _error = ex;
-                        _hasFailed = true;
 
-                        base.Dispose();
+                        Dispose();
                     }
                 }
             }
 
             public override void OnError(Exception error)
             {
-                base.Dispose();
+                Dispose();
 
                 lock (_gate)
                 {
                     _error = error;
-                    _hasFailed = true;
                 }
             }
 
             public override void OnCompleted()
             {
-                base.Dispose();
+                Dispose();
 
                 lock (_gate)
                 {
@@ -93,10 +80,12 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 lock (_gate)
                 {
-                    if (_hasFailed)
+                    var error = _error;
+                    if (error != null)
                     {
-                        current = default(TResult);
-                        _error.Throw();
+                        current = default;
+                        _collector = default;
+                        error.Throw();
                     }
                     else
                     {
@@ -104,7 +93,8 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             if (_done)
                             {
-                                current = default(TResult);
+                                current = default;
+                                _collector = default;
                                 return false;
                             }
 
@@ -117,11 +107,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                             try
                             {
-                                _collector = _parent._getNewCollector(current);
+                                _collector = _getNewCollector(current);
                             }
                             catch
                             {
-                                base.Dispose();
+                                Dispose();
                                 throw;
                             }
                         }

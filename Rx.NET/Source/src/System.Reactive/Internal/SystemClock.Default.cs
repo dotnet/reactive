@@ -5,6 +5,8 @@
 using System.ComponentModel;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace System.Reactive.PlatformServices
 {
@@ -22,10 +24,10 @@ namespace System.Reactive.PlatformServices
 
     internal class DefaultSystemClockMonitor : PeriodicTimerSystemClockMonitor
     {
-        private static readonly TimeSpan DEFAULT_PERIOD = TimeSpan.FromSeconds(1);
+        private static readonly TimeSpan DefaultPeriod = TimeSpan.FromSeconds(1);
 
         public DefaultSystemClockMonitor()
-            : base(DEFAULT_PERIOD)
+            : base(DefaultPeriod)
         {
         }
     }
@@ -37,14 +39,19 @@ namespace System.Reactive.PlatformServices
     public class PeriodicTimerSystemClockMonitor : INotifySystemClockChanged
     {
         private readonly TimeSpan _period;
-        private readonly SerialDisposable _timer;
+        private IDisposable _timer;
 
-        private DateTimeOffset _lastTime;
+        /// <summary>
+        /// Use the Unix milliseconds for the current time
+        /// so it can be atomically read/written without locking.
+        /// </summary>
+        private long _lastTimeUnixMillis;
+
         private EventHandler<SystemClockChangedEventArgs> _systemClockChanged;
 
-        private const int SYNC_MAXRETRIES = 100;
-        private const double SYNC_MAXDELTA = 10;
-        private const int MAXERROR = 100;
+        private const int SyncMaxRetries = 100;
+        private const double SyncMaxDelta = 10;
+        private const int MaxError = 100;
 
         /// <summary>
         /// Creates a new monitor for system clock changes with the specified polling frequency.
@@ -53,7 +60,6 @@ namespace System.Reactive.PlatformServices
         public PeriodicTimerSystemClockMonitor(TimeSpan period)
         {
             _period = period;
-            _timer = new SerialDisposable();
         }
 
         /// <summary>
@@ -72,38 +78,55 @@ namespace System.Reactive.PlatformServices
             {
                 _systemClockChanged -= value;
 
-                _timer.Disposable = Disposable.Empty;
+                Disposable.TrySetSerial(ref _timer, Disposable.Empty);
             }
         }
 
         private void NewTimer()
         {
-            _timer.Disposable = Disposable.Empty;
+            Disposable.TrySetSerial(ref _timer, Disposable.Empty);
 
-            var n = 0;
-            do
+            var n = 0L;
+            for (; ; )
             {
-                _lastTime = SystemClock.UtcNow;
-                _timer.Disposable = ConcurrencyAbstractionLayer.Current.StartPeriodicTimer(TimeChanged, _period);
-            } while (Math.Abs((SystemClock.UtcNow - _lastTime).TotalMilliseconds) > SYNC_MAXDELTA && ++n < SYNC_MAXRETRIES);
+                var now = SystemClock.UtcNow.ToUnixTimeMilliseconds();
+                Interlocked.Exchange(ref _lastTimeUnixMillis, now);
 
-            if (n >= SYNC_MAXRETRIES)
-                throw new InvalidOperationException(Strings_Core.FAILED_CLOCK_MONITORING);
+                Disposable.TrySetSerial(ref _timer, ConcurrencyAbstractionLayer.Current.StartPeriodicTimer(TimeChanged, _period));
+
+                if (Math.Abs(SystemClock.UtcNow.ToUnixTimeMilliseconds() - now) <= SyncMaxDelta)
+                {
+                    break;
+                }
+                if (Volatile.Read(ref _timer) == Disposable.Empty)
+                {
+                    break;
+                }
+                if (++n >= SyncMaxRetries)
+                {
+                    Task.Delay((int)SyncMaxDelta).Wait();
+                }
+            }
         }
 
         private void TimeChanged()
         {
-            var now = SystemClock.UtcNow;
-            var diff = now - (_lastTime + _period);
-            if (Math.Abs(diff.TotalMilliseconds) >= MAXERROR)
+            var newTime = SystemClock.UtcNow;
+            var now = newTime.ToUnixTimeMilliseconds();
+            var last = Volatile.Read(ref _lastTimeUnixMillis);
+
+            var oldTime = (long)(last + _period.TotalMilliseconds);
+            var diff = now - oldTime;
+            if (Math.Abs(diff) >= MaxError)
             {
-                _systemClockChanged?.Invoke(this, new SystemClockChangedEventArgs(_lastTime + _period, now));
+                _systemClockChanged?.Invoke(this, new SystemClockChangedEventArgs(
+                    DateTimeOffset.FromUnixTimeMilliseconds(oldTime), newTime));
 
                 NewTimer();
             }
             else
             {
-                _lastTime = SystemClock.UtcNow;
+                Interlocked.Exchange(ref _lastTimeUnixMillis, SystemClock.UtcNow.ToUnixTimeMilliseconds());
             }
         }
     }

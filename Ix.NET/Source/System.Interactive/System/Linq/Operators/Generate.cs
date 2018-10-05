@@ -21,11 +21,19 @@ namespace System.Linq
         public static IEnumerable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
         {
             if (condition == null)
+            {
                 throw new ArgumentNullException(nameof(condition));
+            }
+
             if (iterate == null)
+            {
                 throw new ArgumentNullException(nameof(iterate));
+            }
+
             if (resultSelector == null)
+            {
                 throw new ArgumentNullException(nameof(resultSelector));
+            }
 
             return GenerateCore(initialState, condition, iterate, resultSelector);
         }

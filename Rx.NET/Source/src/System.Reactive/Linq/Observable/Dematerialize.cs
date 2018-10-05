@@ -13,45 +13,31 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource>, IObserver<Notification<TSource>>
+        internal sealed class _ : Sink<Notification<TSource>, TSource>
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
-            public void OnNext(Notification<TSource> value)
+            public override void OnNext(Notification<TSource> value)
             {
                 switch (value.Kind)
                 {
                     case NotificationKind.OnNext:
-                        base._observer.OnNext(value.Value);
+                        ForwardOnNext(value.Value);
                         break;
                     case NotificationKind.OnError:
-                        base._observer.OnError(value.Exception);
-                        base.Dispose();
+                        ForwardOnError(value.Exception);
                         break;
                     case NotificationKind.OnCompleted:
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                         break;
                 }
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
             }
         }
     }

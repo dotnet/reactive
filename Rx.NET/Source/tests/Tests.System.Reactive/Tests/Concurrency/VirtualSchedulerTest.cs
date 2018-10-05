@@ -14,10 +14,10 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public class VirtualSchedulerTest
     {
-        class VirtualSchedulerTestScheduler : VirtualTimeScheduler<string, char>
+        private class VirtualSchedulerTestScheduler : VirtualTimeScheduler<string, char>
         {
             public VirtualSchedulerTestScheduler()
             {
@@ -94,22 +94,22 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler("", null));
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().ScheduleRelative(0, 'a', null));
             ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().ScheduleAbsolute(0, "", null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, TimeSpan.Zero, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, DateTimeOffset.UtcNow, default(Func<IScheduler, int, IDisposable>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, TimeSpan.Zero, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new VirtualSchedulerTestScheduler().Schedule(0, DateTimeOffset.UtcNow, default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleAbsolute(default(VirtualSchedulerTestScheduler), "", () => {}));
-            ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleAbsolute(new VirtualSchedulerTestScheduler(), "", default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleAbsolute(default(VirtualSchedulerTestScheduler), "", () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleAbsolute(new VirtualSchedulerTestScheduler(), "", default));
             ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleRelative(default(VirtualSchedulerTestScheduler), 'a', () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleRelative(new VirtualSchedulerTestScheduler(), 'a', default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => VirtualTimeSchedulerExtensions.ScheduleRelative(new VirtualSchedulerTestScheduler(), 'a', default));
         }
 
         [Fact]
         public void Historical_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler(DateTime.Now, default(IComparer<DateTimeOffset>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler().ScheduleAbsolute(42, DateTime.Now, default(Func<IScheduler, int, IDisposable>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler().ScheduleRelative(42, TimeSpan.FromSeconds(1), default(Func<IScheduler, int, IDisposable>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler(DateTime.Now, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler().ScheduleAbsolute(42, DateTime.Now, default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler().ScheduleRelative(42, TimeSpan.FromSeconds(1), default));
         }
 
 #if !NO_THREAD
@@ -136,19 +136,46 @@ namespace ReactiveTests.Tests
             {
                 var scheduler = new TestScheduler();
                 var seq = Observable.Never<string>();
+                var disposable = default(IDisposable);
 
-                Task.Run(()=>
+                var sync = 2;
+
+                Task.Run(() =>
                 {
-                    Task.Delay(50).Wait();
-                    seq.Timeout(TimeSpan.FromSeconds(10), scheduler).Subscribe(s => { });
+                    if (Interlocked.Decrement(ref sync) != 0)
+                    {
+                        while (Volatile.Read(ref sync) != 0)
+                        {
+                            ;
+                        }
+                    }
+
+                    Task.Delay(10).Wait();
+
+                    disposable = seq.Timeout(TimeSpan.FromSeconds(5), scheduler).Subscribe(s => { });
                 });
 
                 var watch = scheduler.StartStopwatch();
                 try
                 {
-                    while (watch.Elapsed < TimeSpan.FromSeconds(20))
+                    if (Interlocked.Decrement(ref sync) != 0)
                     {
-                        scheduler.AdvanceBy(10);
+                        while (Volatile.Read(ref sync) != 0)
+                        {
+                            ;
+                        }
+                    }
+
+                    var d = default(IDisposable);
+                    while (watch.Elapsed < TimeSpan.FromSeconds(100))
+                    {
+                        d = Volatile.Read(ref disposable);
+                        scheduler.AdvanceBy(50);
+                    }
+
+                    if (d != null)
+                    {
+                        throw new Exception("Should have thrown!");
                     }
                 }
                 catch (TimeoutException)
@@ -158,6 +185,7 @@ namespace ReactiveTests.Tests
                 {
                     Assert.True(false, string.Format("Virtual time {0}, exception {1}", watch.Elapsed, ex));
                 }
+                disposable?.Dispose();
             }
         }
     }

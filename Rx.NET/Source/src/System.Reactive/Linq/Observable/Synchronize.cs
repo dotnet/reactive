@@ -20,43 +20,41 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_gate, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(_gate, observer);
 
-        protected override IDisposable Run(_ sink) => _source.Subscribe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private readonly object _gate;
 
-            public _(object gate, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(object gate, IObserver<TSource> observer)
+                : base(observer)
             {
                 _gate = gate ?? new object();
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 lock (_gate)
                 {
-                    base._observer.OnNext(value);
+                    ForwardOnNext(value);
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 lock (_gate)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    ForwardOnError(error);
                 }
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 lock (_gate)
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
                 }
             }
         }

@@ -37,38 +37,48 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> When<TResult>(IEnumerable<Plan<TResult>> plans)
         {
-            return new AnonymousObservable<TResult>(observer =>
+            return new WhenObservable<TResult>(plans);
+        }
+
+        private sealed class WhenObservable<TResult> : ObservableBase<TResult>
+        {
+            private readonly IEnumerable<Plan<TResult>> _plans;
+
+            public WhenObservable(IEnumerable<Plan<TResult>> plans)
+            {
+                _plans = plans;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TResult> observer)
             {
                 var externalSubscriptions = new Dictionary<object, IJoinObserver>();
                 var gate = new object();
                 var activePlans = new List<ActivePlan>();
-                var outObserver = Observer.Create<TResult>(observer.OnNext,
-                    exception =>
-                    {
-                        foreach (var po in externalSubscriptions.Values)
-                        {
-                            po.Dispose();
-                        }
-                        observer.OnError(exception);
-                    },
-                    observer.OnCompleted);
+                var outObserver = new OutObserver(observer, externalSubscriptions);
                 try
                 {
-                    foreach (var plan in plans)
+                    void onDeactivate(ActivePlan activePlan)
+                    {
+                        activePlans.Remove(activePlan);
+                        if (activePlans.Count == 0)
+                        {
+                            outObserver.OnCompleted();
+                        }
+                    }
+
+                    foreach (var plan in _plans)
+                    {
                         activePlans.Add(plan.Activate(externalSubscriptions, outObserver,
-                                                      activePlan =>
-                                                      {
-                                                          activePlans.Remove(activePlan);
-                                                          if (activePlans.Count == 0)
-                                                              outObserver.OnCompleted();
-                                                      }));
+                                                      onDeactivate));
+                    }
                 }
                 catch (Exception e)
                 {
                     //
                     // [OK] Use of unsafe Subscribe: we're calling into a known producer implementation.
                     //
-                    return Throw<TResult>(e).Subscribe/*Unsafe*/(observer);
+                    observer.OnError(e);
+                    return Disposable.Empty;
                 }
 
                 var group = new CompositeDisposable(externalSubscriptions.Values.Count);
@@ -78,7 +88,38 @@ namespace System.Reactive.Linq
                     group.Add(joinObserver);
                 }
                 return group;
-            });
+            }
+
+            private sealed class OutObserver : IObserver<TResult>
+            {
+                private readonly IObserver<TResult> _observer;
+                private readonly Dictionary<object, IJoinObserver> _externalSubscriptions;
+
+                public OutObserver(IObserver<TResult> observer, Dictionary<object, IJoinObserver> externalSubscriptions)
+                {
+                    _observer = observer;
+                    _externalSubscriptions = externalSubscriptions;
+                }
+
+                public void OnCompleted()
+                {
+                    _observer.OnCompleted();
+                }
+
+                public void OnError(Exception exception)
+                {
+                    foreach (var po in _externalSubscriptions.Values)
+                    {
+                        po.Dispose();
+                    }
+                    _observer.OnError(exception);
+                }
+
+                public void OnNext(TResult value)
+                {
+                    _observer.OnNext(value);
+                }
+            }
         }
 
         #endregion

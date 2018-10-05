@@ -14,26 +14,26 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gate to protect local scheduler queues.
         /// </summary>
-        private static readonly object _gate = new object();
+        private static readonly object Gate = new object();
 
         /// <summary>
         /// Gate to protect queues and to synchronize scheduling decisions and system clock
         /// change management.
         /// </summary>
-        private static readonly object s_gate = new object();
+        private static readonly object StaticGate = new object();
 
         /// <summary>
         /// Long term work queue. Contains work that's due beyond SHORTTERM, computed at the
         /// time of enqueueing.
         /// </summary>
-        private static readonly PriorityQueue<WorkItem/*!*/> s_longTerm = new PriorityQueue<WorkItem/*!*/>();
+        private static readonly PriorityQueue<WorkItem/*!*/> LongTerm = new PriorityQueue<WorkItem/*!*/>();
 
         /// <summary>
         /// Disposable resource for the long term timer that will reevaluate and dispatch the
         /// first item in the long term queue. A serial disposable is used to make "dispose
         /// current and assign new" logic easier. The disposable itself is never disposed.
         /// </summary>
-        private static readonly SerialDisposable s_nextLongTermTimer = new SerialDisposable();
+        private static readonly SerialDisposable NextLongTermTimer = new SerialDisposable();
 
         /// <summary>
         /// Item at the head of the long term queue for which the current long term timer is
@@ -41,7 +41,7 @@ namespace System.Reactive.Concurrency
         /// or can continue using the current timer (because no earlier long term work was
         /// added to the queue).
         /// </summary>
-        private static WorkItem s_nextLongTermWorkItem = null;
+        private static WorkItem _nextLongTermWorkItem;
 
         /// <summary>
         /// Short term work queue. Contains work that's due soon, computed at the time of
@@ -61,7 +61,7 @@ namespace System.Reactive.Concurrency
         /// Threshold where an item is considered to be short term work or gets moved from
         /// long term to short term.
         /// </summary>
-        private static readonly TimeSpan SHORTTERM = TimeSpan.FromSeconds(10);
+        private static readonly TimeSpan ShortTerm = TimeSpan.FromSeconds(10);
 
         /// <summary>
         /// Maximum error ratio for timer drift. We've seen machines with 10s drift on a
@@ -79,14 +79,14 @@ namespace System.Reactive.Concurrency
         /// enough time to transition work to short term and as a courtesy to the
         /// destination scheduler to manage its queues etc.
         /// </summary>
-        private const int MAXERRORRATIO = 1000;
+        private const int MaxErrorRatio = 1000;
 
         /// <summary>
         /// Minimum threshold for the long term timer to fire before the queue is reevaluated
         /// for short term work. This value is chosen to be less than SHORTTERM in order to
         /// ensure the timer fires and has work to transition to the short term queue.
         /// </summary>
-        private static readonly TimeSpan LONGTOSHORT = TimeSpan.FromSeconds(5);
+        private static readonly TimeSpan LongToShort = TimeSpan.FromSeconds(5);
 
         /// <summary>
         /// Threshold used to determine when a short term timer has fired too early compared
@@ -94,17 +94,17 @@ namespace System.Reactive.Concurrency
         /// completion of scheduled work, which can happen in case of time adjustment in the
         /// operating system (cf. GetSystemTimeAdjustment).
         /// </summary>
-        private static readonly TimeSpan RETRYSHORT = TimeSpan.FromMilliseconds(50);
+        private static readonly TimeSpan RetryShort = TimeSpan.FromMilliseconds(50);
 
         /// <summary>
         /// Longest interval supported by timers in the BCL.
         /// </summary>
-        private static readonly TimeSpan MAXSUPPORTEDTIMER = TimeSpan.FromMilliseconds((1L << 32) - 2);
+        private static readonly TimeSpan MaxSupportedTimer = TimeSpan.FromMilliseconds((1L << 32) - 2);
 
         /// <summary>
         /// Creates a new local scheduler.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "We can't really lift this into a field initializer, and would end up checking for an initialization flag in every static method anyway (which is roughly what the JIT does in a thread-safe manner).")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "We can't really lift this into a field initializer, and would end up checking for an initialization flag in every static method anyway (which is roughly what the JIT does in a thread-safe manner).")]
         protected LocalScheduler()
         {
             //
@@ -137,7 +137,7 @@ namespace System.Reactive.Concurrency
             var due = Scheduler.Normalize(dueTime - Now);
             if (due == TimeSpan.Zero)
             {
-                return Schedule<TState>(state, TimeSpan.Zero, action);
+                return Schedule(state, TimeSpan.Zero, action);
             }
 
             //
@@ -153,7 +153,7 @@ namespace System.Reactive.Concurrency
 
             var workItem = new WorkItem<TState>(this, state, dueTime, action);
 
-            if (due <= SHORTTERM)
+            if (due <= ShortTerm)
             {
                 ScheduleShortTermWork(workItem);
             }
@@ -173,7 +173,7 @@ namespace System.Reactive.Concurrency
         /// <param name="item">Work item to schedule in the short term. The caller is responsible to determine the work is indeed short term.</param>
         private void ScheduleShortTermWork(WorkItem/*!*/ item)
         {
-            lock (_gate)
+            lock (Gate)
             {
                 _shortTerm.Enqueue(item);
 
@@ -195,7 +195,7 @@ namespace System.Reactive.Concurrency
                 // (though it should).
                 //
                 var dueTime = Scheduler.Normalize(item.DueTime - item.Scheduler.Now);
-                d.Disposable = item.Scheduler.Schedule(d, dueTime, ExecuteNextShortTermWorkItem);
+                d.Disposable = item.Scheduler.Schedule((@this: this, d), dueTime, (self, tuple) => tuple.@this.ExecuteNextShortTermWorkItem(self, tuple.d));
             }
         }
 
@@ -209,7 +209,7 @@ namespace System.Reactive.Concurrency
         {
             var next = default(WorkItem);
 
-            lock (_gate)
+            lock (Gate)
             {
                 //
                 // Notice that even though we try to cancel all work in the short term queue upon a
@@ -242,7 +242,7 @@ namespace System.Reactive.Concurrency
                 // have only "little" impact (range of 100s of ms). On an absolute time scale, we
                 // don't provide stronger guarantees.
                 //
-                if (next.DueTime - next.Scheduler.Now >= RETRYSHORT)
+                if (next.DueTime - next.Scheduler.Now >= RetryShort)
                 {
                     ScheduleShortTermWork(next);
                 }
@@ -277,9 +277,9 @@ namespace System.Reactive.Concurrency
         /// <param name="item">Work item to schedule on the long term. The caller is responsible to determine the work is indeed long term.</param>
         private static void ScheduleLongTermWork(WorkItem/*!*/ item)
         {
-            lock (s_gate)
+            lock (StaticGate)
             {
-                s_longTerm.Enqueue(item);
+                LongTerm.Enqueue(item);
 
                 //
                 // In case we're the first long-term item in the queue now, the timer will have
@@ -301,16 +301,20 @@ namespace System.Reactive.Concurrency
              * 
             lock (s_gate) */
             {
-                if (s_longTerm.Count == 0)
+                if (LongTerm.Count == 0)
+                {
                     return;
+                }
 
                 //
                 // To avoid setting the timer all over again for the first work item if it hasn't changed,
                 // we keep track of the next long term work item that will be processed by the timer.
                 //
-                var next = s_longTerm.Peek();
-                if (next == s_nextLongTermWorkItem)
+                var next = LongTerm.Peek();
+                if (next == _nextLongTermWorkItem)
+                {
                     return;
+                }
 
                 //
                 // We need to arrive early in order to accommodate for potential drift. The relative amount
@@ -320,16 +324,16 @@ namespace System.Reactive.Concurrency
                 // error due to drift is negligible.
                 //
                 var due = Scheduler.Normalize(next.DueTime - next.Scheduler.Now);
-                var remainder = TimeSpan.FromTicks(Math.Max(due.Ticks / MAXERRORRATIO, LONGTOSHORT.Ticks));
+                var remainder = TimeSpan.FromTicks(Math.Max(due.Ticks / MaxErrorRatio, LongToShort.Ticks));
                 var dueEarly = due - remainder;
 
                 //
                 // Limit the interval to maximum supported by underlying Timer.
                 //
-                var dueCapped = TimeSpan.FromTicks(Math.Min(dueEarly.Ticks, MAXSUPPORTEDTIMER.Ticks));
+                var dueCapped = TimeSpan.FromTicks(Math.Min(dueEarly.Ticks, MaxSupportedTimer.Ticks));
 
-                s_nextLongTermWorkItem = next;
-                s_nextLongTermTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(EvaluateLongTermQueue, null, dueCapped);
+                _nextLongTermWorkItem = next;
+                NextLongTermTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(_ => EvaluateLongTermQueue(), null, dueCapped);
             }
         }
 
@@ -337,26 +341,25 @@ namespace System.Reactive.Concurrency
         /// Evaluates the long term queue, transitioning short term work to the short term list,
         /// and adjusting the new long term processing timer accordingly.
         /// </summary>
-        /// <param name="state">Ignored.</param>
-        private static void EvaluateLongTermQueue(object state)
+        private static void EvaluateLongTermQueue()
         {
-            lock (s_gate)
+            lock (StaticGate)
             {
-                var next = default(WorkItem);
-
-                while (s_longTerm.Count > 0)
+                while (LongTerm.Count > 0)
                 {
-                    next = s_longTerm.Peek();
+                    var next = LongTerm.Peek();
 
                     var due = Scheduler.Normalize(next.DueTime - next.Scheduler.Now);
-                    if (due >= SHORTTERM)
+                    if (due >= ShortTerm)
+                    {
                         break;
+                    }
 
-                    var item = s_longTerm.Dequeue();
+                    var item = LongTerm.Dequeue();
                     item.Scheduler.ScheduleShortTermWork(item);
                 }
 
-                s_nextLongTermWorkItem = null;
+                _nextLongTermWorkItem = null;
                 UpdateLongTermProcessingTimer();
             }
         }
@@ -369,9 +372,9 @@ namespace System.Reactive.Concurrency
         /// <param name="sender">Currently not used.</param>
         internal void SystemClockChanged(object sender, SystemClockChangedEventArgs args)
         {
-            lock (_gate)
+            lock (StaticGate)
             {
-                lock (s_gate)
+                lock (Gate)
                 {
                     //
                     // Best-effort cancellation of short term work. A check for presence in the hash set
@@ -394,15 +397,15 @@ namespace System.Reactive.Concurrency
                     while (_shortTerm.Count > 0)
                     {
                         var next = _shortTerm.Dequeue();
-                        s_longTerm.Enqueue(next);
+                        LongTerm.Enqueue(next);
                     }
 
                     //
                     // Reevaluate the queue and don't forget to null out the current timer to force the
                     // method to create a new timer for the new first long term item.
                     //
-                    s_nextLongTermWorkItem = null;
-                    EvaluateLongTermQueue(null);
+                    _nextLongTermWorkItem = null;
+                    EvaluateLongTermQueue();
                 }
             }
         }
@@ -419,15 +422,14 @@ namespace System.Reactive.Concurrency
             public readonly LocalScheduler Scheduler;
             public readonly DateTimeOffset DueTime;
 
-            private readonly SingleAssignmentDisposable _disposable;
+            private IDisposable _disposable;
             private int _hasRun;
 
-            public WorkItem(LocalScheduler scheduler, DateTimeOffset dueTime)
+            protected WorkItem(LocalScheduler scheduler, DateTimeOffset dueTime)
             {
                 Scheduler = scheduler;
                 DueTime = dueTime;
 
-                _disposable = new SingleAssignmentDisposable();
                 _hasRun = 0;
             }
 
@@ -443,9 +445,9 @@ namespace System.Reactive.Concurrency
                 {
                     try
                     {
-                        if (!_disposable.IsDisposed)
+                        if (!Disposable.GetIsDisposed(ref _disposable))
                         {
-                            _disposable.Disposable = InvokeCore(scheduler);
+                            Disposable.SetSingle(ref _disposable, InvokeCore(scheduler));
                         }
                     }
                     finally
@@ -459,7 +461,7 @@ namespace System.Reactive.Concurrency
 
             public int CompareTo(WorkItem/*!*/ other) => Comparer<DateTimeOffset>.Default.Compare(DueTime, other.DueTime);
 
-            public void Dispose() => _disposable.Dispose();
+            public void Dispose() => Disposable.TryDispose(ref _disposable);
         }
 
         /// <summary>

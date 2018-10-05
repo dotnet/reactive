@@ -25,7 +25,9 @@ namespace System.Reactive.Concurrency
         public virtual IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return Schedule(state, TimeSpan.Zero, action);
         }
@@ -52,7 +54,9 @@ namespace System.Reactive.Concurrency
         public virtual IDisposable Schedule<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return Enqueue(state, dueTime, action);
         }
@@ -79,11 +83,19 @@ namespace System.Reactive.Concurrency
         protected virtual object GetService(Type serviceType)
         {
             if (serviceType == typeof(IStopwatchProvider))
-                return this as IStopwatchProvider;
-            else if (serviceType == typeof(ISchedulerLongRunning))
+            {
+                return this;
+            }
+
+            if (serviceType == typeof(ISchedulerLongRunning))
+            {
                 return this as ISchedulerLongRunning;
-            else if (serviceType == typeof(ISchedulerPeriodic))
+            }
+
+            if (serviceType == typeof(ISchedulerPeriodic))
+            {
                 return this as ISchedulerPeriodic;
+            }
 
             return null;
         }

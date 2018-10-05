@@ -31,23 +31,56 @@ namespace System.Reactive.Concurrency
         public static IObservable<TSource> SubscribeOn<TSource>(IObservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-
-            return new AnonymousObservable<TSource>(observer =>
             {
-                var m = new SingleAssignmentDisposable();
-                var d = new SerialDisposable();
-                d.Disposable = m;
+                throw new ArgumentNullException(nameof(source));
+            }
 
-                m.Disposable = scheduler.Schedule(() =>
+            if (scheduler == null)
+            {
+                throw new ArgumentNullException(nameof(scheduler));
+            }
+
+            return new SubscribeOnObservable<TSource>(source, scheduler);
+        }
+
+        private sealed class SubscribeOnObservable<TSource> : ObservableBase<TSource>
+        {
+            private sealed class Subscription : IDisposable
+            {
+                private IDisposable _cancel;
+
+                public Subscription(IObservable<TSource> source, IScheduler scheduler, IObserver<TSource> observer)
                 {
-                    d.Disposable = new ScheduledDisposable(scheduler, source.SubscribeSafe(observer));
-                });
+                    Disposable.TrySetSingle(
+                        ref _cancel,
+                        scheduler.Schedule(
+                            (@this: this, source, observer),
+                            (closureScheduler, state) =>
+                            {
+                                Disposable.TrySetSerial(ref state.@this._cancel, new ScheduledDisposable(closureScheduler, state.source.SubscribeSafe(state.observer)));
+                                return Disposable.Empty;
+                            }));
+                }
 
-                return d;
-            });
+                public void Dispose()
+                {
+                    Disposable.TryDispose(ref _cancel);
+                }
+            }
+
+            private readonly IObservable<TSource> _source;
+            private readonly IScheduler _scheduler;
+
+            public SubscribeOnObservable(IObservable<TSource> source, IScheduler scheduler)
+            {
+                _source = source;
+                _scheduler = scheduler;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TSource> observer)
+            {
+                return new Subscription(_source, _scheduler, observer);
+            }
         }
 
         /// <summary>
@@ -65,22 +98,63 @@ namespace System.Reactive.Concurrency
         public static IObservable<TSource> SubscribeOn<TSource>(IObservable<TSource> source, SynchronizationContext context)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            return new AnonymousObservable<TSource>(observer =>
             {
-                var subscription = new SingleAssignmentDisposable();
-                context.PostWithStartComplete(() =>
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            return new SubscribeOnCtxObservable<TSource>(source, context);
+        }
+
+        private sealed class SubscribeOnCtxObservable<TSource> : ObservableBase<TSource>
+        {
+            private sealed class Subscription : IDisposable
+            {
+                private readonly IObservable<TSource> _source;
+                private readonly IObserver<TSource> _observer;
+                private readonly SynchronizationContext _context;
+                private IDisposable _cancel;
+
+                public Subscription(IObservable<TSource> source, SynchronizationContext context, IObserver<TSource> observer)
                 {
-                    if (!subscription.IsDisposed)
-                    {
-                        subscription.Disposable = new ContextDisposable(context, source.SubscribeSafe(observer));
-                    }
-                });
-                return subscription;
-            });
+                    _source = source;
+                    _context = context;
+                    _observer = observer;
+
+                    context.PostWithStartComplete(
+                        @this =>
+                        {
+                            if (!Disposable.GetIsDisposed(ref @this._cancel))
+                            {
+                                Disposable.SetSingle(ref @this._cancel, new ContextDisposable(@this._context, @this._source.SubscribeSafe(@this._observer)));
+                            }
+                        },
+                        this);
+                }
+
+                public void Dispose()
+                {
+                    Disposable.TryDispose(ref _cancel);
+                }
+            }
+
+            private readonly IObservable<TSource> _source;
+            private readonly SynchronizationContext _context;
+
+            public SubscribeOnCtxObservable(IObservable<TSource> source, SynchronizationContext context)
+            {
+                _source = source;
+                _context = context;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TSource> observer)
+            {
+                return new Subscription(_source, _context, observer);
+            }
         }
 
         #endregion
@@ -98,9 +172,14 @@ namespace System.Reactive.Concurrency
         public static IObservable<TSource> ObserveOn<TSource>(IObservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             return new ObserveOn<TSource>.Scheduler(source, scheduler);
         }
@@ -116,9 +195,14 @@ namespace System.Reactive.Concurrency
         public static IObservable<TSource> ObserveOn<TSource>(IObservable<TSource> source, SynchronizationContext context)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (context == null)
+            {
                 throw new ArgumentNullException(nameof(context));
+            }
 
             return new ObserveOn<TSource>.Context(source, context);
         }
@@ -137,7 +221,9 @@ namespace System.Reactive.Concurrency
         public static IObservable<TSource> Synchronize<TSource>(IObservable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return new Synchronize<TSource>(source);
         }
@@ -153,9 +239,14 @@ namespace System.Reactive.Concurrency
         public static IObservable<TSource> Synchronize<TSource>(IObservable<TSource> source, object gate)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (gate == null)
+            {
                 throw new ArgumentNullException(nameof(gate));
+            }
 
             return new Synchronize<TSource>(source, gate);
         }

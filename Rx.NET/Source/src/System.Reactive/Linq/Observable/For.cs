@@ -17,32 +17,23 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(GetSources());
+        protected override void Run(_ sink) => sink.Run(GetSources());
 
         public IEnumerable<IObservable<TResult>> GetSources()
         {
             foreach (var item in _source)
+            {
                 yield return _resultSelector(item);
+            }
         }
 
         internal sealed class _ : ConcatSink<TResult>
         {
-            public _(IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TResult> observer)
+                : base(observer)
             {
-            }
-
-            public override void OnNext(TResult value)
-            {
-                base._observer.OnNext(value);
-            }
-
-            public override void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
             }
         }
     }

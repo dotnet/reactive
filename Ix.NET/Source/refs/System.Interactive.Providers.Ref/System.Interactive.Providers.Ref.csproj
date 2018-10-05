@@ -1,0 +1,23 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras">
+
+  <PropertyGroup>
+    <Description>Interactive Extensions Providers Library used to build query providers and express queries over enumerable sequences.</Description>
+    <AssemblyTitle>Interactive Extensions - Providers Library</AssemblyTitle>
+    <TargetFrameworks>netstandard1.0;netcoreapp2.0;netstandard2.1</TargetFrameworks>
+    <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Interactive.Ref\System.Interactive.Ref.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\System.Interactive.Providers\**\*.cs" Exclude="..\..\System.Interactive.Providers\obj\**" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
+    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
+  </ItemGroup>
+
+
+</Project>

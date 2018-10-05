@@ -10,45 +10,185 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Buffer<TSource>
     {
-        internal sealed class Count : Producer<IList<TSource>, Count._>
+        internal sealed class CountExact : Producer<IList<TSource>, CountExact.ExactSink>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly int _count;
+
+            public CountExact(IObservable<TSource> source, int count)
+            {
+                _source = source;
+                _count = count;
+            }
+
+            protected override ExactSink CreateSink(IObserver<IList<TSource>> observer) => new ExactSink(observer, _count);
+
+            protected override void Run(ExactSink sink) => sink.Run(_source);
+
+            internal sealed class ExactSink : Sink<TSource, IList<TSource>>
+            {
+                private readonly int _count;
+                private int _index;
+                private IList<TSource> _buffer;
+
+                internal ExactSink(IObserver<IList<TSource>> observer, int count) : base(observer)
+                {
+                    _count = count;
+                }
+
+                public override void OnNext(TSource value)
+                {
+                    var buffer = _buffer;
+                    if (buffer == null)
+                    {
+                        buffer = new List<TSource>();
+                        _buffer = buffer;
+                    }
+
+                    buffer.Add(value);
+
+                    var idx = _index + 1;
+                    if (idx == _count)
+                    {
+                        _buffer = null;
+                        _index = 0;
+                        ForwardOnNext(buffer);
+                    }
+                    else
+                    {
+                        _index = idx;
+                    }
+                }
+
+                public override void OnError(Exception error)
+                {
+                    _buffer = null;
+                    ForwardOnError(error);
+                }
+
+                public override void OnCompleted()
+                {
+                    var buffer = _buffer;
+                    _buffer = null;
+
+                    if (buffer != null)
+                    {
+                        ForwardOnNext(buffer);
+                    }
+                    ForwardOnCompleted();
+                }
+            }
+        }
+
+        internal sealed class CountSkip : Producer<IList<TSource>, CountSkip.SkipSink>
         {
             private readonly IObservable<TSource> _source;
             private readonly int _count;
             private readonly int _skip;
 
-            public Count(IObservable<TSource> source, int count, int skip)
+            public CountSkip(IObservable<TSource> source, int count, int skip)
             {
                 _source = source;
                 _count = count;
                 _skip = skip;
             }
 
-            protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override SkipSink CreateSink(IObserver<IList<TSource>> observer) => new SkipSink(observer, _count, _skip);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(SkipSink sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+            internal sealed class SkipSink : Sink<TSource, IList<TSource>>
             {
-                private readonly Queue<IList<TSource>> _queue = new Queue<IList<TSource>>();
-
                 private readonly int _count;
                 private readonly int _skip;
+                private int _index;
+                private IList<TSource> _buffer;
 
-                public _(Count parent, IObserver<IList<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                internal SkipSink(IObserver<IList<TSource>> observer, int count, int skip) : base(observer)
                 {
-                    _count = parent._count;
-                    _skip = parent._skip;
+                    _count = count;
+                    _skip = skip;
                 }
 
+                public override void OnNext(TSource value)
+                {
+                    var idx = _index;
+                    var buffer = _buffer;
+                    if (idx == 0)
+                    {
+                        buffer = new List<TSource>();
+                        _buffer = buffer;
+                    }
+
+                    buffer?.Add(value);
+
+                    if (++idx == _count)
+                    {
+                        _buffer = null;
+                        ForwardOnNext(buffer);
+                    }
+
+                    if (idx == _skip)
+                    {
+                        _index = 0;
+                    }
+                    else
+                    {
+                        _index = idx;
+                    }
+                }
+
+                public override void OnError(Exception error)
+                {
+                    _buffer = null;
+                    ForwardOnError(error);
+                }
+
+                public override void OnCompleted()
+                {
+                    var buffer = _buffer;
+                    _buffer = null;
+
+                    if (buffer != null)
+                    {
+                        ForwardOnNext(buffer);
+                    }
+                    ForwardOnCompleted();
+                }
+            }
+        }
+
+        internal sealed class CountOverlap : Producer<IList<TSource>, CountOverlap.OverlapSink>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly int _count;
+            private readonly int _skip;
+
+            public CountOverlap(IObservable<TSource> source, int count, int skip)
+            {
+                _source = source;
+                _count = count;
+                _skip = skip;
+            }
+
+            protected override OverlapSink CreateSink(IObserver<IList<TSource>> observer) => new OverlapSink(observer, _count, _skip);
+
+            protected override void Run(OverlapSink sink) => sink.Run(_source);
+
+            internal sealed class OverlapSink : Sink<TSource, IList<TSource>>
+            {
+                private readonly Queue<IList<TSource>> _queue;
+                private readonly int _count;
+                private readonly int _skip;
                 private int _n;
 
-                public IDisposable Run(IObservable<TSource> source)
+                public OverlapSink(IObserver<IList<TSource>> observer, int count, int skip)
+                    : base(observer)
                 {
-                    _n = 0;
-
+                    _queue = new Queue<IList<TSource>>();
+                    _count = count;
+                    _skip = skip;
                     CreateWindow();
-                    return source.SubscribeSafe(this);
                 }
 
                 private void CreateWindow()
@@ -57,44 +197,50 @@ namespace System.Reactive.Linq.ObservableImpl
                     _queue.Enqueue(s);
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     foreach (var s in _queue)
+                    {
                         s.Add(value);
+                    }
 
                     var c = _n - _count + 1;
                     if (c >= 0 && c % _skip == 0)
                     {
                         var s = _queue.Dequeue();
                         if (s.Count > 0)
-                            base._observer.OnNext(s);
+                        {
+                            ForwardOnNext(s);
+                        }
                     }
 
                     _n++;
                     if (_n % _skip == 0)
+                    {
                         CreateWindow();
+                    }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
-                    while (_queue.Count > 0)
-                        _queue.Dequeue().Clear();
+                    // just drop the ILists on the GC floor, no reason to clear them
+                    _queue.Clear();
 
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    ForwardOnError(error);
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     while (_queue.Count > 0)
                     {
                         var s = _queue.Dequeue();
                         if (s.Count > 0)
-                            base._observer.OnNext(s);
+                        {
+                            ForwardOnNext(s);
+                        }
                     }
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
                 }
             }
         }
@@ -102,7 +248,6 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class TimeSliding : Producer<IList<TSource>, TimeSliding._>
         {
             private readonly IObservable<TSource> _source;
-
             private readonly TimeSpan _timeSpan;
             private readonly TimeSpan _timeShift;
             private readonly IScheduler _scheduler;
@@ -115,21 +260,20 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly TimeSpan _timeShift;
                 private readonly IScheduler _scheduler;
-
                 private readonly object _gate = new object();
                 private readonly Queue<List<TSource>> _q = new Queue<List<TSource>>();
-                private readonly SerialDisposable _timerD = new SerialDisposable();
+                private IDisposable _timerSerial;
 
-                public _(TimeSliding parent, IObserver<IList<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(TimeSliding parent, IObserver<IList<TSource>> observer)
+                    : base(observer)
                 {
                     _timeShift = parent._timeShift;
                     _scheduler = parent._scheduler;
@@ -139,7 +283,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private TimeSpan _nextShift;
                 private TimeSpan _nextSpan;
 
-                public IDisposable Run(TimeSliding parent)
+                public void Run(TimeSliding parent)
                 {
                     _totalTime = TimeSpan.Zero;
                     _nextShift = parent._timeShift;
@@ -148,9 +292,16 @@ namespace System.Reactive.Linq.ObservableImpl
                     CreateWindow();
                     CreateTimer();
 
-                    var subscription = parent._source.SubscribeSafe(this);
+                    Run(parent._source);
+                }
 
-                    return StableCompositeDisposable.Create(_timerD, subscription);
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _timerSerial);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private void CreateWindow()
@@ -162,7 +313,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private void CreateTimer()
                 {
                     var m = new SingleAssignmentDisposable();
-                    _timerD.Disposable = m;
+
+                    Disposable.TrySetSerial(ref _timerSerial, m);
 
                     var isSpan = false;
                     var isShift = false;
@@ -172,29 +324,32 @@ namespace System.Reactive.Linq.ObservableImpl
                         isShift = true;
                     }
                     else if (_nextSpan < _nextShift)
+                    {
                         isSpan = true;
+                    }
                     else
+                    {
                         isShift = true;
+                    }
 
                     var newTotalTime = isSpan ? _nextSpan : _nextShift;
                     var ts = newTotalTime - _totalTime;
                     _totalTime = newTotalTime;
 
                     if (isSpan)
+                    {
                         _nextSpan += _timeShift;
+                    }
+
                     if (isShift)
+                    {
                         _nextShift += _timeShift;
+                    }
 
-                    m.Disposable = _scheduler.Schedule(new State { isSpan = isSpan, isShift = isShift }, ts, Tick);
+                    m.Disposable = _scheduler.ScheduleAction((@this: this, isSpan, isShift), ts, tuple => tuple.@this.Tick(tuple.isSpan, tuple.isShift));
                 }
 
-                private struct State
-                {
-                    public bool isSpan;
-                    public bool isShift;
-                }
-
-                private IDisposable Tick(IScheduler self, State state)
+                private void Tick(bool isSpan, bool isShift)
                 {
                     lock (_gate)
                     {
@@ -204,53 +359,55 @@ namespace System.Reactive.Linq.ObservableImpl
                         // took a breaking change in v2 to ensure consistency across overloads. For more info,
                         // see the comment in Tick for Window.
                         //
-                        if (state.isSpan)
+                        if (isSpan)
                         {
                             var s = _q.Dequeue();
-                            base._observer.OnNext(s);
+                            ForwardOnNext(s);
                         }
 
-                        if (state.isShift)
+                        if (isShift)
                         {
                             CreateWindow();
                         }
                     }
 
                     CreateTimer();
-
-                    return Disposable.Empty;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
                         foreach (var s in _q)
+                        {
                             s.Add(value);
+                        }
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
                         while (_q.Count > 0)
+                        {
                             _q.Dequeue().Clear();
+                        }
 
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        ForwardOnError(error);
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
                         while (_q.Count > 0)
-                            base._observer.OnNext(_q.Dequeue());
+                        {
+                            ForwardOnNext(_q.Dequeue());
+                        }
 
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                     }
                 }
             }
@@ -259,7 +416,6 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class TimeHopping : Producer<IList<TSource>, TimeHopping._>
         {
             private readonly IObservable<TSource> _source;
-
             private readonly TimeSpan _timeSpan;
             private readonly IScheduler _scheduler;
 
@@ -270,41 +426,49 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly object _gate = new object();
 
-                public _(IObserver<IList<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(IObserver<IList<TSource>> observer)
+                    : base(observer)
                 {
                 }
 
                 private List<TSource> _list;
+                private IDisposable _periodicDisposable;
 
-                public IDisposable Run(TimeHopping parent)
+                public void Run(TimeHopping parent)
                 {
                     _list = new List<TSource>();
 
-                    var d = parent._scheduler.SchedulePeriodic(parent._timeSpan, Tick);
-                    var s = parent._source.SubscribeSafe(this);
+                    Disposable.SetSingle(ref _periodicDisposable, parent._scheduler.SchedulePeriodic(this, parent._timeSpan, @this => @this.Tick()));
+                    Run(parent._source);
+                }
 
-                    return StableCompositeDisposable.Create(d, s);
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _periodicDisposable);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private void Tick()
                 {
                     lock (_gate)
                     {
-                        base._observer.OnNext(_list);
+                        ForwardOnNext(_list);
                         _list = new List<TSource>();
                     }
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
@@ -312,24 +476,22 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
                         _list.Clear();
 
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        ForwardOnError(error);
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
-                        base._observer.OnNext(_list);
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnNext(_list);
+                        ForwardOnCompleted();
                     }
                 }
             }
@@ -350,19 +512,18 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run();
+            protected override void Run(_ sink) => sink.Run();
 
-            internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly Ferry _parent;
-
                 private readonly object _gate = new object();
-                private readonly SerialDisposable _timerD = new SerialDisposable();
+                private IDisposable _timerSerial;
 
-                public _(Ferry parent, IObserver<IList<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Ferry parent, IObserver<IList<TSource>> observer)
+                    : base(observer)
                 {
                     _parent = parent;
                 }
@@ -371,7 +532,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private int _n;
                 private int _windowId;
 
-                public IDisposable Run()
+                public void Run()
                 {
                     _s = new List<TSource>();
                     _n = 0;
@@ -379,43 +540,47 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     CreateTimer(0);
 
-                    var subscription = _parent._source.SubscribeSafe(this);
+                    SetUpstream(_parent._source.SubscribeSafe(this));
+                }
 
-                    return StableCompositeDisposable.Create(_timerD, subscription);
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _timerSerial);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private void CreateTimer(int id)
                 {
                     var m = new SingleAssignmentDisposable();
-                    _timerD.Disposable = m;
+                    Disposable.TrySetSerial(ref _timerSerial, m);
 
-                    m.Disposable = _parent._scheduler.Schedule(id, _parent._timeSpan, Tick);
+                    m.Disposable = _parent._scheduler.ScheduleAction((@this: this, id), _parent._timeSpan, tuple => tuple.@this.Tick(tuple.id));
                 }
 
-                private IDisposable Tick(IScheduler self, int id)
+                private void Tick(int id)
                 {
-                    var d = Disposable.Empty;
-
-                    var newId = 0;
                     lock (_gate)
                     {
                         if (id != _windowId)
-                            return d;
+                        {
+                            return;
+                        }
 
                         _n = 0;
-                        newId = ++_windowId;
+                        var newId = ++_windowId;
 
                         var res = _s;
                         _s = new List<TSource>();
-                        base._observer.OnNext(res);
+                        ForwardOnNext(res);
 
                         CreateTimer(newId);
                     }
-
-                    return d;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var newWindow = false;
                     var newId = 0;
@@ -433,31 +598,31 @@ namespace System.Reactive.Linq.ObservableImpl
 
                             var res = _s;
                             _s = new List<TSource>();
-                            base._observer.OnNext(res);
+                            ForwardOnNext(res);
                         }
 
                         if (newWindow)
+                        {
                             CreateTimer(newId);
+                        }
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
                         _s.Clear();
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        ForwardOnError(error);
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
-                        base._observer.OnNext(_s);
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnNext(_s);
+                        ForwardOnCompleted();
                     }
                 }
             }
@@ -477,35 +642,41 @@ namespace System.Reactive.Linq.ObservableImpl
                 _bufferClosingSelector = bufferClosingSelector;
             }
 
-            protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly object _gate = new object();
                 private readonly AsyncLock _bufferGate = new AsyncLock();
-                private readonly SerialDisposable _bufferClosingSubscription = new SerialDisposable();
-
+                private IDisposable _bufferClosingSerialDisposable;
                 private readonly Func<IObservable<TBufferClosing>> _bufferClosingSelector;
 
-                public _(Selector parent, IObserver<IList<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Selector parent, IObserver<IList<TSource>> observer)
+                    : base(observer)
                 {
                     _bufferClosingSelector = parent._bufferClosingSelector;
                 }
 
                 private IList<TSource> _buffer;
 
-                public IDisposable Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _buffer = new List<TSource>();
 
-                    var groupDisposable = StableCompositeDisposable.Create(_bufferClosingSubscription, source.SubscribeSafe(this));
+                    base.Run(source);
 
-                    _bufferGate.Wait(CreateBufferClose);
+                    _bufferGate.Wait(this, @this => @this.CreateBufferClose());
+                }
 
-                    return groupDisposable;
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _bufferClosingSerialDisposable);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private void CreateBufferClose()
@@ -519,15 +690,14 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         lock (_gate)
                         {
-                            base._observer.OnError(exception);
-                            base.Dispose();
+                            ForwardOnError(exception);
                         }
                         return;
                     }
 
-                    var closingSubscription = new SingleAssignmentDisposable();
-                    _bufferClosingSubscription.Disposable = closingSubscription;
-                    closingSubscription.Disposable = bufferClose.SubscribeSafe(new BufferClosingObserver(this, closingSubscription));
+                    var closingObserver = new BufferClosingObserver(this);
+                    Disposable.TrySetSerial(ref _bufferClosingSerialDisposable, closingObserver);
+                    closingObserver.SetResource(bufferClose.SubscribeSafe(closingObserver));
                 }
 
                 private void CloseBuffer(IDisposable closingSubscription)
@@ -538,40 +708,38 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         var res = _buffer;
                         _buffer = new List<TSource>();
-                        base._observer.OnNext(res);
+                        ForwardOnNext(res);
                     }
 
-                    _bufferGate.Wait(CreateBufferClose);
+                    _bufferGate.Wait(this, @this => @this.CreateBufferClose());
                 }
 
-                private sealed class BufferClosingObserver : IObserver<TBufferClosing>
+                private sealed class BufferClosingObserver : SafeObserver<TBufferClosing>
                 {
                     private readonly _ _parent;
-                    private readonly IDisposable _self;
 
-                    public BufferClosingObserver(_ parent, IDisposable self)
+                    public BufferClosingObserver(_ parent)
                     {
                         _parent = parent;
-                        _self = self;
                     }
 
-                    public void OnNext(TBufferClosing value)
+                    public override void OnNext(TBufferClosing value)
                     {
-                        _parent.CloseBuffer(_self);
+                        _parent.CloseBuffer(this);
                     }
 
-                    public void OnError(Exception error)
+                    public override void OnError(Exception error)
                     {
                         _parent.OnError(error);
                     }
 
-                    public void OnCompleted()
+                    public override void OnCompleted()
                     {
-                        _parent.CloseBuffer(_self);
+                        _parent.CloseBuffer(this);
                     }
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
@@ -579,23 +747,21 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
                         _buffer.Clear();
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        ForwardOnError(error);
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
-                        base._observer.OnNext(_buffer);
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnNext(_buffer);
+                        ForwardOnCompleted();
                     }
                 }
             }
@@ -612,29 +778,37 @@ namespace System.Reactive.Linq.ObservableImpl
                 _bufferBoundaries = bufferBoundaries;
             }
 
-            protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource, IList<TSource>>
             {
                 private readonly object _gate = new object();
 
-                public _(IObserver<IList<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(IObserver<IList<TSource>> observer)
+                    : base(observer)
                 {
                 }
 
                 private IList<TSource> _buffer;
+                private IDisposable _boundariesDisposable;
 
-                public IDisposable Run(Boundaries parent)
+                public void Run(Boundaries parent)
                 {
                     _buffer = new List<TSource>();
 
-                    var sourceSubscription = parent._source.SubscribeSafe(this);
-                    var boundariesSubscription = parent._bufferBoundaries.SubscribeSafe(new BufferClosingObserver(this));
+                    Run(parent._source);
+                    Disposable.SetSingle(ref _boundariesDisposable, parent._bufferBoundaries.SubscribeSafe(new BufferClosingObserver(this)));
+                }
 
-                    return StableCompositeDisposable.Create(sourceSubscription, boundariesSubscription);
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _boundariesDisposable);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private sealed class BufferClosingObserver : IObserver<TBufferClosing>
@@ -652,7 +826,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             var res = _parent._buffer;
                             _parent._buffer = new List<TSource>();
-                            _parent._observer.OnNext(res);
+                            _parent.ForwardOnNext(res);
                         }
                     }
 
@@ -667,7 +841,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
@@ -675,23 +849,21 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
                         _buffer.Clear();
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        ForwardOnError(error);
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
-                        base._observer.OnNext(_buffer);
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnNext(_buffer);
+                        ForwardOnCompleted();
                     }
                 }
             }

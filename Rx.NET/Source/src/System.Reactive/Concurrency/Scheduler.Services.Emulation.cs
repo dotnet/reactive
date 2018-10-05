@@ -28,11 +28,19 @@ namespace System.Reactive.Concurrency
         public static IDisposable SchedulePeriodic<TState>(this IScheduler scheduler, TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return SchedulePeriodic_(scheduler, state, period, action);
         }
@@ -54,13 +62,21 @@ namespace System.Reactive.Concurrency
         public static IDisposable SchedulePeriodic<TState>(this IScheduler scheduler, TState state, TimeSpan period, Action<TState> action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
-            if (period < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException(nameof(period));
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
+            }
 
-            return SchedulePeriodic_(scheduler, state, period, state_ => { action(state_); return state_; });
+            if (period < TimeSpan.Zero)
+            {
+                throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return SchedulePeriodic_(scheduler, (state, action), period, t => { t.action(t.state); return t; });
         }
 
         /// <summary>
@@ -78,11 +94,19 @@ namespace System.Reactive.Concurrency
         public static IDisposable SchedulePeriodic(this IScheduler scheduler, TimeSpan period, Action action)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
+
             if (period < TimeSpan.Zero)
+            {
                 throw new ArgumentOutOfRangeException(nameof(period));
+            }
+
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return SchedulePeriodic_(scheduler, action, period, a => { a(); return a; });
         }
@@ -99,7 +123,9 @@ namespace System.Reactive.Concurrency
         public static IStopwatch StartStopwatch(this IScheduler scheduler)
         {
             if (scheduler == null)
+            {
                 throw new ArgumentNullException(nameof(scheduler));
+            }
 
             //
             // All schedulers deriving from LocalScheduler will automatically pick up this
@@ -115,7 +141,7 @@ namespace System.Reactive.Concurrency
             // stopwatch facility, or go with a stopwatch based on "scheduler.Now", which has
             // the drawback of potentially going back in time:
             //
-            //   - Using the CAL's stopwatch facility causes us to abondon the scheduler's
+            //   - Using the CAL's stopwatch facility causes us to abandon the scheduler's
             //     potentially virtualized notion of time, always going for the local system
             //     time instead.
             //
@@ -129,7 +155,7 @@ namespace System.Reactive.Concurrency
             // non-monotonic points somehow), so we pick the latter option as the lesser of
             // two evils (also because it should occur rarely).
             //
-            // Users of the stopwatch retrieved by this method could detect non-sensical data
+            // Users of the stopwatch retrieved by this method could detect nonsensical data
             // revealing a jump back in time, or implement custom fallback logic like the one
             // shown below.
             //
@@ -289,7 +315,7 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        private sealed class SchedulePeriodicStopwatch<TState>
+        private sealed class SchedulePeriodicStopwatch<TState> : IDisposable
         {
             private readonly IScheduler _scheduler;
             private readonly TimeSpan _period;
@@ -304,7 +330,7 @@ namespace System.Reactive.Concurrency
                 _stopwatchProvider = stopwatchProvider;
 
                 _state = state;
-                _runState = STOPPED;
+                _runState = Stopped;
             }
 
             private TState _state;
@@ -336,10 +362,12 @@ namespace System.Reactive.Concurrency
             //  (d) Dispose returned object from Start --> scheduled work is cancelled
             //  (e) Dispose returned object from Start --> unblocks _resumeEvent, Tick exits
             //
-            private const int STOPPED = 0;
-            private const int RUNNING = 1;
-            private const int SUSPENDED = 2;
-            private const int DISPOSED = 3;
+            private const int Stopped = 0;
+            private const int Running = 1;
+            private const int Suspended = 2;
+            private const int Disposed = 3;
+
+            private IDisposable _task;
 
             public IDisposable Start()
             {
@@ -347,16 +375,19 @@ namespace System.Reactive.Concurrency
 
                 _stopwatch = _stopwatchProvider.StartStopwatch();
                 _nextDue = _period;
-                _runState = RUNNING;
+                _runState = Running;
 
-                return StableCompositeDisposable.Create
-                (
-                    _scheduler.Schedule(_nextDue, Tick),
-                    Disposable.Create(Cancel)
-                );
+                Disposable.TrySetSingle(ref _task, _scheduler.Schedule(this, _nextDue, (@this, a) => @this.Tick(a)));
+                return this;
             }
 
-            private void Tick(Action<TimeSpan> recurse)
+            void IDisposable.Dispose()
+            {
+                Disposable.TryDispose(ref _task);
+                Cancel();
+            }
+
+            private void Tick(Action<SchedulePeriodicStopwatch<TState>, TimeSpan> recurse)
             {
                 _nextDue += _period;
                 _state = _action(_state);
@@ -365,11 +396,9 @@ namespace System.Reactive.Concurrency
 
                 while (true)
                 {
-                    var shouldWaitForResume = false;
-
                     lock (_gate)
                     {
-                        if (_runState == RUNNING)
+                        if (_runState == Running)
                         {
                             //
                             // This is the fast path. We just let the stopwatch continue to
@@ -380,7 +409,8 @@ namespace System.Reactive.Concurrency
                             next = Normalize(_nextDue - (_stopwatch.Elapsed - _inactiveTime));
                             break;
                         }
-                        else if (_runState == DISPOSED)
+
+                        if (_runState == Disposed)
                         {
                             //
                             // In case the periodic job gets disposed but we are currently
@@ -391,16 +421,13 @@ namespace System.Reactive.Concurrency
                             //
                             return;
                         }
-                        else
-                        {
-                            //
-                            // This is the least common case where we got suspended and need
-                            // to block such that future reevaluations of the next due time
-                            // will pick up the cumulative inactive time delta.
-                            //
-                            Debug.Assert(_runState == SUSPENDED);
-                            shouldWaitForResume = true;
-                        }
+
+                        //
+                        // This is the least common case where we got suspended and need
+                        // to block such that future reevaluations of the next due time
+                        // will pick up the cumulative inactive time delta.
+                        //
+                        Debug.Assert(_runState == Suspended);
                     }
 
                     //
@@ -410,13 +437,10 @@ namespace System.Reactive.Concurrency
                     // be extremely unlucky to find ourselves SUSPENDED again and be blocked
                     // once more.
                     //
-                    if (shouldWaitForResume)
-                    {
-                        _resumeEvent.WaitOne();
-                    }
+                    _resumeEvent.WaitOne();
                 }
 
-                recurse(next);
+                recurse(this, next);
             }
 
             private void Cancel()
@@ -425,7 +449,7 @@ namespace System.Reactive.Concurrency
 
                 lock (_gate)
                 {
-                    _runState = DISPOSED;
+                    _runState = Disposed;
 
                     if (!Environment.HasShutdownStarted)
                     {
@@ -439,7 +463,7 @@ namespace System.Reactive.Concurrency
                 //
                 // The host is telling us we're about to be suspended. At this point, time
                 // computations will still be in a valid range (next <= _period), but after
-                // we're woken up again, Tick would start to go on a crucade to catch up.
+                // we're woken up again, Tick would start to go on a crusade to catch up.
                 //
                 // This has caused problems in the past, where the flood of events caused
                 // batteries to drain etc (see design rationale discussion higher up).
@@ -452,10 +476,10 @@ namespace System.Reactive.Concurrency
                 //
                 lock (_gate)
                 {
-                    if (_runState == RUNNING)
+                    if (_runState == Running)
                     {
                         _suspendedAt = _stopwatch.Elapsed;
-                        _runState = SUSPENDED;
+                        _runState = Suspended;
 
                         if (!Environment.HasShutdownStarted)
                         {
@@ -486,10 +510,10 @@ namespace System.Reactive.Concurrency
                 //
                 lock (_gate)
                 {
-                    if (_runState == SUSPENDED)
+                    if (_runState == Suspended)
                     {
                         _inactiveTime += _stopwatch.Elapsed - _suspendedAt;
-                        _runState = RUNNING;
+                        _runState = Running;
 
                         if (!Environment.HasShutdownStarted)
                         {
@@ -549,8 +573,8 @@ namespace System.Reactive.Concurrency
             // The protocol using the three commands is explained in the Tick implementation below.
             //
             private const int TICK = 0;
-            private const int DISPATCH_START = 1;
-            private const int DISPATCH_END = 2;
+            private const int DispatchStart = 1;
+            private const int DispatchEnd = 2;
 
             private void Tick(int command, Action<int, TimeSpan> recurse)
             {
@@ -571,11 +595,13 @@ namespace System.Reactive.Concurrency
                         // safely bail out, delegating work to the catch-up tail calls.
                         //
                         if (Interlocked.Increment(ref _pendingTickCount) == 1)
-                            goto case DISPATCH_START;
+                        {
+                            goto case DispatchStart;
+                        }
 
                         break;
 
-                    case DISPATCH_START:
+                    case DispatchStart:
                         try
                         {
                             _state = _action(_state);
@@ -599,11 +625,11 @@ namespace System.Reactive.Concurrency
                         // disabled using DisableOptimizations; legacy implementations of schedulers
                         // from the v1.x days will not have a stopwatch).
                         //
-                        recurse(DISPATCH_END, TimeSpan.Zero);
+                        recurse(DispatchEnd, TimeSpan.Zero);
 
                         break;
 
-                    case DISPATCH_END:
+                    case DispatchEnd:
                         //
                         // If work was due while we were still running user code, the count will have
                         // been incremented by the periodic tick handler above. In that case, we will
@@ -616,7 +642,7 @@ namespace System.Reactive.Concurrency
                         //
                         if (Interlocked.Decrement(ref _pendingTickCount) > 0)
                         {
-                            recurse(DISPATCH_START, TimeSpan.Zero);
+                            recurse(DispatchStart, TimeSpan.Zero);
                         }
 
                         break;

@@ -2,14 +2,13 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Threading;
 using System.Collections.Generic;
 
 namespace System.Reactive
 {
     internal sealed class PriorityQueue<T> where T : IComparable<T>
     {
-        private static long _count = long.MinValue;
+        private long _count = long.MinValue;
         private IndexedItem[] _items;
         private int _size;
 
@@ -29,29 +28,27 @@ namespace System.Reactive
             return _items[left].CompareTo(_items[right]) < 0;
         }
 
-        private void Percolate(int index)
+        private int Percolate(int index)
         {
             if (index >= _size || index < 0)
             {
-                return;
+                return index;
             }
 
             var parent = (index - 1) / 2;
-            if (parent < 0 || parent == index)
-            {
-                return;
-            }
-
-            if (IsHigherPriority(index, parent))
-            {
+            while (parent >= 0 && parent != index && IsHigherPriority(index, parent))
+            { 
+                // swap index and parent
                 var temp = _items[index];
                 _items[index] = _items[parent];
                 _items[parent] = temp;
-                Percolate(parent);
-            }
-        }
 
-        private void Heapify() => Heapify(index: 0);
+                index = parent;
+                parent = (index - 1) / 2;
+            }
+
+            return index;
+        }
 
         private void Heapify(int index)
         {
@@ -60,26 +57,33 @@ namespace System.Reactive
                 return;
             }
 
-            var left = 2 * index + 1;
-            var right = 2 * index + 2;
-            var first = index;
-
-            if (left < _size && IsHigherPriority(left, first))
+            while (true)
             {
-                first = left;
-            }
+                var left = 2 * index + 1;
+                var right = 2 * index + 2;
+                var first = index;
 
-            if (right < _size && IsHigherPriority(right, first))
-            {
-                first = right;
-            }
+                if (left < _size && IsHigherPriority(left, first))
+                {
+                    first = left;
+                }
 
-            if (first != index)
-            {
+                if (right < _size && IsHigherPriority(right, first))
+                {
+                    first = right;
+                }
+
+                if (first == index)
+                {
+                    break;
+                }
+
+                // swap index and first
                 var temp = _items[index];
                 _items[index] = _items[first];
                 _items[first] = temp;
-                Heapify(first);
+
+                index = first;
             }
         }
 
@@ -88,7 +92,9 @@ namespace System.Reactive
         public T Peek()
         {
             if (_size == 0)
+            {
                 throw new InvalidOperationException(Strings_Core.HEAP_EMPTY);
+            }
 
             return _items[0].Value;
         }
@@ -96,9 +102,12 @@ namespace System.Reactive
         private void RemoveAt(int index)
         {
             _items[index] = _items[--_size];
-            _items[_size] = default(IndexedItem);
+            _items[_size] = default;
 
-            Heapify();
+            if (Percolate(index) == index)
+            {
+                Heapify(index);
+            }
 
             if (_size < _items.Length / 4)
             {
@@ -125,7 +134,7 @@ namespace System.Reactive
             }
 
             var index = _size++;
-            _items[index] = new IndexedItem { Value = item, Id = Interlocked.Increment(ref _count) };
+            _items[index] = new IndexedItem { Value = item, Id = ++_count };
             Percolate(index);
         }
 

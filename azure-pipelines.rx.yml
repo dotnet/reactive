@@ -1,0 +1,86 @@
+trigger:
+  branches:
+    include:
+      - master
+      - rel/*
+  paths:
+    include:
+      - Rx.NET/Source/*
+      - .editorconfig
+      - azure-pipelines.rx.yml
+
+pool:
+  vmImage: vs2017-win2016
+
+variables: 
+  BuildConfiguration: Release
+  BuildPlatform: Any CPU
+    
+steps:
+- task: DotNetCoreCLI@2  
+  inputs:
+    command: custom
+    custom: tool
+    arguments: install --tool-path . nbgv
+  displayName: Install NBGV tool
+  condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
+
+- script: nbgv cloud -a -p Rx.NET\Source
+  displayName: Set Version
+  condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
+
+- task: MSBuild@1
+  displayName: Build System.Reactive.sln
+  inputs:
+    solution: Rx.NET/Source/System.Reactive.sln    
+    msbuildArguments: /restore /t:build /p:CreatePackage=true /p:NoPackageAnalysis=true /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
+    platform: $(BuildPlatform)
+    configuration: $(BuildConfiguration)
+    maximumCpuCount: true
+
+- task: NuGetCommand@2
+  displayName: Pack compatibility package
+  inputs:
+    command: custom
+    arguments: pack Rx.NET/Source/facades/System.Reactive.Compatibility.nuspec -Version $(NBGV_NuGetPackageVersion) -MinClientVersion 2.12 -NoPackageAnalysis -outputdirectory $(Build.ArtifactStagingDirectory)\artifacts
+  condition: eq(variables['system.pullrequest.isfork'], false)
+
+- task: MSBuild@1
+  displayName: Build for Test (ppdb) workaround
+  inputs:
+    solution: Rx.NET/Source/System.Reactive.sln    
+    msbuildArguments: /t:build /p:DebugType=portable
+    platform: $(BuildPlatform)
+    configuration: $(BuildConfiguration)
+    maximumCpuCount: true
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: test
+    projects: Rx.NET/Source/tests/Tests.System.Reactive/*.csproj
+    arguments: -c $(BuildConfiguration) --no-build --no-restore --filter "SkipCI!=true" --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Rx.NET/Source/CodeCoverage.runsettings
+  displayName: Run Unit Tests
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: test
+    projects: Rx.NET/Source/tests/Tests.System.Reactive.ApiApprovals/Tests.System.Reactive.ApiApprovals.csproj
+    arguments: -c $(BuildConfiguration) --no-build --no-restore 
+  displayName: Run Api Approvals Tests
+  
+- task: PowerShell@2
+  displayName: Authenticode Sign Packages
+  inputs:
+    filePath: Rx.NET/Source/build/Sign-Package.ps1
+  env:
+    SignClientUser: $(SignClientUser)
+    SignClientSecret: $(SignClientSecret)
+    ArtifactDirectory: $(Build.ArtifactStagingDirectory)\artifacts
+  condition: and(succeeded(), not(eq(variables['build.reason'], 'PullRequest')), not(eq(variables['SignClientSecret'], '')), not(eq(variables['SignClientUser'], '')))
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: $(Build.ArtifactStagingDirectory)\artifacts
+    ArtifactName: artifacts
+    publishLocation: Container
+  condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))

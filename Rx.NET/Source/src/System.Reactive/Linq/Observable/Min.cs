@@ -17,23 +17,19 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => default(TSource) == null ? (_)new Null(_comparer, observer, cancel) : new NonNull(_comparer, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => default(TSource) == null ? (_)new Null(_comparer, observer) : new NonNull(_comparer, observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal abstract class _ : Sink<TSource>, IObserver<TSource>
+        internal abstract class _ : IdentitySink<TSource>
         {
             protected readonly IComparer<TSource> _comparer;
 
-            public _(IComparer<TSource> comparer, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            protected _(IComparer<TSource> comparer, IObserver<TSource> observer)
+                : base(observer)
             {
                 _comparer = comparer;
             }
-
-            public abstract void OnCompleted();
-            public abstract void OnError(Exception error);
-            public abstract void OnNext(TSource value);
         }
 
         private sealed class NonNull : _
@@ -41,11 +37,9 @@ namespace System.Reactive.Linq.ObservableImpl
             private bool _hasValue;
             private TSource _lastValue;
 
-            public NonNull(IComparer<TSource> comparer, IObserver<TSource> observer, IDisposable cancel)
-                : base(comparer, observer, cancel)
+            public NonNull(IComparer<TSource> comparer, IObserver<TSource> observer)
+                : base(comparer, observer)
             {
-                _hasValue = false;
-                _lastValue = default(TSource);
             }
 
             public override void OnNext(TSource value)
@@ -60,8 +54,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        ForwardOnError(ex);
                         return;
                     }
 
@@ -79,23 +72,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                ForwardOnError(error);
             }
 
             public override void OnCompleted()
             {
                 if (!_hasValue)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
                 else
                 {
-                    base._observer.OnNext(_lastValue);
-                    base._observer.OnCompleted();
+                    ForwardOnNext(_lastValue);
+                    ForwardOnCompleted();
                 }
-
-                base.Dispose();
             }
         }
 
@@ -103,10 +93,9 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private TSource _lastValue;
 
-            public Null(IComparer<TSource> comparer, IObserver<TSource> observer, IDisposable cancel)
-                : base(comparer, observer, cancel)
+            public Null(IComparer<TSource> comparer, IObserver<TSource> observer)
+                : base(comparer, observer)
             {
-                _lastValue = default(TSource);
             }
 
             public override void OnNext(TSource value)
@@ -127,8 +116,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         catch (Exception ex)
                         {
-                            base._observer.OnError(ex);
-                            base.Dispose();
+                            ForwardOnError(ex);
                             return;
                         }
 
@@ -140,17 +128,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public override void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
             public override void OnCompleted()
             {
-                base._observer.OnNext(_lastValue);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_lastValue);
+                ForwardOnCompleted();
             }
         }
     }
@@ -164,23 +145,21 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<double> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<double> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<double>, IObserver<double>
+        internal sealed class _ : IdentitySink<double>
         {
             private bool _hasValue;
             private double _lastValue;
 
-            public _(IObserver<double> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<double> observer)
+                : base(observer)
             {
-                _hasValue = false;
-                _lastValue = default(double);
             }
 
-            public void OnNext(double value)
+            public override void OnNext(double value)
             {
                 if (_hasValue)
                 {
@@ -196,25 +175,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (!_hasValue)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
                 else
                 {
-                    base._observer.OnNext(_lastValue);
-                    base._observer.OnCompleted();
+                    ForwardOnNext(_lastValue);
+                    ForwardOnCompleted();
                 }
-
-                base.Dispose();
             }
         }
     }
@@ -228,23 +199,21 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<float> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<float> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<float>, IObserver<float>
+        internal sealed class _ : IdentitySink<float>
         {
             private bool _hasValue;
             private float _lastValue;
 
-            public _(IObserver<float> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<float> observer)
+                : base(observer)
             {
-                _hasValue = false;
-                _lastValue = default(float);
             }
 
-            public void OnNext(float value)
+            public override void OnNext(float value)
             {
                 if (_hasValue)
                 {
@@ -260,25 +229,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (!_hasValue)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
                 else
                 {
-                    base._observer.OnNext(_lastValue);
-                    base._observer.OnCompleted();
+                    ForwardOnNext(_lastValue);
+                    ForwardOnCompleted();
                 }
-
-                base.Dispose();
             }
         }
     }
@@ -292,23 +253,21 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<decimal> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<decimal> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<decimal>, IObserver<decimal>
+        internal sealed class _ : IdentitySink<decimal>
         {
             private bool _hasValue;
             private decimal _lastValue;
 
-            public _(IObserver<decimal> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<decimal> observer)
+                : base(observer)
             {
-                _hasValue = false;
-                _lastValue = default(decimal);
             }
 
-            public void OnNext(decimal value)
+            public override void OnNext(decimal value)
             {
                 if (_hasValue)
                 {
@@ -324,25 +283,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (!_hasValue)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
                 else
                 {
-                    base._observer.OnNext(_lastValue);
-                    base._observer.OnCompleted();
+                    ForwardOnNext(_lastValue);
+                    ForwardOnCompleted();
                 }
-
-                base.Dispose();
             }
         }
     }
@@ -356,23 +307,21 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<int> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<int> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<int>, IObserver<int>
+        internal sealed class _ : IdentitySink<int>
         {
             private bool _hasValue;
             private int _lastValue;
 
-            public _(IObserver<int> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<int> observer)
+                : base(observer)
             {
-                _hasValue = false;
-                _lastValue = default(int);
             }
 
-            public void OnNext(int value)
+            public override void OnNext(int value)
             {
                 if (_hasValue)
                 {
@@ -388,25 +337,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (!_hasValue)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
                 else
                 {
-                    base._observer.OnNext(_lastValue);
-                    base._observer.OnCompleted();
+                    ForwardOnNext(_lastValue);
+                    ForwardOnCompleted();
                 }
-
-                base.Dispose();
             }
         }
     }
@@ -420,23 +361,21 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<long> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<long> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<long>, IObserver<long>
+        internal sealed class _ : IdentitySink<long>
         {
             private bool _hasValue;
             private long _lastValue;
 
-            public _(IObserver<long> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<long> observer)
+                : base(observer)
             {
-                _hasValue = false;
-                _lastValue = default(long);
             }
 
-            public void OnNext(long value)
+            public override void OnNext(long value)
             {
                 if (_hasValue)
                 {
@@ -452,25 +391,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (!_hasValue)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
                 else
                 {
-                    base._observer.OnNext(_lastValue);
-                    base._observer.OnCompleted();
+                    ForwardOnNext(_lastValue);
+                    ForwardOnCompleted();
                 }
-
-                base.Dispose();
             }
         }
     }
@@ -484,24 +415,25 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<double?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<double?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<double?>, IObserver<double?>
+        internal sealed class _ : IdentitySink<double?>
         {
             private double? _lastValue;
 
-            public _(IObserver<double?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<double?> observer)
+                : base(observer)
             {
-                _lastValue = default(double?);
             }
 
-            public void OnNext(double? value)
+            public override void OnNext(double? value)
             {
                 if (!value.HasValue)
+                {
                     return;
+                }
 
                 if (_lastValue.HasValue)
                 {
@@ -516,17 +448,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_lastValue);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_lastValue);
+                ForwardOnCompleted();
             }
         }
     }
@@ -540,24 +465,25 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<float?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<float?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<float?>, IObserver<float?>
+        internal sealed class _ : IdentitySink<float?>
         {
             private float? _lastValue;
 
-            public _(IObserver<float?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<float?> observer)
+                : base(observer)
             {
-                _lastValue = default(float?);
             }
 
-            public void OnNext(float? value)
+            public override void OnNext(float? value)
             {
                 if (!value.HasValue)
+                {
                     return;
+                }
 
                 if (_lastValue.HasValue)
                 {
@@ -572,17 +498,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_lastValue);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_lastValue);
+                ForwardOnCompleted();
             }
         }
     }
@@ -596,24 +515,25 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<decimal?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<decimal?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<decimal?>, IObserver<decimal?>
+        internal sealed class _ : IdentitySink<decimal?>
         {
             private decimal? _lastValue;
 
-            public _(IObserver<decimal?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<decimal?> observer)
+                : base(observer)
             {
-                _lastValue = default(decimal?);
             }
 
-            public void OnNext(decimal? value)
+            public override void OnNext(decimal? value)
             {
                 if (!value.HasValue)
+                {
                     return;
+                }
 
                 if (_lastValue.HasValue)
                 {
@@ -628,17 +548,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_lastValue);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_lastValue);
+                ForwardOnCompleted();
             }
         }
     }
@@ -652,24 +565,25 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<int?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<int?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<int?>, IObserver<int?>
+        internal sealed class _ : IdentitySink<int?>
         {
             private int? _lastValue;
 
-            public _(IObserver<int?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<int?> observer)
+                : base(observer)
             {
-                _lastValue = default(int?);
             }
 
-            public void OnNext(int? value)
+            public override void OnNext(int? value)
             {
                 if (!value.HasValue)
+                {
                     return;
+                }
 
                 if (_lastValue.HasValue)
                 {
@@ -684,17 +598,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_lastValue);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_lastValue);
+                ForwardOnCompleted();
             }
         }
     }
@@ -708,24 +615,25 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<long?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<long?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<long?>, IObserver<long?>
+        internal sealed class _ : IdentitySink<long?>
         {
             private long? _lastValue;
 
-            public _(IObserver<long?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<long?> observer)
+                : base(observer)
             {
-                _lastValue = default(long?);
             }
 
-            public void OnNext(long? value)
+            public override void OnNext(long? value)
             {
                 if (!value.HasValue)
+                {
                     return;
+                }
 
                 if (_lastValue.HasValue)
                 {
@@ -740,17 +648,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_lastValue);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_lastValue);
+                ForwardOnCompleted();
             }
         }
     }

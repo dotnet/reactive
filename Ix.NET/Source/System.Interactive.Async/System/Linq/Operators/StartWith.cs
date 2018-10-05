@@ -11,7 +11,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> StartWith<TSource>(this IAsyncEnumerable<TSource> source, params TSource[] values)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return values.ToAsyncEnumerable().Concat(source);
         }

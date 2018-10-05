@@ -2,11 +2,11 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using Microsoft.Reactive.Testing;
 using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
+using Microsoft.Reactive.Testing;
 using Xunit;
 
 namespace ReactiveTests.Tests
@@ -37,7 +37,7 @@ namespace ReactiveTests.Tests
                 var left = (Either<int, string>.Left)Either<int, string>.CreateLeft(value);
 
                 Assert.True(left.Equals(left));
-                Assert.False(left.Equals((Either<int, string>.Left)null));
+                Assert.False(left.Equals(null));
 
                 var other = (Either<int, string>.Left)Either<int, string>.CreateLeft(value + 1);
                 Assert.False(left.Equals(other));
@@ -47,7 +47,7 @@ namespace ReactiveTests.Tests
                 var right = (Either<int, string>.Right)Either<int, string>.CreateRight(value);
 
                 Assert.True(right.Equals(right));
-                Assert.False(right.Equals((Either<int, string>.Right)null));
+                Assert.False(right.Equals(null));
 
                 var other = (Either<int, string>.Right)Either<int, string>.CreateRight(value + "1");
                 Assert.False(right.Equals(other));
@@ -113,12 +113,12 @@ namespace ReactiveTests.Tests
             {
                 var value = 42;
                 var left = (Either<int, string>.Left)Either<int, string>.CreateLeft(value);
-                Assert.Equal(left.Switch<int>(l => l, r => r.Length), value);
+                Assert.Equal(left.Switch(l => l, r => r.Length), value);
             }
             {
                 var value = "42";
                 var right = (Either<int, string>.Right)Either<int, string>.CreateRight(value);
-                Assert.Equal(right.Switch<int>(l => l, r => r.Length), value.Length);
+                Assert.Equal(right.Switch(l => l, r => r.Length), value.Length);
             }
         }
 
@@ -128,21 +128,21 @@ namespace ReactiveTests.Tests
             {
                 var value = 42;
                 var left = (Either<int, string>.Left)Either<int, string>.CreateLeft(value);
-                int res = 0;
-                left.Switch(l => { res = 1; }, r => { res = 2;});
+                var res = 0;
+                left.Switch(l => { res = 1; }, r => { res = 2; });
                 Assert.Equal(1, res);
             }
             {
                 var value = "42";
                 var right = (Either<int, string>.Right)Either<int, string>.CreateRight(value);
-                int res = 0;
+                var res = 0;
                 right.Switch(l => { res = 1; }, r => { res = 2; });
                 Assert.Equal(2, res);
             }
         }
     }
 
-    class EitherBase
+    internal class EitherBase
     {
         protected object _value;
 
@@ -163,14 +163,14 @@ namespace ReactiveTests.Tests
         }
     }
 
-    class Either<TLeft, TRight> : EitherBase
+    internal class Either<TLeft, TRight> : EitherBase
     {
         public static Either<TLeft, TRight> CreateLeft(TLeft value)
         {
             var tpe = typeof(Observable).GetTypeInfo().Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
             var mth = tpe.GetMethod(nameof(CreateLeft));
             var res = mth.Invoke(null, new object[] { value });
-            return new Either<TLeft, TRight>.Left(res);
+            return new Left(res);
         }
 
         public static Either<TLeft, TRight> CreateRight(TRight value)
@@ -178,7 +178,7 @@ namespace ReactiveTests.Tests
             var tpe = typeof(Observable).GetTypeInfo().Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
             var mth = tpe.GetMethod(nameof(CreateRight));
             var res = mth.Invoke(null, new object[] { value });
-            return new Either<TLeft, TRight>.Right(res);
+            return new Right(res);
         }
 
         public TResult Switch<TResult>(Func<TLeft, TResult> caseLeft, Func<TRight, TResult> caseRight)

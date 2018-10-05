@@ -143,7 +143,7 @@ using System.Reactive.Subjects;
 //
 // In here, there's already a race between the user hooking up an event handler through the += add
 // operation and the event producer (possibly on a different thread) calling OnBar. It's also worth
-// pointing out that this race condition is migitated by a check in SynchronizationContextScheduler
+// pointing out that this race condition is mitigated by a check in SynchronizationContextScheduler
 // causing synchronous execution in case the caller is already on the target SynchronizationContext.
 // This situation is common when using FromEvent[Pattern] immediately after declaring it, e.g. in
 // the context of a UI event handler.
@@ -195,7 +195,7 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly IScheduler _scheduler;
         private readonly object _gate;
 
-        public EventProducer(IScheduler scheduler)
+        protected EventProducer(IScheduler scheduler)
         {
             _scheduler = scheduler;
             _gate = new object();
@@ -221,7 +221,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 // lock. Future subscriptions will cause a new session to be created.
                 //
                 if (_session == null)
+                {
                     _session = new Session(this);
+                }
 
                 connection = _session.Connect(observer);
             }
@@ -276,20 +278,25 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                     }
 
-                    return Disposable.Create(() =>
-                    {
-                        connection.Dispose();
-
-                        lock (_parent._gate)
+                    return Disposable.Create(
+                        (this, _parent, connection),
+                        tuple =>
                         {
-                            if (--_count == 0)
+                            var (@this, closureParent, closureConnection) = tuple;
+
+                            closureConnection.Dispose();
+
+                            lock (closureParent._gate)
                             {
-                                _parent._scheduler.Schedule(_removeHandler.Dispose);
-                                _parent._session = null;
+                                if (--@this._count == 0)
+                                {
+                                    closureParent._scheduler.ScheduleAction(@this._removeHandler, handler => handler.Dispose());
+                                    closureParent._session = null;
+                                }
                             }
-                        }
-                    });
+                        });
                 }
+
             }
 
             private void Initialize()
@@ -314,11 +321,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     // the GetSchedulerForCurrentContext method).
                     //
                     var onNext = _parent.GetHandler(_subject.OnNext);
-                    _parent._scheduler.Schedule(onNext, AddHandler);
+                    _parent._scheduler.ScheduleAction(onNext, AddHandler);
                 }
             }
 
-            private IDisposable AddHandler(IScheduler self, TDelegate onNext)
+            private void AddHandler(TDelegate onNext)
             {
                 var removeHandler = default(IDisposable);
                 try
@@ -328,7 +335,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 catch (Exception exception)
                 {
                     _subject.OnError(exception);
-                    return Disposable.Empty;
+                    return;
                 }
 
                 //
@@ -340,8 +347,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 // remove handler to run on the scheduler.
                 //
                 _removeHandler.Disposable = removeHandler;
-
-                return Disposable.Empty;
             }
         }
     }
@@ -351,7 +356,7 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly Action<TDelegate> _addHandler;
         private readonly Action<TDelegate> _removeHandler;
 
-        public ClassicEventProducer(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+        protected ClassicEventProducer(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
             : base(scheduler)
         {
             _addHandler = addHandler;
@@ -361,7 +366,9 @@ namespace System.Reactive.Linq.ObservableImpl
         protected override IDisposable AddHandler(TDelegate handler)
         {
             _addHandler(handler);
-            return Disposable.Create(() => _removeHandler(handler));
+            return Disposable.Create(
+                (_removeHandler, handler),
+                tuple => tuple._removeHandler(tuple.handler));
         }
     }
 }

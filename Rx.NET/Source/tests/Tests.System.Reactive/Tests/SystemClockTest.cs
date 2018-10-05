@@ -5,7 +5,6 @@
 #if !NO_REMOTING && !XUNIT
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -14,7 +13,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    static class Exts
+    internal static class Exts
     {
         public static T Deq<T>(this List<T> l)
         {
@@ -24,7 +23,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-    
+
     public class SystemClockTest
     {
         private void Run(CrossAppDomainDelegate a)
@@ -837,21 +836,21 @@ namespace ReactiveTests.Tests
             d2.Dispose();
             d4.Dispose();
 
-            Assert.Equal(1, scm.n);
+            Assert.Equal(1, scm.N);
 
             s.SetTime(due1);
             var i1 = s._queue.Deq();
             i1.Invoke();
             Assert.True(done1);
 
-            Assert.Equal(1, scm.n);
+            Assert.Equal(1, scm.N);
 
             s.SetTime(due2);
             var i2 = s._queue.Deq();
             i2.Invoke();
             Assert.False(done2);
 
-            Assert.Equal(1, scm.n);
+            Assert.Equal(1, scm.N);
 
             var l1 = cal._queue.Deq();
             var l1d = now + l1.Interval;
@@ -868,7 +867,7 @@ namespace ReactiveTests.Tests
             catch { }
             Assert.True(done3);
 
-            Assert.Equal(1, scm.n);
+            Assert.Equal(1, scm.N);
 
             var l2 = cal._queue.Deq();
             var l2d = l1d + l2.Interval;
@@ -880,7 +879,7 @@ namespace ReactiveTests.Tests
             i4.Invoke();
             Assert.False(done4);
 
-            Assert.Equal(1, scm.n);
+            Assert.Equal(1, scm.N);
 
             var l3 = cal._queue.Deq();
             var l3d = l2d + l3.Interval;
@@ -892,21 +891,21 @@ namespace ReactiveTests.Tests
             i5.Invoke();
             Assert.True(done5);
 
-            Assert.Equal(0, scm.n);
+            Assert.Equal(0, scm.N);
 
             var d6 = s.Schedule(due6, () => { done6 = true; });
 
-            Assert.Equal(1, scm.n);
+            Assert.Equal(1, scm.N);
 
             s.SetTime(due6);
             var i6 = s._queue.Deq();
             i6.Invoke();
             Assert.True(done6);
 
-            Assert.Equal(0, scm.n);
+            Assert.Equal(0, scm.N);
         }
 
-        class MyScheduler : LocalScheduler
+        private class MyScheduler : LocalScheduler
         {
             internal List<ScheduledItem<TimeSpan>> _queue = new List<ScheduledItem<TimeSpan>>();
 
@@ -930,7 +929,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        class MyPlatformEnlightenmentProvider : IPlatformEnlightenmentProvider
+        private class MyPlatformEnlightenmentProvider : IPlatformEnlightenmentProvider
         {
             internal MyCAL _cal;
 
@@ -954,7 +953,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        class FakeClockPlatformEnlightenmentProvider : IPlatformEnlightenmentProvider
+        private class FakeClockPlatformEnlightenmentProvider : IPlatformEnlightenmentProvider
         {
             internal FakeClockCAL _cal;
             internal FakeClock _clock;
@@ -980,7 +979,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        class Work
+        private class Work
         {
             internal readonly Action<object> _action;
             internal readonly object _state;
@@ -992,7 +991,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        class MyCAL : IConcurrencyAbstractionLayer
+        private class MyCAL : IConcurrencyAbstractionLayer
         {
             internal List<TimeInterval<Work>> _queue = new List<TimeInterval<Work>>();
 
@@ -1034,7 +1033,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        class FakeClockCAL : IConcurrencyAbstractionLayer
+        private class FakeClockCAL : IConcurrencyAbstractionLayer
         {
             internal Action _action;
             internal TimeSpan _period;
@@ -1077,7 +1076,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        class FakeClock : ISystemClock
+        private class FakeClock : ISystemClock
         {
             internal DateTimeOffset _now;
 
@@ -1087,42 +1086,32 @@ namespace ReactiveTests.Tests
             }
         }
 
-        class ClockChanged : INotifySystemClockChanged
+        private class ClockChanged : INotifySystemClockChanged
         {
-            private static ClockChanged s_instance = new ClockChanged();
-
             private EventHandler<SystemClockChangedEventArgs> _systemClockChanged;
 
-            internal int n = 0;
+            internal int N = 0;
 
             public event EventHandler<SystemClockChangedEventArgs> SystemClockChanged
             {
                 add
                 {
                     _systemClockChanged += value;
-                    n++;
+                    N++;
                 }
 
                 remove
                 {
                     _systemClockChanged -= value;
-                    n--;
+                    N--;
                 }
             }
 
-            public static ClockChanged Instance
-            {
-                get
-                {
-                    return s_instance;
-                }
-            }
+            public static ClockChanged Instance { get; } = new ClockChanged();
 
             public void OnSystemClockChanged()
             {
-                var scc = _systemClockChanged;
-                if (scc != null)
-                    scc(this, new SystemClockChangedEventArgs());
+                _systemClockChanged?.Invoke(this, new SystemClockChangedEventArgs());
             }
         }
     }

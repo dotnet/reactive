@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Collections.Generic;
-using System.Reactive.Concurrency;
-using Microsoft.Reactive.Testing;
 using System;
+using System.Collections.Generic;
+using Microsoft.Reactive.Testing;
 
 namespace ReactiveTests
 {
@@ -13,23 +12,17 @@ namespace ReactiveTests
     {
         public readonly TestScheduler Scheduler;
         public readonly List<Subscription> Subscriptions = new List<Subscription>();
-
-        IEnumerable<T> underlyingEnumerable;
+        private IEnumerable<T> _underlyingEnumerable;
 
         public MockEnumerable(TestScheduler scheduler, IEnumerable<T> underlyingEnumerable)
         {
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-            if (underlyingEnumerable == null)
-                throw new ArgumentNullException(nameof(underlyingEnumerable));
-
-            Scheduler = scheduler;
-            this.underlyingEnumerable = underlyingEnumerable;
+            Scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
+            this._underlyingEnumerable = underlyingEnumerable ?? throw new ArgumentNullException(nameof(underlyingEnumerable));
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return new MockEnumerator(Scheduler, Subscriptions, underlyingEnumerable.GetEnumerator());
+            return new MockEnumerator(Scheduler, Subscriptions, _underlyingEnumerable.GetEnumerator());
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -37,21 +30,21 @@ namespace ReactiveTests
             return GetEnumerator();
         }
 
-        class MockEnumerator : IEnumerator<T>
+        private class MockEnumerator : IEnumerator<T>
         {
-            List<Subscription> subscriptions;
-            IEnumerator<T> enumerator;
-            TestScheduler scheduler;
-            int index;
-            bool disposed = false;
+            private readonly List<Subscription> _subscriptions;
+            private IEnumerator<T> _enumerator;
+            private TestScheduler _scheduler;
+            private readonly int _index;
+            private bool _disposed;
 
             public MockEnumerator(TestScheduler scheduler, List<Subscription> subscriptions, IEnumerator<T> enumerator)
             {
-                this.subscriptions = subscriptions;
-                this.enumerator = enumerator;
-                this.scheduler = scheduler;
+                this._subscriptions = subscriptions;
+                this._enumerator = enumerator;
+                this._scheduler = scheduler;
 
-                index = subscriptions.Count;
+                _index = subscriptions.Count;
                 subscriptions.Add(new Subscription(scheduler.Clock));
             }
 
@@ -59,19 +52,22 @@ namespace ReactiveTests
             {
                 get
                 {
-                    if (disposed)
+                    if (_disposed)
+                    {
                         throw new ObjectDisposedException("this");
-                    return enumerator.Current;
+                    }
+
+                    return _enumerator.Current;
                 }
             }
 
             public void Dispose()
             {
-                if (!disposed)
+                if (!_disposed)
                 {
-                    disposed = true;
-                    enumerator.Dispose();
-                    subscriptions[index] = new Subscription(subscriptions[index].Subscribe, scheduler.Clock);
+                    _disposed = true;
+                    _enumerator.Dispose();
+                    _subscriptions[_index] = new Subscription(_subscriptions[_index].Subscribe, _scheduler.Clock);
                 }
             }
 
@@ -82,16 +78,22 @@ namespace ReactiveTests
 
             public bool MoveNext()
             {
-                if (disposed)
+                if (_disposed)
+                {
                     throw new ObjectDisposedException("this");
-                return enumerator.MoveNext();
+                }
+
+                return _enumerator.MoveNext();
             }
 
             public void Reset()
             {
-                if (disposed)
+                if (_disposed)
+                {
                     throw new ObjectDisposedException("this");
-                enumerator.Reset();
+                }
+
+                _enumerator.Reset();
             }
         }
 

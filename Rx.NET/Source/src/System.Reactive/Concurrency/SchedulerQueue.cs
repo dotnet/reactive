@@ -9,7 +9,7 @@ namespace System.Reactive.Concurrency
     /// </summary>
     /// <typeparam name="TAbsolute">Absolute time representation type.</typeparam>
     /// <remarks>This type is not thread safe; users should ensure proper synchronization.</remarks>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "But it *is* a queue!")]
+    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "But it *is* a queue!")]
     public class SchedulerQueue<TAbsolute>
         where TAbsolute : IComparable<TAbsolute>
     {
@@ -24,14 +24,16 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Creats a new scheduler queue with the specified initial capacity.
+        /// Creates a new scheduler queue with the specified initial capacity.
         /// </summary>
         /// <param name="capacity">Initial capacity of the scheduler queue.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="capacity"/> is less than zero.</exception>
         public SchedulerQueue(int capacity)
         {
             if (capacity < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(capacity));
+            }
 
             _queue = new PriorityQueue<ScheduledItem<TAbsolute>>(capacity);
         }

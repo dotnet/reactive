@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -17,30 +18,43 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_exception, observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer) => new _(_exception, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_scheduler);
+        protected override void Run(_ sink) => sink.Run(_scheduler);
 
-        internal sealed class _ : Sink<TResult>
+        internal sealed class _ : IdentitySink<TResult>
         {
             private readonly Exception _exception;
 
-            public _(Exception exception, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Exception exception, IObserver<TResult> observer)
+                : base(observer)
             {
                 _exception = exception;
             }
 
-            public IDisposable Run(IScheduler scheduler)
+            public void Run(IScheduler scheduler)
             {
-                return scheduler.Schedule(Invoke);
+                SetUpstream(scheduler.ScheduleAction(this, @this => @this.ForwardOnError(@this._exception)));
             }
+        }
+    }
 
-            private void Invoke()
-            {
-                base._observer.OnError(_exception);
-                base.Dispose();
-            }
+    // There is no need for a full Producer/IdentitySink as there is no
+    // way to stop a first task running on the immediate scheduler
+    // as it is always synchronous.
+    internal sealed class ThrowImmediate<TSource> : BasicProducer<TSource>
+    {
+        private readonly Exception _exception;
+
+        public ThrowImmediate(Exception exception)
+        {
+            _exception = exception;
+        }
+
+        protected override IDisposable Run(IObserver<TSource> observer)
+        {
+            observer.OnError(_exception);
+            return Disposable.Empty;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.Immediate">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class ImmediateScheduler : LocalScheduler
     {
-        private static readonly Lazy<ImmediateScheduler> s_instance = new Lazy<ImmediateScheduler>(() => new ImmediateScheduler());
+        private static readonly Lazy<ImmediateScheduler> _instance = new Lazy<ImmediateScheduler>(() => new ImmediateScheduler());
 
         private ImmediateScheduler()
         {
@@ -21,7 +21,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the singleton instance of the immediate scheduler.
         /// </summary>
-        public static ImmediateScheduler Instance => s_instance.Value;
+        public static ImmediateScheduler Instance => _instance.Value;
 
         /// <summary>
         /// Schedules an action to be executed.
@@ -34,7 +34,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             return action(new AsyncLockScheduler(), state);
         }
@@ -51,7 +53,9 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
+            {
                 throw new ArgumentNullException(nameof(action));
+            }
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks > 0)
@@ -64,27 +68,31 @@ namespace System.Reactive.Concurrency
 
         private sealed class AsyncLockScheduler : LocalScheduler
         {
-            private AsyncLock asyncLock;
+            private AsyncLock _asyncLock;
 
             public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
             {
                 if (action == null)
+                {
                     throw new ArgumentNullException(nameof(action));
+                }
 
                 var m = new SingleAssignmentDisposable();
 
-                if (asyncLock == null)
+                if (_asyncLock == null)
                 {
-                    asyncLock = new AsyncLock();
+                    _asyncLock = new AsyncLock();
                 }
 
-                asyncLock.Wait(() =>
-                {
-                    if (!m.IsDisposed)
+                _asyncLock.Wait(
+                    (@this: this, m, action, state),
+                    tuple =>
                     {
-                        m.Disposable = action(this, state);
-                    }
-                });
+                        if (!tuple.m.IsDisposed)
+                        {
+                            tuple.m.Disposable = tuple.action(tuple.@this, tuple.state);
+                        }
+                    });
 
                 return m;
             }
@@ -92,7 +100,9 @@ namespace System.Reactive.Concurrency
             public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
             {
                 if (action == null)
+                {
                     throw new ArgumentNullException(nameof(action));
+                }
 
                 if (dueTime.Ticks <= 0)
                 {
@@ -108,27 +118,29 @@ namespace System.Reactive.Concurrency
 
                 var m = new SingleAssignmentDisposable();
 
-                if (asyncLock == null)
+                if (_asyncLock == null)
                 {
-                    asyncLock = new AsyncLock();
+                    _asyncLock = new AsyncLock();
                 }
 
-                asyncLock.Wait(() =>
-                {
-                    if (!m.IsDisposed)
+                _asyncLock.Wait(
+                    (@this: this, m, state, action, timer, dueTime),
+                    tuple =>
                     {
-                        var sleep = dueTime - timer.Elapsed;
-                        if (sleep.Ticks > 0)
+                        if (!tuple.m.IsDisposed)
                         {
-                            ConcurrencyAbstractionLayer.Current.Sleep(sleep);
-                        }
+                            var sleep = tuple.dueTime - tuple.timer.Elapsed;
+                            if (sleep.Ticks > 0)
+                            {
+                                ConcurrencyAbstractionLayer.Current.Sleep(sleep);
+                            }
 
-                        if (!m.IsDisposed)
-                        {
-                            m.Disposable = action(this, state);
+                            if (!tuple.m.IsDisposed)
+                            {
+                                tuple.m.Disposable = tuple.action(tuple.@this, tuple.state);
+                            }
                         }
-                    }
-                });
+                    });
 
                 return m;
             }

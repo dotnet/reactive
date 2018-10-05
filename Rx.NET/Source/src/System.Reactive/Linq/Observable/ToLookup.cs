@@ -22,25 +22,25 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<ILookup<TKey, TElement>> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<ILookup<TKey, TElement>> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<ILookup<TKey, TElement>>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource, ILookup<TKey, TElement>>
         {
             private readonly Func<TSource, TKey> _keySelector;
             private readonly Func<TSource, TElement> _elementSelector;
-            private readonly Lookup<TKey, TElement> _lookup;
+            private Lookup<TKey, TElement> _lookup;
 
-            public _(ToLookup<TSource, TKey, TElement> parent, IObserver<ILookup<TKey, TElement>> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(ToLookup<TSource, TKey, TElement> parent, IObserver<ILookup<TKey, TElement>> observer)
+                : base(observer)
             {
                 _keySelector = parent._keySelector;
                 _elementSelector = parent._elementSelector;
                 _lookup = new Lookup<TKey, TElement>(parent._comparer);
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 try
                 {
@@ -48,22 +48,23 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception ex)
                 {
-                    base._observer.OnError(ex);
-                    base.Dispose();
+                    _lookup = null;
+                    ForwardOnError(ex);
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                _lookup = null;
+                ForwardOnError(error);
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
-                base._observer.OnNext(_lookup);
-                base._observer.OnCompleted();
-                base.Dispose();
+                var lookup = _lookup;
+                _lookup = null;
+                ForwardOnNext(lookup);
+                ForwardOnCompleted();
             }
         }
     }

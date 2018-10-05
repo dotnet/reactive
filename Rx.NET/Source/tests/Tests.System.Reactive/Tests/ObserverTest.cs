@@ -14,19 +14,19 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class ObserverTest : ReactiveTest
     {
         [Fact]
         public void ToObserver_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToObserver<int>(default(Action<Notification<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToObserver(default(Action<Notification<int>>)));
         }
 
         [Fact]
         public void ToObserver_NotificationOnNext()
         {
-            int i = 0;
+            var i = 0;
             Action<Notification<int>> next = n =>
             {
                 Assert.Equal(i++, 0);
@@ -42,7 +42,7 @@ namespace ReactiveTests.Tests
         public void ToObserver_NotificationOnError()
         {
             var ex = new Exception();
-            int i = 0;
+            var i = 0;
             Action<Notification<int>> next = n =>
             {
                 Assert.Equal(i++, 0);
@@ -57,7 +57,7 @@ namespace ReactiveTests.Tests
         public void ToObserver_NotificationOnCompleted()
         {
             var ex = new Exception();
-            int i = 0;
+            var i = 0;
             Action<Notification<int>> next = n =>
             {
                 Assert.Equal(i++, 0);
@@ -70,14 +70,14 @@ namespace ReactiveTests.Tests
         [Fact]
         public void ToNotifier_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToNotifier<int>(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToNotifier<int>(default));
         }
 
         [Fact]
         public void ToNotifier_Forwards()
         {
             var obsn = new MyObserver();
-            obsn.ToNotifier()(Notification.CreateOnNext<int>(42));
+            obsn.ToNotifier()(Notification.CreateOnNext(42));
             Assert.Equal(obsn.HasOnNext, 42);
 
             var ex = new Exception();
@@ -93,20 +93,20 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Create_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default(Action<int>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default(Action<int>), () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default, () => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, default(Action)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default(Action<int>), (Exception _) => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default, (Exception _) => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, default(Action<Exception>)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default(Action<int>), (Exception _) => { }, () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, default(Action<Exception>), () => { }));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, (Exception _) => { }, default(Action)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default, (Exception _) => { }, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, default, () => { }));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, (Exception _) => { }, default));
         }
 
         [Fact]
         public void Create_OnNext()
         {
-            bool next = false;
+            var next = false;
             var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; });
             res.OnNext(42);
             Assert.True(next);
@@ -119,7 +119,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
             var e_ = default(Exception);
 
-            bool next = false;
+            var next = false;
             var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; });
             res.OnNext(42);
             Assert.True(next);
@@ -139,8 +139,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Create_OnNextOnCompleted()
         {
-            bool next = false;
-            bool completed = false;
+            var next = false;
+            var completed = false;
             var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; }, () => { completed = true; });
             res.OnNext(42);
             Assert.True(next);
@@ -155,8 +155,8 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
             var e_ = default(Exception);
 
-            bool next = false;
-            bool completed = false;
+            var next = false;
+            var completed = false;
             var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; }, () => { completed = true; });
             res.OnNext(42);
             Assert.True(next);
@@ -178,8 +178,8 @@ namespace ReactiveTests.Tests
         public void Create_OnNextOnError()
         {
             var ex = new Exception();
-            bool next = true;
-            bool error = false;
+            var next = true;
+            var error = false;
             var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; }, e => { Assert.Same(ex, e); error = true; });
             res.OnNext(42);
             Assert.True(next);
@@ -192,8 +192,8 @@ namespace ReactiveTests.Tests
         public void Create_OnNextOnError_HitCompleted()
         {
             var ex = new Exception();
-            bool next = true;
-            bool error = false;
+            var next = true;
+            var error = false;
             var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; }, e => { Assert.Same(ex, e); error = true; });
             res.OnNext(42);
             Assert.True(next);
@@ -206,9 +206,9 @@ namespace ReactiveTests.Tests
         public void Create_OnNextOnErrorOnCompleted1()
         {
             var ex = new Exception();
-            bool next = true;
-            bool error = false;
-            bool completed = false;
+            var next = true;
+            var error = false;
+            var completed = false;
             var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; }, e => { Assert.Same(ex, e); error = true; }, () => { completed = true; });
             res.OnNext(42);
             Assert.True(next);
@@ -223,9 +223,9 @@ namespace ReactiveTests.Tests
         public void Create_OnNextOnErrorOnCompleted2()
         {
             var ex = new Exception();
-            bool next = true;
-            bool error = false;
-            bool completed = false;
+            var next = true;
+            var error = false;
+            var completed = false;
             var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; }, e => { Assert.Same(ex, e); error = true; }, () => { completed = true; });
             res.OnNext(42);
             Assert.True(next);
@@ -239,7 +239,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void AsObserver_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.AsObserver<int>(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.AsObserver<int>(default));
         }
 
         [Fact]
@@ -248,7 +248,7 @@ namespace ReactiveTests.Tests
             var obs = new MyObserver();
             var res = obs.AsObserver();
 
-            Assert.False(object.ReferenceEquals(obs, res));
+            Assert.False(ReferenceEquals(obs, res));
         }
 
         [Fact]
@@ -268,7 +268,7 @@ namespace ReactiveTests.Tests
             Assert.True(obsc.HasOnCompleted);
         }
 
-        class MyObserver : IObserver<int>
+        private class MyObserver : IObserver<int>
         {
             public void OnNext(int value)
             {
@@ -693,12 +693,15 @@ namespace ReactiveTests.Tests
             var M = 1000;
 
             var e = new CountdownEvent(N);
-            for (int i = 0; i < N; i++)
+            for (var i = 0; i < N; i++)
             {
                 Scheduler.Default.Schedule(() =>
                 {
-                    for (int j = 0; j < M; j++)
+                    for (var j = 0; j < M; j++)
+                    {
                         s.OnNext(j);
+                    }
+
                     e.Signal();
                 });
             }
@@ -776,13 +779,19 @@ namespace ReactiveTests.Tests
 
             new Thread(() =>
             {
-                for (int i = 0; i < N; i++)
+                for (var i = 0; i < N; i++)
+                {
                     n.OnNext(i);
+                }
 
                 if (success)
+                {
                     n.OnCompleted();
+                }
                 else
+                {
                     n.OnError(err);
+                }
             }).Start();
 
             e.WaitOne();
@@ -799,32 +808,35 @@ namespace ReactiveTests.Tests
             var ctx = new MySyncCtx();
             var res = obs.NotifyOn(ctx);
 
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
+            {
                 obs.OnNext(i);
+            }
+
             obs.OnCompleted();
 
             don.WaitOne();
             Assert.True(lst.SequenceEqual(Enumerable.Range(0, 100)));
         }
 
-        class MySyncCtx : SynchronizationContext
+        private class MySyncCtx : SynchronizationContext
         {
             public override void Post(SendOrPostCallback d, object state)
             {
                 Task.Run(() => d(state));
             }
         }
-        
+
         [Fact]
         public void Observer_ToProgress_ArgumentChecking()
         {
             var s = Scheduler.Immediate;
             var o = Observer.Create<int>(_ => { });
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(default(IObserver<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(default));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(default(IObserver<int>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(o, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(default, s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress(o, default));
         }
 
         [Fact]
@@ -883,7 +895,7 @@ namespace ReactiveTests.Tests
             Assert.True(xs.SequenceEqual(new[] { 42, 43 }));
         }
 
-        class MyProgress<T> : IProgress<T>
+        private class MyProgress<T> : IProgress<T>
         {
             private readonly Action<T> _report;
 

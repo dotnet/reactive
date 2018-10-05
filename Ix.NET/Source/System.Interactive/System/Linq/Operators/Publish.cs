@@ -35,7 +35,9 @@ namespace System.Linq
         public static IBuffer<TSource> Publish<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             return new PublishedBuffer<TSource>(source.GetEnumerator());
         }
@@ -52,9 +54,14 @@ namespace System.Linq
         public static IEnumerable<TResult> Publish<TSource, TResult>(this IEnumerable<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
             if (source == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
+
             if (selector == null)
+            {
                 throw new ArgumentNullException(nameof(selector));
+            }
 
             return Create(() => selector(source.Publish()).GetEnumerator());
         }
@@ -76,7 +83,9 @@ namespace System.Linq
             public IEnumerator<T> GetEnumerator()
             {
                 if (_disposed)
+                {
                     throw new ObjectDisposedException("");
+                }
 
                 var i = default(int);
                 lock (_source)
@@ -91,7 +100,9 @@ namespace System.Linq
             IEnumerator IEnumerable.GetEnumerator()
             {
                 if (_disposed)
+                {
                     throw new ObjectDisposedException("");
+                }
 
                 return GetEnumerator();
             }
@@ -120,7 +131,9 @@ namespace System.Linq
                     while (true)
                     {
                         if (_disposed)
+                        {
                             throw new ObjectDisposedException("");
+                        }
 
                         var hasValue = default(bool);
                         var current = default(T);
