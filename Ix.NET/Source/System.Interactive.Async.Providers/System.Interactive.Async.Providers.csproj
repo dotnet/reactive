@@ -3,8 +3,7 @@
   <PropertyGroup>
     <Description>Interactive Extensions Async Providers Library used to build query providers and express queries over async enumerable sequences.</Description>
     <AssemblyTitle>Interactive Extensions - Async Providers Library</AssemblyTitle>
-    <TargetFrameworks>net46;netstandard1.4</TargetFrameworks>
-    <TargetFrameworks>net45;netstandard1.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable;Asynchronous</PackageTags>
   </PropertyGroup>
 
@@ -26,7 +25,4 @@
     <Compile Update="System\Linq\AsyncQueryableEx.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="AsyncQueryableEx.Generated.tt" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
 </Project>

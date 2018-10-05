@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp1.1;net461</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
   </PropertyGroup>
 
@@ -19,13 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta4-build3742 " />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     <PackageReference Include="FluentAssertions" Version="4.19.2 " />
 
-    <PackageReference Include="xunit" Version="2.3.0-beta3-build3705" />
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0-beta4-build3742 " />
-
+    <PackageReference Include="xunit" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,10 +31,6 @@
       <LastGenOutput>AsyncQueryableExTests.Generated.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
   <ItemGroup>

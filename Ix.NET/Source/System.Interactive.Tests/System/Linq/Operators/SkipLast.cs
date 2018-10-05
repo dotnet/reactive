@@ -8,6 +8,7 @@ using Xunit;
 
 namespace Tests
 {
+#if !NETCOREAPP2_1
     public class SkipLast : Tests
     {
         [Fact]
@@ -41,4 +42,5 @@ namespace Tests
             Assert.True(Enumerable.SequenceEqual(r, e.Take(2)));
         }
     }
+#endif
 }

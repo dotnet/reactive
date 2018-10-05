@@ -142,7 +142,13 @@ namespace System.Linq
             var count = Count;
             if (count == 0)
             {
-                return Task.FromResult(Array.Empty<TSource>());
+                return Task.FromResult(
+#if NO_ARRAY_EMPTY
+                EmptyArray<TSource>.Value
+#else
+                Array.Empty<TSource>()
+#endif
+                    );
             }
 
             var array = new TSource[count];

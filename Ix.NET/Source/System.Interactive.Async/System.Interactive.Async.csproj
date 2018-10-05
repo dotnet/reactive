@@ -2,9 +2,8 @@
 
   <PropertyGroup>
     <Description>Interactive Extensions Async Library used to express queries over asynchronous enumerable sequences.</Description>
-    <AssemblyTitle>Interactive Extensions - Async Library</AssemblyTitle>
-    <TargetFrameworks>net46;netstandard1.4</TargetFrameworks>
-    <TargetFrameworks>net45;net46;netstandard1.0;netstandard1.3;netstandard2.0</TargetFrameworks>
+    <AssemblyTitle>Interactive Extensions - Async Library</AssemblyTitle>    
+    <TargetFrameworks>net45;net46;netstandard1.4;netstandard2.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable;Asynchronous</PackageTags>
   </PropertyGroup>
 
@@ -15,9 +14,5 @@
   <ItemGroup>
     <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
+  
 </Project>

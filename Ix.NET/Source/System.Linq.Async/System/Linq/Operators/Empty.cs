@@ -24,7 +24,13 @@ namespace System.Linq
 
             public IAsyncPartition<TValue> Take(int count) => this;
 
-            public Task<TValue[]> ToArrayAsync(CancellationToken cancellationToken) => Task.FromResult(Array.Empty<TValue>());
+            public Task<TValue[]> ToArrayAsync(CancellationToken cancellationToken) => Task.FromResult(
+#if NO_ARRAY_EMPTY
+                EmptyArray<TValue>.Value
+#else
+                Array.Empty<TValue>()
+#endif
+                );
 
             public Task<List<TValue>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(new List<TValue>());
 

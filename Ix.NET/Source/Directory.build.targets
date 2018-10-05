@@ -8,7 +8,7 @@
     <DefineConstants>$(DefineConstants);NO_CODE_COVERAGE_ATTRIBUTE;CRIPPLED_REFLECTION</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
-    <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY;NO_TASK_FROMEXCEPTION</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup>

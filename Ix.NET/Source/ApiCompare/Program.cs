@@ -314,7 +314,7 @@ namespace ApiCompare
                     {
                         var ret = typeof(Task<>).MakeGenericType(args.Last());
 
-                        return Expression.GetFuncType(args.SkipLast(1).Append(ret).ToArray());
+                        return Expression.GetFuncType(Enumerable.SkipLast(args, 1).Append(ret).ToArray());
                     }
                     else
                     {

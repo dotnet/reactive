@@ -8,6 +8,7 @@ using Xunit;
 
 namespace Tests
 {
+#if !NETCOREAPP2_1
     public class TakeLast : Tests
     {
         [Fact]
@@ -49,4 +50,5 @@ namespace Tests
             Assert.True(Enumerable.SequenceEqual(r, e.Skip(2)));
         }
     }
+#endif
 }

@@ -315,7 +315,11 @@ namespace System.Linq
                 await en.DisposeAsync().ConfigureAwait(false);
             }
 
+#if NO_ARRAY_EMPTY
+            return EmptyArray<TSource>.Value;
+#else
             return Array.Empty<TSource>();
+#endif
         }
 
         public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
