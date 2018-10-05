@@ -110,7 +110,7 @@ namespace System.Linq
                 return new DistinctUntilChangedAsyncIterator<TSource>(source, comparer);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -122,7 +122,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -181,7 +181,7 @@ namespace System.Linq
                 return new DistinctUntilChangedAsyncIterator<TSource, TKey>(source, keySelector, comparer);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -193,7 +193,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -252,7 +252,7 @@ namespace System.Linq
                 return new DistinctUntilChangedAsyncIteratorWithTask<TSource, TKey>(source, keySelector, comparer);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -264,7 +264,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

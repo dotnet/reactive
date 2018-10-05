@@ -44,12 +44,12 @@ namespace System.Threading.Tasks
                         _continueOnCapturedContext = continueOnCapturedContext;
                     }
 
-                    public ConfiguredTaskAwaitable<bool> MoveNextAsync() =>
+                    public ConfiguredValueTaskAwaitable<bool> MoveNextAsync() =>
                         _enumerator.MoveNextAsync().ConfigureAwait(_continueOnCapturedContext);
 
                     public T Current => _enumerator.Current;
 
-                    public ConfiguredTaskAwaitable DisposeAsync() =>
+                    public ConfiguredValueTaskAwaitable DisposeAsync() =>
                         _enumerator.DisposeAsync().ConfigureAwait(_continueOnCapturedContext);
                 }
             }

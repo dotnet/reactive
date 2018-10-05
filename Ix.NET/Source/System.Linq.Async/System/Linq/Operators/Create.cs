@@ -27,12 +27,12 @@ namespace System.Linq
             return new AnonymousAsyncEnumerableWithTask<T>(getEnumerator);
         }
 
-        public static IAsyncEnumerator<T> CreateEnumerator<T>(Func<Task<bool>> moveNext, Func<T> current, Func<Task> dispose)
+        public static IAsyncEnumerator<T> CreateEnumerator<T>(Func<ValueTask<bool>> moveNext, Func<T> current, Func<ValueTask> dispose)
         {
             return AsyncEnumerator.Create(moveNext, current, dispose);
         }
 
-        private static IAsyncEnumerator<T> CreateEnumerator<T>(Func<TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Func<Task> dispose)
+        private static IAsyncEnumerator<T> CreateEnumerator<T>(Func<TaskCompletionSource<bool>, ValueTask<bool>> moveNext, Func<T> current, Func<ValueTask> dispose)
         {
             return AsyncEnumerator.Create(moveNext, current, dispose);
         }
@@ -87,7 +87,7 @@ namespace System.Linq
                     }
                 }
 
-                public async Task DisposeAsync()
+                public async ValueTask DisposeAsync()
                 {
                     var old = Interlocked.Exchange(ref enumerator, DisposedEnumerator.Instance);
 
@@ -97,7 +97,7 @@ namespace System.Linq
                     }
                 }
 
-                public Task<bool> MoveNextAsync()
+                public ValueTask<bool> MoveNextAsync()
                 {
                     if (enumerator == null)
                     {
@@ -107,7 +107,7 @@ namespace System.Linq
                     return enumerator.MoveNextAsync();
                 }
 
-                private async Task<bool> InitAndMoveNextAsync()
+                private async ValueTask<bool> InitAndMoveNextAsync()
                 {
                     try
                     {
@@ -132,9 +132,9 @@ namespace System.Linq
 
                     public T Current => throw new ObjectDisposedException("this");
 
-                    public Task DisposeAsync() => TaskExt.CompletedTask;
+                    public ValueTask DisposeAsync() => TaskExt.CompletedTask;
 
-                    public Task<bool> MoveNextAsync() => throw new ObjectDisposedException("this");
+                    public ValueTask<bool> MoveNextAsync() => throw new ObjectDisposedException("this");
                 }
             }
         }

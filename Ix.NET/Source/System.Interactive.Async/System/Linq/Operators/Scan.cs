@@ -74,7 +74,7 @@ namespace System.Linq
                 return new ScanAsyncEnumerable<TSource>(source, accumulator);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -86,7 +86,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -148,7 +148,7 @@ namespace System.Linq
                 return new ScanAsyncEnumerable<TSource, TAccumulate>(source, seed, accumulator);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -160,7 +160,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -212,7 +212,7 @@ namespace System.Linq
                 return new ScanAsyncEnumerableWithTask<TSource>(source, accumulator);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -224,7 +224,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -286,7 +286,7 @@ namespace System.Linq
                 return new ScanAsyncEnumerableWithTask<TSource, TAccumulate>(source, seed, accumulator);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -298,7 +298,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

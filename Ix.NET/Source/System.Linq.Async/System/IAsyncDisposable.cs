@@ -11,6 +11,6 @@ namespace System
 {
     public interface IAsyncDisposable
     {
-        Task DisposeAsync();
+        ValueTask DisposeAsync();
     }
 }

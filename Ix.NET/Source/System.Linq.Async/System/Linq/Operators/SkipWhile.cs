@@ -72,7 +72,7 @@ namespace System.Linq
                 return new SkipWhileAsyncIterator<TSource>(source, predicate);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -83,7 +83,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -149,7 +149,7 @@ namespace System.Linq
                 return new SkipWhileWithIndexAsyncIterator<TSource>(source, predicate);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -160,7 +160,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -231,7 +231,7 @@ namespace System.Linq
                 return new SkipWhileAsyncIteratorWithTask<TSource>(source, predicate);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -242,7 +242,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -308,7 +308,7 @@ namespace System.Linq
                 return new SkipWhileWithIndexAsyncIteratorWithTask<TSource>(source, predicate);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -319,7 +319,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

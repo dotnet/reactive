@@ -39,7 +39,7 @@ namespace System.Linq
             private readonly IAsyncEnumerable<TSource>[] sources;
 
             private IAsyncEnumerator<TSource>[] enumerators;
-            private Task<bool>[] moveNexts;
+            private ValueTask<bool>[] moveNexts;
             private int active;
 
             public MergeAsyncIterator(IAsyncEnumerable<TSource>[] sources)
@@ -54,13 +54,13 @@ namespace System.Linq
                 return new MergeAsyncIterator<TSource>(sources);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerators != null)
                 {
                     var n = enumerators.Length;
 
-                    var disposes = new Task[n];
+                    var disposes = new ValueTask[n];
 
                     for (var i = 0; i < n; i++)
                     {
@@ -68,14 +68,14 @@ namespace System.Linq
                         disposes[i] = dispose;
                     }
 
-                    await Task.WhenAll(disposes).ConfigureAwait(false);
+                    await Task.WhenAll(disposes.Select(t => t.AsTask())).ConfigureAwait(false);
                     enumerators = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -83,7 +83,7 @@ namespace System.Linq
                         var n = sources.Length;
 
                         enumerators = new IAsyncEnumerator<TSource>[n];
-                        moveNexts = new Task<bool>[n];
+                        moveNexts = new ValueTask<bool>[n];
                         active = n;
 
                         for (var i = 0; i < n; i++)
@@ -105,7 +105,7 @@ namespace System.Linq
                             //         want to consider a "prefer fairness" option.
                             //
 
-                            var moveNext = await Task.WhenAny(moveNexts).ConfigureAwait(false);
+                            var moveNext = await Task.WhenAny(moveNexts.Select(t => t.AsTask())).ConfigureAwait(false);
 
                             var index = Array.IndexOf(moveNexts, moveNext);
 

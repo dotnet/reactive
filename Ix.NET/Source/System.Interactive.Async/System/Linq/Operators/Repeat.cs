@@ -47,7 +47,7 @@ namespace System.Linq
                 return new RepeatElementAsyncIterator<TResult>(element);
             }
 
-            protected override Task<bool> MoveNextCore()
+            protected override ValueTask<bool> MoveNextCore()
             {
                 current = element;
                 return TaskExt.True;
@@ -78,7 +78,7 @@ namespace System.Linq
                 return new RepeatSequenceAsyncIterator<TSource>(source, count);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -89,7 +89,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

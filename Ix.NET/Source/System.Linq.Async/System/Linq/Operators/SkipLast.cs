@@ -51,7 +51,7 @@ namespace System.Linq
                 return new SkipLastAsyncIterator<TSource>(source, count);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -65,7 +65,7 @@ namespace System.Linq
             }
 
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

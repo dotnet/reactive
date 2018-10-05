@@ -138,15 +138,15 @@ namespace Tests
                     _disposeCounter = disposeCounter;
                 }
 
-                public Task DisposeAsync()
+                public ValueTask DisposeAsync()
                 {
                     _disposeCounter.DisposeCount++;
-                    return Task.FromResult(true);
+                    return new ValueTask(Task.FromResult(true));
                 }
 
-                public Task<bool> MoveNextAsync()
+                public ValueTask<bool> MoveNextAsync()
                 {
-                    return Task.Factory.StartNew(() => false);
+                    return new ValueTask<bool>(Task.Factory.StartNew(() => false));
                 }
 
                 public object Current { get; private set; }

@@ -60,7 +60,7 @@ namespace System.Linq
                 return new OnErrorResumeNextAsyncIterator<TSource>(sources);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (sourcesEnumerator != null)
                 {
@@ -77,7 +77,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

@@ -138,7 +138,7 @@ namespace System.Linq
                     _comparer = comparer;
                 }
 
-                public async Task<bool> MoveNextAsync()
+                public async ValueTask<bool> MoveNextAsync()
                 {
                     // nothing to do 
                     if (!await _outer.MoveNextAsync().ConfigureAwait(false))
@@ -163,7 +163,7 @@ namespace System.Linq
 
                 public TResult Current { get; private set; }
 
-                public Task DisposeAsync() => _outer.DisposeAsync();
+                public ValueTask DisposeAsync() => _outer.DisposeAsync();
             }
         }
 
@@ -228,7 +228,7 @@ namespace System.Linq
                     _comparer = comparer;
                 }
 
-                public async Task<bool> MoveNextAsync()
+                public async ValueTask<bool> MoveNextAsync()
                 {
                     // nothing to do 
                     if (!await _outer.MoveNextAsync().ConfigureAwait(false))
@@ -253,7 +253,7 @@ namespace System.Linq
 
                 public TResult Current { get; private set; }
 
-                public Task DisposeAsync() => _outer.DisposeAsync();
+                public ValueTask DisposeAsync() => _outer.DisposeAsync();
             }
         }
     }

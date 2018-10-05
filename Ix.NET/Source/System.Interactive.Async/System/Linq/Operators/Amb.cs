@@ -57,7 +57,7 @@ namespace System.Linq
                 return new AmbAsyncIterator<TSource>(first, second);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -68,7 +68,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -76,8 +76,8 @@ namespace System.Linq
                         var firstEnumerator = first.GetAsyncEnumerator();
                         var secondEnumerator = second.GetAsyncEnumerator();
 
-                        var firstMoveNext = firstEnumerator.MoveNextAsync();
-                        var secondMoveNext = secondEnumerator.MoveNextAsync();
+                        var firstMoveNext = firstEnumerator.MoveNextAsync().AsTask();
+                        var secondMoveNext = secondEnumerator.MoveNextAsync().AsTask();
 
                         var winner = await Task.WhenAny(firstMoveNext, secondMoveNext).ConfigureAwait(false);
 
@@ -152,7 +152,7 @@ namespace System.Linq
                 return new AmbAsyncIteratorN<TSource>(sources);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -163,7 +163,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -171,7 +171,7 @@ namespace System.Linq
                         var n = sources.Length;
 
                         var enumerators = new IAsyncEnumerator<TSource>[n];
-                        var moveNexts = new Task<bool>[n];
+                        var moveNexts = new ValueTask<bool>[n];
 
                         for (var i = 0; i < n; i++)
                         {
@@ -181,7 +181,7 @@ namespace System.Linq
                             moveNexts[i] = enumerator.MoveNextAsync();
                         }
 
-                        var winner = await Task.WhenAny(moveNexts).ConfigureAwait(false);
+                        var winner = await Task.WhenAny(moveNexts.Select(t => t.AsTask())).ConfigureAwait(false);
 
                         //
                         // REVIEW: An alternative option is to call DisposeAsync on the other and await it, but this has two drawbacks:
@@ -200,7 +200,7 @@ namespace System.Linq
                         {
                             if (i != winnerIndex)
                             {
-                                var ignored = moveNexts[i].ContinueWith(_ =>
+                                var ignored = moveNexts[i].AsTask().ContinueWith(_ =>
                                 {
                                     enumerators[i].DisposeAsync();
                                 });

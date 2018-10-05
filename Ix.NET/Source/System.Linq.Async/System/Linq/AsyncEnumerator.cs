@@ -22,7 +22,7 @@ namespace System.Collections.Generic
         /// <param name="current">The delegate implementing the <see cref="IAsyncEnumerator{T}.Current"/> property getter.</param>
         /// <param name="dispose">The delegate implementing the <see cref="IAsyncDisposable.DisposeAsync"/> method.</param>
         /// <returns>A new enumerator instance.</returns>
-        public static IAsyncEnumerator<T> Create<T>(Func<Task<bool>> moveNext, Func<T> current, Func<Task> dispose)
+        public static IAsyncEnumerator<T> Create<T>(Func<ValueTask<bool>> moveNext, Func<T> current, Func<ValueTask> dispose)
         {
             if (moveNext == null)
                 throw new ArgumentNullException(nameof(moveNext));
@@ -42,7 +42,7 @@ namespace System.Collections.Generic
         /// Task containing the result of the operation: true if the enumerator was successfully advanced
         /// to the next element; false if the enumerator has passed the end of the sequence.
         /// </returns>
-        public static Task<bool> MoveNextAsync<T>(this IAsyncEnumerator<T> source, CancellationToken cancellationToken)
+        public static ValueTask<bool> MoveNextAsync<T>(this IAsyncEnumerator<T> source, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -90,7 +90,7 @@ namespace System.Collections.Generic
             return AsyncEnumerable.CreateEnumerable<T>(() => source);
         }
 
-        internal static IAsyncEnumerator<T> Create<T>(Func<TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Func<Task> dispose)
+        internal static IAsyncEnumerator<T> Create<T>(Func<TaskCompletionSource<bool>, ValueTask<bool>> moveNext, Func<T> current, Func<ValueTask> dispose)
         {
             return new AnonymousAsyncIterator<T>(
                 async () =>
@@ -107,10 +107,10 @@ namespace System.Collections.Generic
         private sealed class AnonymousAsyncIterator<T> : AsyncIterator<T>
         {
             private readonly Func<T> currentFunc;
-            private readonly Func<Task<bool>> moveNext;
-            private Func<Task> dispose;
+            private readonly Func<ValueTask<bool>> moveNext;
+            private Func<ValueTask> dispose;
 
-            public AnonymousAsyncIterator(Func<Task<bool>> moveNext, Func<T> currentFunc, Func<Task> dispose)
+            public AnonymousAsyncIterator(Func<ValueTask<bool>> moveNext, Func<T> currentFunc, Func<ValueTask> dispose)
             {
                 Debug.Assert(moveNext != null);
 
@@ -127,7 +127,7 @@ namespace System.Collections.Generic
                 throw new NotSupportedException("AnonymousAsyncIterator cannot be cloned. It is only intended for use as an iterator.");
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 var dispose = Interlocked.Exchange(ref this.dispose, null);
 
@@ -139,7 +139,7 @@ namespace System.Collections.Generic
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

@@ -51,7 +51,7 @@ namespace System.Linq
             return new AsyncEnumerablePartition<TSource>(_source, _minIndexInclusive, _maxIndexInclusive);
         }
 
-        public override async Task DisposeAsync()
+        public override async ValueTask DisposeAsync()
         {
             if (_enumerator != null)
             {
@@ -102,7 +102,7 @@ namespace System.Linq
         private bool hasSkipped;
         private int taken;
 
-        protected override async Task<bool> MoveNextCore()
+        protected override async ValueTask<bool> MoveNextCore()
         {
             switch (state)
             {

@@ -55,7 +55,7 @@ namespace System.Linq
                 return new ConcatEnumerableAsyncIterator<TSource>(source);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (outerEnumerator != null)
                 {
@@ -80,7 +80,7 @@ namespace System.Linq
             private const int State_OuterNext = 1;
             private const int State_While = 4;
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
 
                 switch (state)
@@ -145,7 +145,7 @@ namespace System.Linq
                 return new ConcatAsyncEnumerableAsyncIterator<TSource>(source);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (outerEnumerator != null)
                 {
@@ -170,7 +170,7 @@ namespace System.Linq
             private const int State_OuterNext = 1;
             private const int State_While = 4;
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
 
                 switch (state)

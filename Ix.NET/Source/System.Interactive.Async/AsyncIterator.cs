@@ -43,7 +43,7 @@ namespace System.Linq
             return enumerator;
         }
 
-        public virtual Task DisposeAsync()
+        public virtual ValueTask DisposeAsync()
         {
             current = default(TSource);
             state = AsyncIteratorState.Disposed;
@@ -62,7 +62,7 @@ namespace System.Linq
             }
         }
 
-        public async Task<bool> MoveNextAsync()
+        public async ValueTask<bool> MoveNextAsync()
         {
             // Note: MoveNext *must* be implemented as an async method to ensure
             // that any exceptions thrown from the MoveNextCore call are handled 
@@ -91,7 +91,7 @@ namespace System.Linq
 
         public abstract AsyncIterator<TSource> Clone();
 
-        protected abstract Task<bool> MoveNextCore();
+        protected abstract ValueTask<bool> MoveNextCore();
 
         protected virtual void OnGetEnumerator()
         {

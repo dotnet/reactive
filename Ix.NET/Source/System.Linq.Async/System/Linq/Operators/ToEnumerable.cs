@@ -34,7 +34,8 @@ namespace System.Linq
             }
             finally
             {
-                e.DisposeAsync().Wait();
+                // Wait
+                e.DisposeAsync().GetAwaiter().GetResult();
             }
         }
     }

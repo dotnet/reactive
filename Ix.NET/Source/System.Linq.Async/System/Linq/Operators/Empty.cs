@@ -40,11 +40,11 @@ namespace System.Linq
 
             public Task<Maybe<TValue>> TryGetLastAsync(CancellationToken cancellationToken) => Task.FromResult(new Maybe<TValue>());
 
-            public Task<bool> MoveNextAsync() => TaskExt.False;
+            public ValueTask<bool> MoveNextAsync() => TaskExt.False;
 
             public IAsyncEnumerator<TValue> GetAsyncEnumerator() => this;
 
-            public Task DisposeAsync() => TaskExt.CompletedTask;
+            public ValueTask DisposeAsync() => TaskExt.CompletedTask;
         }
     }
 }

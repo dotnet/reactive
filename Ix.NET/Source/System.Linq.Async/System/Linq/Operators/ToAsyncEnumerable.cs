@@ -49,7 +49,7 @@ namespace System.Linq
                             return false;
                         },
                         () => value,
-                        () => TaskExt.True);
+                        () => TaskExt.CompletedTask);
                 });
         }
 
@@ -106,14 +106,14 @@ namespace System.Linq
                                 tcs.TrySetException(error);
                             }
 
-                            return tcs.Task;
+                            return new ValueTask<bool>(tcs.Task);
                         },
                         () => observer.Current,
                         () =>
                         {
                             subscription.Dispose();
                             // Should we cancel in-flight operations somehow?
-                            return TaskExt.True;
+                            return TaskExt.CompletedTask;
                         });
                 });
         }
@@ -136,7 +136,7 @@ namespace System.Linq
                 return new AsyncEnumerableAdapter<T>(source);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -147,7 +147,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -205,7 +205,7 @@ namespace System.Linq
                 return new AsyncIListEnumerableAdapter<T>(source);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -216,7 +216,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -308,7 +308,7 @@ namespace System.Linq
                 return new AsyncICollectionEnumerableAdapter<T>(source);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -319,7 +319,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

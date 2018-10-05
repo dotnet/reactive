@@ -27,6 +27,6 @@ namespace System.Collections.Generic
         /// Task containing the result of the operation: true if the enumerator was successfully advanced
         /// to the next element; false if the enumerator has passed the end of the sequence.
         /// </returns>
-        Task<bool> MoveNextAsync();
+        ValueTask<bool> MoveNextAsync();
     }
 }

@@ -59,7 +59,7 @@ namespace System.Linq
                 return new ZipAsyncIterator<TFirst, TSecond, TResult>(first, second, selector);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (firstEnumerator != null)
                 {
@@ -76,7 +76,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -92,7 +92,8 @@ namespace System.Linq
                         // We kick these off and join so they can potentially run in parallel
                         var ft = firstEnumerator.MoveNextAsync();
                         var st = secondEnumerator.MoveNextAsync();
-                        await Task.WhenAll(ft, st).ConfigureAwait(false);
+                        
+                        await Task.WhenAll(ft.AsTask(), st.AsTask()).ConfigureAwait(false);
 
                         if (ft.Result && st.Result)
                         {
@@ -133,7 +134,7 @@ namespace System.Linq
                 return new ZipAsyncIteratorWithTask<TFirst, TSecond, TResult>(first, second, selector);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (firstEnumerator != null)
                 {
@@ -150,7 +151,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -166,7 +167,7 @@ namespace System.Linq
                         // We kick these off and join so they can potentially run in parallel
                         var ft = firstEnumerator.MoveNextAsync();
                         var st = secondEnumerator.MoveNextAsync();
-                        await Task.WhenAll(ft, st).ConfigureAwait(false);
+                        await Task.WhenAll(ft.AsTask(), st.AsTask()).ConfigureAwait(false);
 
                         if (ft.Result && st.Result)
                         {

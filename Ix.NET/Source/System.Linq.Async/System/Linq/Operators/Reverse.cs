@@ -83,13 +83,13 @@ namespace System.Linq
                 return new ReverseAsyncIterator<TSource>(source);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 items = null; // Just in case this ends up being long-lived, allow the memory to be reclaimed.
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

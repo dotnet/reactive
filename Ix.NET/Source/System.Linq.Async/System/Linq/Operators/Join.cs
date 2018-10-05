@@ -111,7 +111,7 @@ namespace System.Linq
                 return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (outerEnumerator != null)
                 {
@@ -135,7 +135,7 @@ namespace System.Linq
             private const int State_For = 3;
             private const int State_While = 4;
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -239,7 +239,7 @@ namespace System.Linq
                 return new JoinAsyncIteratorWithTask<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (outerEnumerator != null)
                 {
@@ -263,7 +263,7 @@ namespace System.Linq
             private const int State_For = 3;
             private const int State_While = 4;
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

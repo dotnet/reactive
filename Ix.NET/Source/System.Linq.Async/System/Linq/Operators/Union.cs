@@ -54,7 +54,7 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public sealed override async Task DisposeAsync()
+            public sealed override async ValueTask DisposeAsync()
             {
                 if (_enumerator != null)
                 {
@@ -107,7 +107,7 @@ namespace System.Linq
                 return false;
             }
 
-            protected sealed override async Task<bool> MoveNextCore()
+            protected sealed override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

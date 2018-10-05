@@ -102,7 +102,7 @@ namespace System.Linq
                 return new WhereEnumerableAsyncIterator<TSource>(source, predicate);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -123,7 +123,7 @@ namespace System.Linq
                 return new WhereEnumerableAsyncIterator<TSource>(source, CombinePredicates(this.predicate, predicate));
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -173,7 +173,7 @@ namespace System.Linq
                 return new WhereEnumerableWithIndexAsyncIterator<TSource>(source, predicate);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -184,7 +184,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -237,7 +237,7 @@ namespace System.Linq
                 return new WhereEnumerableAsyncIteratorWithTask<TSource>(source, predicate);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -253,7 +253,7 @@ namespace System.Linq
                 return new WhereEnumerableAsyncIteratorWithTask<TSource>(source, CombinePredicates(this.predicate, predicate));
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -303,7 +303,7 @@ namespace System.Linq
                 return new WhereEnumerableWithIndexAsyncIteratorWithTask<TSource>(source, predicate);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -314,7 +314,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -371,7 +371,7 @@ namespace System.Linq
                 return new WhereSelectEnumerableAsyncIterator<TSource, TResult>(source, predicate, selector);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -387,7 +387,7 @@ namespace System.Linq
                 return new WhereSelectEnumerableAsyncIterator<TSource, TResult1>(source, predicate, CombineSelectors(this.selector, selector));
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

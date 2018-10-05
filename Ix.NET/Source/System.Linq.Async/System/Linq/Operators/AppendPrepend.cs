@@ -75,7 +75,7 @@ namespace System.Linq
                 return false;
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -110,7 +110,7 @@ namespace System.Linq
                 return new AppendPrepend1AsyncIterator<TSource>(source, item, appending);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -304,7 +304,7 @@ namespace System.Linq
             int mode;
             IEnumerator<TSource> appendedEnumerator;
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (appendedEnumerator != null)
                 {
@@ -315,7 +315,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

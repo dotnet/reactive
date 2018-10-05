@@ -43,7 +43,7 @@ namespace System.Linq
                 return new TimeoutAsyncIterator<TSource>(source, timeout);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -54,7 +54,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -73,7 +73,7 @@ namespace System.Linq
                             {
                                 var delay = Task.Delay(timeout, delayCts.Token);
 
-                                var winner = await Task.WhenAny(moveNext, delay).ConfigureAwait(false);
+                                var winner = await Task.WhenAny(moveNext.AsTask(), delay).ConfigureAwait(false);
 
                                 if (winner == delay)
                                 {

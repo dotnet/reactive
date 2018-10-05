@@ -31,7 +31,7 @@ namespace System.Linq
                 var e = source.GetAsyncEnumerator();
 
                 var f = default(Action);
-                f = () => e.MoveNextAsync().ContinueWith(
+                f = () => e.MoveNextAsync().AsTask().ContinueWith(
                     async t =>
                     {
                         if (t.IsFaulted)

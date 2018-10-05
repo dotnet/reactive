@@ -61,7 +61,7 @@ namespace System.Linq
                 return new IntersectAsyncIterator<TSource>(first, second, comparer);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (firstEnumerator != null)
                 {
@@ -74,7 +74,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -96,7 +96,7 @@ namespace System.Linq
                             {
                                 // This is here so we don't need to call Task.WhenAll each time after the set is filled
                                 var moveNextTask = firstEnumerator.MoveNextAsync();
-                                await Task.WhenAll(moveNextTask, fillSetTask).ConfigureAwait(false);
+                                await Task.WhenAll(moveNextTask.AsTask(), fillSetTask).ConfigureAwait(false);
                                 setFilled = true;
                                 moveNext = moveNextTask.Result;
                             }

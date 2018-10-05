@@ -17,9 +17,9 @@ namespace System.Linq
 #if NO_TASK_FROMEXCEPTION
             var tcs = new TaskCompletionSource<bool>();
             tcs.TrySetException(exception);
-            var moveNextThrows = tcs.Task;
+            var moveNextThrows = new ValueTask<bool>(tcs.Task);
 #else
-            var moveNextThrows = Task.FromException<bool>(exception);
+            var moveNextThrows = new ValueTask<bool>(Task.FromException<bool>(exception));
 #endif
 
             return AsyncEnumerable.CreateEnumerable(

@@ -58,14 +58,14 @@ namespace System.Linq
                 return new GenerateAsyncIterator<TState, TResult>(initialState, condition, iterate, resultSelector);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 currentState = default;
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

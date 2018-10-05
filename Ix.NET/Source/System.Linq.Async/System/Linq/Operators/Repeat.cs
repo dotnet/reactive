@@ -58,7 +58,7 @@ namespace System.Linq
                 return Task.FromResult(res);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

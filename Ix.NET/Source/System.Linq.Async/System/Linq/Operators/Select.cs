@@ -102,7 +102,7 @@ namespace System.Linq
                 return new SelectEnumerableAsyncIterator<TSource, TResult>(source, selector);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -118,7 +118,7 @@ namespace System.Linq
                 return new SelectEnumerableAsyncIterator<TSource, TResult1>(source, CombineSelectors(this.selector, selector));
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -163,7 +163,7 @@ namespace System.Linq
                 return new SelectEnumerableWithIndexAsyncIterator<TSource, TResult>(source, selector);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -174,7 +174,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -223,7 +223,7 @@ namespace System.Linq
                 return new SelectIListIterator<TSource, TResult>(source, selector);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -289,7 +289,7 @@ namespace System.Linq
                 return Task.FromResult(res);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -334,7 +334,7 @@ namespace System.Linq
                 return new SelectEnumerableAsyncIteratorWithTask<TSource, TResult>(source, selector);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -350,7 +350,7 @@ namespace System.Linq
                 return new SelectEnumerableAsyncIteratorWithTask<TSource, TResult1>(source, CombineSelectors(this.selector, selector));
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -395,7 +395,7 @@ namespace System.Linq
                 return new SelectEnumerableWithIndexAsyncIteratorWithTask<TSource, TResult>(source, selector);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -406,7 +406,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -460,7 +460,7 @@ namespace System.Linq
                 return new SelectIListIteratorWithTask<TSource, TResult>(source, selector);
             }
 
-            public override async Task DisposeAsync()
+            public override async ValueTask DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -526,7 +526,7 @@ namespace System.Linq
                 return res;
             }
 
-            protected override async Task<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
