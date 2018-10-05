@@ -63,7 +63,7 @@ namespace Tests
             var ys = xs.Select(x => { if (x == 1) throw ex; return x; });
 
             var e = ys.GetAsyncEnumerator();
-            await Assert.ThrowsAsync<Exception>(() => e.MoveNextAsync());
+            await AssertX.ThrowsAsync<Exception>(() => e.MoveNextAsync());
 
             var result = await disposed.Task;
             Assert.True(result);

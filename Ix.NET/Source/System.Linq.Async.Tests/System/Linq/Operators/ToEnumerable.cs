@@ -35,7 +35,7 @@ namespace Tests
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex).ToEnumerable();
-            AssertThrows<Exception>(() => xs.GetEnumerator().MoveNext(), SingleInnerExceptionMatches(ex));
+            Assert.Throws<Exception>(() => xs.GetEnumerator().MoveNext());
         }
     }
 }

@@ -28,6 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\System.Linq.Async.Tests\ValueTaskHelpers.cs" />
+    <Compile Include="..\System.Linq.Async.Tests\TaskExt.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="AsyncQueryableExTests.Generated.tt">
       <LastGenOutput>AsyncQueryableExTests.Generated.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
