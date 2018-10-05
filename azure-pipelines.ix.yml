@@ -31,7 +31,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: pack
-    packagesToPack: Ix.NET/Source/**/System.Interactive*.csproj;!Ix.NET/Source/**/*.Tests*.csproj;!Ix.NET/Source/refs/**
+    packagesToPack: Ix.NET/Source/**/System.Interactive*.csproj;Ix.NET/Source/**/System.Linq.*.csproj;!Ix.NET/Source/**/*.Tests*.csproj;!Ix.NET/Source/refs/**
     configuration: $(BuildConfiguration)
     packDirectory: $(Build.ArtifactStagingDirectory)\artifacts    
     verbosityPack: Minimal
