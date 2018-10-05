@@ -57,8 +57,8 @@ namespace Tests
             var res = xs.ToLookup(x => x % 2).Result;
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
-            Assert.True(res[0].Contains(4));
-            Assert.True(res[1].Contains(1));
+            Assert.Contains(4, res[0]);
+            Assert.Contains(1, res[1]);
             Assert.True(res.Count == 2);
         }
 
@@ -69,9 +69,9 @@ namespace Tests
             var res = xs.ToLookup(x => x % 2).Result;
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
-            Assert.True(res[0].Contains(4));
-            Assert.True(res[0].Contains(2));
-            Assert.True(res[1].Contains(1));
+            Assert.Contains(4, res[0]);
+            Assert.Contains(2, res[0]);
+            Assert.Contains(1, res[1]);
             Assert.True(res.Count == 2);
         }
 
@@ -82,8 +82,8 @@ namespace Tests
             var res = xs.ToLookup(x => x % 2, x => x + 1).Result;
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
-            Assert.True(res[0].Contains(5));
-            Assert.True(res[1].Contains(2));
+            Assert.Contains(5, res[0]);
+            Assert.Contains(2, res[1]);
             Assert.True(res.Count == 2);
         }
 
@@ -94,9 +94,9 @@ namespace Tests
             var res = xs.ToLookup(x => x % 2, x => x + 1).Result;
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
-            Assert.True(res[0].Contains(5));
-            Assert.True(res[0].Contains(3));
-            Assert.True(res[1].Contains(2));
+            Assert.Contains(5, res[0]);
+            Assert.Contains(3, res[0]);
+            Assert.Contains(2, res[1]);
             Assert.True(res.Count == 2);
         }
 
@@ -107,8 +107,8 @@ namespace Tests
             var res = xs.ToLookup(x => x % 2, new Eq()).Result;
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
-            Assert.True(res[0].Contains(4));
-            Assert.True(res[1].Contains(1));
+            Assert.Contains(4, res[0]);
+            Assert.Contains(1, res[1]);
             Assert.True(res.Count == 2);
         }
 
@@ -119,9 +119,9 @@ namespace Tests
             var res = xs.ToLookup(x => x % 2, new Eq()).Result;
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
-            Assert.True(res[0].Contains(4));
-            Assert.True(res[0].Contains(2));
-            Assert.True(res[1].Contains(1));
+            Assert.Contains(4, res[0]);
+            Assert.Contains(2, res[0]);
+            Assert.Contains(1, res[1]);
             Assert.True(res.Count == 2);
         }
 
@@ -152,9 +152,9 @@ namespace Tests
             var res = xs.ToLookup(x => x % 2, x => x, new Eq()).Result;
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
-            Assert.True(res[0].Contains(4));
-            Assert.True(res[0].Contains(2));
-            Assert.True(res[1].Contains(1));
+            Assert.Contains(4, res[0]);
+            Assert.Contains(2, res[0]);
+            Assert.Contains(1, res[1]);
             Assert.True(res.Count == 2);
         }
 
