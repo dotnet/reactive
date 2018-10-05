@@ -14,9 +14,7 @@ namespace System.Linq
     {
         private readonly IEqualityComparer<TElement> _comparer;
         private int[] _buckets;
-#if DEBUG
-        private bool _haveRemoved;
-#endif
+
         private Slot[] _slots;
 
         public Set(IEqualityComparer<TElement> comparer)
@@ -31,9 +29,6 @@ namespace System.Linq
         // If value is not in set, add it and return true; otherwise return false
         public bool Add(TElement value)
         {
-#if DEBUG
-            Debug.Assert(!_haveRemoved, "This class is optimised for never calling Add after Remove. If your changes need to do so, undo that optimization.");
-#endif
             var hashCode = InternalGetHashCode(value);
             for (var i = _buckets[hashCode%_buckets.Length] - 1; i >= 0; i = _slots[i]._next)
             {
