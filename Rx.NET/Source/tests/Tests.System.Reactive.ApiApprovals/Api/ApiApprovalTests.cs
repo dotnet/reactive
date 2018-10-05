@@ -30,21 +30,21 @@ namespace ReactiveTests.Tests.Api
         public void Core()
         {
             var publicApi = GeneratePublicApi(typeof(System.Reactive.Unit).Assembly);
-            Approvals.Verify(publicApi);
+            Approvals.Verify(new ApprovalTextWriter(publicApi, "cs"));
         }
 
         [Fact]
         public void Aliases()
         {
             var publicApi = GeneratePublicApi(typeof(System.Reactive.Observable.Aliases.QueryLanguage).Assembly);
-            Approvals.Verify(publicApi);
+            Approvals.Verify(new ApprovalTextWriter(publicApi, "cs"));
         }
 
         [Fact]
         public void Testing()
         {
             var publicApi = GeneratePublicApi(typeof(Microsoft.Reactive.Testing.TestScheduler).Assembly);
-            Approvals.Verify(publicApi);
+            Approvals.Verify(new ApprovalTextWriter(publicApi, "cs"));
         }
 
         private string GeneratePublicApi(Assembly assembly)
