@@ -7,6 +7,7 @@ root = true
 # Don't use tabs for indentation.
 [*]
 indent_style = space
+trim_trailing_whitespace = true
 # (Please don't specify an indent_size here; that has too many unintended consequences.)
 
 # Code files
@@ -69,7 +70,13 @@ dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
 dotnet_style_prefer_conditional_expression_over_return = false
 dotnet_style_prefer_conditional_expression_over_assignment = false
-dotnet_style_prefer_auto_properties = true
+dotnet_style_prefer_auto_properties = true:suggestion
+
+# Parentheses
+dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:silent
+dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:silent
+dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
+dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
 
 # Accessibility modifiers
 dotnet_style_require_accessibility_modifiers = always:suggestion
@@ -163,6 +170,12 @@ dotnet_naming_style.pascal_case_and_prefix_with_I_style.capitalization          
 
 # CSharp code style settings:
 [*.cs]
+# Modifier order
+csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
+
+# Code block
+csharp_prefer_braces = false:none
+
 # Indentation preferences
 csharp_indent_block_contents = true
 csharp_indent_braces = false
@@ -235,3 +248,11 @@ csharp_space_between_method_declaration_name_and_open_parenthesis = false
 csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
+
+
+
+
+
+
+
+
