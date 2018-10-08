@@ -4462,13 +4462,17 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Zip3WithImmediateReturn()
         {
-            Observable.Zip<Unit, Unit, Unit, Unit>(
-                Observable.Return(Unit.Default),
-                Observable.Return(Unit.Default),
-                Observable.Return(Unit.Default),
-                (_, __, ___) => Unit.Default
+            int result = 0;
+
+            Observable.Zip<int, int, int, int>(
+                Observable.Return(1),
+                Observable.Return(2),
+                Observable.Return(4),
+                (a, b, c) => a + b + c
             )
-            .Subscribe(_ => { });
+            .Subscribe(v => result = v);
+
+            Assert.Equal(7, result);
         }
 
         [Fact]
