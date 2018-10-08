@@ -524,7 +524,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public override void OnCompleted()
         {
-            Dispose();
+            base.Dispose(true);
 
             lock (_gate)
             {
