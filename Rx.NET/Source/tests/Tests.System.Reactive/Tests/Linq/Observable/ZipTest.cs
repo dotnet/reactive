@@ -4451,24 +4451,25 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Zip2WithImmediateReturn()
         {
-            Observable.Zip<Unit, Unit, Unit>(
-                Observable.Return(Unit.Default), 
-                Observable.Return(Unit.Default), 
-                (_, __) => Unit.Default
-            )
-            .Subscribe(_ => {  });
+            var obs = Observable.Return(1);
+            var result = 0;
+
+            Observable.Zip(obs, obs, (a, b) => a + b)
+                .Subscribe(x => result = x);
+
+            Assert.True(result == 2);
         }
 
         [Fact]
         public void Zip3WithImmediateReturn()
         {
-            Observable.Zip<Unit, Unit, Unit, Unit>(
-                Observable.Return(Unit.Default),
-                Observable.Return(Unit.Default),
-                Observable.Return(Unit.Default),
-                (_, __, ___) => Unit.Default
-            )
-            .Subscribe(_ => { });
+            var obs = Observable.Return(1);
+            var result = 0;
+
+            Observable.Zip(obs, obs, obs, (a, b, c) => a + b + c)
+                .Subscribe(x => result = x);
+
+            Assert.True(result == 3);
         }
 
         [Fact]
