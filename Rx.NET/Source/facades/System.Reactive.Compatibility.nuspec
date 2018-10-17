@@ -7,7 +7,7 @@
         <authors>.NET Foundation and Contributors</authors>
         <owners>Microsoft,RxTeam</owners>
         <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
-        <PackageProjectUrl>https://github.com/dotnet/reactive</PackageProjectUrl>
+        <projectUrl>https://github.com/dotnet/reactive</projectUrl>
         <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Reactive Extensions (Rx) Compatibility Library for enabling v3 apps to work with v4</description>
