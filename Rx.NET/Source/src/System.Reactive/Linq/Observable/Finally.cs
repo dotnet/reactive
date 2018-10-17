@@ -25,8 +25,6 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly Action _finallyAction;
 
-            private IDisposable _sourceDisposable;
-
             public _(Action finallyAction, IObserver<TSource> observer)
                 : base(observer)
             {
@@ -35,19 +33,19 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void Run(IObservable<TSource> source)
             {
-                Disposable.SetSingle(ref _sourceDisposable, source.SubscribeSafe(this));
-            }
+                var subscription = source.SubscribeSafe(this);
 
-            protected override void Dispose(bool disposing)
-            {
-                if (disposing)
+                SetUpstream(Disposable.Create(() =>
                 {
-                    if (Disposable.TryDispose(ref _sourceDisposable))
+                    try
+                    {
+                        subscription.Dispose();
+                    }
+                    finally
                     {
                         _finallyAction();
                     }
-                }
-                base.Dispose(disposing);
+                }));
             }
         }
     }

@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
@@ -295,5 +297,35 @@ namespace ReactiveTests.Tests
             );
         }
 
+        [Fact]
+        public void Using_NestedCompleted()
+        {
+            var order = "";
+
+            Observable.Using(() => Disposable.Create(() => order += "3"),
+                _ => Observable.Using(() => Disposable.Create(() => order += "2"),
+                    __ => Observable.Using(() => Disposable.Create(() => order += "1"),
+                        ___ => Observable.Return(Unit.Default))))
+                .Finally(() => order += "4")
+                .Subscribe();
+
+            Assert.Equal("1234", order);
+        }
+
+        [Fact]
+        public void Using_NestedDisposed()
+        {
+            var order = "";
+
+            Observable.Using(() => Disposable.Create(() => order += "3"),
+                _ => Observable.Using(() => Disposable.Create(() => order += "2"),
+                    __ => Observable.Using(() => Disposable.Create(() => order += "1"),
+                        ___ => Observable.Never<Unit>())))
+                .Finally(() => order += "4")
+                .Subscribe()
+                .Dispose();
+
+            Assert.Equal("1234", order);
+        }
     }
 }
