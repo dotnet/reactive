@@ -34,33 +34,37 @@ namespace System.Reactive.Linq.ObservableImpl
             public void Run(Using<TSource, TResource> parent)
             {
                 var source = default(IObservable<TSource>);
+                var disposable = Disposable.Empty;
                 try
                 {
                     var resource = parent._resourceFactory();
                     if (resource != null)
                     {
-                        Disposable.SetSingle(ref _disposable, resource);
+                        disposable = resource;
                     }
 
                     source = parent._observableFactory(resource);
                 }
                 catch (Exception exception)
                 {
-                    SetUpstream(Observable.Throw<TSource>(exception).SubscribeSafe(this));
-
-                    return;
+                    source = Observable.Throw<TSource>(exception);
                 }
 
+                // It is important to set the disposable resource after
+                // Run(). In the synchronous case this would else dispose
+                // the the resource before the source subscription.
                 Run(source);
+                Disposable.SetSingle(ref _disposable, disposable);
             }
 
             protected override void Dispose(bool disposing)
             {
+                base.Dispose(disposing);
+
                 if (disposing)
                 {
                     Disposable.TryDispose(ref _disposable);
                 }
-                base.Dispose(disposing);
             }
         }
     }
