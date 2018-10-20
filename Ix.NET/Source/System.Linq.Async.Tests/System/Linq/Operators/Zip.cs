@@ -106,5 +106,16 @@ namespace Tests
 
             await SequenceIdentity(res);
         }
+
+        [Fact]
+        public async Task Zip_SharedState()
+        {
+            var xs = new[] { 1, 2, 3 }.ToSharedStateAsyncEnumerable();
+            var res = xs.Zip(xs, (x, y) => x * y);
+
+            var ret = await res.Last();
+
+            Assert.Equal(9, ret);
+        }
     }
 }

@@ -177,6 +177,14 @@ namespace Tests
             await AssertThrowsAsync<NotImplementedException>(res);
         }
 
+        [Fact]
+        public void SequenceEqual_SharedState()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToSharedStateAsyncEnumerable();
+            var res = xs.SequenceEqual(xs);
+            Assert.True(res.Result);
+        }
+
         private sealed class EqEx : IEqualityComparer<int>
         {
             public bool Equals(int x, int y)
