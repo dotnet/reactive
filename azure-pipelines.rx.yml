@@ -67,6 +67,9 @@ steps:
     projects: Rx.NET/Source/tests/Tests.System.Reactive.ApiApprovals/Tests.System.Reactive.ApiApprovals.csproj
     arguments: -c $(BuildConfiguration) --no-build --no-restore 
   displayName: Run Api Approvals Tests
+
+- task: whitesource.ws-bolt.bolt.wss.WhiteSource Bolt@18
+  displayName: 'WhiteSource Bolt'
   
 - task: PowerShell@2
   displayName: Authenticode Sign Packages
