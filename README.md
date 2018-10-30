@@ -132,6 +132,18 @@ System.Reactive is part of the [.NET Foundation](https://www.dotnetfoundation.or
         <a href="https://github.com/onovotny">Oren Novotny</a>
         <p>New York, USA</p>
       </td>
+      <td align="center" valign="top">
+        <img width="150" height="150" src="https://github.com/akarnokd.png?s=150">
+        <br>
+        <a href="https://github.com/akarnokd">David Karnok</a>
+        <p>Budapest, Hungary</p>
+      </td>
+      <td align="center" valign="top">
+        <img width="150" height="150" src="https://github.com/danielcweber.png?s=150">
+        <br>
+        <a href="https://github.com/danielcweber">Daniel C. Weber</a>
+        <p>Aachen, Germany</p>
+      </td>
      </tr>
   </tbody>
 </table>
