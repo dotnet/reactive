@@ -9,6 +9,17 @@ trigger:
       - .editorconfig
       - azure-pipelines.ix.yml
 
+pr:
+  branches:
+    include:
+      - master
+      - rel/*
+  paths:
+    include:
+      - Ix.NET/Source/*
+      - .editorconfig
+      - azure-pipelines.ix.yml
+
 pool:
   vmImage: vs2017-win2016
 
