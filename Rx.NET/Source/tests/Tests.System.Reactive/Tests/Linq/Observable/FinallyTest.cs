@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
@@ -142,5 +143,48 @@ namespace ReactiveTests.Tests
             );
         }
 
+        [Fact]
+        public void Finally_DisposeOrder_Empty()
+        {
+            var order = "";
+            Observable
+                .Empty<Unit>()
+                .Finally(() => order += "1")
+                .Finally(() => order += "2")
+                .Finally(() => order += "3")
+                .Subscribe();
+
+            Assert.Equal("123", order);
+        }
+
+        [Fact]
+        public void Finally_DisposeOrder_Return()
+        {
+            var order = "";
+            Observable
+                .Return(Unit.Default)
+                .Finally(() => order += "1")
+                .Finally(() => order += "2")
+                .Finally(() => order += "3")
+                .Subscribe();
+
+            Assert.Equal("123", order);
+        }
+
+        [Fact]
+        public void Finally_DisposeOrder_Never()
+        {
+            var order = "";
+            var d = Observable
+                .Never<Unit>()
+                .Finally(() => order += "1")
+                .Finally(() => order += "2")
+                .Finally(() => order += "3")
+                .Subscribe();
+
+            d.Dispose();
+
+            Assert.Equal("123", order);
+        }
     }
 }
