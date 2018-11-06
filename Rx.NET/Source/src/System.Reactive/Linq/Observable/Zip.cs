@@ -524,7 +524,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public override void OnCompleted()
         {
-            Dispose();
+            // Calling Dispose() here would clear the queue prematurely.
+            // We only need to dispose the IDisposable of the upstream,
+            // which is done by SafeObserver.Dispose(bool).
+            base.Dispose(true);
 
             lock (_gate)
             {
