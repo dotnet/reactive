@@ -83,11 +83,11 @@ namespace System.Linq
                         break;
                     }
 
-                    var e = source.GetAsyncEnumerator();
+                    var e = source.GetAsyncEnumerator(cancellationToken);
 
                     try
                     {
-                        while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
                         {
                             list.Add(e.Current);
                         }
@@ -137,11 +137,11 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 if (state == AsyncIteratorState.Allocated)
                 {
-                    enumerator = GetAsyncEnumerable(0).GetAsyncEnumerator();
+                    enumerator = GetAsyncEnumerable(0).GetAsyncEnumerator(cancellationToken);
                     state = AsyncIteratorState.Iterating;
                     counter = 2;
                 }
@@ -161,7 +161,7 @@ namespace System.Linq
                         if (next != null)
                         {
                             await enumerator.DisposeAsync().ConfigureAwait(false);
-                            enumerator = next.GetAsyncEnumerator();
+                            enumerator = next.GetAsyncEnumerator(cancellationToken);
                             continue;
                         }
 

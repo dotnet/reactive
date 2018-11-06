@@ -79,12 +79,12 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator();
+                        enumerator = source.GetAsyncEnumerator(cancellationToken);
                         if (!await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             await DisposeAsync().ConfigureAwait(false);
@@ -121,7 +121,7 @@ namespace System.Linq
             {
                 var s = new Set<TSource>(comparer);
 
-                await s.UnionWithAsync(source);
+                await s.UnionWithAsync(source, cancellationToken);
 
                 return s;
             }

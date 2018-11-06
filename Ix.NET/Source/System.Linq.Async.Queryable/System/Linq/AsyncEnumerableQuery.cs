@@ -144,8 +144,9 @@ namespace System.Linq
         /// <summary>
         /// Gets an enumerator to enumerate the elements in the sequence.
         /// </summary>
+        /// <param name="token">Cancellation token used to cancel the enumeration.</param>
         /// <returns>A new enumerator instance used to enumerate the elements in the sequence.</returns>
-        public IAsyncEnumerator<T> GetAsyncEnumerator()
+        public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken token)
         {
             if (_enumerable == null)
             {
@@ -153,7 +154,7 @@ namespace System.Linq
                 _enumerable = expression.Compile()();
             }
 
-            return _enumerable.GetAsyncEnumerator();
+            return _enumerable.GetAsyncEnumerator(token);
         }
 
         /// <summary>

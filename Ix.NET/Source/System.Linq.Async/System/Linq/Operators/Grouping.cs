@@ -4,6 +4,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 
 // Note: The type here has to be internal as System.Linq has it's own public copy we're not using
 
@@ -103,6 +104,6 @@ namespace System.Linq.Internal
             }
         }
 
-        IAsyncEnumerator<TElement> IAsyncEnumerable<TElement>.GetAsyncEnumerator() => this.ToAsyncEnumerable().GetAsyncEnumerator();
+        IAsyncEnumerator<TElement> IAsyncEnumerable<TElement>.GetAsyncEnumerator(CancellationToken cancellationToken) => this.ToAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
     }
 }

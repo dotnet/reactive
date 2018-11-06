@@ -42,18 +42,18 @@ namespace System.Collections.Generic
             }
             else
             {
-                var en = source.GetAsyncEnumerator();
+                var en = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
-                    if (await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    if (await en.MoveNextAsync().ConfigureAwait(false))
                     {
                         const int DefaultCapacity = 4;
                         var arr = new T[DefaultCapacity];
                         arr[0] = en.Current;
                         var count = 1;
 
-                        while (await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                        while (await en.MoveNextAsync().ConfigureAwait(false))
                         {
                             if (count == arr.Length)
                             {

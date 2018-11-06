@@ -88,11 +88,11 @@ namespace System.Linq
                 return false;
             }
 
-            var e1 = first.GetAsyncEnumerator();
+            var e1 = first.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                var e2 = second.GetAsyncEnumerator();
+                var e2 = second.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {

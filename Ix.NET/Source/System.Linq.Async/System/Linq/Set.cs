@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -144,9 +145,9 @@ namespace System.Linq
             _slots = newSlots;
         }
 
-        public async Task UnionWithAsync(IAsyncEnumerable<TElement> other)
+        public async Task UnionWithAsync(IAsyncEnumerable<TElement> other, CancellationToken cancellationToken)
         {
-            var enu = other.GetAsyncEnumerator();
+            var enu = other.GetAsyncEnumerator(cancellationToken);
 
             try
             {

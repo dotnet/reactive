@@ -48,11 +48,11 @@ namespace System.Linq
             }
             else
             {
-                var e = source.GetAsyncEnumerator();
+                var e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
-                    while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
                         if (index == 0)
                         {

@@ -112,7 +112,7 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -152,7 +152,7 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {

@@ -69,16 +69,16 @@ namespace System.Linq
 
         private static async Task<TSource> MaxCore<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                if (!await e.MoveNextAsync().ConfigureAwait(false))
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
 
                 var max = e.Current;
 
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     var cur = e.Current;
 

@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -47,8 +48,10 @@ namespace System.Linq
                 return new RepeatElementAsyncIterator<TResult>(element);
             }
 
-            protected override ValueTask<bool> MoveNextCore()
+            protected override ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 current = element;
                 return TaskExt.True;
             }
@@ -89,7 +92,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
@@ -104,7 +107,7 @@ namespace System.Linq
                         if (!isInfinite && currentCount-- == 0)
                             break;
 
-                        enumerator = source.GetAsyncEnumerator();
+                        enumerator = source.GetAsyncEnumerator(cancellationToken);
                         state = AsyncIteratorState.Iterating;
 
                         goto case AsyncIteratorState.Iterating;

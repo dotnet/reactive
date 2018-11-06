@@ -154,11 +154,11 @@ namespace System.Linq
         {
             var index = 0;
 
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     action(e.Current, checked(index++));
                 }
@@ -173,11 +173,11 @@ namespace System.Linq
         {
             var index = 0;
 
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     await action(e.Current, checked(index++), cancellationToken).ConfigureAwait(false);
                 }

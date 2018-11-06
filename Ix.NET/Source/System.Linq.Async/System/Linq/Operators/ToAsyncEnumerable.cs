@@ -147,7 +147,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
@@ -216,7 +216,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
@@ -319,7 +319,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {

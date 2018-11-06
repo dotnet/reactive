@@ -119,7 +119,7 @@ namespace System.Collections.Generic
                 this.dispose = dispose;
 
                 // Explicit call to initialize enumerator mode
-                GetAsyncEnumerator();
+                GetAsyncEnumerator(default);
             }
 
             public override AsyncIterator<T> Clone()
@@ -139,7 +139,7 @@ namespace System.Collections.Generic
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {

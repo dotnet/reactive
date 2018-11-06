@@ -15,7 +15,7 @@ namespace System.Linq
             if (factory == null)
                 throw new ArgumentNullException(nameof(factory));
 
-            return CreateEnumerable(() => factory().GetAsyncEnumerator());
+            return CreateEnumerable(ct => factory().GetAsyncEnumerator(ct));
         }
 
         public static IAsyncEnumerable<TSource> Defer<TSource>(Func<Task<IAsyncEnumerable<TSource>>> factory)
@@ -23,7 +23,7 @@ namespace System.Linq
             if (factory == null)
                 throw new ArgumentNullException(nameof(factory));
 
-            return CreateEnumerable(async () => (await factory().ConfigureAwait(false)).GetAsyncEnumerator());
+            return CreateEnumerable(async ct => (await factory().ConfigureAwait(false)).GetAsyncEnumerator(ct));
         }
     }
 }

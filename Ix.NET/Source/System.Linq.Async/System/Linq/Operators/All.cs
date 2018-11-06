@@ -52,11 +52,11 @@ namespace System.Linq
 
         private static async Task<bool> AllCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     if (!predicate(e.Current))
                         return false;
@@ -72,11 +72,11 @@ namespace System.Linq
 
         private static async Task<bool> AllCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     if (!await predicate(e.Current).ConfigureAwait(false))
                         return false;

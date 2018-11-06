@@ -124,7 +124,7 @@ namespace Tests
         {
             public int DisposeCount { get; private set; }
 
-            public IAsyncEnumerator<object> GetAsyncEnumerator()
+            public IAsyncEnumerator<object> GetAsyncEnumerator(CancellationToken cancellationToken)
             {
                 return new Enumerator(this);
             }

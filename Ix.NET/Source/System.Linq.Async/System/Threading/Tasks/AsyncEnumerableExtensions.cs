@@ -30,8 +30,8 @@ namespace System.Threading.Tasks
                     _continueOnCapturedContext = continueOnCapturedContext;
                 }
 
-                public ConfiguredAsyncEnumerator GetAsyncEnumerator() =>
-                    new ConfiguredAsyncEnumerator(_enumerable.GetAsyncEnumerator(), _continueOnCapturedContext);
+                public ConfiguredAsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken) =>
+                    new ConfiguredAsyncEnumerator(_enumerable.GetAsyncEnumerator(cancellationToken), _continueOnCapturedContext);
 
                 public struct ConfiguredAsyncEnumerator
                 {

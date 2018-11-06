@@ -107,7 +107,7 @@ namespace System.Linq
                 var count = 0;
                 var s = new Set<TKey>(comparer);
 
-                var enu = source.GetAsyncEnumerator();
+                var enu = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -145,12 +145,12 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator();
+                        enumerator = source.GetAsyncEnumerator(cancellationToken);
 
                         if (!await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
@@ -189,7 +189,7 @@ namespace System.Linq
                 var s = new Set<TKey>(comparer);
                 var r = new List<TSource>();
 
-                var enu = source.GetAsyncEnumerator();
+                var enu = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -253,7 +253,7 @@ namespace System.Linq
                 var count = 0;
                 var s = new Set<TKey>(comparer);
 
-                var enu = source.GetAsyncEnumerator();
+                var enu = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -291,12 +291,12 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator();
+                        enumerator = source.GetAsyncEnumerator(cancellationToken);
 
                         if (!await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
@@ -335,7 +335,7 @@ namespace System.Linq
                 var s = new Set<TKey>(comparer);
                 var r = new List<TSource>();
 
-                var enu = source.GetAsyncEnumerator();
+                var enu = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {

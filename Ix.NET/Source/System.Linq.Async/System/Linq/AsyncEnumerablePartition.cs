@@ -76,7 +76,7 @@ namespace System.Linq
                 return Math.Max(await _source.Count(cancellationToken).ConfigureAwait(false) - _minIndexInclusive, 0);
             }
 
-            var en = _source.GetAsyncEnumerator();
+            var en = _source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -102,12 +102,12 @@ namespace System.Linq
         private bool hasSkipped;
         private int taken;
 
-        protected override async ValueTask<bool> MoveNextCore()
+        protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
         {
             switch (state)
             {
                 case AsyncIteratorState.Allocated:
-                    _enumerator = _source.GetAsyncEnumerator();
+                    _enumerator = _source.GetAsyncEnumerator(cancellationToken);
                     hasSkipped = false;
                     taken = 0;
 
@@ -217,13 +217,13 @@ namespace System.Linq
             // If the index is negative or >= our max count, return early.
             if (index >= 0 && (!HasLimit || index < Limit))
             {
-                var en = _source.GetAsyncEnumerator();
+                var en = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
                     Debug.Assert(_minIndexInclusive + index >= 0, $"Adding {nameof(index)} caused {nameof(_minIndexInclusive)} to overflow.");
 
-                    if (await SkipBeforeAsync(_minIndexInclusive + index, en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    if (await SkipBeforeAsync(_minIndexInclusive + index, en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
                     {
                         return new Maybe<TSource>(en.Current);
                     }
@@ -239,11 +239,11 @@ namespace System.Linq
 
         public async Task<Maybe<TSource>> TryGetFirstAsync(CancellationToken cancellationToken)
         {
-            var en = _source.GetAsyncEnumerator();
+            var en = _source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                if (await SkipBeforeFirstAsync(en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                if (await SkipBeforeFirstAsync(en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
                 {
                     return new Maybe<TSource>(en.Current);
                 }
@@ -258,11 +258,11 @@ namespace System.Linq
 
         public async Task<Maybe<TSource>> TryGetLastAsync(CancellationToken cancellationToken)
         {
-            var en = _source.GetAsyncEnumerator();
+            var en = _source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                if (await SkipBeforeFirstAsync(en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                if (await SkipBeforeFirstAsync(en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
                 {
                     var remaining = Limit - 1; // Max number of items left, not counting the current element.
                     var comparand = HasLimit ? 0 : int.MinValue; // If we don't have an upper bound, have the comparison always return true.
@@ -288,11 +288,11 @@ namespace System.Linq
 
         public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
         {
-            var en = _source.GetAsyncEnumerator();
+            var en = _source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                if (await SkipBeforeFirstAsync(en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                if (await SkipBeforeFirstAsync(en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
                 {
                     var remaining = Limit - 1; // Max number of items left, not counting the current element.
                     var comparand = HasLimit ? 0 : int.MinValue; // If we don't have an upper bound, have the comparison always return true.
@@ -305,7 +305,7 @@ namespace System.Linq
                         remaining--;
                         builder.Add(en.Current);
                     }
-                    while (remaining >= comparand && await en.MoveNextAsync(cancellationToken).ConfigureAwait(false));
+                    while (remaining >= comparand && await en.MoveNextAsync().ConfigureAwait(false));
 
                     return builder.ToArray();
                 }
@@ -326,11 +326,11 @@ namespace System.Linq
         {
             var list = new List<TSource>();
 
-            var en = _source.GetAsyncEnumerator();
+            var en = _source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                if (await SkipBeforeFirstAsync(en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                if (await SkipBeforeFirstAsync(en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
                 {
                     var remaining = Limit - 1; // Max number of items left, not counting the current element.
                     var comparand = HasLimit ? 0 : int.MinValue; // If we don't have an upper bound, have the comparison always return true.
@@ -340,7 +340,7 @@ namespace System.Linq
                         remaining--;
                         list.Add(en.Current);
                     }
-                    while (remaining >= comparand && await en.MoveNextAsync(cancellationToken).ConfigureAwait(false));
+                    while (remaining >= comparand && await en.MoveNextAsync().ConfigureAwait(false));
                 }
             }
             finally
@@ -371,7 +371,7 @@ namespace System.Linq
 
             for (uint i = 0; i < index; i++)
             {
-                if (!await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                if (!await en.MoveNextAsync().ConfigureAwait(false))
                 {
                     return i;
                 }

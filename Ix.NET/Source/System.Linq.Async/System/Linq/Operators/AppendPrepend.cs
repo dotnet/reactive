@@ -49,10 +49,10 @@ namespace System.Linq
                 this.source = source;
             }
 
-            protected void GetSourceEnumerator()
+            protected void GetSourceEnumerator(CancellationToken cancellationToken)
             {
                 Debug.Assert(enumerator == null);
-                enumerator = source.GetAsyncEnumerator();
+                enumerator = source.GetAsyncEnumerator(cancellationToken);
             }
 
             public abstract AppendPrependAsyncIterator<TSource> Append(TSource item);
@@ -110,7 +110,7 @@ namespace System.Linq
                 return new AppendPrepend1AsyncIterator<TSource>(source, item, appending);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
@@ -128,7 +128,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (!hasEnumerator)
                         {
-                            GetSourceEnumerator();
+                            GetSourceEnumerator(cancellationToken);
                             hasEnumerator = true;
                         }
 
@@ -204,11 +204,11 @@ namespace System.Linq
                 }
                 else
                 {
-                    var en = source.GetAsyncEnumerator();
+                    var en = source.GetAsyncEnumerator(cancellationToken);
 
                     try
                     {
-                        while (await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                        while (await en.MoveNextAsync().ConfigureAwait(false))
                         {
                             array[index] = en.Current;
                             ++index;
@@ -239,11 +239,11 @@ namespace System.Linq
                 }
 
 
-                var en = source.GetAsyncEnumerator();
+                var en = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
-                    while (await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    while (await en.MoveNextAsync().ConfigureAwait(false))
                     {
                         list.Add(en.Current);
                     }
@@ -315,7 +315,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
@@ -340,7 +340,7 @@ namespace System.Linq
                                     return true;
                                 }
 
-                                GetSourceEnumerator();
+                                GetSourceEnumerator(cancellationToken);
                                 mode = 3;
                                 goto case 3;
 
@@ -410,11 +410,11 @@ namespace System.Linq
                 }
                 else
                 {
-                    var en = source.GetAsyncEnumerator();
+                    var en = source.GetAsyncEnumerator(cancellationToken);
 
                     try
                     {
-                        while (await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                        while (await en.MoveNextAsync().ConfigureAwait(false))
                         {
                             array[index] = en.Current;
                             ++index;
@@ -445,11 +445,11 @@ namespace System.Linq
                     list.Add(n.Item);
                 }
 
-                var en = source.GetAsyncEnumerator();
+                var en = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
-                    while (await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    while (await en.MoveNextAsync().ConfigureAwait(false))
                     {
                         list.Add(en.Current);
                     }

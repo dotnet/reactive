@@ -16,23 +16,25 @@ namespace System.Linq
 
         internal TSource current;
         internal AsyncIteratorState state = AsyncIteratorState.New;
+        internal CancellationToken token;
 
         protected AsyncIterator()
         {
             threadId = Environment.CurrentManagedThreadId;
         }
 
-        public IAsyncEnumerator<TSource> GetAsyncEnumerator()
+        public IAsyncEnumerator<TSource> GetAsyncEnumerator(CancellationToken token)
         {
             var enumerator = state == AsyncIteratorState.New && threadId == Environment.CurrentManagedThreadId
                 ? this
                 : Clone();
 
             enumerator.state = AsyncIteratorState.Allocated;
+            enumerator.token = token;
 
             try
             {
-                enumerator.OnGetEnumerator();
+                enumerator.OnGetEnumerator(token);
             }
             catch
             {
@@ -75,7 +77,7 @@ namespace System.Linq
 
             try
             {
-                var result = await MoveNextCore().ConfigureAwait(false);
+                var result = await MoveNextCore(token).ConfigureAwait(false);
 
                 currentIsInvalid = !result; // if move next is false, invalid otherwise valid
 
@@ -91,9 +93,9 @@ namespace System.Linq
 
         public abstract AsyncIterator<TSource> Clone();
 
-        protected abstract ValueTask<bool> MoveNextCore();
+        protected abstract ValueTask<bool> MoveNextCore(CancellationToken cancellationToken);
 
-        protected virtual void OnGetEnumerator()
+        protected virtual void OnGetEnumerator(CancellationToken cancellationToken)
         {
         }
     }

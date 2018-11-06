@@ -18,7 +18,7 @@ namespace System.Linq
 
         private static IEnumerable<TSource> ToEnumerableCore<TSource>(IAsyncEnumerable<TSource> source)
         {
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(default);
 
             try
             {

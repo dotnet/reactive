@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -135,12 +136,12 @@ namespace System.Linq
             private const int State_For = 3;
             private const int State_While = 4;
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        outerEnumerator = outer.GetAsyncEnumerator();
+                        outerEnumerator = outer.GetAsyncEnumerator(cancellationToken);
                         mode = State_If;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -151,7 +152,7 @@ namespace System.Linq
                             case State_If:
                                 if (await outerEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer).ConfigureAwait(false);
+                                    lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
 
                                     if (lookup.Count != 0)
                                     {
@@ -263,12 +264,12 @@ namespace System.Linq
             private const int State_For = 3;
             private const int State_While = 4;
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        outerEnumerator = outer.GetAsyncEnumerator();
+                        outerEnumerator = outer.GetAsyncEnumerator(cancellationToken);
                         mode = State_If;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -279,7 +280,7 @@ namespace System.Linq
                             case State_If:
                                 if (await outerEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer).ConfigureAwait(false);
+                                    lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
 
                                     if (lookup.Count != 0)
                                     {

@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -70,12 +71,12 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = enumerable.GetAsyncEnumerator();
+                        enumerator = enumerable.GetAsyncEnumerator(cancellationToken);
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
@@ -93,12 +94,14 @@ namespace System.Linq
                 return false;
             }
 
-            protected override void OnGetEnumerator()
+            protected override void OnGetEnumerator(CancellationToken cancellationToken)
             {
+                // REVIEW: Wire cancellation to the functions.
+
                 resource = resourceFactory();
                 enumerable = enumerableFactory(resource);
 
-                base.OnGetEnumerator();
+                base.OnGetEnumerator(cancellationToken);
             }
         }
 
@@ -142,7 +145,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
@@ -150,7 +153,7 @@ namespace System.Linq
                         resource = await resourceFactory().ConfigureAwait(false);
                         enumerable = await enumerableFactory(resource).ConfigureAwait(false);
 
-                        enumerator = enumerable.GetAsyncEnumerator();
+                        enumerator = enumerable.GetAsyncEnumerator(cancellationToken);
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 

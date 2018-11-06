@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -68,13 +69,13 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        var firstEnumerator = first.GetAsyncEnumerator();
-                        var secondEnumerator = second.GetAsyncEnumerator();
+                        var firstEnumerator = first.GetAsyncEnumerator(cancellationToken);
+                        var secondEnumerator = second.GetAsyncEnumerator(cancellationToken);
 
                         var firstMoveNext = firstEnumerator.MoveNextAsync().AsTask();
                         var secondMoveNext = secondEnumerator.MoveNextAsync().AsTask();
@@ -163,7 +164,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
@@ -175,7 +176,7 @@ namespace System.Linq
 
                         for (var i = 0; i < n; i++)
                         {
-                            var enumerator = sources[i].GetAsyncEnumerator();
+                            var enumerator = sources[i].GetAsyncEnumerator(cancellationToken);
 
                             enumerators[i] = enumerator;
                             moveNexts[i] = enumerator.MoveNextAsync();

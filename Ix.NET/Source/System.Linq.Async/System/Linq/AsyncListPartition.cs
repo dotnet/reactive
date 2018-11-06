@@ -38,7 +38,7 @@ namespace System.Linq
             return new AsyncListPartition<TSource>(_source, _minIndexInclusive, _maxIndexInclusive);
         }
 
-        protected override async ValueTask<bool> MoveNextCore()
+        protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
         {
             if ((uint)_index <= (uint)(_maxIndexInclusive - _minIndexInclusive) && _index < _source.Count - _minIndexInclusive)
             {

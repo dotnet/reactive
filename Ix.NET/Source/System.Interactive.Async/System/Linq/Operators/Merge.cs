@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -75,7 +76,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
@@ -88,7 +89,7 @@ namespace System.Linq
 
                         for (var i = 0; i < n; i++)
                         {
-                            var enumerator = sources[i].GetAsyncEnumerator();
+                            var enumerator = sources[i].GetAsyncEnumerator(cancellationToken);
                             enumerators[i] = enumerator;
                             moveNexts[i] = enumerator.MoveNextAsync();
                         }

@@ -63,11 +63,11 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                return await e.MoveNextAsync(cancellationToken).ConfigureAwait(false);
+                return await e.MoveNextAsync().ConfigureAwait(false);
             }
             finally
             {
@@ -77,11 +77,11 @@ namespace System.Linq
 
         private static async Task<bool> AnyCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     if (predicate(e.Current))
                         return true;
@@ -97,11 +97,11 @@ namespace System.Linq
 
         private static async Task<bool> AnyCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     if (await predicate(e.Current).ConfigureAwait(false))
                         return true;

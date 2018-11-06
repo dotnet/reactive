@@ -42,7 +42,7 @@ namespace System.Linq
 
             public ValueTask<bool> MoveNextAsync() => TaskExt.False;
 
-            public IAsyncEnumerator<TValue> GetAsyncEnumerator() => this;
+            public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken) => this;
 
             public ValueTask DisposeAsync() => TaskExt.CompletedTask;
         }

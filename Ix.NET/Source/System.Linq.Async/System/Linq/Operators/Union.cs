@@ -107,7 +107,7 @@ namespace System.Linq
                 return false;
             }
 
-            protected sealed override async ValueTask<bool> MoveNextCore()
+            protected sealed override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
@@ -118,7 +118,7 @@ namespace System.Linq
                         {
                             ++_index;
 
-                            var enumerator = enumerable.GetAsyncEnumerator();
+                            var enumerator = enumerable.GetAsyncEnumerator(cancellationToken);
 
                             if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
@@ -146,7 +146,7 @@ namespace System.Linq
                                 break;
                             }
 
-                            await SetEnumeratorAsync(enumerable.GetAsyncEnumerator()).ConfigureAwait(false);
+                            await SetEnumeratorAsync(enumerable.GetAsyncEnumerator(cancellationToken)).ConfigureAwait(false);
                             ++_index;
                         }
 
@@ -169,7 +169,7 @@ namespace System.Linq
                         return set;
                     }
 
-                    await set.UnionWithAsync(enumerable);
+                    await set.UnionWithAsync(enumerable, cancellationToken);
                 }
             }
 

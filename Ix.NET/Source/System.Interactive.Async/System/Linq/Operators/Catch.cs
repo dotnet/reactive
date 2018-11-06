@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.ExceptionServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -97,12 +98,12 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator();
+                        enumerator = source.GetAsyncEnumerator(cancellationToken);
                         isDone = false;
 
                         state = AsyncIteratorState.Iterating;
@@ -127,7 +128,7 @@ namespace System.Linq
                                     // invoking the handler, but we use this order to preserve
                                     // current behavior
                                     var inner = handler(ex);
-                                    var err = inner.GetAsyncEnumerator();
+                                    var err = inner.GetAsyncEnumerator(cancellationToken);
 
                                     if (enumerator != null)
                                     {
@@ -190,12 +191,12 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator();
+                        enumerator = source.GetAsyncEnumerator(cancellationToken);
                         isDone = false;
 
                         state = AsyncIteratorState.Iterating;
@@ -220,7 +221,7 @@ namespace System.Linq
                                     // invoking the handler, but we use this order to preserve
                                     // current behavior
                                     var inner = await handler(ex).ConfigureAwait(false);
-                                    var err = inner.GetAsyncEnumerator();
+                                    var err = inner.GetAsyncEnumerator(cancellationToken);
 
                                     if (enumerator != null)
                                     {
@@ -290,7 +291,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
@@ -313,7 +314,7 @@ namespace System.Linq
                                 }
 
                                 error = null;
-                                enumerator = sourcesEnumerator.Current.GetAsyncEnumerator();
+                                enumerator = sourcesEnumerator.Current.GetAsyncEnumerator(cancellationToken);
                             }
 
                             try

@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -23,7 +24,7 @@ namespace System.Linq
             return new OrderedAsyncEnumerableWithTask<TElement, TKey>(source, keySelector, comparer, descending, this);
         }
 
-        internal abstract Task Initialize();
+        internal abstract Task Initialize(CancellationToken cancellationToken);
     }
 
     internal sealed class OrderedAsyncEnumerable<TElement, TKey> : OrderedAsyncEnumerable<TElement>
@@ -71,13 +72,13 @@ namespace System.Linq
             await base.DisposeAsync().ConfigureAwait(false);
         }
 
-        protected override async ValueTask<bool> MoveNextCore()
+        protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
         {
             switch (state)
             {
                 case AsyncIteratorState.Allocated:
 
-                    await Initialize().ConfigureAwait(false);
+                    await Initialize(cancellationToken).ConfigureAwait(false);
 
                     enumerator = enumerable.GetEnumerator();
                     state = AsyncIteratorState.Iterating;
@@ -97,17 +98,17 @@ namespace System.Linq
             return false;
         }
 
-        internal override async Task Initialize()
+        internal override async Task Initialize(CancellationToken cancellationToken)
         {
             if (parent == null)
             {
-                var buffer = await source.ToList().ConfigureAwait(false);
+                var buffer = await source.ToList(cancellationToken).ConfigureAwait(false);
                 enumerable = (!@descending ? buffer.OrderBy(keySelector, comparer) : buffer.OrderByDescending(keySelector, comparer));
             }
             else
             {
-                parentEnumerator = parent.GetAsyncEnumerator();
-                await parent.Initialize().ConfigureAwait(false);
+                parentEnumerator = parent.GetAsyncEnumerator(cancellationToken);
+                await parent.Initialize(cancellationToken).ConfigureAwait(false);
                 enumerable = parent.enumerable.CreateOrderedEnumerable(keySelector, comparer, @descending);
             }
         }
@@ -158,13 +159,13 @@ namespace System.Linq
             await base.DisposeAsync().ConfigureAwait(false);
         }
 
-        protected override async ValueTask<bool> MoveNextCore()
+        protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
         {
             switch (state)
             {
                 case AsyncIteratorState.Allocated:
 
-                    await Initialize().ConfigureAwait(false);
+                    await Initialize(cancellationToken).ConfigureAwait(false);
 
                     enumerator = enumerable.GetEnumerator();
                     state = AsyncIteratorState.Iterating;
@@ -184,17 +185,17 @@ namespace System.Linq
             return false;
         }
 
-        internal override async Task Initialize()
+        internal override async Task Initialize(CancellationToken cancellationToken)
         {
             if (parent == null)
             {
-                var buffer = await source.ToList().ConfigureAwait(false);
+                var buffer = await source.ToList(cancellationToken).ConfigureAwait(false);
                 enumerable = (!@descending ? buffer.OrderByAsync(keySelector, comparer) : buffer.OrderByDescendingAsync(keySelector, comparer));
             }
             else
             {
-                parentEnumerator = parent.GetAsyncEnumerator();
-                await parent.Initialize().ConfigureAwait(false);
+                parentEnumerator = parent.GetAsyncEnumerator(cancellationToken);
+                await parent.Initialize(cancellationToken).ConfigureAwait(false);
                 enumerable = parent.enumerable.CreateOrderedEnumerableAsync(keySelector, comparer, @descending);
             }
         }

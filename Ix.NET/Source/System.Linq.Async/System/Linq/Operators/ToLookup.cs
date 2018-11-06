@@ -293,11 +293,11 @@ namespace System.Linq.Internal
 
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-            var enu = source.GetAsyncEnumerator();
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
                     var key = keySelector(enu.Current);
                     var group = lookup.GetGrouping(key, create: true);
@@ -321,11 +321,11 @@ namespace System.Linq.Internal
 
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-            var enu = source.GetAsyncEnumerator();
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
                     var key = keySelector(enu.Current);
                     lookup.GetGrouping(key, create: true).Add(enu.Current);
@@ -339,11 +339,11 @@ namespace System.Linq.Internal
             return lookup;
         }
 
-        internal static async Task<Lookup<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        internal static async Task<Lookup<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-            var enu = source.GetAsyncEnumerator();
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -474,9 +474,9 @@ namespace System.Linq.Internal
             return Task.FromResult(Count);
         }
 
-        IAsyncEnumerator<IAsyncGrouping<TKey, TElement>> IAsyncEnumerable<IAsyncGrouping<TKey, TElement>>.GetAsyncEnumerator()
+        IAsyncEnumerator<IAsyncGrouping<TKey, TElement>> IAsyncEnumerable<IAsyncGrouping<TKey, TElement>>.GetAsyncEnumerator(CancellationToken cancellationToken)
         {
-            return Enumerable.Cast<IAsyncGrouping<TKey, TElement>>(this).ToAsyncEnumerable().GetAsyncEnumerator();
+            return Enumerable.Cast<IAsyncGrouping<TKey, TElement>>(this).ToAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
         }
 
         Task<List<IAsyncGrouping<TKey, TElement>>> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)
@@ -579,11 +579,11 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            var enu = source.GetAsyncEnumerator();
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
                     var key = await keySelector(enu.Current).ConfigureAwait(false);
                     var group = lookup.GetGrouping(key, create: true);
@@ -607,11 +607,11 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            var enu = source.GetAsyncEnumerator();
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
                     var key = await keySelector(enu.Current).ConfigureAwait(false);
                     lookup.GetGrouping(key, create: true).Add(enu.Current);
@@ -625,11 +625,11 @@ namespace System.Linq.Internal
             return lookup;
         }
 
-        internal static async Task<LookupWithTask<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        internal static async Task<LookupWithTask<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            var enu = source.GetAsyncEnumerator();
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -760,9 +760,9 @@ namespace System.Linq.Internal
             return Task.FromResult(Count);
         }
 
-        IAsyncEnumerator<IAsyncGrouping<TKey, TElement>> IAsyncEnumerable<IAsyncGrouping<TKey, TElement>>.GetAsyncEnumerator()
+        IAsyncEnumerator<IAsyncGrouping<TKey, TElement>> IAsyncEnumerable<IAsyncGrouping<TKey, TElement>>.GetAsyncEnumerator(CancellationToken cancellationToken)
         {
-            return Enumerable.Cast<IAsyncGrouping<TKey, TElement>>(this).ToAsyncEnumerable().GetAsyncEnumerator();
+            return Enumerable.Cast<IAsyncGrouping<TKey, TElement>>(this).ToAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
         }
 
         Task<List<IAsyncGrouping<TKey, TElement>>> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)

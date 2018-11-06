@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -102,14 +103,15 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public IAsyncEnumerator<TResult> GetAsyncEnumerator()
+            public IAsyncEnumerator<TResult> GetAsyncEnumerator(CancellationToken cancellationToken)
                 => new GroupJoinAsyncEnumerator(
-                    _outer.GetAsyncEnumerator(),
+                    _outer.GetAsyncEnumerator(cancellationToken),
                     _inner,
                     _outerKeySelector,
                     _innerKeySelector,
                     _resultSelector,
-                    _comparer);
+                    _comparer,
+                    cancellationToken);
 
             private sealed class GroupJoinAsyncEnumerator : IAsyncEnumerator<TResult>
             {
@@ -119,6 +121,7 @@ namespace System.Linq
                 private readonly IAsyncEnumerator<TOuter> _outer;
                 private readonly Func<TOuter, TKey> _outerKeySelector;
                 private readonly Func<TOuter, IAsyncEnumerable<TInner>, TResult> _resultSelector;
+                private readonly CancellationToken _cancellationToken;
 
                 private Internal.Lookup<TKey, TInner> _lookup;
 
@@ -128,7 +131,8 @@ namespace System.Linq
                     Func<TOuter, TKey> outerKeySelector,
                     Func<TInner, TKey> innerKeySelector,
                     Func<TOuter, IAsyncEnumerable<TInner>, TResult> resultSelector,
-                    IEqualityComparer<TKey> comparer)
+                    IEqualityComparer<TKey> comparer,
+                    CancellationToken cancellationToken)
                 {
                     _outer = outer;
                     _inner = inner;
@@ -136,6 +140,7 @@ namespace System.Linq
                     _innerKeySelector = innerKeySelector;
                     _resultSelector = resultSelector;
                     _comparer = comparer;
+                    _cancellationToken = cancellationToken;
                 }
 
                 public async ValueTask<bool> MoveNextAsync()
@@ -148,7 +153,7 @@ namespace System.Linq
 
                     if (_lookup == null)
                     {
-                        _lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer).ConfigureAwait(false);
+                        _lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer, _cancellationToken).ConfigureAwait(false);
                     }
 
                     var item = _outer.Current;
@@ -192,14 +197,15 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public IAsyncEnumerator<TResult> GetAsyncEnumerator()
+            public IAsyncEnumerator<TResult> GetAsyncEnumerator(CancellationToken cancellationToken)
                 => new GroupJoinAsyncEnumeratorWithTask(
-                    _outer.GetAsyncEnumerator(),
+                    _outer.GetAsyncEnumerator(cancellationToken),
                     _inner,
                     _outerKeySelector,
                     _innerKeySelector,
                     _resultSelector,
-                    _comparer);
+                    _comparer,
+                    cancellationToken);
 
             private sealed class GroupJoinAsyncEnumeratorWithTask : IAsyncEnumerator<TResult>
             {
@@ -209,6 +215,7 @@ namespace System.Linq
                 private readonly IAsyncEnumerator<TOuter> _outer;
                 private readonly Func<TOuter, Task<TKey>> _outerKeySelector;
                 private readonly Func<TOuter, IAsyncEnumerable<TInner>, Task<TResult>> _resultSelector;
+                private readonly CancellationToken _cancellationToken;
 
                 private Internal.LookupWithTask<TKey, TInner> _lookup;
 
@@ -218,7 +225,8 @@ namespace System.Linq
                     Func<TOuter, Task<TKey>> outerKeySelector,
                     Func<TInner, Task<TKey>> innerKeySelector,
                     Func<TOuter, IAsyncEnumerable<TInner>, Task<TResult>> resultSelector,
-                    IEqualityComparer<TKey> comparer)
+                    IEqualityComparer<TKey> comparer,
+                    CancellationToken cancellationToken)
                 {
                     _outer = outer;
                     _inner = inner;
@@ -226,6 +234,7 @@ namespace System.Linq
                     _innerKeySelector = innerKeySelector;
                     _resultSelector = resultSelector;
                     _comparer = comparer;
+                    _cancellationToken = cancellationToken;
                 }
 
                 public async ValueTask<bool> MoveNextAsync()
@@ -238,7 +247,7 @@ namespace System.Linq
 
                     if (_lookup == null)
                     {
-                        _lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer).ConfigureAwait(false);
+                        _lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer, _cancellationToken).ConfigureAwait(false);
                     }
 
                     var item = _outer.Current;

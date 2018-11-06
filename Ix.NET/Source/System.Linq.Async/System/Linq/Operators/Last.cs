@@ -90,11 +90,11 @@ namespace System.Linq
                 var last = default(TSource);
                 var hasLast = false;
 
-                var e = source.GetAsyncEnumerator();
+                var e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
-                    while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
                         hasLast = true;
                         last = e.Current;

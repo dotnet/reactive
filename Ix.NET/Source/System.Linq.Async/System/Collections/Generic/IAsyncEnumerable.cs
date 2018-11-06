@@ -5,6 +5,8 @@
 // See https://github.com/dotnet/csharplang/blob/master/proposals/async-streams.md for the definition of this interface
 // and the design rationale. (8/30/2017)
 
+using System.Threading;
+
 namespace System.Collections.Generic
 {
     /// <summary>
@@ -16,7 +18,8 @@ namespace System.Collections.Generic
         /// <summary>
         /// Gets an asynchronous enumerator over the sequence.
         /// </summary>
+        /// <param name="cancellationToken">Cancellation token used to cancel the enumeration.</param>
         /// <returns>Enumerator for asynchronous enumeration over the sequence.</returns>
-        IAsyncEnumerator<T> GetAsyncEnumerator();
+        IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default);
     }
 }

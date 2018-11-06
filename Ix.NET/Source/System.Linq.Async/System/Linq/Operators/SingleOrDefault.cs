@@ -79,17 +79,17 @@ namespace System.Linq
                 throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
             }
 
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     return default(TSource);
                 }
 
                 var result = e.Current;
-                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     return result;
                 }

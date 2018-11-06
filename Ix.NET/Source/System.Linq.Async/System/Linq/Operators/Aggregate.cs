@@ -142,11 +142,11 @@ namespace System.Linq
         {
             var acc = seed;
 
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     acc = accumulator(acc, e.Current);
                 }
@@ -164,11 +164,11 @@ namespace System.Linq
             var first = true;
             var acc = default(TSource);
 
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     acc = first ? e.Current : accumulator(acc, e.Current);
                     first = false;
@@ -189,11 +189,11 @@ namespace System.Linq
         {
             var acc = seed;
 
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     acc = await accumulator(acc, e.Current).ConfigureAwait(false);
                 }
@@ -211,11 +211,11 @@ namespace System.Linq
             var first = true;
             var acc = default(TSource);
 
-            var e = source.GetAsyncEnumerator();
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     acc = first ? e.Current : await accumulator(acc, e.Current).ConfigureAwait(false);
                     first = false;
