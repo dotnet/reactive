@@ -15,7 +15,7 @@ namespace Tests
         [Fact]
         public void Skip_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Skip<int>(default(IAsyncEnumerable<int>), 5));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Skip<int>(default, 5));
         }
 
         //[Fact]

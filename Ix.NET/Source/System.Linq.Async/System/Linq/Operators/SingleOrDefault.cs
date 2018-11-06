@@ -72,7 +72,7 @@ namespace System.Linq
             {
                 switch (list.Count)
                 {
-                    case 0: return default(TSource);
+                    case 0: return default;
                     case 1: return list[0];
                 }
 
@@ -85,7 +85,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    return default(TSource);
+                    return default;
                 }
 
                 var result = e.Current;

@@ -14,9 +14,9 @@ namespace Tests
         [Fact]
         public void Generate_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Generate<int, int>(0, default(Func<int, bool>), x => x, x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Generate<int, int>(0, x => true, default(Func<int, int>), x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Generate<int, int>(0, x => true, x => x, default(Func<int, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Generate<int, int>(0, default, x => x, x => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Generate<int, int>(0, x => true, default, x => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Generate<int, int>(0, x => true, x => x, default));
         }
 
         [Fact]

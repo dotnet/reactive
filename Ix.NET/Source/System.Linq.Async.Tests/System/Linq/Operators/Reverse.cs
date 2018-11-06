@@ -15,7 +15,7 @@ namespace Tests
         [Fact]
         public void Reverse_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Reverse<int>(default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Reverse<int>(default));
         }
 
         [Fact]

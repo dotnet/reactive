@@ -15,12 +15,12 @@ namespace Tests
         [Fact]
         public void Intersect_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(default(IAsyncEnumerable<int>), Return42));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(Return42, default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(default, Return42));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(Return42, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(default(IAsyncEnumerable<int>), Return42, new Eq()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(Return42, default(IAsyncEnumerable<int>), new Eq()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(Return42, Return42, default(IEqualityComparer<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(default, Return42, new Eq()));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(Return42, default, new Eq()));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(Return42, Return42, default));
         }
 
         [Fact]

@@ -96,7 +96,7 @@ namespace System.Linq
             private readonly TSource _item;
             private readonly bool _appending;
 
-            bool _hasEnumerator;
+            private bool _hasEnumerator;
 
             public AppendPrepend1AsyncIterator(IAsyncEnumerable<TSource> source, TSource item, bool appending)
                 : base(source)
@@ -292,10 +292,10 @@ namespace System.Linq
                 Debug.Assert((prepended?.GetCount() ?? 0) == prependCount);
                 Debug.Assert((appended?.GetCount() ?? 0) == appendCount);
 
-                this._prepended = prepended;
-                this._appended = appended;
-                this._prependCount = prependCount;
-                this._appendCount = appendCount;
+                _prepended = prepended;
+                _appended = appended;
+                _prependCount = prependCount;
+                _appendCount = appendCount;
             }
 
             public override AsyncIterator<TSource> Clone()

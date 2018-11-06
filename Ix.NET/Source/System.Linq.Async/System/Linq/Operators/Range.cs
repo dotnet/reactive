@@ -28,50 +28,50 @@ namespace System.Linq
 
         private sealed class RangeAsyncIterator : AsyncIterator<int>, IAsyncPartition<int>
         {
-            private readonly int start;
-            private readonly int end;
+            private readonly int _start;
+            private readonly int _end;
 
             public RangeAsyncIterator(int start, int count)
             {
                 Debug.Assert(count > 0);
 
-                this.start = start;
-                this.end = start + count;
+                _start = start;
+                _end = start + count;
             }
 
-            public override AsyncIterator<int> Clone() => new RangeAsyncIterator(start, end - start);
+            public override AsyncIterator<int> Clone() => new RangeAsyncIterator(_start, _end - _start);
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(end - start);
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(_end - _start);
 
             public IAsyncPartition<int> Skip(int count)
             {
-                var n = end - start;
+                var n = _end - _start;
 
                 if (count >= n)
                 {
                     return EmptyAsyncIterator<int>.Instance;
                 }
 
-                return new RangeAsyncIterator(start + count, n - count);
+                return new RangeAsyncIterator(_start + count, n - count);
             }
 
             public IAsyncPartition<int> Take(int count)
             {
-                var n = end - start;
+                var n = _end - _start;
 
                 if (count >= n)
                 {
                     return this;
                 }
 
-                return new RangeAsyncIterator(start, count);
+                return new RangeAsyncIterator(_start, count);
             }
 
             public Task<int[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var res = new int[end - start];
+                var res = new int[_end - _start];
 
-                var value = start;
+                var value = _start;
 
                 for (var i = 0; i < res.Length; i++)
                 {
@@ -83,9 +83,9 @@ namespace System.Linq
 
             public Task<List<int>> ToListAsync(CancellationToken cancellationToken)
             {
-                var res = new List<int>(end - start);
+                var res = new List<int>(_end - _start);
 
-                for (var value = start; value < end; value++)
+                for (var value = _start; value < _end; value++)
                 {
                     res.Add(value);
                 }
@@ -95,24 +95,24 @@ namespace System.Linq
 
             public Task<Maybe<int>> TryGetElementAsync(int index, CancellationToken cancellationToken)
             {
-                if ((uint)index < (uint)(end - start))
+                if ((uint)index < (uint)(_end - _start))
                 {
-                    return Task.FromResult(new Maybe<int>(start + index));
+                    return Task.FromResult(new Maybe<int>(_start + index));
                 }
 
                 return Task.FromResult(new Maybe<int>());
             }
 
-            public Task<Maybe<int>> TryGetFirstAsync(CancellationToken cancellationToken) => Task.FromResult(new Maybe<int>(start));
+            public Task<Maybe<int>> TryGetFirstAsync(CancellationToken cancellationToken) => Task.FromResult(new Maybe<int>(_start));
 
-            public Task<Maybe<int>> TryGetLastAsync(CancellationToken cancellationToken) => Task.FromResult(new Maybe<int>(end - 1));
+            public Task<Maybe<int>> TryGetLastAsync(CancellationToken cancellationToken) => Task.FromResult(new Maybe<int>(_end - 1));
 
             protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        current = start;
+                        current = _start;
 
                         state = AsyncIteratorState.Iterating;
                         return true;
@@ -120,7 +120,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         current++;
 
-                        if (current != end)
+                        if (current != _end)
                         {
                             return true;
                         }

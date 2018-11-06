@@ -14,12 +14,12 @@ namespace Tests
         [Fact]
         public void Union_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union<int>(default(IAsyncEnumerable<int>), Return42));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union<int>(Return42, default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union<int>(default, Return42));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union<int>(Return42, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union<int>(default(IAsyncEnumerable<int>), Return42, new Eq()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union<int>(Return42, default(IAsyncEnumerable<int>), new Eq()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union<int>(Return42, Return42, default(IEqualityComparer<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union<int>(default, Return42, new Eq()));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union<int>(Return42, default, new Eq()));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union<int>(Return42, Return42, default));
         }
 
         [Fact]

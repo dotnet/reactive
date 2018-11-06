@@ -15,18 +15,18 @@ namespace Tests
         [Fact]
         public void Join_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(default(IAsyncEnumerable<int>), Return42, x => x, x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, default(IAsyncEnumerable<int>), x => x, x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, default(Func<int, int>), x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, default(Func<int, int>), (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, x => x, default(Func<int, int, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(default, Return42, x => x, x => x, (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, default, x => x, x => x, (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, default, x => x, (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, default, (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, x => x, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(default(IAsyncEnumerable<int>), Return42, x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, default(IAsyncEnumerable<int>), x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, default(Func<int, int>), x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, default(Func<int, int>), (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, x => x, default(Func<int, int, int>), EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, x => x, (x, y) => x, default(IEqualityComparer<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(default, Return42, x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, default, x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, default, x => x, (x, y) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, default, (x, y) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, x => x, default, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, x => x, (x, y) => x, default));
         }
 
         [Fact]
@@ -248,16 +248,16 @@ namespace Tests
 
             public bool Equals(CustomerOrder other)
             {
-                if (ReferenceEquals(null, other)) return false;
+                if (other is null) return false;
                 if (ReferenceEquals(this, other)) return true;
                 return OrderId == other.OrderId && string.Equals(CustomerId, other.CustomerId);
             }
 
             public override bool Equals(object obj)
             {
-                if (ReferenceEquals(null, obj)) return false;
+                if (obj is null) return false;
                 if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != this.GetType()) return false;
+                if (obj.GetType() != GetType()) return false;
                 return Equals((CustomerOrder)obj);
             }
 

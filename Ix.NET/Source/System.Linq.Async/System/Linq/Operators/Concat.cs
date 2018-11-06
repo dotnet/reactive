@@ -18,29 +18,28 @@ namespace System.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            var concatFirst = first as ConcatAsyncIterator<TSource>;
-            return concatFirst != null ?
+            return first is ConcatAsyncIterator<TSource> concatFirst ?
                        concatFirst.Concat(second) :
                        new Concat2AsyncIterator<TSource>(first, second);
         }
 
         private sealed class Concat2AsyncIterator<TSource> : ConcatAsyncIterator<TSource>
         {
-            private readonly IAsyncEnumerable<TSource> first;
-            private readonly IAsyncEnumerable<TSource> second;
+            private readonly IAsyncEnumerable<TSource> _first;
+            private readonly IAsyncEnumerable<TSource> _second;
 
             internal Concat2AsyncIterator(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
             {
                 Debug.Assert(first != null);
                 Debug.Assert(second != null);
 
-                this.first = first;
-                this.second = second;
+                _first = first;
+                _second = second;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new Concat2AsyncIterator<TSource>(first, second);
+                return new Concat2AsyncIterator<TSource>(_first, _second);
             }
 
             internal override ConcatAsyncIterator<TSource> Concat(IAsyncEnumerable<TSource> next)
@@ -53,9 +52,9 @@ namespace System.Linq
                 switch (index)
                 {
                     case 0:
-                        return first;
+                        return _first;
                     case 1:
-                        return second;
+                        return _second;
                     default:
                         return null;
                 }

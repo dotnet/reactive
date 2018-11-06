@@ -101,7 +101,7 @@ namespace System.Linq
                 }
             }
 
-            return default(TSource);
+            return default;
         }
     }
 }

@@ -15,8 +15,8 @@ namespace Tests
         [Fact]
         public void Using_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Using<int, IDisposable>(default(Func<IDisposable>), _ => default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Using<int, IDisposable>(() => new MyD(null), default(Func<IDisposable, IAsyncEnumerable<int>>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Using<int, IDisposable>(default, _ => default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Using<int, IDisposable>(() => new MyD(null), default));
         }
 
         [Fact]

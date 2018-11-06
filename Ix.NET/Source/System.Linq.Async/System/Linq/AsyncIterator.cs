@@ -47,7 +47,7 @@ namespace System.Linq
 
         public virtual ValueTask DisposeAsync()
         {
-            current = default(TSource);
+            current = default;
             state = AsyncIteratorState.Disposed;
 
             return TaskExt.CompletedTask;

@@ -15,41 +15,41 @@ namespace Tests
         [Fact]
         public void GroupBy_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default(IAsyncEnumerable<int>), x => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default, x => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(Return42, default(Func<int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default(IAsyncEnumerable<int>), x => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default, x => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(Return42, default(Func<int, int>), EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(Return42, x => x, default(IEqualityComparer<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(Return42, x => x, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), x => x, x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(Func<int, int>), x => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, x => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, x => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, default(Func<int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), x => x, x => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(Func<int, int>), x => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, x => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, x => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, default(Func<int, int>), EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, x => x, default(IEqualityComparer<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, x => x, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), x => x, (x, ys) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(Func<int, int>), (x, ys) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, (x, ys) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, (x, ys) => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, default(Func<int, IAsyncEnumerable<int>, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), x => x, (x, ys) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(Func<int, int>), (x, ys) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, (x, ys) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, (x, ys) => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, default(Func<int, IAsyncEnumerable<int>, int>), EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, (x, ys) => x, default(IEqualityComparer<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, (x, ys) => x, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), x => x, x => x, (x, ys) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default(Func<int, int>), x => x, (x, ys) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, default(Func<int, int>), (x, ys) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, default(Func<int, IAsyncEnumerable<int>, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default, x => x, x => x, (x, ys) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default, x => x, (x, ys) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, default, (x, ys) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), x => x, x => x, (x, ys) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default(Func<int, int>), x => x, (x, ys) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, default(Func<int, int>), (x, ys) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, default(Func<int, IAsyncEnumerable<int>, int>), EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, (x, ys) => x, default(IEqualityComparer<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default, x => x, x => x, (x, ys) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default, x => x, (x, ys) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, default, (x, ys) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, default, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, (x, ys) => x, default));
         }
 
         [Fact]
@@ -226,7 +226,7 @@ namespace Tests
 
         }
 
-        static IEnumerable<int> GetXs()
+        private static IEnumerable<int> GetXs()
         {
             yield return 42;
             yield return 43;
@@ -857,14 +857,14 @@ namespace Tests
 
             public bool Equals(Kvp other)
             {
-                if (ReferenceEquals(null, other)) return false;
+                if (other is null) return false;
                 if (ReferenceEquals(this, other)) return true;
                 return string.Equals(Key, other.Key) && Item == other.Item;
             }
 
             public override bool Equals(object obj)
             {
-                if (ReferenceEquals(null, obj)) return false;
+                if (obj is null) return false;
                 if (ReferenceEquals(this, obj)) return true;
                 if (obj.GetType() != GetType()) return false;
                 return Equals((Kvp)obj);

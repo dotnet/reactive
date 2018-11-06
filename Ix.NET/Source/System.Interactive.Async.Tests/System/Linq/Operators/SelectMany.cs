@@ -14,8 +14,8 @@ namespace Tests
         [Fact]
         public void SelectMany_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.SelectMany<int, int>(default(IAsyncEnumerable<int>), Return42));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.SelectMany<int, int>(Return42, default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.SelectMany<int, int>(default, Return42));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.SelectMany<int, int>(Return42, default));
         }
 
         [Fact]

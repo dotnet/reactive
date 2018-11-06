@@ -16,10 +16,10 @@ namespace Tests
         [Fact]
         public async Task ElementAt_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAt<int>(default(IAsyncEnumerable<int>), 0));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAt<int>(default, 0));
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAt<int>(Return42, -1));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAt<int>(default(IAsyncEnumerable<int>), 0, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAt<int>(default, 0, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAt<int>(Return42, -1, CancellationToken.None));
         }
 

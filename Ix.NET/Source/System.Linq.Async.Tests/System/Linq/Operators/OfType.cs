@@ -14,7 +14,7 @@ namespace Tests
         [Fact]
         public void OfType_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OfType<int>(default(IAsyncEnumerable<object>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OfType<int>(default));
         }
 
         [Fact]

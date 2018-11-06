@@ -16,8 +16,8 @@ namespace Tests
         [Fact]
         public async Task ToList_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToList<int>(default(IAsyncEnumerable<int>)));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToList<int>(default(IAsyncEnumerable<int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToList<int>(default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToList<int>(default, CancellationToken.None));
         }
 
         [Fact]

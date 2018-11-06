@@ -129,7 +129,7 @@ namespace System.Collections.Generic
 
             public override async ValueTask DisposeAsync()
             {
-                var dispose = Interlocked.Exchange(ref this._dispose, null);
+                var dispose = Interlocked.Exchange(ref _dispose, null);
 
                 if (dispose != null)
                 {

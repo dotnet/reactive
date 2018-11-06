@@ -15,7 +15,7 @@ namespace Tests
         [Fact]
         public void CreateEnumerator_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerator<int>(default(Func<ValueTask<bool>>), () => 3, () => TaskExt.CompletedTask));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerator<int>(default, () => 3, () => TaskExt.CompletedTask));
         }
 
         [Fact]

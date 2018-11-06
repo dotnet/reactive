@@ -13,7 +13,7 @@ namespace Tests
         [Fact]
         public void Throw_Null()
         {
-            AssertThrows<ArgumentNullException>(() => Throw<int>(default(Exception)));
+            AssertThrows<ArgumentNullException>(() => Throw<int>(default));
         }
 
         [Fact]

@@ -21,7 +21,7 @@ namespace System.Reflection
 
 namespace System
 {
-    static class TypeExtensions
+    internal static class TypeExtensions
     {
         public static bool IsNestedPrivate(this Type t)
         {
@@ -90,7 +90,7 @@ namespace System
 
 namespace System
 {
-    static class TypeExtensions
+    internal static class TypeExtensions
     {
         public static bool IsNestedPrivate(this Type t)
         {

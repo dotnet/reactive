@@ -69,7 +69,7 @@ namespace Tests
             Assert.True(result);
         }
 
-        static IEnumerable<int> Blocking(ManualResetEvent evt, ManualResetEvent blockingStarted)
+        private static IEnumerable<int> Blocking(ManualResetEvent evt, ManualResetEvent blockingStarted)
         {
             blockingStarted.Set();
             evt.WaitOne();
@@ -154,7 +154,7 @@ namespace Tests
         }
     }
 
-    static class MyExt
+    internal static class MyExt
     {
         public static IEnumerable<T> WithDispose<T>(this IEnumerable<T> source, Action a)
         {

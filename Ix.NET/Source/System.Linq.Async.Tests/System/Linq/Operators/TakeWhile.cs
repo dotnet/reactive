@@ -15,8 +15,8 @@ namespace Tests
         [Fact]
         public void TakeWhile_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.TakeWhile<int>(default(IAsyncEnumerable<int>), x => true));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.TakeWhile<int>(default(IAsyncEnumerable<int>), (x, i) => true));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.TakeWhile<int>(default, x => true));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.TakeWhile<int>(default, (x, i) => true));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.TakeWhile<int>(Return42, default(Func<int, bool>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.TakeWhile<int>(Return42, default(Func<int, int, bool>)));
         }

@@ -65,7 +65,7 @@ namespace System.Linq
                 if (resource != null)
                 {
                     resource.Dispose();
-                    resource = default(TResource);
+                    resource = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -139,7 +139,7 @@ namespace System.Linq
                 if (resource != null)
                 {
                     resource.Dispose();
-                    resource = default(TResource);
+                    resource = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);

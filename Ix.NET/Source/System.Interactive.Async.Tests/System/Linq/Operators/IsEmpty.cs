@@ -16,8 +16,8 @@ namespace Tests
         [Fact]
         public async Task IsEmpty_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmpty<int>(default(IAsyncEnumerable<int>)));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmpty<int>(default(IAsyncEnumerable<int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmpty<int>(default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmpty<int>(default, CancellationToken.None));
         }
     }
 }

@@ -16,19 +16,19 @@ namespace Tests
         [Fact]
         public async Task SequenceEqual_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(default(IAsyncEnumerable<int>), Return42));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(Return42, default(IAsyncEnumerable<int>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(default, Return42));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(Return42, default));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(default(IAsyncEnumerable<int>), Return42, new Eq()));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(Return42, default(IAsyncEnumerable<int>), new Eq()));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(default, Return42, new Eq()));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(Return42, default, new Eq()));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(Return42, Return42, default(IEqualityComparer<int>)));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(default(IAsyncEnumerable<int>), Return42, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(Return42, default(IAsyncEnumerable<int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(default, Return42, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(Return42, default, CancellationToken.None));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(default(IAsyncEnumerable<int>), Return42, new Eq(), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(Return42, default(IAsyncEnumerable<int>), new Eq(), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(Return42, Return42, default(IEqualityComparer<int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(default, Return42, new Eq(), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(Return42, default, new Eq(), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual<int>(Return42, Return42, default, CancellationToken.None));
         }
 
         [Fact]

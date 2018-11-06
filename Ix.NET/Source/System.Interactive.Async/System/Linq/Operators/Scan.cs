@@ -81,7 +81,7 @@ namespace System.Linq
                 {
                     await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
-                    accumulated = default(TSource);
+                    accumulated = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -94,7 +94,7 @@ namespace System.Linq
                     case AsyncIteratorState.Allocated:
                         enumerator = source.GetAsyncEnumerator(cancellationToken);
                         hasSeed = false;
-                        accumulated = default(TSource);
+                        accumulated = default;
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -155,7 +155,7 @@ namespace System.Linq
                 {
                     await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
-                    accumulated = default(TAccumulate);
+                    accumulated = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -219,7 +219,7 @@ namespace System.Linq
                 {
                     await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
-                    accumulated = default(TSource);
+                    accumulated = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -232,7 +232,7 @@ namespace System.Linq
                     case AsyncIteratorState.Allocated:
                         enumerator = source.GetAsyncEnumerator(cancellationToken);
                         hasSeed = false;
-                        accumulated = default(TSource);
+                        accumulated = default;
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -293,7 +293,7 @@ namespace System.Linq
                 {
                     await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
-                    accumulated = default(TAccumulate);
+                    accumulated = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);

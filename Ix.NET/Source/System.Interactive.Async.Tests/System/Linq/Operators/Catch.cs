@@ -15,12 +15,12 @@ namespace Tests
         [Fact]
         public void Catch_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int, Exception>(default(IAsyncEnumerable<int>), x => default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int, Exception>(default, x => default(IAsyncEnumerable<int>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int, Exception>(Return42, default(Func<Exception, IAsyncEnumerable<int>>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default(IAsyncEnumerable<int>), Return42));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(Return42, default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default(IAsyncEnumerable<int>[])));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default, Return42));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(Return42, default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
         }
 

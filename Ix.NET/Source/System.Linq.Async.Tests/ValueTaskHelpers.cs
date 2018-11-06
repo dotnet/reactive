@@ -6,7 +6,7 @@ using Xunit.Sdk;
 
 namespace System.Linq
 {
-    static class ValueTaskHelpers
+    internal static class ValueTaskHelpers
     {
         public static void Wait<T>(this ValueTask<T> task, int timeOut)
         {
@@ -17,7 +17,7 @@ namespace System.Linq
 
 namespace Xunit
 {
-    static class AssertX
+    internal static class AssertX
     {
         /// <summary>
         /// Verifies that the exact exception is thrown (and not a derived exception type).
@@ -50,7 +50,7 @@ namespace Xunit
         /// </summary>
         /// <param name="testCode">The task which may thrown an exception.</param>
         /// <returns>Returns the exception that was thrown by the code; null, otherwise.</returns>
-        static async Task<Exception> RecordExceptionAsync(Func<ValueTask> testCode)
+        private static async Task<Exception> RecordExceptionAsync(Func<ValueTask> testCode)
         {
             if (testCode == null)
             {
@@ -73,7 +73,7 @@ namespace Xunit
         /// </summary>
         /// <param name="testCode">The task which may thrown an exception.</param>
         /// <returns>Returns the exception that was thrown by the code; null, otherwise.</returns>
-        static async Task<Exception> RecordExceptionAsync<T>(Func<ValueTask<T>> testCode)
+        private static async Task<Exception> RecordExceptionAsync<T>(Func<ValueTask<T>> testCode)
         {
             if (testCode == null)
             {
@@ -91,7 +91,7 @@ namespace Xunit
             }
         }
 
-        static Exception Throws(Type exceptionType, Exception exception)
+        private static Exception Throws(Type exceptionType, Exception exception)
         {
             if (exceptionType == null)
             {

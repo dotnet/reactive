@@ -325,7 +325,7 @@ namespace System.Linq
                     _resultEnumerator = null;
                 }
 
-                _currentSource = default(TSource);
+                _currentSource = default;
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
@@ -423,7 +423,7 @@ namespace System.Linq
                     _resultEnumerator = null;
                 }
 
-                _currentSource = default(TSource);
+                _currentSource = default;
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
@@ -522,7 +522,7 @@ namespace System.Linq
                     _resultEnumerator = null;
                 }
 
-                _currentSource = default(TSource);
+                _currentSource = default;
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
@@ -628,7 +628,7 @@ namespace System.Linq
                     _resultEnumerator = null;
                 }
 
-                _currentSource = default(TSource);
+                _currentSource = default;
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }

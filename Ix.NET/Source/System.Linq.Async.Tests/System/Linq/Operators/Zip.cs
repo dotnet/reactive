@@ -15,8 +15,8 @@ namespace Tests
         [Fact]
         public void Zip_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(default(IAsyncEnumerable<int>), Return42, (x, y) => x + y));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(Return42, default(IAsyncEnumerable<int>), (x, y) => x + y));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(default, Return42, (x, y) => x + y));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(Return42, default, (x, y) => x + y));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(Return42, Return42, default(Func<int, int, int>)));
         }
 

@@ -16,11 +16,11 @@ namespace Tests
         [Fact]
         public async Task ToHashSet_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(default(IAsyncEnumerable<int>)));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(default(IAsyncEnumerable<int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(default, CancellationToken.None));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(default(IAsyncEnumerable<int>), EqualityComparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(Return42, default(IEqualityComparer<int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(default, EqualityComparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(Return42, default, CancellationToken.None));
         }
 
         [Fact]

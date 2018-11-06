@@ -16,12 +16,12 @@ namespace Tests
         [Fact]
         public async Task First_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.First<int>(default(IAsyncEnumerable<int>)));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.First<int>(default(IAsyncEnumerable<int>), x => true));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.First<int>(default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.First<int>(default, x => true));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.First<int>(Return42, default(Func<int, bool>)));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.First<int>(default(IAsyncEnumerable<int>), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.First<int>(default(IAsyncEnumerable<int>), x => true, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.First<int>(default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.First<int>(default, x => true, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.First<int>(Return42, default(Func<int, bool>), CancellationToken.None));
         }
 

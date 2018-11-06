@@ -15,8 +15,8 @@ namespace Tests
         [Fact]
         public void Select_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default(IAsyncEnumerable<int>), x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default(IAsyncEnumerable<int>), (x, i) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default, x => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default, (x, i) => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(Return42, default(Func<int, int>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(Return42, default(Func<int, int, int>)));
         }

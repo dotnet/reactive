@@ -15,17 +15,17 @@ namespace Tests
         [Fact]
         public void SelectMany_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(default(IAsyncEnumerable<int>), default(Func<int, IAsyncEnumerable<int>>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(default(IAsyncEnumerable<int>), default(Func<int, int, IAsyncEnumerable<int>>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(default, default(Func<int, IAsyncEnumerable<int>>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(default, default(Func<int, int, IAsyncEnumerable<int>>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(Return42, default(Func<int, IAsyncEnumerable<int>>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(Return42, default(Func<int, int, IAsyncEnumerable<int>>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(default(IAsyncEnumerable<int>), default(Func<int, IAsyncEnumerable<int>>), (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(default(IAsyncEnumerable<int>), default(Func<int, int, IAsyncEnumerable<int>>), (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(default, default(Func<int, IAsyncEnumerable<int>>), (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(default, default(Func<int, int, IAsyncEnumerable<int>>), (x, y) => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(Return42, default(Func<int, IAsyncEnumerable<int>>), (x, y) => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(Return42, default(Func<int, int, IAsyncEnumerable<int>>), (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(Return42, x => default(IAsyncEnumerable<int>), default(Func<int, int, int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(Return42, (x, i) => default(IAsyncEnumerable<int>), default(Func<int, int, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(Return42, x => default, default(Func<int, int, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(Return42, (x, i) => default, default(Func<int, int, int>)));
         }
 
         [Fact]

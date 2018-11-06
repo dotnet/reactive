@@ -15,7 +15,7 @@ namespace Tests
         [Fact]
         public void Take_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Take<int>(default(IAsyncEnumerable<int>), 5));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Take<int>(default, 5));
         }
 
         [Fact]

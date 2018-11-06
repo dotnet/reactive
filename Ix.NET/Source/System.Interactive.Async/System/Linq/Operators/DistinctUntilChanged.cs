@@ -117,7 +117,7 @@ namespace System.Linq
                 {
                     await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
-                    currentValue = default(TSource);
+                    currentValue = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -188,7 +188,7 @@ namespace System.Linq
                 {
                     await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
-                    currentKeyValue = default(TKey);
+                    currentKeyValue = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -259,7 +259,7 @@ namespace System.Linq
                 {
                     await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
-                    currentKeyValue = default(TKey);
+                    currentKeyValue = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);

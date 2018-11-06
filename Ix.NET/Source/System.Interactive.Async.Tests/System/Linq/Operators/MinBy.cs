@@ -28,7 +28,7 @@ namespace Tests
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinBy(default(IAsyncEnumerable<int>), x => x, Comparer<int>.Default, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinBy(Return42, default(Func<int, int>), Comparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinBy(Return42, x => x, default(IComparer<int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinBy(Return42, x => x, default, CancellationToken.None));
         }
 
         [Fact]

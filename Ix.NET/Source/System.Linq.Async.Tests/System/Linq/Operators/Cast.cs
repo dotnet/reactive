@@ -14,7 +14,7 @@ namespace Tests
         [Fact]
         public void Cast_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Cast<int>(default(IAsyncEnumerable<object>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Cast<int>(default));
         }
 
         [Fact]

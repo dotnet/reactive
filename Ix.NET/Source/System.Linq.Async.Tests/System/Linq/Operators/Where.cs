@@ -15,8 +15,8 @@ namespace Tests
         [Fact]
         public void Where_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(default(IAsyncEnumerable<int>), x => true));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(default(IAsyncEnumerable<int>), (x, i) => true));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(default, x => true));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(default, (x, i) => true));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(Return42, default(Func<int, bool>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(Return42, default(Func<int, int, bool>)));
         }
