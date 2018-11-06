@@ -93,21 +93,21 @@ namespace System.Linq
 
         private sealed class AppendPrepend1AsyncIterator<TSource> : AppendPrependAsyncIterator<TSource>
         {
-            private readonly TSource item;
-            private readonly bool appending;
+            private readonly TSource _item;
+            private readonly bool _appending;
 
-            bool hasEnumerator;
+            bool _hasEnumerator;
 
             public AppendPrepend1AsyncIterator(IAsyncEnumerable<TSource> source, TSource item, bool appending)
                 : base(source)
             {
-                this.item = item;
-                this.appending = appending;
+                _item = item;
+                _appending = appending;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new AppendPrepend1AsyncIterator<TSource>(source, item, appending);
+                return new AppendPrepend1AsyncIterator<TSource>(source, _item, _appending);
             }
 
             protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
@@ -115,21 +115,21 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        hasEnumerator = false;
+                        _hasEnumerator = false;
                         state = AsyncIteratorState.Iterating;
-                        if (!appending)
+                        if (!_appending)
                         {
-                            current = item;
+                            current = _item;
                             return true;
                         }
 
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (!hasEnumerator)
+                        if (!_hasEnumerator)
                         {
                             GetSourceEnumerator(cancellationToken);
-                            hasEnumerator = true;
+                            _hasEnumerator = true;
                         }
 
                         if (enumerator != null)
@@ -140,9 +140,9 @@ namespace System.Linq
                                 return true;
                             }
 
-                            if (appending)
+                            if (_appending)
                             {
-                                current = item;
+                                current = _item;
                                 return true;
                             }
                         }
@@ -156,25 +156,25 @@ namespace System.Linq
 
             public override AppendPrependAsyncIterator<TSource> Append(TSource element)
             {
-                if (appending)
+                if (_appending)
                 {
-                    return new AppendPrependNAsyncIterator<TSource>(source, null, new SingleLinkedNode<TSource>(item).Add(element), prependCount: 0, appendCount: 2);
+                    return new AppendPrependNAsyncIterator<TSource>(source, null, new SingleLinkedNode<TSource>(_item).Add(element), prependCount: 0, appendCount: 2);
                 }
                 else
                 {
-                    return new AppendPrependNAsyncIterator<TSource>(source, new SingleLinkedNode<TSource>(item), new SingleLinkedNode<TSource>(element), prependCount: 1, appendCount: 1);
+                    return new AppendPrependNAsyncIterator<TSource>(source, new SingleLinkedNode<TSource>(_item), new SingleLinkedNode<TSource>(element), prependCount: 1, appendCount: 1);
                 }
             }
 
             public override AppendPrependAsyncIterator<TSource> Prepend(TSource element)
             {
-                if (appending)
+                if (_appending)
                 {
-                    return new AppendPrependNAsyncIterator<TSource>(source, new SingleLinkedNode<TSource>(element), new SingleLinkedNode<TSource>(item), prependCount: 1, appendCount: 1);
+                    return new AppendPrependNAsyncIterator<TSource>(source, new SingleLinkedNode<TSource>(element), new SingleLinkedNode<TSource>(_item), prependCount: 1, appendCount: 1);
                 }
                 else
                 {
-                    return new AppendPrependNAsyncIterator<TSource>(source, new SingleLinkedNode<TSource>(item).Add(element), null, prependCount: 2, appendCount: 0);
+                    return new AppendPrependNAsyncIterator<TSource>(source, new SingleLinkedNode<TSource>(_item).Add(element), null, prependCount: 2, appendCount: 0);
                 }
             }
 
@@ -188,13 +188,13 @@ namespace System.Linq
 
                 var array = new TSource[count];
                 int index;
-                if (appending)
+                if (_appending)
                 {
                     index = 0;
                 }
                 else
                 {
-                    array[0] = item;
+                    array[0] = _item;
                     index = 1;
                 }
 
@@ -220,9 +220,9 @@ namespace System.Linq
                     }
                 }
 
-                if (appending)
+                if (_appending)
                 {
-                    array[array.Length - 1] = item;
+                    array[array.Length - 1] = _item;
                 }
 
                 return array;
@@ -233,9 +233,9 @@ namespace System.Linq
                 var count = await GetCountAsync(onlyIfCheap: true, cancellationToken: cancellationToken).ConfigureAwait(false);
                 var list = count == -1 ? new List<TSource>() : new List<TSource>(count);
 
-                if (!appending)
+                if (!_appending)
                 {
-                    list.Add(item);
+                    list.Add(_item);
                 }
 
 
@@ -253,9 +253,9 @@ namespace System.Linq
                     await en.DisposeAsync().ConfigureAwait(false);
                 }
 
-                if (appending)
+                if (_appending)
                 {
-                    list.Add(item);
+                    list.Add(_item);
                 }
 
                 return list;
@@ -275,11 +275,13 @@ namespace System.Linq
 
         private sealed class AppendPrependNAsyncIterator<TSource> : AppendPrependAsyncIterator<TSource>
         {
-            private readonly SingleLinkedNode<TSource> prepended;
-            private readonly SingleLinkedNode<TSource> appended;
-            private readonly int prependCount;
-            private readonly int appendCount;
-            private SingleLinkedNode<TSource> node;
+            private readonly SingleLinkedNode<TSource> _prepended;
+            private readonly SingleLinkedNode<TSource> _appended;
+            private readonly int _prependCount;
+            private readonly int _appendCount;
+            private SingleLinkedNode<TSource> _node;
+            private int _mode;
+            private IEnumerator<TSource> _appendedEnumerator;
 
             public AppendPrependNAsyncIterator(IAsyncEnumerable<TSource> source, SingleLinkedNode<TSource> prepended, SingleLinkedNode<TSource> appended, int prependCount, int appendCount)
                 : base(source)
@@ -290,26 +292,23 @@ namespace System.Linq
                 Debug.Assert((prepended?.GetCount() ?? 0) == prependCount);
                 Debug.Assert((appended?.GetCount() ?? 0) == appendCount);
 
-                this.prepended = prepended;
-                this.appended = appended;
-                this.prependCount = prependCount;
-                this.appendCount = appendCount;
+                this._prepended = prepended;
+                this._appended = appended;
+                this._prependCount = prependCount;
+                this._appendCount = appendCount;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new AppendPrependNAsyncIterator<TSource>(source, prepended, appended, prependCount, appendCount);
+                return new AppendPrependNAsyncIterator<TSource>(source, _prepended, _appended, _prependCount, _appendCount);
             }
-
-            int mode;
-            IEnumerator<TSource> appendedEnumerator;
 
             public override async ValueTask DisposeAsync()
             {
-                if (appendedEnumerator != null)
+                if (_appendedEnumerator != null)
                 {
-                    appendedEnumerator.Dispose();
-                    appendedEnumerator = null;
+                    _appendedEnumerator.Dispose();
+                    _appendedEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -320,28 +319,28 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        mode = 1;
+                        _mode = 1;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case 1:
-                                node = prepended;
-                                mode = 2;
+                                _node = _prepended;
+                                _mode = 2;
                                 goto case 2;
 
                             case 2:
-                                if (node != null)
+                                if (_node != null)
                                 {
-                                    current = node.Item;
-                                    node = node.Linked;
+                                    current = _node.Item;
+                                    _node = _node.Linked;
                                     return true;
                                 }
 
                                 GetSourceEnumerator(cancellationToken);
-                                mode = 3;
+                                _mode = 3;
                                 goto case 3;
 
                             case 3:
@@ -350,10 +349,10 @@ namespace System.Linq
                                     return true;
                                 }
 
-                                if (appended != null)
+                                if (_appended != null)
                                 {
-                                    appendedEnumerator = appended.GetEnumerator(appendCount);
-                                    mode = 4;
+                                    _appendedEnumerator = _appended.GetEnumerator(_appendCount);
+                                    _mode = 4;
                                     goto case 4;
                                 }
 
@@ -361,9 +360,9 @@ namespace System.Linq
 
 
                             case 4:
-                                if (appendedEnumerator.MoveNext())
+                                if (_appendedEnumerator.MoveNext())
                                 {
-                                    current = appendedEnumerator.Current;
+                                    current = _appendedEnumerator.Current;
                                     return true;
                                 }
                                 break;
@@ -378,14 +377,14 @@ namespace System.Linq
 
             public override AppendPrependAsyncIterator<TSource> Append(TSource item)
             {
-                var res = appended != null ? appended.Add(item) : new SingleLinkedNode<TSource>(item);
-                return new AppendPrependNAsyncIterator<TSource>(source, prepended, res, prependCount, appendCount + 1);
+                var res = _appended != null ? _appended.Add(item) : new SingleLinkedNode<TSource>(item);
+                return new AppendPrependNAsyncIterator<TSource>(source, _prepended, res, _prependCount, _appendCount + 1);
             }
 
             public override AppendPrependAsyncIterator<TSource> Prepend(TSource item)
             {
-                var res = prepended != null ? prepended.Add(item) : new SingleLinkedNode<TSource>(item);
-                return new AppendPrependNAsyncIterator<TSource>(source, res, appended, prependCount + 1, appendCount);
+                var res = _prepended != null ? _prepended.Add(item) : new SingleLinkedNode<TSource>(item);
+                return new AppendPrependNAsyncIterator<TSource>(source, res, _appended, _prependCount + 1, _appendCount);
             }
 
             public override async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
@@ -398,7 +397,7 @@ namespace System.Linq
 
                 var array = new TSource[count];
                 var index = 0;
-                for (var n = prepended; n != null; n = n.Linked)
+                for (var n = _prepended; n != null; n = n.Linked)
                 {
                     array[index] = n.Item;
                     ++index;
@@ -427,7 +426,7 @@ namespace System.Linq
                 }
 
                 index = array.Length;
-                for (var n = appended; n != null; n = n.Linked)
+                for (var n = _appended; n != null; n = n.Linked)
                 {
                     --index;
                     array[index] = n.Item;
@@ -440,7 +439,7 @@ namespace System.Linq
             {
                 var count = await GetCountAsync(onlyIfCheap: true, cancellationToken: cancellationToken).ConfigureAwait(false);
                 var list = count == -1 ? new List<TSource>() : new List<TSource>(count);
-                for (var n = prepended; n != null; n = n.Linked)
+                for (var n = _prepended; n != null; n = n.Linked)
                 {
                     list.Add(n.Item);
                 }
@@ -459,9 +458,9 @@ namespace System.Linq
                     await en.DisposeAsync().ConfigureAwait(false);
                 }
 
-                if (appended != null)
+                if (_appended != null)
                 {
-                    using (var en2 = appended.GetEnumerator(appendCount))
+                    using (var en2 = _appended.GetEnumerator(_appendCount))
                     {
                         while (en2.MoveNext())
                         {
@@ -478,10 +477,10 @@ namespace System.Linq
                 if (source is IAsyncIListProvider<TSource> listProv)
                 {
                     var count = await listProv.GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
-                    return count == -1 ? -1 : count + appendCount + prependCount;
+                    return count == -1 ? -1 : count + _appendCount + _prependCount;
                 }
 
-                return !onlyIfCheap || source is ICollection<TSource> ? await source.Count(cancellationToken).ConfigureAwait(false) + appendCount + prependCount : -1;
+                return !onlyIfCheap || source is ICollection<TSource> ? await source.Count(cancellationToken).ConfigureAwait(false) + _appendCount + _prependCount : -1;
             }
         }
     }

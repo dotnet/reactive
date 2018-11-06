@@ -98,7 +98,7 @@ namespace Tests
 
             var result = new[] { 1 }.ToAsyncEnumerable().SelectMany(i => disposeCounter).Select(i => i).ToList().Result;
 
-            Assert.Equal(0, result.Count);
+            Assert.Empty(result);
             Assert.Equal(1, disposeCounter.DisposeCount);
         }
 
@@ -109,7 +109,7 @@ namespace Tests
 
             var result = AsyncEnumerable.Range(0, 10).SelectMany(i => disposes[i]).Select(i => i).ToList().Result;
 
-            Assert.Equal(0, result.Count);
+            Assert.Empty(result);
             Assert.True(disposes.All(d => d.DisposeCount == 1));
         }
 

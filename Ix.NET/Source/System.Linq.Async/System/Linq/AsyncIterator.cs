@@ -10,9 +10,9 @@ namespace System.Linq
 {
     internal abstract class AsyncIterator<TSource> : IAsyncEnumerable<TSource>, IAsyncEnumerator<TSource>
     {
-        private readonly int threadId;
+        private readonly int _threadId;
 
-        private bool currentIsInvalid = true;
+        private bool _currentIsInvalid = true;
 
         internal TSource current;
         internal AsyncIteratorState state = AsyncIteratorState.New;
@@ -20,12 +20,12 @@ namespace System.Linq
 
         protected AsyncIterator()
         {
-            threadId = Environment.CurrentManagedThreadId;
+            _threadId = Environment.CurrentManagedThreadId;
         }
 
         public IAsyncEnumerator<TSource> GetAsyncEnumerator(CancellationToken cancellationToken)
         {
-            var enumerator = state == AsyncIteratorState.New && threadId == Environment.CurrentManagedThreadId
+            var enumerator = state == AsyncIteratorState.New && _threadId == Environment.CurrentManagedThreadId
                 ? this
                 : Clone();
 
@@ -57,7 +57,7 @@ namespace System.Linq
         {
             get
             {
-                if (currentIsInvalid)
+                if (_currentIsInvalid)
                     throw new InvalidOperationException("Enumerator is in an invalid state");
 
                 return current;
@@ -79,13 +79,13 @@ namespace System.Linq
             {
                 var result = await MoveNextCore(cancellationToken).ConfigureAwait(false);
 
-                currentIsInvalid = !result; // if move next is false, invalid otherwise valid
+                _currentIsInvalid = !result; // if move next is false, invalid otherwise valid
 
                 return result;
             }
             catch
             {
-                currentIsInvalid = true;
+                _currentIsInvalid = true;
                 await DisposeAsync().ConfigureAwait(false);
                 throw;
             }

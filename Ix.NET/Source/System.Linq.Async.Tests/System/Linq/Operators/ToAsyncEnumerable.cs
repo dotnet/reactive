@@ -262,7 +262,7 @@ namespace Tests
 
         private sealed class MyObservable<T> : IObservable<T>
         {
-            private Func<IObserver<T>, IDisposable> _subscribe;
+            private readonly Func<IObserver<T>, IDisposable> _subscribe;
 
             public MyObservable(Func<IObserver<T>, IDisposable> subscribe)
             {
@@ -277,7 +277,7 @@ namespace Tests
 
         private sealed class MyDisposable : IDisposable
         {
-            private Action _dispose;
+            private readonly Action _dispose;
 
             public MyDisposable(Action dispose)
             {

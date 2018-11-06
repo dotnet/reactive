@@ -81,14 +81,14 @@ namespace System.Linq
 
         internal sealed class JoinAsyncIterator<TOuter, TInner, TKey, TResult> : AsyncIterator<TResult>
         {
-            private readonly IAsyncEnumerable<TOuter> outer;
-            private readonly IAsyncEnumerable<TInner> inner;
-            private readonly Func<TOuter, TKey> outerKeySelector;
-            private readonly Func<TInner, TKey> innerKeySelector;
-            private readonly Func<TOuter, TInner, TResult> resultSelector;
-            private readonly IEqualityComparer<TKey> comparer;
+            private readonly IAsyncEnumerable<TOuter> _outer;
+            private readonly IAsyncEnumerable<TInner> _inner;
+            private readonly Func<TOuter, TKey> _outerKeySelector;
+            private readonly Func<TInner, TKey> _innerKeySelector;
+            private readonly Func<TOuter, TInner, TResult> _resultSelector;
+            private readonly IEqualityComparer<TKey> _comparer;
 
-            private IAsyncEnumerator<TOuter> outerEnumerator;
+            private IAsyncEnumerator<TOuter> _outerEnumerator;
 
             public JoinAsyncIterator(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey> comparer)
             {
@@ -99,37 +99,37 @@ namespace System.Linq
                 Debug.Assert(resultSelector != null);
                 Debug.Assert(comparer != null);
 
-                this.outer = outer;
-                this.inner = inner;
-                this.outerKeySelector = outerKeySelector;
-                this.innerKeySelector = innerKeySelector;
-                this.resultSelector = resultSelector;
-                this.comparer = comparer;
+                _outer = outer;
+                _inner = inner;
+                _outerKeySelector = outerKeySelector;
+                _innerKeySelector = innerKeySelector;
+                _resultSelector = resultSelector;
+                _comparer = comparer;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
+                return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(_outer, _inner, _outerKeySelector, _innerKeySelector, _resultSelector, _comparer);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (outerEnumerator != null)
+                if (_outerEnumerator != null)
                 {
-                    await outerEnumerator.DisposeAsync().ConfigureAwait(false);
-                    outerEnumerator = null;
+                    await _outerEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _outerEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
             // State machine vars
-            private Internal.Lookup<TKey, TInner> lookup;
-            private int count;
-            private TInner[] elements;
-            private int index;
-            private TOuter item;
-            private int mode;
+            private Internal.Lookup<TKey, TInner> _lookup;
+            private int _count;
+            private TInner[] _elements;
+            private int _index;
+            private TOuter _item;
+            private int _mode;
 
             private const int State_If = 1;
             private const int State_DoLoop = 2;
@@ -141,22 +141,22 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        outerEnumerator = outer.GetAsyncEnumerator(cancellationToken);
-                        mode = State_If;
+                        _outerEnumerator = _outer.GetAsyncEnumerator(cancellationToken);
+                        _mode = State_If;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case State_If:
-                                if (await outerEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _outerEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+                                    _lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
-                                    if (lookup.Count != 0)
+                                    if (_lookup.Count != 0)
                                     {
-                                        mode = State_DoLoop;
+                                        _mode = State_DoLoop;
                                         goto case State_DoLoop;
                                     }
                                 }
@@ -164,33 +164,33 @@ namespace System.Linq
                                 break;
 
                             case State_DoLoop:
-                                item = outerEnumerator.Current;
-                                var g = lookup.GetGrouping(outerKeySelector(item), create: false);
+                                _item = _outerEnumerator.Current;
+                                var g = _lookup.GetGrouping(_outerKeySelector(_item), create: false);
                                 if (g != null)
                                 {
-                                    count = g._count;
-                                    elements = g._elements;
-                                    index = 0;
-                                    mode = State_For;
+                                    _count = g._count;
+                                    _elements = g._elements;
+                                    _index = 0;
+                                    _mode = State_For;
                                     goto case State_For;
                                 }
 
                                 // advance to while
-                                mode = State_While;
+                                _mode = State_While;
                                 goto case State_While;
 
                             case State_For:
-                                current = resultSelector(item, elements[index]);
-                                index++;
-                                if (index == count)
+                                current = _resultSelector(_item, _elements[_index]);
+                                _index++;
+                                if (_index == _count)
                                 {
-                                    mode = State_While;
+                                    _mode = State_While;
                                 }
 
                                 return true;
 
                             case State_While:
-                                var hasNext = await outerEnumerator.MoveNextAsync().ConfigureAwait(false);
+                                var hasNext = await _outerEnumerator.MoveNextAsync().ConfigureAwait(false);
                                 if (hasNext)
                                 {
                                     goto case State_DoLoop;
@@ -209,14 +209,14 @@ namespace System.Linq
 
         internal sealed class JoinAsyncIteratorWithTask<TOuter, TInner, TKey, TResult> : AsyncIterator<TResult>
         {
-            private readonly IAsyncEnumerable<TOuter> outer;
-            private readonly IAsyncEnumerable<TInner> inner;
-            private readonly Func<TOuter, Task<TKey>> outerKeySelector;
-            private readonly Func<TInner, Task<TKey>> innerKeySelector;
-            private readonly Func<TOuter, TInner, Task<TResult>> resultSelector;
-            private readonly IEqualityComparer<TKey> comparer;
+            private readonly IAsyncEnumerable<TOuter> _outer;
+            private readonly IAsyncEnumerable<TInner> _inner;
+            private readonly Func<TOuter, Task<TKey>> _outerKeySelector;
+            private readonly Func<TInner, Task<TKey>> _innerKeySelector;
+            private readonly Func<TOuter, TInner, Task<TResult>> _resultSelector;
+            private readonly IEqualityComparer<TKey> _comparer;
 
-            private IAsyncEnumerator<TOuter> outerEnumerator;
+            private IAsyncEnumerator<TOuter> _outerEnumerator;
 
             public JoinAsyncIteratorWithTask(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, Task<TKey>> outerKeySelector, Func<TInner, Task<TKey>> innerKeySelector, Func<TOuter, TInner, Task<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
             {
@@ -227,37 +227,37 @@ namespace System.Linq
                 Debug.Assert(resultSelector != null);
                 Debug.Assert(comparer != null);
 
-                this.outer = outer;
-                this.inner = inner;
-                this.outerKeySelector = outerKeySelector;
-                this.innerKeySelector = innerKeySelector;
-                this.resultSelector = resultSelector;
-                this.comparer = comparer;
+                _outer = outer;
+                _inner = inner;
+                _outerKeySelector = outerKeySelector;
+                _innerKeySelector = innerKeySelector;
+                _resultSelector = resultSelector;
+                _comparer = comparer;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new JoinAsyncIteratorWithTask<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
+                return new JoinAsyncIteratorWithTask<TOuter, TInner, TKey, TResult>(_outer, _inner, _outerKeySelector, _innerKeySelector, _resultSelector, _comparer);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (outerEnumerator != null)
+                if (_outerEnumerator != null)
                 {
-                    await outerEnumerator.DisposeAsync().ConfigureAwait(false);
-                    outerEnumerator = null;
+                    await _outerEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _outerEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
             // State machine vars
-            private Internal.LookupWithTask<TKey, TInner> lookup;
-            private int count;
-            private TInner[] elements;
-            private int index;
-            private TOuter item;
-            private int mode;
+            private Internal.LookupWithTask<TKey, TInner> _lookup;
+            private int _count;
+            private TInner[] _elements;
+            private int _index;
+            private TOuter _item;
+            private int _mode;
 
             private const int State_If = 1;
             private const int State_DoLoop = 2;
@@ -269,22 +269,22 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        outerEnumerator = outer.GetAsyncEnumerator(cancellationToken);
-                        mode = State_If;
+                        _outerEnumerator = _outer.GetAsyncEnumerator(cancellationToken);
+                        _mode = State_If;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case State_If:
-                                if (await outerEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _outerEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+                                    _lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
-                                    if (lookup.Count != 0)
+                                    if (_lookup.Count != 0)
                                     {
-                                        mode = State_DoLoop;
+                                        _mode = State_DoLoop;
                                         goto case State_DoLoop;
                                     }
                                 }
@@ -292,33 +292,33 @@ namespace System.Linq
                                 break;
 
                             case State_DoLoop:
-                                item = outerEnumerator.Current;
-                                var g = lookup.GetGrouping(await outerKeySelector(item).ConfigureAwait(false), create: false);
+                                _item = _outerEnumerator.Current;
+                                var g = _lookup.GetGrouping(await _outerKeySelector(_item).ConfigureAwait(false), create: false);
                                 if (g != null)
                                 {
-                                    count = g._count;
-                                    elements = g._elements;
-                                    index = 0;
-                                    mode = State_For;
+                                    _count = g._count;
+                                    _elements = g._elements;
+                                    _index = 0;
+                                    _mode = State_For;
                                     goto case State_For;
                                 }
 
                                 // advance to while
-                                mode = State_While;
+                                _mode = State_While;
                                 goto case State_While;
 
                             case State_For:
-                                current = await resultSelector(item, elements[index]).ConfigureAwait(false);
-                                index++;
-                                if (index == count)
+                                current = await _resultSelector(_item, _elements[_index]).ConfigureAwait(false);
+                                _index++;
+                                if (_index == _count)
                                 {
-                                    mode = State_While;
+                                    _mode = State_While;
                                 }
 
                                 return true;
 
                             case State_While:
-                                var hasNext = await outerEnumerator.MoveNextAsync().ConfigureAwait(false);
+                                var hasNext = await _outerEnumerator.MoveNextAsync().ConfigureAwait(false);
                                 if (hasNext)
                                 {
                                     goto case State_DoLoop;

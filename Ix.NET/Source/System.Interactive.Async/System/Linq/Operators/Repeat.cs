@@ -36,57 +36,57 @@ namespace System.Linq
 
         private sealed class RepeatElementAsyncIterator<TResult> : AsyncIterator<TResult>
         {
-            private readonly TResult element;
+            private readonly TResult _element;
 
             public RepeatElementAsyncIterator(TResult element)
             {
-                this.element = element;
+                _element = element;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new RepeatElementAsyncIterator<TResult>(element);
+                return new RepeatElementAsyncIterator<TResult>(_element);
             }
 
             protected override ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                current = element;
+                current = _element;
                 return TaskExt.True;
             }
         }
 
         private sealed class RepeatSequenceAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly int count;
-            private readonly bool isInfinite;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly int _count;
+            private readonly bool _isInfinite;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private int currentCount;
-            private IAsyncEnumerator<TSource> enumerator;
+            private int _currentCount;
+            private IAsyncEnumerator<TSource> _enumerator;
 
             public RepeatSequenceAsyncIterator(IAsyncEnumerable<TSource> source, int count)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.count = count;
-                isInfinite = count < 0;
-                currentCount = count;
+                _source = source;
+                _count = count;
+                _isInfinite = count < 0;
+                _currentCount = count;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new RepeatSequenceAsyncIterator<TSource>(source, count);
+                return new RepeatSequenceAsyncIterator<TSource>(_source, _count);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -98,24 +98,24 @@ namespace System.Linq
                 {
                     case AsyncIteratorState.Allocated:
 
-                        if (enumerator != null)
+                        if (_enumerator != null)
                         {
-                            await enumerator.DisposeAsync().ConfigureAwait(false);
-                            enumerator = null;
+                            await _enumerator.DisposeAsync().ConfigureAwait(false);
+                            _enumerator = null;
                         }
 
-                        if (!isInfinite && currentCount-- == 0)
+                        if (!_isInfinite && _currentCount-- == 0)
                             break;
 
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
                         state = AsyncIteratorState.Iterating;
 
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 

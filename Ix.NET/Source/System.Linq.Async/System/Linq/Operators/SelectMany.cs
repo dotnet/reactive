@@ -104,39 +104,39 @@ namespace System.Linq
             private const int State_Source = 1;
             private const int State_Result = 2;
 
-            private readonly Func<TSource, IAsyncEnumerable<TResult>> selector;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, IAsyncEnumerable<TResult>> _selector;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private int mode;
-            private IAsyncEnumerator<TResult> resultEnumerator;
-            private IAsyncEnumerator<TSource> sourceEnumerator;
+            private int _mode;
+            private IAsyncEnumerator<TResult> _resultEnumerator;
+            private IAsyncEnumerator<TSource> _sourceEnumerator;
 
             public SelectManyAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TResult>> selector)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(selector != null);
 
-                this.source = source;
-                this.selector = selector;
+                _source = source;
+                _selector = selector;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new SelectManyAsyncIterator<TSource, TResult>(source, selector);
+                return new SelectManyAsyncIterator<TSource, TResult>(_source, _selector);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (sourceEnumerator != null)
+                if (_sourceEnumerator != null)
                 {
-                    await sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    sourceEnumerator = null;
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
-                if (resultEnumerator != null)
+                if (_resultEnumerator != null)
                 {
-                    await resultEnumerator.DisposeAsync().ConfigureAwait(false);
-                    resultEnumerator = null;
+                    await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _resultEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -147,38 +147,38 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourceEnumerator = source.GetAsyncEnumerator(cancellationToken);
-                        mode = State_Source;
+                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _mode = State_Source;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    if (resultEnumerator != null)
+                                    if (_resultEnumerator != null)
                                     {
-                                        await resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                                        await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    var inner = selector(sourceEnumerator.Current);
-                                    resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    var inner = _selector(_sourceEnumerator.Current);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
 
-                                    mode = State_Result;
+                                    _mode = State_Result;
                                     goto case State_Result;
                                 }
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = resultEnumerator.Current;
+                                    current = _resultEnumerator.Current;
                                     return true;
                                 }
 
-                                mode = State_Source;
+                                _mode = State_Source;
                                 goto case State_Source; // loop
                         }
 
@@ -195,39 +195,39 @@ namespace System.Linq
             private const int State_Source = 1;
             private const int State_Result = 2;
 
-            private readonly Func<TSource, Task<IAsyncEnumerable<TResult>>> selector;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, Task<IAsyncEnumerable<TResult>>> _selector;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private int mode;
-            private IAsyncEnumerator<TResult> resultEnumerator;
-            private IAsyncEnumerator<TSource> sourceEnumerator;
+            private int _mode;
+            private IAsyncEnumerator<TResult> _resultEnumerator;
+            private IAsyncEnumerator<TSource> _sourceEnumerator;
 
             public SelectManyAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<IAsyncEnumerable<TResult>>> selector)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(selector != null);
 
-                this.source = source;
-                this.selector = selector;
+                _source = source;
+                _selector = selector;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new SelectManyAsyncIteratorWithTask<TSource, TResult>(source, selector);
+                return new SelectManyAsyncIteratorWithTask<TSource, TResult>(_source, _selector);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (sourceEnumerator != null)
+                if (_sourceEnumerator != null)
                 {
-                    await sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    sourceEnumerator = null;
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
-                if (resultEnumerator != null)
+                if (_resultEnumerator != null)
                 {
-                    await resultEnumerator.DisposeAsync().ConfigureAwait(false);
-                    resultEnumerator = null;
+                    await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _resultEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -238,38 +238,38 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourceEnumerator = source.GetAsyncEnumerator(cancellationToken);
-                        mode = State_Source;
+                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _mode = State_Source;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    if (resultEnumerator != null)
+                                    if (_resultEnumerator != null)
                                     {
-                                        await resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                                        await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    var inner = await selector(sourceEnumerator.Current).ConfigureAwait(false);
-                                    resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    var inner = await _selector(_sourceEnumerator.Current).ConfigureAwait(false);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
 
-                                    mode = State_Result;
+                                    _mode = State_Result;
                                     goto case State_Result;
                                 }
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = resultEnumerator.Current;
+                                    current = _resultEnumerator.Current;
                                     return true;
                                 }
 
-                                mode = State_Source;
+                                _mode = State_Source;
                                 goto case State_Source; // loop
                         }
 
@@ -286,14 +286,14 @@ namespace System.Linq
             private const int State_Source = 1;
             private const int State_Result = 2;
 
-            private readonly Func<TSource, IAsyncEnumerable<TCollection>> collectionSelector;
-            private readonly Func<TSource, TCollection, TResult> resultSelector;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, IAsyncEnumerable<TCollection>> _collectionSelector;
+            private readonly Func<TSource, TCollection, TResult> _resultSelector;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private TSource currentSource;
-            private int mode;
-            private IAsyncEnumerator<TCollection> resultEnumerator;
-            private IAsyncEnumerator<TSource> sourceEnumerator;
+            private TSource _currentSource;
+            private int _mode;
+            private IAsyncEnumerator<TCollection> _resultEnumerator;
+            private IAsyncEnumerator<TSource> _sourceEnumerator;
 
             public SelectManyAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
             {
@@ -301,31 +301,31 @@ namespace System.Linq
                 Debug.Assert(collectionSelector != null);
                 Debug.Assert(resultSelector != null);
 
-                this.source = source;
-                this.collectionSelector = collectionSelector;
-                this.resultSelector = resultSelector;
+                _source = source;
+                _collectionSelector = collectionSelector;
+                _resultSelector = resultSelector;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new SelectManyAsyncIterator<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+                return new SelectManyAsyncIterator<TSource, TCollection, TResult>(_source, _collectionSelector, _resultSelector);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (sourceEnumerator != null)
+                if (_sourceEnumerator != null)
                 {
-                    await sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    sourceEnumerator = null;
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
-                if (resultEnumerator != null)
+                if (_resultEnumerator != null)
                 {
-                    await resultEnumerator.DisposeAsync().ConfigureAwait(false);
-                    resultEnumerator = null;
+                    await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _resultEnumerator = null;
                 }
 
-                currentSource = default(TSource);
+                _currentSource = default(TSource);
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
@@ -335,39 +335,39 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourceEnumerator = source.GetAsyncEnumerator(cancellationToken);
-                        mode = State_Source;
+                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _mode = State_Source;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    if (resultEnumerator != null)
+                                    if (_resultEnumerator != null)
                                     {
-                                        await resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                                        await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    currentSource = sourceEnumerator.Current;
-                                    var inner = collectionSelector(currentSource);
-                                    resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    _currentSource = _sourceEnumerator.Current;
+                                    var inner = _collectionSelector(_currentSource);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
 
-                                    mode = State_Result;
+                                    _mode = State_Result;
                                     goto case State_Result;
                                 }
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = resultSelector(currentSource, resultEnumerator.Current);
+                                    current = _resultSelector(_currentSource, _resultEnumerator.Current);
                                     return true;
                                 }
 
-                                mode = State_Source;
+                                _mode = State_Source;
                                 goto case State_Source; // loop
                         }
 
@@ -384,14 +384,14 @@ namespace System.Linq
             private const int State_Source = 1;
             private const int State_Result = 2;
 
-            private readonly Func<TSource, Task<IAsyncEnumerable<TCollection>>> collectionSelector;
-            private readonly Func<TSource, TCollection, Task<TResult>> resultSelector;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, Task<IAsyncEnumerable<TCollection>>> _collectionSelector;
+            private readonly Func<TSource, TCollection, Task<TResult>> _resultSelector;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private TSource currentSource;
-            private int mode;
-            private IAsyncEnumerator<TCollection> resultEnumerator;
-            private IAsyncEnumerator<TSource> sourceEnumerator;
+            private TSource _currentSource;
+            private int _mode;
+            private IAsyncEnumerator<TCollection> _resultEnumerator;
+            private IAsyncEnumerator<TSource> _sourceEnumerator;
 
             public SelectManyAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, Task<TResult>> resultSelector)
             {
@@ -399,31 +399,31 @@ namespace System.Linq
                 Debug.Assert(collectionSelector != null);
                 Debug.Assert(resultSelector != null);
 
-                this.source = source;
-                this.collectionSelector = collectionSelector;
-                this.resultSelector = resultSelector;
+                _source = source;
+                _collectionSelector = collectionSelector;
+                _resultSelector = resultSelector;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new SelectManyAsyncIteratorWithTask<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+                return new SelectManyAsyncIteratorWithTask<TSource, TCollection, TResult>(_source, _collectionSelector, _resultSelector);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (sourceEnumerator != null)
+                if (_sourceEnumerator != null)
                 {
-                    await sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    sourceEnumerator = null;
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
-                if (resultEnumerator != null)
+                if (_resultEnumerator != null)
                 {
-                    await resultEnumerator.DisposeAsync().ConfigureAwait(false);
-                    resultEnumerator = null;
+                    await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _resultEnumerator = null;
                 }
 
-                currentSource = default(TSource);
+                _currentSource = default(TSource);
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
@@ -433,39 +433,39 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourceEnumerator = source.GetAsyncEnumerator(cancellationToken);
-                        mode = State_Source;
+                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _mode = State_Source;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    if (resultEnumerator != null)
+                                    if (_resultEnumerator != null)
                                     {
-                                        await resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                                        await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    currentSource = sourceEnumerator.Current;
-                                    var inner = await collectionSelector(currentSource).ConfigureAwait(false);
-                                    resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    _currentSource = _sourceEnumerator.Current;
+                                    var inner = await _collectionSelector(_currentSource).ConfigureAwait(false);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
 
-                                    mode = State_Result;
+                                    _mode = State_Result;
                                     goto case State_Result;
                                 }
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = await resultSelector(currentSource, resultEnumerator.Current).ConfigureAwait(false);
+                                    current = await _resultSelector(_currentSource, _resultEnumerator.Current).ConfigureAwait(false);
                                     return true;
                                 }
 
-                                mode = State_Source;
+                                _mode = State_Source;
                                 goto case State_Source; // loop
                         }
 
@@ -482,15 +482,15 @@ namespace System.Linq
             private const int State_Source = 1;
             private const int State_Result = 2;
 
-            private readonly Func<TSource, int, IAsyncEnumerable<TCollection>> collectionSelector;
-            private readonly Func<TSource, TCollection, TResult> resultSelector;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, int, IAsyncEnumerable<TCollection>> _collectionSelector;
+            private readonly Func<TSource, TCollection, TResult> _resultSelector;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private TSource currentSource;
-            private int index;
-            private int mode;
-            private IAsyncEnumerator<TCollection> resultEnumerator;
-            private IAsyncEnumerator<TSource> sourceEnumerator;
+            private TSource _currentSource;
+            private int _index;
+            private int _mode;
+            private IAsyncEnumerator<TCollection> _resultEnumerator;
+            private IAsyncEnumerator<TSource> _sourceEnumerator;
 
             public SelectManyWithIndexAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, int, IAsyncEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
             {
@@ -498,31 +498,31 @@ namespace System.Linq
                 Debug.Assert(collectionSelector != null);
                 Debug.Assert(resultSelector != null);
 
-                this.source = source;
-                this.collectionSelector = collectionSelector;
-                this.resultSelector = resultSelector;
+                _source = source;
+                _collectionSelector = collectionSelector;
+                _resultSelector = resultSelector;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new SelectManyWithIndexAsyncIterator<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+                return new SelectManyWithIndexAsyncIterator<TSource, TCollection, TResult>(_source, _collectionSelector, _resultSelector);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (sourceEnumerator != null)
+                if (_sourceEnumerator != null)
                 {
-                    await sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    sourceEnumerator = null;
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
-                if (resultEnumerator != null)
+                if (_resultEnumerator != null)
                 {
-                    await resultEnumerator.DisposeAsync().ConfigureAwait(false);
-                    resultEnumerator = null;
+                    await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _resultEnumerator = null;
                 }
 
-                currentSource = default(TSource);
+                _currentSource = default(TSource);
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
@@ -532,46 +532,46 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourceEnumerator = source.GetAsyncEnumerator(cancellationToken);
-                        index = -1;
-                        mode = State_Source;
+                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _index = -1;
+                        _mode = State_Source;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    if (resultEnumerator != null)
+                                    if (_resultEnumerator != null)
                                     {
-                                        await resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                                        await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    currentSource = sourceEnumerator.Current;
+                                    _currentSource = _sourceEnumerator.Current;
 
                                     checked
                                     {
-                                        index++;
+                                        _index++;
                                     }
 
-                                    var inner = collectionSelector(currentSource, index);
-                                    resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    var inner = _collectionSelector(_currentSource, _index);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
 
-                                    mode = State_Result;
+                                    _mode = State_Result;
                                     goto case State_Result;
                                 }
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = resultSelector(currentSource, resultEnumerator.Current);
+                                    current = _resultSelector(_currentSource, _resultEnumerator.Current);
                                     return true;
                                 }
 
-                                mode = State_Source;
+                                _mode = State_Source;
                                 goto case State_Source; // loop
                         }
 
@@ -588,15 +588,15 @@ namespace System.Linq
             private const int State_Source = 1;
             private const int State_Result = 2;
 
-            private readonly Func<TSource, int, Task<IAsyncEnumerable<TCollection>>> collectionSelector;
-            private readonly Func<TSource, TCollection, Task<TResult>> resultSelector;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, int, Task<IAsyncEnumerable<TCollection>>> _collectionSelector;
+            private readonly Func<TSource, TCollection, Task<TResult>> _resultSelector;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private TSource currentSource;
-            private int index;
-            private int mode;
-            private IAsyncEnumerator<TCollection> resultEnumerator;
-            private IAsyncEnumerator<TSource> sourceEnumerator;
+            private TSource _currentSource;
+            private int _index;
+            private int _mode;
+            private IAsyncEnumerator<TCollection> _resultEnumerator;
+            private IAsyncEnumerator<TSource> _sourceEnumerator;
 
             public SelectManyWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, Task<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, Task<TResult>> resultSelector)
             {
@@ -604,31 +604,31 @@ namespace System.Linq
                 Debug.Assert(collectionSelector != null);
                 Debug.Assert(resultSelector != null);
 
-                this.source = source;
-                this.collectionSelector = collectionSelector;
-                this.resultSelector = resultSelector;
+                _source = source;
+                _collectionSelector = collectionSelector;
+                _resultSelector = resultSelector;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new SelectManyWithIndexAsyncIteratorWithTask<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+                return new SelectManyWithIndexAsyncIteratorWithTask<TSource, TCollection, TResult>(_source, _collectionSelector, _resultSelector);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (sourceEnumerator != null)
+                if (_sourceEnumerator != null)
                 {
-                    await sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    sourceEnumerator = null;
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
-                if (resultEnumerator != null)
+                if (_resultEnumerator != null)
                 {
-                    await resultEnumerator.DisposeAsync().ConfigureAwait(false);
-                    resultEnumerator = null;
+                    await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _resultEnumerator = null;
                 }
 
-                currentSource = default(TSource);
+                _currentSource = default(TSource);
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
@@ -638,46 +638,46 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourceEnumerator = source.GetAsyncEnumerator(cancellationToken);
-                        index = -1;
-                        mode = State_Source;
+                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _index = -1;
+                        _mode = State_Source;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    if (resultEnumerator != null)
+                                    if (_resultEnumerator != null)
                                     {
-                                        await resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                                        await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    currentSource = sourceEnumerator.Current;
+                                    _currentSource = _sourceEnumerator.Current;
 
                                     checked
                                     {
-                                        index++;
+                                        _index++;
                                     }
 
-                                    var inner = await collectionSelector(currentSource, index).ConfigureAwait(false);
-                                    resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    var inner = await _collectionSelector(_currentSource, _index).ConfigureAwait(false);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
 
-                                    mode = State_Result;
+                                    _mode = State_Result;
                                     goto case State_Result;
                                 }
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = await resultSelector(currentSource, resultEnumerator.Current).ConfigureAwait(false);
+                                    current = await _resultSelector(_currentSource, _resultEnumerator.Current).ConfigureAwait(false);
                                     return true;
                                 }
 
-                                mode = State_Source;
+                                _mode = State_Source;
                                 goto case State_Source; // loop
                         }
 
@@ -694,40 +694,40 @@ namespace System.Linq
             private const int State_Source = 1;
             private const int State_Result = 2;
 
-            private readonly Func<TSource, int, IAsyncEnumerable<TResult>> selector;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, int, IAsyncEnumerable<TResult>> _selector;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private int index;
-            private int mode;
-            private IAsyncEnumerator<TResult> resultEnumerator;
-            private IAsyncEnumerator<TSource> sourceEnumerator;
+            private int _index;
+            private int _mode;
+            private IAsyncEnumerator<TResult> _resultEnumerator;
+            private IAsyncEnumerator<TSource> _sourceEnumerator;
 
             public SelectManyWithIndexAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, int, IAsyncEnumerable<TResult>> selector)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(selector != null);
 
-                this.source = source;
-                this.selector = selector;
+                _source = source;
+                _selector = selector;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new SelectManyWithIndexAsyncIterator<TSource, TResult>(source, selector);
+                return new SelectManyWithIndexAsyncIterator<TSource, TResult>(_source, _selector);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (sourceEnumerator != null)
+                if (_sourceEnumerator != null)
                 {
-                    await sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    sourceEnumerator = null;
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
-                if (resultEnumerator != null)
+                if (_resultEnumerator != null)
                 {
-                    await resultEnumerator.DisposeAsync().ConfigureAwait(false);
-                    resultEnumerator = null;
+                    await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _resultEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -738,44 +738,44 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourceEnumerator = source.GetAsyncEnumerator(cancellationToken);
-                        index = -1;
-                        mode = State_Source;
+                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _index = -1;
+                        _mode = State_Source;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    if (resultEnumerator != null)
+                                    if (_resultEnumerator != null)
                                     {
-                                        await resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                                        await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
                                     checked
                                     {
-                                        index++;
+                                        _index++;
                                     }
 
-                                    var inner = selector(sourceEnumerator.Current, index);
-                                    resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    var inner = _selector(_sourceEnumerator.Current, _index);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
 
-                                    mode = State_Result;
+                                    _mode = State_Result;
                                     goto case State_Result;
                                 }
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = resultEnumerator.Current;
+                                    current = _resultEnumerator.Current;
                                     return true;
                                 }
 
-                                mode = State_Source;
+                                _mode = State_Source;
                                 goto case State_Source; // loop
                         }
 
@@ -792,40 +792,40 @@ namespace System.Linq
             private const int State_Source = 1;
             private const int State_Result = 2;
 
-            private readonly Func<TSource, int, Task<IAsyncEnumerable<TResult>>> selector;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, int, Task<IAsyncEnumerable<TResult>>> _selector;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private int index;
-            private int mode;
-            private IAsyncEnumerator<TResult> resultEnumerator;
-            private IAsyncEnumerator<TSource> sourceEnumerator;
+            private int _index;
+            private int _mode;
+            private IAsyncEnumerator<TResult> _resultEnumerator;
+            private IAsyncEnumerator<TSource> _sourceEnumerator;
 
             public SelectManyWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, Task<IAsyncEnumerable<TResult>>> selector)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(selector != null);
 
-                this.source = source;
-                this.selector = selector;
+                _source = source;
+                _selector = selector;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new SelectManyWithIndexAsyncIteratorWithTask<TSource, TResult>(source, selector);
+                return new SelectManyWithIndexAsyncIteratorWithTask<TSource, TResult>(_source, _selector);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (sourceEnumerator != null)
+                if (_sourceEnumerator != null)
                 {
-                    await sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    sourceEnumerator = null;
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
-                if (resultEnumerator != null)
+                if (_resultEnumerator != null)
                 {
-                    await resultEnumerator.DisposeAsync().ConfigureAwait(false);
-                    resultEnumerator = null;
+                    await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _resultEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -836,44 +836,44 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourceEnumerator = source.GetAsyncEnumerator(cancellationToken);
-                        index = -1;
-                        mode = State_Source;
+                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _index = -1;
+                        _mode = State_Source;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    if (resultEnumerator != null)
+                                    if (_resultEnumerator != null)
                                     {
-                                        await resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                                        await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
                                     checked
                                     {
-                                        index++;
+                                        _index++;
                                     }
 
-                                    var inner = await selector(sourceEnumerator.Current, index).ConfigureAwait(false);
-                                    resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    var inner = await _selector(_sourceEnumerator.Current, _index).ConfigureAwait(false);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
 
-                                    mode = State_Result;
+                                    _mode = State_Result;
                                     goto case State_Result;
                                 }
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = resultEnumerator.Current;
+                                    current = _resultEnumerator.Current;
                                     return true;
                                 }
 
-                                mode = State_Source;
+                                _mode = State_Source;
                                 goto case State_Source; // loop
                         }
 

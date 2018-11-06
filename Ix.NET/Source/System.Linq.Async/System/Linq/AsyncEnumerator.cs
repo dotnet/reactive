@@ -106,17 +106,17 @@ namespace System.Collections.Generic
 
         private sealed class AnonymousAsyncIterator<T> : AsyncIterator<T>
         {
-            private readonly Func<T> currentFunc;
-            private readonly Func<ValueTask<bool>> moveNext;
-            private Func<ValueTask> dispose;
+            private readonly Func<T> _currentFunc;
+            private readonly Func<ValueTask<bool>> _moveNext;
+            private Func<ValueTask> _dispose;
 
             public AnonymousAsyncIterator(Func<ValueTask<bool>> moveNext, Func<T> currentFunc, Func<ValueTask> dispose)
             {
                 Debug.Assert(moveNext != null);
 
-                this.moveNext = moveNext;
-                this.currentFunc = currentFunc;
-                this.dispose = dispose;
+                _moveNext = moveNext;
+                _currentFunc = currentFunc;
+                _dispose = dispose;
 
                 // Explicit call to initialize enumerator mode
                 GetAsyncEnumerator(default);
@@ -129,7 +129,7 @@ namespace System.Collections.Generic
 
             public override async ValueTask DisposeAsync()
             {
-                var dispose = Interlocked.Exchange(ref this.dispose, null);
+                var dispose = Interlocked.Exchange(ref this._dispose, null);
 
                 if (dispose != null)
                 {
@@ -148,9 +148,9 @@ namespace System.Collections.Generic
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await moveNext().ConfigureAwait(false))
+                        if (await _moveNext().ConfigureAwait(false))
                         {
-                            current = currentFunc();
+                            current = _currentFunc();
                             return true;
                         }
 
