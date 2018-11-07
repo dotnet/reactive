@@ -30,8 +30,7 @@ namespace System.Linq
                 var ctd = new CancellationTokenDisposable();
                 var e = _source.GetAsyncEnumerator(ctd.Token);
 
-                var f = default(Action);
-                f = () => e.MoveNextAsync().AsTask().ContinueWith(
+                void Core() => e.MoveNextAsync().AsTask().ContinueWith(
                     async t =>
                     {
                         if (t.IsFaulted)
@@ -51,7 +50,7 @@ namespace System.Linq
 
                                 if (!ctd.Token.IsCancellationRequested)
                                 {
-                                    f();
+                                    Core();
                                 }
 
                                 // In case cancellation is requested, this could only have happened
@@ -66,7 +65,7 @@ namespace System.Linq
                         }
                     }, ctd.Token);
 
-                f();
+                Core();
 
                 return Disposable.Create(ctd, Disposable.Create(() => { e.DisposeAsync(); /* REVIEW: fire-and-forget? */ }));
             }
