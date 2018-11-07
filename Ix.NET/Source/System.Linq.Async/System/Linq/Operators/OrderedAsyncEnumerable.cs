@@ -11,17 +11,17 @@ namespace System.Linq
 {
     internal abstract class OrderedAsyncEnumerable<TElement> : AsyncIterator<TElement>, IOrderedAsyncEnumerable<TElement>
     {
-        internal IOrderedEnumerable<TElement> enumerable;
-        internal IAsyncEnumerable<TElement> source;
+        internal IOrderedEnumerable<TElement> _enumerable;
+        internal IAsyncEnumerable<TElement> _source;
 
         IOrderedAsyncEnumerable<TElement> IOrderedAsyncEnumerable<TElement>.CreateOrderedEnumerable<TKey>(Func<TElement, TKey> keySelector, IComparer<TKey> comparer, bool descending)
         {
-            return new OrderedAsyncEnumerable<TElement, TKey>(source, keySelector, comparer, descending, this);
+            return new OrderedAsyncEnumerable<TElement, TKey>(_source, keySelector, comparer, descending, this);
         }
 
         IOrderedAsyncEnumerable<TElement> IOrderedAsyncEnumerable<TElement>.CreateOrderedEnumerable<TKey>(Func<TElement, Task<TKey>> keySelector, IComparer<TKey> comparer, bool descending)
         {
-            return new OrderedAsyncEnumerableWithTask<TElement, TKey>(source, keySelector, comparer, descending, this);
+            return new OrderedAsyncEnumerableWithTask<TElement, TKey>(_source, keySelector, comparer, descending, this);
         }
 
         internal abstract Task Initialize(CancellationToken cancellationToken);
@@ -43,7 +43,7 @@ namespace System.Linq
             Debug.Assert(keySelector != null);
             Debug.Assert(comparer != null);
 
-            this.source = source;
+            _source = source;
             _keySelector = keySelector;
             _comparer = comparer;
             _descending = descending;
@@ -52,7 +52,7 @@ namespace System.Linq
 
         public override AsyncIterator<TElement> Clone()
         {
-            return new OrderedAsyncEnumerable<TElement, TKey>(source, _keySelector, _comparer, _descending, _parent);
+            return new OrderedAsyncEnumerable<TElement, TKey>(_source, _keySelector, _comparer, _descending, _parent);
         }
 
         public override async ValueTask DisposeAsync()
@@ -80,7 +80,7 @@ namespace System.Linq
 
                     await Initialize(cancellationToken).ConfigureAwait(false);
 
-                    _enumerator = enumerable.GetEnumerator();
+                    _enumerator = _enumerable.GetEnumerator();
                     state = AsyncIteratorState.Iterating;
                     goto case AsyncIteratorState.Iterating;
 
@@ -102,14 +102,14 @@ namespace System.Linq
         {
             if (_parent == null)
             {
-                var buffer = await source.ToList(cancellationToken).ConfigureAwait(false);
-                enumerable = (!_descending ? buffer.OrderBy(_keySelector, _comparer) : buffer.OrderByDescending(_keySelector, _comparer));
+                var buffer = await _source.ToList(cancellationToken).ConfigureAwait(false);
+                _enumerable = (!_descending ? buffer.OrderBy(_keySelector, _comparer) : buffer.OrderByDescending(_keySelector, _comparer));
             }
             else
             {
                 _parentEnumerator = _parent.GetAsyncEnumerator(cancellationToken);
                 await _parent.Initialize(cancellationToken).ConfigureAwait(false);
-                enumerable = _parent.enumerable.CreateOrderedEnumerable(_keySelector, _comparer, _descending);
+                _enumerable = _parent._enumerable.CreateOrderedEnumerable(_keySelector, _comparer, _descending);
             }
         }
     }
@@ -130,7 +130,7 @@ namespace System.Linq
             Debug.Assert(keySelector != null);
             Debug.Assert(comparer != null);
 
-            this.source = source;
+            _source = source;
             _keySelector = keySelector;
             _comparer = comparer;
             _descending = descending;
@@ -139,7 +139,7 @@ namespace System.Linq
 
         public override AsyncIterator<TElement> Clone()
         {
-            return new OrderedAsyncEnumerableWithTask<TElement, TKey>(source, _keySelector, _comparer, _descending, _parent);
+            return new OrderedAsyncEnumerableWithTask<TElement, TKey>(_source, _keySelector, _comparer, _descending, _parent);
         }
 
         public override async ValueTask DisposeAsync()
@@ -167,7 +167,7 @@ namespace System.Linq
 
                     await Initialize(cancellationToken).ConfigureAwait(false);
 
-                    _enumerator = enumerable.GetEnumerator();
+                    _enumerator = _enumerable.GetEnumerator();
                     state = AsyncIteratorState.Iterating;
                     goto case AsyncIteratorState.Iterating;
 
@@ -189,14 +189,14 @@ namespace System.Linq
         {
             if (_parent == null)
             {
-                var buffer = await source.ToList(cancellationToken).ConfigureAwait(false);
-                enumerable = (!_descending ? buffer.OrderByAsync(_keySelector, _comparer) : buffer.OrderByDescendingAsync(_keySelector, _comparer));
+                var buffer = await _source.ToList(cancellationToken).ConfigureAwait(false);
+                _enumerable = (!_descending ? buffer.OrderByAsync(_keySelector, _comparer) : buffer.OrderByDescendingAsync(_keySelector, _comparer));
             }
             else
             {
                 _parentEnumerator = _parent.GetAsyncEnumerator(cancellationToken);
                 await _parent.Initialize(cancellationToken).ConfigureAwait(false);
-                enumerable = _parent.enumerable.CreateOrderedEnumerableAsync(_keySelector, _comparer, _descending);
+                _enumerable = _parent._enumerable.CreateOrderedEnumerableAsync(_keySelector, _comparer, _descending);
             }
         }
     }
