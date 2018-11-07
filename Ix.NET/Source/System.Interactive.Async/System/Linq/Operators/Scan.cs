@@ -53,35 +53,35 @@ namespace System.Linq
 
         private sealed class ScanAsyncEnumerable<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, TSource, TSource> accumulator;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, TSource, TSource> _accumulator;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private TSource accumulated;
-            private IAsyncEnumerator<TSource> enumerator;
+            private TSource _accumulated;
+            private IAsyncEnumerator<TSource> _enumerator;
 
-            private bool hasSeed;
+            private bool _hasSeed;
 
             public ScanAsyncEnumerable(IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(accumulator != null);
 
-                this.source = source;
-                this.accumulator = accumulator;
+                _source = source;
+                _accumulator = accumulator;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new ScanAsyncEnumerable<TSource>(source, accumulator);
+                return new ScanAsyncEnumerable<TSource>(_source, _accumulator);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
-                    accumulated = default;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                    _accumulated = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -92,27 +92,27 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        hasSeed = false;
-                        accumulated = default;
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _hasSeed = false;
+                        _accumulated = default;
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
 
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = enumerator.Current;
-                            if (!hasSeed)
+                            var item = _enumerator.Current;
+                            if (!_hasSeed)
                             {
-                                hasSeed = true;
-                                accumulated = item;
+                                _hasSeed = true;
+                                _accumulated = item;
                                 continue; // loop
                             }
 
-                            accumulated = accumulator(accumulated, item);
-                            current = accumulated;
+                            _accumulated = _accumulator(_accumulated, item);
+                            current = _accumulated;
                             return true;
                         }
 
@@ -127,35 +127,35 @@ namespace System.Linq
 
         private sealed class ScanAsyncEnumerable<TSource, TAccumulate> : AsyncIterator<TAccumulate>
         {
-            private readonly Func<TAccumulate, TSource, TAccumulate> accumulator;
-            private readonly TAccumulate seed;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
+            private readonly TAccumulate _seed;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private TAccumulate accumulated;
-            private IAsyncEnumerator<TSource> enumerator;
+            private TAccumulate _accumulated;
+            private IAsyncEnumerator<TSource> _enumerator;
 
             public ScanAsyncEnumerable(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(accumulator != null);
 
-                this.source = source;
-                this.seed = seed;
-                this.accumulator = accumulator;
+                _source = source;
+                _seed = seed;
+                _accumulator = accumulator;
             }
 
             public override AsyncIterator<TAccumulate> Clone()
             {
-                return new ScanAsyncEnumerable<TSource, TAccumulate>(source, seed, accumulator);
+                return new ScanAsyncEnumerable<TSource, TAccumulate>(_source, _seed, _accumulator);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
-                    accumulated = default;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                    _accumulated = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -166,18 +166,18 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        accumulated = seed;
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _accumulated = _seed;
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = enumerator.Current;
-                            accumulated = accumulator(accumulated, item);
-                            current = accumulated;
+                            var item = _enumerator.Current;
+                            _accumulated = _accumulator(_accumulated, item);
+                            current = _accumulated;
                             return true;
                         }
 
@@ -191,35 +191,35 @@ namespace System.Linq
 
         private sealed class ScanAsyncEnumerableWithTask<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, TSource, Task<TSource>> accumulator;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, TSource, Task<TSource>> _accumulator;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private TSource accumulated;
-            private IAsyncEnumerator<TSource> enumerator;
+            private TSource _accumulated;
+            private IAsyncEnumerator<TSource> _enumerator;
 
-            private bool hasSeed;
+            private bool _hasSeed;
 
             public ScanAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, Func<TSource, TSource, Task<TSource>> accumulator)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(accumulator != null);
 
-                this.source = source;
-                this.accumulator = accumulator;
+                _source = source;
+                _accumulator = accumulator;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new ScanAsyncEnumerableWithTask<TSource>(source, accumulator);
+                return new ScanAsyncEnumerableWithTask<TSource>(_source, _accumulator);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
-                    accumulated = default;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                    _accumulated = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -230,27 +230,27 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        hasSeed = false;
-                        accumulated = default;
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _hasSeed = false;
+                        _accumulated = default;
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
 
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = enumerator.Current;
-                            if (!hasSeed)
+                            var item = _enumerator.Current;
+                            if (!_hasSeed)
                             {
-                                hasSeed = true;
-                                accumulated = item;
+                                _hasSeed = true;
+                                _accumulated = item;
                                 continue; // loop
                             }
 
-                            accumulated = await accumulator(accumulated, item).ConfigureAwait(false);
-                            current = accumulated;
+                            _accumulated = await _accumulator(_accumulated, item).ConfigureAwait(false);
+                            current = _accumulated;
                             return true;
                         }
 
@@ -265,35 +265,35 @@ namespace System.Linq
 
         private sealed class ScanAsyncEnumerableWithTask<TSource, TAccumulate> : AsyncIterator<TAccumulate>
         {
-            private readonly Func<TAccumulate, TSource, Task<TAccumulate>> accumulator;
-            private readonly TAccumulate seed;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TAccumulate, TSource, Task<TAccumulate>> _accumulator;
+            private readonly TAccumulate _seed;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private TAccumulate accumulated;
-            private IAsyncEnumerator<TSource> enumerator;
+            private TAccumulate _accumulated;
+            private IAsyncEnumerator<TSource> _enumerator;
 
             public ScanAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, Task<TAccumulate>> accumulator)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(accumulator != null);
 
-                this.source = source;
-                this.seed = seed;
-                this.accumulator = accumulator;
+                _source = source;
+                _seed = seed;
+                _accumulator = accumulator;
             }
 
             public override AsyncIterator<TAccumulate> Clone()
             {
-                return new ScanAsyncEnumerableWithTask<TSource, TAccumulate>(source, seed, accumulator);
+                return new ScanAsyncEnumerableWithTask<TSource, TAccumulate>(_source, _seed, _accumulator);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
-                    accumulated = default;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                    _accumulated = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -304,18 +304,18 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        accumulated = seed;
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _accumulated = _seed;
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = enumerator.Current;
-                            accumulated = await accumulator(accumulated, item).ConfigureAwait(false);
-                            current = accumulated;
+                            var item = _enumerator.Current;
+                            _accumulated = await _accumulator(_accumulated, item).ConfigureAwait(false);
+                            current = _accumulated;
                             return true;
                         }
 

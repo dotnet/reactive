@@ -18,17 +18,17 @@ namespace System.Linq
 
         private sealed class ToObservableObservable<T> : IObservable<T>
         {
-            private readonly IAsyncEnumerable<T> source;
+            private readonly IAsyncEnumerable<T> _source;
 
             public ToObservableObservable(IAsyncEnumerable<T> source)
             {
-                this.source = source;
+                _source = source;
             }
 
             public IDisposable Subscribe(IObserver<T> observer)
             {
                 var ctd = new CancellationTokenDisposable();
-                var e = source.GetAsyncEnumerator(ctd.Token);
+                var e = _source.GetAsyncEnumerator(ctd.Token);
 
                 var f = default(Action);
                 f = () => e.MoveNextAsync().AsTask().ContinueWith(

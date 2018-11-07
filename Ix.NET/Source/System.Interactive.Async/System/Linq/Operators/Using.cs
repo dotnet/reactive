@@ -33,39 +33,39 @@ namespace System.Linq
 
         private sealed class UsingAsyncIterator<TSource, TResource> : AsyncIterator<TSource> where TResource : IDisposable
         {
-            private readonly Func<TResource, IAsyncEnumerable<TSource>> enumerableFactory;
-            private readonly Func<TResource> resourceFactory;
+            private readonly Func<TResource, IAsyncEnumerable<TSource>> _enumerableFactory;
+            private readonly Func<TResource> _resourceFactory;
 
-            private IAsyncEnumerable<TSource> enumerable;
-            private IAsyncEnumerator<TSource> enumerator;
-            private TResource resource;
+            private IAsyncEnumerable<TSource> _enumerable;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private TResource _resource;
 
             public UsingAsyncIterator(Func<TResource> resourceFactory, Func<TResource, IAsyncEnumerable<TSource>> enumerableFactory)
             {
                 Debug.Assert(resourceFactory != null);
                 Debug.Assert(enumerableFactory != null);
 
-                this.resourceFactory = resourceFactory;
-                this.enumerableFactory = enumerableFactory;
+                _resourceFactory = resourceFactory;
+                _enumerableFactory = enumerableFactory;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new UsingAsyncIterator<TSource, TResource>(resourceFactory, enumerableFactory);
+                return new UsingAsyncIterator<TSource, TResource>(_resourceFactory, _enumerableFactory);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
-                if (resource != null)
+                if (_resource != null)
                 {
-                    resource.Dispose();
-                    resource = default;
+                    _resource.Dispose();
+                    _resource = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -76,14 +76,14 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = enumerable.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _enumerable.GetAsyncEnumerator(cancellationToken);
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 
@@ -98,8 +98,8 @@ namespace System.Linq
             {
                 // REVIEW: Wire cancellation to the functions.
 
-                resource = resourceFactory();
-                enumerable = enumerableFactory(resource);
+                _resource = _resourceFactory();
+                _enumerable = _enumerableFactory(_resource);
 
                 base.OnGetEnumerator(cancellationToken);
             }
@@ -107,39 +107,39 @@ namespace System.Linq
 
         private sealed class UsingAsyncIteratorWithTask<TSource, TResource> : AsyncIterator<TSource> where TResource : IDisposable
         {
-            private readonly Func<TResource, Task<IAsyncEnumerable<TSource>>> enumerableFactory;
-            private readonly Func<Task<TResource>> resourceFactory;
+            private readonly Func<TResource, Task<IAsyncEnumerable<TSource>>> _enumerableFactory;
+            private readonly Func<Task<TResource>> _resourceFactory;
 
-            private IAsyncEnumerable<TSource> enumerable;
-            private IAsyncEnumerator<TSource> enumerator;
-            private TResource resource;
+            private IAsyncEnumerable<TSource> _enumerable;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private TResource _resource;
 
             public UsingAsyncIteratorWithTask(Func<Task<TResource>> resourceFactory, Func<TResource, Task<IAsyncEnumerable<TSource>>> enumerableFactory)
             {
                 Debug.Assert(resourceFactory != null);
                 Debug.Assert(enumerableFactory != null);
 
-                this.resourceFactory = resourceFactory;
-                this.enumerableFactory = enumerableFactory;
+                _resourceFactory = resourceFactory;
+                _enumerableFactory = enumerableFactory;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new UsingAsyncIteratorWithTask<TSource, TResource>(resourceFactory, enumerableFactory);
+                return new UsingAsyncIteratorWithTask<TSource, TResource>(_resourceFactory, _enumerableFactory);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
-                if (resource != null)
+                if (_resource != null)
                 {
-                    resource.Dispose();
-                    resource = default;
+                    _resource.Dispose();
+                    _resource = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -150,17 +150,17 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        resource = await resourceFactory().ConfigureAwait(false);
-                        enumerable = await enumerableFactory(resource).ConfigureAwait(false);
+                        _resource = await _resourceFactory().ConfigureAwait(false);
+                        _enumerable = await _enumerableFactory(_resource).ConfigureAwait(false);
 
-                        enumerator = enumerable.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _enumerable.GetAsyncEnumerator(cancellationToken);
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 

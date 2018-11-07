@@ -34,30 +34,30 @@ namespace System.Linq
 
         private sealed class DefaultIfEmptyAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
-            private readonly IAsyncEnumerable<TSource> source;
-            private readonly TSource defaultValue;
+            private readonly IAsyncEnumerable<TSource> _source;
+            private readonly TSource _defaultValue;
 
-            private IAsyncEnumerator<TSource> enumerator;
+            private IAsyncEnumerator<TSource> _enumerator;
 
             public DefaultIfEmptyAsyncIterator(IAsyncEnumerable<TSource> source, TSource defaultValue)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.defaultValue = defaultValue;
+                _source = source;
+                _defaultValue = defaultValue;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new DefaultIfEmptyAsyncIterator<TSource>(source, defaultValue);
+                return new DefaultIfEmptyAsyncIterator<TSource>(_source, _defaultValue);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -68,26 +68,26 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             state = AsyncIteratorState.Iterating;
                         }
                         else
                         {
-                            current = defaultValue;
-                            await enumerator.DisposeAsync().ConfigureAwait(false);
-                            enumerator = null;
+                            current = _defaultValue;
+                            await _enumerator.DisposeAsync().ConfigureAwait(false);
+                            _enumerator = null;
 
                             state = AsyncIteratorState.Disposed;
                         }
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
                         break;
@@ -99,16 +99,16 @@ namespace System.Linq
 
             public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var array = await source.ToArray(cancellationToken).ConfigureAwait(false);
-                return array.Length == 0 ? new[] { defaultValue } : array;
+                var array = await _source.ToArray(cancellationToken).ConfigureAwait(false);
+                return array.Length == 0 ? new[] { _defaultValue } : array;
             }
 
             public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var list = await source.ToList(cancellationToken).ConfigureAwait(false);
+                var list = await _source.ToList(cancellationToken).ConfigureAwait(false);
                 if (list.Count == 0)
                 {
-                    list.Add(defaultValue);
+                    list.Add(_defaultValue);
                 }
 
                 return list;
@@ -117,13 +117,13 @@ namespace System.Linq
             public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 int count;
-                if (!onlyIfCheap || source is ICollection<TSource> || source is ICollection)
+                if (!onlyIfCheap || _source is ICollection<TSource> || _source is ICollection)
                 {
-                    count = await source.Count(cancellationToken).ConfigureAwait(false);
+                    count = await _source.Count(cancellationToken).ConfigureAwait(false);
                 }
                 else
                 {
-                    var listProv = source as IAsyncIListProvider<TSource>;
+                    var listProv = _source as IAsyncIListProvider<TSource>;
                     count = listProv == null ? -1 : await listProv.GetCountAsync(onlyIfCheap: true, cancellationToken: cancellationToken).ConfigureAwait(false);
                 }
 

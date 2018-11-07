@@ -26,35 +26,35 @@ namespace System.Linq
 
         private sealed class TakeLastAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly int count;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly int _count;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> enumerator;
-            private bool isDone;
-            private Queue<TSource> queue;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private bool _isDone;
+            private Queue<TSource> _queue;
 
             public TakeLastAsyncIterator(IAsyncEnumerable<TSource> source, int count)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.count = count;
+                _source = source;
+                _count = count;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new TakeLastAsyncIterator<TSource>(source, count);
+                return new TakeLastAsyncIterator<TSource>(_source, _count);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
-                queue = null; // release the memory
+                _queue = null; // release the memory
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
@@ -64,9 +64,9 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        queue = new Queue<TSource>();
-                        isDone = false;
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _queue = new Queue<TSource>();
+                        _isDone = false;
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -75,34 +75,34 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (true)
                         {
-                            if (!isDone)
+                            if (!_isDone)
                             {
-                                if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    if (count > 0)
+                                    if (_count > 0)
                                     {
-                                        var item = enumerator.Current;
-                                        if (queue.Count >= count)
+                                        var item = _enumerator.Current;
+                                        if (_queue.Count >= _count)
                                         {
-                                            queue.Dequeue();
+                                            _queue.Dequeue();
                                         }
-                                        queue.Enqueue(item);
+                                        _queue.Enqueue(item);
                                     }
                                 }
                                 else
                                 {
-                                    isDone = true;
+                                    _isDone = true;
                                     // Dispose early here as we can
-                                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                                    enumerator = null;
+                                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                                    _enumerator = null;
                                 }
 
                                 continue; // loop until queue is drained
                             }
 
-                            if (queue.Count > 0)
+                            if (_queue.Count > 0)
                             {
-                                current = queue.Dequeue();
+                                current = _queue.Dequeue();
                                 return true;
                             }
 

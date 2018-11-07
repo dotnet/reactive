@@ -48,38 +48,38 @@ namespace System.Linq
 
         private sealed class BufferAsyncIterator<TSource> : AsyncIterator<IList<TSource>>
         {
-            private readonly int count;
-            private readonly int skip;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly int _count;
+            private readonly int _skip;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private Queue<IList<TSource>> buffers;
-            private IAsyncEnumerator<TSource> enumerator;
-            private int index;
-            private bool stopped;
+            private Queue<IList<TSource>> _buffers;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private int _index;
+            private bool _stopped;
 
             public BufferAsyncIterator(IAsyncEnumerable<TSource> source, int count, int skip)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.count = count;
-                this.skip = skip;
+                _source = source;
+                _count = count;
+                _skip = skip;
             }
 
             public override AsyncIterator<IList<TSource>> Clone()
             {
-                return new BufferAsyncIterator<TSource>(source, count, skip);
+                return new BufferAsyncIterator<TSource>(_source, _count, _skip);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
-                buffers = null;
+                _buffers = null;
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
@@ -89,10 +89,10 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        buffers = new Queue<IList<TSource>>();
-                        index = 0;
-                        stopped = false;
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _buffers = new Queue<IList<TSource>>();
+                        _index = 0;
+                        _stopped = false;
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -100,40 +100,40 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (true)
                         {
-                            if (!stopped)
+                            if (!_stopped)
                             {
-                                if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    var item = enumerator.Current;
-                                    if (index++ % skip == 0)
+                                    var item = _enumerator.Current;
+                                    if (_index++ % _skip == 0)
                                     {
-                                        buffers.Enqueue(new List<TSource>(count));
+                                        _buffers.Enqueue(new List<TSource>(_count));
                                     }
 
-                                    foreach (var buffer in buffers)
+                                    foreach (var buffer in _buffers)
                                     {
                                         buffer.Add(item);
                                     }
 
-                                    if (buffers.Count > 0 && buffers.Peek().Count == count)
+                                    if (_buffers.Count > 0 && _buffers.Peek().Count == _count)
                                     {
-                                        current = buffers.Dequeue();
+                                        current = _buffers.Dequeue();
                                         return true;
                                     }
 
                                     continue; // loop
                                 }
 
-                                stopped = true;
-                                await enumerator.DisposeAsync().ConfigureAwait(false);
-                                enumerator = null;
+                                _stopped = true;
+                                await _enumerator.DisposeAsync().ConfigureAwait(false);
+                                _enumerator = null;
 
                                 continue; // loop
                             }
 
-                            if (buffers.Count > 0)
+                            if (_buffers.Count > 0)
                             {
-                                current = buffers.Dequeue();
+                                current = _buffers.Dequeue();
                                 return true;
                             }
 

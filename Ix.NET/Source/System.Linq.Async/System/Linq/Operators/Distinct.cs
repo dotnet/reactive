@@ -31,18 +31,18 @@ namespace System.Linq
 
         private sealed class DistinctAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
-            private readonly IEqualityComparer<TSource> comparer;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly IEqualityComparer<TSource> _comparer;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> enumerator;
-            private Set<TSource> set;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private Set<TSource> _set;
 
             public DistinctAsyncIterator(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.comparer = comparer;
+                _source = source;
+                _comparer = comparer;
             }
 
             public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
@@ -64,16 +64,16 @@ namespace System.Linq
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new DistinctAsyncIterator<TSource>(source, comparer);
+                return new DistinctAsyncIterator<TSource>(_source, _comparer);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
-                    set = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                    _set = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -84,26 +84,26 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        if (!await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        if (!await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             await DisposeAsync().ConfigureAwait(false);
                             return false;
                         }
 
-                        var element = enumerator.Current;
-                        set = new Set<TSource>(comparer);
-                        set.Add(element);
+                        var element = _enumerator.Current;
+                        _set = new Set<TSource>(_comparer);
+                        _set.Add(element);
                         current = element;
 
                         state = AsyncIteratorState.Iterating;
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            element = enumerator.Current;
-                            if (set.Add(element))
+                            element = _enumerator.Current;
+                            if (_set.Add(element))
                             {
                                 current = element;
                                 return true;
@@ -119,9 +119,9 @@ namespace System.Linq
 
             private async Task<Set<TSource>> FillSetAsync(CancellationToken cancellationToken)
             {
-                var s = new Set<TSource>(comparer);
+                var s = new Set<TSource>(_comparer);
 
-                await s.UnionWithAsync(source, cancellationToken);
+                await s.UnionWithAsync(_source, cancellationToken);
 
                 return s;
             }

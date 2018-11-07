@@ -53,32 +53,32 @@ namespace System.Linq
 
         private sealed class SkipWhileAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, bool> predicate;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, bool> _predicate;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private bool doMoveNext;
-            private IAsyncEnumerator<TSource> enumerator;
+            private bool _doMoveNext;
+            private IAsyncEnumerator<TSource> _enumerator;
 
             public SkipWhileAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
             {
                 Debug.Assert(predicate != null);
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.predicate = predicate;
+                _source = source;
+                _predicate = predicate;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new SkipWhileAsyncIterator<TSource>(source, predicate);
+                return new SkipWhileAsyncIterator<TSource>(_source, _predicate);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -89,15 +89,15 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
 
                         // skip elements as requested
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var element = enumerator.Current;
-                            if (!predicate(element))
+                            var element = _enumerator.Current;
+                            if (!_predicate(element))
                             {
-                                doMoveNext = false;
+                                _doMoveNext = false;
                                 state = AsyncIteratorState.Iterating;
                                 goto case AsyncIteratorState.Iterating;
                             }
@@ -106,16 +106,16 @@ namespace System.Linq
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (doMoveNext && await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (_doMoveNext && await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 
-                        if (!doMoveNext)
+                        if (!_doMoveNext)
                         {
-                            current = enumerator.Current;
-                            doMoveNext = true;
+                            current = _enumerator.Current;
+                            _doMoveNext = true;
                             return true;
                         }
 
@@ -129,33 +129,33 @@ namespace System.Linq
 
         private sealed class SkipWhileWithIndexAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, int, bool> predicate;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, int, bool> _predicate;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private bool doMoveNext;
-            private IAsyncEnumerator<TSource> enumerator;
-            private int index;
+            private bool _doMoveNext;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private int _index;
 
             public SkipWhileWithIndexAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate)
             {
                 Debug.Assert(predicate != null);
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.predicate = predicate;
+                _source = source;
+                _predicate = predicate;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new SkipWhileWithIndexAsyncIterator<TSource>(source, predicate);
+                return new SkipWhileWithIndexAsyncIterator<TSource>(_source, _predicate);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -166,21 +166,21 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        index = -1;
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _index = -1;
 
                         // skip elements as requested
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             checked
                             {
-                                index++;
+                                _index++;
                             }
 
-                            var element = enumerator.Current;
-                            if (!predicate(element, index))
+                            var element = _enumerator.Current;
+                            if (!_predicate(element, _index))
                             {
-                                doMoveNext = false;
+                                _doMoveNext = false;
                                 state = AsyncIteratorState.Iterating;
                                 goto case AsyncIteratorState.Iterating;
                             }
@@ -189,16 +189,16 @@ namespace System.Linq
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (doMoveNext && await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (_doMoveNext && await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 
-                        if (!doMoveNext)
+                        if (!_doMoveNext)
                         {
-                            current = enumerator.Current;
-                            doMoveNext = true;
+                            current = _enumerator.Current;
+                            _doMoveNext = true;
                             return true;
                         }
 
@@ -212,32 +212,32 @@ namespace System.Linq
 
         private sealed class SkipWhileAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, Task<bool>> predicate;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, Task<bool>> _predicate;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private bool doMoveNext;
-            private IAsyncEnumerator<TSource> enumerator;
+            private bool _doMoveNext;
+            private IAsyncEnumerator<TSource> _enumerator;
 
             public SkipWhileAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
             {
                 Debug.Assert(predicate != null);
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.predicate = predicate;
+                _source = source;
+                _predicate = predicate;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new SkipWhileAsyncIteratorWithTask<TSource>(source, predicate);
+                return new SkipWhileAsyncIteratorWithTask<TSource>(_source, _predicate);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -248,15 +248,15 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
 
                         // skip elements as requested
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var element = enumerator.Current;
-                            if (!await predicate(element).ConfigureAwait(false))
+                            var element = _enumerator.Current;
+                            if (!await _predicate(element).ConfigureAwait(false))
                             {
-                                doMoveNext = false;
+                                _doMoveNext = false;
                                 state = AsyncIteratorState.Iterating;
                                 goto case AsyncIteratorState.Iterating;
                             }
@@ -265,16 +265,16 @@ namespace System.Linq
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (doMoveNext && await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (_doMoveNext && await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 
-                        if (!doMoveNext)
+                        if (!_doMoveNext)
                         {
-                            current = enumerator.Current;
-                            doMoveNext = true;
+                            current = _enumerator.Current;
+                            _doMoveNext = true;
                             return true;
                         }
 
@@ -288,33 +288,33 @@ namespace System.Linq
 
         private sealed class SkipWhileWithIndexAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, int, Task<bool>> predicate;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, int, Task<bool>> _predicate;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private bool doMoveNext;
-            private IAsyncEnumerator<TSource> enumerator;
-            private int index;
+            private bool _doMoveNext;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private int _index;
 
             public SkipWhileWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, Task<bool>> predicate)
             {
                 Debug.Assert(predicate != null);
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.predicate = predicate;
+                _source = source;
+                _predicate = predicate;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new SkipWhileWithIndexAsyncIteratorWithTask<TSource>(source, predicate);
+                return new SkipWhileWithIndexAsyncIteratorWithTask<TSource>(_source, _predicate);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -325,21 +325,21 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        index = -1;
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _index = -1;
 
                         // skip elements as requested
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             checked
                             {
-                                index++;
+                                _index++;
                             }
 
-                            var element = enumerator.Current;
-                            if (!await predicate(element, index).ConfigureAwait(false))
+                            var element = _enumerator.Current;
+                            if (!await _predicate(element, _index).ConfigureAwait(false))
                             {
-                                doMoveNext = false;
+                                _doMoveNext = false;
                                 state = AsyncIteratorState.Iterating;
                                 goto case AsyncIteratorState.Iterating;
                             }
@@ -348,16 +348,16 @@ namespace System.Linq
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (doMoveNext && await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (_doMoveNext && await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 
-                        if (!doMoveNext)
+                        if (!_doMoveNext)
                         {
-                            current = enumerator.Current;
-                            doMoveNext = true;
+                            current = _enumerator.Current;
+                            _doMoveNext = true;
                             return true;
                         }
 

@@ -20,27 +20,27 @@ namespace System.Linq
 
         private sealed class RepeatAsyncIterator<TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
-            private readonly TResult element;
-            private readonly int count;
-            private int remaining;
+            private readonly TResult _element;
+            private readonly int _count;
+            private int _remaining;
 
             public RepeatAsyncIterator(TResult element, int count)
             {
-                this.element = element;
-                this.count = count;
+                _element = element;
+                _count = count;
             }
 
-            public override AsyncIterator<TResult> Clone() => new RepeatAsyncIterator<TResult>(element, count);
+            public override AsyncIterator<TResult> Clone() => new RepeatAsyncIterator<TResult>(_element, _count);
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(count);
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(_count);
 
             public Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var res = new TResult[count];
+                var res = new TResult[_count];
 
-                for (var i = 0; i < count; i++)
+                for (var i = 0; i < _count; i++)
                 {
-                    res[i] = element;
+                    res[i] = _element;
                 }
 
                 return Task.FromResult(res);
@@ -48,11 +48,11 @@ namespace System.Linq
 
             public Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
-                var res = new List<TResult>(count);
+                var res = new List<TResult>(_count);
 
-                for (var i = 0; i < count; i++)
+                for (var i = 0; i < _count; i++)
                 {
-                    res.Add(element);
+                    res.Add(_element);
                 }
 
                 return Task.FromResult(res);
@@ -63,11 +63,11 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        remaining = count;
+                        _remaining = _count;
 
-                        if (remaining > 0)
+                        if (_remaining > 0)
                         {
-                            current = element;
+                            current = _element;
                         }
 
                         state = AsyncIteratorState.Iterating;
@@ -75,7 +75,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (remaining-- != 0)
+                        if (_remaining-- != 0)
                         {
                             return true;
                         }

@@ -37,12 +37,12 @@ namespace System.Linq
 
         private sealed class ZipAsyncIterator<TFirst, TSecond, TResult> : AsyncIterator<TResult>
         {
-            private readonly IAsyncEnumerable<TFirst> first;
-            private readonly IAsyncEnumerable<TSecond> second;
-            private readonly Func<TFirst, TSecond, TResult> selector;
+            private readonly IAsyncEnumerable<TFirst> _first;
+            private readonly IAsyncEnumerable<TSecond> _second;
+            private readonly Func<TFirst, TSecond, TResult> _selector;
 
-            private IAsyncEnumerator<TFirst> firstEnumerator;
-            private IAsyncEnumerator<TSecond> secondEnumerator;
+            private IAsyncEnumerator<TFirst> _firstEnumerator;
+            private IAsyncEnumerator<TSecond> _secondEnumerator;
 
             public ZipAsyncIterator(IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> selector)
             {
@@ -50,28 +50,28 @@ namespace System.Linq
                 Debug.Assert(second != null);
                 Debug.Assert(selector != null);
 
-                this.first = first;
-                this.second = second;
-                this.selector = selector;
+                _first = first;
+                _second = second;
+                _selector = selector;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new ZipAsyncIterator<TFirst, TSecond, TResult>(first, second, selector);
+                return new ZipAsyncIterator<TFirst, TSecond, TResult>(_first, _second, _selector);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (firstEnumerator != null)
+                if (_firstEnumerator != null)
                 {
-                    await firstEnumerator.DisposeAsync().ConfigureAwait(false);
-                    firstEnumerator = null;
+                    await _firstEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _firstEnumerator = null;
                 }
 
-                if (secondEnumerator != null)
+                if (_secondEnumerator != null)
                 {
-                    await secondEnumerator.DisposeAsync().ConfigureAwait(false);
-                    secondEnumerator = null;
+                    await _secondEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _secondEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -82,8 +82,8 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        firstEnumerator = first.GetAsyncEnumerator(cancellationToken);
-                        secondEnumerator = second.GetAsyncEnumerator(cancellationToken);
+                        _firstEnumerator = _first.GetAsyncEnumerator(cancellationToken);
+                        _secondEnumerator = _second.GetAsyncEnumerator(cancellationToken);
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -91,14 +91,14 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
 
                         // We kick these off and join so they can potentially run in parallel
-                        var ft = firstEnumerator.MoveNextAsync();
-                        var st = secondEnumerator.MoveNextAsync();
+                        var ft = _firstEnumerator.MoveNextAsync();
+                        var st = _secondEnumerator.MoveNextAsync();
                         
                         await Task.WhenAll(ft.AsTask(), st.AsTask()).ConfigureAwait(false);
 
                         if (ft.Result && st.Result)
                         {
-                            current = selector(firstEnumerator.Current, secondEnumerator.Current);
+                            current = _selector(_firstEnumerator.Current, _secondEnumerator.Current);
                             return true;
                         }
 
@@ -112,12 +112,12 @@ namespace System.Linq
 
         private sealed class ZipAsyncIteratorWithTask<TFirst, TSecond, TResult> : AsyncIterator<TResult>
         {
-            private readonly IAsyncEnumerable<TFirst> first;
-            private readonly IAsyncEnumerable<TSecond> second;
-            private readonly Func<TFirst, TSecond, Task<TResult>> selector;
+            private readonly IAsyncEnumerable<TFirst> _first;
+            private readonly IAsyncEnumerable<TSecond> _second;
+            private readonly Func<TFirst, TSecond, Task<TResult>> _selector;
 
-            private IAsyncEnumerator<TFirst> firstEnumerator;
-            private IAsyncEnumerator<TSecond> secondEnumerator;
+            private IAsyncEnumerator<TFirst> _firstEnumerator;
+            private IAsyncEnumerator<TSecond> _secondEnumerator;
 
             public ZipAsyncIteratorWithTask(IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, Task<TResult>> selector)
             {
@@ -125,28 +125,28 @@ namespace System.Linq
                 Debug.Assert(second != null);
                 Debug.Assert(selector != null);
 
-                this.first = first;
-                this.second = second;
-                this.selector = selector;
+                _first = first;
+                _second = second;
+                _selector = selector;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new ZipAsyncIteratorWithTask<TFirst, TSecond, TResult>(first, second, selector);
+                return new ZipAsyncIteratorWithTask<TFirst, TSecond, TResult>(_first, _second, _selector);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (firstEnumerator != null)
+                if (_firstEnumerator != null)
                 {
-                    await firstEnumerator.DisposeAsync().ConfigureAwait(false);
-                    firstEnumerator = null;
+                    await _firstEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _firstEnumerator = null;
                 }
 
-                if (secondEnumerator != null)
+                if (_secondEnumerator != null)
                 {
-                    await secondEnumerator.DisposeAsync().ConfigureAwait(false);
-                    secondEnumerator = null;
+                    await _secondEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _secondEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -157,8 +157,8 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        firstEnumerator = first.GetAsyncEnumerator(cancellationToken);
-                        secondEnumerator = second.GetAsyncEnumerator(cancellationToken);
+                        _firstEnumerator = _first.GetAsyncEnumerator(cancellationToken);
+                        _secondEnumerator = _second.GetAsyncEnumerator(cancellationToken);
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -166,13 +166,13 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
 
                         // We kick these off and join so they can potentially run in parallel
-                        var ft = firstEnumerator.MoveNextAsync();
-                        var st = secondEnumerator.MoveNextAsync();
+                        var ft = _firstEnumerator.MoveNextAsync();
+                        var st = _secondEnumerator.MoveNextAsync();
                         await Task.WhenAll(ft.AsTask(), st.AsTask()).ConfigureAwait(false);
 
                         if (ft.Result && st.Result)
                         {
-                            current = await selector(firstEnumerator.Current, secondEnumerator.Current).ConfigureAwait(false);
+                            current = await _selector(_firstEnumerator.Current, _secondEnumerator.Current).ConfigureAwait(false);
                             return true;
                         }
 

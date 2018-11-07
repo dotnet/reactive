@@ -99,8 +99,8 @@ namespace System.Linq
             }
         }
 
-        private bool hasSkipped;
-        private int taken;
+        private bool _hasSkipped;
+        private int _taken;
 
         protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
         {
@@ -108,14 +108,14 @@ namespace System.Linq
             {
                 case AsyncIteratorState.Allocated:
                     _enumerator = _source.GetAsyncEnumerator(cancellationToken);
-                    hasSkipped = false;
-                    taken = 0;
+                    _hasSkipped = false;
+                    _taken = 0;
 
                     state = AsyncIteratorState.Iterating;
                     goto case AsyncIteratorState.Iterating;
 
                 case AsyncIteratorState.Iterating:
-                    if (!hasSkipped)
+                    if (!_hasSkipped)
                     {
                         if (!await SkipBeforeFirstAsync(_enumerator, CancellationToken.None).ConfigureAwait(false))
                         {
@@ -123,17 +123,17 @@ namespace System.Linq
                             break;
                         }
 
-                        hasSkipped = true;
+                        _hasSkipped = true;
                     }
 
-                    if ((!HasLimit || taken < Limit) && await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                    if ((!HasLimit || _taken < Limit) && await _enumerator.MoveNextAsync().ConfigureAwait(false))
                     {
                         if (HasLimit)
                         {
                             // If we are taking an unknown number of elements, it's important not to increment _state.
                             // _state - 3 may eventually end up overflowing & we'll hit the Dispose branch even though
                             // we haven't finished enumerating.
-                            taken++;
+                            _taken++;
                         }
 
                         current = _enumerator.Current;

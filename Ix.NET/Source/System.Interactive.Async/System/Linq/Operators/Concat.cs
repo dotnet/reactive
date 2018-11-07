@@ -42,79 +42,78 @@ namespace System.Linq
 
         private sealed class ConcatEnumerableAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly IEnumerable<IAsyncEnumerable<TSource>> source;
+            private readonly IEnumerable<IAsyncEnumerable<TSource>> _source;
 
             public ConcatEnumerableAsyncIterator(IEnumerable<IAsyncEnumerable<TSource>> source)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
+                _source = source;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new ConcatEnumerableAsyncIterator<TSource>(source);
+                return new ConcatEnumerableAsyncIterator<TSource>(_source);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (outerEnumerator != null)
+                if (_outerEnumerator != null)
                 {
-                    outerEnumerator.Dispose();
-                    outerEnumerator = null;
+                    _outerEnumerator.Dispose();
+                    _outerEnumerator = null;
                 }
 
-                if (currentEnumerator != null)
+                if (_currentEnumerator != null)
                 {
-                    await currentEnumerator.DisposeAsync().ConfigureAwait(false);
-                    currentEnumerator = null;
+                    await _currentEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _currentEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
             // State machine vars
-            private IEnumerator<IAsyncEnumerable<TSource>> outerEnumerator;
-            private IAsyncEnumerator<TSource> currentEnumerator;
-            private int mode;
+            private IEnumerator<IAsyncEnumerable<TSource>> _outerEnumerator;
+            private IAsyncEnumerator<TSource> _currentEnumerator;
+            private int _mode;
 
             private const int State_OuterNext = 1;
             private const int State_While = 4;
 
             protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        outerEnumerator = source.GetEnumerator();
-                        mode = State_OuterNext;
+                        _outerEnumerator = _source.GetEnumerator();
+                        _mode = State_OuterNext;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case State_OuterNext:
-                                if (outerEnumerator.MoveNext())
+                                if (_outerEnumerator.MoveNext())
                                 {
                                     // make sure we dispose the previous one if we're about to replace it
-                                    if (currentEnumerator != null)
+                                    if (_currentEnumerator != null)
                                     {
-                                        await currentEnumerator.DisposeAsync().ConfigureAwait(false);
+                                        await _currentEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    currentEnumerator = outerEnumerator.Current.GetAsyncEnumerator(cancellationToken);
+                                    _currentEnumerator = _outerEnumerator.Current.GetAsyncEnumerator(cancellationToken);
 
-                                    mode = State_While;
+                                    _mode = State_While;
                                     goto case State_While;
                                 }
 
                                 break;
                             case State_While:
-                                if (await currentEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _currentEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = currentEnumerator.Current;
+                                    current = _currentEnumerator.Current;
                                     return true;
                                 }
 
@@ -132,79 +131,78 @@ namespace System.Linq
 
         private sealed class ConcatAsyncEnumerableAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly IAsyncEnumerable<IAsyncEnumerable<TSource>> source;
+            private readonly IAsyncEnumerable<IAsyncEnumerable<TSource>> _source;
 
             public ConcatAsyncEnumerableAsyncIterator(IAsyncEnumerable<IAsyncEnumerable<TSource>> source)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
+                _source = source;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new ConcatAsyncEnumerableAsyncIterator<TSource>(source);
+                return new ConcatAsyncEnumerableAsyncIterator<TSource>(_source);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (outerEnumerator != null)
+                if (_outerEnumerator != null)
                 {
-                    await outerEnumerator.DisposeAsync().ConfigureAwait(false);
-                    outerEnumerator = null;
+                    await _outerEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _outerEnumerator = null;
                 }
 
-                if (currentEnumerator != null)
+                if (_currentEnumerator != null)
                 {
-                    await currentEnumerator.DisposeAsync().ConfigureAwait(false);
-                    currentEnumerator = null;
+                    await _currentEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _currentEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
             // State machine vars
-            private IAsyncEnumerator<IAsyncEnumerable<TSource>> outerEnumerator;
-            private IAsyncEnumerator<TSource> currentEnumerator;
-            private int mode;
+            private IAsyncEnumerator<IAsyncEnumerable<TSource>> _outerEnumerator;
+            private IAsyncEnumerator<TSource> _currentEnumerator;
+            private int _mode;
 
             private const int State_OuterNext = 1;
             private const int State_While = 4;
 
             protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        outerEnumerator = source.GetAsyncEnumerator(cancellationToken);
-                        mode = State_OuterNext;
+                        _outerEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _mode = State_OuterNext;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        switch (mode)
+                        switch (_mode)
                         {
                             case State_OuterNext:
-                                if (await outerEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _outerEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     // make sure we dispose the previous one if we're about to replace it
-                                    if (currentEnumerator != null)
+                                    if (_currentEnumerator != null)
                                     {
-                                        await currentEnumerator.DisposeAsync().ConfigureAwait(false);
+                                        await _currentEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    currentEnumerator = outerEnumerator.Current.GetAsyncEnumerator(cancellationToken);
+                                    _currentEnumerator = _outerEnumerator.Current.GetAsyncEnumerator(cancellationToken);
 
-                                    mode = State_While;
+                                    _mode = State_While;
                                     goto case State_While;
                                 }
 
                                 break;
                             case State_While:
-                                if (await currentEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _currentEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = currentEnumerator.Current;
+                                    current = _currentEnumerator.Current;
                                     return true;
                                 }
 

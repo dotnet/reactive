@@ -8,15 +8,15 @@ namespace System.Linq
 {
     internal sealed class CancellationTokenDisposable : IDisposable
     {
-        private readonly CancellationTokenSource cts = new CancellationTokenSource();
+        private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 
-        public CancellationToken Token => cts.Token;
+        public CancellationToken Token => _cts.Token;
 
         public void Dispose()
         {
-            if (!cts.IsCancellationRequested)
+            if (!_cts.IsCancellationRequested)
             {
-                cts.Cancel();
+                _cts.Cancel();
             }
         }
     }

@@ -53,31 +53,31 @@ namespace System.Linq
 
         private sealed class TakeWhileAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, bool> predicate;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, bool> _predicate;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> enumerator;
+            private IAsyncEnumerator<TSource> _enumerator;
 
             public TakeWhileAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
             {
                 Debug.Assert(predicate != null);
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.predicate = predicate;
+                _source = source;
+                _predicate = predicate;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new TakeWhileAsyncIterator<TSource>(source, predicate);
+                return new TakeWhileAsyncIterator<TSource>(_source, _predicate);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -88,17 +88,17 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = enumerator.Current;
-                            if (!predicate(item))
+                            var item = _enumerator.Current;
+                            if (!_predicate(item))
                             {
                                 break;
                             }
@@ -117,32 +117,32 @@ namespace System.Linq
 
         private sealed class TakeWhileWithIndexAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, int, bool> predicate;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, int, bool> _predicate;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> enumerator;
-            private int index;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private int _index;
 
             public TakeWhileWithIndexAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate)
             {
                 Debug.Assert(predicate != null);
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.predicate = predicate;
+                _source = source;
+                _predicate = predicate;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new TakeWhileWithIndexAsyncIterator<TSource>(source, predicate);
+                return new TakeWhileWithIndexAsyncIterator<TSource>(_source, _predicate);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -153,22 +153,22 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        index = -1;
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _index = -1;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = enumerator.Current;
+                            var item = _enumerator.Current;
                             checked
                             {
-                                index++;
+                                _index++;
                             }
 
-                            if (!predicate(item, index))
+                            if (!_predicate(item, _index))
                             {
                                 break;
                             }
@@ -187,31 +187,31 @@ namespace System.Linq
 
         private sealed class TakeWhileAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, Task<bool>> predicate;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, Task<bool>> _predicate;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> enumerator;
+            private IAsyncEnumerator<TSource> _enumerator;
 
             public TakeWhileAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
             {
                 Debug.Assert(predicate != null);
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.predicate = predicate;
+                _source = source;
+                _predicate = predicate;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new TakeWhileAsyncIteratorWithTask<TSource>(source, predicate);
+                return new TakeWhileAsyncIteratorWithTask<TSource>(_source, _predicate);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -222,17 +222,17 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = enumerator.Current;
-                            if (!await predicate(item).ConfigureAwait(false))
+                            var item = _enumerator.Current;
+                            if (!await _predicate(item).ConfigureAwait(false))
                             {
                                 break;
                             }
@@ -251,32 +251,32 @@ namespace System.Linq
 
         private sealed class TakeWhileWithIndexAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, int, Task<bool>> predicate;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, int, Task<bool>> _predicate;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> enumerator;
-            private int index;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private int _index;
 
             public TakeWhileWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, Task<bool>> predicate)
             {
                 Debug.Assert(predicate != null);
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.predicate = predicate;
+                _source = source;
+                _predicate = predicate;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new TakeWhileWithIndexAsyncIteratorWithTask<TSource>(source, predicate);
+                return new TakeWhileWithIndexAsyncIteratorWithTask<TSource>(_source, _predicate);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -287,22 +287,22 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        index = -1;
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _index = -1;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = enumerator.Current;
+                            var item = _enumerator.Current;
                             checked
                             {
-                                index++;
+                                _index++;
                             }
 
-                            if (!await predicate(item, index).ConfigureAwait(false))
+                            if (!await _predicate(item, _index).ConfigureAwait(false))
                             {
                                 break;
                             }

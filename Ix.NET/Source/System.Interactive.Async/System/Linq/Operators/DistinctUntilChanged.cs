@@ -90,34 +90,34 @@ namespace System.Linq
 
         private sealed class DistinctUntilChangedAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly IEqualityComparer<TSource> comparer;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly IEqualityComparer<TSource> _comparer;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private TSource currentValue;
-            private IAsyncEnumerator<TSource> enumerator;
-            private bool hasCurrentValue;
+            private TSource _currentValue;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private bool _hasCurrentValue;
 
             public DistinctUntilChangedAsyncIterator(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
             {
                 Debug.Assert(comparer != null);
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.comparer = comparer;
+                _source = source;
+                _comparer = comparer;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new DistinctUntilChangedAsyncIterator<TSource>(source, comparer);
+                return new DistinctUntilChangedAsyncIterator<TSource>(_source, _comparer);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
-                    currentValue = default;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                    _currentValue = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -128,25 +128,25 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = enumerator.Current;
+                            var item = _enumerator.Current;
                             var comparerEquals = false;
 
-                            if (hasCurrentValue)
+                            if (_hasCurrentValue)
                             {
-                                comparerEquals = comparer.Equals(currentValue, item);
+                                comparerEquals = _comparer.Equals(_currentValue, item);
                             }
 
-                            if (!hasCurrentValue || !comparerEquals)
+                            if (!_hasCurrentValue || !comparerEquals)
                             {
-                                hasCurrentValue = true;
-                                currentValue = item;
+                                _hasCurrentValue = true;
+                                _currentValue = item;
                                 current = item;
                                 return true;
                             }
@@ -162,33 +162,33 @@ namespace System.Linq
 
         private sealed class DistinctUntilChangedAsyncIterator<TSource, TKey> : AsyncIterator<TSource>
         {
-            private readonly IEqualityComparer<TKey> comparer;
-            private readonly Func<TSource, TKey> keySelector;
-            private readonly IAsyncEnumerable<TSource> source;
-            private TKey currentKeyValue;
+            private readonly IEqualityComparer<TKey> _comparer;
+            private readonly Func<TSource, TKey> _keySelector;
+            private readonly IAsyncEnumerable<TSource> _source;
+            private TKey _currentKeyValue;
 
-            private IAsyncEnumerator<TSource> enumerator;
-            private bool hasCurrentKey;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private bool _hasCurrentKey;
 
             public DistinctUntilChangedAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
             {
-                this.source = source;
-                this.keySelector = keySelector;
-                this.comparer = comparer;
+                _source = source;
+                _keySelector = keySelector;
+                _comparer = comparer;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new DistinctUntilChangedAsyncIterator<TSource, TKey>(source, keySelector, comparer);
+                return new DistinctUntilChangedAsyncIterator<TSource, TKey>(_source, _keySelector, _comparer);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
-                    currentKeyValue = default;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                    _currentKeyValue = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -199,25 +199,25 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = enumerator.Current;
-                            var key = keySelector(item);
+                            var item = _enumerator.Current;
+                            var key = _keySelector(item);
                             var comparerEquals = false;
 
-                            if (hasCurrentKey)
+                            if (_hasCurrentKey)
                             {
-                                comparerEquals = comparer.Equals(currentKeyValue, key);
+                                comparerEquals = _comparer.Equals(_currentKeyValue, key);
                             }
-                            if (!hasCurrentKey || !comparerEquals)
+                            if (!_hasCurrentKey || !comparerEquals)
                             {
-                                hasCurrentKey = true;
-                                currentKeyValue = key;
+                                _hasCurrentKey = true;
+                                _currentKeyValue = key;
                                 current = item;
                                 return true;
                             }
@@ -233,33 +233,33 @@ namespace System.Linq
 
         private sealed class DistinctUntilChangedAsyncIteratorWithTask<TSource, TKey> : AsyncIterator<TSource>
         {
-            private readonly IEqualityComparer<TKey> comparer;
-            private readonly Func<TSource, Task<TKey>> keySelector;
-            private readonly IAsyncEnumerable<TSource> source;
-            private TKey currentKeyValue;
+            private readonly IEqualityComparer<TKey> _comparer;
+            private readonly Func<TSource, Task<TKey>> _keySelector;
+            private readonly IAsyncEnumerable<TSource> _source;
+            private TKey _currentKeyValue;
 
-            private IAsyncEnumerator<TSource> enumerator;
-            private bool hasCurrentKey;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private bool _hasCurrentKey;
 
             public DistinctUntilChangedAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
             {
-                this.source = source;
-                this.keySelector = keySelector;
-                this.comparer = comparer;
+                _source = source;
+                _keySelector = keySelector;
+                _comparer = comparer;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new DistinctUntilChangedAsyncIteratorWithTask<TSource, TKey>(source, keySelector, comparer);
+                return new DistinctUntilChangedAsyncIteratorWithTask<TSource, TKey>(_source, _keySelector, _comparer);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
-                    currentKeyValue = default;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                    _currentKeyValue = default;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -270,25 +270,25 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = enumerator.Current;
-                            var key = await keySelector(item).ConfigureAwait(false);
+                            var item = _enumerator.Current;
+                            var key = await _keySelector(item).ConfigureAwait(false);
                             var comparerEquals = false;
 
-                            if (hasCurrentKey)
+                            if (_hasCurrentKey)
                             {
-                                comparerEquals = comparer.Equals(currentKeyValue, key);
+                                comparerEquals = _comparer.Equals(_currentKeyValue, key);
                             }
-                            if (!hasCurrentKey || !comparerEquals)
+                            if (!_hasCurrentKey || !comparerEquals)
                             {
-                                hasCurrentKey = true;
-                                currentKeyValue = key;
+                                _hasCurrentKey = true;
+                                _currentKeyValue = key;
                                 current = item;
                                 return true;
                             }

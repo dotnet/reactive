@@ -67,32 +67,32 @@ namespace System.Linq
 
         private sealed class CatchAsyncIterator<TSource, TException> : AsyncIterator<TSource> where TException : Exception
         {
-            private readonly Func<TException, IAsyncEnumerable<TSource>> handler;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TException, IAsyncEnumerable<TSource>> _handler;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> enumerator;
-            private bool isDone;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private bool _isDone;
 
             public CatchAsyncIterator(IAsyncEnumerable<TSource> source, Func<TException, IAsyncEnumerable<TSource>> handler)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(handler != null);
 
-                this.source = source;
-                this.handler = handler;
+                _source = source;
+                _handler = handler;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new CatchAsyncIterator<TSource, TException>(source, handler);
+                return new CatchAsyncIterator<TSource, TException>(_source, _handler);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -103,8 +103,8 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        isDone = false;
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _isDone = false;
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -112,13 +112,13 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (true)
                         {
-                            if (!isDone)
+                            if (!_isDone)
                             {
                                 try
                                 {
-                                    if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                                    if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                                     {
-                                        current = enumerator.Current;
+                                        current = _enumerator.Current;
                                         return true;
                                     }
                                 }
@@ -127,23 +127,23 @@ namespace System.Linq
                                     // Note: Ideally we'd dipose of the previous enumerator before
                                     // invoking the handler, but we use this order to preserve
                                     // current behavior
-                                    var inner = handler(ex);
+                                    var inner = _handler(ex);
                                     var err = inner.GetAsyncEnumerator(cancellationToken);
 
-                                    if (enumerator != null)
+                                    if (_enumerator != null)
                                     {
-                                        await enumerator.DisposeAsync().ConfigureAwait(false);
+                                        await _enumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    enumerator = err;
-                                    isDone = true;
+                                    _enumerator = err;
+                                    _isDone = true;
                                     continue; // loop so we hit the catch state
                                 }
                             }
 
-                            if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                            if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
-                                current = enumerator.Current;
+                                current = _enumerator.Current;
                                 return true;
                             }
 
@@ -160,32 +160,32 @@ namespace System.Linq
 
         private sealed class CatchAsyncIteratorWithTask<TSource, TException> : AsyncIterator<TSource> where TException : Exception
         {
-            private readonly Func<TException, Task<IAsyncEnumerable<TSource>>> handler;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TException, Task<IAsyncEnumerable<TSource>>> _handler;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> enumerator;
-            private bool isDone;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private bool _isDone;
 
             public CatchAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TException, Task<IAsyncEnumerable<TSource>>> handler)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(handler != null);
 
-                this.source = source;
-                this.handler = handler;
+                _source = source;
+                _handler = handler;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new CatchAsyncIteratorWithTask<TSource, TException>(source, handler);
+                return new CatchAsyncIteratorWithTask<TSource, TException>(_source, _handler);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -196,8 +196,8 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
-                        isDone = false;
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _isDone = false;
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -205,13 +205,13 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (true)
                         {
-                            if (!isDone)
+                            if (!_isDone)
                             {
                                 try
                                 {
-                                    if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                                    if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                                     {
-                                        current = enumerator.Current;
+                                        current = _enumerator.Current;
                                         return true;
                                     }
                                 }
@@ -220,23 +220,23 @@ namespace System.Linq
                                     // Note: Ideally we'd dipose of the previous enumerator before
                                     // invoking the handler, but we use this order to preserve
                                     // current behavior
-                                    var inner = await handler(ex).ConfigureAwait(false);
+                                    var inner = await _handler(ex).ConfigureAwait(false);
                                     var err = inner.GetAsyncEnumerator(cancellationToken);
 
-                                    if (enumerator != null)
+                                    if (_enumerator != null)
                                     {
-                                        await enumerator.DisposeAsync().ConfigureAwait(false);
+                                        await _enumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    enumerator = err;
-                                    isDone = true;
+                                    _enumerator = err;
+                                    _isDone = true;
                                     continue; // loop so we hit the catch state
                                 }
                             }
 
-                            if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                            if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
-                                current = enumerator.Current;
+                                current = _enumerator.Current;
                                 return true;
                             }
 
@@ -253,40 +253,40 @@ namespace System.Linq
 
         private sealed class CatchAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly IEnumerable<IAsyncEnumerable<TSource>> sources;
+            private readonly IEnumerable<IAsyncEnumerable<TSource>> _sources;
 
-            private IAsyncEnumerator<TSource> enumerator;
-            private ExceptionDispatchInfo error;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private ExceptionDispatchInfo _error;
 
-            private IEnumerator<IAsyncEnumerable<TSource>> sourcesEnumerator;
+            private IEnumerator<IAsyncEnumerable<TSource>> _sourcesEnumerator;
 
             public CatchAsyncIterator(IEnumerable<IAsyncEnumerable<TSource>> sources)
             {
                 Debug.Assert(sources != null);
 
-                this.sources = sources;
+                _sources = sources;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new CatchAsyncIterator<TSource>(sources);
+                return new CatchAsyncIterator<TSource>(_sources);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (sourcesEnumerator != null)
+                if (_sourcesEnumerator != null)
                 {
-                    sourcesEnumerator.Dispose();
-                    sourcesEnumerator = null;
+                    _sourcesEnumerator.Dispose();
+                    _sourcesEnumerator = null;
                 }
 
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
-                error = null;
+                _error = null;
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
@@ -296,7 +296,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourcesEnumerator = sources.GetEnumerator();
+                        _sourcesEnumerator = _sources.GetEnumerator();
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -304,33 +304,33 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (true)
                         {
-                            if (enumerator == null)
+                            if (_enumerator == null)
                             {
-                                if (!sourcesEnumerator.MoveNext())
+                                if (!_sourcesEnumerator.MoveNext())
                                 {
                                     // only throw if we have an error on the last one
-                                    error?.Throw();
+                                    _error?.Throw();
                                     break; // done, nothing else to do
                                 }
 
-                                error = null;
-                                enumerator = sourcesEnumerator.Current.GetAsyncEnumerator(cancellationToken);
+                                _error = null;
+                                _enumerator = _sourcesEnumerator.Current.GetAsyncEnumerator(cancellationToken);
                             }
 
                             try
                             {
-                                if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = enumerator.Current;
+                                    current = _enumerator.Current;
                                     return true;
                                 }
                             }
                             catch (Exception ex)
                             {
                                 // Done with the current one, go to the next
-                                await enumerator.DisposeAsync().ConfigureAwait(false);
-                                enumerator = null;
-                                error = ExceptionDispatchInfo.Capture(ex);
+                                await _enumerator.DisposeAsync().ConfigureAwait(false);
+                                _enumerator = null;
+                                _error = ExceptionDispatchInfo.Capture(ex);
                                 continue;
                             }
 

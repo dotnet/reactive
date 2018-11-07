@@ -33,14 +33,14 @@ namespace System.Linq
 
         private sealed class GenerateAsyncIterator<TState, TResult> : AsyncIterator<TResult>
         {
-            private readonly Func<TState, bool> condition;
-            private readonly TState initialState;
-            private readonly Func<TState, TState> iterate;
-            private readonly Func<TState, TResult> resultSelector;
+            private readonly Func<TState, bool> _condition;
+            private readonly TState _initialState;
+            private readonly Func<TState, TState> _iterate;
+            private readonly Func<TState, TResult> _resultSelector;
 
-            private TState currentState;
+            private TState _currentState;
 
-            private bool started;
+            private bool _started;
 
             public GenerateAsyncIterator(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
             {
@@ -48,20 +48,20 @@ namespace System.Linq
                 Debug.Assert(iterate != null);
                 Debug.Assert(resultSelector != null);
 
-                this.initialState = initialState;
-                this.condition = condition;
-                this.iterate = iterate;
-                this.resultSelector = resultSelector;
+                _initialState = initialState;
+                _condition = condition;
+                _iterate = iterate;
+                _resultSelector = resultSelector;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new GenerateAsyncIterator<TState, TResult>(initialState, condition, iterate, resultSelector);
+                return new GenerateAsyncIterator<TState, TResult>(_initialState, _condition, _iterate, _resultSelector);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                currentState = default;
+                _currentState = default;
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
@@ -71,23 +71,23 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        started = false;
-                        currentState = initialState;
+                        _started = false;
+                        _currentState = _initialState;
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (started)
+                        if (_started)
                         {
-                            currentState = iterate(currentState);
+                            _currentState = _iterate(_currentState);
                         }
 
-                        started = true;
+                        _started = true;
 
-                        if (condition(currentState))
+                        if (_condition(_currentState))
                         {
-                            current = resultSelector(currentState);
+                            current = _resultSelector(_currentState);
                             return true;
                         }
                         break;

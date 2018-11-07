@@ -25,30 +25,30 @@ namespace System.Linq
 
         private sealed class TimeoutAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly IAsyncEnumerable<TSource> source;
-            private readonly TimeSpan timeout;
+            private readonly IAsyncEnumerable<TSource> _source;
+            private readonly TimeSpan _timeout;
 
-            private IAsyncEnumerator<TSource> enumerator;
+            private IAsyncEnumerator<TSource> _enumerator;
 
             public TimeoutAsyncIterator(IAsyncEnumerable<TSource> source, TimeSpan timeout)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
-                this.timeout = timeout;
+                _source = source;
+                _timeout = timeout;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new TimeoutAsyncIterator<TSource>(source, timeout);
+                return new TimeoutAsyncIterator<TSource>(_source, _timeout);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -59,19 +59,19 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        var moveNext = enumerator.MoveNextAsync();
+                        var moveNext = _enumerator.MoveNextAsync();
 
                         if (!moveNext.IsCompleted)
                         {
                             using (var delayCts = new CancellationTokenSource())
                             {
-                                var delay = Task.Delay(timeout, delayCts.Token);
+                                var delay = Task.Delay(_timeout, delayCts.Token);
 
                                 var winner = await Task.WhenAny(moveNext.AsTask(), delay).ConfigureAwait(false);
 
@@ -86,7 +86,7 @@ namespace System.Linq
 
                         if (await moveNext.ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 

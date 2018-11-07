@@ -39,31 +39,31 @@ namespace System.Linq
 
         private sealed class AmbAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly IAsyncEnumerable<TSource> first;
-            private readonly IAsyncEnumerable<TSource> second;
+            private readonly IAsyncEnumerable<TSource> _first;
+            private readonly IAsyncEnumerable<TSource> _second;
 
-            private IAsyncEnumerator<TSource> enumerator;
+            private IAsyncEnumerator<TSource> _enumerator;
 
             public AmbAsyncIterator(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
             {
                 Debug.Assert(first != null);
                 Debug.Assert(second != null);
 
-                this.first = first;
-                this.second = second;
+                _first = first;
+                _second = second;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new AmbAsyncIterator<TSource>(first, second);
+                return new AmbAsyncIterator<TSource>(_first, _second);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -74,8 +74,8 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        var firstEnumerator = first.GetAsyncEnumerator(cancellationToken);
-                        var secondEnumerator = second.GetAsyncEnumerator(cancellationToken);
+                        var firstEnumerator = _first.GetAsyncEnumerator(cancellationToken);
+                        var secondEnumerator = _second.GetAsyncEnumerator(cancellationToken);
 
                         var firstMoveNext = firstEnumerator.MoveNextAsync().AsTask();
                         var secondMoveNext = secondEnumerator.MoveNextAsync().AsTask();
@@ -93,7 +93,7 @@ namespace System.Linq
 
                         if (winner == firstMoveNext)
                         {
-                            enumerator = firstEnumerator;
+                            _enumerator = firstEnumerator;
 
                             var ignored = secondMoveNext.ContinueWith(_ =>
                             {
@@ -102,7 +102,7 @@ namespace System.Linq
                         }
                         else
                         {
-                            enumerator = secondEnumerator;
+                            _enumerator = secondEnumerator;
 
                             var ignored = firstMoveNext.ContinueWith(_ =>
                             {
@@ -114,16 +114,16 @@ namespace System.Linq
 
                         if (await winner.ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 
@@ -137,28 +137,28 @@ namespace System.Linq
 
         private sealed class AmbAsyncIteratorN<TSource> : AsyncIterator<TSource>
         {
-            private readonly IAsyncEnumerable<TSource>[] sources;
+            private readonly IAsyncEnumerable<TSource>[] _sources;
 
-            private IAsyncEnumerator<TSource> enumerator;
+            private IAsyncEnumerator<TSource> _enumerator;
 
             public AmbAsyncIteratorN(IAsyncEnumerable<TSource>[] sources)
             {
                 Debug.Assert(sources != null);
 
-                this.sources = sources;
+                _sources = sources;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new AmbAsyncIteratorN<TSource>(sources);
+                return new AmbAsyncIteratorN<TSource>(_sources);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -169,14 +169,14 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        var n = sources.Length;
+                        var n = _sources.Length;
 
                         var enumerators = new IAsyncEnumerator<TSource>[n];
                         var moveNexts = new ValueTask<bool>[n];
 
                         for (var i = 0; i < n; i++)
                         {
-                            var enumerator = sources[i].GetAsyncEnumerator(cancellationToken);
+                            var enumerator = _sources[i].GetAsyncEnumerator(cancellationToken);
 
                             enumerators[i] = enumerator;
                             moveNexts[i] = enumerator.MoveNextAsync();
@@ -195,7 +195,7 @@ namespace System.Linq
 
                         var winnerIndex = Array.IndexOf(moveNexts, winner);
 
-                        enumerator = enumerators[winnerIndex];
+                        _enumerator = enumerators[winnerIndex];
 
                         for (var i = 0; i < n; i++)
                         {
@@ -212,16 +212,16 @@ namespace System.Linq
 
                         if (await winner.ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 

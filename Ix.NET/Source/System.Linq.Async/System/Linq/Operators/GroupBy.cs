@@ -221,13 +221,13 @@ namespace System.Linq
 
         internal sealed class GroupedResultAsyncEnumerable<TSource, TKey, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
-            private readonly IAsyncEnumerable<TSource> source;
-            private readonly Func<TSource, TKey> keySelector;
-            private readonly Func<TKey, IAsyncEnumerable<TSource>, TResult> resultSelector;
-            private readonly IEqualityComparer<TKey> comparer;
+            private readonly IAsyncEnumerable<TSource> _source;
+            private readonly Func<TSource, TKey> _keySelector;
+            private readonly Func<TKey, IAsyncEnumerable<TSource>, TResult> _resultSelector;
+            private readonly IEqualityComparer<TKey> _comparer;
 
-            private Internal.Lookup<TKey, TSource> lookup;
-            private IEnumerator<TResult> enumerator;
+            private Internal.Lookup<TKey, TSource> _lookup;
+            private IEnumerator<TResult> _enumerator;
 
             public GroupedResultAsyncEnumerable(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, IAsyncEnumerable<TSource>, TResult> resultSelector, IEqualityComparer<TKey> comparer)
             {
@@ -236,24 +236,24 @@ namespace System.Linq
                 Debug.Assert(resultSelector != null);
                 Debug.Assert(comparer != null);
 
-                this.source = source;
-                this.keySelector = keySelector;
-                this.resultSelector = resultSelector;
-                this.comparer = comparer;
+                _source = source;
+                _keySelector = keySelector;
+                _resultSelector = resultSelector;
+                _comparer = comparer;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new GroupedResultAsyncEnumerable<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer);
+                return new GroupedResultAsyncEnumerable<TSource, TKey, TResult>(_source, _keySelector, _resultSelector, _comparer);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    enumerator.Dispose();
-                    enumerator = null;
-                    lookup = null;
+                    _enumerator.Dispose();
+                    _enumerator = null;
+                    _lookup = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -264,15 +264,15 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer).ConfigureAwait(false);
-                        enumerator = lookup.ApplyResultSelector(resultSelector).GetEnumerator();
+                        _lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer).ConfigureAwait(false);
+                        _enumerator = _lookup.ApplyResultSelector(_resultSelector).GetEnumerator();
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
+                        if (_enumerator.MoveNext())
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 
@@ -285,14 +285,14 @@ namespace System.Linq
 
             public async Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
-                return l.ToArray(resultSelector);
+                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return l.ToArray(_resultSelector);
             }
 
             public async Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
-                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
-                return l.ToList(resultSelector);
+                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return l.ToList(_resultSelector);
             }
 
             public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
@@ -302,7 +302,7 @@ namespace System.Linq
                     return -1;
                 }
 
-                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
                 return l.Count;
             }
@@ -310,13 +310,13 @@ namespace System.Linq
 
         internal sealed class GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
-            private readonly IAsyncEnumerable<TSource> source;
-            private readonly Func<TSource, Task<TKey>> keySelector;
-            private readonly Func<TKey, IAsyncEnumerable<TSource>, Task<TResult>> resultSelector;
-            private readonly IEqualityComparer<TKey> comparer;
+            private readonly IAsyncEnumerable<TSource> _source;
+            private readonly Func<TSource, Task<TKey>> _keySelector;
+            private readonly Func<TKey, IAsyncEnumerable<TSource>, Task<TResult>> _resultSelector;
+            private readonly IEqualityComparer<TKey> _comparer;
 
-            private Internal.LookupWithTask<TKey, TSource> lookup;
-            private IAsyncEnumerator<TResult> enumerator;
+            private Internal.LookupWithTask<TKey, TSource> _lookup;
+            private IAsyncEnumerator<TResult> _enumerator;
 
             public GroupedResultAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, Task<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
             {
@@ -325,24 +325,24 @@ namespace System.Linq
                 Debug.Assert(resultSelector != null);
                 Debug.Assert(comparer != null);
 
-                this.source = source;
-                this.keySelector = keySelector;
-                this.resultSelector = resultSelector;
-                this.comparer = comparer;
+                _source = source;
+                _keySelector = keySelector;
+                _resultSelector = resultSelector;
+                _comparer = comparer;
             }
 
             public override AsyncIterator<TResult> Clone()
             {
-                return new GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer);
+                return new GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult>(_source, _keySelector, _resultSelector, _comparer);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
-                    lookup = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                    _lookup = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -353,15 +353,15 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        lookup = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(source, keySelector, comparer).ConfigureAwait(false);
-                        enumerator = lookup.Select(async g => await resultSelector(g.Key, g).ConfigureAwait(false)).GetAsyncEnumerator(cancellationToken);
+                        _lookup = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer).ConfigureAwait(false);
+                        _enumerator = _lookup.Select(async g => await _resultSelector(g.Key, g).ConfigureAwait(false)).GetAsyncEnumerator(cancellationToken);
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 
@@ -374,14 +374,14 @@ namespace System.Linq
 
             public async Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
-                return await l.ToArray(resultSelector).ConfigureAwait(false);
+                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return await l.ToArray(_resultSelector).ConfigureAwait(false);
             }
 
             public async Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
-                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
-                return await l.ToList(resultSelector).ConfigureAwait(false);
+                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return await l.ToList(_resultSelector).ConfigureAwait(false);
             }
 
             public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
@@ -391,7 +391,7 @@ namespace System.Linq
                     return -1;
                 }
 
-                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
                 return l.Count;
             }
@@ -399,13 +399,13 @@ namespace System.Linq
 
         internal sealed class GroupedAsyncEnumerable<TSource, TKey, TElement> : AsyncIterator<IAsyncGrouping<TKey, TElement>>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
         {
-            private readonly IAsyncEnumerable<TSource> source;
-            private readonly Func<TSource, TKey> keySelector;
-            private readonly Func<TSource, TElement> elementSelector;
-            private readonly IEqualityComparer<TKey> comparer;
+            private readonly IAsyncEnumerable<TSource> _source;
+            private readonly Func<TSource, TKey> _keySelector;
+            private readonly Func<TSource, TElement> _elementSelector;
+            private readonly IEqualityComparer<TKey> _comparer;
 
-            private Internal.Lookup<TKey, TElement> lookup;
-            private IEnumerator<IGrouping<TKey, TElement>> enumerator;
+            private Internal.Lookup<TKey, TElement> _lookup;
+            private IEnumerator<IGrouping<TKey, TElement>> _enumerator;
 
             public GroupedAsyncEnumerable(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
             {
@@ -414,24 +414,24 @@ namespace System.Linq
                 Debug.Assert(elementSelector != null);
                 Debug.Assert(comparer != null);
 
-                this.source = source;
-                this.keySelector = keySelector;
-                this.elementSelector = elementSelector;
-                this.comparer = comparer;
+                _source = source;
+                _keySelector = keySelector;
+                _elementSelector = elementSelector;
+                _comparer = comparer;
             }
 
             public override AsyncIterator<IAsyncGrouping<TKey, TElement>> Clone()
             {
-                return new GroupedAsyncEnumerable<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
+                return new GroupedAsyncEnumerable<TSource, TKey, TElement>(_source, _keySelector, _elementSelector, _comparer);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    enumerator.Dispose();
-                    enumerator = null;
-                    lookup = null;
+                    _enumerator.Dispose();
+                    _enumerator = null;
+                    _lookup = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -442,15 +442,15 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer).ConfigureAwait(false);
-                        enumerator = lookup.GetEnumerator();
+                        _lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer).ConfigureAwait(false);
+                        _enumerator = _lookup.GetEnumerator();
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
+                        if (_enumerator.MoveNext())
                         {
-                            current = (IAsyncGrouping<TKey, TElement>)enumerator.Current;
+                            current = (IAsyncGrouping<TKey, TElement>)_enumerator.Current;
                             return true;
                         }
 
@@ -463,13 +463,13 @@ namespace System.Linq
             
             public async Task<IAsyncGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
             public async Task<List<IAsyncGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
             {
-                IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
@@ -480,7 +480,7 @@ namespace System.Linq
                     return -1;
                 }
 
-                var l = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                var l = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
 
                 return l.Count;
             }
@@ -488,13 +488,13 @@ namespace System.Linq
 
         internal sealed class GroupedAsyncEnumerableWithTask<TSource, TKey, TElement> : AsyncIterator<IAsyncGrouping<TKey, TElement>>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
         {
-            private readonly IAsyncEnumerable<TSource> source;
-            private readonly Func<TSource, Task<TKey>> keySelector;
-            private readonly Func<TSource, Task<TElement>> elementSelector;
-            private readonly IEqualityComparer<TKey> comparer;
+            private readonly IAsyncEnumerable<TSource> _source;
+            private readonly Func<TSource, Task<TKey>> _keySelector;
+            private readonly Func<TSource, Task<TElement>> _elementSelector;
+            private readonly IEqualityComparer<TKey> _comparer;
 
-            private Internal.LookupWithTask<TKey, TElement> lookup;
-            private IEnumerator<IGrouping<TKey, TElement>> enumerator;
+            private Internal.LookupWithTask<TKey, TElement> _lookup;
+            private IEnumerator<IGrouping<TKey, TElement>> _enumerator;
 
             public GroupedAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer)
             {
@@ -503,24 +503,24 @@ namespace System.Linq
                 Debug.Assert(elementSelector != null);
                 Debug.Assert(comparer != null);
 
-                this.source = source;
-                this.keySelector = keySelector;
-                this.elementSelector = elementSelector;
-                this.comparer = comparer;
+                _source = source;
+                _keySelector = keySelector;
+                _elementSelector = elementSelector;
+                _comparer = comparer;
             }
 
             public override AsyncIterator<IAsyncGrouping<TKey, TElement>> Clone()
             {
-                return new GroupedAsyncEnumerableWithTask<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
+                return new GroupedAsyncEnumerableWithTask<TSource, TKey, TElement>(_source, _keySelector, _elementSelector, _comparer);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    enumerator.Dispose();
-                    enumerator = null;
-                    lookup = null;
+                    _enumerator.Dispose();
+                    _enumerator = null;
+                    _lookup = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -531,15 +531,15 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        lookup = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer).ConfigureAwait(false);
-                        enumerator = lookup.GetEnumerator();
+                        _lookup = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer).ConfigureAwait(false);
+                        _enumerator = _lookup.GetEnumerator();
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
+                        if (_enumerator.MoveNext())
                         {
-                            current = (IAsyncGrouping<TKey, TElement>)enumerator.Current;
+                            current = (IAsyncGrouping<TKey, TElement>)_enumerator.Current;
                             return true;
                         }
 
@@ -552,13 +552,13 @@ namespace System.Linq
 
             public async Task<IAsyncGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
             public async Task<List<IAsyncGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
             {
-                IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
@@ -569,7 +569,7 @@ namespace System.Linq
                     return -1;
                 }
 
-                var l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                var l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
 
                 return l.Count;
             }
@@ -577,12 +577,12 @@ namespace System.Linq
 
         internal sealed class GroupedAsyncEnumerable<TSource, TKey> : AsyncIterator<IAsyncGrouping<TKey, TSource>>, IAsyncIListProvider<IAsyncGrouping<TKey, TSource>>
         {
-            private readonly IAsyncEnumerable<TSource> source;
-            private readonly Func<TSource, TKey> keySelector;
-            private readonly IEqualityComparer<TKey> comparer;
+            private readonly IAsyncEnumerable<TSource> _source;
+            private readonly Func<TSource, TKey> _keySelector;
+            private readonly IEqualityComparer<TKey> _comparer;
 
-            private Internal.Lookup<TKey, TSource> lookup;
-            private IEnumerator<IGrouping<TKey, TSource>> enumerator;
+            private Internal.Lookup<TKey, TSource> _lookup;
+            private IEnumerator<IGrouping<TKey, TSource>> _enumerator;
 
             public GroupedAsyncEnumerable(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
             {
@@ -590,22 +590,22 @@ namespace System.Linq
                 Debug.Assert(keySelector != null);
                 Debug.Assert(comparer != null);
 
-                this.source = source;
-                this.keySelector = keySelector;
-                this.comparer = comparer;
+                _source = source;
+                _keySelector = keySelector;
+                _comparer = comparer;
             }
 
             public override AsyncIterator<IAsyncGrouping<TKey, TSource>> Clone()
             {
-                return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer);
+                return new GroupedAsyncEnumerable<TSource, TKey>(_source, _keySelector, _comparer);
             }
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    enumerator.Dispose();
-                    enumerator = null;
-                    lookup = null;
+                    _enumerator.Dispose();
+                    _enumerator = null;
+                    _lookup = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -616,15 +616,15 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer).ConfigureAwait(false);
-                        enumerator = lookup.GetEnumerator();
+                        _lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer).ConfigureAwait(false);
+                        _enumerator = _lookup.GetEnumerator();
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
+                        if (_enumerator.MoveNext())
                         {
-                            current = (IAsyncGrouping<TKey, TSource>)enumerator.Current;
+                            current = (IAsyncGrouping<TKey, TSource>)_enumerator.Current;
                             return true;
                         }
 
@@ -637,13 +637,13 @@ namespace System.Linq
 
             public async Task<IAsyncGrouping<TKey, TSource>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
             public async Task<List<IAsyncGrouping<TKey, TSource>>> ToListAsync(CancellationToken cancellationToken)
             {
-                IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
@@ -654,7 +654,7 @@ namespace System.Linq
                     return -1;
                 }
 
-                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer).ConfigureAwait(false);
+                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer).ConfigureAwait(false);
 
                 return l.Count;
             }
@@ -662,12 +662,12 @@ namespace System.Linq
 
         internal sealed class GroupedAsyncEnumerableWithTask<TSource, TKey> : AsyncIterator<IAsyncGrouping<TKey, TSource>>, IAsyncIListProvider<IAsyncGrouping<TKey, TSource>>
         {
-            private readonly IAsyncEnumerable<TSource> source;
-            private readonly Func<TSource, Task<TKey>> keySelector;
-            private readonly IEqualityComparer<TKey> comparer;
+            private readonly IAsyncEnumerable<TSource> _source;
+            private readonly Func<TSource, Task<TKey>> _keySelector;
+            private readonly IEqualityComparer<TKey> _comparer;
 
-            private Internal.LookupWithTask<TKey, TSource> lookup;
-            private IEnumerator<IGrouping<TKey, TSource>> enumerator;
+            private Internal.LookupWithTask<TKey, TSource> _lookup;
+            private IEnumerator<IGrouping<TKey, TSource>> _enumerator;
 
             public GroupedAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
             {
@@ -675,22 +675,22 @@ namespace System.Linq
                 Debug.Assert(keySelector != null);
                 Debug.Assert(comparer != null);
 
-                this.source = source;
-                this.keySelector = keySelector;
-                this.comparer = comparer;
+                _source = source;
+                _keySelector = keySelector;
+                _comparer = comparer;
             }
 
             public override AsyncIterator<IAsyncGrouping<TKey, TSource>> Clone()
             {
-                return new GroupedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer);
+                return new GroupedAsyncEnumerableWithTask<TSource, TKey>(_source, _keySelector, _comparer);
             }
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    enumerator.Dispose();
-                    enumerator = null;
-                    lookup = null;
+                    _enumerator.Dispose();
+                    _enumerator = null;
+                    _lookup = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -701,15 +701,15 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        lookup = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(source, keySelector, comparer).ConfigureAwait(false);
-                        enumerator = lookup.GetEnumerator();
+                        _lookup = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer).ConfigureAwait(false);
+                        _enumerator = _lookup.GetEnumerator();
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
+                        if (_enumerator.MoveNext())
                         {
-                            current = (IAsyncGrouping<TKey, TSource>)enumerator.Current;
+                            current = (IAsyncGrouping<TKey, TSource>)_enumerator.Current;
                             return true;
                         }
 
@@ -722,13 +722,13 @@ namespace System.Linq
 
             public async Task<IAsyncGrouping<TKey, TSource>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
             public async Task<List<IAsyncGrouping<TKey, TSource>>> ToListAsync(CancellationToken cancellationToken)
             {
-                IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
@@ -739,7 +739,7 @@ namespace System.Linq
                     return -1;
                 }
 
-                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(source, keySelector, comparer).ConfigureAwait(false);
+                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer).ConfigureAwait(false);
 
                 return l.Count;
             }

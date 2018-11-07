@@ -67,12 +67,12 @@ namespace System.Linq
 
         private sealed class DistinctAsyncIterator<TSource, TKey> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
-            private readonly IEqualityComparer<TKey> comparer;
-            private readonly Func<TSource, TKey> keySelector;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly IEqualityComparer<TKey> _comparer;
+            private readonly Func<TSource, TKey> _keySelector;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> enumerator;
-            private Set<TKey> set;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private Set<TKey> _set;
 
             public DistinctAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
             {
@@ -80,9 +80,9 @@ namespace System.Linq
                 Debug.Assert(keySelector != null);
                 Debug.Assert(comparer != null);
 
-                this.source = source;
-                this.keySelector = keySelector;
-                this.comparer = comparer;
+                _source = source;
+                _keySelector = keySelector;
+                _comparer = comparer;
             }
 
             public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
@@ -105,16 +105,16 @@ namespace System.Linq
                 }
 
                 var count = 0;
-                var s = new Set<TKey>(comparer);
+                var s = new Set<TKey>(_comparer);
 
-                var enu = source.GetAsyncEnumerator(cancellationToken);
+                var enu = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
                         var item = enu.Current;
-                        if (s.Add(keySelector(item)))
+                        if (s.Add(_keySelector(item)))
                         {
                             count++;
                         }
@@ -130,16 +130,16 @@ namespace System.Linq
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new DistinctAsyncIterator<TSource, TKey>(source, keySelector, comparer);
+                return new DistinctAsyncIterator<TSource, TKey>(_source, _keySelector, _comparer);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
-                    set = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                    _set = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -150,27 +150,27 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
 
-                        if (!await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (!await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             await DisposeAsync().ConfigureAwait(false);
                             return false;
                         }
 
-                        var element = enumerator.Current;
-                        set = new Set<TKey>(comparer);
-                        set.Add(keySelector(element));
+                        var element = _enumerator.Current;
+                        _set = new Set<TKey>(_comparer);
+                        _set.Add(_keySelector(element));
                         current = element;
 
                         state = AsyncIteratorState.Iterating;
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            element = enumerator.Current;
-                            if (set.Add(keySelector(element)))
+                            element = _enumerator.Current;
+                            if (_set.Add(_keySelector(element)))
                             {
                                 current = element;
                                 return true;
@@ -186,17 +186,17 @@ namespace System.Linq
 
             private async Task<List<TSource>> FillSetAsync(CancellationToken cancellationToken)
             {
-                var s = new Set<TKey>(comparer);
+                var s = new Set<TKey>(_comparer);
                 var r = new List<TSource>();
 
-                var enu = source.GetAsyncEnumerator(cancellationToken);
+                var enu = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
                     while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                     {
                         var item = enu.Current;
-                        if (s.Add(keySelector(item)))
+                        if (s.Add(_keySelector(item)))
                         {
                             r.Add(item);
                         }
@@ -213,12 +213,12 @@ namespace System.Linq
 
         private sealed class DistinctAsyncIteratorWithTask<TSource, TKey> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
-            private readonly IEqualityComparer<TKey> comparer;
-            private readonly Func<TSource, Task<TKey>> keySelector;
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly IEqualityComparer<TKey> _comparer;
+            private readonly Func<TSource, Task<TKey>> _keySelector;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> enumerator;
-            private Set<TKey> set;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private Set<TKey> _set;
 
             public DistinctAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
             {
@@ -226,9 +226,9 @@ namespace System.Linq
                 Debug.Assert(keySelector != null);
                 Debug.Assert(comparer != null);
 
-                this.source = source;
-                this.keySelector = keySelector;
-                this.comparer = comparer;
+                _source = source;
+                _keySelector = keySelector;
+                _comparer = comparer;
             }
 
             public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
@@ -251,16 +251,16 @@ namespace System.Linq
                 }
 
                 var count = 0;
-                var s = new Set<TKey>(comparer);
+                var s = new Set<TKey>(_comparer);
 
-                var enu = source.GetAsyncEnumerator(cancellationToken);
+                var enu = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
                         var item = enu.Current;
-                        if (s.Add(await keySelector(item).ConfigureAwait(false)))
+                        if (s.Add(await _keySelector(item).ConfigureAwait(false)))
                         {
                             count++;
                         }
@@ -276,16 +276,16 @@ namespace System.Linq
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new DistinctAsyncIteratorWithTask<TSource, TKey>(source, keySelector, comparer);
+                return new DistinctAsyncIteratorWithTask<TSource, TKey>(_source, _keySelector, _comparer);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
-                    set = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                    _set = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -296,27 +296,27 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
 
-                        if (!await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (!await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             await DisposeAsync().ConfigureAwait(false);
                             return false;
                         }
 
-                        var element = enumerator.Current;
-                        set = new Set<TKey>(comparer);
-                        set.Add(await keySelector(element).ConfigureAwait(false));
+                        var element = _enumerator.Current;
+                        _set = new Set<TKey>(_comparer);
+                        _set.Add(await _keySelector(element).ConfigureAwait(false));
                         current = element;
 
                         state = AsyncIteratorState.Iterating;
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            element = enumerator.Current;
-                            if (set.Add(await keySelector(element).ConfigureAwait(false)))
+                            element = _enumerator.Current;
+                            if (_set.Add(await _keySelector(element).ConfigureAwait(false)))
                             {
                                 current = element;
                                 return true;
@@ -332,17 +332,17 @@ namespace System.Linq
 
             private async Task<List<TSource>> FillSetAsync(CancellationToken cancellationToken)
             {
-                var s = new Set<TKey>(comparer);
+                var s = new Set<TKey>(_comparer);
                 var r = new List<TSource>();
 
-                var enu = source.GetAsyncEnumerator(cancellationToken);
+                var enu = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
                     while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                     {
                         var item = enu.Current;
-                        if (s.Add(await keySelector(item).ConfigureAwait(false)))
+                        if (s.Add(await _keySelector(item).ConfigureAwait(false)))
                         {
                             r.Add(item);
                         }

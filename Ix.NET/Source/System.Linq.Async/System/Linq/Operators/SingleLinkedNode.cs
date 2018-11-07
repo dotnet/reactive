@@ -57,8 +57,8 @@ namespace System.Linq
         /// </summary>
         public int GetCount()
         {
-            int count = 0;
-            for (SingleLinkedNode<TSource> node = this; node != null; node = node.Linked)
+            var count = 0;
+            for (var node = this; node != null; node = node.Linked)
             {
                 count++;
             }
@@ -86,7 +86,7 @@ namespace System.Linq
         {
             Debug.Assert(index >= 0 && index < GetCount());
 
-            SingleLinkedNode<TSource> node = this;
+            var node = this;
             for (; index > 0; index--)
             {
                 node = node.Linked;
@@ -104,9 +104,9 @@ namespace System.Linq
         {
             Debug.Assert(count == GetCount());
 
-            TSource[] array = new TSource[count];
-            int index = count;
-            for (SingleLinkedNode<TSource> node = this; node != null; node = node.Linked)
+            var array = new TSource[count];
+            var index = count;
+            for (var node = this; node != null; node = node.Linked)
             {
                 --index;
                 array[index] = node.Item;

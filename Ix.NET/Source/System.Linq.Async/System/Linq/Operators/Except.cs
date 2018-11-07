@@ -35,16 +35,16 @@ namespace System.Linq
 
         private sealed class ExceptAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly IEqualityComparer<TSource> comparer;
-            private readonly IAsyncEnumerable<TSource> first;
-            private readonly IAsyncEnumerable<TSource> second;
+            private readonly IEqualityComparer<TSource> _comparer;
+            private readonly IAsyncEnumerable<TSource> _first;
+            private readonly IAsyncEnumerable<TSource> _second;
 
-            private Task fillSetTask;
+            private Task _fillSetTask;
 
-            private IAsyncEnumerator<TSource> firstEnumerator;
-            private Set<TSource> set;
+            private IAsyncEnumerator<TSource> _firstEnumerator;
+            private Set<TSource> _set;
 
-            private bool setFilled;
+            private bool _setFilled;
 
             public ExceptAsyncIterator(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
             {
@@ -52,25 +52,25 @@ namespace System.Linq
                 Debug.Assert(second != null);
                 Debug.Assert(comparer != null);
 
-                this.first = first;
-                this.second = second;
-                this.comparer = comparer;
+                _first = first;
+                _second = second;
+                _comparer = comparer;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new ExceptAsyncIterator<TSource>(first, second, comparer);
+                return new ExceptAsyncIterator<TSource>(_first, _second, _comparer);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (firstEnumerator != null)
+                if (_firstEnumerator != null)
                 {
-                    await firstEnumerator.DisposeAsync().ConfigureAwait(false);
-                    firstEnumerator = null;
+                    await _firstEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _firstEnumerator = null;
                 }
 
-                set = null;
+                _set = null;
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
@@ -80,10 +80,10 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        firstEnumerator = first.GetAsyncEnumerator(cancellationToken);
-                        set = new Set<TSource>(comparer);
-                        setFilled = false;
-                        fillSetTask = FillSetAsync();
+                        _firstEnumerator = _first.GetAsyncEnumerator(cancellationToken);
+                        _set = new Set<TSource>(_comparer);
+                        _setFilled = false;
+                        _fillSetTask = FillSetAsync();
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -92,24 +92,24 @@ namespace System.Linq
                         bool moveNext;
                         do
                         {
-                            if (!setFilled)
+                            if (!_setFilled)
                             {
                                 // This is here so we don't need to call Task.WhenAll each time after the set is filled
-                                var moveNextTask = firstEnumerator.MoveNextAsync();
-                                await Task.WhenAll(moveNextTask.AsTask(), fillSetTask).ConfigureAwait(false);
+                                var moveNextTask = _firstEnumerator.MoveNextAsync();
+                                await Task.WhenAll(moveNextTask.AsTask(), _fillSetTask).ConfigureAwait(false);
 
-                                setFilled = true;
+                                _setFilled = true;
                                 moveNext = moveNextTask.Result;
                             }
                             else
                             {
-                                moveNext = await firstEnumerator.MoveNextAsync().ConfigureAwait(false);
+                                moveNext = await _firstEnumerator.MoveNextAsync().ConfigureAwait(false);
                             }
 
                             if (moveNext)
                             {
-                                var item = firstEnumerator.Current;
-                                if (set.Add(item))
+                                var item = _firstEnumerator.Current;
+                                if (_set.Add(item))
                                 {
                                     current = item;
                                     return true;
@@ -126,11 +126,11 @@ namespace System.Linq
 
             private async Task FillSetAsync()
             {
-                var array = await second.ToArray().ConfigureAwait(false);
+                var array = await _second.ToArray().ConfigureAwait(false);
 
                 foreach (var t in array)
                 {
-                    set.Add(t);
+                    _set.Add(t);
                 }
             }
         }

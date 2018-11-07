@@ -24,21 +24,21 @@ namespace System.Linq
 
         private sealed class ReverseAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
-            private readonly IAsyncEnumerable<TSource> source;
+            private readonly IAsyncEnumerable<TSource> _source;
 
-            private int index;
-            private TSource[] items;
+            private int _index;
+            private TSource[] _items;
 
             public ReverseAsyncIterator(IAsyncEnumerable<TSource> source)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
+                _source = source;
             }
 
             public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var array = await source.ToArray(cancellationToken).ConfigureAwait(false);
+                var array = await _source.ToArray(cancellationToken).ConfigureAwait(false);
 
                 // Array.Reverse() involves boxing for non-primitive value types, but
                 // checking that has its own cost, so just use this approach for all types.
@@ -54,7 +54,7 @@ namespace System.Linq
 
             public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var list = await source.ToList(cancellationToken).ConfigureAwait(false);
+                var list = await _source.ToList(cancellationToken).ConfigureAwait(false);
 
                 list.Reverse();
                 return list;
@@ -64,28 +64,28 @@ namespace System.Linq
             {
                 if (onlyIfCheap)
                 {
-                    if (source is IAsyncIListProvider<TSource> listProv)
+                    if (_source is IAsyncIListProvider<TSource> listProv)
                     {
                         return listProv.GetCountAsync(true, cancellationToken);
                     }
 
-                    if (!(source is ICollection<TSource>) && !(source is ICollection))
+                    if (!(_source is ICollection<TSource>) && !(_source is ICollection))
                     {
                         return Task.FromResult(-1);
                     }
                 }
 
-                return source.Count(cancellationToken);
+                return _source.Count(cancellationToken);
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new ReverseAsyncIterator<TSource>(source);
+                return new ReverseAsyncIterator<TSource>(_source);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                items = null; // Just in case this ends up being long-lived, allow the memory to be reclaimed.
+                _items = null; // Just in case this ends up being long-lived, allow the memory to be reclaimed.
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
@@ -94,17 +94,17 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        items = await source.ToArray().ConfigureAwait(false);
-                        index = items.Length - 1;
+                        _items = await _source.ToArray().ConfigureAwait(false);
+                        _index = _items.Length - 1;
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (index != -1)
+                        if (_index != -1)
                         {
-                            current = items[index];
-                            --index;
+                            current = _items[_index];
+                            --_index;
                             return true;
                         }
 

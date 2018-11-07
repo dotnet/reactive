@@ -37,40 +37,40 @@ namespace System.Linq
 
         private sealed class MergeAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly IAsyncEnumerable<TSource>[] sources;
+            private readonly IAsyncEnumerable<TSource>[] _sources;
 
-            private IAsyncEnumerator<TSource>[] enumerators;
-            private ValueTask<bool>[] moveNexts;
-            private int active;
+            private IAsyncEnumerator<TSource>[] _enumerators;
+            private ValueTask<bool>[] _moveNexts;
+            private int _active;
 
             public MergeAsyncIterator(IAsyncEnumerable<TSource>[] sources)
             {
                 Debug.Assert(sources != null);
 
-                this.sources = sources;
+                _sources = sources;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new MergeAsyncIterator<TSource>(sources);
+                return new MergeAsyncIterator<TSource>(_sources);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerators != null)
+                if (_enumerators != null)
                 {
-                    var n = enumerators.Length;
+                    var n = _enumerators.Length;
 
                     var disposes = new ValueTask[n];
 
                     for (var i = 0; i < n; i++)
                     {
-                        var dispose = enumerators[i].DisposeAsync();
+                        var dispose = _enumerators[i].DisposeAsync();
                         disposes[i] = dispose;
                     }
 
                     await Task.WhenAll(disposes.Select(t => t.AsTask())).ConfigureAwait(false);
-                    enumerators = null;
+                    _enumerators = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -81,24 +81,24 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        var n = sources.Length;
+                        var n = _sources.Length;
 
-                        enumerators = new IAsyncEnumerator<TSource>[n];
-                        moveNexts = new ValueTask<bool>[n];
-                        active = n;
+                        _enumerators = new IAsyncEnumerator<TSource>[n];
+                        _moveNexts = new ValueTask<bool>[n];
+                        _active = n;
 
                         for (var i = 0; i < n; i++)
                         {
-                            var enumerator = sources[i].GetAsyncEnumerator(cancellationToken);
-                            enumerators[i] = enumerator;
-                            moveNexts[i] = enumerator.MoveNextAsync();
+                            var enumerator = _sources[i].GetAsyncEnumerator(cancellationToken);
+                            _enumerators[i] = enumerator;
+                            _moveNexts[i] = enumerator.MoveNextAsync();
                         }
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (active > 0)
+                        while (_active > 0)
                         {
                             //
                             // REVIEW: This approach does have a bias towards giving sources on the left
@@ -106,20 +106,20 @@ namespace System.Linq
                             //         want to consider a "prefer fairness" option.
                             //
 
-                            var moveNext = await Task.WhenAny(moveNexts.Select(t => t.AsTask())).ConfigureAwait(false);
+                            var moveNext = await Task.WhenAny(_moveNexts.Select(t => t.AsTask())).ConfigureAwait(false);
 
-                            var index = Array.IndexOf(moveNexts, moveNext);
+                            var index = Array.IndexOf(_moveNexts, moveNext);
 
                             if (!await moveNext.ConfigureAwait(false))
                             {
-                                moveNexts[index] = TaskExt.Never;
-                                active--;
+                                _moveNexts[index] = TaskExt.Never;
+                                _active--;
                             }
                             else
                             {
-                                var enumerator = enumerators[index];
+                                var enumerator = _enumerators[index];
                                 current = enumerator.Current;
-                                moveNexts[index] = enumerator.MoveNextAsync();
+                                _moveNexts[index] = enumerator.MoveNextAsync();
                                 return true;
                             }
                         }

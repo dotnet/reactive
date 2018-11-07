@@ -23,27 +23,27 @@ namespace System.Linq
 
         private sealed class IgnoreElementsAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly IAsyncEnumerable<TSource> source;
-            private IAsyncEnumerator<TSource> enumerator;
+            private readonly IAsyncEnumerable<TSource> _source;
+            private IAsyncEnumerator<TSource> _enumerator;
 
             public IgnoreElementsAsyncIterator(IAsyncEnumerable<TSource> source)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
+                _source = source;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new IgnoreElementsAsyncIterator<TSource>(source);
+                return new IgnoreElementsAsyncIterator<TSource>(_source);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -54,12 +54,12 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                         }
 

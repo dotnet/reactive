@@ -44,35 +44,35 @@ namespace System.Linq
 
         private sealed class OnErrorResumeNextAsyncIterator<TSource> : AsyncIterator<TSource>
         {
-            private readonly IEnumerable<IAsyncEnumerable<TSource>> sources;
+            private readonly IEnumerable<IAsyncEnumerable<TSource>> _sources;
 
-            private IAsyncEnumerator<TSource> enumerator;
-            private IEnumerator<IAsyncEnumerable<TSource>> sourcesEnumerator;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private IEnumerator<IAsyncEnumerable<TSource>> _sourcesEnumerator;
 
             public OnErrorResumeNextAsyncIterator(IEnumerable<IAsyncEnumerable<TSource>> sources)
             {
                 Debug.Assert(sources != null);
 
-                this.sources = sources;
+                _sources = sources;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new OnErrorResumeNextAsyncIterator<TSource>(sources);
+                return new OnErrorResumeNextAsyncIterator<TSource>(_sources);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (sourcesEnumerator != null)
+                if (_sourcesEnumerator != null)
                 {
-                    sourcesEnumerator.Dispose();
-                    sourcesEnumerator = null;
+                    _sourcesEnumerator.Dispose();
+                    _sourcesEnumerator = null;
                 }
 
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
-                    enumerator = null;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -83,7 +83,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourcesEnumerator = sources.GetEnumerator();
+                        _sourcesEnumerator = _sources.GetEnumerator();
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -91,21 +91,21 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (true)
                         {
-                            if (enumerator == null)
+                            if (_enumerator == null)
                             {
-                                if (!sourcesEnumerator.MoveNext())
+                                if (!_sourcesEnumerator.MoveNext())
                                 {
                                     break; // while -- done, nothing else to do
                                 }
 
-                                enumerator = sourcesEnumerator.Current.GetAsyncEnumerator(cancellationToken);
+                                _enumerator = _sourcesEnumerator.Current.GetAsyncEnumerator(cancellationToken);
                             }
 
                             try
                             {
-                                if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = enumerator.Current;
+                                    current = _enumerator.Current;
                                     return true;
                                 }
                             }
@@ -115,8 +115,8 @@ namespace System.Linq
                             }
 
                             // Done with the current one, go to the next
-                            await enumerator.DisposeAsync().ConfigureAwait(false);
-                            enumerator = null;
+                            await _enumerator.DisposeAsync().ConfigureAwait(false);
+                            _enumerator = null;
                         }
 
                         break; // case

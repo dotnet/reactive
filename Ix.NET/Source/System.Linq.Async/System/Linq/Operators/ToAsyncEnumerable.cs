@@ -120,28 +120,28 @@ namespace System.Linq
 
         internal sealed class AsyncEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>
         {
-            private readonly IEnumerable<T> source;
+            private readonly IEnumerable<T> _source;
 
-            private IEnumerator<T> enumerator;
+            private IEnumerator<T> _enumerator;
  
             public AsyncEnumerableAdapter(IEnumerable<T> source)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
+                _source = source;
             }
 
             public override AsyncIterator<T> Clone()
             {
-                return new AsyncEnumerableAdapter<T>(source);
+                return new AsyncEnumerableAdapter<T>(_source);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    enumerator.Dispose();
-                    enumerator = null;
+                    _enumerator.Dispose();
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -152,14 +152,14 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        _enumerator = _source.GetEnumerator();
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
+                        if (_enumerator.MoveNext())
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 
@@ -174,43 +174,43 @@ namespace System.Linq
             // and short circuit as appropriate
             public Task<T[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                return Task.FromResult(source.ToArray());
+                return Task.FromResult(_source.ToArray());
             }
 
             public Task<List<T>> ToListAsync(CancellationToken cancellationToken)
             {
-                return Task.FromResult(source.ToList());
+                return Task.FromResult(_source.ToList());
             }
 
             public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
-                return Task.FromResult(source.Count());
+                return Task.FromResult(_source.Count());
             }
         }
 
         internal sealed class AsyncIListEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>, IList<T>
         {
-            private readonly IList<T> source;
-            private IEnumerator<T> enumerator;
+            private readonly IList<T> _source;
+            private IEnumerator<T> _enumerator;
 
             public AsyncIListEnumerableAdapter(IList<T> source)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
+                _source = source;
             }
 
             public override AsyncIterator<T> Clone()
             {
-                return new AsyncIListEnumerableAdapter<T>(source);
+                return new AsyncIListEnumerableAdapter<T>(_source);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    enumerator.Dispose();
-                    enumerator = null;
+                    _enumerator.Dispose();
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -221,14 +221,14 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        _enumerator = _source.GetEnumerator();
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
+                        if (_enumerator.MoveNext())
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 
@@ -241,79 +241,80 @@ namespace System.Linq
 
             public override IAsyncEnumerable<TResult> Select<TResult>(Func<T, TResult> selector)
             {
-                return new SelectIListIterator<T, TResult>(source, selector);
+                return new SelectIListIterator<T, TResult>(_source, selector);
             }
 
             // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
             // and short circuit as appropriate
             public Task<T[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                return Task.FromResult(source.ToArray());
+                return Task.FromResult(_source.ToArray());
             }
 
             public Task<List<T>> ToListAsync(CancellationToken cancellationToken)
             {
-                return Task.FromResult(source.ToList());
+                return Task.FromResult(_source.ToList());
             }
 
             public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
-                return Task.FromResult(source.Count);
+                return Task.FromResult(_source.Count);
             }
 
-            IEnumerator<T> IEnumerable<T>.GetEnumerator() => source.GetEnumerator();
+            IEnumerator<T> IEnumerable<T>.GetEnumerator() => _source.GetEnumerator();
 
-            IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => _source.GetEnumerator();
 
-            void ICollection<T>.Add(T item) => source.Add(item);
+            void ICollection<T>.Add(T item) => _source.Add(item);
 
-            void ICollection<T>.Clear() => source.Clear();
+            void ICollection<T>.Clear() => _source.Clear();
 
-            bool ICollection<T>.Contains(T item) => source.Contains(item);
+            bool ICollection<T>.Contains(T item) => _source.Contains(item);
 
-            void ICollection<T>.CopyTo(T[] array, int arrayIndex) => source.CopyTo(array, arrayIndex);
+            void ICollection<T>.CopyTo(T[] array, int arrayIndex) => _source.CopyTo(array, arrayIndex);
 
-            bool ICollection<T>.Remove(T item) => source.Remove(item);
+            bool ICollection<T>.Remove(T item) => _source.Remove(item);
 
-            int ICollection<T>.Count => source.Count;
+            int ICollection<T>.Count => _source.Count;
 
-            bool ICollection<T>.IsReadOnly => source.IsReadOnly;
+            bool ICollection<T>.IsReadOnly => _source.IsReadOnly;
 
-            int IList<T>.IndexOf(T item) => source.IndexOf(item);
+            int IList<T>.IndexOf(T item) => _source.IndexOf(item);
 
-            void IList<T>.Insert(int index, T item) => source.Insert(index, item);
+            void IList<T>.Insert(int index, T item) => _source.Insert(index, item);
 
-            void IList<T>.RemoveAt(int index) => source.RemoveAt(index);
+            void IList<T>.RemoveAt(int index) => _source.RemoveAt(index);
 
             T IList<T>.this[int index]
             {
-                get { return source[index]; }
-                set { source[index] = value; }
+                get { return _source[index]; }
+                set { _source[index] = value; }
             }
         }
 
         internal sealed class AsyncICollectionEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>, ICollection<T>
         {
-            private readonly ICollection<T> source;
-            private IEnumerator<T> enumerator;
+            private readonly ICollection<T> _source;
+            private IEnumerator<T> _enumerator;
+
             public AsyncICollectionEnumerableAdapter(ICollection<T> source)
             {
                 Debug.Assert(source != null);
 
-                this.source = source;
+                _source = source;
             }
 
             public override AsyncIterator<T> Clone()
             {
-                return new AsyncICollectionEnumerableAdapter<T>(source);
+                return new AsyncICollectionEnumerableAdapter<T>(_source);
             }
 
             public override async ValueTask DisposeAsync()
             {
-                if (enumerator != null)
+                if (_enumerator != null)
                 {
-                    enumerator.Dispose();
-                    enumerator = null;
+                    _enumerator.Dispose();
+                    _enumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -324,14 +325,14 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        _enumerator = _source.GetEnumerator();
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
+                        if (_enumerator.MoveNext())
                         {
-                            current = enumerator.Current;
+                            current = _enumerator.Current;
                             return true;
                         }
 
@@ -346,36 +347,36 @@ namespace System.Linq
             // and short circuit as appropriate
             public Task<T[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                return Task.FromResult(source.ToArray());
+                return Task.FromResult(_source.ToArray());
             }
 
             public Task<List<T>> ToListAsync(CancellationToken cancellationToken)
             {
-                return Task.FromResult(source.ToList());
+                return Task.FromResult(_source.ToList());
             }
 
             public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
-                return Task.FromResult(source.Count);
+                return Task.FromResult(_source.Count);
             }
 
-            IEnumerator<T> IEnumerable<T>.GetEnumerator() => source.GetEnumerator();
+            IEnumerator<T> IEnumerable<T>.GetEnumerator() => _source.GetEnumerator();
 
-            IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator() => _source.GetEnumerator();
 
-            void ICollection<T>.Add(T item) => source.Add(item);
+            void ICollection<T>.Add(T item) => _source.Add(item);
 
-            void ICollection<T>.Clear() => source.Clear();
+            void ICollection<T>.Clear() => _source.Clear();
 
-            bool ICollection<T>.Contains(T item) => source.Contains(item);
+            bool ICollection<T>.Contains(T item) => _source.Contains(item);
 
-            void ICollection<T>.CopyTo(T[] array, int arrayIndex) => source.CopyTo(array, arrayIndex);
+            void ICollection<T>.CopyTo(T[] array, int arrayIndex) => _source.CopyTo(array, arrayIndex);
 
-            bool ICollection<T>.Remove(T item) => source.Remove(item);
+            bool ICollection<T>.Remove(T item) => _source.Remove(item);
 
-            int ICollection<T>.Count => source.Count;
+            int ICollection<T>.Count => _source.Count;
 
-            bool ICollection<T>.IsReadOnly => source.IsReadOnly;
+            bool ICollection<T>.IsReadOnly => _source.IsReadOnly;
         }
 
         private sealed class ToAsyncEnumerableObserver<T> : IObserver<T>

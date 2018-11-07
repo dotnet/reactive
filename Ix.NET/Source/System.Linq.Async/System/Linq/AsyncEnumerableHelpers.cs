@@ -14,8 +14,8 @@ namespace System.Collections.Generic
         internal static async Task<T[]> ToArray<T>(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
         {
             var result = await ToArrayWithLength(source, cancellationToken).ConfigureAwait(false);
-            Array.Resize(ref result.array, result.length);
-            return result.array;
+            Array.Resize(ref result.Array, result.Length);
+            return result.Array;
         }
 
         internal static async Task<ArrayWithLength<T>> ToArrayWithLength<T>(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
@@ -34,9 +34,9 @@ namespace System.Collections.Generic
                     // exception from overrunning the array (if the size went up) or we could end up not filling as many 
                     // items as 'count' suggests (if the size went down).  This is only an issue for concurrent collections 
                     // that implement ICollection<T>, which as of .NET 4.6 is just ConcurrentDictionary<TKey, TValue>.
-                    result.array = new T[count];
-                    ic.CopyTo(result.array, 0);
-                    result.length = count;
+                    result.Array = new T[count];
+                    ic.CopyTo(result.Array, 0);
+                    result.Length = count;
                     return result;
                 }
             }
@@ -86,8 +86,8 @@ namespace System.Collections.Generic
                             arr[count++] = en.Current;
                         }
 
-                        result.length = count;
-                        result.array = arr;
+                        result.Length = count;
+                        result.Array = arr;
                         return result;
                     }
                 }
@@ -97,19 +97,19 @@ namespace System.Collections.Generic
                 }
             }
 
-            result.length = 0;
+            result.Length = 0;
 #if NO_ARRAY_EMPTY
-            result.array = EmptyArray<T>.Value;
+            result.Array = EmptyArray<T>.Value;
 #else
-            result.array = Array.Empty<T>();
+            result.Array = Array.Empty<T>();
 #endif
             return result;
         }
 
         internal struct ArrayWithLength<T>
         {
-            public T[] array;
-            public int length;
+            public T[] Array;
+            public int Length;
         }
     }
 }
