@@ -173,7 +173,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            var lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer).ConfigureAwait(false);
+            var lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
 
             return lookup;
         }
@@ -203,7 +203,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            var lookup = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer).ConfigureAwait(false);
+            var lookup = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
 
             return lookup;
         }
@@ -285,7 +285,7 @@ namespace System.Linq.Internal
             }
         }
 
-        internal static async Task<Lookup<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        internal static async Task<Lookup<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             Debug.Assert(source != null);
             Debug.Assert(keySelector != null);
@@ -314,7 +314,7 @@ namespace System.Linq.Internal
             return lookup;
         }
 
-        internal static async Task<Lookup<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        internal static async Task<Lookup<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             Debug.Assert(source != null);
             Debug.Assert(keySelector != null);
@@ -571,7 +571,7 @@ namespace System.Linq.Internal
             }
         }
 
-        internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             Debug.Assert(source != null);
             Debug.Assert(keySelector != null);
@@ -600,7 +600,7 @@ namespace System.Linq.Internal
             return lookup;
         }
 
-        internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             Debug.Assert(source != null);
             Debug.Assert(keySelector != null);
