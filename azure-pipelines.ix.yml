@@ -9,6 +9,17 @@ trigger:
       - .editorconfig
       - azure-pipelines.ix.yml
 
+pr:
+  branches:
+    include:
+      - master
+      - rel/*
+  paths:
+    include:
+      - Ix.NET/Source/*
+      - .editorconfig
+      - azure-pipelines.ix.yml
+
 pool:
   vmImage: vs2017-win2016
 
@@ -22,11 +33,9 @@ steps:
     custom: tool
     arguments: install --tool-path . nbgv
   displayName: Install NBGV tool
-  condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
 
 - script: nbgv cloud -p Ix.NET\Source
   displayName: Set Version
-  condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -43,7 +52,11 @@ steps:
     projects: Ix.NET/Source/**/*.Tests.csproj
     arguments: -c $(BuildConfiguration) --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Ix.NET/Source/CodeCoverage.runsettings /p:DebugType=Full 
   displayName: Run Tests
-  
+
+- task: whitesource.ws-bolt.bolt.wss.WhiteSource Bolt@18
+  displayName: 'WhiteSource Bolt'
+  enabled: false
+
 - task: PowerShell@2
   displayName: Authenticode Sign Packages
   inputs:
@@ -59,4 +72,3 @@ steps:
     PathtoPublish: $(Build.ArtifactStagingDirectory)\artifacts
     ArtifactName: artifacts
     publishLocation: Container
-  condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
