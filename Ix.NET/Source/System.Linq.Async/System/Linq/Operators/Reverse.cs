@@ -94,7 +94,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _items = await _source.ToArray().ConfigureAwait(false);
+                        _items = await _source.ToArray(cancellationToken).ConfigureAwait(false);
                         _index = _items.Length - 1;
 
                         state = AsyncIteratorState.Iterating;

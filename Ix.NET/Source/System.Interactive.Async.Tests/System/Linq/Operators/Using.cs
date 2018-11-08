@@ -65,7 +65,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Using3()
+        public async void Using3()
         {
             var ex = new Exception("Bang!");
             var i = 0;
@@ -82,7 +82,22 @@ namespace Tests
 
             Assert.Equal(0, i);
 
-            AssertThrows<Exception>(() => xs.GetAsyncEnumerator(), ex_ => ex_ == ex);
+            var enumerator = xs.GetAsyncEnumerator();
+
+            while (await enumerator.MoveNextAsync())
+            {
+                // ignore any items
+            }
+
+            try
+            {
+                await enumerator.DisposeAsync();
+                Assert.False(true, "Should have thrown!");
+            }
+            catch (Exception exc)
+            {
+                Assert.Same(exc, ex);
+            }
 
             Assert.Equal(1, d);
         }

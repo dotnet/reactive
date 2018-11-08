@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -15,7 +17,7 @@ namespace System.Linq
 
             if (count <= 0)
             {
-                return Empty<TSource>();
+                return new EmptyTake<TSource>(source);
             }
             else if (source is IAsyncPartition<TSource> partition)
             {
@@ -27,6 +29,49 @@ namespace System.Linq
             }
 
             return new AsyncEnumerablePartition<TSource>(source, 0, count - 1);
+        }
+
+        /// <summary>
+        /// An empty source that triggers any side-effects with GetAsyncEnumerator
+        /// and disposes it immediately when the consumer calls MoveNextAsync.
+        /// </summary>
+        /// <typeparam name="TSource">The element type of the source async sequence.</typeparam>
+        private sealed class EmptyTake<TSource> : IAsyncEnumerable<TSource>
+        {
+            private readonly IAsyncEnumerable<TSource> _source;
+
+            public EmptyTake(IAsyncEnumerable<TSource> source)
+            {
+                _source = source;
+            }
+
+            public IAsyncEnumerator<TSource> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            {
+                return new EmptyTakeEnumerator(_source.GetAsyncEnumerator(cancellationToken));
+            }
+
+            private sealed class EmptyTakeEnumerator : IAsyncEnumerator<TSource>
+            {
+                private readonly IAsyncEnumerator<TSource> _source;
+
+                public TSource Current => default;
+
+                public EmptyTakeEnumerator(IAsyncEnumerator<TSource> source)
+                {
+                    _source = source;
+                }
+
+                public ValueTask DisposeAsync()
+                {
+                    return TaskExt.CompletedTask;
+                }
+
+                public async ValueTask<bool> MoveNextAsync()
+                {
+                    await _source.DisposeAsync();
+                    return false;
+                }
+            }
         }
     }
 }

@@ -54,15 +54,20 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_enumerator != null)
+                try
                 {
-                    await _enumerator.DisposeAsync().ConfigureAwait(false);
-                    _enumerator = null;
+                    if (_enumerator != null)
+                    {
+                        await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    }
                 }
+                finally
+                {
+                    _enumerator = null;
+                    _queue = null; // release the memory
 
-                _queue = null; // release the memory
-
-                await base.DisposeAsync().ConfigureAwait(false);
+                    await base.DisposeAsync().ConfigureAwait(false);
+                }
             }
 
 

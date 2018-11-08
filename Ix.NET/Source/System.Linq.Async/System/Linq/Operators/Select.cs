@@ -104,13 +104,28 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_enumerator != null)
+                var enumerator = _enumerator;
+                var error = default(Exception);
+                if (enumerator != null)
                 {
-                    await _enumerator.DisposeAsync().ConfigureAwait(false);
                     _enumerator = null;
+                    try
+                    {
+                        await enumerator.DisposeAsync().ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        error = ex;
+                    }
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
+                if (error != null)
+                {
+                    // 'throw error' doesn't preserve the stack trace
+                    // this, however, doesn't preserve the flat error structure.
+                    throw new AggregateException("The enumerator's DisposeAsync failed", error);
+                }
             }
 
             public override IAsyncEnumerable<TResult1> Select<TResult1>(Func<TResult, TResult1> selector)

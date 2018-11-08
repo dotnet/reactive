@@ -156,12 +156,16 @@ namespace System.Linq
                         switch (_mode)
                         {
                             case State_Source:
+                                // Make sure we dispose the previous inner source
+                                // before moving onto the next
+                                if (_resultEnumerator != null)
+                                {
+                                    await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                                    _resultEnumerator = null;
+                                }
+
                                 if (await _sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    if (_resultEnumerator != null)
-                                    {
-                                        await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
-                                    }
 
                                     var inner = _selector(_sourceEnumerator.Current);
                                     _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);

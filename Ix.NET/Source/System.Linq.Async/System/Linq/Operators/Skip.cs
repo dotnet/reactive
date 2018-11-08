@@ -15,14 +15,9 @@ namespace System.Linq
 
             if (count <= 0)
             {
-                // Return source if not actually skipping, but only if it's a type from here, to avoid
-                // issues if collections are used as keys or otherwise must not be aliased.
-                if (source is AsyncIterator<TSource> || source is IAsyncPartition<TSource>)
-                {
-                    return source;
-                }
-
-                count = 0;
+                // If there is  nothing to skip, why would we ever create a partition.
+                // Let the next, non-trivial operator create the partition if needed.
+                return source;
             }
             else if (source is IAsyncPartition<TSource> partition)
             {

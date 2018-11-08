@@ -36,10 +36,10 @@ namespace System.Linq
             {
                 enumerator.OnGetEnumerator(token);
             }
-            catch
+            catch (Exception ex)
             {
-                enumerator.DisposeAsync(); // REVIEW: fire-and-forget?
-                throw;
+                // GetAsyncEnumerator should not throw but rather return a failing enumerator
+                return new FailingEnumerator(enumerator, ex);
             }
 
             return enumerator;
@@ -98,6 +98,35 @@ namespace System.Linq
         protected virtual void OnGetEnumerator(CancellationToken cancellationToken)
         {
         }
+
+        /// <summary>
+        /// Disposes a source enumerator then fails with an exception in DisposeAsync.
+        /// </summary>
+        private sealed class FailingEnumerator : IAsyncEnumerator<TSource>
+        {
+            private readonly IAsyncEnumerator<TSource> _source;
+
+            private readonly Exception _error;
+
+            public FailingEnumerator(IAsyncEnumerator<TSource> source, Exception error)
+            {
+                _source = source;
+                _error = error;
+            }
+
+            public TSource Current => throw new InvalidOperationException("Enumerator is in an invalid state");
+
+            public async ValueTask DisposeAsync()
+            {
+                await _source.DisposeAsync();
+                throw _error;
+            }
+
+            public ValueTask<bool> MoveNextAsync()
+            {
+                return TaskExt.False;
+            }
+        }
     }
 
     internal enum AsyncIteratorState
@@ -107,4 +136,5 @@ namespace System.Linq
         Iterating = 2,
         Disposed = -1,
     }
+
 }

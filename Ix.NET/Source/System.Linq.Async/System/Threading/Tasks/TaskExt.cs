@@ -9,5 +9,16 @@ namespace System.Threading.Tasks
         public static readonly ValueTask<bool> True = new ValueTask<bool>(true);
         public static readonly ValueTask<bool> False = new ValueTask<bool>(false);
         public static readonly ValueTask CompletedTask = new ValueTask(Task.FromResult(true));
+
+        /// <summary>
+        ///  A constant TaskCompletionSource already completed with true.
+        /// </summary>
+        public static readonly TaskCompletionSource<bool> ResumeTrue;
+
+        static TaskExt()
+        {
+            ResumeTrue = new TaskCompletionSource<bool>();
+            ResumeTrue.TrySetResult(true);
+        }
     }
 }

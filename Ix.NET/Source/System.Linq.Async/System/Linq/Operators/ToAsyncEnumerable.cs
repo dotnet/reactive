@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -58,64 +59,187 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return CreateEnumerable(
-                () =>
+            return new ObservableToAsyncEnumerable<TSource>(source);
+        }
+
+        /// <summary>
+        /// Wraps an IObservable and exposes it as an IAsyncEnumerable, buffering
+        /// all source items until they are requested via MoveNextAsync.
+        /// </summary>
+        /// <typeparam name="TSource">The element type of the source and result.</typeparam>
+        private sealed class ObservableToAsyncEnumerable<TSource> : IAsyncEnumerable<TSource>
+        {
+            private readonly IObservable<TSource> _source;
+
+            public ObservableToAsyncEnumerable(IObservable<TSource> source)
+            {
+                _source = source;
+            }
+
+            public IAsyncEnumerator<TSource> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            {
+                var observer = new ObserverAsyncEnumerator();
+                observer.SetCancellation(cancellationToken, _source.Subscribe(observer));
+                return observer;
+            }
+
+            private sealed class ObserverAsyncEnumerator : IAsyncEnumerator<TSource>, IObserver<TSource>, IDisposable
+            {
+                public TSource Current { get; private set; }
+
+                private IDisposable _disposable;
+
+                private CancellationTokenRegistration _tokenReg;
+
+                private ConcurrentQueue<TSource> _queue;
+                private Exception _error;
+                private volatile bool _done;
+
+                private TaskCompletionSource<bool> _resume;
+
+                internal ObserverAsyncEnumerator()
                 {
-                    var observer = new ToAsyncEnumerableObserver<TSource>();
+                    Volatile.Write(ref _queue, new ConcurrentQueue<TSource>());
+                }
 
-                    var subscription = source.Subscribe(observer);
+                internal void SetCancellation(CancellationToken token, IDisposable disposable)
+                {
+                    if (Interlocked.CompareExchange(ref _disposable, disposable, null) == null)
+                    {
+                        _tokenReg = token.Register(state => ((ObserverAsyncEnumerator)state).DisposeForToken(), this);
+                    }
+                    else
+                    {
+                        disposable.Dispose();
+                    }
+                }
 
-                    return CreateEnumerator(
-                        tcs =>
+                private void DisposeForToken()
+                {
+                    DisposeSource();
+                    _tokenReg.Dispose();
+                    _tokenReg = default;
+                    _queue = null;
+                    _error = null;
+                }
+
+                public void Dispose()
+                {
+                    // "this" is the disposed indicator
+                }
+
+                public ValueTask DisposeAsync()
+                {
+                    DisposeForToken();
+                    return TaskExt.CompletedTask;
+                }
+
+                public async ValueTask<bool> MoveNextAsync()
+                {
+                    for (; ; )
+                    {
+                        var isDone = _done;
+                        var queue = _queue;
+                        if (queue == null)
                         {
-                            var hasValue = false;
-                            var hasCompleted = false;
-                            var error = default(Exception);
+                            return false;
+                        }
+                        var hasItem = queue.TryDequeue(out var item);
 
-                            lock (observer.SyncRoot)
-                            {
-                                if (observer.Values.Count > 0)
-                                {
-                                    hasValue = true;
-                                    observer.Current = observer.Values.Dequeue();
-                                }
-                                else if (observer.HasCompleted)
-                                {
-                                    hasCompleted = true;
-                                }
-                                else if (observer.Error != null)
-                                {
-                                    error = observer.Error;
-                                }
-                                else
-                                {
-                                    observer.TaskCompletionSource = tcs;
-                                }
-                            }
-
-                            if (hasValue)
-                            {
-                                tcs.TrySetResult(true);
-                            }
-                            else if (hasCompleted)
-                            {
-                                tcs.TrySetResult(false);
-                            }
-                            else if (error != null)
-                            {
-                                tcs.TrySetException(error);
-                            }
-
-                            return new ValueTask<bool>(tcs.Task);
-                        },
-                        () => observer.Current,
-                        () =>
+                        if (isDone && !hasItem)
                         {
-                            subscription.Dispose();
-                            // Should we cancel in-flight operations somehow?
-                            return TaskExt.CompletedTask;
-                        });
-                });
+                            var ex = _error;
+                            if (ex != null)
+                            {
+                                throw ex;
+                            }
+                            return false;
+                        }
+
+                        if (hasItem)
+                        {
+                            Current = item;
+                            return true;
+                        }
+
+                        await Resume();
+                        Interlocked.Exchange(ref _resume, null);
+                    }
+                }
+
+                private Task Resume()
+                {
+                    var next = default(TaskCompletionSource<bool>);
+                    for (; ; )
+                    {
+                        var current = Volatile.Read(ref _resume);
+                        if (current != null)
+                        {
+                            return current.Task;
+                        }
+                        if (next == null)
+                        {
+                            next = new TaskCompletionSource<bool>();
+                        }
+                        if (Interlocked.CompareExchange(ref _resume, next, null) == null)
+                        {
+                            return next.Task;
+                        }
+                    }
+                }
+
+                public void OnCompleted()
+                {
+                    _done = true;
+                    DisposeSource();
+                    Signal();
+                }
+
+                public void OnError(Exception error)
+                {
+                    _error = error;
+                    _done = true;
+                    DisposeSource();
+                    Signal();
+                }
+
+                public void OnNext(TSource value)
+                {
+                    _queue?.Enqueue(value);
+
+                    Signal();
+                }
+
+                private void DisposeSource()
+                {
+                    var old = Interlocked.Exchange(ref _disposable, this);
+                    if (old != this)
+                    {
+                        old?.Dispose();
+                    }
+                }
+
+                public void Signal()
+                {
+                    for (; ; )
+                    {
+                        var current = Volatile.Read(ref _resume);
+                        if (current == TaskExt.ResumeTrue)
+                        {
+                            break;
+                        }
+                        if (current != null)
+                        {
+                            current.TrySetResult(true);
+                            break;
+                        }
+                        if (Interlocked.CompareExchange(ref _resume, TaskExt.ResumeTrue, null) == null)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         internal sealed class AsyncEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>
@@ -377,84 +501,6 @@ namespace System.Linq
             int ICollection<T>.Count => _source.Count;
 
             bool ICollection<T>.IsReadOnly => _source.IsReadOnly;
-        }
-
-        private sealed class ToAsyncEnumerableObserver<T> : IObserver<T>
-        {
-            public readonly Queue<T> Values;
-
-            public T Current;
-            public Exception Error;
-            public bool HasCompleted;
-            public TaskCompletionSource<bool> TaskCompletionSource;
-
-            public ToAsyncEnumerableObserver()
-            {
-                Values = new Queue<T>();
-            }
-
-            public object SyncRoot
-            {
-                get { return Values; }
-            }
-
-            public void OnCompleted()
-            {
-                var tcs = default(TaskCompletionSource<bool>);
-
-                lock (SyncRoot)
-                {
-                    HasCompleted = true;
-
-                    if (TaskCompletionSource != null)
-                    {
-                        tcs = TaskCompletionSource;
-                        TaskCompletionSource = null;
-                    }
-                }
-
-                tcs?.TrySetResult(false);
-            }
-
-            public void OnError(Exception error)
-            {
-                var tcs = default(TaskCompletionSource<bool>);
-
-                lock (SyncRoot)
-                {
-                    Error = error;
-
-                    if (TaskCompletionSource != null)
-                    {
-                        tcs = TaskCompletionSource;
-                        TaskCompletionSource = null;
-                    }
-                }
-
-                tcs?.TrySetException(error);
-            }
-
-            public void OnNext(T value)
-            {
-                var tcs = default(TaskCompletionSource<bool>);
-
-                lock (SyncRoot)
-                {
-                    if (TaskCompletionSource == null)
-                    {
-                        Values.Enqueue(value);
-                    }
-                    else
-                    {
-                        Current = value;
-
-                        tcs = TaskCompletionSource;
-                        TaskCompletionSource = null;
-                    }
-                }
-
-                tcs?.TrySetResult(true);
-            }
         }
     }
 }
