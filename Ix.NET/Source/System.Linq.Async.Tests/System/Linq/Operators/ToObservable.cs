@@ -132,7 +132,7 @@ namespace Tests
 
             evt.WaitOne();
             Assert.False(fail);
-            Assert.Equal(ex1, ((AggregateException)ex_).InnerExceptions.Single());
+            Assert.Equal(ex1, ex_);
         }
 
         [Fact]
