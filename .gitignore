@@ -187,5 +187,4 @@ nuget.exe
 .dotnet
 
 # JetBrains Rider adds these
-Ix.NET/Source/.idea
-Rx.NET/Source/.idea
+.idea/
