@@ -121,7 +121,7 @@ namespace System.Linq
             {
                 var s = new Set<TSource>(_comparer);
 
-                await s.UnionWithAsync(_source, cancellationToken);
+                await s.UnionWithAsync(_source, cancellationToken).ConfigureAwait(false);
 
                 return s;
             }
