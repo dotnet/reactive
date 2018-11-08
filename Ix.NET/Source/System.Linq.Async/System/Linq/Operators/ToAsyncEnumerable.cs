@@ -33,7 +33,7 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(task));
 
             return CreateEnumerable(
-                () =>
+                _ =>
                 {
                     var called = 0;
 
@@ -59,11 +59,15 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
 
             return CreateEnumerable(
-                () =>
+                ct =>
                 {
                     var observer = new ToAsyncEnumerableObserver<TSource>();
 
                     var subscription = source.Subscribe(observer);
+
+                    // REVIEW: Review possible concurrency issues with Dispose calls.
+
+                    var ctr = ct.Register(subscription.Dispose);
 
                     return CreateEnumerator(
                         tcs =>
@@ -111,6 +115,7 @@ namespace System.Linq
                         () => observer.Current,
                         () =>
                         {
+                            ctr.Dispose();
                             subscription.Dispose();
                             // Should we cancel in-flight operations somehow?
                             return TaskExt.CompletedTask;

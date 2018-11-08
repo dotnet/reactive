@@ -18,7 +18,7 @@ namespace System.Linq
             //         seem correct either, given that we return a *cold* sequence.
             //
 
-            return AsyncEnumerable.CreateEnumerable(() => AsyncEnumerable.CreateEnumerator<TValue>(() => TaskExt.Never, current: null, dispose: null));
+            return AsyncEnumerable.CreateEnumerable(_ => AsyncEnumerable.CreateEnumerator<TValue>(() => TaskExt.Never, current: null, dispose: null));
         }
     }
 }

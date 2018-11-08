@@ -142,7 +142,7 @@ namespace Tests
             var evt = new ManualResetEvent(false);
 
             var ae = AsyncEnumerable.CreateEnumerable(
-                () => AsyncEnumerable.CreateEnumerator<int>(
+                _ => AsyncEnumerable.CreateEnumerator<int>(
                     () => TaskExt.False,
                     () => { throw new InvalidOperationException(); },
                     () => { evt.Set(); return TaskExt.CompletedTask; }));
@@ -176,7 +176,7 @@ namespace Tests
             var subscriptionAssignedTcs = new TaskCompletionSource<object>();
 
             var ae = AsyncEnumerable.CreateEnumerable(
-                () => AsyncEnumerable.CreateEnumerator(
+                _ => AsyncEnumerable.CreateEnumerator(
                     async () =>
                     {
                         await subscriptionAssignedTcs.Task;
@@ -222,7 +222,7 @@ namespace Tests
             var subscriptionAssignedTcs = new TaskCompletionSource<object>();
 
             var ae = AsyncEnumerable.CreateEnumerable(
-                () => AsyncEnumerable.CreateEnumerator(
+                _ => AsyncEnumerable.CreateEnumerator(
                     async () =>
                     {
                         await subscriptionAssignedTcs.Task;
