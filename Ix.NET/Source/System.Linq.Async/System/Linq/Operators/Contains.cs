@@ -15,7 +15,15 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return ContainsCore(source, value, EqualityComparer<TSource>.Default, CancellationToken.None);
+            return ContainsCore(source, value, CancellationToken.None);
+        }
+
+        public static Task<bool> Contains<TSource>(this IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return ContainsCore(source, value, cancellationToken);
         }
 
         public static Task<bool> Contains<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
@@ -28,14 +36,6 @@ namespace System.Linq
             return ContainsCore(source, value, comparer, CancellationToken.None);
         }
 
-        public static Task<bool> Contains<TSource>(this IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            return ContainsCore(source, value, EqualityComparer<TSource>.Default, cancellationToken);
-        }
-
         public static Task<bool> Contains<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
@@ -46,9 +46,52 @@ namespace System.Linq
             return ContainsCore(source, value, comparer, cancellationToken);
         }
 
-        private static Task<bool> ContainsCore<TSource>(IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
+        private static Task<bool> ContainsCore<TSource>(IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken)
         {
-            return source.Any(x => comparer.Equals(x, value), cancellationToken);
+            if (source is ICollection<TSource> collection)
+            {
+                return Task.FromResult(collection.Contains(value));
+            }
+
+            return ContainsCore(source, value, comparer: null, cancellationToken);
+        }
+
+        private static async Task<bool> ContainsCore<TSource>(IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
+        {
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                //
+                // See https://github.com/dotnet/corefx/pull/25097 for the optimization here.
+                //
+                if (comparer == null)
+                {
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        if (EqualityComparer<TSource>.Default.Equals(e.Current, value))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        if (comparer.Equals(e.Current, value))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return false;
         }
     }
 }
