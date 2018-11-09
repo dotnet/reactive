@@ -68,50 +68,38 @@ namespace System.Linq
 
         private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            if (source is IList<TSource> list)
-            {
-                if (list.Count > 0)
-                {
-                    return list[0];
-                }
-            }
-            else if (source is IAsyncPartition<TSource> p)
-            {
-                var first = await p.TryGetFirstAsync(cancellationToken).ConfigureAwait(false);
+            var first = await TryGetFirst(source, cancellationToken).ConfigureAwait(false);
 
-                if (first.HasValue)
-                {
-                    return first.Value;
-                }
-            }
-            else
+            if (first.HasValue)
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
-
-                try
-                {
-                    if (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        return e.Current;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
+                return first.Value;
             }
 
             throw new InvalidOperationException(Strings.NO_ELEMENTS);
         }
 
-        private static Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            return source.Where(predicate).First(cancellationToken);
+            var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
+
+            if (first.HasValue)
+            {
+                return first.Value;
+            }
+
+            throw new InvalidOperationException(Strings.NO_ELEMENTS);
         }
 
-        private static Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
-            return source.Where(predicate).First(cancellationToken);
+            var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
+
+            if (first.HasValue)
+            {
+                return first.Value;
+            }
+
+            throw new InvalidOperationException(Strings.NO_ELEMENTS);
         }
     }
 }
