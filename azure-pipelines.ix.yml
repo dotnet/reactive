@@ -14,6 +14,7 @@ pr:
     include:
       - master
       - rel/*
+      - IxAsyncCSharp8
   paths:
     include:
       - Ix.NET/Source/*
