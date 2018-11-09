@@ -20,7 +20,7 @@ namespace System.Linq
         {
             internal static readonly NeverAsyncEnumerable<TValue> Instance = new NeverAsyncEnumerable<TValue>();
 
-            public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken)
             {
                 return new NeverAsyncEnumerator(cancellationToken);
             }
@@ -31,6 +31,12 @@ namespace System.Linq
 
                 private readonly CancellationToken _token;
 
+                private CancellationTokenRegistration _registration;
+
+                private bool _once;
+
+                private TaskCompletionSource<bool> _task;
+
                 public NeverAsyncEnumerator(CancellationToken token)
                 {
                     _token = token;
@@ -38,16 +44,21 @@ namespace System.Linq
 
                 public ValueTask DisposeAsync()
                 {
+                    _registration.Dispose();
+                    _task = null;
                     return TaskExt.CompletedTask;
                 }
 
                 public ValueTask<bool> MoveNextAsync()
                 {
-                    return new ValueTask<bool>(Task.Run(async () =>
+                    if (_once)
                     {
-                        await Task.Delay(Threading.Timeout.Infinite, _token);
-                        return false;
-                    }, _token));
+                        return TaskExt.False;
+                    }
+                    _once = true;
+                    _task = new TaskCompletionSource<bool>();
+                    _registration = _token.Register(state => ((NeverAsyncEnumerator)state)._task.SetCanceled(), this);
+                    return new ValueTask<bool>(_task.Task);
                 }
             }
         }

@@ -31,34 +31,44 @@ namespace System.Linq
             );
         }
 
-        private sealed class ThrowEnumerable<TValue> : IAsyncEnumerable<TValue>, IAsyncEnumerator<TValue>
+        private sealed class ThrowEnumerable<TValue> : IAsyncEnumerable<TValue>
         {
             private readonly ValueTask<bool> _moveNextThrows;
-
-            public TValue Current => default;
 
             public ThrowEnumerable(ValueTask<bool> moveNextThrows)
             {
                 _moveNextThrows = moveNextThrows;
             }
 
-            public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken)
             {
-                return this;
+                return new ThrowEnumerator(_moveNextThrows);
             }
 
-            public ValueTask DisposeAsync()
+            private sealed class ThrowEnumerator : IAsyncEnumerator<TValue>
             {
-                return TaskExt.CompletedTask;
-            }
+                private ValueTask<bool> _moveNextThrows;
 
-            public ValueTask<bool> MoveNextAsync()
-            {
-                // May we let this fail over and over?
-                // If so, the class doesn't need extra state
-                // and thus can be reused without creating an
-                // async enumerator
-                return _moveNextThrows;
+                public ThrowEnumerator(ValueTask<bool> moveNextThrows)
+                {
+                    _moveNextThrows = moveNextThrows;
+                }
+
+                public TValue Current => default;
+
+                public ValueTask DisposeAsync()
+                {
+                    _moveNextThrows = TaskExt.False;
+                    return TaskExt.CompletedTask;
+                }
+
+                public ValueTask<bool> MoveNextAsync()
+                {
+                    var result = _moveNextThrows;
+                    _moveNextThrows = TaskExt.False;
+                    return result;
+                }
+
             }
         }
     }

@@ -26,7 +26,7 @@ namespace System.Linq
                 _value = value;
             }
 
-            public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken)
             {
                 return new ReturnEnumerator(_value);
             }
