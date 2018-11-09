@@ -66,19 +66,82 @@ namespace System.Linq
             return LongCountCore(source, predicate, cancellationToken);
         }
 
-        private static Task<long> LongCountCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        private static async Task<long> LongCountCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            return source.Aggregate(0L, (c, _) => checked(c + 1), cancellationToken);
+            var count = 0L;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        count++;
+                    }
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return count;
         }
 
-        private static Task<long> LongCountCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        private static async Task<long> LongCountCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            return source.Where(predicate).Aggregate(0L, (c, _) => checked(c + 1), cancellationToken);
+            var count = 0L;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    if (predicate(e.Current))
+                    {
+                        checked
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return count;
         }
 
-        private static Task<long> LongCountCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        private static async Task<long> LongCountCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
-            return source.Where(predicate).Aggregate(0L, (c, _) => checked(c + 1), cancellationToken);
+            var count = 0L;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    if (await predicate(e.Current).ConfigureAwait(false))
+                    {
+                        checked
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return count;
         }
     }
 }
