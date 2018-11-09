@@ -22,6 +22,7 @@ namespace Benchmarks.System.Interactive
                 typeof(DeferBenchmark),
                 typeof(RetryBenchmark),
                 typeof(MinMaxBenchmark),
+                typeof(AsyncReturnBenchmark)
             });
 
             switcher.Run();
