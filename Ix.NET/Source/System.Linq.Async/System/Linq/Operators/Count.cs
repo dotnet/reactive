@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -68,14 +69,14 @@ namespace System.Linq
 
         private static Task<int> CountCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            if (source is ICollection<TSource> collection)
+            switch (source)
             {
-                return Task.FromResult(collection.Count);
-            }
-
-            if (source is IAsyncIListProvider<TSource> listProv)
-            {
-                return listProv.GetCountAsync(onlyIfCheap: false, cancellationToken);
+                case ICollection<TSource> collection:
+                    return Task.FromResult(collection.Count);
+                case IAsyncIListProvider<TSource> listProv:
+                    return listProv.GetCountAsync(onlyIfCheap: false, cancellationToken);
+                case ICollection collection:
+                    return Task.FromResult(collection.Count);
             }
 
             return Core();
