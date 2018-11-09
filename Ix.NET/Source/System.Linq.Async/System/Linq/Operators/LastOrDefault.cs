@@ -87,47 +87,49 @@ namespace System.Linq
             return last.HasValue ? last.Value : default;
         }
 
-        private static async Task<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        private static Task<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source is IList<TSource> list)
             {
                 var count = list.Count;
                 if (count > 0)
                 {
-                    return new Maybe<TSource>(list[count - 1]);
+                    return Task.FromResult(new Maybe<TSource>(list[count - 1]));
                 }
             }
             else if (source is IAsyncPartition<TSource> p)
             {
-                return await p.TryGetLastAsync(cancellationToken).ConfigureAwait(false);
+                return p.TryGetLastAsync(cancellationToken);
             }
             else
             {
-                var last = default(TSource);
-                var hasLast = false;
+                return Core();
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
-
-                try
+                async Task<Maybe<TSource>> Core()
                 {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    var last = default(TSource);
+                    var hasLast = false;
+
+                    var e = source.GetAsyncEnumerator(cancellationToken);
+
+                    try
                     {
-                        hasLast = true;
-                        last = e.Current;
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            hasLast = true;
+                            last = e.Current;
+                        }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
 
-                if (hasLast)
-                {
-                    return new Maybe<TSource>(last);
+                    return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
                 }
             }
 
-            return new Maybe<TSource>();
+            return Task.FromResult(new Maybe<TSource>());
         }
 
         private static async Task<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)

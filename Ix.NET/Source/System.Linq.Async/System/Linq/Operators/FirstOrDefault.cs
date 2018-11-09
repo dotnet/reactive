@@ -87,37 +87,44 @@ namespace System.Linq
             return first.HasValue ? first.Value : default;
         }
 
-        private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        private static Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source is IList<TSource> list)
             {
                 if (list.Count > 0)
                 {
-                    return new Maybe<TSource>(list[0]);
+                    return Task.FromResult(new Maybe<TSource>(list[0]));
                 }
             }
             else if (source is IAsyncPartition<TSource> p)
             {
-                return await p.TryGetFirstAsync(cancellationToken).ConfigureAwait(false);
+                return p.TryGetFirstAsync(cancellationToken);
             }
             else
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                return Core();
 
-                try
+                async Task<Maybe<TSource>> Core()
                 {
-                    if (await e.MoveNextAsync().ConfigureAwait(false))
+                    var e = source.GetAsyncEnumerator(cancellationToken);
+
+                    try
                     {
-                        return new Maybe<TSource>(e.Current);
+                        if (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            return new Maybe<TSource>(e.Current);
+                        }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
+
+                    return new Maybe<TSource>();
                 }
             }
 
-            return new Maybe<TSource>();
+            return Task.FromResult(new Maybe<TSource>());
         }
 
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
