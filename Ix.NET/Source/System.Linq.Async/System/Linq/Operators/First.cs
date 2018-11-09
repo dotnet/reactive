@@ -15,7 +15,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return First(source, CancellationToken.None);
+            return FirstCore(source, CancellationToken.None);
         }
 
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return First(source, predicate, CancellationToken.None);
+            return FirstCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate).First(cancellationToken);
+            return FirstCore(source, predicate, cancellationToken);
         }
 
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
@@ -53,7 +53,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return First(source, predicate, CancellationToken.None);
+            return FirstCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -63,7 +63,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate).First(cancellationToken);
+            return FirstCore(source, predicate, cancellationToken);
         }
 
         private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -102,6 +102,16 @@ namespace System.Linq
             }
 
             throw new InvalidOperationException(Strings.NO_ELEMENTS);
+        }
+
+        private static Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        {
+            return source.Where(predicate).First(cancellationToken);
+        }
+
+        private static Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        {
+            return source.Where(predicate).First(cancellationToken);
         }
     }
 }

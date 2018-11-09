@@ -15,7 +15,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Single(source, CancellationToken.None);
+            return SingleCore(source, CancellationToken.None);
         }
 
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Single(source, predicate, CancellationToken.None);
+            return SingleCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate).Single(cancellationToken);
+            return SingleCore(source, predicate, cancellationToken);
         }
 
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
@@ -53,7 +53,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Single(source, predicate, CancellationToken.None);
+            return SingleCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -63,7 +63,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate).Single(cancellationToken);
+            return SingleCore(source, predicate, cancellationToken);
         }
 
         private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -100,6 +100,16 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+        }
+
+        private static Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        {
+            return source.Where(predicate).Single(cancellationToken);
+        }
+
+        private static Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        {
+            return source.Where(predicate).Single(cancellationToken);
         }
     }
 }

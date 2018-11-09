@@ -15,7 +15,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return FirstOrDefault(source, CancellationToken.None);
+            return FirstOrDefaultCore(source, CancellationToken.None);
         }
 
         public static Task<TSource> FirstOrDefault<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return FirstOrDefault(source, predicate, CancellationToken.None);
+            return FirstOrDefaultCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> FirstOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate).FirstOrDefault(cancellationToken);
+            return FirstOrDefaultCore(source, predicate, cancellationToken);
         }
 
         public static Task<TSource> FirstOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
@@ -53,7 +53,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return FirstOrDefault(source, predicate, CancellationToken.None);
+            return FirstOrDefaultCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> FirstOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -63,7 +63,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate).FirstOrDefault(cancellationToken);
+            return FirstOrDefaultCore(source, predicate, cancellationToken);
         }
 
         private static async Task<TSource> FirstOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -102,6 +102,16 @@ namespace System.Linq
             }
 
             return default;
+        }
+
+        private static Task<TSource> FirstOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        {
+            return source.Where(predicate).FirstOrDefault(cancellationToken);
+        }
+
+        private static Task<TSource> FirstOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        {
+            return source.Where(predicate).FirstOrDefault(cancellationToken);
         }
     }
 }

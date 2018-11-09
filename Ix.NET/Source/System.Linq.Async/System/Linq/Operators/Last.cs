@@ -15,7 +15,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Last(source, CancellationToken.None);
+            return LastCore(source, CancellationToken.None);
         }
 
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Last(source, predicate, CancellationToken.None);
+            return LastCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate).Last(cancellationToken);
+            return LastCore(source, predicate, cancellationToken);
         }
 
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
@@ -53,7 +53,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Last(source, predicate, CancellationToken.None);
+            return LastCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -63,7 +63,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate).Last(cancellationToken);
+            return LastCore(source, predicate, cancellationToken);
         }
 
         private static async Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -112,6 +112,16 @@ namespace System.Linq
             }
 
             throw new InvalidOperationException(Strings.NO_ELEMENTS);
+        }
+
+        private static Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        {
+            return source.Where(predicate).Last(cancellationToken);
+        }
+
+        private static Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        {
+            return source.Where(predicate).Last(cancellationToken);
         }
     }
 }

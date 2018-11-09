@@ -15,7 +15,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return LastOrDefault(source, CancellationToken.None);
+            return LastOrDefaultCore(source, CancellationToken.None);
         }
 
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return LastOrDefault(source, predicate, CancellationToken.None);
+            return LastOrDefaultCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
@@ -53,7 +53,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return LastOrDefault(source, predicate, CancellationToken.None);
+            return LastOrDefaultCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -112,6 +112,16 @@ namespace System.Linq
             }
 
             return default;
+        }
+
+        private static Task<TSource> LastOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        {
+            return source.Where(predicate).LastOrDefault(cancellationToken);
+        }
+
+        private static Task<TSource> LastOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        {
+            return source.Where(predicate).LastOrDefault(cancellationToken);
         }
     }
 }
