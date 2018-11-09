@@ -15,7 +15,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Min(source, CancellationToken.None);
+            return MinCore(source, Comparer<TSource>.Default, CancellationToken.None);
         }
 
         public static Task<TSource> Min<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -23,8 +23,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            var comparer = Comparer<TSource>.Default;
-            return source.Aggregate((x, y) => comparer.Compare(x, y) <= 0 ? x : y, cancellationToken);
+            return MinCore(source, Comparer<TSource>.Default, cancellationToken);
         }
 
         public static Task<TResult> Min<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector)
@@ -34,7 +33,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Min(source, selector, CancellationToken.None);
+            return MinCore(source, selector, CancellationToken.None);
         }
 
         public static Task<TResult> Min<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken)
@@ -44,7 +43,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return source.Select(selector).Min(cancellationToken);
+            return MinCore(source, selector, cancellationToken);
         }
 
         public static Task<TResult> Min<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TResult>> selector)
@@ -54,7 +53,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Min(source, selector, CancellationToken.None);
+            return MinCore(source, selector, CancellationToken.None);
         }
 
         public static Task<TResult> Min<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TResult>> selector, CancellationToken cancellationToken)
@@ -64,7 +63,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return source.Select(selector).Min(cancellationToken);
+            return MinCore(source, selector, cancellationToken);
         }
 
         private static async Task<TSource> MinCore<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
@@ -94,6 +93,16 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+        }
+
+        private static Task<TResult> MinCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken)
+        {
+            return MinCore(source.Select(selector), Comparer<TResult>.Default, cancellationToken);
+        }
+
+        private static Task<TResult> MinCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, Task<TResult>> selector, CancellationToken cancellationToken)
+        {
+            return MinCore(source.Select(selector), Comparer<TResult>.Default, cancellationToken);
         }
     }
 }
