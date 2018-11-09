@@ -126,7 +126,7 @@ namespace System.Linq
 
             try
             {
-                if (await e.MoveNextAsync().ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     var value = e.Current;
 
@@ -150,7 +150,7 @@ namespace System.Linq
 
             try
             {
-                if (await e.MoveNextAsync().ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     var value = e.Current;
 
