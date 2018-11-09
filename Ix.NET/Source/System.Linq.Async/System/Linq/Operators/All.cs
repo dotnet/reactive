@@ -17,7 +17,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return All(source, predicate, CancellationToken.None);
+            return AllCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
@@ -27,7 +27,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return All(source, predicate, CancellationToken.None);
+            return AllCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
