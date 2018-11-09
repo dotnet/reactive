@@ -15,7 +15,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return ElementAtOrDefault(source, index, CancellationToken.None);
+            return ElementAtOrDefaultCore(source, index, CancellationToken.None);
         }
 
         public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
