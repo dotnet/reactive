@@ -102,14 +102,68 @@ namespace System.Linq
             }
         }
 
-        private static Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            return source.Where(predicate).Single(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var result = e.Current;
+
+                    if (predicate(result))
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            if (predicate(e.Current))
+                            {
+                                throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
+                            }
+                        }
+
+                        return result;
+                    }
+                }
+
+                throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
         }
 
-        private static Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
-            return source.Where(predicate).Single(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var result = e.Current;
+
+                    if (await predicate(result).ConfigureAwait(false))
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            if (await predicate(e.Current).ConfigureAwait(false))
+                            {
+                                throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
+                            }
+                        }
+
+                        return result;
+                    }
+                }
+
+                throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
         }
     }
 }
