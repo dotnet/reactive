@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -10,7 +12,52 @@ namespace System.Linq
     {
         public static IAsyncEnumerable<TValue> Return<TValue>(TValue value)
         {
-            return new[] { value }.ToAsyncEnumerable();
+            return new ReturnEnumerable<TValue>(value);
+        }
+
+        // FIXME: AsyncListPartition is internal to the project System.Linq.Async
+        // project, not sure how to expose it here
+        private sealed class ReturnEnumerable<TValue> : IAsyncEnumerable<TValue>
+        {
+            private readonly TValue _value;
+
+            public ReturnEnumerable(TValue value)
+            {
+                _value = value;
+            }
+
+            public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            {
+                return new ReturnEnumerator(_value);
+            }
+
+            private sealed class ReturnEnumerator : IAsyncEnumerator<TValue>
+            {
+                public TValue Current { get; private set; }
+
+                private bool _once;
+
+                public ReturnEnumerator(TValue current)
+                {
+                    Current = current;
+                }
+
+                public ValueTask DisposeAsync()
+                {
+                    Current = default;
+                    return TaskExt.CompletedTask;
+                }
+
+                public ValueTask<bool> MoveNextAsync()
+                {
+                    if (_once)
+                    {
+                        return TaskExt.False;
+                    }
+                    _once = true;
+                    return TaskExt.True;
+                }
+            }
         }
     }
 }

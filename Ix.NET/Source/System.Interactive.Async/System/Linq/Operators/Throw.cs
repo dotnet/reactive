@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -28,6 +29,37 @@ namespace System.Linq
                     current: null,
                     dispose: null)
             );
+        }
+
+        private sealed class ThrowEnumerable<TValue> : IAsyncEnumerable<TValue>, IAsyncEnumerator<TValue>
+        {
+            private readonly ValueTask<bool> _moveNextThrows;
+
+            public TValue Current => default;
+
+            public ThrowEnumerable(ValueTask<bool> moveNextThrows)
+            {
+                _moveNextThrows = moveNextThrows;
+            }
+
+            public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            {
+                return this;
+            }
+
+            public ValueTask DisposeAsync()
+            {
+                return TaskExt.CompletedTask;
+            }
+
+            public ValueTask<bool> MoveNextAsync()
+            {
+                // May we let this fail over and over?
+                // If so, the class doesn't need extra state
+                // and thus can be reused without creating an
+                // async enumerator
+                return _moveNextThrows;
+            }
         }
     }
 }

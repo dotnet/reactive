@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -11,14 +13,43 @@ namespace System.Linq
     {
         public static IAsyncEnumerable<TValue> Never<TValue>()
         {
-            //
-            // REVIEW: The C# 8.0 proposed interfaces don't allow for cancellation, so this "Never" is
-            //         as never as never can be; it can't be interrupted *at all*, similar to the sync
-            //         variant in Ix. Passing a *hot* CancellationToken to the Never operator doesn't
-            //         seem correct either, given that we return a *cold* sequence.
-            //
+            return NeverAsyncEnumerable<TValue>.Instance;
+        }
 
-            return AsyncEnumerable.CreateEnumerable(() => AsyncEnumerable.CreateEnumerator<TValue>(() => TaskExt.Never, current: null, dispose: null));
+        private sealed class NeverAsyncEnumerable<TValue> : IAsyncEnumerable<TValue>
+        {
+            internal static readonly NeverAsyncEnumerable<TValue> Instance = new NeverAsyncEnumerable<TValue>();
+
+            public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            {
+                return new NeverAsyncEnumerator(cancellationToken);
+            }
+
+            private sealed class NeverAsyncEnumerator : IAsyncEnumerator<TValue>
+            {
+                public TValue Current => throw new InvalidOperationException();
+
+                private readonly CancellationToken _token;
+
+                public NeverAsyncEnumerator(CancellationToken token)
+                {
+                    _token = token;
+                }
+
+                public ValueTask DisposeAsync()
+                {
+                    return TaskExt.CompletedTask;
+                }
+
+                public ValueTask<bool> MoveNextAsync()
+                {
+                    return new ValueTask<bool>(Task.Run(async () =>
+                    {
+                        await Task.Delay(Threading.Timeout.Infinite, _token);
+                        return false;
+                    }, _token));
+                }
+            }
         }
     }
 }

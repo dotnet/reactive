@@ -38,6 +38,8 @@ namespace System.Linq
 
             private IAsyncEnumerator<TSource> _enumerator;
 
+            private bool _finallyOnce;
+
             public FinallyAsyncIterator(IAsyncEnumerable<TSource> source, Action finallyAction)
             {
                 Debug.Assert(source != null);
@@ -59,6 +61,13 @@ namespace System.Linq
                     await _enumerator.DisposeAsync().ConfigureAwait(false);
                     _enumerator = null;
 
+                }
+
+                // Run the _finallyAction even if
+                // the consumer did not call MoveNextAsync
+                if (!_finallyOnce)
+                {
+                    _finallyOnce = true;
                     _finallyAction();
                 }
 
@@ -96,6 +105,8 @@ namespace System.Linq
 
             private IAsyncEnumerator<TSource> _enumerator;
 
+            private bool _finallyOnce;
+
             public FinallyAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<Task> finallyAction)
             {
                 Debug.Assert(source != null);
@@ -116,7 +127,13 @@ namespace System.Linq
                 {
                     await _enumerator.DisposeAsync().ConfigureAwait(false);
                     _enumerator = null;
+                }
 
+                // Await the _finallyAction even if
+                // the consumer did not call MoveNextAsync
+                if (!_finallyOnce)
+                {
+                    _finallyOnce = true;
                     await _finallyAction().ConfigureAwait(false);
                 }
 

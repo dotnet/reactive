@@ -114,7 +114,46 @@ namespace Tests
             var xs = new[] { 1, 2 }.ToAsyncEnumerable().Finally(() => { i++; });
 
             await SequenceIdentity(xs);
-            Assert.Equal(2, i);
+            Assert.Equal(4, i);
+        }
+
+        [Fact]
+        public async Task Finally7_Async()
+        {
+            var i = 0;
+            var xs = new[] { 1, 2 }.ToAsyncEnumerable().Finally(async () => {
+                await Task.CompletedTask;
+                i++;
+            });
+
+            await SequenceIdentity(xs);
+            Assert.Equal(4, i);
+        }
+
+        [Fact]
+        public async Task Finally8()
+        {
+            var i = 0;
+            var en = AsyncEnumerable.Range(1, 5).Finally(() => i++).GetAsyncEnumerator();
+
+            await en.DisposeAsync();
+
+            Assert.Equal(1, i);
+        }
+
+        [Fact]
+        public async Task Finally8_Async()
+        {
+            var i = 0;
+            var en = AsyncEnumerable.Range(1, 5).Finally(async () =>
+            {
+                await Task.CompletedTask;
+                i++;
+            }).GetAsyncEnumerator();
+
+            await en.DisposeAsync();
+
+            Assert.Equal(1, i);
         }
     }
 }
