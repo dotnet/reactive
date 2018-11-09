@@ -73,17 +73,13 @@ namespace System.Linq
 
                 private bool _once;
 
-                private readonly TaskCompletionSource<bool> _loserTask;
-
-                private readonly TaskCompletionSource<WinnerInfo> _winnerTask;
+                private Task _loserTask;
 
                 public AmbEnumerator(IAsyncEnumerable<TSource> source1, IAsyncEnumerable<TSource> source2, CancellationToken mainToken)
                 {
                     _source1 = source1;
                     _source2 = source2;
                     _mainToken = mainToken;
-                    _loserTask = new TaskCompletionSource<bool>();
-                    _winnerTask = new TaskCompletionSource<WinnerInfo>();
                 }
 
                 public async ValueTask DisposeAsync()
@@ -93,8 +89,8 @@ namespace System.Linq
                     {
                         await _winner.DisposeAsync();
                         _winner = this; // keep it non-null
+                        await _loserTask;
                     }
-                    await _loserTask.Task;
                 }
 
                 public async ValueTask<bool> MoveNextAsync()
@@ -111,27 +107,27 @@ namespace System.Linq
                         _enumerator1 = _source1.GetAsyncEnumerator(_token1.Token);
                         _enumerator2 = _source2.GetAsyncEnumerator(_token2.Token);
 
-#pragma warning disable CS4014 // ContinueWith used
-                        _enumerator1.MoveNextAsync()
-                            .AsTask()
-                            .ContinueWith((t, state) => ((AmbEnumerator)state).Move1(t), this);
+                        var t1 = _enumerator1.MoveNextAsync().AsTask();
+                        var t2 = _enumerator2.MoveNextAsync().AsTask();
 
-                        _enumerator2.MoveNextAsync()
-                            .AsTask()
-                            .ContinueWith((t, state) => ((AmbEnumerator)state).Move2(t), this);
-#pragma warning restore CS4014
+                        var winner = await Task.WhenAny(t1, t2);
 
-                        var info = await _winnerTask.Task;
-
-                        if (info.Empty)
+                        if (winner == t1)
                         {
-                            return false;
+                            _winner = _enumerator1;
+                            _loserTask = t2.ContinueWith(async (t, s) =>
+                                await ((AmbEnumerator)s)._enumerator2.DisposeAsync(),
+                                this);
                         }
-                        else if (info.Error != null)
+                        else
                         {
-                            throw info.Error;
+                            _winner = _enumerator2;
+                            _loserTask = t1.ContinueWith(async (t, s) =>
+                                await ((AmbEnumerator)s)._enumerator1.DisposeAsync(),
+                                this);
                         }
-                        return true;
+
+                        return await winner;
                     }
 
                     return await _winner.MoveNextAsync().ConfigureAwait(false);
@@ -141,71 +137,6 @@ namespace System.Linq
                 {
                     _token1.Cancel();
                     _token2.Cancel();
-                }
-
-                private void TryWin(Task<bool> t, IAsyncEnumerator<TSource> candidate, CancellationTokenSource otherToken)
-                {
-                    if (Interlocked.CompareExchange(ref _winner, candidate, null) == null)
-                    {
-                        otherToken.Cancel();
-
-                        if (t.IsCanceled)
-                        {
-                            _winnerTask.TrySetCanceled();
-                        }
-                        else if (t.IsFaulted)
-                        {
-                            _winnerTask.TrySetResult(new WinnerInfo
-                            {
-                                Error = t.Exception
-                            });
-                        }
-                        else
-                        {
-                            _winnerTask.TrySetResult(new WinnerInfo
-                            {
-                                Empty = !t.Result
-                            });
-                        }
-                    }
-                    else
-                    {
-                        candidate.DisposeAsync()
-                            .AsTask()
-                            .ContinueWith((t2, state) => ((AmbEnumerator)state).DisposeHandler(t2), this);
-                    }
-                }
-
-                private void Move1(Task<bool> t)
-                {
-                    TryWin(t, _enumerator1, _token2);
-                }
-
-                private void Move2(Task<bool> t)
-                {
-                    TryWin(t, _enumerator2, _token1);
-                }
-
-                private void DisposeHandler(Task t)
-                {
-                    if (t.IsCanceled)
-                    {
-                        _loserTask.TrySetCanceled();
-                    }
-                    else if (t.IsFaulted)
-                    {
-                        _loserTask.TrySetException(t.Exception);
-                    }
-                    else
-                    {
-                        _loserTask.TrySetResult(true);
-                    }
-                }
-
-                private struct WinnerInfo
-                {
-                    internal bool Empty;
-                    internal Exception Error;
                 }
             }
         }
