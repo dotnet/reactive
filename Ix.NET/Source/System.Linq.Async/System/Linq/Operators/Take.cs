@@ -68,7 +68,7 @@ namespace System.Linq
 
                 public async ValueTask<bool> MoveNextAsync()
                 {
-                    await _source.DisposeAsync();
+                    await _source.DisposeAsync().ConfigureAwait(false);
                     return false;
                 }
             }

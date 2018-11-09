@@ -162,7 +162,7 @@ namespace System.Linq
                             return true;
                         }
 
-                        await Resume();
+                        await Resume().ConfigureAwait(false);
                         Interlocked.Exchange(ref _resume, null);
                     }
                 }

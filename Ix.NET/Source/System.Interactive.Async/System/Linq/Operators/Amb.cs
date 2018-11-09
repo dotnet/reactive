@@ -87,9 +87,9 @@ namespace System.Linq
                     _cancelBoth.Dispose();
                     if (_winner != null)
                     {
-                        await _winner.DisposeAsync();
+                        await _winner.DisposeAsync().ConfigureAwait(false);
                         _winner = this; // keep it non-null
-                        await _loserTask;
+                        await _loserTask.ConfigureAwait(false);
                     }
                 }
 
@@ -110,20 +110,20 @@ namespace System.Linq
                         var t1 = _enumerator1.MoveNextAsync().AsTask();
                         var t2 = _enumerator2.MoveNextAsync().AsTask();
 
-                        var winner = await Task.WhenAny(t1, t2);
+                        var winner = await Task.WhenAny(t1, t2).ConfigureAwait(false);
 
                         if (winner == t1)
                         {
                             _winner = _enumerator1;
                             _loserTask = t2.ContinueWith(async (t, s) =>
-                                await ((AmbEnumerator)s)._enumerator2.DisposeAsync(),
+                                await ((AmbEnumerator)s)._enumerator2.DisposeAsync().ConfigureAwait(false),
                                 this);
                         }
                         else
                         {
                             _winner = _enumerator2;
                             _loserTask = t1.ContinueWith(async (t, s) =>
-                                await ((AmbEnumerator)s)._enumerator1.DisposeAsync(),
+                                await ((AmbEnumerator)s)._enumerator1.DisposeAsync().ConfigureAwait(false),
                                 this);
                         }
 

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -118,8 +119,8 @@ namespace System.Linq
 
             public async ValueTask DisposeAsync()
             {
-                await _source.DisposeAsync();
-                throw _error;
+                await _source.DisposeAsync().ConfigureAwait(false);
+                ExceptionDispatchInfo.Capture(_error).Throw();
             }
 
             public ValueTask<bool> MoveNextAsync()

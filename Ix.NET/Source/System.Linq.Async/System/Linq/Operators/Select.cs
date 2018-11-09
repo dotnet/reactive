@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -122,9 +123,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
                 if (error != null)
                 {
-                    // 'throw error' doesn't preserve the stack trace
-                    // this, however, doesn't preserve the flat error structure.
-                    throw new AggregateException("The enumerator's DisposeAsync failed", error);
+                    ExceptionDispatchInfo.Capture(error).Throw();
                 }
             }
 
