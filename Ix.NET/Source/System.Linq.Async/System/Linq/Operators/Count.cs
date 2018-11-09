@@ -78,17 +78,85 @@ namespace System.Linq
                 return listProv.GetCountAsync(onlyIfCheap: false, cancellationToken);
             }
 
-            return source.Aggregate(0, (c, _) => checked(c + 1), cancellationToken);
+            return Core();
+
+            async Task<int> Core()
+            {
+                var count = 0;
+
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
+                {
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        checked
+                        {
+                            count++;
+                        }
+                    }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+
+                return count;
+            }
         }
 
-        private static Task<int> CountCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        private static async Task<int> CountCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            return source.Where(predicate).Aggregate(0, (c, _) => checked(c + 1), cancellationToken);
+            var count = 0;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    if (predicate(e.Current))
+                    {
+                        checked
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return count;
         }
 
-        private static Task<int> CountCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        private static async Task<int> CountCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
-            return source.Where(predicate).Aggregate(0, (c, _) => checked(c + 1), cancellationToken);
+            var count = 0;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    if (await predicate(e.Current).ConfigureAwait(false))
+                    {
+                        checked
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return count;
         }
     }
 }
