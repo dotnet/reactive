@@ -70,36 +70,21 @@ namespace System.Linq
         {
             var first = await TryGetFirst(source, cancellationToken).ConfigureAwait(false);
 
-            if (first.HasValue)
-            {
-                return first.Value;
-            }
-
-            throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            return first.HasValue ? first.Value : throw new InvalidOperationException(Strings.NO_ELEMENTS);
         }
 
         private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
-            if (first.HasValue)
-            {
-                return first.Value;
-            }
-
-            throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            return first.HasValue ? first.Value : throw new InvalidOperationException(Strings.NO_ELEMENTS);
         }
 
         private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
             var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
-            if (first.HasValue)
-            {
-                return first.Value;
-            }
-
-            throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            return first.HasValue ? first.Value : throw new InvalidOperationException(Strings.NO_ELEMENTS);
         }
     }
 }

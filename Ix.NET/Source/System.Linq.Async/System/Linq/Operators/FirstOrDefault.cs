@@ -70,36 +70,21 @@ namespace System.Linq
         {
             var first = await TryGetFirst(source, cancellationToken).ConfigureAwait(false);
 
-            if (first.HasValue)
-            {
-                return first.Value;
-            }
-
-            return default;
+            return first.HasValue ? first.Value : default;
         }
 
         private static async Task<TSource> FirstOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
-            if (first.HasValue)
-            {
-                return first.Value;
-            }
-
-            return default;
+            return first.HasValue ? first.Value : default;
         }
 
         private static async Task<TSource> FirstOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
             var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
-            if (first.HasValue)
-            {
-                return first.Value;
-            }
-
-            return default;
+            return first.HasValue ? first.Value : default;
         }
 
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
