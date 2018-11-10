@@ -90,7 +90,15 @@ namespace System.Linq
                     {
                         if (TryDispose() && !_cts.IsCancellationRequested)
                         {
-                            _downstream.OnError(t.Exception);
+                            var ex = t.Exception;
+                            if (ex.InnerExceptions.Count == 1)
+                            {
+                                _downstream.OnError(ex.InnerExceptions[0]);
+                            }
+                            else
+                            {
+                                _downstream.OnError(ex);
+                            }
                         }
                     }
                     else if (t.Result)

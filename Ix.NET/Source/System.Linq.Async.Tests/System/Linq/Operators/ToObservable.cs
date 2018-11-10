@@ -261,6 +261,35 @@ namespace Tests
             Assert.False(fail);
         }
 
+        [Fact]
+        public void ToObservable_Million_Items()
+        {
+            var fail = false;
+            var evt = new ManualResetEvent(false);
+            var index = 0;
+
+            var xs = AsyncEnumerable.Range(0, 1_000_000).ToObservable();
+            xs.Subscribe(new MyObserver<int>(
+                x =>
+                {
+                    fail |= x != index++;
+                },
+                ex =>
+                {
+                    fail = true;
+                    evt.Set();
+                },
+                () =>
+                {
+                    evt.Set();
+                }
+            ));
+
+            evt.WaitOne();
+            Assert.False(fail);
+            Assert.Equal(1_000_000, index);
+        }
+
         private sealed class MyObserver<T> : IObserver<T>
         {
             private readonly Action<T> _onNext;
