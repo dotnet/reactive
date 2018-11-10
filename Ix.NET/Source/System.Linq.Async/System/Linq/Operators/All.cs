@@ -20,16 +20,6 @@ namespace System.Linq
             return AllCore(source, predicate, CancellationToken.None);
         }
 
-        public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (predicate == null)
-                throw Error.ArgumentNull(nameof(predicate));
-
-            return AllCore(source, predicate, CancellationToken.None);
-        }
-
         public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
@@ -38,6 +28,16 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(predicate));
 
             return AllCore(source, predicate, cancellationToken);
+        }
+
+        public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
+
+            return AllCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
