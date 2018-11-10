@@ -13,29 +13,27 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return ToEnumerableCore(source);
-        }
+            return Core();
 
-        private static IEnumerable<TSource> ToEnumerableCore<TSource>(IAsyncEnumerable<TSource> source)
-        {
-            var e = source.GetAsyncEnumerator(default);
-
-            try
+            IEnumerable<TSource> Core()
             {
-                while (true)
+                var e = source.GetAsyncEnumerator(default);
+
+                try
                 {
-                    if (!e.MoveNextAsync().Result)
-                        break;
+                    while (true)
+                    {
+                        if (!e.MoveNextAsync().GetAwaiter().GetResult())
+                            break;
 
-                    var c = e.Current;
-
-                    yield return c;
+                        yield return e.Current;
+                    }
                 }
-            }
-            finally
-            {
-                // Wait
-                e.DisposeAsync().GetAwaiter().GetResult();
+                finally
+                {
+                    // Wait
+                    e.DisposeAsync().GetAwaiter().GetResult();
+                }
             }
         }
     }
