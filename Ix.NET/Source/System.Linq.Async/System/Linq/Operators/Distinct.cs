@@ -16,7 +16,7 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return source.Distinct(EqualityComparer<TSource>.Default);
+            return new DistinctAsyncIterator<TSource>(source, EqualityComparer<TSource>.Default);
         }
 
         public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
