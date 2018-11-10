@@ -19,7 +19,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
 
-            return ToLookup(source, keySelector, CancellationToken.None);
+            return ToLookupCore(source, keySelector, x => x, EqualityComparer<TKey>.Default, CancellationToken.None);
         }
 
         public static Task<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken)
@@ -29,7 +29,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
 
-            return source.ToLookup(keySelector, x => x, EqualityComparer<TKey>.Default, cancellationToken);
+            return ToLookupCore(source, keySelector, x => x, EqualityComparer<TKey>.Default, cancellationToken);
         }
 
         public static Task<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector)
@@ -39,7 +39,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
 
-            return ToLookup(source, keySelector, CancellationToken.None);
+            return ToLookupCore(source, keySelector, x => Task.FromResult(x), EqualityComparer<TKey>.Default, CancellationToken.None);
         }
 
         public static Task<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, CancellationToken cancellationToken)
@@ -49,7 +49,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
 
-            return source.ToLookup(keySelector, x => Task.FromResult(x), EqualityComparer<TKey>.Default, cancellationToken);
+            return ToLookupCore(source, keySelector, x => Task.FromResult(x), EqualityComparer<TKey>.Default, cancellationToken);
         }
 
         public static Task<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
@@ -61,7 +61,7 @@ namespace System.Linq
             if (comparer == null)
                 throw Error.ArgumentNull(nameof(comparer));
 
-            return ToLookup(source, keySelector, comparer, CancellationToken.None);
+            return ToLookupCore(source, keySelector, x => x, comparer, CancellationToken.None);
         }
 
         public static Task<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
@@ -73,7 +73,7 @@ namespace System.Linq
             if (comparer == null)
                 throw Error.ArgumentNull(nameof(comparer));
 
-            return source.ToLookup(keySelector, x => x, comparer, cancellationToken);
+            return ToLookupCore(source, keySelector, x => x, comparer, cancellationToken);
         }
 
         public static Task<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
@@ -85,7 +85,7 @@ namespace System.Linq
             if (comparer == null)
                 throw Error.ArgumentNull(nameof(comparer));
 
-            return ToLookup(source, keySelector, comparer, CancellationToken.None);
+            return ToLookupCore(source, keySelector, x => Task.FromResult(x), comparer, CancellationToken.None);
         }
 
         public static Task<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
@@ -97,7 +97,7 @@ namespace System.Linq
             if (comparer == null)
                 throw Error.ArgumentNull(nameof(comparer));
 
-            return source.ToLookup(keySelector, x => Task.FromResult(x), comparer, cancellationToken);
+            return ToLookupCore(source, keySelector, x => Task.FromResult(x), comparer, cancellationToken);
         }
 
         public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
@@ -109,7 +109,7 @@ namespace System.Linq
             if (elementSelector == null)
                 throw Error.ArgumentNull(nameof(elementSelector));
 
-            return ToLookup(source, keySelector, elementSelector, CancellationToken.None);
+            return ToLookupCore(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, CancellationToken.None);
         }
 
         public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, CancellationToken cancellationToken)
@@ -121,7 +121,7 @@ namespace System.Linq
             if (elementSelector == null)
                 throw Error.ArgumentNull(nameof(elementSelector));
 
-            return source.ToLookup(keySelector, elementSelector, EqualityComparer<TKey>.Default, cancellationToken);
+            return ToLookupCore(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, cancellationToken);
         }
 
         public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector)
@@ -133,7 +133,7 @@ namespace System.Linq
             if (elementSelector == null)
                 throw Error.ArgumentNull(nameof(elementSelector));
 
-            return ToLookup(source, keySelector, elementSelector, CancellationToken.None);
+            return ToLookupCore(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, CancellationToken.None);
         }
 
         public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, CancellationToken cancellationToken)
@@ -145,7 +145,7 @@ namespace System.Linq
             if (elementSelector == null)
                 throw Error.ArgumentNull(nameof(elementSelector));
 
-            return source.ToLookup(keySelector, elementSelector, EqualityComparer<TKey>.Default, cancellationToken);
+            return ToLookupCore(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, cancellationToken);
         }
 
         public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
@@ -159,10 +159,10 @@ namespace System.Linq
             if (comparer == null)
                 throw Error.ArgumentNull(nameof(comparer));
 
-            return ToLookup(source, keySelector, elementSelector, comparer, CancellationToken.None);
+            return ToLookupCore(source, keySelector, elementSelector, comparer, CancellationToken.None);
         }
 
-        public static async Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -173,9 +173,7 @@ namespace System.Linq
             if (comparer == null)
                 throw Error.ArgumentNull(nameof(comparer));
 
-            var lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
-
-            return lookup;
+            return ToLookupCore(source, keySelector, elementSelector, comparer, cancellationToken);
         }
 
         public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer)
@@ -189,10 +187,10 @@ namespace System.Linq
             if (comparer == null)
                 throw Error.ArgumentNull(nameof(comparer));
 
-            return ToLookup(source, keySelector, elementSelector, comparer, CancellationToken.None);
+            return ToLookupCore(source, keySelector, elementSelector, comparer, CancellationToken.None);
         }
 
-        public static async Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -203,9 +201,17 @@ namespace System.Linq
             if (comparer == null)
                 throw Error.ArgumentNull(nameof(comparer));
 
-            var lookup = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+            return ToLookupCore(source, keySelector, elementSelector, comparer, cancellationToken);
+        }
 
-            return lookup;
+        private static async Task<ILookup<TKey, TElement>> ToLookupCore<TSource, TKey, TElement>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        {
+            return await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+        }
+
+        private static async Task<ILookup<TKey, TElement>> ToLookupCore<TSource, TKey, TElement>(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        {
+            return await Internal.LookupWithTask<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
         }
     }
 }
