@@ -83,7 +83,7 @@ namespace System.Linq
                         _firstEnumerator = _first.GetAsyncEnumerator(cancellationToken);
                         _set = new Set<TSource>(_comparer);
                         _setFilled = false;
-                        _fillSetTask = FillSetAsync();
+                        _fillSetTask = FillSetAsync(cancellationToken);
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -124,9 +124,9 @@ namespace System.Linq
                 return false;
             }
 
-            private async Task FillSetAsync()
+            private async Task FillSetAsync(CancellationToken cancellationToken)
             {
-                var array = await _second.ToArray().ConfigureAwait(false);
+                var array = await _second.ToArray(cancellationToken).ConfigureAwait(false);
 
                 foreach (var t in array)
                 {
