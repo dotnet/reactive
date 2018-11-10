@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Threading;
 
 namespace Tests
 {
@@ -29,7 +30,7 @@ namespace Tests
                 _state = sharedState;
             }
 
-            public IAsyncEnumerator<T> GetAsyncEnumerator() => new Enumerator(_enumerable.GetAsyncEnumerator(), _state);
+            public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken ca) => new Enumerator(_enumerable.GetAsyncEnumerator(ca), _state);
 
             private class Enumerator : IAsyncEnumerator<T>
             {
