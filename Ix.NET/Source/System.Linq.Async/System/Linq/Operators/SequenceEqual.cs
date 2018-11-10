@@ -13,19 +13,11 @@ namespace System.Linq
         public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
-            {
                 throw Error.ArgumentNull(nameof(first));
-            }
-
             if (second == null)
-            {
                 throw Error.ArgumentNull(nameof(second));
-            }
-
             if (comparer == null)
-            {
                 throw Error.ArgumentNull(nameof(comparer));
-            }
 
             return SequenceEqual(first, second, comparer, CancellationToken.None);
         }
@@ -33,14 +25,9 @@ namespace System.Linq
         public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
-            {
                 throw Error.ArgumentNull(nameof(first));
-            }
-
             if (second == null)
-            {
                 throw Error.ArgumentNull(nameof(second));
-            }
 
             return SequenceEqual(first, second, CancellationToken.None);
         }
@@ -49,19 +36,11 @@ namespace System.Linq
         public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (first == null)
-            {
                 throw Error.ArgumentNull(nameof(first));
-            }
-
             if (second == null)
-            {
                 throw Error.ArgumentNull(nameof(second));
-            }
-
             if (comparer == null)
-            {
                 throw Error.ArgumentNull(nameof(comparer));
-            }
 
             return SequenceEqualCore(first, second, comparer, cancellationToken);
         }
@@ -69,14 +48,9 @@ namespace System.Linq
         public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken)
         {
             if (first == null)
-            {
                 throw Error.ArgumentNull(nameof(first));
-            }
-
             if (second == null)
-            {
                 throw Error.ArgumentNull(nameof(second));
-            }
 
             return first.SequenceEqual(second, EqualityComparer<TSource>.Default, cancellationToken);
         }

@@ -14,14 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-            {
                 throw Error.ArgumentNull(nameof(source));
-            }
-
             if (predicate == null)
-            {
                 throw Error.ArgumentNull(nameof(predicate));
-            }
 
             if (source is AsyncIterator<TSource> iterator)
             {
@@ -35,14 +30,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (source == null)
-            {
                 throw Error.ArgumentNull(nameof(source));
-            }
-
             if (predicate == null)
-            {
                 throw Error.ArgumentNull(nameof(predicate));
-            }
 
             return new WhereEnumerableWithIndexAsyncIterator<TSource>(source, predicate);
         }

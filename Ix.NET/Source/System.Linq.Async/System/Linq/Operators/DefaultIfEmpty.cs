@@ -15,9 +15,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> DefaultIfEmpty<TSource>(this IAsyncEnumerable<TSource> source, TSource defaultValue)
         {
             if (source == null)
-            {
                 throw Error.ArgumentNull(nameof(source));
-            }
 
             return new DefaultIfEmptyAsyncIterator<TSource>(source, defaultValue);
         }
@@ -25,9 +23,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> DefaultIfEmpty<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-            {
                 throw Error.ArgumentNull(nameof(source));
-            }
 
             return DefaultIfEmpty(source, default);
         }

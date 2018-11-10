@@ -15,9 +15,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Reverse<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-            {
                 throw Error.ArgumentNull(nameof(source));
-            }
 
             return new ReverseAsyncIterator<TSource>(source);
         }
