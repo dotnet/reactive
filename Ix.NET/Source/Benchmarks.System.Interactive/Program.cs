@@ -21,8 +21,7 @@ namespace Benchmarks.System.Interactive
                 typeof(IgnoreElementsBenchmark),
                 typeof(DeferBenchmark),
                 typeof(RetryBenchmark),
-                typeof(MinMaxBenchmark),
-                typeof(AsyncReturnBenchmark)
+                typeof(MinMaxBenchmark)
             });
 
             switcher.Run();
