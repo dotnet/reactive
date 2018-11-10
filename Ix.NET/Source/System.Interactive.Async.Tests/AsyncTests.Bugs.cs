@@ -158,11 +158,25 @@ namespace Tests
     {
         public static IEnumerable<T> WithDispose<T>(this IEnumerable<T> source, Action a)
         {
-            return EnumerableEx.Create(() =>
+            return new Enumerable<T>(() =>
             {
                 var e = source.GetEnumerator();
                 return new Enumerator<T>(e.MoveNext, () => e.Current, () => { e.Dispose(); a(); });
             });
+        }
+
+        private sealed class Enumerable<T> : IEnumerable<T>
+        {
+            private readonly Func<IEnumerator<T>> _getEnumerator;
+
+            public Enumerable(Func<IEnumerator<T>> getEnumerator)
+            {
+                _getEnumerator = getEnumerator;
+            }
+
+            public IEnumerator<T> GetEnumerator() => _getEnumerator();
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
         private sealed class Enumerator<T> : IEnumerator<T>
