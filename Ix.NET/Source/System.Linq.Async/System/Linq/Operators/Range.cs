@@ -14,11 +14,11 @@ namespace System.Linq
         public static IAsyncEnumerable<int> Range(int start, int count)
         {
             if (count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw Error.ArgumentOutOfRange(nameof(count));
 
             var end = (long)start + count - 1L;
             if (count < 0 || end > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw Error.ArgumentOutOfRange(nameof(count));
 
             if (count == 0)
                 return Empty<int>();

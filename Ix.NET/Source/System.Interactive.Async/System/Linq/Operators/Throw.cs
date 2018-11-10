@@ -22,8 +22,12 @@ namespace System.Linq
             var moveNextThrows = new ValueTask<bool>(Task.FromException<bool>(exception));
 #endif
 
+            //
+            // REVIEW: Honor cancellation using conditional expression in MoveNextAsync?
+            //
+
             return AsyncEnumerable.CreateEnumerable(
-                () => AsyncEnumerable.CreateEnumerator<TValue>(
+                _ => AsyncEnumerable.CreateEnumerator<TValue>(
                     () => moveNextThrows,
                     current: null,
                     dispose: null)

@@ -5,6 +5,8 @@
 // See https://github.com/dotnet/csharplang/blob/master/proposals/async-streams.md for the definition of this interface
 // and the design rationale. (8/30/2017)
 
+#if !HAS_ASYNCENUMERABLE
+
 using System.Threading;
 
 namespace System.Collections.Generic
@@ -23,3 +25,5 @@ namespace System.Collections.Generic
         IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default);
     }
 }
+
+#endif

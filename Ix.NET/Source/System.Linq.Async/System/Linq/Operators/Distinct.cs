@@ -14,7 +14,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return source.Distinct(EqualityComparer<TSource>.Default);
         }
@@ -22,9 +22,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(comparer));
 
             return new DistinctAsyncIterator<TSource>(source, comparer);
         }
@@ -121,7 +121,7 @@ namespace System.Linq
             {
                 var s = new Set<TSource>(_comparer);
 
-                await s.UnionWithAsync(_source, cancellationToken);
+                await s.UnionWithAsync(_source, cancellationToken).ConfigureAwait(false);
 
                 return s;
             }

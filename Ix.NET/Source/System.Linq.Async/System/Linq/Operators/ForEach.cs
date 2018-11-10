@@ -13,59 +13,39 @@ namespace System.Linq
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> action)
         {
             if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
+                throw Error.ArgumentNull(nameof(source));
             if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
+                throw Error.ArgumentNull(nameof(action));
 
-            return ForEachAsync(source, action, CancellationToken.None);
-        }
-
-        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action)
-        {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            return ForEachAsync(source, action, CancellationToken.None);
+            return ForEachAsyncCore(source, action, CancellationToken.None);
         }
 
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> action, CancellationToken cancellationToken)
         {
             if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
+                throw Error.ArgumentNull(nameof(source));
             if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
+                throw Error.ArgumentNull(nameof(action));
 
-            return source.ForEachAsync((x, i) => action(x), cancellationToken);
+            return ForEachAsyncCore(source, action, cancellationToken);
+        }
+
+        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (action == null)
+                throw Error.ArgumentNull(nameof(action));
+
+            return ForEachAsyncCore(source, action, CancellationToken.None);
         }
 
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action, CancellationToken cancellationToken)
         {
             if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
+                throw Error.ArgumentNull(nameof(source));
             if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
+                throw Error.ArgumentNull(nameof(action));
 
             return ForEachAsyncCore(source, action, cancellationToken);
         }
@@ -73,81 +53,95 @@ namespace System.Linq
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> action)
         {
             if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
+                throw Error.ArgumentNull(nameof(source));
             if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
+                throw Error.ArgumentNull(nameof(action));
 
-            return ForEachAsync(source, action, CancellationToken.None);
-        }
-
-        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task> action)
-        {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            return ForEachAsync(source, action, CancellationToken.None);
+            return ForEachAsyncCore(source, (x, ct) => action(x), CancellationToken.None);
         }
 
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> action, CancellationToken cancellationToken)
         {
             if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
+                throw Error.ArgumentNull(nameof(source));
             if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
+                throw Error.ArgumentNull(nameof(action));
 
-            return source.ForEachAsync((x, i, ct) => action(x), cancellationToken);
+            return ForEachAsyncCore(source, (x, ct) => action(x), cancellationToken);
         }
 
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> action, CancellationToken cancellationToken)
         {
             if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
+                throw Error.ArgumentNull(nameof(source));
             if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
+                throw Error.ArgumentNull(nameof(action));
 
-            return source.ForEachAsync((x, i, ct) => action(x, ct), cancellationToken);
+            return ForEachAsyncCore(source, action, cancellationToken);
+        }
+
+        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task> action)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (action == null)
+                throw Error.ArgumentNull(nameof(action));
+
+            return ForEachAsyncCore(source, (x, i, ct) => action(x, i), CancellationToken.None);
         }
 
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task> action, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (action == null)
-                throw new ArgumentNullException(nameof(action));
+                throw Error.ArgumentNull(nameof(action));
 
-            return source.ForEachAsync((x, i, ct) => action(x, i), cancellationToken);
+            return ForEachAsyncCore(source, (x, i, ct) => action(x, i), cancellationToken);
         }
 
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, Task> action, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (action == null)
-                throw new ArgumentNullException(nameof(action));
+                throw Error.ArgumentNull(nameof(action));
 
             return ForEachAsyncCore(source, action, cancellationToken);
+        }
+
+        private static async Task ForEachAsyncCore<TSource>(IAsyncEnumerable<TSource> source, Action<TSource> action, CancellationToken cancellationToken)
+        {
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    action(e.Current);
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+        }
+
+        private static async Task ForEachAsyncCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> action, CancellationToken cancellationToken)
+        {
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    await action(e.Current, cancellationToken).ConfigureAwait(false);
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
         }
 
         private static async Task ForEachAsyncCore<TSource>(IAsyncEnumerable<TSource> source, Action<TSource, int> action, CancellationToken cancellationToken)

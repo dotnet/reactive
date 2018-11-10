@@ -144,11 +144,11 @@ namespace System.Linq
             {
                 return Task.FromResult(
 #if NO_ARRAY_EMPTY
-                EmptyArray<TSource>.Value
+                    EmptyArray<TSource>.Value
 #else
-                Array.Empty<TSource>()
+                    Array.Empty<TSource>()
 #endif
-                    );
+                );
             }
 
             var array = new TSource[count];

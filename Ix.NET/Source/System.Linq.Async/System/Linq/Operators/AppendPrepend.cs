@@ -14,7 +14,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Append<TSource>(this IAsyncEnumerable<TSource> source, TSource element)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             if (source is AppendPrependAsyncIterator<TSource> appendable)
             {
@@ -27,7 +27,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Prepend<TSource>(this IAsyncEnumerable<TSource> source, TSource element)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             if (source is AppendPrependAsyncIterator<TSource> appendable)
             {
@@ -134,8 +134,7 @@ namespace System.Linq
 
                         if (_enumerator != null)
                         {
-                            if (await LoadFromEnumeratorAsync()
-                                .ConfigureAwait(false))
+                            if (await LoadFromEnumeratorAsync().ConfigureAwait(false))
                             {
                                 return true;
                             }
@@ -180,7 +179,7 @@ namespace System.Linq
 
             public override async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var count = await GetCountAsync(onlyIfCheap: true, cancellationToken: cancellationToken).ConfigureAwait(false);
+                var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
                 if (count == -1)
                 {
                     return await AsyncEnumerableHelpers.ToArray(this, cancellationToken).ConfigureAwait(false);
@@ -230,7 +229,7 @@ namespace System.Linq
 
             public override async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var count = await GetCountAsync(onlyIfCheap: true, cancellationToken: cancellationToken).ConfigureAwait(false);
+                var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
                 var list = count == -1 ? new List<TSource>() : new List<TSource>(count);
 
                 if (!_appending)
@@ -389,7 +388,7 @@ namespace System.Linq
 
             public override async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var count = await GetCountAsync(onlyIfCheap: true, cancellationToken: cancellationToken).ConfigureAwait(false);
+                var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
                 if (count == -1)
                 {
                     return await AsyncEnumerableHelpers.ToArray(this, cancellationToken).ConfigureAwait(false);
@@ -437,7 +436,7 @@ namespace System.Linq
 
             public override async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var count = await GetCountAsync(onlyIfCheap: true, cancellationToken: cancellationToken).ConfigureAwait(false);
+                var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
                 var list = count == -1 ? new List<TSource>() : new List<TSource>(count);
                 for (var n = _prepended; n != null; n = n.Linked)
                 {

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -14,7 +13,7 @@ namespace Tests
         [Fact]
         public void CreateEnumerable_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerable<int>(default(Func<IAsyncEnumerator<int>>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerable<int>(default));
         }
     }
 }

@@ -13,15 +13,15 @@ namespace System.Linq
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
-            return LastOrDefault(source, CancellationToken.None);
+            return LastOrDefaultCore(source, CancellationToken.None);
         }
 
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return LastOrDefaultCore(source, cancellationToken);
         }
@@ -29,89 +29,173 @@ namespace System.Linq
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
-            return LastOrDefault(source, predicate, CancellationToken.None);
+            return LastOrDefaultCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
-            return source.Where(predicate).LastOrDefault(cancellationToken);
+            return LastOrDefaultCore(source, predicate, cancellationToken);
         }
 
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
-            return LastOrDefault(source, predicate, CancellationToken.None);
+            return LastOrDefaultCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
-            return source.Where(predicate).LastOrDefault(cancellationToken);
+            return LastOrDefaultCore(source, predicate, cancellationToken);
         }
 
         private static async Task<TSource> LastOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        {
+            var last = await TryGetLast(source, cancellationToken).ConfigureAwait(false);
+
+            return last.HasValue ? last.Value : default;
+        }
+
+        private static async Task<TSource> LastOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        {
+            var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
+
+            return last.HasValue ? last.Value : default;
+        }
+
+        private static async Task<TSource> LastOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        {
+            var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
+
+            return last.HasValue ? last.Value : default;
+        }
+
+        private static Task<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source is IList<TSource> list)
             {
                 var count = list.Count;
                 if (count > 0)
                 {
-                    return list[count - 1];
+                    return Task.FromResult(new Maybe<TSource>(list[count - 1]));
                 }
             }
             else if (source is IAsyncPartition<TSource> p)
             {
-                var first = await p.TryGetLastAsync(cancellationToken).ConfigureAwait(false);
-
-                if (first.HasValue)
-                {
-                    return first.Value;
-                }
+                return p.TryGetLastAsync(cancellationToken);
             }
             else
             {
-                var last = default(TSource);
-                var hasLast = false;
+                return Core();
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
-
-                try
+                async Task<Maybe<TSource>> Core()
                 {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    var last = default(TSource);
+                    var hasLast = false;
+
+                    var e = source.GetAsyncEnumerator(cancellationToken);
+
+                    try
                     {
-                        hasLast = true;
-                        last = e.Current;
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            hasLast = true;
+                            last = e.Current;
+                        }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
 
-                if (hasLast)
-                {
-                    return last;
+                    return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
                 }
             }
 
-            return default;
+            return Task.FromResult(new Maybe<TSource>());
+        }
+
+        private static async Task<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        {
+            var last = default(TSource);
+            var hasLast = false;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var value = e.Current;
+
+                    if (predicate(value))
+                    {
+                        hasLast = true;
+                        last = value;
+                    }
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
+            if (hasLast)
+            {
+                return new Maybe<TSource>(last);
+            }
+
+            return new Maybe<TSource>();
+        }
+
+        private static async Task<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        {
+            var last = default(TSource);
+            var hasLast = false;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var value = e.Current;
+
+                    if (await predicate(value).ConfigureAwait(false))
+                    {
+                        hasLast = true;
+                        last = value;
+                    }
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
+            if (hasLast)
+            {
+                return new Maybe<TSource>(last);
+            }
+
+            return new Maybe<TSource>();
         }
     }
 }

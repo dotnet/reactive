@@ -13,15 +13,15 @@ namespace System.Linq
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
-            return First(source, CancellationToken.None);
+            return FirstCore(source, CancellationToken.None);
         }
 
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return FirstCore(source, cancellationToken);
         }
@@ -29,79 +29,62 @@ namespace System.Linq
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
-            return First(source, predicate, CancellationToken.None);
+            return FirstCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
-            return source.Where(predicate).First(cancellationToken);
+            return FirstCore(source, predicate, cancellationToken);
         }
 
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
-            return First(source, predicate, CancellationToken.None);
+            return FirstCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
-            return source.Where(predicate).First(cancellationToken);
+            return FirstCore(source, predicate, cancellationToken);
         }
 
         private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            if (source is IList<TSource> list)
-            {
-                if (list.Count > 0)
-                {
-                    return list[0];
-                }
-            }
-            else if (source is IAsyncPartition<TSource> p)
-            {
-                var first = await p.TryGetFirstAsync(cancellationToken).ConfigureAwait(false);
+            var first = await TryGetFirst(source, cancellationToken).ConfigureAwait(false);
 
-                if (first.HasValue)
-                {
-                    return first.Value;
-                }
-            }
-            else
-            {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+            return first.HasValue ? first.Value : throw Error.NoElements();
+        }
 
-                try
-                {
-                    if (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        return e.Current;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-            }
+        private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        {
+            var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
-            throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            return first.HasValue ? first.Value : throw Error.NoElements();
+        }
+
+        private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        {
+            var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
+
+            return first.HasValue ? first.Value : throw Error.NoElements();
         }
     }
 }

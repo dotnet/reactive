@@ -145,7 +145,7 @@ namespace System.Linq
             _slots = newSlots;
         }
 
-        public async Task UnionWithAsync(IAsyncEnumerable<TElement> other, CancellationToken cancellationToken)
+        public async ValueTask UnionWithAsync(IAsyncEnumerable<TElement> other, CancellationToken cancellationToken)
         {
             var enu = other.GetAsyncEnumerator(cancellationToken);
 

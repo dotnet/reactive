@@ -13,45 +13,58 @@ namespace System.Linq
         public static Task<HashSet<TSource>> ToHashSet<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
-            return ToHashSet(source, EqualityComparer<TSource>.Default, CancellationToken.None);
+            return ToHashSetCore(source, EqualityComparer<TSource>.Default, CancellationToken.None);
         }
 
         public static Task<HashSet<TSource>> ToHashSet<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
-            return ToHashSet(source, EqualityComparer<TSource>.Default, cancellationToken);
+            return ToHashSetCore(source, EqualityComparer<TSource>.Default, cancellationToken);
         }
 
         public static Task<HashSet<TSource>> ToHashSet<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(comparer));
 
-            return ToHashSet(source, comparer, CancellationToken.None);
+            return ToHashSetCore(source, comparer, CancellationToken.None);
         }
 
         public static Task<HashSet<TSource>> ToHashSet<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(comparer));
 
-            return source.Aggregate(
-                new HashSet<TSource>(comparer),
-                (set, x) =>
+            return ToHashSetCore(source, comparer, cancellationToken);
+        }
+
+        private static async Task<HashSet<TSource>> ToHashSetCore<TSource>(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
+        {
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                var set = new HashSet<TSource>(comparer);
+
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    set.Add(x);
-                    return set;
-                },
-                cancellationToken
-            );
+                    set.Add(e.Current);
+                }
+
+                return set;
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
         }
     }
 }

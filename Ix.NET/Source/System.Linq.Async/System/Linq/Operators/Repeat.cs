@@ -13,7 +13,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Repeat<TResult>(TResult element, int count)
         {
             if (count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw Error.ArgumentOutOfRange(nameof(count));
 
             return new RepeatAsyncIterator<TResult>(element, count);
         }

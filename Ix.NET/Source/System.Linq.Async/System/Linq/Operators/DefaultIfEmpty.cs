@@ -15,9 +15,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> DefaultIfEmpty<TSource>(this IAsyncEnumerable<TSource> source, TSource defaultValue)
         {
             if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+                throw Error.ArgumentNull(nameof(source));
 
             return new DefaultIfEmptyAsyncIterator<TSource>(source, defaultValue);
         }
@@ -25,9 +23,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> DefaultIfEmpty<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+                throw Error.ArgumentNull(nameof(source));
 
             return DefaultIfEmpty(source, default);
         }
@@ -124,7 +120,7 @@ namespace System.Linq
                 else
                 {
                     var listProv = _source as IAsyncIListProvider<TSource>;
-                    count = listProv == null ? -1 : await listProv.GetCountAsync(onlyIfCheap: true, cancellationToken: cancellationToken).ConfigureAwait(false);
+                    count = listProv == null ? -1 : await listProv.GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
                 }
 
                 return count == 0 ? 1 : count;

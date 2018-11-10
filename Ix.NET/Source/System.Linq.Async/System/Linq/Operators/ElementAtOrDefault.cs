@@ -13,17 +13,19 @@ namespace System.Linq
         public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
+            if (index < 0)
+                throw Error.ArgumentOutOfRange(nameof(index));
 
-            return ElementAtOrDefault(source, index, CancellationToken.None);
+            return ElementAtOrDefaultCore(source, index, CancellationToken.None);
         }
 
         public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (index < 0)
-                throw new ArgumentOutOfRangeException(nameof(index));
+                throw Error.ArgumentOutOfRange(nameof(index));
 
             return ElementAtOrDefaultCore(source, index, cancellationToken);
         }

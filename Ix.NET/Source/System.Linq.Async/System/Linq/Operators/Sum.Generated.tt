@@ -19,16 +19,16 @@ namespace System.Linq
 <#
 var os = new[]
 {
-    new { type = "int", zero = "0" },
-    new { type = "long", zero = "0L" },
-    new { type = "float", zero = "0.0f" },
-    new { type = "double", zero = "0.0" },
-    new { type = "decimal", zero = "0m" },
-    new { type = "int?", zero = "(int?)0" },
-    new { type = "long?", zero = "(long?)0L" },
-    new { type = "float?", zero = "(float?)0.0f" },
-    new { type = "double?", zero = "(double?)0.0" },
-    new { type = "decimal?", zero = "(decimal?)0m" },
+    new { type = "int", zero = "0", @checked = true },
+    new { type = "long", zero = "0L", @checked = true },
+    new { type = "float", zero = "0.0f", @checked = false },
+    new { type = "double", zero = "0.0", @checked = false },
+    new { type = "decimal", zero = "0m", @checked = false },
+    new { type = "int?", zero = "0", @checked = true },
+    new { type = "long?", zero = "0L", @checked = true },
+    new { type = "float?", zero = "0.0f", @checked = false },
+    new { type = "double?", zero = "0.0", @checked = false },
+    new { type = "decimal?", zero = "0m", @checked = false },
 };
 
 foreach (var o in os)
@@ -38,57 +38,172 @@ foreach (var o in os)
         public static Task<<#=o.type#>> Sum(this IAsyncEnumerable<<#=o.type#>> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
-            return source.Aggregate(<#=o.zero#>, (x, y) => x + y<#=n#>, CancellationToken.None);
+            return SumCore(source, CancellationToken.None);
         }
 
         public static Task<<#=o.type#>> Sum(this IAsyncEnumerable<<#=o.type#>> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
-            return source.Aggregate(<#=o.zero#>, (x, y) => x + y<#=n#>, cancellationToken);
+            return SumCore(source, cancellationToken);
         }
 
         public static Task<<#=o.type#>> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=o.type#>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
-            return source.Select(selector).Sum(CancellationToken.None);
+            return SumCore(source, selector, CancellationToken.None);
         }
 
         public static Task<<#=o.type#>> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=o.type#>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
-            return source.Select(selector).Sum(cancellationToken);
+            return SumCore(source, selector, cancellationToken);
         }
 
         public static Task<<#=o.type#>> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<<#=o.type#>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
-            return source.Select(selector).Sum(CancellationToken.None);
+            return SumCore(source, selector, CancellationToken.None);
         }
 
         public static Task<<#=o.type#>> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<<#=o.type#>>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
-            return source.Select(selector).Sum(cancellationToken);
+            return SumCore(source, selector, cancellationToken);
+        }
+
+        private static async Task<<#=o.type#>> SumCore(IAsyncEnumerable<<#=o.type#>> source, CancellationToken cancellationToken)
+        {
+            var sum = <#=o.zero#>;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+<#
+if (o.@checked)
+{
+#>
+                    checked
+                    {
+                        sum += e.Current<#=n#>;
+                    }
+<#
+}
+else
+{
+#>
+                    sum += e.Current<#=n#>;
+<#
+}
+#>
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return sum;
+        }
+
+        private static async Task<<#=o.type#>> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, <#=o.type#>> selector, CancellationToken cancellationToken)
+        {
+            var sum = <#=o.zero#>;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var value = selector(e.Current);
+
+<#
+if (o.@checked)
+{
+#>
+                    checked
+                    {
+                        sum += value<#=n#>;
+                    }
+<#
+}
+else
+{
+#>
+                    sum += value<#=n#>;
+<#
+}
+#>
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return sum;
+        }
+
+        private static async Task<<#=o.type#>> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<<#=o.type#>>> selector, CancellationToken cancellationToken)
+        {
+            var sum = <#=o.zero#>;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var value = await selector(e.Current).ConfigureAwait(false);
+
+<#
+if (o.@checked)
+{
+#>
+                    checked
+                    {
+                        sum += value<#=n#>;
+                    }
+<#
+}
+else
+{
+#>
+                    sum += value<#=n#>;
+<#
+}
+#>
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return sum;
         }
 
 <#
