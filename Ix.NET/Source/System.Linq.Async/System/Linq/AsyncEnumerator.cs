@@ -87,7 +87,7 @@ namespace System.Collections.Generic
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return AsyncEnumerable.CreateEnumerable<T>(() => source);
+            return AsyncEnumerable.CreateEnumerable<T>(_ => source);
         }
 
         internal static IAsyncEnumerator<T> Create<T>(Func<TaskCompletionSource<bool>, ValueTask<bool>> moveNext, Func<T> current, Func<ValueTask> dispose)

@@ -185,3 +185,6 @@ nuget.exe
 
 # dotnet local cache
 .dotnet
+
+# JetBrains Rider adds these
+.idea/

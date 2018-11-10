@@ -10,7 +10,7 @@ namespace System.Linq
     {
         public Maybe(T value)
         {
-            HasValue = false;
+            HasValue = true;
             Value = value;
         }
 

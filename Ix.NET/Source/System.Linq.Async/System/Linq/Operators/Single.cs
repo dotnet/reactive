@@ -15,7 +15,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Single(source, CancellationToken.None);
+            return SingleCore(source, CancellationToken.None);
         }
 
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Single(source, predicate, CancellationToken.None);
+            return SingleCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate).Single(cancellationToken);
+            return SingleCore(source, predicate, cancellationToken);
         }
 
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
@@ -53,7 +53,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Single(source, predicate, CancellationToken.None);
+            return SingleCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -63,7 +63,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate).Single(cancellationToken);
+            return SingleCore(source, predicate, cancellationToken);
         }
 
         private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -95,6 +95,70 @@ namespace System.Linq
                 }
 
                 return result;
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+        }
+
+        private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        {
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var result = e.Current;
+
+                    if (predicate(result))
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            if (predicate(e.Current))
+                            {
+                                throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
+                            }
+                        }
+
+                        return result;
+                    }
+                }
+
+                throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+        }
+
+        private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        {
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var result = e.Current;
+
+                    if (await predicate(result).ConfigureAwait(false))
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            if (await predicate(e.Current).ConfigureAwait(false))
+                            {
+                                throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
+                            }
+                        }
+
+                        return result;
+                    }
+                }
+
+                throw new InvalidOperationException(Strings.NO_ELEMENTS);
             }
             finally
             {

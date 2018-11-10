@@ -32,7 +32,7 @@ namespace System.Linq
                     }
                 }
 
-                return (double)sum/count;
+                return (double)sum / count;
             }
             finally
             {
@@ -66,7 +66,7 @@ namespace System.Linq
                             }
                         }
 
-                        return (double)sum/count;
+                        return (double)sum / count;
                     }
                 }
             }
@@ -100,7 +100,7 @@ namespace System.Linq
                     }
                 }
 
-                return (double)sum/count;
+                return (double)sum / count;
             }
             finally
             {
@@ -134,7 +134,7 @@ namespace System.Linq
                             }
                         }
 
-                        return (double)sum/count;
+                        return (double)sum / count;
                     }
                 }
             }
@@ -168,7 +168,7 @@ namespace System.Linq
                     ++count;
                 }
 
-                return sum/count;
+                return sum / count;
             }
             finally
             {
@@ -202,7 +202,7 @@ namespace System.Linq
                             }
                         }
 
-                        return sum/count;
+                        return sum / count;
                     }
                 }
             }
@@ -233,7 +233,7 @@ namespace System.Linq
                     ++count;
                 }
 
-                return (float)(sum/count);
+                return (float)(sum / count);
             }
             finally
             {
@@ -267,7 +267,7 @@ namespace System.Linq
                             }
                         }
 
-                        return (float)(sum/count);
+                        return (float)(sum / count);
                     }
                 }
             }
@@ -298,7 +298,7 @@ namespace System.Linq
                     ++count;
                 }
 
-                return sum/count;
+                return sum / count;
             }
             finally
             {
@@ -329,7 +329,7 @@ namespace System.Linq
                             }
                         }
 
-                        return sum/count;
+                        return sum / count;
                     }
                 }
             }

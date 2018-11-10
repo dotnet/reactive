@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Xunit;
 
 namespace Tests
@@ -15,6 +16,7 @@ namespace Tests
         public void CreateEnumerable_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerable<int>(default(Func<IAsyncEnumerator<int>>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerable<int>(default(Func<CancellationToken, IAsyncEnumerator<int>>)));
         }
     }
 }

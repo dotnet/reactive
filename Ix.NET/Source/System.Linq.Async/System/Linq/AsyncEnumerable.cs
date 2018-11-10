@@ -31,7 +31,7 @@ namespace System.Linq
 #endif
 
             return CreateEnumerable(
-                () => CreateEnumerator<TValue>(
+                _ => CreateEnumerator<TValue>(
                     () => moveNextThrows,
                     current: null,
                     dispose: null)
