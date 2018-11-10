@@ -17,10 +17,7 @@ namespace Tests
         public async Task ElementAtOrDefault_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefault<int>(default, 0));
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAtOrDefault<int>(Return42, -1));
-
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefault<int>(default, 0, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAtOrDefault<int>(Return42, -1, CancellationToken.None));
         }
 
         [Fact]
@@ -60,6 +57,13 @@ namespace Tests
 
         [Fact]
         public void ElementAtOrDefault6()
+        {
+            var res = Return42.ElementAtOrDefault(-1);
+            Assert.Equal(0, res.Result);
+        }
+
+        [Fact]
+        public void ElementAtOrDefault7()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).ElementAtOrDefault(15);
