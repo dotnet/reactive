@@ -35,6 +35,8 @@ namespace System.Linq
                 case AsyncIteratorState.Allocated:
                     _buffer = await _source.ToArray(cancellationToken).ConfigureAwait(false);
 
+                    // REVIEW: If we add selectors with CancellationToken support, we should feed the token to Sort.
+
                     var sorter = GetAsyncEnumerableSorter(next: null);
                     _indexes = await sorter.Sort(_buffer, _buffer.Length).ConfigureAwait(false);
                     _index = 0;
