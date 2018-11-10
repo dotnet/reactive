@@ -471,26 +471,31 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var count = 0;
+                return Core();
 
-                foreach (var item in _source)
+                async Task<int> Core()
                 {
-                    await _selector(item).ConfigureAwait(false);
+                    var count = 0;
 
-                    checked
+                    foreach (var item in _source)
                     {
-                        count++;
-                    }
-                }
+                        await _selector(item).ConfigureAwait(false);
 
-                return count;
+                        checked
+                        {
+                            count++;
+                        }
+                    }
+
+                    return count;
+                }
             }
 
             public override IAsyncEnumerable<TResult1> Select<TResult1>(Func<TResult, Task<TResult1>> selector)

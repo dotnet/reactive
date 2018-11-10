@@ -100,29 +100,34 @@ namespace System.Linq
                 return list;
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var count = 0;
-                for (var i = 0; ; i++)
+                return Core();
+
+                async Task<int> Core()
                 {
-                    var source = GetAsyncEnumerable(i);
-                    if (source == null)
+                    var count = 0;
+                    for (var i = 0; ; i++)
                     {
-                        break;
+                        var source = GetAsyncEnumerable(i);
+                        if (source == null)
+                        {
+                            break;
+                        }
+
+                        checked
+                        {
+                            count += await source.Count(cancellationToken).ConfigureAwait(false);
+                        }
                     }
 
-                    checked
-                    {
-                        count += await source.Count(cancellationToken).ConfigureAwait(false);
-                    }
+                    return count;
                 }
-
-                return count;
             }
 
             public override async ValueTask DisposeAsync()

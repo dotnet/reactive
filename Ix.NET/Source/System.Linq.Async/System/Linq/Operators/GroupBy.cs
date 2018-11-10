@@ -295,16 +295,21 @@ namespace System.Linq
                 return l.ToList(_resultSelector);
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return Core();
 
-                return l.Count;
+                async Task<int> Core()
+                {
+                    var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+
+                    return l.Count;
+                }
             }
         }
 
@@ -384,16 +389,21 @@ namespace System.Linq
                 return await l.ToList(_resultSelector).ConfigureAwait(false);
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return Core();
 
-                return l.Count;
+                async Task<int> Core()
+                {
+                    var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+
+                    return l.Count;
+                }
             }
         }
 
@@ -473,16 +483,21 @@ namespace System.Linq
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var l = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return Core();
 
-                return l.Count;
+                async Task<int> Core()
+                {
+                    var l = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
+
+                    return l.Count;
+                }
             }
         }
 
@@ -562,16 +577,21 @@ namespace System.Linq
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return Core();
 
-                return l.Count;
+                async Task<int> Core()
+                {
+                    var l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
+
+                    return l.Count;
+                }
             }
         }
 
@@ -647,16 +667,21 @@ namespace System.Linq
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return Core();
 
-                return l.Count;
+                async Task<int> Core()
+                {
+                    var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+
+                    return l.Count;
+                }
             }
         }
 
@@ -732,16 +757,21 @@ namespace System.Linq
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return Core();
 
-                return l.Count;
+                async Task<int> Core()
+                {
+                    var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+
+                    return l.Count;
+                }
             }
         }
     }

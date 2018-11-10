@@ -62,40 +62,45 @@ namespace System.Linq
             await base.DisposeAsync().ConfigureAwait(false);
         }
 
-        public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+        public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
         {
             if (onlyIfCheap)
             {
-                return -1;
+                return TaskExt.MinusOne;
             }
 
-            if (!HasLimit)
+            return Core();
+
+            async Task<int> Core()
             {
-                // If HasLimit is false, we contain everything past _minIndexInclusive.
-                // Therefore, we have to iterate the whole enumerable.
-                return Math.Max(await _source.Count(cancellationToken).ConfigureAwait(false) - _minIndexInclusive, 0);
-            }
+                if (!HasLimit)
+                {
+                    // If HasLimit is false, we contain everything past _minIndexInclusive.
+                    // Therefore, we have to iterate the whole enumerable.
+                    return Math.Max(await _source.Count(cancellationToken).ConfigureAwait(false) - _minIndexInclusive, 0);
+                }
 
-            var en = _source.GetAsyncEnumerator(cancellationToken);
+                var en = _source.GetAsyncEnumerator(cancellationToken);
 
-            try
-            {
-                // We only want to iterate up to _maxIndexInclusive + 1.
-                // Past that, we know the enumerable will be able to fit this partition,
-                // so the count will just be _maxIndexInclusive + 1 - _minIndexInclusive.
+                try
+                {
+                    // We only want to iterate up to _maxIndexInclusive + 1.
+                    // Past that, we know the enumerable will be able to fit this partition,
+                    // so the count will just be _maxIndexInclusive + 1 - _minIndexInclusive.
 
-                // Note that it is possible for _maxIndexInclusive to be int.MaxValue here,
-                // so + 1 may result in signed integer overflow. We need to handle this.
-                // At the same time, however, we are guaranteed that our max count can fit
-                // in an int because if that is true, then _minIndexInclusive must > 0.
+                    // Note that it is possible for _maxIndexInclusive to be int.MaxValue here,
+                    // so + 1 may result in signed integer overflow. We need to handle this.
+                    // At the same time, however, we are guaranteed that our max count can fit
+                    // in an int because if that is true, then _minIndexInclusive must > 0.
 
-                var count = await SkipAndCountAsync((uint)_maxIndexInclusive + 1, en, cancellationToken).ConfigureAwait(false);
-                Debug.Assert(count != (uint)int.MaxValue + 1 || _minIndexInclusive > 0, "Our return value will be incorrect.");
-                return Math.Max((int)count - _minIndexInclusive, 0);
-            }
-            finally
-            {
-                await en.DisposeAsync().ConfigureAwait(false);
+                    var count = await SkipAndCountAsync((uint)_maxIndexInclusive + 1, en, cancellationToken).ConfigureAwait(false);
+                    Debug.Assert(count != (uint)int.MaxValue + 1 || _minIndexInclusive > 0, "Our return value will be incorrect.");
+                    return Math.Max((int)count - _minIndexInclusive, 0);
+                }
+                finally
+                {
+                    await en.DisposeAsync().ConfigureAwait(false);
+                }
             }
         }
 
