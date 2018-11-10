@@ -3,6 +3,9 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -19,7 +22,59 @@ namespace System.Linq
                 return typedSource;
             }
 
-            return source.Select(x => (TResult)x);
+            return new CastAsyncIterator<TResult>(source);
+        }
+
+        internal sealed class CastAsyncIterator<TResult> : AsyncIterator<TResult>
+        {
+            private readonly IAsyncEnumerable<object> _source;
+            private IAsyncEnumerator<object> _enumerator;
+
+            public CastAsyncIterator(IAsyncEnumerable<object> source)
+            {
+                Debug.Assert(source != null);
+
+                _source = source;
+            }
+
+            public override AsyncIterator<TResult> Clone()
+            {
+                return new CastAsyncIterator<TResult>(_source);
+            }
+
+            public override async ValueTask DisposeAsync()
+            {
+                if (_enumerator != null)
+                {
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                }
+
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            current = (TResult)_enumerator.Current;
+                            return true;
+                        }
+
+                        await DisposeAsync().ConfigureAwait(false);
+                        break;
+                }
+
+                return false;
+            }
         }
     }
 }
