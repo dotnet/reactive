@@ -53,7 +53,7 @@ namespace System.Linq
                 cancellationToken.ThrowIfCancellationRequested();
 
                 current = _element;
-                return TaskExt.True;
+                return new ValueTask<bool>(true);
             }
         }
 

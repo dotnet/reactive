@@ -40,7 +40,7 @@ namespace System.Linq
 
             public Task<Maybe<TValue>> TryGetLastAsync(CancellationToken cancellationToken) => Task.FromResult(new Maybe<TValue>());
 
-            public ValueTask<bool> MoveNextAsync() => TaskExt.False;
+            public ValueTask<bool> MoveNextAsync() => new ValueTask<bool>(false);
 
             public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken) => this;
 
