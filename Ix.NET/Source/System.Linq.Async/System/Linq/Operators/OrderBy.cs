@@ -147,7 +147,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
 
-            return source.ThenByDescending(keySelector, Comparer<TKey>.Default);
+            return source.CreateOrderedEnumerable(keySelector, Comparer<TKey>.Default, descending: true);
         }
 
         public static IOrderedAsyncEnumerable<TSource> ThenByDescending<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector)
@@ -157,7 +157,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
 
-            return source.ThenByDescending(keySelector, Comparer<TKey>.Default);
+            return source.CreateOrderedEnumerable(keySelector, Comparer<TKey>.Default, descending: true);
         }
 
         public static IOrderedAsyncEnumerable<TSource> ThenByDescending<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
