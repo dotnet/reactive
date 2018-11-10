@@ -10,5 +10,6 @@ namespace System
         public static Exception ArgumentOutOfRange(string paramName) => new ArgumentOutOfRangeException(paramName);
         public static Exception NoElements() => new InvalidOperationException(Strings.NO_ELEMENTS);
         public static Exception MoreThanOneElement() => new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
+        public static Exception NotSupported() => new NotSupportedException(Strings.NOT_SUPPORTED);
     }
 }

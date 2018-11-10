@@ -39,36 +39,21 @@ namespace System.Linq.Internal
 
         bool ICollection<TElement>.IsReadOnly => true;
 
-        void ICollection<TElement>.Add(TElement item)
-        {
-            throw new NotSupportedException(Strings.NOT_SUPPORTED);
-        }
+        void ICollection<TElement>.Add(TElement item) => throw Error.NotSupported();
 
-        void ICollection<TElement>.Clear()
-        {
-            throw new NotSupportedException(Strings.NOT_SUPPORTED);
-        }
+        void ICollection<TElement>.Clear() => throw Error.NotSupported();
 
         bool ICollection<TElement>.Contains(TElement item) => Array.IndexOf(_elements, item, 0, _count) >= 0;
 
         void ICollection<TElement>.CopyTo(TElement[] array, int arrayIndex) => Array.Copy(_elements, 0, array, arrayIndex, _count);
 
-        bool ICollection<TElement>.Remove(TElement item)
-        {
-            throw new NotSupportedException(Strings.NOT_SUPPORTED);
-        }
+        bool ICollection<TElement>.Remove(TElement item) => throw Error.NotSupported();
 
         int IList<TElement>.IndexOf(TElement item) => Array.IndexOf(_elements, item, 0, _count);
 
-        void IList<TElement>.Insert(int index, TElement item)
-        {
-            throw new NotSupportedException(Strings.NOT_SUPPORTED);
-        }
+        void IList<TElement>.Insert(int index, TElement item) => throw Error.NotSupported();
 
-        void IList<TElement>.RemoveAt(int index)
-        {
-            throw new NotSupportedException(Strings.NOT_SUPPORTED);
-        }
+        void IList<TElement>.RemoveAt(int index) => throw Error.NotSupported();
 
         TElement IList<TElement>.this[int index]
         {
@@ -82,7 +67,7 @@ namespace System.Linq.Internal
                 return _elements[index];
             }
 
-            set { throw new NotSupportedException(Strings.NOT_SUPPORTED); }
+            set => throw Error.NotSupported();
         }
 
         internal void Add(TElement element)
