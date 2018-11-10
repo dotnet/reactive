@@ -5,8 +5,8 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 // Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the Apache 2.0 License.
-// See the LICENSE file in the project root for more information. 
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
 using System.Threading;
@@ -17,45 +17,17 @@ namespace System.Linq
     public static partial class AsyncEnumerable
     {
 <#
-var ts = new[]
-{
-    "int",
-    "long",
-    "float",
-    "double",
-    "decimal",
-    "int?",
-    "long?",
-    "float?",
-    "double?",
-    "decimal?",
-};
-
 foreach (var m in new[] { "Max", "Min" })
 {
-    foreach (var t in ts)
+    foreach (var t in new[] { "int", "int?", "long", "long?", "float", "float?", "double", "double?", "decimal", "decimal?" })
     {
-        var n = t.EndsWith("?");
 #>
         public static Task<<#=t#>> <#=m#>(this IAsyncEnumerable<<#=t#>> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-<#
-if (n)
-{
-#>
-            return source.Aggregate(default(<#=t#>), new Func<<#=t#>, <#=t#>, <#=t#>>(Nullable<#=m#>), CancellationToken.None);
-<#
-}
-else
-{
-#>
-            return source.Aggregate(new Func<<#=t#>, <#=t#>, <#=t#>>(Math.<#=m#>), CancellationToken.None);
-<#
-}
-#>
+            return <#=m#>Core(source, CancellationToken.None);
         }
 
         public static Task<<#=t#>> <#=m#>(this IAsyncEnumerable<<#=t#>> source, CancellationToken cancellationToken)
@@ -63,20 +35,7 @@ else
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-<#
-if (n)
-{
-#>
-            return source.Aggregate(default(<#=t#>), new Func<<#=t#>, <#=t#>, <#=t#>>(Nullable<#=m#>), cancellationToken);
-<#
-}
-else
-{
-#>
-            return source.Aggregate(new Func<<#=t#>, <#=t#>, <#=t#>>(Math.<#=m#>), cancellationToken);
-<#
-}
-#>
+            return <#=m#>Core(source, cancellationToken);
         }
 
         public static Task<<#=t#>> <#=m#><TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=t#>> selector)
@@ -86,7 +45,7 @@ else
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return source.Select(selector).<#=m#>(CancellationToken.None);
+            return <#=m#>Core(source, selector, CancellationToken.None);
         }
 
         public static Task<<#=t#>> <#=m#><TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=t#>> selector, CancellationToken cancellationToken)
@@ -96,7 +55,7 @@ else
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return source.Select(selector).<#=m#>(cancellationToken);
+            return <#=m#>Core(source, selector, cancellationToken);
         }
 
         public static Task<<#=t#>> <#=m#><TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<<#=t#>>> selector)
@@ -106,7 +65,7 @@ else
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return source.Select(selector).<#=m#>(CancellationToken.None);
+            return <#=m#>Core(source, selector, CancellationToken.None);
         }
 
         public static Task<<#=t#>> <#=m#><TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<<#=t#>>> selector, CancellationToken cancellationToken)
@@ -116,35 +75,12 @@ else
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return source.Select(selector).<#=m#>(cancellationToken);
+            return <#=m#>Core(source, selector, cancellationToken);
         }
 
 <#
     }
 }
 #>
-        private static T? NullableMax<T>(T? x, T? y)
-            where T : struct, IComparable<T>
-        {
-            if (!x.HasValue)
-                return y;
-            if (!y.HasValue)
-                return x;
-            if (x.Value.CompareTo(y.Value) >= 0)
-                return x;
-            return y;
-        }
-
-        private static T? NullableMin<T>(T? x, T? y)
-            where T : struct, IComparable<T>
-        {
-            if (!x.HasValue)
-                return y;
-            if (!y.HasValue)
-                return x;
-            if (x.Value.CompareTo(y.Value) <= 0)
-                return x;
-            return y;
-        }
     }
 }
