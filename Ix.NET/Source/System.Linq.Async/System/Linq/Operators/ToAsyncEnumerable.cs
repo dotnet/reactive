@@ -39,7 +39,7 @@ namespace System.Linq
 
                     var value = default(TSource);
                     return CreateEnumerator(
-                        async ct =>
+                        async () =>
                         {
                             if (Interlocked.CompareExchange(ref called, 1, 0) == 0)
                             {
