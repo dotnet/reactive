@@ -18,7 +18,7 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
-            return first.Union(second, EqualityComparer<TSource>.Default);
+            return UnionCore(first, second, EqualityComparer<TSource>.Default);
         }
 
         public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
@@ -30,6 +30,11 @@ namespace System.Linq
             if (comparer == null)
                 throw Error.ArgumentNull(nameof(comparer));
 
+            return UnionCore(first, second, comparer);
+        }
+
+        private static IAsyncEnumerable<TSource> UnionCore<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
+        {
             return first is UnionAsyncIterator<TSource> union && AreEqualityComparersEqual(comparer, union._comparer) ? union.Union(second) : new UnionAsyncIterator2<TSource>(first, second, comparer);
         }
 

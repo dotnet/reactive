@@ -18,7 +18,7 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
-            return first.Intersect(second, EqualityComparer<TSource>.Default);
+            return new IntersectAsyncIterator<TSource>(first, second, EqualityComparer<TSource>.Default);
         }
 
         public static IAsyncEnumerable<TSource> Intersect<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
