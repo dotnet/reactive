@@ -8,12 +8,8 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static IAsyncEnumerable<TSource> AsAsyncEnumerable<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
+        // NB: Synchronous LINQ to Objects doesn't hide the implementation of the source either.
 
-            return source.Select(x => x);
-        }
+        public static IAsyncEnumerable<TSource> AsAsyncEnumerable<TSource>(this IAsyncEnumerable<TSource> source) => source;
     }
 }
