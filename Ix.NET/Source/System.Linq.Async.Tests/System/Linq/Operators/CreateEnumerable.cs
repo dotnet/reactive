@@ -15,7 +15,6 @@ namespace Tests
         [Fact]
         public void CreateEnumerable_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerable<int>(default(Func<IAsyncEnumerator<int>>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerable<int>(default(Func<CancellationToken, IAsyncEnumerator<int>>)));
         }
     }
