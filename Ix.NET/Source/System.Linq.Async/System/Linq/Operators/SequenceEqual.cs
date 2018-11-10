@@ -10,6 +10,26 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
+        {
+            if (first == null)
+                throw Error.ArgumentNull(nameof(first));
+            if (second == null)
+                throw Error.ArgumentNull(nameof(second));
+
+            return SequenceEqualCore(first, second, EqualityComparer<TSource>.Default, CancellationToken.None);
+        }
+
+        public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken)
+        {
+            if (first == null)
+                throw Error.ArgumentNull(nameof(first));
+            if (second == null)
+                throw Error.ArgumentNull(nameof(second));
+
+            return SequenceEqualCore(first, second, EqualityComparer<TSource>.Default, cancellationToken);
+        }
+
         public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
@@ -19,19 +39,8 @@ namespace System.Linq
             if (comparer == null)
                 throw Error.ArgumentNull(nameof(comparer));
 
-            return SequenceEqual(first, second, comparer, CancellationToken.None);
+            return SequenceEqualCore(first, second, comparer, CancellationToken.None);
         }
-
-        public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
-        {
-            if (first == null)
-                throw Error.ArgumentNull(nameof(first));
-            if (second == null)
-                throw Error.ArgumentNull(nameof(second));
-
-            return SequenceEqual(first, second, CancellationToken.None);
-        }
-
 
         public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
@@ -45,49 +54,44 @@ namespace System.Linq
             return SequenceEqualCore(first, second, comparer, cancellationToken);
         }
 
-        public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken)
-        {
-            if (first == null)
-                throw Error.ArgumentNull(nameof(first));
-            if (second == null)
-                throw Error.ArgumentNull(nameof(second));
-
-            return first.SequenceEqual(second, EqualityComparer<TSource>.Default, cancellationToken);
-        }
-
-        private static async Task<bool> SequenceEqualCore<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
+        private static Task<bool> SequenceEqualCore<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (first is ICollection<TSource> firstCol && second is ICollection<TSource> secondCol && firstCol.Count != secondCol.Count)
             {
-                return false;
+                return Task.FromResult(false);
             }
 
-            var e1 = first.GetAsyncEnumerator(cancellationToken);
+            return Core();
 
-            try
+            async Task<bool> Core()
             {
-                var e2 = second.GetAsyncEnumerator(cancellationToken);
+                var e1 = first.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
-                    while (await e1.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        if (!(await e2.MoveNextAsync().ConfigureAwait(false) && comparer.Equals(e1.Current, e2.Current)))
-                        {
-                            return false;
-                        }
-                    }
+                    var e2 = second.GetAsyncEnumerator(cancellationToken);
 
-                    return !await e2.MoveNextAsync().ConfigureAwait(false);
+                    try
+                    {
+                        while (await e1.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            if (!(await e2.MoveNextAsync().ConfigureAwait(false) && comparer.Equals(e1.Current, e2.Current)))
+                            {
+                                return false;
+                            }
+                        }
+
+                        return !await e2.MoveNextAsync().ConfigureAwait(false);
+                    }
+                    finally
+                    {
+                        await e2.DisposeAsync().ConfigureAwait(false);
+                    }
                 }
                 finally
                 {
-                    await e2.DisposeAsync().ConfigureAwait(false);
+                    await e1.DisposeAsync().ConfigureAwait(false);
                 }
-            }
-            finally
-            {
-                await e1.DisposeAsync().ConfigureAwait(false);
             }
         }
     }
