@@ -11,7 +11,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Cast<TResult>(this IAsyncEnumerable<object> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             // Check to see if it already is and short-circuit
             if (source is IAsyncEnumerable<TResult> typedSource)

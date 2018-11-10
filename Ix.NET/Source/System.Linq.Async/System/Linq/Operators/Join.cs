@@ -14,15 +14,15 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector)
         {
             if (outer == null)
-                throw new ArgumentNullException(nameof(outer));
+                throw Error.ArgumentNull(nameof(outer));
             if (inner == null)
-                throw new ArgumentNullException(nameof(inner));
+                throw Error.ArgumentNull(nameof(inner));
             if (outerKeySelector == null)
-                throw new ArgumentNullException(nameof(outerKeySelector));
+                throw Error.ArgumentNull(nameof(outerKeySelector));
             if (innerKeySelector == null)
-                throw new ArgumentNullException(nameof(innerKeySelector));
+                throw Error.ArgumentNull(nameof(innerKeySelector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
             return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, EqualityComparer<TKey>.Default);
         }
@@ -30,17 +30,17 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (outer == null)
-                throw new ArgumentNullException(nameof(outer));
+                throw Error.ArgumentNull(nameof(outer));
             if (inner == null)
-                throw new ArgumentNullException(nameof(inner));
+                throw Error.ArgumentNull(nameof(inner));
             if (outerKeySelector == null)
-                throw new ArgumentNullException(nameof(outerKeySelector));
+                throw Error.ArgumentNull(nameof(outerKeySelector));
             if (innerKeySelector == null)
-                throw new ArgumentNullException(nameof(innerKeySelector));
+                throw Error.ArgumentNull(nameof(innerKeySelector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw Error.ArgumentNull(nameof(resultSelector));
             if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(comparer));
 
             return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
         }
@@ -48,15 +48,15 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, Task<TKey>> outerKeySelector, Func<TInner, Task<TKey>> innerKeySelector, Func<TOuter, TInner, Task<TResult>> resultSelector)
         {
             if (outer == null)
-                throw new ArgumentNullException(nameof(outer));
+                throw Error.ArgumentNull(nameof(outer));
             if (inner == null)
-                throw new ArgumentNullException(nameof(inner));
+                throw Error.ArgumentNull(nameof(inner));
             if (outerKeySelector == null)
-                throw new ArgumentNullException(nameof(outerKeySelector));
+                throw Error.ArgumentNull(nameof(outerKeySelector));
             if (innerKeySelector == null)
-                throw new ArgumentNullException(nameof(innerKeySelector));
+                throw Error.ArgumentNull(nameof(innerKeySelector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
             return new JoinAsyncIteratorWithTask<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, EqualityComparer<TKey>.Default);
         }
@@ -64,17 +64,17 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, Task<TKey>> outerKeySelector, Func<TInner, Task<TKey>> innerKeySelector, Func<TOuter, TInner, Task<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (outer == null)
-                throw new ArgumentNullException(nameof(outer));
+                throw Error.ArgumentNull(nameof(outer));
             if (inner == null)
-                throw new ArgumentNullException(nameof(inner));
+                throw Error.ArgumentNull(nameof(inner));
             if (outerKeySelector == null)
-                throw new ArgumentNullException(nameof(outerKeySelector));
+                throw Error.ArgumentNull(nameof(outerKeySelector));
             if (innerKeySelector == null)
-                throw new ArgumentNullException(nameof(innerKeySelector));
+                throw Error.ArgumentNull(nameof(innerKeySelector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw Error.ArgumentNull(nameof(resultSelector));
             if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(comparer));
 
             return new JoinAsyncIteratorWithTask<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
         }

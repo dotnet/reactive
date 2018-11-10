@@ -14,7 +14,7 @@ namespace System.Linq
         public static IAsyncEnumerable<T> CreateEnumerable<T>(Func<IAsyncEnumerator<T>> getEnumerator)
         {
             if (getEnumerator == null)
-                throw new ArgumentNullException(nameof(getEnumerator));
+                throw Error.ArgumentNull(nameof(getEnumerator));
 
             return new AnonymousAsyncEnumerable<T>(_ => getEnumerator());
         }
@@ -22,7 +22,7 @@ namespace System.Linq
         public static IAsyncEnumerable<T> CreateEnumerable<T>(Func<CancellationToken, IAsyncEnumerator<T>> getEnumerator)
         {
             if (getEnumerator == null)
-                throw new ArgumentNullException(nameof(getEnumerator));
+                throw Error.ArgumentNull(nameof(getEnumerator));
 
             return new AnonymousAsyncEnumerable<T>(getEnumerator);
         }
@@ -30,7 +30,7 @@ namespace System.Linq
         public static IAsyncEnumerable<T> CreateEnumerable<T>(Func<Task<IAsyncEnumerator<T>>> getEnumerator)
         {
             if (getEnumerator == null)
-                throw new ArgumentNullException(nameof(getEnumerator));
+                throw Error.ArgumentNull(nameof(getEnumerator));
 
             return new AnonymousAsyncEnumerableWithTask<T>(_ => getEnumerator());
         }
@@ -38,7 +38,7 @@ namespace System.Linq
         public static IAsyncEnumerable<T> CreateEnumerable<T>(Func<CancellationToken, Task<IAsyncEnumerator<T>>> getEnumerator)
         {
             if (getEnumerator == null)
-                throw new ArgumentNullException(nameof(getEnumerator));
+                throw Error.ArgumentNull(nameof(getEnumerator));
 
             return new AnonymousAsyncEnumerableWithTask<T>(getEnumerator);
         }

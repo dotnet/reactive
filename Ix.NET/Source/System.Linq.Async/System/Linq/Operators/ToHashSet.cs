@@ -13,7 +13,7 @@ namespace System.Linq
         public static Task<HashSet<TSource>> ToHashSet<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return ToHashSetCore(source, EqualityComparer<TSource>.Default, CancellationToken.None);
         }
@@ -21,7 +21,7 @@ namespace System.Linq
         public static Task<HashSet<TSource>> ToHashSet<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return ToHashSetCore(source, EqualityComparer<TSource>.Default, cancellationToken);
         }
@@ -29,9 +29,9 @@ namespace System.Linq
         public static Task<HashSet<TSource>> ToHashSet<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(comparer));
 
             return ToHashSetCore(source, comparer, CancellationToken.None);
         }
@@ -39,9 +39,9 @@ namespace System.Linq
         public static Task<HashSet<TSource>> ToHashSet<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(comparer));
 
             return ToHashSetCore(source, comparer, cancellationToken);
         }

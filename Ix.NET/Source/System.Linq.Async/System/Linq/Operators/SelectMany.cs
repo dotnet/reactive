@@ -14,9 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TResult>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
             return new SelectManyAsyncIterator<TSource, TResult>(source, selector);
         }
@@ -24,9 +24,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<IAsyncEnumerable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
             return new SelectManyAsyncIteratorWithTask<TSource, TResult>(source, selector);
         }
@@ -34,9 +34,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, IAsyncEnumerable<TResult>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
             return new SelectManyWithIndexAsyncIterator<TSource, TResult>(source, selector);
         }
@@ -44,9 +44,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task<IAsyncEnumerable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
             return new SelectManyWithIndexAsyncIteratorWithTask<TSource, TResult>(source, selector);
         }
@@ -54,11 +54,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TCollection>> selector, Func<TSource, TCollection, TResult> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
             return new SelectManyAsyncIterator<TSource, TCollection, TResult>(source, selector, resultSelector);
         }
@@ -66,11 +66,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<IAsyncEnumerable<TCollection>>> selector, Func<TSource, TCollection, Task<TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
             return new SelectManyAsyncIteratorWithTask<TSource, TCollection, TResult>(source, selector, resultSelector);
         }
@@ -78,11 +78,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, IAsyncEnumerable<TCollection>> selector, Func<TSource, TCollection, TResult> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
             return new SelectManyWithIndexAsyncIterator<TSource, TCollection, TResult>(source, selector, resultSelector);
         }
@@ -90,11 +90,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task<IAsyncEnumerable<TCollection>>> selector, Func<TSource, TCollection, Task<TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
             return new SelectManyWithIndexAsyncIteratorWithTask<TSource, TCollection, TResult>(source, selector, resultSelector);
         }

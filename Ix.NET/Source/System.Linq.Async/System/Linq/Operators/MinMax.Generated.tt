@@ -25,7 +25,7 @@ foreach (var m in new[] { "Max", "Min" })
         public static Task<<#=t#>> <#=m#>(this IAsyncEnumerable<<#=t#>> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return <#=m#>Core(source, CancellationToken.None);
         }
@@ -33,7 +33,7 @@ foreach (var m in new[] { "Max", "Min" })
         public static Task<<#=t#>> <#=m#>(this IAsyncEnumerable<<#=t#>> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return <#=m#>Core(source, cancellationToken);
         }
@@ -41,9 +41,9 @@ foreach (var m in new[] { "Max", "Min" })
         public static Task<<#=t#>> <#=m#><TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=t#>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
             return <#=m#>Core(source, selector, CancellationToken.None);
         }
@@ -51,9 +51,9 @@ foreach (var m in new[] { "Max", "Min" })
         public static Task<<#=t#>> <#=m#><TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=t#>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
             return <#=m#>Core(source, selector, cancellationToken);
         }
@@ -61,9 +61,9 @@ foreach (var m in new[] { "Max", "Min" })
         public static Task<<#=t#>> <#=m#><TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<<#=t#>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
             return <#=m#>Core(source, selector, CancellationToken.None);
         }
@@ -71,9 +71,9 @@ foreach (var m in new[] { "Max", "Min" })
         public static Task<<#=t#>> <#=m#><TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<<#=t#>>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
             return <#=m#>Core(source, selector, cancellationToken);
         }

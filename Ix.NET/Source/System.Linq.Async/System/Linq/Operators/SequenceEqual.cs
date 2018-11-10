@@ -14,17 +14,17 @@ namespace System.Linq
         {
             if (first == null)
             {
-                throw new ArgumentNullException(nameof(first));
+                throw Error.ArgumentNull(nameof(first));
             }
 
             if (second == null)
             {
-                throw new ArgumentNullException(nameof(second));
+                throw Error.ArgumentNull(nameof(second));
             }
 
             if (comparer == null)
             {
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(comparer));
             }
 
             return SequenceEqual(first, second, comparer, CancellationToken.None);
@@ -34,12 +34,12 @@ namespace System.Linq
         {
             if (first == null)
             {
-                throw new ArgumentNullException(nameof(first));
+                throw Error.ArgumentNull(nameof(first));
             }
 
             if (second == null)
             {
-                throw new ArgumentNullException(nameof(second));
+                throw Error.ArgumentNull(nameof(second));
             }
 
             return SequenceEqual(first, second, CancellationToken.None);
@@ -50,17 +50,17 @@ namespace System.Linq
         {
             if (first == null)
             {
-                throw new ArgumentNullException(nameof(first));
+                throw Error.ArgumentNull(nameof(first));
             }
 
             if (second == null)
             {
-                throw new ArgumentNullException(nameof(second));
+                throw Error.ArgumentNull(nameof(second));
             }
 
             if (comparer == null)
             {
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(comparer));
             }
 
             return SequenceEqualCore(first, second, comparer, cancellationToken);
@@ -70,12 +70,12 @@ namespace System.Linq
         {
             if (first == null)
             {
-                throw new ArgumentNullException(nameof(first));
+                throw Error.ArgumentNull(nameof(first));
             }
 
             if (second == null)
             {
-                throw new ArgumentNullException(nameof(second));
+                throw Error.ArgumentNull(nameof(second));
             }
 
             return first.SequenceEqual(second, EqualityComparer<TSource>.Default, cancellationToken);

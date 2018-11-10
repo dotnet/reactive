@@ -13,7 +13,7 @@ namespace System.Linq
         public static Task<List<TSource>> ToList<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return ToListCore(source, CancellationToken.None);
         }
@@ -21,7 +21,7 @@ namespace System.Linq
         public static Task<List<TSource>> ToList<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return ToListCore(source, cancellationToken);
         }

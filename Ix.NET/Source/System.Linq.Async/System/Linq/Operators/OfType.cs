@@ -11,7 +11,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TType> OfType<TType>(this IAsyncEnumerable<object> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return source.Where(x => x is TType).Cast<TType>();
         }

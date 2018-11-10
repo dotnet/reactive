@@ -25,7 +25,7 @@ namespace System.Collections.Generic
         public static IAsyncEnumerator<T> Create<T>(Func<ValueTask<bool>> moveNext, Func<T> current, Func<ValueTask> dispose)
         {
             if (moveNext == null)
-                throw new ArgumentNullException(nameof(moveNext));
+                throw Error.ArgumentNull(nameof(moveNext));
 
             // Note: Many methods pass null in for the second two params. We're assuming
             // That the caller is responsible and knows what they're doing
@@ -45,7 +45,7 @@ namespace System.Collections.Generic
         public static ValueTask<bool> MoveNextAsync<T>(this IAsyncEnumerator<T> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -63,7 +63,7 @@ namespace System.Collections.Generic
         public static IAsyncEnumerator<T> WithCancellation<T>(this IAsyncEnumerator<T> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return new AnonymousAsyncIterator<T>(
                 moveNext: () =>
@@ -85,7 +85,7 @@ namespace System.Collections.Generic
         public static IAsyncEnumerable<T> AsEnumerable<T>(this IAsyncEnumerator<T> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return AsyncEnumerable.CreateEnumerable<T>(_ => source);
         }

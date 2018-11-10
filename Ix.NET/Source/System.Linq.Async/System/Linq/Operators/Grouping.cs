@@ -76,7 +76,7 @@ namespace System.Linq.Internal
             {
                 if (index < 0 || index >= _count)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(index));
+                    throw Error.ArgumentOutOfRange(nameof(index));
                 }
 
                 return _elements[index];

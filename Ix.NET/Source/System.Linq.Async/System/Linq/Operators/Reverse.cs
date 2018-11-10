@@ -16,7 +16,7 @@ namespace System.Linq
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             }
 
             return new ReverseAsyncIterator<TSource>(source);

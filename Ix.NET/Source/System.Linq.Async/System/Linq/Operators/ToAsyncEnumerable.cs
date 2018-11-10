@@ -15,7 +15,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             // optimize these adapters for lists and collections
             if (source is IList<TSource> list)
@@ -30,7 +30,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this Task<TSource> task)
         {
             if (task == null)
-                throw new ArgumentNullException(nameof(task));
+                throw Error.ArgumentNull(nameof(task));
 
             return CreateEnumerable(
                 _ =>
@@ -56,7 +56,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return CreateEnumerable(
                 ct =>

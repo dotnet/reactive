@@ -20,7 +20,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = e.Current;
@@ -97,7 +97,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = e.Current;
@@ -170,7 +170,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = e.Current;
@@ -260,7 +260,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = e.Current;
@@ -341,7 +341,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = e.Current;
@@ -411,7 +411,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = selector(e.Current);
@@ -488,7 +488,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = selector(e.Current);
@@ -561,7 +561,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = selector(e.Current);
@@ -651,7 +651,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = selector(e.Current);
@@ -732,7 +732,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = selector(e.Current);
@@ -802,7 +802,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = await selector(e.Current).ConfigureAwait(false);
@@ -879,7 +879,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = await selector(e.Current).ConfigureAwait(false);
@@ -952,7 +952,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = await selector(e.Current).ConfigureAwait(false);
@@ -1042,7 +1042,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = await selector(e.Current).ConfigureAwait(false);
@@ -1123,7 +1123,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 value = await selector(e.Current).ConfigureAwait(false);

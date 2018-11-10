@@ -11,7 +11,7 @@ namespace System.Linq
         public static IObservable<TSource> ToObservable<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return new ToObservableObservable<TSource>(source);
         }

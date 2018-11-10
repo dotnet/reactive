@@ -13,7 +13,7 @@ namespace System.Linq
         public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return SingleOrDefaultCore(source, CancellationToken.None);
         }
@@ -21,7 +21,7 @@ namespace System.Linq
         public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return SingleOrDefaultCore(source, cancellationToken);
         }
@@ -29,9 +29,9 @@ namespace System.Linq
         public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return SingleOrDefaultCore(source, predicate, CancellationToken.None);
         }
@@ -39,9 +39,9 @@ namespace System.Linq
         public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return SingleOrDefaultCore(source, predicate, cancellationToken);
         }
@@ -49,9 +49,9 @@ namespace System.Linq
         public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return SingleOrDefaultCore(source, predicate, CancellationToken.None);
         }
@@ -59,9 +59,9 @@ namespace System.Linq
         public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return SingleOrDefaultCore(source, predicate, cancellationToken);
         }
@@ -76,7 +76,7 @@ namespace System.Linq
                     case 1: return list[0];
                 }
 
-                throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
+                throw Error.MoreThanOneElement();
             }
 
             var e = source.GetAsyncEnumerator(cancellationToken);
@@ -100,7 +100,7 @@ namespace System.Linq
                 await e.DisposeAsync().ConfigureAwait(false);
             }
 
-            throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
+            throw Error.MoreThanOneElement();
         }
 
         private static async Task<TSource> SingleOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
@@ -119,7 +119,7 @@ namespace System.Linq
                         {
                             if (predicate(e.Current))
                             {
-                                throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
+                                throw Error.MoreThanOneElement();
                             }
                         }
 
@@ -151,7 +151,7 @@ namespace System.Linq
                         {
                             if (await predicate(e.Current).ConfigureAwait(false))
                             {
-                                throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
+                                throw Error.MoreThanOneElement();
                             }
                         }
 

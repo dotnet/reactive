@@ -14,7 +14,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Append<TSource>(this IAsyncEnumerable<TSource> source, TSource element)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             if (source is AppendPrependAsyncIterator<TSource> appendable)
             {
@@ -27,7 +27,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Prepend<TSource>(this IAsyncEnumerable<TSource> source, TSource element)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             if (source is AppendPrependAsyncIterator<TSource> appendable)
             {

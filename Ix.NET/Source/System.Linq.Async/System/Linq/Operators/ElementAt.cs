@@ -13,7 +13,7 @@ namespace System.Linq
         public static Task<TSource> ElementAt<TSource>(this IAsyncEnumerable<TSource> source, int index)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return ElementAtCore(source, index, CancellationToken.None);
         }
@@ -21,9 +21,9 @@ namespace System.Linq
         public static Task<TSource> ElementAt<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (index < 0)
-                throw new ArgumentOutOfRangeException(nameof(index));
+                throw Error.ArgumentOutOfRange(nameof(index));
 
             return ElementAtCore(source, index, cancellationToken);
         }
@@ -47,7 +47,7 @@ namespace System.Linq
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException(nameof(index));
+                    throw Error.ArgumentOutOfRange(nameof(index));
                 }
             }
             else
@@ -72,7 +72,7 @@ namespace System.Linq
                 }
             }
 
-            throw new ArgumentOutOfRangeException(nameof(index));
+            throw Error.ArgumentOutOfRange(nameof(index));
         }
     }
 }
