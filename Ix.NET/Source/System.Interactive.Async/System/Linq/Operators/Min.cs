@@ -36,12 +36,12 @@ namespace System.Linq
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                if (!await e.MoveNextAsync().ConfigureAwait(false))
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
 
                 var min = e.Current;
 
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     var cur = e.Current;
 

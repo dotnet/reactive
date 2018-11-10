@@ -116,14 +116,14 @@ namespace System.Linq
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                if (!await e.MoveNextAsync().ConfigureAwait(false))
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
 
                 var current = e.Current;
                 var resKey = keySelector(current);
                 result.Add(current);
 
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     var cur = e.Current;
                     var key = keySelector(cur);
@@ -156,14 +156,14 @@ namespace System.Linq
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                if (!await e.MoveNextAsync().ConfigureAwait(false))
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
 
                 var current = e.Current;
                 var resKey = await keySelector(current).ConfigureAwait(false);
                 result.Add(current);
 
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     var cur = e.Current;
                     var key = await keySelector(cur).ConfigureAwait(false);

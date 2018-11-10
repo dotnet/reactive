@@ -193,7 +193,7 @@ namespace System.Linq
 
                 try
                 {
-                    while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
                         var item = enu.Current;
                         if (s.Add(_keySelector(item)))
@@ -339,7 +339,7 @@ namespace System.Linq
 
                 try
                 {
-                    while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
                         var item = enu.Current;
                         if (s.Add(await _keySelector(item).ConfigureAwait(false)))
