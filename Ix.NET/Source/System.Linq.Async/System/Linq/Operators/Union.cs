@@ -169,7 +169,7 @@ namespace System.Linq
                         return set;
                     }
 
-                    await set.UnionWithAsync(enumerable, cancellationToken);
+                    await set.UnionWithAsync(enumerable, cancellationToken).ConfigureAwait(false);
                 }
             }
 

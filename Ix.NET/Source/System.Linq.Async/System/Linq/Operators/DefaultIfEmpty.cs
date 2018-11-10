@@ -124,7 +124,7 @@ namespace System.Linq
                 else
                 {
                     var listProv = _source as IAsyncIListProvider<TSource>;
-                    count = listProv == null ? -1 : await listProv.GetCountAsync(onlyIfCheap: true, cancellationToken: cancellationToken).ConfigureAwait(false);
+                    count = listProv == null ? -1 : await listProv.GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
                 }
 
                 return count == 0 ? 1 : count;
