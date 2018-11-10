@@ -12,20 +12,20 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        public static IAsyncEnumerable<TSource> DefaultIfEmpty<TSource>(this IAsyncEnumerable<TSource> source)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+
+            return new DefaultIfEmptyAsyncIterator<TSource>(source, default);
+        }
+
         public static IAsyncEnumerable<TSource> DefaultIfEmpty<TSource>(this IAsyncEnumerable<TSource> source, TSource defaultValue)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
             return new DefaultIfEmptyAsyncIterator<TSource>(source, defaultValue);
-        }
-
-        public static IAsyncEnumerable<TSource> DefaultIfEmpty<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return DefaultIfEmpty(source, default);
         }
 
         private sealed class DefaultIfEmptyAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
