@@ -90,6 +90,9 @@ namespace System.Linq
 
                     case AsyncIteratorState.Iterating:
 
+                        // REVIEW: Do we want concurrent behavior by default? Likely not, so we should introduce ConcurrentZip
+                        //         either here or in System.Interactive.Async.
+
                         // We kick these off and join so they can potentially run in parallel
                         var ft = _firstEnumerator.MoveNextAsync();
                         var st = _secondEnumerator.MoveNextAsync();
