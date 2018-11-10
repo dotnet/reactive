@@ -26,7 +26,7 @@ namespace Tests
         {
             using (Use())
             {
-                await Task.Yield();
+                await Task.Delay(TimeSpan.FromMilliseconds(10));
             }
         }
 
