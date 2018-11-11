@@ -229,6 +229,18 @@ namespace Tests
             await NoNextAsync(e);
         }
 
+        [Fact]
+        public async Task Join_Concurrency()
+        {
+            var state = new SharedState();
+            var xs = new[] { 0, 1, 2 }.ToSharedStateAsyncEnumerable(state);
+            var ys = new[] { 3, 6, 4 }.ToSharedStateAsyncEnumerable(state);
+
+            async Task f() => await xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y).Last();
+
+            await f(); // Should not throw
+        }
+
         public class Customer
         {
             public string CustomerId { get; set; }

@@ -132,5 +132,18 @@ namespace Tests
 
             Assert.Equal(8, await c.CountAsync());
         }
+
+        [Fact]
+        public async Task Concat_Concurrency()
+        {
+            var state = new SharedState();
+            var xs = new[] { 1, 2, 3 }.ToSharedStateAsyncEnumerable(state);
+            var ys = new[] { 4, 5 }.ToSharedStateAsyncEnumerable(state);
+            var zs = new[] { 6, 7, 8 }.ToSharedStateAsyncEnumerable(state);
+
+            async Task f() => await xs.Concat(ys).Concat(zs).Last();
+
+            await f(); // Should not throw
+        }
     }
 }

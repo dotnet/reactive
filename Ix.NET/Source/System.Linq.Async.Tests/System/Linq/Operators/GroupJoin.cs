@@ -128,5 +128,17 @@ namespace Tests
             await HasNextAsync(e, "0 - 36");
             await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
+
+        [Fact]
+        public async Task GroupJoin_Concurrency()
+        {
+            var state = new SharedState();
+            var xs = new[] { 0, 1, 2 }.ToSharedStateAsyncEnumerable(state);
+            var ys = new[] { 3, 6, 4 }.ToSharedStateAsyncEnumerable(state);
+
+            async Task f() => await xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result).Last();
+
+            await f(); // Should not throw
+        }
     }
 }

@@ -211,5 +211,18 @@ namespace Tests
 
             Assert.True(ress.SequenceEqual(resa.ToEnumerable()));
         }
+
+        [Fact]
+        public async Task OrderBy_Concurrency()
+        {
+            var state = new SharedState();
+            var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToSharedStateAsyncEnumerable(state);
+
+            async Task f() => await xs
+                .OrderBy(async x => await state.GetTask(x))
+                .ThenBy(async x => await state.GetTask(x)).Last();
+
+            await f(); // Should not throw
+        }
     }
 }

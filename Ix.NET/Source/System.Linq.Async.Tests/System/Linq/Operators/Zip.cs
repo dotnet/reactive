@@ -108,14 +108,14 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Zip_SharedState()
+        public async Task Zip_Concurrency()
         {
             var xs = new[] { 1, 2, 3 }.ToSharedStateAsyncEnumerable();
             var res = xs.Zip(xs, (x, y) => x * y);
 
-            var ret = await res.Last();
+            async Task f() => await res.Last();
 
-            Assert.Equal(9, ret);
+            await f(); // Should not throw
         }
     }
 }
