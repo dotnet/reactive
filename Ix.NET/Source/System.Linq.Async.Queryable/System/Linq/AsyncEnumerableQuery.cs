@@ -56,57 +56,27 @@ namespace System.Linq
         /// <summary>
         /// Gets the type of the elements in the sequence.
         /// </summary>
-        Type IAsyncQueryable.ElementType
-        {
-            get
-            {
-                return typeof(T);
-            }
-        }
+        Type IAsyncQueryable.ElementType => typeof(T);
 
         /// <summary>
         /// Gets the expression representing the sequence.
         /// </summary>
-        Expression IAsyncQueryable.Expression
-        {
-            get
-            {
-                return _expression;
-            }
-        }
+        Expression IAsyncQueryable.Expression => _expression;
 
         /// <summary>
         /// Gets the query provider used to execute the sequence.
         /// </summary>
-        IAsyncQueryProvider IAsyncQueryable.Provider
-        {
-            get
-            {
-                return this;
-            }
-        }
+        IAsyncQueryProvider IAsyncQueryable.Provider => this;
 
         /// <summary>
         /// Gets the enumerable sequence obtained from evaluating the expression tree.
         /// </summary>
-        internal override object Enumerable
-        {
-            get
-            {
-                return _enumerable;
-            }
-        }
+        internal override object Enumerable => _enumerable;
 
         /// <summary>
         /// Gets the expression tree representing the asynchronous enumerable sequence.
         /// </summary>
-        internal override Expression Expression
-        {
-            get
-            {
-                return _expression;
-            }
-        }
+        internal override Expression Expression => _expression;
 
         /// <summary>
         /// Creates a new asynchronous enumerable sequence represented by an expression tree.

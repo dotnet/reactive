@@ -19,7 +19,6 @@ namespace System.Linq
 
         protected override Expression VisitConstant(ConstantExpression node)
         {
-
             //
             // Not an expression representation obtained from the async enumerable query provider,
             // so just a plain constant that can be returned as-is.
