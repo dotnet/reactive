@@ -79,6 +79,10 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
+                // REVIEW: Earlier versions of this operator performed concurrent MoveNextAsync calls, which isn't a great default and
+                //         results in an unexpected source of concurrency. However, a concurrent Zip may be a worthy addition to the
+                //         API or System.Interactive.Async as a complementary implementation besides the conservative default.
+
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
@@ -89,17 +93,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-
-                        // REVIEW: Do we want concurrent behavior by default? Likely not, so we should introduce ConcurrentZip
-                        //         either here or in System.Interactive.Async.
-
-                        // We kick these off and join so they can potentially run in parallel
-                        var ft = _firstEnumerator.MoveNextAsync();
-                        var st = _secondEnumerator.MoveNextAsync();
-                        
-                        await Task.WhenAll(ft.AsTask(), st.AsTask()).ConfigureAwait(false);
-
-                        if (await ft.ConfigureAwait(false) && await st.ConfigureAwait(false))
+                        if (await _firstEnumerator.MoveNextAsync().ConfigureAwait(false) && await _secondEnumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             current = _selector(_firstEnumerator.Current, _secondEnumerator.Current);
                             return true;
@@ -157,6 +151,10 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
+                // REVIEW: Earlier versions of this operator performed concurrent MoveNextAsync calls, which isn't a great default and
+                //         results in an unexpected source of concurrency. However, a concurrent Zip may be a worthy addition to the
+                //         API or System.Interactive.Async as a complementary implementation besides the conservative default.
+
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
@@ -167,13 +165,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-
-                        // We kick these off and join so they can potentially run in parallel
-                        var ft = _firstEnumerator.MoveNextAsync();
-                        var st = _secondEnumerator.MoveNextAsync();
-                        await Task.WhenAll(ft.AsTask(), st.AsTask()).ConfigureAwait(false);
-
-                        if (await ft.ConfigureAwait(false) && await st.ConfigureAwait(false))
+                        if (await _firstEnumerator.MoveNextAsync().ConfigureAwait(false) && await _secondEnumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             current = await _selector(_firstEnumerator.Current, _secondEnumerator.Current).ConfigureAwait(false);
                             return true;
