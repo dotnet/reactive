@@ -17,8 +17,8 @@ namespace Tests
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(default, x => true));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(default, (x, i) => true));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(Return42, default(Func<int, bool>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(Return42, default(Func<int, int, bool>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SkipWhile(Return42, default(Func<int, bool>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SkipWhile(Return42, default(Func<int, int, bool>)));
         }
 
         [Fact]

@@ -15,11 +15,11 @@ namespace Tests
         [Fact]
         public void Intersect_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(default, Return42));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(Return42, default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect(default, Return42));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect(Return42, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(default, Return42, new Eq()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(Return42, default, new Eq()));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect(default, Return42, new Eq()));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect(Return42, default, new Eq()));
         }
 
         [Fact]

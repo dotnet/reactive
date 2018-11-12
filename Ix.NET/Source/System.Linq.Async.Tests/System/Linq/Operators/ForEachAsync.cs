@@ -17,14 +17,14 @@ namespace Tests
         public async Task ForEachAsync_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(default, x => { }));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(Return42, default(Action<int>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(Return42, default(Action<int>)));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(default, (x, i) => { }));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(Return42, default(Action<int, int>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(Return42, default(Action<int, int>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(default, x => { }, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(Return42, default(Action<int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(Return42, default(Action<int>), CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(default, (x, i) => { }, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(Return42, default(Action<int, int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(Return42, default(Action<int, int>), CancellationToken.None));
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            AssertThrows<Exception>(() => xs.ForEachAsync(x => { throw ex; }).Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrows(() => xs.ForEachAsync(x => { throw ex; }).Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            AssertThrows<Exception>(() => xs.ForEachAsync((x, i) => { throw ex; }).Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrows(() => xs.ForEachAsync((x, i) => { throw ex; }).Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
 
-            AssertThrows<Exception>(() => xs.ForEachAsync(x => { throw ex; }).Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrows(() => xs.ForEachAsync(x => { throw ex; }).Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
 
-            AssertThrows<Exception>(() => xs.ForEachAsync((x, i) => { throw ex; }).Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrows(() => xs.ForEachAsync((x, i) => { throw ex; }).Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
     }
 }

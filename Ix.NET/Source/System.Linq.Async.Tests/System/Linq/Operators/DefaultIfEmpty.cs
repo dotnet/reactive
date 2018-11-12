@@ -16,7 +16,7 @@ namespace Tests
         public void DefaultIfEmpty_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.DefaultIfEmpty<int>(default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.DefaultIfEmpty<int>(default, 42));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.DefaultIfEmpty(default, 42));
         }
 
         [Fact]

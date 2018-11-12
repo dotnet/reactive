@@ -15,11 +15,11 @@ namespace Tests
         [Fact]
         public void Except_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(default, Return42));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(Return42, default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except(default, Return42));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except(Return42, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(default, Return42, new Eq()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(Return42, null, new Eq()));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except(default, Return42, new Eq()));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except(Return42, null, new Eq()));
         }
 
         [Fact]

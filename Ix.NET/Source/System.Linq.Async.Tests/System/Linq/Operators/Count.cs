@@ -18,11 +18,11 @@ namespace Tests
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Count<int>(default));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Count<int>(default, x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Count<int>(Return42, default(Func<int, bool>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Count(Return42, default(Func<int, bool>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Count<int>(default, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Count<int>(default, x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Count<int>(Return42, default(Func<int, bool>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Count(Return42, default(Func<int, bool>), CancellationToken.None));
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().Count(new Func<int, bool>(x => { throw ex; }));
-            AssertThrows<Exception>(() => ys.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrows(() => ys.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
     }
 }

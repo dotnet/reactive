@@ -16,30 +16,30 @@ namespace Tests
         public void OrderBy_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderBy<int, int>(default, x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderBy<int, int>(Return42, default(Func<int, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderBy(Return42, default(Func<int, int>)));
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderBy<int, int>(default, x => x, Comparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderBy<int, int>(Return42, default(Func<int, int>), Comparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderBy(Return42, default(Func<int, int>), Comparer<int>.Default));
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderByDescending<int, int>(default, x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderByDescending<int, int>(Return42, default(Func<int, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderByDescending(Return42, default(Func<int, int>)));
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderByDescending<int, int>(default, x => x, Comparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderByDescending<int, int>(Return42, default(Func<int, int>), Comparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderByDescending(Return42, default(Func<int, int>), Comparer<int>.Default));
 
             var xs = Return42.OrderBy(x => x);
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ThenBy<int, int>(default, x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ThenBy<int, int>(xs, default(Func<int, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ThenBy(xs, default(Func<int, int>)));
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ThenBy<int, int>(default, x => x, Comparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ThenBy<int, int>(xs, default(Func<int, int>), Comparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ThenBy(xs, default(Func<int, int>), Comparer<int>.Default));
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ThenByDescending<int, int>(default, x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ThenByDescending<int, int>(xs, default(Func<int, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ThenByDescending(xs, default(Func<int, int>)));
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ThenByDescending<int, int>(default, x => x, Comparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ThenByDescending<int, int>(xs, default(Func<int, int>), Comparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ThenByDescending(xs, default(Func<int, int>), Comparer<int>.Default));
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
-            var ys = xs.OrderBy<int, int>(new Func<int, int>(x => { throw ex; }));
+            var ys = xs.OrderBy(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
@@ -79,7 +79,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
-            var ys = xs.OrderBy(x => x).ThenBy<int, int>(new Func<int, int>(x => { throw ex; }));
+            var ys = xs.OrderBy(x => x).ThenBy(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
@@ -102,7 +102,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
-            var ys = xs.OrderByDescending<int, int>(new Func<int, int>(x => { throw ex; }));
+            var ys = xs.OrderByDescending(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
@@ -122,7 +122,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
-            var ys = xs.OrderBy<int, int>(x => x).ThenByDescending<int, int>(new Func<int, int>(x => { throw ex; }));
+            var ys = xs.OrderBy(x => x).ThenByDescending(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));

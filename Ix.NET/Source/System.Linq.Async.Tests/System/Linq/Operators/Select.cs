@@ -17,8 +17,8 @@ namespace Tests
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default, x => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default, (x, i) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(Return42, default(Func<int, int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(Return42, default(Func<int, int, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select(Return42, default(Func<int, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select(Return42, default(Func<int, int, int>)));
         }
 
         [Fact]

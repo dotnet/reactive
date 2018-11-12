@@ -17,8 +17,8 @@ namespace Tests
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(default, x => true));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(default, (x, i) => true));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(Return42, default(Func<int, bool>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(Return42, default(Func<int, int, bool>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where(Return42, default(Func<int, bool>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where(Return42, default(Func<int, int, bool>)));
         }
 
         [Fact]

@@ -16,7 +16,7 @@ namespace Tests
         public void Distinct_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(default, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct(default, EqualityComparer<int>.Default));
         }
 
         [Fact]
