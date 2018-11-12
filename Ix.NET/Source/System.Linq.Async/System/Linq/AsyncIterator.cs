@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-    internal abstract class AsyncIterator<TSource> : IAsyncEnumerable<TSource>, IAsyncEnumerator<TSource>
+    internal abstract partial class AsyncIterator<TSource> : IAsyncEnumerable<TSource>, IAsyncEnumerator<TSource>
     {
         private readonly int _threadId;
 
@@ -92,26 +92,6 @@ namespace System.Linq
         }
 
         public abstract AsyncIterator<TSource> Clone();
-
-        public virtual IAsyncEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector)
-        {
-            return new AsyncEnumerable.SelectEnumerableAsyncIterator<TSource, TResult>(this, selector);
-        }
-
-        public virtual IAsyncEnumerable<TResult> Select<TResult>(Func<TSource, Task<TResult>> selector)
-        {
-            return new AsyncEnumerable.SelectEnumerableAsyncIteratorWithTask<TSource, TResult>(this, selector);
-        }
-
-        public virtual IAsyncEnumerable<TSource> Where(Func<TSource, bool> predicate)
-        {
-            return new AsyncEnumerable.WhereEnumerableAsyncIterator<TSource>(this, predicate);
-        }
-
-        public virtual IAsyncEnumerable<TSource> Where(Func<TSource, Task<bool>> predicate)
-        {
-            return new AsyncEnumerable.WhereEnumerableAsyncIteratorWithTask<TSource>(this, predicate);
-        }
 
         protected abstract ValueTask<bool> MoveNextCore(CancellationToken cancellationToken);
 
