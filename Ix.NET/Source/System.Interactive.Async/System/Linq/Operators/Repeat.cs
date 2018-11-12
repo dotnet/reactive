@@ -50,9 +50,9 @@ namespace System.Linq
 
             protected override ValueTask<bool> MoveNextCore()
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                _cancellationToken.ThrowIfCancellationRequested();
 
-                current = _element;
+                _current = _element;
                 return new ValueTask<bool>(true);
             }
         }
@@ -94,7 +94,7 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
 
@@ -107,15 +107,15 @@ namespace System.Linq
                         if (!_isInfinite && _currentCount-- == 0)
                             break;
 
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
-                        state = AsyncIteratorState.Iterating;
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
 
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 

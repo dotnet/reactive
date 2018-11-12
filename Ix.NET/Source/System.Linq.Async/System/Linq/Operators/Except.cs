@@ -75,13 +75,13 @@ namespace System.Linq
                 //     concurrency, which isn't a great default behavior because it's very hard to suppress or control
                 //     this behavior.
 
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _set = await AsyncEnumerableHelpers.ToSet(_second, _comparer, cancellationToken).ConfigureAwait(false);
-                        _firstEnumerator = _first.GetAsyncEnumerator(cancellationToken);
+                        _set = await AsyncEnumerableHelpers.ToSet(_second, _comparer, _cancellationToken).ConfigureAwait(false);
+                        _firstEnumerator = _first.GetAsyncEnumerator(_cancellationToken);
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -95,7 +95,7 @@ namespace System.Linq
                                 var item = _firstEnumerator.Current;
                                 if (_set.Add(item))
                                 {
-                                    current = item;
+                                    _current = item;
                                     return true;
                                 }
                             }

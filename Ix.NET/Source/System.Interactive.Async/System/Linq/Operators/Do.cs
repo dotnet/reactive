@@ -165,11 +165,11 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
-                        state = AsyncIteratorState.Iterating;
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -177,8 +177,8 @@ namespace System.Linq
                         {
                             if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
-                                current = _enumerator.Current;
-                                _onNext(current);
+                                _current = _enumerator.Current;
+                                _onNext(_current);
 
                                 return true;
                             }
@@ -241,11 +241,11 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
-                        state = AsyncIteratorState.Iterating;
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -253,8 +253,8 @@ namespace System.Linq
                         {
                             if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
-                                current = _enumerator.Current;
-                                await _onNext(current).ConfigureAwait(false);
+                                _current = _enumerator.Current;
+                                await _onNext(_current).ConfigureAwait(false);
 
                                 return true;
                             }

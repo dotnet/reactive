@@ -73,15 +73,15 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _buffers = new Queue<IList<TSource>>();
                         _index = 0;
                         _stopped = false;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -104,7 +104,7 @@ namespace System.Linq
 
                                     if (_buffers.Count > 0 && _buffers.Peek().Count == _count)
                                     {
-                                        current = _buffers.Dequeue();
+                                        _current = _buffers.Dequeue();
                                         return true;
                                     }
 
@@ -120,7 +120,7 @@ namespace System.Linq
 
                             if (_buffers.Count > 0)
                             {
-                                current = _buffers.Dequeue();
+                                _current = _buffers.Dequeue();
                                 return true;
                             }
 

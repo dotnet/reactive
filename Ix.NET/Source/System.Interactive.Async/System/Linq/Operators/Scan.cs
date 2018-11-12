@@ -89,14 +89,14 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _hasSeed = false;
                         _accumulated = default;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -112,7 +112,7 @@ namespace System.Linq
                             }
 
                             _accumulated = _accumulator(_accumulated, item);
-                            current = _accumulated;
+                            _current = _accumulated;
                             return true;
                         }
 
@@ -163,13 +163,13 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _accumulated = _seed;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -177,7 +177,7 @@ namespace System.Linq
                         {
                             var item = _enumerator.Current;
                             _accumulated = _accumulator(_accumulated, item);
-                            current = _accumulated;
+                            _current = _accumulated;
                             return true;
                         }
 
@@ -227,14 +227,14 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _hasSeed = false;
                         _accumulated = default;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -250,7 +250,7 @@ namespace System.Linq
                             }
 
                             _accumulated = await _accumulator(_accumulated, item).ConfigureAwait(false);
-                            current = _accumulated;
+                            _current = _accumulated;
                             return true;
                         }
 
@@ -301,13 +301,13 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _accumulated = _seed;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -315,7 +315,7 @@ namespace System.Linq
                         {
                             var item = _enumerator.Current;
                             _accumulated = await _accumulator(_accumulated, item).ConfigureAwait(false);
-                            current = _accumulated;
+                            _current = _accumulated;
                             return true;
                         }
 

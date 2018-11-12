@@ -88,7 +88,7 @@ namespace System.Linq
                 var set = new Set<TSource>(_comparer);
                 var element = _enumerator.Current;
                 set.Add(element);
-                current = element;
+                _current = element;
                 _set = set;
             }
 
@@ -102,7 +102,7 @@ namespace System.Linq
                     var element = _enumerator.Current;
                     if (set.Add(element))
                     {
-                        current = element;
+                        _current = element;
                         return true;
                     }
                 }
@@ -112,7 +112,7 @@ namespace System.Linq
 
             protected sealed override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _index = 0;
@@ -121,14 +121,14 @@ namespace System.Linq
                         {
                             ++_index;
 
-                            var enumerator = enumerable.GetAsyncEnumerator(cancellationToken);
+                            var enumerator = enumerable.GetAsyncEnumerator(_cancellationToken);
 
                             if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
                                 await SetEnumeratorAsync(enumerator).ConfigureAwait(false);
                                 StoreFirst();
 
-                                state = AsyncIteratorState.Iterating;
+                                _state = AsyncIteratorState.Iterating;
                                 return true;
                             }
                         }
@@ -149,7 +149,7 @@ namespace System.Linq
                                 break;
                             }
 
-                            await SetEnumeratorAsync(enumerable.GetAsyncEnumerator(cancellationToken)).ConfigureAwait(false);
+                            await SetEnumeratorAsync(enumerable.GetAsyncEnumerator(_cancellationToken)).ConfigureAwait(false);
                             ++_index;
                         }
 

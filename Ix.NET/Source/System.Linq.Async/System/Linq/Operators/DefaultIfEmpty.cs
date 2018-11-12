@@ -61,29 +61,29 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
-                            state = AsyncIteratorState.Iterating;
+                            _current = _enumerator.Current;
+                            _state = AsyncIteratorState.Iterating;
                         }
                         else
                         {
-                            current = _defaultValue;
+                            _current = _defaultValue;
                             await _enumerator.DisposeAsync().ConfigureAwait(false);
                             _enumerator = null;
 
-                            state = AsyncIteratorState.Disposed;
+                            _state = AsyncIteratorState.Disposed;
                         }
                         return true;
 
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
                         break;

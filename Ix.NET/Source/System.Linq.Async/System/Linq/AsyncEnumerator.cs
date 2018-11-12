@@ -141,16 +141,16 @@ namespace System.Collections.Generic
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (await _moveNext().ConfigureAwait(false))
                         {
-                            current = _currentFunc();
+                            _current = _currentFunc();
                             return true;
                         }
 

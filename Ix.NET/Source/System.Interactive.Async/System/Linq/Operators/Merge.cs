@@ -78,7 +78,7 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         var n = _sources.Length;
@@ -89,12 +89,12 @@ namespace System.Linq
 
                         for (var i = 0; i < n; i++)
                         {
-                            var enumerator = _sources[i].GetAsyncEnumerator(cancellationToken);
+                            var enumerator = _sources[i].GetAsyncEnumerator(_cancellationToken);
                             _enumerators[i] = enumerator;
                             _moveNexts[i] = enumerator.MoveNextAsync();
                         }
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -118,7 +118,7 @@ namespace System.Linq
                             else
                             {
                                 var enumerator = _enumerators[index];
-                                current = enumerator.Current;
+                                _current = enumerator.Current;
                                 _moveNexts[index] = enumerator.MoveNextAsync();
                                 return true;
                             }

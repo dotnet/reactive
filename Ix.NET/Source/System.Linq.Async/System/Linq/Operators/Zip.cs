@@ -83,19 +83,19 @@ namespace System.Linq
                 //         results in an unexpected source of concurrency. However, a concurrent Zip may be a worthy addition to the
                 //         API or System.Interactive.Async as a complementary implementation besides the conservative default.
 
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _firstEnumerator = _first.GetAsyncEnumerator(cancellationToken);
-                        _secondEnumerator = _second.GetAsyncEnumerator(cancellationToken);
+                        _firstEnumerator = _first.GetAsyncEnumerator(_cancellationToken);
+                        _secondEnumerator = _second.GetAsyncEnumerator(_cancellationToken);
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (await _firstEnumerator.MoveNextAsync().ConfigureAwait(false) && await _secondEnumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _selector(_firstEnumerator.Current, _secondEnumerator.Current);
+                            _current = _selector(_firstEnumerator.Current, _secondEnumerator.Current);
                             return true;
                         }
 
@@ -155,19 +155,19 @@ namespace System.Linq
                 //         results in an unexpected source of concurrency. However, a concurrent Zip may be a worthy addition to the
                 //         API or System.Interactive.Async as a complementary implementation besides the conservative default.
 
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _firstEnumerator = _first.GetAsyncEnumerator(cancellationToken);
-                        _secondEnumerator = _second.GetAsyncEnumerator(cancellationToken);
+                        _firstEnumerator = _first.GetAsyncEnumerator(_cancellationToken);
+                        _secondEnumerator = _second.GetAsyncEnumerator(_cancellationToken);
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (await _firstEnumerator.MoveNextAsync().ConfigureAwait(false) && await _secondEnumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = await _selector(_firstEnumerator.Current, _secondEnumerator.Current).ConfigureAwait(false);
+                            _current = await _selector(_firstEnumerator.Current, _secondEnumerator.Current).ConfigureAwait(false);
                             return true;
                         }
 

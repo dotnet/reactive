@@ -89,19 +89,19 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _items = await _source.ToArray(cancellationToken).ConfigureAwait(false);
+                        _items = await _source.ToArray(_cancellationToken).ConfigureAwait(false);
                         _index = _items.Length - 1;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (_index != -1)
                         {
-                            current = _items[_index];
+                            _current = _items[_index];
                             --_index;
                             return true;
                         }

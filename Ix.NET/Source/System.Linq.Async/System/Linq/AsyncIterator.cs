@@ -12,9 +12,9 @@ namespace System.Linq
     {
         private readonly int _threadId;
 
-        protected TSource current;
-        protected AsyncIteratorState state = AsyncIteratorState.New;
-        protected CancellationToken cancellationToken;
+        protected TSource _current;
+        protected AsyncIteratorState _state = AsyncIteratorState.New;
+        protected CancellationToken _cancellationToken;
 
         protected AsyncIterator()
         {
@@ -23,25 +23,25 @@ namespace System.Linq
 
         public IAsyncEnumerator<TSource> GetAsyncEnumerator(CancellationToken cancellationToken)
         {
-            var enumerator = state == AsyncIteratorState.New && _threadId == Environment.CurrentManagedThreadId
+            var enumerator = _state == AsyncIteratorState.New && _threadId == Environment.CurrentManagedThreadId
                 ? this
                 : Clone();
 
-            enumerator.state = AsyncIteratorState.Allocated;
-            enumerator.cancellationToken = cancellationToken;
+            enumerator._state = AsyncIteratorState.Allocated;
+            enumerator._cancellationToken = cancellationToken;
 
             return enumerator;
         }
 
         public virtual ValueTask DisposeAsync()
         {
-            current = default;
-            state = AsyncIteratorState.Disposed;
+            _current = default;
+            _state = AsyncIteratorState.Disposed;
 
             return TaskExt.CompletedTask;
         }
 
-        public TSource Current => current;
+        public TSource Current => _current;
 
         public async ValueTask<bool> MoveNextAsync()
         {
@@ -49,7 +49,7 @@ namespace System.Linq
             // that any exceptions thrown from the MoveNextCore call are handled 
             // by the try/catch, whether they're sync or async
 
-            if (state == AsyncIteratorState.Disposed)
+            if (_state == AsyncIteratorState.Disposed)
             {
                 return false;
             }

@@ -42,7 +42,7 @@ namespace System.Linq
         {
             if ((uint)_index <= (uint)(_maxIndexInclusive - _minIndexInclusive) && _index < _source.Count - _minIndexInclusive)
             {
-                current = _source[_minIndexInclusive + _index];
+                _current = _source[_minIndexInclusive + _index];
                 ++_index;
                 return true;
             }

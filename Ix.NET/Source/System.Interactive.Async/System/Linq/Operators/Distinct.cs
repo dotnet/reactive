@@ -144,10 +144,10 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
 
                         if (!await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
@@ -158,9 +158,9 @@ namespace System.Linq
                         var element = _enumerator.Current;
                         _set = new Set<TKey>(_comparer);
                         _set.Add(_keySelector(element));
-                        current = element;
+                        _current = element;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         return true;
 
                     case AsyncIteratorState.Iterating:
@@ -169,7 +169,7 @@ namespace System.Linq
                             element = _enumerator.Current;
                             if (_set.Add(_keySelector(element)))
                             {
-                                current = element;
+                                _current = element;
                                 return true;
                             }
                         }
@@ -289,10 +289,10 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
 
                         if (!await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
@@ -303,9 +303,9 @@ namespace System.Linq
                         var element = _enumerator.Current;
                         _set = new Set<TKey>(_comparer);
                         _set.Add(await _keySelector(element).ConfigureAwait(false));
-                        current = element;
+                        _current = element;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         return true;
 
                     case AsyncIteratorState.Iterating:
@@ -314,7 +314,7 @@ namespace System.Linq
                             element = _enumerator.Current;
                             if (_set.Add(await _keySelector(element).ConfigureAwait(false)))
                             {
-                                current = element;
+                                _current = element;
                                 return true;
                             }
                         }

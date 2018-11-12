@@ -80,12 +80,12 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _sourcesEnumerator = _sources.GetEnumerator();
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -98,14 +98,14 @@ namespace System.Linq
                                     break; // while -- done, nothing else to do
                                 }
 
-                                _enumerator = _sourcesEnumerator.Current.GetAsyncEnumerator(cancellationToken);
+                                _enumerator = _sourcesEnumerator.Current.GetAsyncEnumerator(_cancellationToken);
                             }
 
                             try
                             {
                                 if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = _enumerator.Current;
+                                    _current = _enumerator.Current;
                                     return true;
                                 }
                             }

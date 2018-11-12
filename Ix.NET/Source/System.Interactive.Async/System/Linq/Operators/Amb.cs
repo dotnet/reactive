@@ -71,11 +71,11 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        var firstEnumerator = _first.GetAsyncEnumerator(cancellationToken);
-                        var secondEnumerator = _second.GetAsyncEnumerator(cancellationToken);
+                        var firstEnumerator = _first.GetAsyncEnumerator(_cancellationToken);
+                        var secondEnumerator = _second.GetAsyncEnumerator(_cancellationToken);
 
                         var firstMoveNext = firstEnumerator.MoveNextAsync().AsTask();
                         var secondMoveNext = secondEnumerator.MoveNextAsync().AsTask();
@@ -110,11 +110,11 @@ namespace System.Linq
                             });
                         }
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
 
                         if (await winner.ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 
@@ -123,7 +123,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 
@@ -166,7 +166,7 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         var n = _sources.Length;
@@ -176,7 +176,7 @@ namespace System.Linq
 
                         for (var i = 0; i < n; i++)
                         {
-                            var enumerator = _sources[i].GetAsyncEnumerator(cancellationToken);
+                            var enumerator = _sources[i].GetAsyncEnumerator(_cancellationToken);
 
                             enumerators[i] = enumerator;
                             moveNexts[i] = enumerator.MoveNextAsync();
@@ -208,11 +208,11 @@ namespace System.Linq
                             }
                         }
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
 
                         if (await winner.ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 
@@ -221,7 +221,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 

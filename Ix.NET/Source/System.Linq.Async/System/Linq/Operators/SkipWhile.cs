@@ -86,10 +86,10 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
 
                         // skip elements as requested
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
@@ -98,7 +98,7 @@ namespace System.Linq
                             if (!_predicate(element))
                             {
                                 _doMoveNext = false;
-                                state = AsyncIteratorState.Iterating;
+                                _state = AsyncIteratorState.Iterating;
                                 goto case AsyncIteratorState.Iterating;
                             }
                         }
@@ -108,13 +108,13 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (_doMoveNext && await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 
                         if (!_doMoveNext)
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             _doMoveNext = true;
                             return true;
                         }
@@ -163,10 +163,10 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _index = -1;
 
                         // skip elements as requested
@@ -181,7 +181,7 @@ namespace System.Linq
                             if (!_predicate(element, _index))
                             {
                                 _doMoveNext = false;
-                                state = AsyncIteratorState.Iterating;
+                                _state = AsyncIteratorState.Iterating;
                                 goto case AsyncIteratorState.Iterating;
                             }
                         }
@@ -191,13 +191,13 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (_doMoveNext && await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 
                         if (!_doMoveNext)
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             _doMoveNext = true;
                             return true;
                         }
@@ -245,10 +245,10 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
 
                         // skip elements as requested
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
@@ -257,7 +257,7 @@ namespace System.Linq
                             if (!await _predicate(element).ConfigureAwait(false))
                             {
                                 _doMoveNext = false;
-                                state = AsyncIteratorState.Iterating;
+                                _state = AsyncIteratorState.Iterating;
                                 goto case AsyncIteratorState.Iterating;
                             }
                         }
@@ -267,13 +267,13 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (_doMoveNext && await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 
                         if (!_doMoveNext)
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             _doMoveNext = true;
                             return true;
                         }
@@ -322,10 +322,10 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _index = -1;
 
                         // skip elements as requested
@@ -340,7 +340,7 @@ namespace System.Linq
                             if (!await _predicate(element, _index).ConfigureAwait(false))
                             {
                                 _doMoveNext = false;
-                                state = AsyncIteratorState.Iterating;
+                                _state = AsyncIteratorState.Iterating;
                                 goto case AsyncIteratorState.Iterating;
                             }
                         }
@@ -350,13 +350,13 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (_doMoveNext && await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 
                         if (!_doMoveNext)
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             _doMoveNext = true;
                             return true;
                         }

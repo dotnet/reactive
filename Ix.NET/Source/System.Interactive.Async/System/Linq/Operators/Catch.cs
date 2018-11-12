@@ -100,13 +100,13 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _isDone = false;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -118,7 +118,7 @@ namespace System.Linq
                                 {
                                     if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                                     {
-                                        current = _enumerator.Current;
+                                        _current = _enumerator.Current;
                                         return true;
                                     }
                                 }
@@ -128,7 +128,7 @@ namespace System.Linq
                                     // invoking the handler, but we use this order to preserve
                                     // current behavior
                                     var inner = _handler(ex);
-                                    var err = inner.GetAsyncEnumerator(cancellationToken);
+                                    var err = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     if (_enumerator != null)
                                     {
@@ -143,7 +143,7 @@ namespace System.Linq
 
                             if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
-                                current = _enumerator.Current;
+                                _current = _enumerator.Current;
                                 return true;
                             }
 
@@ -193,13 +193,13 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _isDone = false;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -211,7 +211,7 @@ namespace System.Linq
                                 {
                                     if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                                     {
-                                        current = _enumerator.Current;
+                                        _current = _enumerator.Current;
                                         return true;
                                     }
                                 }
@@ -221,7 +221,7 @@ namespace System.Linq
                                     // invoking the handler, but we use this order to preserve
                                     // current behavior
                                     var inner = await _handler(ex).ConfigureAwait(false);
-                                    var err = inner.GetAsyncEnumerator(cancellationToken);
+                                    var err = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     if (_enumerator != null)
                                     {
@@ -236,7 +236,7 @@ namespace System.Linq
 
                             if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
-                                current = _enumerator.Current;
+                                _current = _enumerator.Current;
                                 return true;
                             }
 
@@ -293,12 +293,12 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _sourcesEnumerator = _sources.GetEnumerator();
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -314,14 +314,14 @@ namespace System.Linq
                                 }
 
                                 _error = null;
-                                _enumerator = _sourcesEnumerator.Current.GetAsyncEnumerator(cancellationToken);
+                                _enumerator = _sourcesEnumerator.Current.GetAsyncEnumerator(_cancellationToken);
                             }
 
                             try
                             {
                                 if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = _enumerator.Current;
+                                    _current = _enumerator.Current;
                                     return true;
                                 }
                             }

@@ -30,10 +30,10 @@ namespace System.Linq
 
         protected override async ValueTask<bool> MoveNextCore()
         {
-            switch (state)
+            switch (_state)
             {
                 case AsyncIteratorState.Allocated:
-                    _buffer = await _source.ToArray(cancellationToken).ConfigureAwait(false);
+                    _buffer = await _source.ToArray(_cancellationToken).ConfigureAwait(false);
 
                     // REVIEW: If we add selectors with CancellationToken support, we should feed the token to Sort.
 
@@ -41,13 +41,13 @@ namespace System.Linq
                     _indexes = await sorter.Sort(_buffer, _buffer.Length).ConfigureAwait(false);
                     _index = 0;
 
-                    state = AsyncIteratorState.Iterating;
+                    _state = AsyncIteratorState.Iterating;
                     goto case AsyncIteratorState.Iterating;
 
                 case AsyncIteratorState.Iterating:
                     if (_index < _buffer.Length)
                     {
-                        current = _buffer[_indexes[_index++]];
+                        _current = _buffer[_indexes[_index++]];
                         return true;
                     }
 

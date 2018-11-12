@@ -62,7 +62,7 @@ namespace System.Linq
             {
                 if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    current = _enumerator.Current;
+                    _current = _enumerator.Current;
                     return true;
                 }
 
@@ -112,14 +112,14 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _hasEnumerator = false;
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         if (!_appending)
                         {
-                            current = _item;
+                            _current = _item;
                             return true;
                         }
 
@@ -128,7 +128,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (!_hasEnumerator)
                         {
-                            GetSourceEnumerator(cancellationToken);
+                            GetSourceEnumerator(_cancellationToken);
                             _hasEnumerator = true;
                         }
 
@@ -141,7 +141,7 @@ namespace System.Linq
 
                             if (_appending)
                             {
-                                current = _item;
+                                _current = _item;
                                 return true;
                             }
                         }
@@ -315,11 +315,11 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _mode = 1;
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -333,12 +333,12 @@ namespace System.Linq
                             case 2:
                                 if (_node != null)
                                 {
-                                    current = _node.Item;
+                                    _current = _node.Item;
                                     _node = _node.Linked;
                                     return true;
                                 }
 
-                                GetSourceEnumerator(cancellationToken);
+                                GetSourceEnumerator(_cancellationToken);
                                 _mode = 3;
                                 goto case 3;
 
@@ -361,7 +361,7 @@ namespace System.Linq
                             case 4:
                                 if (_appendedEnumerator.MoveNext())
                                 {
-                                    current = _appendedEnumerator.Current;
+                                    _current = _appendedEnumerator.Current;
                                     return true;
                                 }
                                 break;

@@ -144,12 +144,12 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _sourceEnumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _mode = State_Source;
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -164,7 +164,7 @@ namespace System.Linq
                                     }
 
                                     var inner = _selector(_sourceEnumerator.Current);
-                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
                                     goto case State_Result;
@@ -174,7 +174,7 @@ namespace System.Linq
                             case State_Result:
                                 if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = _resultEnumerator.Current;
+                                    _current = _resultEnumerator.Current;
                                     return true;
                                 }
 
@@ -235,12 +235,12 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _sourceEnumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _mode = State_Source;
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -255,7 +255,7 @@ namespace System.Linq
                                     }
 
                                     var inner = await _selector(_sourceEnumerator.Current).ConfigureAwait(false);
-                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
                                     goto case State_Result;
@@ -265,7 +265,7 @@ namespace System.Linq
                             case State_Result:
                                 if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = _resultEnumerator.Current;
+                                    _current = _resultEnumerator.Current;
                                     return true;
                                 }
 
@@ -332,12 +332,12 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _sourceEnumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _mode = State_Source;
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -353,7 +353,7 @@ namespace System.Linq
 
                                     _currentSource = _sourceEnumerator.Current;
                                     var inner = _collectionSelector(_currentSource);
-                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
                                     goto case State_Result;
@@ -363,7 +363,7 @@ namespace System.Linq
                             case State_Result:
                                 if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = _resultSelector(_currentSource, _resultEnumerator.Current);
+                                    _current = _resultSelector(_currentSource, _resultEnumerator.Current);
                                     return true;
                                 }
 
@@ -430,12 +430,12 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _sourceEnumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _mode = State_Source;
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -451,7 +451,7 @@ namespace System.Linq
 
                                     _currentSource = _sourceEnumerator.Current;
                                     var inner = await _collectionSelector(_currentSource).ConfigureAwait(false);
-                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
                                     goto case State_Result;
@@ -461,7 +461,7 @@ namespace System.Linq
                             case State_Result:
                                 if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = await _resultSelector(_currentSource, _resultEnumerator.Current).ConfigureAwait(false);
+                                    _current = await _resultSelector(_currentSource, _resultEnumerator.Current).ConfigureAwait(false);
                                     return true;
                                 }
 
@@ -529,13 +529,13 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _sourceEnumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _index = -1;
                         _mode = State_Source;
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -557,7 +557,7 @@ namespace System.Linq
                                     }
 
                                     var inner = _collectionSelector(_currentSource, _index);
-                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
                                     goto case State_Result;
@@ -567,7 +567,7 @@ namespace System.Linq
                             case State_Result:
                                 if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = _resultSelector(_currentSource, _resultEnumerator.Current);
+                                    _current = _resultSelector(_currentSource, _resultEnumerator.Current);
                                     return true;
                                 }
 
@@ -635,13 +635,13 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _sourceEnumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _index = -1;
                         _mode = State_Source;
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -663,7 +663,7 @@ namespace System.Linq
                                     }
 
                                     var inner = await _collectionSelector(_currentSource, _index).ConfigureAwait(false);
-                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
                                     goto case State_Result;
@@ -673,7 +673,7 @@ namespace System.Linq
                             case State_Result:
                                 if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = await _resultSelector(_currentSource, _resultEnumerator.Current).ConfigureAwait(false);
+                                    _current = await _resultSelector(_currentSource, _resultEnumerator.Current).ConfigureAwait(false);
                                     return true;
                                 }
 
@@ -735,13 +735,13 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _sourceEnumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _index = -1;
                         _mode = State_Source;
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -761,7 +761,7 @@ namespace System.Linq
                                     }
 
                                     var inner = _selector(_sourceEnumerator.Current, _index);
-                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
                                     goto case State_Result;
@@ -771,7 +771,7 @@ namespace System.Linq
                             case State_Result:
                                 if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = _resultEnumerator.Current;
+                                    _current = _resultEnumerator.Current;
                                     return true;
                                 }
 
@@ -833,13 +833,13 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _sourceEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _sourceEnumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _index = -1;
                         _mode = State_Source;
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -859,7 +859,7 @@ namespace System.Linq
                                     }
 
                                     var inner = await _selector(_sourceEnumerator.Current, _index).ConfigureAwait(false);
-                                    _resultEnumerator = inner.GetAsyncEnumerator(cancellationToken);
+                                    _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
                                     goto case State_Result;
@@ -869,7 +869,7 @@ namespace System.Linq
                             case State_Result:
                                 if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = _resultEnumerator.Current;
+                                    _current = _resultEnumerator.Current;
                                     return true;
                                 }
 

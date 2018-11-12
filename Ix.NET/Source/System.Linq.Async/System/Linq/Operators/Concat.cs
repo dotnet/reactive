@@ -143,20 +143,20 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                if (state == AsyncIteratorState.Allocated)
+                if (_state == AsyncIteratorState.Allocated)
                 {
-                    _enumerator = GetAsyncEnumerable(0).GetAsyncEnumerator(cancellationToken);
-                    state = AsyncIteratorState.Iterating;
+                    _enumerator = GetAsyncEnumerable(0).GetAsyncEnumerator(_cancellationToken);
+                    _state = AsyncIteratorState.Iterating;
                     _counter = 2;
                 }
 
-                if (state == AsyncIteratorState.Iterating)
+                if (_state == AsyncIteratorState.Iterating)
                 {
                     while (true)
                     {
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
                         // note, this is simply to match the logic of 
@@ -165,7 +165,7 @@ namespace System.Linq
                         if (next != null)
                         {
                             await _enumerator.DisposeAsync().ConfigureAwait(false);
-                            _enumerator = next.GetAsyncEnumerator(cancellationToken);
+                            _enumerator = next.GetAsyncEnumerator(_cancellationToken);
                             continue;
                         }
 

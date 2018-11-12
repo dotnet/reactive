@@ -60,13 +60,13 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _started = false;
                         _currentState = _initialState;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -79,7 +79,7 @@ namespace System.Linq
 
                         if (_condition(_currentState))
                         {
-                            current = _resultSelector(_currentState);
+                            _current = _resultSelector(_currentState);
                             return true;
                         }
                         break;
