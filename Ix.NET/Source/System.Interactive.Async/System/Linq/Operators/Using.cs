@@ -36,7 +36,6 @@ namespace System.Linq
             private readonly Func<TResource, IAsyncEnumerable<TSource>> _enumerableFactory;
             private readonly Func<TResource> _resourceFactory;
 
-            private IAsyncEnumerable<TSource> _enumerable;
             private IAsyncEnumerator<TSource> _enumerator;
             private TResource _resource;
 
