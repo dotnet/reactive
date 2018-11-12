@@ -69,7 +69,7 @@ namespace System.Linq
 
                     if (!(_source is ICollection<TSource>) && !(_source is ICollection))
                     {
-                        return Task.FromResult(-1);
+                        return TaskExt.MinusOne;
                     }
                 }
 

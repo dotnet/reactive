@@ -182,7 +182,7 @@ namespace System.Linq
 
             public Task<List<TSource>> ToListAsync(CancellationToken cancellationToken) => FillSetAsync(cancellationToken).ContinueWith(set => set.Result.ToList());
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => onlyIfCheap ? Task.FromResult(-1) : FillSetAsync(cancellationToken).ContinueWith(set => set.Result.Count);
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => onlyIfCheap ? TaskExt.MinusOne : FillSetAsync(cancellationToken).ContinueWith(set => set.Result.Count);
         }
 
         /// <summary>

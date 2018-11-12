@@ -238,7 +238,7 @@ namespace System.Linq
             {
                 if (onlyIfCheap)
                 {
-                    return Task.FromResult(-1);
+                    return TaskExt.MinusOne;
                 }
 
                 var count = 0;
