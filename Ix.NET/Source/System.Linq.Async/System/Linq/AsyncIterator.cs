@@ -12,8 +12,6 @@ namespace System.Linq
     {
         private readonly int _threadId;
 
-        private bool _currentIsInvalid = true;
-
         internal TSource current;
         internal AsyncIteratorState state = AsyncIteratorState.New;
         internal CancellationToken cancellationToken;
@@ -43,16 +41,7 @@ namespace System.Linq
             return TaskExt.CompletedTask;
         }
 
-        public TSource Current
-        {
-            get
-            {
-                if (_currentIsInvalid)
-                    throw new InvalidOperationException("Enumerator is in an invalid state");
-
-                return current;
-            }
-        }
+        public TSource Current => current;
 
         public async ValueTask<bool> MoveNextAsync()
         {
@@ -67,15 +56,10 @@ namespace System.Linq
 
             try
             {
-                var result = await MoveNextCore(cancellationToken).ConfigureAwait(false);
-
-                _currentIsInvalid = !result; // if move next is false, invalid otherwise valid
-
-                return result;
+                return await MoveNextCore(cancellationToken).ConfigureAwait(false);
             }
             catch
             {
-                _currentIsInvalid = true;
                 await DisposeAsync().ConfigureAwait(false);
                 throw;
             }

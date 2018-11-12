@@ -24,7 +24,6 @@ namespace Tests
 
             var e = xs.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
-            AssertThrows<InvalidOperationException>(() => Nop(e.Current));
         }
 
         private void Nop(object o)

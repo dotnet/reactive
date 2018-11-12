@@ -25,8 +25,6 @@ namespace Tests
 
             var e = xs.GetAsyncEnumerator();
             NoNext(e);
-
-            AssertThrows<InvalidOperationException>(() => { var ignored = e.Current; });
         }
 
         [Fact]
@@ -36,8 +34,6 @@ namespace Tests
 
             var e = xs.GetAsyncEnumerator();
             NoNext(e);
-
-            AssertThrows<InvalidOperationException>(() => { var ignored = e.Current; });
         }
 
         [Fact]
@@ -47,8 +43,6 @@ namespace Tests
 
             var e = xs.GetAsyncEnumerator();
             NoNext(e);
-
-            AssertThrows<InvalidOperationException>(() => { var ignored = e.Current; });
         }
 
         [Fact]

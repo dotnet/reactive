@@ -18,7 +18,6 @@ namespace Tests
 
             var e = xs.GetAsyncEnumerator();
             Assert.False(e.MoveNextAsync().IsCompleted); // Very rudimentary check
-            AssertThrows<InvalidOperationException>(() => Nop(e.Current));
             await e.DisposeAsync();
         }
 
