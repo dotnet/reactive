@@ -58,7 +58,7 @@ namespace System.Linq
                 return Task.FromResult(res);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

@@ -48,7 +48,7 @@ namespace System.Linq
                 return new RepeatElementAsyncIterator<TResult>(_element);
             }
 
-            protected override ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override ValueTask<bool> MoveNextCore()
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -92,7 +92,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

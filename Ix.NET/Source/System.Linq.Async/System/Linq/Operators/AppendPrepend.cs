@@ -110,7 +110,7 @@ namespace System.Linq
                 return new AppendPrepend1AsyncIterator<TSource>(_source, _item, _appending);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -313,7 +313,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

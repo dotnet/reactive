@@ -77,7 +77,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 // REVIEW: Earlier versions of this operator performed concurrent MoveNextAsync calls, which isn't a great default and
                 //         results in an unexpected source of concurrency. However, a concurrent Zip may be a worthy addition to the
@@ -149,7 +149,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 // REVIEW: Earlier versions of this operator performed concurrent MoveNextAsync calls, which isn't a great default and
                 //         results in an unexpected source of concurrency. However, a concurrent Zip may be a worthy addition to the

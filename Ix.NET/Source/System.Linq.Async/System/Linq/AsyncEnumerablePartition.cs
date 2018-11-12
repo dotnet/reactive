@@ -107,7 +107,7 @@ namespace System.Linq
         private bool _hasSkipped;
         private int _taken;
 
-        protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+        protected override async ValueTask<bool> MoveNextCore()
         {
             switch (state)
             {

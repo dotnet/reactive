@@ -56,7 +56,7 @@ namespace System.Linq
 
             try
             {
-                return await MoveNextCore(cancellationToken).ConfigureAwait(false);
+                return await MoveNextCore().ConfigureAwait(false);
             }
             catch
             {
@@ -67,7 +67,7 @@ namespace System.Linq
 
         public abstract AsyncIterator<TSource> Clone();
 
-        protected abstract ValueTask<bool> MoveNextCore(CancellationToken cancellationToken);
+        protected abstract ValueTask<bool> MoveNextCore();
     }
 
     internal enum AsyncIteratorState

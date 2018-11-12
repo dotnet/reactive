@@ -28,7 +28,7 @@ namespace System.Linq
             return new OrderedAsyncEnumerableWithTask<TElement, TKey>(_source, keySelector, comparer, descending, this);
         }
 
-        protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+        protected override async ValueTask<bool> MoveNextCore()
         {
             switch (state)
             {

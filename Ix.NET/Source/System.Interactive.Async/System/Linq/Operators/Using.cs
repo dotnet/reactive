@@ -70,7 +70,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 // NB: Earlier behavior of this operator was more eager, causing the resource factory to be called upon calling
                 //     GetAsyncEnumerator. This is inconsistent with asynchronous "using" and with a C# 8.0 async iterator with
@@ -139,7 +139,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

@@ -110,7 +110,7 @@ namespace System.Linq
                 return false;
             }
 
-            protected sealed override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected sealed override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {

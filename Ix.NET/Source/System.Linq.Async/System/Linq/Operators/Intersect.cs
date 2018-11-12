@@ -68,7 +68,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 // NB: Earlier implementations of this operator constructed the set for the second source concurrently
                 //     with the first MoveNextAsync call on the first source. This resulted in an unexpected source of

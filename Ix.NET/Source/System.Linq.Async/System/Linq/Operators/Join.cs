@@ -131,7 +131,7 @@ namespace System.Linq
             private const int State_For = 3;
             private const int State_While = 4;
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -258,7 +258,7 @@ namespace System.Linq
             private const int State_For = 3;
             private const int State_While = 4;
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
                 switch (state)
                 {
