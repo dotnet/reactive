@@ -41,7 +41,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).ToArray();
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
 
         [Fact]

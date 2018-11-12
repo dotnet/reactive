@@ -264,8 +264,8 @@ namespace Tests
             //HasNext(g2e, 2);
 
 
-            //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
-            //AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            //AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
 
         [Fact]

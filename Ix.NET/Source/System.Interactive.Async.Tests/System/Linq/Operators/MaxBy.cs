@@ -52,7 +52,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MaxBy(x => { if (x == 3) throw ex; return x; });
 
-            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MaxBy(x => { if (x == 4) throw ex; return x; });
 
-            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().Concat(Throw<int>(ex)).MaxBy(x => x, Comparer<int>.Default);
 
-            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
     }
 }

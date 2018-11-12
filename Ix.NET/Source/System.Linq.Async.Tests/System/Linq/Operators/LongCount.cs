@@ -46,7 +46,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount(new Func<int, bool>(x => { throw ex; }));
-            AssertThrows<Exception>(() => ys.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => ys.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
     }
 }
