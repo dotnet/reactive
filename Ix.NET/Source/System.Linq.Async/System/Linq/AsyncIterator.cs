@@ -12,9 +12,9 @@ namespace System.Linq
     {
         private readonly int _threadId;
 
-        internal TSource current;
-        internal AsyncIteratorState state = AsyncIteratorState.New;
-        internal CancellationToken cancellationToken;
+        protected TSource current;
+        protected AsyncIteratorState state = AsyncIteratorState.New;
+        protected CancellationToken cancellationToken;
 
         protected AsyncIterator()
         {
