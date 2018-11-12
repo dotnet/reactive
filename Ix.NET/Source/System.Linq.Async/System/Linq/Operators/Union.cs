@@ -172,7 +172,19 @@ namespace System.Linq
                         return set;
                     }
 
-                    await set.UnionWithAsync(enumerable, cancellationToken).ConfigureAwait(false);
+                    var e = enumerable.GetAsyncEnumerator(cancellationToken);
+
+                    try
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            set.Add(e.Current);
+                        }
+                    }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
                 }
             }
 

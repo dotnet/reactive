@@ -55,9 +55,20 @@ namespace System.Linq
                 return s.ToList();
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
-                return onlyIfCheap ? -1 : (await FillSetAsync(cancellationToken).ConfigureAwait(false)).Count;
+                if (onlyIfCheap)
+                {
+                    return TaskExt.MinusOne;
+                }
+
+                return Core();
+
+                async Task<int> Core()
+                {
+                    var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                    return s.Count;
+                }
             }
 
             public override AsyncIterator<TSource> Clone()
@@ -115,13 +126,9 @@ namespace System.Linq
                 return false;
             }
 
-            private async Task<Set<TSource>> FillSetAsync(CancellationToken cancellationToken)
+            private Task<Set<TSource>> FillSetAsync(CancellationToken cancellationToken)
             {
-                var s = new Set<TSource>(_comparer);
-
-                await s.UnionWithAsync(_source, cancellationToken).ConfigureAwait(false);
-
-                return s;
+                return AsyncEnumerableHelpers.ToSet(_source, _comparer, cancellationToken);
             }
         }
     }

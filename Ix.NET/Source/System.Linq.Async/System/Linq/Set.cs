@@ -145,23 +145,6 @@ namespace System.Linq
             _slots = newSlots;
         }
 
-        public async ValueTask UnionWithAsync(IAsyncEnumerable<TElement> other, CancellationToken cancellationToken)
-        {
-            var enu = other.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await enu.MoveNextAsync().ConfigureAwait(false))
-                {
-                    Add(enu.Current);
-                }
-            }
-            finally
-            {
-                await enu.DisposeAsync().ConfigureAwait(false);
-            }
-        }
-
         internal struct Slot
         {
             internal int _hashCode;
