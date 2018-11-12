@@ -127,16 +127,16 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_sourceEnumerator != null)
-                {
-                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    _sourceEnumerator = null;
-                }
-
                 if (_resultEnumerator != null)
                 {
                     await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                     _resultEnumerator = null;
+                }
+
+                if (_sourceEnumerator != null)
+                {
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -218,16 +218,16 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_sourceEnumerator != null)
-                {
-                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    _sourceEnumerator = null;
-                }
-
                 if (_resultEnumerator != null)
                 {
                     await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                     _resultEnumerator = null;
+                }
+
+                if (_sourceEnumerator != null)
+                {
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -313,16 +313,16 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_sourceEnumerator != null)
-                {
-                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    _sourceEnumerator = null;
-                }
-
                 if (_resultEnumerator != null)
                 {
                     await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                     _resultEnumerator = null;
+                }
+
+                if (_sourceEnumerator != null)
+                {
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
                 _currentSource = default;
@@ -411,16 +411,16 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_sourceEnumerator != null)
-                {
-                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    _sourceEnumerator = null;
-                }
-
                 if (_resultEnumerator != null)
                 {
                     await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                     _resultEnumerator = null;
+                }
+
+                if (_sourceEnumerator != null)
+                {
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
                 _currentSource = default;
@@ -510,16 +510,16 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_sourceEnumerator != null)
-                {
-                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    _sourceEnumerator = null;
-                }
-
                 if (_resultEnumerator != null)
                 {
                     await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                     _resultEnumerator = null;
+                }
+
+                if (_sourceEnumerator != null)
+                {
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
                 _currentSource = default;
@@ -616,16 +616,16 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_sourceEnumerator != null)
-                {
-                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    _sourceEnumerator = null;
-                }
-
                 if (_resultEnumerator != null)
                 {
                     await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                     _resultEnumerator = null;
+                }
+
+                if (_sourceEnumerator != null)
+                {
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
                 _currentSource = default;
@@ -718,16 +718,16 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_sourceEnumerator != null)
-                {
-                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    _sourceEnumerator = null;
-                }
-
                 if (_resultEnumerator != null)
                 {
                     await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                     _resultEnumerator = null;
+                }
+
+                if (_sourceEnumerator != null)
+                {
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -816,16 +816,16 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_sourceEnumerator != null)
-                {
-                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
-                    _sourceEnumerator = null;
-                }
-
                 if (_resultEnumerator != null)
                 {
                     await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                     _resultEnumerator = null;
+                }
+
+                if (_sourceEnumerator != null)
+                {
+                    await _sourceEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _sourceEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
