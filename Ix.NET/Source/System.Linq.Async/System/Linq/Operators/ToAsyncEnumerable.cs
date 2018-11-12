@@ -49,7 +49,7 @@ namespace System.Linq
                             return false;
                         },
                         () => value,
-                        () => TaskExt.CompletedTask);
+                        () => default);
                 });
         }
 
@@ -118,7 +118,7 @@ namespace System.Linq
                             ctr.Dispose();
                             subscription.Dispose();
                             // Should we cancel in-flight operations somehow?
-                            return TaskExt.CompletedTask;
+                            return default;
                         });
                 });
         }

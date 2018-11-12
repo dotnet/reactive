@@ -38,7 +38,7 @@ namespace System.Linq
             _current = default;
             _state = AsyncIteratorState.Disposed;
 
-            return TaskExt.CompletedTask;
+            return default;
         }
 
         public TSource Current => _current;

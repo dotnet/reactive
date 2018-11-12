@@ -6,7 +6,6 @@ namespace System.Threading.Tasks
 {
     internal static class TaskExt
     {
-        public static readonly ValueTask CompletedTask = new ValueTask(Task.FromResult(true));
         public static readonly Task<int> MinusOne = Task.FromResult(-1);
     }
 }

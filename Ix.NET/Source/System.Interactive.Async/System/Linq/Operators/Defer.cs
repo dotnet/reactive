@@ -111,7 +111,7 @@ namespace System.Linq
 
                     public T Current => throw new ObjectDisposedException("this");
 
-                    public ValueTask DisposeAsync() => TaskExt.CompletedTask;
+                    public ValueTask DisposeAsync() => default;
 
                     public ValueTask<bool> MoveNextAsync() => throw new ObjectDisposedException("this");
                 }

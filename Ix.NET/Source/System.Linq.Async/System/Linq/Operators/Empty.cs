@@ -44,7 +44,7 @@ namespace System.Linq
 
             public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken) => this;
 
-            public ValueTask DisposeAsync() => TaskExt.CompletedTask;
+            public ValueTask DisposeAsync() => default;
         }
     }
 }
