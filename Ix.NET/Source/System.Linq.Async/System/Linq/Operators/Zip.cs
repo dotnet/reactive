@@ -62,16 +62,16 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_firstEnumerator != null)
-                {
-                    await _firstEnumerator.DisposeAsync().ConfigureAwait(false);
-                    _firstEnumerator = null;
-                }
-
                 if (_secondEnumerator != null)
                 {
                     await _secondEnumerator.DisposeAsync().ConfigureAwait(false);
                     _secondEnumerator = null;
+                }
+
+                if (_firstEnumerator != null)
+                {
+                    await _firstEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _firstEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -134,16 +134,16 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_firstEnumerator != null)
-                {
-                    await _firstEnumerator.DisposeAsync().ConfigureAwait(false);
-                    _firstEnumerator = null;
-                }
-
                 if (_secondEnumerator != null)
                 {
                     await _secondEnumerator.DisposeAsync().ConfigureAwait(false);
                     _secondEnumerator = null;
+                }
+
+                if (_firstEnumerator != null)
+                {
+                    await _firstEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _firstEnumerator = null;
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
