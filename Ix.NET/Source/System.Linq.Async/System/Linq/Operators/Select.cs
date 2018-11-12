@@ -183,11 +183,14 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
+                            var item = _enumerator.Current;
+
                             checked
                             {
                                 _index++;
                             }
-                            _current = _selector(_enumerator.Current, _index);
+
+                            _current = _selector(item, _index);
                             return true;
                         }
 
@@ -415,11 +418,14 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
+                            var item = _enumerator.Current;
+
                             checked
                             {
                                 _index++;
                             }
-                            _current = await _selector(_enumerator.Current, _index).ConfigureAwait(false);
+
+                            _current = await _selector(item, _index).ConfigureAwait(false);
                             return true;
                         }
 

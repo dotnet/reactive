@@ -163,6 +163,7 @@ namespace System.Linq
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = _enumerator.Current;
+
                             checked
                             {
                                 _index++;
@@ -297,6 +298,7 @@ namespace System.Linq
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = _enumerator.Current;
+
                             checked
                             {
                                 _index++;

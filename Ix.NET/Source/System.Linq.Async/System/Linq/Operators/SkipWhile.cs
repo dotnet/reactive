@@ -172,12 +172,13 @@ namespace System.Linq
                         // skip elements as requested
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
+                            var element = _enumerator.Current;
+
                             checked
                             {
                                 _index++;
                             }
 
-                            var element = _enumerator.Current;
                             if (!_predicate(element, _index))
                             {
                                 _doMoveNext = false;
@@ -331,12 +332,13 @@ namespace System.Linq
                         // skip elements as requested
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
+                            var element = _enumerator.Current;
+
                             checked
                             {
                                 _index++;
                             }
 
-                            var element = _enumerator.Current;
                             if (!await _predicate(element, _index).ConfigureAwait(false))
                             {
                                 _doMoveNext = false;
