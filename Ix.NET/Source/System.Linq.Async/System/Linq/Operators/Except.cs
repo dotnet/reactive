@@ -99,7 +99,7 @@ namespace System.Linq
                                 await Task.WhenAll(moveNextTask.AsTask(), _fillSetTask).ConfigureAwait(false);
 
                                 _setFilled = true;
-                                moveNext = moveNextTask.Result;
+                                moveNext = await moveNextTask.ConfigureAwait(false);
                             }
                             else
                             {

@@ -99,7 +99,7 @@ namespace System.Linq
                         
                         await Task.WhenAll(ft.AsTask(), st.AsTask()).ConfigureAwait(false);
 
-                        if (ft.Result && st.Result)
+                        if (await ft.ConfigureAwait(false) && await st.ConfigureAwait(false))
                         {
                             current = _selector(_firstEnumerator.Current, _secondEnumerator.Current);
                             return true;
@@ -173,7 +173,7 @@ namespace System.Linq
                         var st = _secondEnumerator.MoveNextAsync();
                         await Task.WhenAll(ft.AsTask(), st.AsTask()).ConfigureAwait(false);
 
-                        if (ft.Result && st.Result)
+                        if (await ft.ConfigureAwait(false) && await st.ConfigureAwait(false))
                         {
                             current = await _selector(_firstEnumerator.Current, _secondEnumerator.Current).ConfigureAwait(false);
                             return true;
