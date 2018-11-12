@@ -39,12 +39,8 @@ namespace System.Linq
             private readonly IAsyncEnumerable<TSource> _first;
             private readonly IAsyncEnumerable<TSource> _second;
 
-            private Task _fillSetTask;
-
             private IAsyncEnumerator<TSource> _firstEnumerator;
             private Set<TSource> _set;
-
-            private bool _setFilled;
 
             public ExceptAsyncIterator(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
             {
@@ -77,13 +73,16 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
+                // NB: Earlier implementations of this operator constructed the set for the second source concurrently
+                //     with the first MoveNextAsync call on the first source. This resulted in an unexpected source of
+                //     concurrency, which isn't a great default behavior because it's very hard to suppress or control
+                //     this behavior.
+
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
+                        _set = await AsyncEnumerableHelpers.ToSet(_second, _comparer, cancellationToken).ConfigureAwait(false);
                         _firstEnumerator = _first.GetAsyncEnumerator(cancellationToken);
-                        _set = new Set<TSource>(_comparer);
-                        _setFilled = false;
-                        _fillSetTask = FillSetAsync(cancellationToken);
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -92,19 +91,7 @@ namespace System.Linq
                         bool moveNext;
                         do
                         {
-                            if (!_setFilled)
-                            {
-                                // This is here so we don't need to call Task.WhenAll each time after the set is filled
-                                var moveNextTask = _firstEnumerator.MoveNextAsync();
-                                await Task.WhenAll(moveNextTask.AsTask(), _fillSetTask).ConfigureAwait(false);
-
-                                _setFilled = true;
-                                moveNext = await moveNextTask.ConfigureAwait(false);
-                            }
-                            else
-                            {
-                                moveNext = await _firstEnumerator.MoveNextAsync().ConfigureAwait(false);
-                            }
+                            moveNext = await _firstEnumerator.MoveNextAsync().ConfigureAwait(false);
 
                             if (moveNext)
                             {
@@ -122,16 +109,6 @@ namespace System.Linq
                 }
 
                 return false;
-            }
-
-            private async Task FillSetAsync(CancellationToken cancellationToken)
-            {
-                var array = await _second.ToArray(cancellationToken).ConfigureAwait(false);
-
-                foreach (var t in array)
-                {
-                    _set.Add(t);
-                }
             }
         }
     }
