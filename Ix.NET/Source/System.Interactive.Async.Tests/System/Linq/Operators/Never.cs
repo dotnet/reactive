@@ -19,9 +19,5 @@ namespace Tests
             Assert.False(e.MoveNextAsync().IsCompleted); // Very rudimentary check
             await e.DisposeAsync();
         }
-
-        private void Nop(object o)
-        {
-        }
     }
 }
