@@ -18,14 +18,12 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            if (source is AsyncIterator<TSource> iterator)
+            switch (source)
             {
-                return iterator.Select(selector);
-            }
-
-            if (source is IList<TSource> ilist)
-            {
-                return new SelectIListIterator<TSource, TResult>(ilist, selector);
+                case AsyncIterator<TSource> iterator:
+                    return iterator.Select(selector);
+                case IList<TSource> list:
+                    return new SelectIListIterator<TSource, TResult>(list, selector);
             }
 
             return new SelectEnumerableAsyncIterator<TSource, TResult>(source, selector);
@@ -48,14 +46,12 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            if (source is AsyncIterator<TSource> iterator)
+            switch (source)
             {
-                return iterator.Select(selector);
-            }
-
-            if (source is IList<TSource> ilist)
-            {
-                return new SelectIListIteratorWithTask<TSource, TResult>(ilist, selector);
+                case AsyncIterator<TSource> iterator:
+                    return iterator.Select(selector);
+                case IList<TSource> list:
+                    return new SelectIListIteratorWithTask<TSource, TResult>(list, selector);
             }
 
             return new SelectEnumerableAsyncIteratorWithTask<TSource, TResult>(source, selector);
