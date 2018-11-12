@@ -16,15 +16,13 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return DistinctUntilChangedCore(source, EqualityComparer<TSource>.Default);
+            return DistinctUntilChangedCore(source, comparer: null);
         }
 
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
             return DistinctUntilChangedCore(source, comparer);
         }
@@ -36,7 +34,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return DistinctUntilChangedCore(source, keySelector, EqualityComparer<TKey>.Default);
+            return DistinctUntilChangedCore(source, keySelector, comparer: null);
         }
 
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
@@ -45,8 +43,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
             return DistinctUntilChangedCore(source, keySelector, comparer);
         }
@@ -58,7 +54,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return DistinctUntilChangedCore(source, keySelector, EqualityComparer<TKey>.Default);
+            return DistinctUntilChangedCore<TSource, TKey>(source, keySelector, comparer: null);
         }
 
         public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
@@ -99,11 +95,10 @@ namespace System.Linq
 
             public DistinctUntilChangedAsyncIterator(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
             {
-                Debug.Assert(comparer != null);
                 Debug.Assert(source != null);
 
                 _source = source;
-                _comparer = comparer;
+                _comparer = comparer ?? EqualityComparer<TSource>.Default;
             }
 
             public override AsyncIterator<TSource> Clone()
@@ -174,7 +169,7 @@ namespace System.Linq
             {
                 _source = source;
                 _keySelector = keySelector;
-                _comparer = comparer;
+                _comparer = comparer ?? EqualityComparer<TKey>.Default;
             }
 
             public override AsyncIterator<TSource> Clone()
@@ -245,7 +240,7 @@ namespace System.Linq
             {
                 _source = source;
                 _keySelector = keySelector;
-                _comparer = comparer;
+                _comparer = comparer ?? EqualityComparer<TKey>.Default;
             }
 
             public override AsyncIterator<TSource> Clone()

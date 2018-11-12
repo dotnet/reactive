@@ -17,7 +17,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return MaxByCore(source, keySelector, Comparer<TKey>.Default, CancellationToken.None);
+            return MaxByCore(source, keySelector, comparer: null, CancellationToken.None);
         }
 
         public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken)
@@ -27,7 +27,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return MaxByCore(source, keySelector, Comparer<TKey>.Default, cancellationToken);
+            return MaxByCore(source, keySelector, comparer: null, cancellationToken);
         }
 
         public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
@@ -36,8 +36,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
             return MaxByCore(source, keySelector, comparer, CancellationToken.None);
         }
@@ -48,8 +46,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
             return MaxByCore(source, keySelector, comparer, cancellationToken);
         }
@@ -61,7 +57,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return MaxByCore(source, keySelector, Comparer<TKey>.Default, CancellationToken.None);
+            return MaxByCore<TSource, TKey>(source, keySelector, comparer: null, CancellationToken.None);
         }
 
         public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, CancellationToken cancellationToken)
@@ -71,7 +67,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return MaxByCore(source, keySelector, Comparer<TKey>.Default, cancellationToken);
+            return MaxByCore<TSource, TKey>(source, keySelector, comparer: null, cancellationToken);
         }
 
         public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IComparer<TKey> comparer)
@@ -80,8 +76,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
             return MaxByCore(source, keySelector, comparer, CancellationToken.None);
         }
@@ -92,19 +86,27 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
             return MaxByCore(source, keySelector, comparer, cancellationToken);
         }
 
         private static Task<IList<TSource>> MaxByCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
         {
+            if (comparer == null)
+            {
+                comparer = Comparer<TKey>.Default;
+            }
+
             return ExtremaBy(source, keySelector, (key, minValue) => comparer.Compare(key, minValue), cancellationToken);
         }
 
         private static Task<IList<TSource>> MaxByCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
         {
+            if (comparer == null)
+            {
+                comparer = Comparer<TKey>.Default;
+            }
+
             return ExtremaBy(source, keySelector, (key, minValue) => comparer.Compare(key, minValue), cancellationToken);
         }
     }
