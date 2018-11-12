@@ -32,16 +32,6 @@ namespace System.Linq
             enumerator.state = AsyncIteratorState.Allocated;
             enumerator.cancellationToken = cancellationToken;
 
-            try
-            {
-                enumerator.OnGetEnumerator(cancellationToken);
-            }
-            catch
-            {
-                enumerator.DisposeAsync(); // REVIEW: fire-and-forget?
-                throw;
-            }
-
             return enumerator;
         }
 
@@ -94,10 +84,6 @@ namespace System.Linq
         public abstract AsyncIterator<TSource> Clone();
 
         protected abstract ValueTask<bool> MoveNextCore(CancellationToken cancellationToken);
-
-        protected virtual void OnGetEnumerator(CancellationToken cancellationToken)
-        {
-        }
     }
 
     internal enum AsyncIteratorState
