@@ -62,14 +62,6 @@ namespace Tests
         [Fact]
         public void TakeLast_BugFix_TakeLast_Zero_TakesForever()
         {
-            var isSet = false;
-            new int[] { 1, 2, 3, 4 }.ToAsyncEnumerable()
-                .TakeLast(0)
-                .ForEachAsync(_ => { isSet = true; })
-                .Wait(WaitTimeoutMs);
-
-            Assert.False(isSet);
-
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(0);
 
             var e = xs.GetAsyncEnumerator();
