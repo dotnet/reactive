@@ -14,9 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Finally<TSource>(this IAsyncEnumerable<TSource> source, Action finallyAction)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (finallyAction == null)
-                throw new ArgumentNullException(nameof(finallyAction));
+                throw Error.ArgumentNull(nameof(finallyAction));
 
             return new FinallyAsyncIterator<TSource>(source, finallyAction);
         }
@@ -24,9 +24,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Finally<TSource>(this IAsyncEnumerable<TSource> source, Func<Task> finallyAction)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (finallyAction == null)
-                throw new ArgumentNullException(nameof(finallyAction));
+                throw Error.ArgumentNull(nameof(finallyAction));
 
             return new FinallyAsyncIteratorWithTask<TSource>(source, finallyAction);
         }

@@ -15,7 +15,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Defer<TSource>(Func<IAsyncEnumerable<TSource>> factory)
         {
             if (factory == null)
-                throw new ArgumentNullException(nameof(factory));
+                throw Error.ArgumentNull(nameof(factory));
 
             return CreateEnumerable(ct => factory().GetAsyncEnumerator(ct));
         }
@@ -23,7 +23,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Defer<TSource>(Func<Task<IAsyncEnumerable<TSource>>> factory)
         {
             if (factory == null)
-                throw new ArgumentNullException(nameof(factory));
+                throw Error.ArgumentNull(nameof(factory));
 
             return new AnonymousAsyncEnumerableWithTask<TSource>(async ct => (await factory().ConfigureAwait(false)).GetAsyncEnumerator(ct));
         }

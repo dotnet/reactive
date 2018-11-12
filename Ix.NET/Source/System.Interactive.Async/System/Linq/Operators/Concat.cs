@@ -14,7 +14,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IAsyncEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+                throw Error.ArgumentNull(nameof(sources));
 
             return new ConcatAsyncEnumerableAsyncIterator<TSource>(sources);
         }
@@ -22,7 +22,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+                throw Error.ArgumentNull(nameof(sources));
 
             return ConcatCore(sources);
         }
@@ -30,7 +30,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Concat<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+                throw Error.ArgumentNull(nameof(sources));
 
             return ConcatCore(sources);
         }

@@ -12,7 +12,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TValue> Throw<TValue>(Exception exception)
         {
             if (exception == null)
-                throw new ArgumentNullException(nameof(exception));
+                throw Error.ArgumentNull(nameof(exception));
 
 #if NO_TASK_FROMEXCEPTION
             var tcs = new TaskCompletionSource<bool>();

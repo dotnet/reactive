@@ -14,9 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Scan<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException(nameof(accumulator));
+                throw Error.ArgumentNull(nameof(accumulator));
 
             return new ScanAsyncEnumerable<TSource>(source, accumulator);
         }
@@ -24,9 +24,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TAccumulate> Scan<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException(nameof(accumulator));
+                throw Error.ArgumentNull(nameof(accumulator));
 
             return new ScanAsyncEnumerable<TSource, TAccumulate>(source, seed, accumulator);
         }
@@ -34,9 +34,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Scan<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, Task<TSource>> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException(nameof(accumulator));
+                throw Error.ArgumentNull(nameof(accumulator));
 
             return new ScanAsyncEnumerableWithTask<TSource>(source, accumulator);
         }
@@ -44,9 +44,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TAccumulate> Scan<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, Task<TAccumulate>> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException(nameof(accumulator));
+                throw Error.ArgumentNull(nameof(accumulator));
 
             return new ScanAsyncEnumerableWithTask<TSource, TAccumulate>(source, seed, accumulator);
         }

@@ -14,11 +14,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Timeout<TSource>(this IAsyncEnumerable<TSource> source, TimeSpan timeout)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             var num = (long)timeout.TotalMilliseconds;
             if (num < -1L || num > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(timeout));
+                throw Error.ArgumentOutOfRange(nameof(timeout));
 
             return new TimeoutAsyncIterator<TSource>(source, timeout);
         }

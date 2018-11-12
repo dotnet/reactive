@@ -14,9 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Using<TSource, TResource>(Func<TResource> resourceFactory, Func<TResource, IAsyncEnumerable<TSource>> enumerableFactory) where TResource : IDisposable
         {
             if (resourceFactory == null)
-                throw new ArgumentNullException(nameof(resourceFactory));
+                throw Error.ArgumentNull(nameof(resourceFactory));
             if (enumerableFactory == null)
-                throw new ArgumentNullException(nameof(enumerableFactory));
+                throw Error.ArgumentNull(nameof(enumerableFactory));
 
             return new UsingAsyncIterator<TSource, TResource>(resourceFactory, enumerableFactory);
         }
@@ -24,9 +24,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Using<TSource, TResource>(Func<Task<TResource>> resourceFactory, Func<TResource, Task<IAsyncEnumerable<TSource>>> enumerableFactory) where TResource : IDisposable
         {
             if (resourceFactory == null)
-                throw new ArgumentNullException(nameof(resourceFactory));
+                throw Error.ArgumentNull(nameof(resourceFactory));
             if (enumerableFactory == null)
-                throw new ArgumentNullException(nameof(enumerableFactory));
+                throw Error.ArgumentNull(nameof(enumerableFactory));
 
             return new UsingAsyncIteratorWithTask<TSource, TResource>(resourceFactory, enumerableFactory);
         }

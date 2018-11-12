@@ -13,7 +13,7 @@ namespace System.Linq
         public static Task<TSource> Min<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return MinCore(source, comparer, CancellationToken.None);
         }
@@ -21,7 +21,7 @@ namespace System.Linq
         public static Task<TSource> Min<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return MinCore(source, comparer, cancellationToken);
         }
@@ -38,7 +38,7 @@ namespace System.Linq
             try
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
 
                 var min = e.Current;
 

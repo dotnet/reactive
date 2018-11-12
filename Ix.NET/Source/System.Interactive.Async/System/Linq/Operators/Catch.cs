@@ -16,9 +16,9 @@ namespace System.Linq
             where TException : Exception
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (handler == null)
-                throw new ArgumentNullException(nameof(handler));
+                throw Error.ArgumentNull(nameof(handler));
 
             return new CatchAsyncIterator<TSource, TException>(source, handler);
         }
@@ -27,9 +27,9 @@ namespace System.Linq
             where TException : Exception
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (handler == null)
-                throw new ArgumentNullException(nameof(handler));
+                throw Error.ArgumentNull(nameof(handler));
 
             return new CatchAsyncIteratorWithTask<TSource, TException>(source, handler);
         }
@@ -37,7 +37,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Catch<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+                throw Error.ArgumentNull(nameof(sources));
 
             return CatchCore(sources);
         }
@@ -45,7 +45,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Catch<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+                throw Error.ArgumentNull(nameof(sources));
 
             return CatchCore(sources);
         }
@@ -53,9 +53,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Catch<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException(nameof(first));
+                throw Error.ArgumentNull(nameof(first));
             if (second == null)
-                throw new ArgumentNullException(nameof(second));
+                throw Error.ArgumentNull(nameof(second));
 
             return CatchCore(new[] { first, second });
         }
