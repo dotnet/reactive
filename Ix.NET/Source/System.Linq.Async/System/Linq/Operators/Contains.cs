@@ -30,8 +30,6 @@ namespace System.Linq
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return ContainsCore(source, value, comparer, CancellationToken.None);
         }
@@ -40,8 +38,6 @@ namespace System.Linq
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return ContainsCore(source, value, comparer, cancellationToken);
         }

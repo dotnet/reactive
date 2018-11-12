@@ -17,7 +17,7 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
-            return SequenceEqualCore(first, second, EqualityComparer<TSource>.Default, CancellationToken.None);
+            return SequenceEqualCore(first, second, comparer: null, CancellationToken.None);
         }
 
         public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken)
@@ -27,7 +27,7 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
-            return SequenceEqualCore(first, second, EqualityComparer<TSource>.Default, cancellationToken);
+            return SequenceEqualCore(first, second, comparer: null, cancellationToken);
         }
 
         public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
@@ -36,8 +36,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(first));
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return SequenceEqualCore(first, second, comparer, CancellationToken.None);
         }
@@ -48,8 +46,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(first));
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return SequenceEqualCore(first, second, comparer, cancellationToken);
         }
@@ -59,6 +55,11 @@ namespace System.Linq
             if (first is ICollection<TSource> firstCol && second is ICollection<TSource> secondCol && firstCol.Count != secondCol.Count)
             {
                 return Task.FromResult(false);
+            }
+
+            if (comparer == null)
+            {
+                comparer = EqualityComparer<TSource>.Default;
             }
 
             return Core();

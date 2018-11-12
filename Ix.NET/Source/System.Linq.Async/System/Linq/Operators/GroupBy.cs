@@ -18,7 +18,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
 
-            return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default);
+            return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer: null);
         }
 
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
@@ -27,8 +27,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer);
         }
@@ -40,7 +38,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
 
-            return new GroupedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default);
+            return new GroupedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer: null);
         }
 
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
@@ -49,8 +47,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return new GroupedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer);
         }
@@ -64,7 +60,7 @@ namespace System.Linq
             if (elementSelector == null)
                 throw Error.ArgumentNull(nameof(elementSelector));
 
-            return new GroupedAsyncEnumerable<TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default);
+            return new GroupedAsyncEnumerable<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null);
         }
 
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
@@ -75,8 +71,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
                 throw Error.ArgumentNull(nameof(elementSelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return new GroupedAsyncEnumerable<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
         }
@@ -90,7 +84,7 @@ namespace System.Linq
             if (elementSelector == null)
                 throw Error.ArgumentNull(nameof(elementSelector));
 
-            return new GroupedAsyncEnumerableWithTask<TSource, TKey, TElement>(source, keySelector, elementSelector, EqualityComparer<TKey>.Default);
+            return new GroupedAsyncEnumerableWithTask<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null);
         }
 
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer)
@@ -101,8 +95,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
                 throw Error.ArgumentNull(nameof(elementSelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return new GroupedAsyncEnumerableWithTask<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
         }
@@ -116,7 +108,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-            return new GroupedResultAsyncEnumerable<TSource, TKey, TResult>(source, keySelector, resultSelector, EqualityComparer<TKey>.Default);
+            return new GroupedResultAsyncEnumerable<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer: null);
         }
 
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, IAsyncEnumerable<TSource>, TResult> resultSelector, IEqualityComparer<TKey> comparer)
@@ -127,8 +119,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(keySelector));
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return new GroupedResultAsyncEnumerable<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer);
         }
@@ -142,7 +132,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-            return new GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult>(source, keySelector, resultSelector, EqualityComparer<TKey>.Default);
+            return new GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer: null);
         }
 
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, Task<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
@@ -153,8 +143,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(keySelector));
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return new GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer);
         }
@@ -170,7 +158,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-            return source.GroupBy(keySelector, elementSelector, EqualityComparer<TKey>.Default).Select(g => resultSelector(g.Key, g));
+            return source.GroupBy(keySelector, elementSelector, comparer: null).Select(g => resultSelector(g.Key, g));
         }
 
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector, IEqualityComparer<TKey> comparer)
@@ -183,8 +171,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(elementSelector));
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return source.GroupBy(keySelector, elementSelector, comparer).Select(g => resultSelector(g.Key, g));
         }
@@ -200,7 +186,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-            return source.GroupBy(keySelector, elementSelector, EqualityComparer<TKey>.Default).Select(g => resultSelector(g.Key, g));
+            return source.GroupBy<TSource, TKey, TElement>(keySelector, elementSelector, comparer: null).Select(g => resultSelector(g.Key, g));
         }
 
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, Task<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
@@ -213,8 +199,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(elementSelector));
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return source.GroupBy(keySelector, elementSelector, comparer).Select(g => resultSelector(g.Key, g));
         }
@@ -234,7 +218,6 @@ namespace System.Linq
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
                 Debug.Assert(resultSelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;
@@ -328,7 +311,6 @@ namespace System.Linq
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
                 Debug.Assert(resultSelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;
@@ -422,7 +404,6 @@ namespace System.Linq
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
                 Debug.Assert(elementSelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;
@@ -516,7 +497,6 @@ namespace System.Linq
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
                 Debug.Assert(elementSelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;
@@ -608,7 +588,6 @@ namespace System.Linq
             {
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;
@@ -698,7 +677,6 @@ namespace System.Linq
             {
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;

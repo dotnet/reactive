@@ -17,7 +17,6 @@ namespace Tests
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(default, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(Return42, default));
         }
 
         [Fact]

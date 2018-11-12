@@ -20,7 +20,6 @@ namespace Tests
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(default, Return42, new Eq()));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(Return42, null, new Eq()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(Return42, Return42, default));
         }
 
         [Fact]

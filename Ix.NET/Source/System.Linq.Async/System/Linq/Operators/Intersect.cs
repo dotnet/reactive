@@ -18,7 +18,7 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
-            return new IntersectAsyncIterator<TSource>(first, second, EqualityComparer<TSource>.Default);
+            return new IntersectAsyncIterator<TSource>(first, second, comparer: null);
         }
 
         public static IAsyncEnumerable<TSource> Intersect<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
@@ -27,8 +27,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(first));
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return new IntersectAsyncIterator<TSource>(first, second, comparer);
         }
@@ -46,7 +44,6 @@ namespace System.Linq
             {
                 Debug.Assert(first != null);
                 Debug.Assert(second != null);
-                Debug.Assert(comparer != null);
 
                 _first = first;
                 _second = second;

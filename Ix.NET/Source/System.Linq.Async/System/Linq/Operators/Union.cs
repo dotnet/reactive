@@ -18,7 +18,7 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
-            return UnionCore(first, second, EqualityComparer<TSource>.Default);
+            return UnionCore(first, second, comparer: null);
         }
 
         public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
@@ -27,8 +27,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(first));
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return UnionCore(first, second, comparer);
         }

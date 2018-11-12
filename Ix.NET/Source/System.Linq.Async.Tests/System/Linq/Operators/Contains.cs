@@ -18,11 +18,9 @@ namespace Tests
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains<int>(default, 42));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains<int>(default, 42, EqualityComparer<int>.Default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains<int>(Return42, 42, null));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains<int>(default, 42, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains<int>(default, 42, EqualityComparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains<int>(Return42, 42, null, CancellationToken.None));
         }
 
         [Fact]

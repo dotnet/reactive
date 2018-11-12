@@ -56,8 +56,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return ToDictionaryCore(source, keySelector, x => x, comparer, CancellationToken.None);
         }
@@ -68,8 +66,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return ToDictionaryCore(source, keySelector, x => x, comparer, cancellationToken);
         }
@@ -80,8 +76,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return ToDictionaryCore(source, keySelector, x => Task.FromResult(x), comparer, CancellationToken.None);
         }
@@ -92,8 +86,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return ToDictionaryCore(source, keySelector, x => Task.FromResult(x), comparer, cancellationToken);
         }
@@ -154,8 +146,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
                 throw Error.ArgumentNull(nameof(elementSelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return ToDictionaryCore(source, keySelector, elementSelector, comparer, CancellationToken.None);
         }
@@ -168,8 +158,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
                 throw Error.ArgumentNull(nameof(elementSelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return ToDictionaryCore(source, keySelector, elementSelector, comparer, cancellationToken);
         }
@@ -182,8 +170,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
                 throw Error.ArgumentNull(nameof(elementSelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return ToDictionaryCore(source, keySelector, elementSelector, comparer, CancellationToken.None);
         }
@@ -196,8 +182,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
                 throw Error.ArgumentNull(nameof(elementSelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return ToDictionaryCore(source, keySelector, elementSelector, comparer, cancellationToken);
         }

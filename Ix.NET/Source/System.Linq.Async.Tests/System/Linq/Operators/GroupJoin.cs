@@ -25,7 +25,6 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, default, x => x, (x, y) => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, x => x, default, (x, y) => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, x => x, x => x, default, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, x => x, x => x, (x, y) => x, default));
         }
 
         [Fact]

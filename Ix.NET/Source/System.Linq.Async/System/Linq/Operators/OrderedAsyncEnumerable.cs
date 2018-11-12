@@ -80,7 +80,6 @@ namespace System.Linq
         {
             Debug.Assert(source != null);
             Debug.Assert(keySelector != null);
-            Debug.Assert(comparer != null);
 
             _source = source;
             _keySelector = keySelector;
@@ -118,7 +117,6 @@ namespace System.Linq
         {
             Debug.Assert(source != null);
             Debug.Assert(keySelector != null);
-            Debug.Assert(comparer != null);
 
             _source = source;
             _keySelector = keySelector;
@@ -236,7 +234,7 @@ namespace System.Linq
 
         public AsyncEnumerableSorterBase(IComparer<TKey> comparer, bool descending, AsyncEnumerableSorter<TElement> next)
         {
-            _comparer = comparer;
+            _comparer = comparer ?? Comparer<TKey>.Default;
             _descending = descending;
             _next = next;
         }

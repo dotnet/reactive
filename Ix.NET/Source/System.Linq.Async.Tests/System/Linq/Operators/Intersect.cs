@@ -20,7 +20,6 @@ namespace Tests
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(default, Return42, new Eq()));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(Return42, default, new Eq()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect<int>(Return42, Return42, default));
         }
 
         [Fact]

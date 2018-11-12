@@ -15,7 +15,7 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return ToHashSetCore(source, EqualityComparer<TSource>.Default, CancellationToken.None);
+            return ToHashSetCore(source, comparer: null, CancellationToken.None);
         }
 
         public static Task<HashSet<TSource>> ToHashSet<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -23,15 +23,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return ToHashSetCore(source, EqualityComparer<TSource>.Default, cancellationToken);
+            return ToHashSetCore(source, comparer: null, cancellationToken);
         }
 
         public static Task<HashSet<TSource>> ToHashSet<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return ToHashSetCore(source, comparer, CancellationToken.None);
         }
@@ -40,8 +38,6 @@ namespace System.Linq
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return ToHashSetCore(source, comparer, cancellationToken);
         }

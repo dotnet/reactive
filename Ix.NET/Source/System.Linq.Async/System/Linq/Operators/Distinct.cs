@@ -16,15 +16,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return new DistinctAsyncIterator<TSource>(source, EqualityComparer<TSource>.Default);
+            return new DistinctAsyncIterator<TSource>(source, comparer: null);
         }
 
         public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return new DistinctAsyncIterator<TSource>(source, comparer);
         }
