@@ -73,10 +73,15 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
             {
+                // NB: Earlier behavior of this operator was more eager, causing the resource factory to be called upon calling
+                //     GetAsyncEnumerator. This is inconsistent with asynchronous "using" and with a C# 8.0 async iterator with
+                //     a using statement inside, so this logic got moved to MoveNextAsync instead.
+
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _enumerable.GetAsyncEnumerator(cancellationToken);
+                        _resource = _resourceFactory();
+                        _enumerator = _enumerableFactory(_resource).GetAsyncEnumerator(cancellationToken);
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
@@ -92,16 +97,6 @@ namespace System.Linq
                 }
 
                 return false;
-            }
-
-            protected override void OnGetEnumerator(CancellationToken cancellationToken)
-            {
-                // REVIEW: Wire cancellation to the functions.
-
-                _resource = _resourceFactory();
-                _enumerable = _enumerableFactory(_resource);
-
-                base.OnGetEnumerator(cancellationToken);
             }
         }
 

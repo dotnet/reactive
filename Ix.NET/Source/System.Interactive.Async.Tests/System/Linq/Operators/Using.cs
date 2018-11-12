@@ -35,9 +35,12 @@ namespace Tests
             );
 
             Assert.Equal(0, i);
+            Assert.Equal(0, d);
 
             var e = xs.GetAsyncEnumerator();
-            Assert.Equal(1, i);
+
+            Assert.Equal(0, i);
+            Assert.Equal(0, d);
         }
 
         [Fact]
@@ -56,16 +59,20 @@ namespace Tests
             );
 
             Assert.Equal(0, i);
+            Assert.Equal(0, d);
 
             var e = xs.GetAsyncEnumerator();
-            Assert.Equal(1, i);
+            Assert.Equal(0, i);
+            Assert.Equal(0, d);
 
             await e.DisposeAsync();
-            Assert.Equal(1, d);
+
+            Assert.Equal(0, i);
+            Assert.Equal(0, d);
         }
 
         [Fact]
-        public void Using3()
+        public async Task Using3()
         {
             var ex = new Exception("Bang!");
             var i = 0;
@@ -81,10 +88,17 @@ namespace Tests
             );
 
             Assert.Equal(0, i);
+            Assert.Equal(0, d);
 
-            AssertThrows<Exception>(() => xs.GetAsyncEnumerator(), ex_ => ex_ == ex);
+            var e = xs.GetAsyncEnumerator();
 
-            Assert.Equal(1, d);
+            Assert.Equal(0, i);
+            Assert.Equal(0, d);
+
+            await e.DisposeAsync();
+
+            Assert.Equal(0, i);
+            Assert.Equal(0, d);
         }
 
         [Fact]
@@ -105,9 +119,13 @@ namespace Tests
             Assert.Equal(0, i);
 
             var e = xs.GetAsyncEnumerator();
-            Assert.Equal(1, i);
+
+            Assert.Equal(0, i);
 
             HasNext(e, 42);
+
+            Assert.Equal(1, i);
+
             NoNext(e);
 
             Assert.True(disposed.Task.Result);
@@ -132,9 +150,12 @@ namespace Tests
             Assert.Equal(0, i);
 
             var e = xs.GetAsyncEnumerator();
-            Assert.Equal(1, i);
+
+            Assert.Equal(0, i);
 
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+
+            Assert.Equal(1, i);
 
             Assert.True(disposed.Task.Result);
         }
