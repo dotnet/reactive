@@ -40,25 +40,25 @@ namespace Tests
         }
 
         [Fact]
-        public void Count3()
+        public async Task Count3Async()
         {
             var ex = new Exception("Bang!");
             var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().Count(new Func<int, bool>(x => { throw ex; }));
-            AssertThrowsAsync(ys, ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public void Count4()
+        public async Task Count4Async()
         {
             var ex = new Exception("Bang!");
-            AssertThrowsAsync(Throw<int>(ex).Count(), ex);
+            await AssertThrowsAsync(Throw<int>(ex).Count(), ex);
         }
 
         [Fact]
-        public void Count5()
+        public async Task Count5Async()
         {
             var ex = new Exception("Bang!");
-            AssertThrowsAsync(Throw<int>(ex).Count(x => x < 3), ex);
+            await AssertThrowsAsync(Throw<int>(ex).Count(x => x < 3), ex);
         }
     }
 }

@@ -37,11 +37,11 @@ namespace Tests
         }
 
         [Fact]
-        public void ToList3()
+        public async Task ToList3Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).ToList();
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
     }
 }

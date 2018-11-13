@@ -40,25 +40,25 @@ namespace Tests
         }
 
         [Fact]
-        public void LongCount3()
+        public async Task LongCount3Async()
         {
             var ex = new Exception("Bang!");
             var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount(new Func<int, bool>(x => { throw ex; }));
-            AssertThrowsAsync(ys, ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public void LongCount4()
+        public async Task LongCount4Async()
         {
             var ex = new Exception("Bang!");
-            AssertThrowsAsync(Throw<int>(ex).LongCount(), ex);
+            await AssertThrowsAsync(Throw<int>(ex).LongCount(), ex);
         }
 
         [Fact]
-        public void LongCount5()
+        public async Task LongCount5Async()
         {
             var ex = new Exception("Bang!");
-            AssertThrowsAsync(Throw<int>(ex).LongCount(x => x < 3), ex);
+            await AssertThrowsAsync(Throw<int>(ex).LongCount(x => x < 3), ex);
         }
     }
 }

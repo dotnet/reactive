@@ -14,38 +14,44 @@ namespace Tests
     public class AsyncEnumerableTests
     {
         protected static readonly IAsyncEnumerable<int> Return42 = new[] { 42 }.ToAsyncEnumerable();
-        private static Func<Exception, bool> SingleInnerExceptionMatches(Exception ex) => e => ((AggregateException)e).Flatten().InnerExceptions.Single() == ex;
 
         private const int WaitTimeoutMs = 5000;
 
-#pragma warning disable xUnit1013 // Public method should be marked as test
-        public void AssertThrowsAsync<TException>(Task t)
+        protected async Task AssertThrowsAsync<TException>(Task t)
+            where TException : Exception
         {
-            AssertThrows<AggregateException>(() => t.Wait(WaitTimeoutMs), ex => ex.Flatten().InnerExceptions.Single() is TException);
+            await Assert.ThrowsAsync<TException>(() => t);
         }
 
-        public void AssertThrowsAsync(Task t, Exception e)
+        protected async Task AssertThrowsAsync(Task t, Exception e)
         {
-            AssertThrows(() => t.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(e));
+            try
+            {
+                await t;
+            }
+            catch (Exception ex)
+            {
+                Assert.Same(e, ex);
+            }
         }
 
-        public void AssertThrowsAsync<T>(ValueTask<T> t, Exception e)
+        protected Task AssertThrowsAsync<T>(ValueTask<T> t, Exception e)
         {
-            AssertThrows(() => t.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(e));
+            return AssertThrowsAsync(t.AsTask(), e);
         }
 
-        public async Task NoNextAsync<T>(IAsyncEnumerator<T> e)
+        protected async Task NoNextAsync<T>(IAsyncEnumerator<T> e)
         {
             Assert.False(await e.MoveNextAsync());
         }
 
-        public async Task HasNextAsync<T>(IAsyncEnumerator<T> e, T value)
+        protected async Task HasNextAsync<T>(IAsyncEnumerator<T> e, T value)
         {
             Assert.True(await e.MoveNextAsync());
             Assert.Equal(value, e.Current);
         }
 
-        public async Task SequenceIdentity<T>(IAsyncEnumerable<T> enumerable)
+        protected async Task SequenceIdentity<T>(IAsyncEnumerable<T> enumerable)
         {
             var en1 = enumerable.GetAsyncEnumerator();
             var en2 = enumerable.GetAsyncEnumerator();
@@ -60,7 +66,6 @@ namespace Tests
 
             res1.ShouldAllBeEquivalentTo(res2);
         }
-#pragma warning restore xUnit1013 // Public method should be marked as test
 
         protected static IAsyncEnumerable<TValue> Throw<TValue>(Exception exception)
         {

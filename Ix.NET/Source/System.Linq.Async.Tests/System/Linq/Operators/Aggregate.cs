@@ -45,29 +45,29 @@ namespace Tests
         }
 
         [Fact]
-        public void Aggregate2()
+        public async Task Aggregate2Async()
         {
             var xs = new int[0].ToAsyncEnumerable();
             var ys = xs.Aggregate((x, y) => x * y);
-            AssertThrowsAsync<InvalidOperationException>(ys);
+            await AssertThrowsAsync<InvalidOperationException>(ys);
         }
 
         [Fact]
-        public void Aggregate3()
+        public async Task Aggregate3Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = xs.Aggregate((x, y) => x * y);
-            AssertThrowsAsync(ys, ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public void Aggregate4()
+        public async Task Aggregate4Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(new Func<int, int, int>((x, y) => { throw ex; }));
-            AssertThrowsAsync(ys, ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
@@ -87,21 +87,21 @@ namespace Tests
         }
 
         [Fact]
-        public void Aggregate7()
+        public async Task Aggregate7Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = xs.Aggregate(1, (x, y) => x * y);
-            AssertThrowsAsync(ys, ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public void Aggregate8()
+        public async Task Aggregate8Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(1, new Func<int, int, int>((x, y) => { throw ex; }));
-            AssertThrowsAsync(ys, ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
@@ -121,30 +121,30 @@ namespace Tests
         }
 
         [Fact]
-        public void Aggregate11()
+        public async Task Aggregate11Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = xs.Aggregate(1, (x, y) => x * y, x => x + 1);
-            AssertThrowsAsync(ys, ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public void Aggregate12()
+        public async Task Aggregate12Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => { throw ex; }, x => x + 1);
-            AssertThrowsAsync(ys, ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public void Aggregate13()
+        public async Task Aggregate13Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate<int, int, int>(1, (x, y) => x * y, x => { throw ex; });
-            AssertThrowsAsync(ys, ex);
+            await AssertThrowsAsync(ys, ex);
         }
     }
 }

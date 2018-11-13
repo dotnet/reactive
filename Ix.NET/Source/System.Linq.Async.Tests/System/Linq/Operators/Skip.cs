@@ -65,14 +65,14 @@ namespace Tests
         }
 
         [Fact]
-        public void Skip4()
+        public async Task Skip4Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
             var ys = xs.Skip(2);
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

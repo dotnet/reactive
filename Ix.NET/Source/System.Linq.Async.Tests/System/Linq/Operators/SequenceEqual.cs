@@ -73,25 +73,25 @@ namespace Tests
         }
 
         [Fact]
-        public void SequenceEqual6()
+        public async Task SequenceEqual6Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = Throw<int>(ex);
             var res = xs.SequenceEqual(ys);
 
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public void SequenceEqual7()
+        public async Task SequenceEqual7Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var res = xs.SequenceEqual(ys);
 
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
@@ -138,25 +138,25 @@ namespace Tests
         }
 
         [Fact]
-        public void SequenceEqual13()
+        public async Task SequenceEqual13Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = Throw<int>(ex);
             var res = xs.SequenceEqual(ys, new Eq());
 
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public void SequenceEqual14()
+        public async Task SequenceEqual14Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var res = xs.SequenceEqual(ys, new Eq());
 
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
@@ -169,12 +169,12 @@ namespace Tests
         }
 
         [Fact]
-        public void SequenceEqual16()
+        public async Task SequenceEqual16Async()
         {
             var xs = new[] { 1, 2, -3, 4 }.ToAsyncEnumerable();
             var ys = new[] { 1, -2, 3, 4 }.ToAsyncEnumerable();
             var res = xs.SequenceEqual(ys, new EqEx());
-            AssertThrowsAsync<NotImplementedException>(res);
+            await AssertThrowsAsync<NotImplementedException>(res);
         }
 
         private sealed class EqEx : IEqualityComparer<int>

@@ -17,13 +17,13 @@ namespace Tests
         }
 
         [Fact]
-        public void Throw1()
+        public async System.Threading.Tasks.Task Throw1Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
     }
 }

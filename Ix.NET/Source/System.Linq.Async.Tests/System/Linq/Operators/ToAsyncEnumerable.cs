@@ -39,7 +39,7 @@ namespace Tests
             var xs = ToAsyncEnumerable_Sequence(ex).ToAsyncEnumerable();
             var e = xs.GetAsyncEnumerator();
             await HasNextAsync(e, 42);
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         private IEnumerable<int> ToAsyncEnumerable_Sequence(Exception e)
@@ -74,7 +74,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToAsyncEnumerable4()
+        public async Task ToAsyncEnumerable4Async()
         {
             var ex = new Exception("Bang!");
             var subscribed = false;
@@ -94,7 +94,7 @@ namespace Tests
 
             Assert.True(subscribed);
 
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -236,7 +236,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToAsyncEnumerable_With_Faulted_Task()
+        public async Task ToAsyncEnumerable_With_Faulted_TaskAsync()
         {
             var ex = new InvalidOperationException();
             var tcs = new TaskCompletionSource<int>();
@@ -245,11 +245,11 @@ namespace Tests
             var xs = tcs.Task.ToAsyncEnumerable();
             var e = xs.GetAsyncEnumerator();
 
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void ToAsyncEnumerable_With_Canceled_Task()
+        public async Task ToAsyncEnumerable_With_Canceled_TaskAsync()
         {
             var tcs = new TaskCompletionSource<int>();
             tcs.SetCanceled();
@@ -257,7 +257,7 @@ namespace Tests
             var xs = tcs.Task.ToAsyncEnumerable();
             var e = xs.GetAsyncEnumerator();
 
-            AssertThrowsAsync<TaskCanceledException>(e.MoveNextAsync().AsTask());
+            await AssertThrowsAsync<TaskCanceledException>(e.MoveNextAsync().AsTask());
         }
 
         private sealed class MyObservable<T> : IObservable<T>

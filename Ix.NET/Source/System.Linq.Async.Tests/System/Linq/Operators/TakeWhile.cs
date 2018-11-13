@@ -70,14 +70,14 @@ namespace Tests
         }
 
         [Fact]
-        public void TakeWhile5()
+        public async Task TakeWhile5Async()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile(new Func<int, bool>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -117,14 +117,14 @@ namespace Tests
         }
 
         [Fact]
-        public void TakeWhile9()
+        public async Task TakeWhile9Async()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile(new Func<int, int, bool>((x, i) => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
 

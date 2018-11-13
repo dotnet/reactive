@@ -37,11 +37,11 @@ namespace Tests
         }
 
         [Fact]
-        public void ToArray3()
+        public async Task ToArray3Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).ToArray();
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]

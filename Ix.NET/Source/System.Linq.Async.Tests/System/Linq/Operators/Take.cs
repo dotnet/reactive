@@ -65,14 +65,14 @@ namespace Tests
         }
 
         [Fact]
-        public void Take4()
+        public async Task Take4Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
             var ys = xs.Take(2);
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

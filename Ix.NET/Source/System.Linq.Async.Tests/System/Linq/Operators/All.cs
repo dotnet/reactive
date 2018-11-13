@@ -37,19 +37,19 @@ namespace Tests
         }
 
         [Fact]
-        public void All3()
+        public async Task All3Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).All(x => x % 2 == 0);
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public void All4()
+        public async Task All4Async()
         {
             var ex = new Exception("Bang!");
             var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().All(new Func<int, bool>(x => { throw ex; }));
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
     }
 }

@@ -63,11 +63,11 @@ namespace Tests
         }
 
         [Fact]
-        public void ElementAtOrDefault7()
+        public async Task ElementAtOrDefault7Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).ElementAtOrDefault(15);
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
     }
 }

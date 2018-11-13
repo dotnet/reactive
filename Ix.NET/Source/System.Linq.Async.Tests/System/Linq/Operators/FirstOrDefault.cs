@@ -61,19 +61,19 @@ namespace Tests
         }
 
         [Fact]
-        public void FirstOrDefault6()
+        public async Task FirstOrDefault6Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).FirstOrDefault();
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public void FirstOrDefault7()
+        public async Task FirstOrDefault7Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).FirstOrDefault(x => true);
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]

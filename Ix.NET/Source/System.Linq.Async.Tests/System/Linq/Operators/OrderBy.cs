@@ -55,14 +55,14 @@ namespace Tests
         }
 
         [Fact]
-        public void OrderBy2()
+        public async Task OrderBy2Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
             var ys = xs.OrderBy(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -75,14 +75,14 @@ namespace Tests
         }
 
         [Fact]
-        public void ThenBy2()
+        public async Task ThenBy2Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
             var ys = xs.OrderBy(x => x).ThenBy(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -98,14 +98,14 @@ namespace Tests
         }
 
         [Fact]
-        public void OrderByDescending2()
+        public async Task OrderByDescending2Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
             var ys = xs.OrderByDescending(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -118,14 +118,14 @@ namespace Tests
         }
 
         [Fact]
-        public void ThenByDescending2()
+        public async Task ThenByDescending2Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
             var ys = xs.OrderBy(x => x).ThenByDescending(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

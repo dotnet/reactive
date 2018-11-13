@@ -61,18 +61,18 @@ namespace Tests
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 1);
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void SelectMany3()
+        public async Task SelectMany3Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
             var ys = xs.SelectMany(x => Enumerable.Range(0, x).ToAsyncEnumerable());
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace Tests
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 1);
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -128,18 +128,18 @@ namespace Tests
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 1);
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void SelectMany7()
+        public async Task SelectMany7Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
             var ys = xs.SelectMany((x, i) => Enumerable.Range(0, x).ToAsyncEnumerable());
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -159,7 +159,7 @@ namespace Tests
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 1);
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -211,7 +211,7 @@ namespace Tests
             await HasNextAsync(e, 6);
             await HasNextAsync(e, 8);
             await HasNextAsync(e, 9);
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -230,7 +230,7 @@ namespace Tests
             await HasNextAsync(e, 3);
             await HasNextAsync(e, 8);
             await HasNextAsync(e, 10);
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

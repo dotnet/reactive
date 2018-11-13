@@ -26,24 +26,24 @@ namespace Tests
         }
 
         [Fact]
-        public void First1()
+        public async Task First1Async()
         {
             var res = AsyncEnumerable.Empty<int>().First();
-            AssertThrowsAsync<InvalidOperationException>(res);
+            await AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
-        public void First2()
+        public async Task First2Async()
         {
             var res = AsyncEnumerable.Empty<int>().First(x => true);
-            AssertThrowsAsync<InvalidOperationException>(res);
+            await AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
-        public void First3()
+        public async Task First3Async()
         {
             var res = Return42.First(x => x % 2 != 0);
-            AssertThrowsAsync<InvalidOperationException>(res);
+            await AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
@@ -61,19 +61,19 @@ namespace Tests
         }
 
         [Fact]
-        public void First6()
+        public async Task First6Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).First();
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public void First7()
+        public async Task First7Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).First(x => true);
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]

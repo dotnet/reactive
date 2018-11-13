@@ -87,7 +87,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Join5()
+        public async Task Join5Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
@@ -96,11 +96,11 @@ namespace Tests
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
 
             var e = res.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Join6()
+        public async Task Join6Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
@@ -109,11 +109,11 @@ namespace Tests
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
 
             var e = res.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Join7()
+        public async Task Join7Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
@@ -122,11 +122,11 @@ namespace Tests
             var res = xs.Join(ys, x => { throw ex; }, y => y, (x, y) => x + y);
 
             var e = res.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Join8()
+        public async Task Join8Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
@@ -135,11 +135,11 @@ namespace Tests
             var res = xs.Join(ys, x => x, y => { throw ex; }, (x, y) => x + y);
 
             var e = res.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Join9()
+        public async Task Join9Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
@@ -148,7 +148,7 @@ namespace Tests
             var res = xs.Join<int, int, int, int>(ys, x => x, y => y, (x, y) => { throw ex; });
 
             var e = res.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

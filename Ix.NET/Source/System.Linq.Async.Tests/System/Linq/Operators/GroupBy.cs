@@ -165,18 +165,18 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy4()
+        public async Task GroupBy4Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = xs.GroupBy(x => x);
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void GroupBy5()
+        public async Task GroupBy5Async()
         {
             var ex = new Exception("Bang!");
             var xs = GetXs(ex).ToAsyncEnumerable();
@@ -184,11 +184,11 @@ namespace Tests
 
             var e = ys.GetAsyncEnumerator();
 
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void GroupBy6()
+        public async Task GroupBy6Async()
         {
             var ex = new Exception("Bang!");
             var xs = GetXs(ex).ToAsyncEnumerable();
@@ -196,7 +196,7 @@ namespace Tests
 
             var e = ys.GetAsyncEnumerator();
 
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         private static IEnumerable<int> GetXs(Exception ex)
@@ -207,18 +207,18 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy7()
+        public async Task GroupBy7Async()
         {
             var ex = new Exception("Bang!");
             var xs = Return42;
             var ys = xs.GroupBy(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void GroupBy8()
+        public async Task GroupBy8Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -226,7 +226,7 @@ namespace Tests
 
             var e = ys.GetAsyncEnumerator();
 
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

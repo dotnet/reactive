@@ -53,14 +53,14 @@ namespace Tests
         }
 
         [Fact]
-        public void Reverse4()
+        public async Task Reverse4Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = xs.Reverse();
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

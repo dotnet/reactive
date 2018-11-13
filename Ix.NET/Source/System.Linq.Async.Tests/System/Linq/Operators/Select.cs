@@ -48,23 +48,23 @@ namespace Tests
         }
 
         [Fact]
-        public void Select3()
+        public async Task Select3Async()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = xs.Select(x => 1 / x);
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
+            await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public void Select4()
+        public async Task Select4Async()
         {
             var xs = new[] { 8, 5, 7 }.ToAsyncEnumerable();
             var ys = xs.Select((x, i) => 1 / i);
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
+            await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]

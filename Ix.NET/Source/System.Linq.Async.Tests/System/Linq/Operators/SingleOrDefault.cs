@@ -61,26 +61,26 @@ namespace Tests
         }
 
         [Fact]
-        public void SingleOrDefault6()
+        public async Task SingleOrDefault6Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).SingleOrDefault();
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public void SingleOrDefault7()
+        public async Task SingleOrDefault7Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).SingleOrDefault(x => true);
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public void SingleOrDefault8()
+        public async Task SingleOrDefault8Async()
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().SingleOrDefault();
-            AssertThrowsAsync<InvalidOperationException>(res);
+            await AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
@@ -98,10 +98,10 @@ namespace Tests
         }
 
         [Fact]
-        public void SingleOrDefault11()
+        public async Task SingleOrDefault11Async()
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().SingleOrDefault(x => true);
-            AssertThrowsAsync<InvalidOperationException>(res);
+            await AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]

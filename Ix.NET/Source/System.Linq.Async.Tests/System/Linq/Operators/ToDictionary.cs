@@ -55,10 +55,10 @@ namespace Tests
         }
 
         [Fact]
-        public void ToDictionary2()
+        public async Task ToDictionary2Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            AssertThrowsAsync<ArgumentException>(xs.ToDictionary(x => x % 2));
+            await AssertThrowsAsync<ArgumentException>(xs.ToDictionary(x => x % 2));
         }
 
         [Fact]
@@ -71,10 +71,10 @@ namespace Tests
         }
 
         [Fact]
-        public void ToDictionary4()
+        public async Task ToDictionary4Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            AssertThrowsAsync<ArgumentException>(xs.ToDictionary(x => x % 2, x => x + 1));
+            await AssertThrowsAsync<ArgumentException>(xs.ToDictionary(x => x % 2, x => x + 1));
         }
 
         [Fact]
@@ -87,10 +87,10 @@ namespace Tests
         }
 
         [Fact]
-        public void ToDictionary6()
+        public async Task ToDictionary6Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            AssertThrowsAsync<ArgumentException>(xs.ToDictionary(x => x % 2, new Eq()));
+            await AssertThrowsAsync<ArgumentException>(xs.ToDictionary(x => x % 2, new Eq()));
         }
 
         [Fact]

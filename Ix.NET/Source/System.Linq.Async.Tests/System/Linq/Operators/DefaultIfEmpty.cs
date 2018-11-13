@@ -86,23 +86,23 @@ namespace Tests
         }
 
         [Fact]
-        public void DefaultIfEmpty7()
+        public async Task DefaultIfEmpty7Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex).DefaultIfEmpty();
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void DefaultIfEmpty8()
+        public async Task DefaultIfEmpty8Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex).DefaultIfEmpty(24);
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

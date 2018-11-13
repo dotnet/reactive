@@ -48,39 +48,39 @@ namespace Tests
         }
 
         [Fact]
-        public void ForEachAsync3()
+        public async Task ForEachAsync3Async()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            AssertThrowsAsync(xs.ForEachAsync(x => { throw ex; }), ex);
+            await AssertThrowsAsync(xs.ForEachAsync(x => { throw ex; }), ex);
         }
 
         [Fact]
-        public void ForEachAsync4()
+        public async Task ForEachAsync4Async()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            AssertThrowsAsync(xs.ForEachAsync((x, i) => { throw ex; }), ex);
+            await AssertThrowsAsync(xs.ForEachAsync((x, i) => { throw ex; }), ex);
         }
 
         [Fact]
-        public void ForEachAsync5()
+        public async Task ForEachAsync5Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
 
-            AssertThrowsAsync(xs.ForEachAsync(x => { throw ex; }), ex);
+            await AssertThrowsAsync(xs.ForEachAsync(x => { throw ex; }), ex);
         }
 
         [Fact]
-        public void ForEachAsync6()
+        public async Task ForEachAsync6Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
 
-            AssertThrowsAsync(xs.ForEachAsync((x, i) => { throw ex; }), ex);
+            await AssertThrowsAsync(xs.ForEachAsync((x, i) => { throw ex; }), ex);
         }
     }
 }

@@ -24,10 +24,10 @@ namespace Tests
         }
 
         [Fact]
-        public void ElementAt1()
+        public async Task ElementAt1Async()
         {
             var res = AsyncEnumerable.Empty<int>().ElementAt(0);
-            AssertThrowsAsync<ArgumentOutOfRangeException>(res);
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(res);
         }
 
         [Fact]
@@ -38,10 +38,10 @@ namespace Tests
         }
 
         [Fact]
-        public void ElementAt3()
+        public async Task ElementAt3Async()
         {
             var res = Return42.ElementAt(1);
-            AssertThrowsAsync<ArgumentOutOfRangeException>(res);
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(res);
         }
 
         [Fact]
@@ -52,18 +52,18 @@ namespace Tests
         }
 
         [Fact]
-        public void ElementAt5()
+        public async Task ElementAt5Async()
         {
             var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAt(7);
-            AssertThrowsAsync<ArgumentOutOfRangeException>(res);
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(res);
         }
 
         [Fact]
-        public void ElementAt6()
+        public async Task ElementAt6Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).ElementAt(15);
-            AssertThrowsAsync(res, ex);
+            await AssertThrowsAsync(res, ex);
         }
     }
 }

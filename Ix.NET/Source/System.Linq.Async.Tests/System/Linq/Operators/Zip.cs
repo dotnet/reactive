@@ -62,7 +62,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Zip4()
+        public async Task Zip4Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
@@ -70,11 +70,11 @@ namespace Tests
             var res = xs.Zip(ys, (x, y) => x * y);
 
             var e = res.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Zip5()
+        public async Task Zip5Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
@@ -82,11 +82,11 @@ namespace Tests
             var res = xs.Zip(ys, (x, y) => x * y);
 
             var e = res.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Zip6()
+        public async Task Zip6Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
@@ -94,7 +94,7 @@ namespace Tests
             var res = xs.Zip(ys, (x, y) => { if (x > 0) throw ex; return x * y; });
 
             var e = res.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

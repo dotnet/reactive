@@ -44,17 +44,17 @@ namespace Tests
             await HasNextAsync(e, 1);
             await HasNextAsync(e, 2);
             await HasNextAsync(e, 3);
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Concat3()
+        public async Task Concat3Async()
         {
             var ex = new Exception("Bang");
             var ys = Throw<int>(ex).Concat(new[] { 4, 5, 6 }.ToAsyncEnumerable());
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

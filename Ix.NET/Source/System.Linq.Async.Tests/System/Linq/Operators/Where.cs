@@ -60,7 +60,7 @@ namespace Tests
             await HasNextAsync(e, 8);
             await HasNextAsync(e, 5);
             await HasNextAsync(e, 7);
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -74,29 +74,29 @@ namespace Tests
             await HasNextAsync(e, 8);
             await HasNextAsync(e, 5);
             await HasNextAsync(e, 7);
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Where5()
+        public async Task Where5Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
             var ys = xs.Where(x => true);
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Where6()
+        public async Task Where6Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
 
             var ys = xs.Where((x, i) => true);
             var e = ys.GetAsyncEnumerator();
-            AssertThrowsAsync(e.MoveNextAsync(), ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
