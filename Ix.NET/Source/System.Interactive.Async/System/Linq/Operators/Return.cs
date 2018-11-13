@@ -15,9 +15,9 @@ namespace System.Linq
             return new ReturnEnumerable<TValue>(value);
         }
 
-        // FIXME: AsyncListPartition is internal to the project System.Linq.Async
-        // project, not sure how to expose it here
-        private sealed class ReturnEnumerable<TValue> : IAsyncEnumerable<TValue>
+        // REVIEW: Add support for IAsyncPartition<T>.
+
+        private sealed class ReturnEnumerable<TValue> : IAsyncEnumerable<TValue>, IAsyncIListProvider<TValue>
         {
             private readonly TValue _value;
 
@@ -31,16 +31,22 @@ namespace System.Linq
                 return new ReturnEnumerator(_value);
             }
 
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(1);
+
+            public Task<TValue[]> ToArrayAsync(CancellationToken cancellationToken) => Task.FromResult(new[] { _value });
+
+            public Task<List<TValue>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(new List<TValue>(1) { _value });
+
             private sealed class ReturnEnumerator : IAsyncEnumerator<TValue>
             {
-                public TValue Current { get; private set; }
-
                 private bool _once;
 
                 public ReturnEnumerator(TValue current)
                 {
                     Current = current;
                 }
+
+                public TValue Current { get; private set; }
 
                 public ValueTask DisposeAsync()
                 {
@@ -54,6 +60,7 @@ namespace System.Linq
                     {
                         return new ValueTask<bool>(false);
                     }
+
                     _once = true;
                     return new ValueTask<bool>(true);
                 }
