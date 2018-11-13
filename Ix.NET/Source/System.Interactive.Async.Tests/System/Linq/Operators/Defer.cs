@@ -14,7 +14,7 @@ namespace Tests
         [Fact]
         public void Defer_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Defer<int>(default(Func<IAsyncEnumerable<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Defer<int>(default(Func<IAsyncEnumerable<int>>)));
         }
 
         [Fact]

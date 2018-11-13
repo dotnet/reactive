@@ -15,8 +15,8 @@ namespace Tests
         [Fact]
         public void Finally_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Finally(default(IAsyncEnumerable<int>), () => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Finally(Return42, default(Action)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Finally(default(IAsyncEnumerable<int>), () => { }));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Finally(Return42, default(Action)));
         }
 
         [Fact]

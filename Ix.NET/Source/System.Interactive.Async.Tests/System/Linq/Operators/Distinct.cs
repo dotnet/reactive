@@ -15,13 +15,13 @@ namespace Tests
         [Fact]
         public void Distinct_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct<int, int>(Return42, default(Func<int, int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Distinct<int, int>(Return42, default(Func<int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(Return42, default(Func<int, int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(Return42, default(Func<int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(Return42, default(Func<int, int>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(Return42, default(Func<int, int>), EqualityComparer<int>.Default));
         }
 
         [Fact]

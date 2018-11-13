@@ -37,9 +37,9 @@ namespace Tests
         [Fact]
         public void RepeatSequence_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Repeat(default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Repeat(default(IAsyncEnumerable<int>), 3));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Repeat(Return42, -1));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Repeat(default(IAsyncEnumerable<int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Repeat(default(IAsyncEnumerable<int>), 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Repeat(Return42, -1));
         }
 
         [Fact]

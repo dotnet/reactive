@@ -15,12 +15,12 @@ namespace Tests
         [Fact]
         public void Buffer_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Buffer(default(IAsyncEnumerable<int>), 1));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Buffer(default(IAsyncEnumerable<int>), 1, 1));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Buffer(default(IAsyncEnumerable<int>), 1));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Buffer(default(IAsyncEnumerable<int>), 1, 1));
 
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Buffer(Return42, -1));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Buffer(Return42, -1, 1));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Buffer(Return42, 1, -1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Buffer(Return42, -1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Buffer(Return42, -1, 1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Buffer(Return42, 1, -1));
         }
 
         [Fact]

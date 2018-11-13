@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -14,8 +13,8 @@ namespace Tests
         [Fact]
         public void StartWith_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.StartWith(default, new[] { 1 }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.StartWith(Return42, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.StartWith(default, new[] { 1 }));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.StartWith(Return42, default));
         }
 
         [Fact]
