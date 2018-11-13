@@ -19,12 +19,6 @@ namespace Tests
         protected const int WaitTimeoutMs = 5000;
 
 #pragma warning disable xUnit1013 // Public method should be marked as test
-        public void AssertThrows<E>(Action a)
-            where E : Exception
-        {
-            Assert.Throws<E>(a);
-        }
-
         public void AssertThrows<E>(Action a, Func<E, bool> assert)
             where E : Exception
         {

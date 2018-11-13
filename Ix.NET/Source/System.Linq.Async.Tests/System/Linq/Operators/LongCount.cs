@@ -26,19 +26,17 @@ namespace Tests
         }
 
         [Fact]
-        public void LongCount1()
+        public async Task LongCount1()
         {
-            Assert.Equal(0, new int[0].ToAsyncEnumerable().LongCount().Result);
-            Assert.Equal(3, new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount().Result);
-            AssertThrows<AggregateException>(() => Throw<int>(new Exception("Bang!")).LongCount().Wait(WaitTimeoutMs));
+            Assert.Equal(0, await new int[0].ToAsyncEnumerable().LongCount());
+            Assert.Equal(3, await new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount());
         }
 
         [Fact]
-        public void LongCount2()
+        public async Task LongCount2()
         {
-            Assert.Equal(0, new int[0].ToAsyncEnumerable().LongCount(x => x < 3).Result);
-            Assert.Equal(2, new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount(x => x < 3).Result);
-            AssertThrows<AggregateException>(() => Throw<int>(new Exception("Bang!")).LongCount(x => x < 3).Wait(WaitTimeoutMs));
+            Assert.Equal(0, await new int[0].ToAsyncEnumerable().LongCount(x => x < 3));
+            Assert.Equal(2, await new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount(x => x < 3));
         }
 
         [Fact]
@@ -47,6 +45,20 @@ namespace Tests
             var ex = new Exception("Bang!");
             var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount(new Func<int, bool>(x => { throw ex; }));
             AssertThrowsAsync(ys, ex);
+        }
+
+        [Fact]
+        public void LongCount4()
+        {
+            var ex = new Exception("Bang!");
+            AssertThrowsAsync(Throw<int>(ex).LongCount(), ex);
+        }
+
+        [Fact]
+        public void LongCount5()
+        {
+            var ex = new Exception("Bang!");
+            AssertThrowsAsync(Throw<int>(ex).LongCount(x => x < 3), ex);
         }
     }
 }

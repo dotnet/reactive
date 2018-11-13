@@ -26,19 +26,17 @@ namespace Tests
         }
 
         [Fact]
-        public void Count1()
+        public async Task Count1()
         {
-            Assert.Equal(0, new int[0].ToAsyncEnumerable().Count().Result);
-            Assert.Equal(3, new[] { 1, 2, 3 }.ToAsyncEnumerable().Count().Result);
-            AssertThrows<AggregateException>(() => Throw<int>(new Exception("Bang!")).Count().Wait(WaitTimeoutMs));
+            Assert.Equal(0, await new int[0].ToAsyncEnumerable().Count());
+            Assert.Equal(3, await new[] { 1, 2, 3 }.ToAsyncEnumerable().Count());
         }
 
         [Fact]
-        public void Count2()
+        public async Task Count2()
         {
-            Assert.Equal(0, new int[0].ToAsyncEnumerable().Count(x => x < 3).Result);
-            Assert.Equal(2, new[] { 1, 2, 3 }.ToAsyncEnumerable().Count(x => x < 3).Result);
-            AssertThrows<AggregateException>(() => Throw<int>(new Exception("Bang!")).Count(x => x < 3).Wait(WaitTimeoutMs));
+            Assert.Equal(0, await new int[0].ToAsyncEnumerable().Count(x => x < 3));
+            Assert.Equal(2, await new[] { 1, 2, 3 }.ToAsyncEnumerable().Count(x => x < 3));
         }
 
         [Fact]
@@ -47,6 +45,20 @@ namespace Tests
             var ex = new Exception("Bang!");
             var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().Count(new Func<int, bool>(x => { throw ex; }));
             AssertThrowsAsync(ys, ex);
+        }
+
+        [Fact]
+        public void Count4()
+        {
+            var ex = new Exception("Bang!");
+            AssertThrowsAsync(Throw<int>(ex).Count(), ex);
+        }
+
+        [Fact]
+        public void Count5()
+        {
+            var ex = new Exception("Bang!");
+            AssertThrowsAsync(Throw<int>(ex).Count(x => x < 3), ex);
         }
     }
 }
