@@ -68,7 +68,7 @@ namespace Tests
             var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
 
             var e = res.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace Tests
             var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
 
             var e = res.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace Tests
             var res = xs.GroupJoin(ys, x => { throw ex; }, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
 
             var e = res.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -107,7 +107,7 @@ namespace Tests
             var res = xs.GroupJoin(ys, x => x % 3, y => { throw ex; }, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
 
             var e = res.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -126,7 +126,7 @@ namespace Tests
 
             var e = res.GetAsyncEnumerator();
             await HasNextAsync(e, "0 - 36");
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
     }
 }

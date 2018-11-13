@@ -43,7 +43,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).Any(x => x % 2 == 0);
-            AssertThrows(() => res.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(res, ex);
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().Any(new Func<int, bool>(x => { throw ex; }));
-            AssertThrows(() => res.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(res, ex);
         }
 
         [Fact]

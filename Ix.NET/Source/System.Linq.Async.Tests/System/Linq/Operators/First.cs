@@ -65,7 +65,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).First();
-            AssertThrows(() => res.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(res, ex);
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).First(x => true);
-            AssertThrows(() => res.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(res, ex);
         }
 
         [Fact]

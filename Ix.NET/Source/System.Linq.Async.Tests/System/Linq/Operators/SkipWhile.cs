@@ -80,7 +80,7 @@ namespace Tests
             var ys = xs.SkipWhile(new Func<int, bool>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -127,7 +127,7 @@ namespace Tests
             var ys = xs.SkipWhile(new Func<int, int, bool>((x, i) => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

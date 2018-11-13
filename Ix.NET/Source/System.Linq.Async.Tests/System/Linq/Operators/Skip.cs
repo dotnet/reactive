@@ -72,7 +72,7 @@ namespace Tests
             var ys = xs.Skip(2);
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

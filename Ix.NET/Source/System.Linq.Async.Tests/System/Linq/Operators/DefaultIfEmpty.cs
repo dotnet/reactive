@@ -92,7 +92,7 @@ namespace Tests
             var xs = Throw<int>(ex).DefaultIfEmpty();
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace Tests
             var xs = Throw<int>(ex).DefaultIfEmpty(24);
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

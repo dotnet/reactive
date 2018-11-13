@@ -62,7 +62,7 @@ namespace Tests
             var ys = xs.OrderBy(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace Tests
             var ys = xs.OrderBy(x => x).ThenBy(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace Tests
             var ys = xs.OrderByDescending(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -125,7 +125,7 @@ namespace Tests
             var ys = xs.OrderBy(x => x).ThenByDescending(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

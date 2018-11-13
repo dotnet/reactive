@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -61,7 +60,7 @@ namespace Tests
             await HasNextAsync(e, 8);
             await HasNextAsync(e, 5);
             await HasNextAsync(e, 7);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -75,7 +74,7 @@ namespace Tests
             await HasNextAsync(e, 8);
             await HasNextAsync(e, 5);
             await HasNextAsync(e, 7);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -86,7 +85,7 @@ namespace Tests
             var ys = xs.Where(x => true);
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -97,9 +96,8 @@ namespace Tests
 
             var ys = xs.Where((x, i) => true);
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
-
 
         [Fact]
         public async Task Where7()

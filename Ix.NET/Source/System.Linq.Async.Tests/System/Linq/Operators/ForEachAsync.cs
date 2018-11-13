@@ -53,7 +53,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            AssertThrows(() => xs.ForEachAsync(x => { throw ex; }).Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(xs.ForEachAsync(x => { throw ex; }), ex);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            AssertThrows(() => xs.ForEachAsync((x, i) => { throw ex; }).Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(xs.ForEachAsync((x, i) => { throw ex; }), ex);
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
 
-            AssertThrows(() => xs.ForEachAsync(x => { throw ex; }).Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(xs.ForEachAsync(x => { throw ex; }), ex);
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
 
-            AssertThrows(() => xs.ForEachAsync((x, i) => { throw ex; }).Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(xs.ForEachAsync((x, i) => { throw ex; }), ex);
         }
     }
 }

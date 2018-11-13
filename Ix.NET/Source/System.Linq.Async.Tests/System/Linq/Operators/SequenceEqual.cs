@@ -80,7 +80,7 @@ namespace Tests
             var ys = Throw<int>(ex);
             var res = xs.SequenceEqual(ys);
 
-            AssertThrows(() => res.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(res, ex);
         }
 
         [Fact]
@@ -91,7 +91,7 @@ namespace Tests
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var res = xs.SequenceEqual(ys);
 
-            AssertThrows(() => res.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(res, ex);
         }
 
         [Fact]
@@ -145,7 +145,7 @@ namespace Tests
             var ys = Throw<int>(ex);
             var res = xs.SequenceEqual(ys, new Eq());
 
-            AssertThrows(() => res.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(res, ex);
         }
 
         [Fact]
@@ -156,7 +156,7 @@ namespace Tests
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var res = xs.SequenceEqual(ys, new Eq());
 
-            AssertThrows(() => res.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(res, ex);
         }
 
         [Fact]

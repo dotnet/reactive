@@ -58,7 +58,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = xs.Aggregate((x, y) => x * y);
-            AssertThrows(() => ys.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(new Func<int, int, int>((x, y) => { throw ex; }));
-            AssertThrows(() => ys.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = xs.Aggregate(1, (x, y) => x * y);
-            AssertThrows(() => ys.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(1, new Func<int, int, int>((x, y) => { throw ex; }));
-            AssertThrows(() => ys.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
@@ -126,7 +126,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = xs.Aggregate(1, (x, y) => x * y, x => x + 1);
-            AssertThrows(() => ys.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
@@ -135,7 +135,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => { throw ex; }, x => x + 1);
-            AssertThrows(() => ys.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
@@ -144,7 +144,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate<int, int, int>(1, (x, y) => x * y, x => { throw ex; });
-            AssertThrows(() => ys.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(ys, ex);
         }
     }
 }

@@ -46,6 +46,16 @@ namespace Tests
             }
         }
 
+        public void AssertThrowsAsync(Task t, Exception e)
+        {
+            AssertThrows(() => t.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(e));
+        }
+
+        public void AssertThrowsAsync<T>(ValueTask<T> t, Exception e)
+        {
+            AssertThrows(() => t.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(e));
+        }
+
         public async Task NoNextAsync<T>(IAsyncEnumerator<T> e)
         {
             Assert.False(await e.MoveNextAsync());

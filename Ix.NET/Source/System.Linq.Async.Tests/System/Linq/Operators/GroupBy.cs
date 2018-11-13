@@ -172,7 +172,7 @@ namespace Tests
             var ys = xs.GroupBy(x => x);
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -237,7 +237,7 @@ namespace Tests
             var ys = xs.GroupBy(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -249,7 +249,7 @@ namespace Tests
 
             var e = ys.GetAsyncEnumerator();
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
 
             //Assert.True(e.MoveNext().Result);
             //var g1 = e.Current;

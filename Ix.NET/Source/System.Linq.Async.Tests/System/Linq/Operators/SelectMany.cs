@@ -61,7 +61,7 @@ namespace Tests
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 1);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace Tests
             var ys = xs.SelectMany(x => Enumerable.Range(0, x).ToAsyncEnumerable());
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace Tests
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 1);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -128,7 +128,7 @@ namespace Tests
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 1);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -139,7 +139,7 @@ namespace Tests
             var ys = xs.SelectMany((x, i) => Enumerable.Range(0, x).ToAsyncEnumerable());
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -159,7 +159,7 @@ namespace Tests
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 0);
             await HasNextAsync(e, 1);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -211,7 +211,7 @@ namespace Tests
             await HasNextAsync(e, 6);
             await HasNextAsync(e, 8);
             await HasNextAsync(e, 9);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -230,7 +230,7 @@ namespace Tests
             await HasNextAsync(e, 3);
             await HasNextAsync(e, 8);
             await HasNextAsync(e, 10);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
