@@ -93,7 +93,7 @@ namespace System.Linq
                     // At the same time, however, we are guaranteed that our max count can fit
                     // in an int because if that is true, then _minIndexInclusive must > 0.
 
-                    var count = await SkipAndCountAsync((uint)_maxIndexInclusive + 1, en, cancellationToken).ConfigureAwait(false);
+                    var count = await SkipAndCountAsync((uint)_maxIndexInclusive + 1, en).ConfigureAwait(false);
                     Debug.Assert(count != (uint)int.MaxValue + 1 || _minIndexInclusive > 0, "Our return value will be incorrect.");
                     return Math.Max((int)count - _minIndexInclusive, 0);
                 }
@@ -122,7 +122,7 @@ namespace System.Linq
                 case AsyncIteratorState.Iterating:
                     if (!_hasSkipped)
                     {
-                        if (!await SkipBeforeFirstAsync(_enumerator, CancellationToken.None).ConfigureAwait(false))
+                        if (!await SkipBeforeFirstAsync(_enumerator).ConfigureAwait(false))
                         {
                             // Reached the end before we finished skipping.
                             break;
@@ -228,7 +228,7 @@ namespace System.Linq
                 {
                     Debug.Assert(_minIndexInclusive + index >= 0, $"Adding {nameof(index)} caused {nameof(_minIndexInclusive)} to overflow.");
 
-                    if (await SkipBeforeAsync(_minIndexInclusive + index, en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
+                    if (await SkipBeforeAsync(_minIndexInclusive + index, en).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
                     {
                         return new Maybe<TSource>(en.Current);
                     }
@@ -248,7 +248,7 @@ namespace System.Linq
 
             try
             {
-                if (await SkipBeforeFirstAsync(en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
+                if (await SkipBeforeFirstAsync(en).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
                 {
                     return new Maybe<TSource>(en.Current);
                 }
@@ -267,7 +267,7 @@ namespace System.Linq
 
             try
             {
-                if (await SkipBeforeFirstAsync(en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
+                if (await SkipBeforeFirstAsync(en).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
                 {
                     var remaining = Limit - 1; // Max number of items left, not counting the current element.
                     var comparand = HasLimit ? 0 : int.MinValue; // If we don't have an upper bound, have the comparison always return true.
@@ -297,7 +297,7 @@ namespace System.Linq
 
             try
             {
-                if (await SkipBeforeFirstAsync(en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
+                if (await SkipBeforeFirstAsync(en).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
                 {
                     var remaining = Limit - 1; // Max number of items left, not counting the current element.
                     var comparand = HasLimit ? 0 : int.MinValue; // If we don't have an upper bound, have the comparison always return true.
@@ -335,7 +335,7 @@ namespace System.Linq
 
             try
             {
-                if (await SkipBeforeFirstAsync(en, cancellationToken).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
+                if (await SkipBeforeFirstAsync(en).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
                 {
                     var remaining = Limit - 1; // Max number of items left, not counting the current element.
                     var comparand = HasLimit ? 0 : int.MinValue; // If we don't have an upper bound, have the comparison always return true.
@@ -356,21 +356,21 @@ namespace System.Linq
             return list;
         }
 
-        private Task<bool> SkipBeforeFirstAsync(IAsyncEnumerator<TSource> en, CancellationToken cancellationToken) => SkipBeforeAsync(_minIndexInclusive, en, cancellationToken);
+        private Task<bool> SkipBeforeFirstAsync(IAsyncEnumerator<TSource> en) => SkipBeforeAsync(_minIndexInclusive, en);
 
-        private static async Task<bool> SkipBeforeAsync(int index, IAsyncEnumerator<TSource> en, CancellationToken cancellationToken)
+        private static async Task<bool> SkipBeforeAsync(int index, IAsyncEnumerator<TSource> en)
         {
-            var n = await SkipAndCountAsync(index, en, cancellationToken).ConfigureAwait(false);
+            var n = await SkipAndCountAsync(index, en).ConfigureAwait(false);
             return n == index;
         }
 
-        private static async Task<int> SkipAndCountAsync(int index, IAsyncEnumerator<TSource> en, CancellationToken cancellationToken)
+        private static async Task<int> SkipAndCountAsync(int index, IAsyncEnumerator<TSource> en)
         {
             Debug.Assert(index >= 0);
-            return (int)await SkipAndCountAsync((uint)index, en, cancellationToken).ConfigureAwait(false);
+            return (int)await SkipAndCountAsync((uint)index, en).ConfigureAwait(false);
         }
 
-        private static async Task<uint> SkipAndCountAsync(uint index, IAsyncEnumerator<TSource> en, CancellationToken cancellationToken)
+        private static async Task<uint> SkipAndCountAsync(uint index, IAsyncEnumerator<TSource> en)
         {
             Debug.Assert(en != null);
 
