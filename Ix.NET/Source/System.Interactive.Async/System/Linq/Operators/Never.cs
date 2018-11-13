@@ -46,14 +46,14 @@ namespace System.Linq
                 {
                     _registration.Dispose();
                     _task = null;
-                    return TaskExt.CompletedTask;
+                    return default;
                 }
 
                 public ValueTask<bool> MoveNextAsync()
                 {
                     if (_once)
                     {
-                        return TaskExt.False;
+                        return new ValueTask<bool>(false);
                     }
                     _once = true;
                     _task = new TaskCompletionSource<bool>();
