@@ -45,17 +45,17 @@ namespace System.Linq
                 public ValueTask DisposeAsync()
                 {
                     Current = default;
-                    return TaskExt.CompletedTask;
+                    return default;
                 }
 
                 public ValueTask<bool> MoveNextAsync()
                 {
                     if (_once)
                     {
-                        return TaskExt.False;
+                        return new ValueTask<bool>(false);
                     }
                     _once = true;
-                    return TaskExt.True;
+                    return new ValueTask<bool>(true);
                 }
             }
         }
