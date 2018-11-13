@@ -30,6 +30,8 @@ namespace System.Linq
 
             private IAsyncEnumerator<TSource> _enumerator;
 
+            private Task _loserTask;
+
             public TimeoutAsyncIterator(IAsyncEnumerable<TSource> source, TimeSpan timeout)
             {
                 Debug.Assert(source != null);
@@ -45,7 +47,13 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_enumerator != null)
+                if (_loserTask != null)
+                {
+                    await _loserTask.ConfigureAwait(false);
+                    _loserTask = null;
+                    _enumerator = null;
+                }
+                else if (_enumerator != null)
                 {
                     await _enumerator.DisposeAsync().ConfigureAwait(false);
                     _enumerator = null;
@@ -73,10 +81,15 @@ namespace System.Linq
                             {
                                 var delay = Task.Delay(_timeout, delayCts.Token);
 
-                                var winner = await Task.WhenAny(moveNext.AsTask(), delay).ConfigureAwait(false);
+                                var next = moveNext.AsTask();
+
+                                var winner = await Task.WhenAny(next, delay).ConfigureAwait(false);
 
                                 if (winner == delay)
                                 {
+                                    // we still have to wait for the "next" to complete
+                                    // before we can dispose _enumerator
+                                    _loserTask = next.ContinueWith(async (t, state) => await ((IAsyncDisposable)state).DisposeAsync(), _enumerator);
                                     throw new TimeoutException();
                                 }
 
