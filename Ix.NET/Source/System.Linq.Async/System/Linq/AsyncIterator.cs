@@ -30,6 +30,9 @@ namespace System.Linq
             enumerator._state = AsyncIteratorState.Allocated;
             enumerator._cancellationToken = cancellationToken;
 
+            // REVIEW: If the final interface contains a CancellationToken here, should we check for a cancellation request
+            //         either here or in the first call to MoveNextAsync?
+
             return enumerator;
         }
 
