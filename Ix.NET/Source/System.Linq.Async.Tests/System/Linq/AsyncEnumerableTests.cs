@@ -15,8 +15,6 @@ namespace Tests
     {
         protected static readonly IAsyncEnumerable<int> Return42 = new[] { 42 }.ToAsyncEnumerable();
 
-        private const int WaitTimeoutMs = 5000;
-
         protected async Task AssertThrowsAsync<TException>(Task t)
             where TException : Exception
         {
