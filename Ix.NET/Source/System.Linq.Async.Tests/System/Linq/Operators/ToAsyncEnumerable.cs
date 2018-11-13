@@ -15,30 +15,30 @@ namespace Tests
         [Fact]
         public void ToAsyncEnumerable_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ToAsyncEnumerable(default(IEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ToAsyncEnumerable(default(IObservable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ToAsyncEnumerable(default(Task<int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ToAsyncEnumerable(default(IEnumerable<int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ToAsyncEnumerable(default(IObservable<int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ToAsyncEnumerable(default(Task<int>)));
         }
 
         [Fact]
-        public void ToAsyncEnumerable1()
+        public async Task ToAsyncEnumerable1Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void ToAsyncEnumerable2()
+        public async Task ToAsyncEnumerable2Async()
         {
             var ex = new Exception("Bang");
             var xs = ToAsyncEnumerable_Sequence(ex).ToAsyncEnumerable();
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 42);
+            await HasNextAsync(e, 42);
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 
@@ -49,7 +49,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToAsyncEnumerable3()
+        public async Task ToAsyncEnumerable3Async()
         {
             var subscribed = false;
 
@@ -69,8 +69,8 @@ namespace Tests
 
             Assert.True(subscribed);
 
-            HasNext(e, 42);
-            NoNext(e);
+            await HasNextAsync(e, 42);
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -98,17 +98,17 @@ namespace Tests
         }
 
         [Fact]
-        public void ToAsyncEnumerable5()
+        public async Task ToAsyncEnumerable5Async()
         {
             var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
 
             var xs = set.ToAsyncEnumerable();
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]

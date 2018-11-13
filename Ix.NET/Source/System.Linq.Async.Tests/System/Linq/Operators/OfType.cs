@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -14,19 +15,19 @@ namespace Tests
         [Fact]
         public void OfType_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OfType<int>(default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.OfType<int>(default));
         }
 
         [Fact]
-        public void OfType1()
+        public async Task OfType1Async()
         {
             var xs = new object[] { 1, 1.2, true, 4, "" }.ToAsyncEnumerable();
             var ys = xs.OfType<int>();
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
     }
 }

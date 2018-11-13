@@ -15,11 +15,11 @@ namespace Tests
         [Fact]
         public void Append_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Append(default, 42));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Append(default, 42));
         }
 
         [Fact]
-        public void Append1()
+        public async Task Append1()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -27,11 +27,11 @@ namespace Tests
 
             var e = res.GetAsyncEnumerator();
 
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace Tests
 
 
         [Fact]
-        public void AppendN1()
+        public async Task AppendN1()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -118,13 +118,13 @@ namespace Tests
 
             var e = res.GetAsyncEnumerator();
 
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 5);
-            HasNext(e, 6);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await NoNextAsync(e);
         }
 
         [Fact]

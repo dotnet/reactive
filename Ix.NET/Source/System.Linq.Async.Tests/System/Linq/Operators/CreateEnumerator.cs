@@ -15,7 +15,7 @@ namespace Tests
         [Fact]
         public void CreateEnumerator_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerator(default, () => 3, () => TaskExt.CompletedTask));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerator(default, () => 3, () => TaskExt.CompletedTask));
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace Tests
 
             var enu = (IAsyncEnumerable<int>)iter;
 
-            AssertThrows<NotSupportedException>(() => enu.GetAsyncEnumerator());
+            Assert.Throws<NotSupportedException>(() => enu.GetAsyncEnumerator());
         }
     }
 }

@@ -15,27 +15,27 @@ namespace Tests
         [Fact]
         public void SkipLast_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SkipLast(default(IAsyncEnumerable<int>), 5));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipLast(default(IAsyncEnumerable<int>), 5));
         }
 
         [Fact]
-        public void SkipLast1()
+        public async Task SkipLast1Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().SkipLast(2);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void SkipLast2()
+        public async Task SkipLast2Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().SkipLast(5);
 
             var e = xs.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -47,17 +47,17 @@ namespace Tests
         }
 
         [Fact]
-        public void SkipLast4()
+        public async Task SkipLast4Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().SkipLast(0);
 
             var e = xs.GetAsyncEnumerator();
 
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
     }
 }

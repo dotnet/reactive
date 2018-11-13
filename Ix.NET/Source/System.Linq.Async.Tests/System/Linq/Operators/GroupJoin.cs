@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -14,21 +15,21 @@ namespace Tests
         [Fact]
         public void GroupJoin_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(default, Return42, x => x, x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, default, x => x, x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin(Return42, Return42, default, x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin(Return42, Return42, x => x, default, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, x => x, x => x, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(default, Return42, x => x, x => x, (x, y) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, default, x => x, x => x, (x, y) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupJoin(Return42, Return42, default, x => x, (x, y) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupJoin(Return42, Return42, x => x, default, (x, y) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, x => x, x => x, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(default, Return42, x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, default, x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin(Return42, Return42, default, x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin(Return42, Return42, x => x, default, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, x => x, x => x, default, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(default, Return42, x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, default, x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupJoin(Return42, Return42, default, x => x, (x, y) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupJoin(Return42, Return42, x => x, default, (x, y) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, x => x, x => x, default, EqualityComparer<int>.Default));
         }
 
         [Fact]
-        public void GroupJoin1()
+        public async Task GroupJoin1()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = new[] { 4, 7, 6, 2, 3, 4, 8, 9 }.ToAsyncEnumerable();
@@ -36,14 +37,14 @@ namespace Tests
             var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, "0 - 639");
-            HasNext(e, "1 - 474");
-            HasNext(e, "2 - 28");
-            NoNext(e);
+            await HasNextAsync(e, "0 - 639");
+            await HasNextAsync(e, "1 - 474");
+            await HasNextAsync(e, "2 - 28");
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void GroupJoin2()
+        public async Task GroupJoin2()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = new[] { 3, 6, 4 }.ToAsyncEnumerable();
@@ -51,10 +52,10 @@ namespace Tests
             var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, "0 - 36");
-            HasNext(e, "1 - 4");
-            HasNext(e, "2 - ");
-            NoNext(e);
+            await HasNextAsync(e, "0 - 36");
+            await HasNextAsync(e, "1 - 4");
+            await HasNextAsync(e, "2 - ");
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -110,7 +111,7 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupJoin7()
+        public async Task GroupJoin7()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
@@ -124,7 +125,7 @@ namespace Tests
             });
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, "0 - 36");
+            await HasNextAsync(e, "0 - 36");
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
     }

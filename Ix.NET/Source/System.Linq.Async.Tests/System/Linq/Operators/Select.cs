@@ -15,36 +15,36 @@ namespace Tests
         [Fact]
         public void Select_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default, x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default, (x, i) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select(Return42, default(Func<int, int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select(Return42, default(Func<int, int, int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default, x => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default, (x, i) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Select(Return42, default(Func<int, int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Select(Return42, default(Func<int, int, int>)));
         }
 
         [Fact]
-        public void Select1()
+        public async Task Select1()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = xs.Select(x => (char)('a' + x));
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 'a');
-            HasNext(e, 'b');
-            HasNext(e, 'c');
-            NoNext(e);
+            await HasNextAsync(e, 'a');
+            await HasNextAsync(e, 'b');
+            await HasNextAsync(e, 'c');
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Select2()
+        public async Task Select2()
         {
             var xs = new[] { 8, 5, 7 }.ToAsyncEnumerable();
             var ys = xs.Select((x, i) => (char)('a' + i));
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 'a');
-            HasNext(e, 'b');
-            HasNext(e, 'c');
-            NoNext(e);
+            await HasNextAsync(e, 'a');
+            await HasNextAsync(e, 'b');
+            await HasNextAsync(e, 'c');
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -68,16 +68,16 @@ namespace Tests
         }
 
         [Fact]
-        public void Select5()
+        public async Task Select5()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = xs.Select(i => i + 3).Select(x => (char)('a' + x));
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 'd');
-            HasNext(e, 'e');
-            HasNext(e, 'f');
-            NoNext(e);
+            await HasNextAsync(e, 'd');
+            await HasNextAsync(e, 'e');
+            await HasNextAsync(e, 'f');
+            await NoNextAsync(e);
         }
 
         [Fact]

@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -14,21 +15,21 @@ namespace Tests
         [Fact]
         public void Cast_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Cast<int>(default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Cast<int>(default));
         }
 
         [Fact]
-        public void Cast1()
+        public async Task Cast1()
         {
             var xs = new object[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Cast<int>();
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]

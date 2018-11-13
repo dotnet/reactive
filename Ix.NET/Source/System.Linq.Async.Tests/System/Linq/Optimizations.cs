@@ -12,43 +12,43 @@ namespace Tests
     public class Optimizations : AsyncEnumerableTests
     {
         [Fact]
-        public void SelectWhere2()
+        public async Task SelectWhere2Async()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = xs.Select(i => i + 2).Where(i => i % 2 == 0);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 2);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void WhereSelect2()
+        public async Task WhereSelect2Async()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = xs.Where(i => i % 2 == 0).Select(i => i + 2);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 2);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void WhereSelect3()
+        public async Task WhereSelect3Async()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = xs.Where(i => i % 2 == 0).Select(i => i + 2).Select(i => i + 2);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 4);
-            HasNext(e, 6);
-            NoNext(e);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 6);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void AppendPrepend1()
+        public async Task AppendPrepend1Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -62,17 +62,17 @@ namespace Tests
 
             var e = res.GetAsyncEnumerator();
 
-            HasNext(e, 10);
-            HasNext(e, 9);
-            HasNext(e, 7);
-            HasNext(e, 4);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 5);
-            HasNext(e, 6);
-            HasNext(e, 8);
-            NoNext(e);
+            await HasNextAsync(e, 10);
+            await HasNextAsync(e, 9);
+            await HasNextAsync(e, 7);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await HasNextAsync(e, 8);
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -183,7 +183,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AppendPrepend8()
+        public async Task AppendPrepend8Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -192,12 +192,12 @@ namespace Tests
 
             var e = res.GetAsyncEnumerator();
 
-            HasNext(e, 5);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]

@@ -15,40 +15,40 @@ namespace Tests
         [Fact]
         public void TakeLast_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.TakeLast(default(IAsyncEnumerable<int>), 5));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.TakeLast(default(IAsyncEnumerable<int>), 5));
         }
 
         [Fact]
-        public void TakeLast0()
+        public async Task TakeLast0()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(-2);
 
             var e = xs.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void TakeLast1()
+        public async Task TakeLast1()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(2);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void TakeLast2()
+        public async Task TakeLast2()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(5);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -60,13 +60,13 @@ namespace Tests
         }
 
         [Fact]
-        public void TakeLast_BugFix_TakeLast_Zero_TakesForever()
+        public async Task TakeLast_BugFix_TakeLast_Zero_TakesForever()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(0);
 
             var e = xs.GetAsyncEnumerator();
 
-            NoNext(e);
+            await NoNextAsync(e);
         }
     }
 }

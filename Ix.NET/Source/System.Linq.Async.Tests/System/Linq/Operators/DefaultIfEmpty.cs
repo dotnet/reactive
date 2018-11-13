@@ -15,74 +15,74 @@ namespace Tests
         [Fact]
         public void DefaultIfEmpty_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.DefaultIfEmpty<int>(default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.DefaultIfEmpty(default, 42));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.DefaultIfEmpty<int>(default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.DefaultIfEmpty(default, 42));
         }
 
         [Fact]
-        public void DefaultIfEmpty1()
+        public async Task DefaultIfEmpty1()
         {
             var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty();
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 0);
-            NoNext(e);
+            await HasNextAsync(e, 0);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void DefaultIfEmpty2()
+        public async Task DefaultIfEmpty2()
         {
             var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty(42);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 42);
-            NoNext(e);
+            await HasNextAsync(e, 42);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void DefaultIfEmpty3()
+        public async Task DefaultIfEmpty3()
         {
             var xs = Return42.DefaultIfEmpty();
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 42);
-            NoNext(e);
+            await HasNextAsync(e, 42);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void DefaultIfEmpty4()
+        public async Task DefaultIfEmpty4()
         {
             var xs = Return42.DefaultIfEmpty(24);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 42);
-            NoNext(e);
+            await HasNextAsync(e, 42);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void DefaultIfEmpty5()
+        public async Task DefaultIfEmpty5()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty();
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void DefaultIfEmpty6()
+        public async Task DefaultIfEmpty6()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty(24);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]

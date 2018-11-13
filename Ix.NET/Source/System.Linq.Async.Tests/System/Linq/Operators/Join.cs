@@ -15,21 +15,21 @@ namespace Tests
         [Fact]
         public void Join_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(default, Return42, x => x, x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, default, x => x, x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join(Return42, Return42, default, x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join(Return42, Return42, x => x, default, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, x => x, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(default, Return42, x => x, x => x, (x, y) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, default, x => x, x => x, (x, y) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Join(Return42, Return42, default, x => x, (x, y) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Join(Return42, Return42, x => x, default, (x, y) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, x => x, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(default, Return42, x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, default, x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join(Return42, Return42, default, x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join(Return42, Return42, x => x, default, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, x => x, default, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(default, Return42, x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, default, x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Join(Return42, Return42, default, x => x, (x, y) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Join(Return42, Return42, x => x, default, (x, y) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(Return42, Return42, x => x, x => x, default, EqualityComparer<int>.Default));
         }
 
         [Fact]
-        public void Join1()
+        public async Task Join1()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = new[] { 3, 6, 4 }.ToAsyncEnumerable();
@@ -37,14 +37,14 @@ namespace Tests
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 0 + 3);
-            HasNext(e, 0 + 6);
-            HasNext(e, 1 + 4);
-            NoNext(e);
+            await HasNextAsync(e, 0 + 3);
+            await HasNextAsync(e, 0 + 6);
+            await HasNextAsync(e, 1 + 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Join2()
+        public async Task Join2()
         {
             var xs = new[] { 3, 6, 4 }.ToAsyncEnumerable();
             var ys = new[] { 0, 1, 2 }.ToAsyncEnumerable();
@@ -52,14 +52,14 @@ namespace Tests
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 3 + 0);
-            HasNext(e, 6 + 0);
-            HasNext(e, 4 + 1);
-            NoNext(e);
+            await HasNextAsync(e, 3 + 0);
+            await HasNextAsync(e, 6 + 0);
+            await HasNextAsync(e, 4 + 1);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Join3()
+        public async Task Join3()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = new[] { 3, 6 }.ToAsyncEnumerable();
@@ -67,13 +67,13 @@ namespace Tests
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 0 + 3);
-            HasNext(e, 0 + 6);
-            NoNext(e);
+            await HasNextAsync(e, 0 + 3);
+            await HasNextAsync(e, 0 + 6);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Join4()
+        public async Task Join4()
         {
             var xs = new[] { 3, 6 }.ToAsyncEnumerable();
             var ys = new[] { 0, 1, 2 }.ToAsyncEnumerable();
@@ -81,9 +81,9 @@ namespace Tests
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 3 + 0);
-            HasNext(e, 6 + 0);
-            NoNext(e);
+            await HasNextAsync(e, 3 + 0);
+            await HasNextAsync(e, 6 + 0);
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -163,7 +163,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Join11()
+        public async Task Join11()
         {
             var customers = new List<Customer>
             {
@@ -187,17 +187,17 @@ namespace Tests
                                             (c, o) => new CustomerOrder { CustomerId = c.CustomerId, OrderId = o.OrderId });
 
             var e = asyncResult.GetAsyncEnumerator();
-            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 1 });
-            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 2 });
-            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 3 });
-            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 4 });
-            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 5 });
-            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 6 });
-            NoNext(e);
+            await HasNextAsync(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 1 });
+            await HasNextAsync(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 2 });
+            await HasNextAsync(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 3 });
+            await HasNextAsync(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 4 });
+            await HasNextAsync(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 5 });
+            await HasNextAsync(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 6 });
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Join12()
+        public async Task Join12()
         {
             var customers = new List<Customer>
             {
@@ -220,13 +220,13 @@ namespace Tests
                                             (c, o) => new CustomerOrder { CustomerId = c.CustomerId, OrderId = o.OrderId });
 
             var e = asyncResult.GetAsyncEnumerator();
-            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 1 });
-            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 2 });
-            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 3 });
-            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 4 });
-            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 5 });
-            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 6 });
-            NoNext(e);
+            await HasNextAsync(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 1 });
+            await HasNextAsync(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 2 });
+            await HasNextAsync(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 3 });
+            await HasNextAsync(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 4 });
+            await HasNextAsync(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 5 });
+            await HasNextAsync(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 6 });
+            await NoNextAsync(e);
         }
 
         public class Customer

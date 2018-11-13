@@ -4,6 +4,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -13,30 +14,30 @@ namespace Tests
         [Fact]
         public void Range_Null()
         {
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerable.Range(0, -1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => AsyncEnumerable.Range(0, -1));
         }
 
         [Fact]
-        public void Range1()
+        public async Task Range1Async()
         {
             var xs = AsyncEnumerable.Range(2, 5);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 5);
-            HasNext(e, 6);
-            NoNext(e);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Range2()
+        public async Task Range2Async()
         {
             var xs = AsyncEnumerable.Range(2, 0);
 
             var e = xs.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
     }
 }

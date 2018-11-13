@@ -13,7 +13,7 @@ namespace Tests
         [Fact]
         public void ToEnumerable_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ToEnumerable<int>(null));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ToEnumerable<int>(null));
         }
 
         [Fact]

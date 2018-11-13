@@ -15,53 +15,53 @@ namespace Tests
         [Fact]
         public void Take_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Take<int>(default, 5));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Take<int>(default, 5));
         }
 
         [Fact]
-        public void Take0()
+        public async Task Take0Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Take(-2);
 
             var e = ys.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Take1()
+        public async Task Take1Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Take(2);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Take2()
+        public async Task Take2Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Take(10);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Take3()
+        public async Task Take3Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Take(0);
 
             var e = ys.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]

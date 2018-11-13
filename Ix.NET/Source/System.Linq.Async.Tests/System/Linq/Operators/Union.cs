@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -14,46 +15,46 @@ namespace Tests
         [Fact]
         public void Union_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union(default, Return42));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Union(default, Return42));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union(default, Return42, new Eq()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union(Return42, default, new Eq()));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Union(default, Return42, new Eq()));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Union(Return42, default, new Eq()));
         }
 
         [Fact]
-        public void Union1()
+        public async Task Union1()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
             var res = xs.Union(ys);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 5);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Union2()
+        public async Task Union2()
         {
             var xs = new[] { 1, 2, -3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, -1, 4 }.ToAsyncEnumerable();
             var res = xs.Union(ys, new Eq());
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, -3);
-            HasNext(e, 5);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, -3);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Union3()
+        public async Task Union3()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
@@ -61,14 +62,14 @@ namespace Tests
             var res = xs.Union(ys).Union(zs);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 5);
-            HasNext(e, 4);
-            HasNext(e, 7);
-            HasNext(e, 8);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 7);
+            await HasNextAsync(e, 8);
+            await NoNextAsync(e);
         }
 
         private sealed class Eq : IEqualityComparer<int>

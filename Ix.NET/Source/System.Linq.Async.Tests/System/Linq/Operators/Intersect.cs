@@ -15,37 +15,37 @@ namespace Tests
         [Fact]
         public void Intersect_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect(default, Return42));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect(Return42, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Intersect(default, Return42));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Intersect(Return42, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect(default, Return42, new Eq()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Intersect(Return42, default, new Eq()));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Intersect(default, Return42, new Eq()));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Intersect(Return42, default, new Eq()));
         }
 
         [Fact]
-        public void Intersect1()
+        public async Task Intersect1()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
             var res = xs.Intersect(ys);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 3);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 3);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Intersect2()
+        public async Task Intersect2()
         {
             var xs = new[] { 1, 2, -3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, -1, 4 }.ToAsyncEnumerable();
             var res = xs.Intersect(ys, new Eq());
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, -3);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, -3);
+            await NoNextAsync(e);
         }
 
         [Fact]

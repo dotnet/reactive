@@ -16,7 +16,7 @@ namespace Tests
         [Fact]
         public void ToObservable_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ToObservable<int>(null));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ToObservable<int>(null));
         }
 
         [Fact]

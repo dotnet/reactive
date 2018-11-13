@@ -15,35 +15,35 @@ namespace Tests
         [Fact]
         public void Except_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except(default, Return42));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except(Return42, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Except(default, Return42));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Except(Return42, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except(default, Return42, new Eq()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except(Return42, null, new Eq()));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Except(default, Return42, new Eq()));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Except(Return42, null, new Eq()));
         }
 
         [Fact]
-        public void Except1()
+        public async Task Except1()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
             var res = xs.Except(ys);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 2);
-            NoNext(e);
+            await HasNextAsync(e, 2);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Except2()
+        public async Task Except2()
         {
             var xs = new[] { 1, 2, -3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, -1, 4 }.ToAsyncEnumerable();
             var res = xs.Except(ys, new Eq());
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 2);
-            NoNext(e);
+            await HasNextAsync(e, 2);
+            await NoNextAsync(e);
         }
 
         [Fact]

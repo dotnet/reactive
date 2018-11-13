@@ -15,61 +15,61 @@ namespace Tests
         [Fact]
         public void SkipWhile_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(default, x => true));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(default, (x, i) => true));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SkipWhile(Return42, default(Func<int, bool>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SkipWhile(Return42, default(Func<int, int, bool>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(default, x => true));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(default, (x, i) => true));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile(Return42, default(Func<int, bool>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile(Return42, default(Func<int, int, bool>)));
         }
 
         [Fact]
-        public void SkipWhile1()
+        public async Task SkipWhile1Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => x < 3);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void SkipWhile2()
+        public async Task SkipWhile2Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => false);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void SkipWhile3()
+        public async Task SkipWhile3Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => true);
 
             var e = ys.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void SkipWhile4()
+        public async Task SkipWhile4Async()
         {
             var xs = new[] { 1, 2, 3, 4, 3, 2, 1 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => x < 3);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 3);
-            HasNext(e, 2);
-            HasNext(e, 1);
-            NoNext(e);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 1);
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -84,39 +84,39 @@ namespace Tests
         }
 
         [Fact]
-        public void SkipWhile6()
+        public async Task SkipWhile6Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => i < 2);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void SkipWhile7()
+        public async Task SkipWhile7Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => false);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void SkipWhile8()
+        public async Task SkipWhile8Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => true);
 
             var e = ys.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
