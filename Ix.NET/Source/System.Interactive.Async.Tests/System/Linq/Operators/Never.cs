@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
@@ -23,7 +23,7 @@ namespace Tests
         }
 
         [Fact]
-        public void CancelToken_Unblocks()
+        public async Task CancelToken_UnblocksAsync()
         {
             var cts = new CancellationTokenSource();
 
@@ -31,27 +31,13 @@ namespace Tests
 
             try
             {
-                var t = Task.Run(async () =>
-                {
-                    await Task.Delay(100);
-                    cts.Cancel();
-                });
+                cts.CancelAfter(100);
 
-                try
-                {
-                    Assert.True(en.MoveNextAsync().AsTask().Wait(2000));
-                }
-                catch (AggregateException ex)
-                {
-                    if (!(ex.InnerException is TaskCanceledException))
-                    {
-                        throw;
-                    }
-                }
+                await Assert.ThrowsAsync<TaskCanceledException>(() => en.MoveNextAsync().AsTask());
             }
             finally
             {
-                en.DisposeAsync().AsTask().Wait(2000);
+                await en.DisposeAsync();
             }
         }
     }
