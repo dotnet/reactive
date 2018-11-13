@@ -62,14 +62,14 @@ namespace System.Linq
 
                 public ValueTask DisposeAsync()
                 {
-                    _moveNextThrows = TaskExt.False;
-                    return TaskExt.CompletedTask;
+                    _moveNextThrows = new ValueTask<bool>(false);
+                    return default;
                 }
 
                 public ValueTask<bool> MoveNextAsync()
                 {
                     var result = _moveNextThrows;
-                    _moveNextThrows = TaskExt.False;
+                    _moveNextThrows = new ValueTask<bool>(false);
                     return result;
                 }
 
