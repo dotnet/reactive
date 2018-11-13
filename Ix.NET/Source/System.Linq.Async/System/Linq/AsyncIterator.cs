@@ -8,15 +8,14 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-    internal abstract partial class AsyncIterator<TSource> : IAsyncEnumerable<TSource>, IAsyncEnumerator<TSource>
+    internal abstract class AsyncIteratorBase<TSource> : IAsyncEnumerable<TSource>, IAsyncEnumerator<TSource>
     {
         private readonly int _threadId;
 
-        protected TSource _current;
         protected AsyncIteratorState _state = AsyncIteratorState.New;
         protected CancellationToken _cancellationToken;
 
-        protected AsyncIterator()
+        protected AsyncIteratorBase()
         {
             _threadId = Environment.CurrentManagedThreadId;
         }
@@ -38,13 +37,12 @@ namespace System.Linq
 
         public virtual ValueTask DisposeAsync()
         {
-            _current = default;
             _state = AsyncIteratorState.Disposed;
 
             return default;
         }
 
-        public TSource Current => _current;
+        public abstract TSource Current { get; }
 
         public async ValueTask<bool> MoveNextAsync()
         {
@@ -71,6 +69,20 @@ namespace System.Linq
         public abstract AsyncIterator<TSource> Clone();
 
         protected abstract ValueTask<bool> MoveNextCore();
+    }
+
+    internal abstract partial class AsyncIterator<TSource> : AsyncIteratorBase<TSource>
+    {
+        protected TSource _current;
+
+        public override TSource Current => _current;
+
+        public override ValueTask DisposeAsync()
+        {
+            _current = default;
+
+            return base.DisposeAsync();
+        }
     }
 
     internal enum AsyncIteratorState
