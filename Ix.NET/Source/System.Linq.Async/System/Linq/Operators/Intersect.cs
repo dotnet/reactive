@@ -50,7 +50,7 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new IntersectAsyncIterator<TSource>(_first, _second, _comparer);
             }

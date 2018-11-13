@@ -43,7 +43,7 @@ namespace System.Linq
                 _element = element;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new RepeatElementAsyncIterator<TResult>(_element);
             }
@@ -76,7 +76,7 @@ namespace System.Linq
                 _currentCount = count;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new RepeatSequenceAsyncIterator<TSource>(_source, _count);
             }

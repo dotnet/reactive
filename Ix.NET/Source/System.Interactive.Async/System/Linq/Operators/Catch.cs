@@ -82,7 +82,7 @@ namespace System.Linq
                 _handler = handler;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new CatchAsyncIterator<TSource, TException>(_source, _handler);
             }
@@ -175,7 +175,7 @@ namespace System.Linq
                 _handler = handler;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new CatchAsyncIteratorWithTask<TSource, TException>(_source, _handler);
             }
@@ -267,7 +267,7 @@ namespace System.Linq
                 _sources = sources;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new CatchAsyncIterator<TSource>(_sources);
             }

@@ -136,7 +136,7 @@ namespace System.Linq
                 _source = source;
             }
 
-            public override AsyncIterator<T> Clone()
+            public override AsyncIteratorBase<T> Clone()
             {
                 return new AsyncEnumerableAdapter<T>(_source);
             }
@@ -205,7 +205,7 @@ namespace System.Linq
                 _source = source;
             }
 
-            public override AsyncIterator<T> Clone()
+            public override AsyncIteratorBase<T> Clone()
             {
                 return new AsyncIListEnumerableAdapter<T>(_source);
             }
@@ -309,7 +309,7 @@ namespace System.Linq
                 _source = source;
             }
 
-            public override AsyncIterator<T> Clone()
+            public override AsyncIteratorBase<T> Clone()
             {
                 return new AsyncICollectionEnumerableAdapter<T>(_source);
             }

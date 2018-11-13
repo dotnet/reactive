@@ -30,7 +30,7 @@ namespace System.Linq
                 _count = count;
             }
 
-            public override AsyncIterator<TResult> Clone() => new RepeatAsyncIterator<TResult>(_element, _count);
+            public override AsyncIteratorBase<TResult> Clone() => new RepeatAsyncIterator<TResult>(_element, _count);
 
             public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(_count);
 

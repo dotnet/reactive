@@ -40,7 +40,7 @@ namespace System.Linq
                 _timeout = timeout;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new TimeoutAsyncIterator<TSource>(_source, _timeout);
             }

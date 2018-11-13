@@ -125,7 +125,7 @@ namespace System.Linq
                 return count;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new DistinctAsyncIterator<TSource, TKey>(_source, _keySelector, _comparer);
             }
@@ -270,7 +270,7 @@ namespace System.Linq
                 return count;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new DistinctAsyncIteratorWithTask<TSource, TKey>(_source, _keySelector, _comparer);
             }

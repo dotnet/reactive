@@ -67,7 +67,7 @@ namespace System.Linq
                 _predicate = predicate;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new TakeWhileAsyncIterator<TSource>(_source, _predicate);
             }
@@ -132,7 +132,7 @@ namespace System.Linq
                 _predicate = predicate;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new TakeWhileWithIndexAsyncIterator<TSource>(_source, _predicate);
             }
@@ -202,7 +202,7 @@ namespace System.Linq
                 _predicate = predicate;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new TakeWhileAsyncIteratorWithTask<TSource>(_source, _predicate);
             }
@@ -267,7 +267,7 @@ namespace System.Linq
                 _predicate = predicate;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new TakeWhileWithIndexAsyncIteratorWithTask<TSource>(_source, _predicate);
             }

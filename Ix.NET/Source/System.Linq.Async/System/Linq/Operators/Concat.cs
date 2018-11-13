@@ -37,7 +37,7 @@ namespace System.Linq
                 _second = second;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new Concat2AsyncIterator<TSource>(_first, _second);
             }
@@ -205,7 +205,7 @@ namespace System.Linq
                 _nextIndex = nextIndex;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new ConcatNAsyncIterator<TSource>(_previousConcat, _next, _nextIndex);
             }

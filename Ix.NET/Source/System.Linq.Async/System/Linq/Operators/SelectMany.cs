@@ -120,7 +120,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectManyAsyncIterator<TSource, TResult>(_source, _selector);
             }
@@ -211,7 +211,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectManyAsyncIteratorWithTask<TSource, TResult>(_source, _selector);
             }
@@ -306,7 +306,7 @@ namespace System.Linq
                 _resultSelector = resultSelector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectManyAsyncIterator<TSource, TCollection, TResult>(_source, _collectionSelector, _resultSelector);
             }
@@ -404,7 +404,7 @@ namespace System.Linq
                 _resultSelector = resultSelector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectManyAsyncIteratorWithTask<TSource, TCollection, TResult>(_source, _collectionSelector, _resultSelector);
             }
@@ -503,7 +503,7 @@ namespace System.Linq
                 _resultSelector = resultSelector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectManyWithIndexAsyncIterator<TSource, TCollection, TResult>(_source, _collectionSelector, _resultSelector);
             }
@@ -609,7 +609,7 @@ namespace System.Linq
                 _resultSelector = resultSelector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectManyWithIndexAsyncIteratorWithTask<TSource, TCollection, TResult>(_source, _collectionSelector, _resultSelector);
             }
@@ -711,7 +711,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectManyWithIndexAsyncIterator<TSource, TResult>(_source, _selector);
             }
@@ -809,7 +809,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectManyWithIndexAsyncIteratorWithTask<TSource, TResult>(_source, _selector);
             }

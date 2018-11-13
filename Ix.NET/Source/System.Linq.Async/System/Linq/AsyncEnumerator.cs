@@ -108,7 +108,7 @@ namespace System.Collections.Generic
                 GetAsyncEnumerator(default);
             }
 
-            public override AsyncIterator<T> Clone()
+            public override AsyncIteratorBase<T> Clone()
             {
                 throw new NotSupportedException("AnonymousAsyncIterator cannot be cloned. It is only intended for use as an iterator.");
             }

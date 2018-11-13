@@ -225,7 +225,7 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new GroupedResultAsyncEnumerable<TSource, TKey, TResult>(_source, _keySelector, _resultSelector, _comparer);
             }
@@ -318,7 +318,7 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult>(_source, _keySelector, _resultSelector, _comparer);
             }
@@ -411,7 +411,7 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public override AsyncIterator<IAsyncGrouping<TKey, TElement>> Clone()
+            public override AsyncIteratorBase<IAsyncGrouping<TKey, TElement>> Clone()
             {
                 return new GroupedAsyncEnumerable<TSource, TKey, TElement>(_source, _keySelector, _elementSelector, _comparer);
             }
@@ -504,7 +504,7 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public override AsyncIterator<IAsyncGrouping<TKey, TElement>> Clone()
+            public override AsyncIteratorBase<IAsyncGrouping<TKey, TElement>> Clone()
             {
                 return new GroupedAsyncEnumerableWithTask<TSource, TKey, TElement>(_source, _keySelector, _elementSelector, _comparer);
             }
@@ -594,10 +594,11 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public override AsyncIterator<IAsyncGrouping<TKey, TSource>> Clone()
+            public override AsyncIteratorBase<IAsyncGrouping<TKey, TSource>> Clone()
             {
                 return new GroupedAsyncEnumerable<TSource, TKey>(_source, _keySelector, _comparer);
             }
+
             public override async ValueTask DisposeAsync()
             {
                 if (_enumerator != null)
@@ -683,10 +684,11 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public override AsyncIterator<IAsyncGrouping<TKey, TSource>> Clone()
+            public override AsyncIteratorBase<IAsyncGrouping<TKey, TSource>> Clone()
             {
                 return new GroupedAsyncEnumerableWithTask<TSource, TKey>(_source, _keySelector, _comparer);
             }
+
             public override async ValueTask DisposeAsync()
             {
                 if (_enumerator != null)

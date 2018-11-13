@@ -70,7 +70,7 @@ namespace System.Linq
                 _accumulator = accumulator;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new ScanAsyncEnumerable<TSource>(_source, _accumulator);
             }
@@ -144,7 +144,7 @@ namespace System.Linq
                 _accumulator = accumulator;
             }
 
-            public override AsyncIterator<TAccumulate> Clone()
+            public override AsyncIteratorBase<TAccumulate> Clone()
             {
                 return new ScanAsyncEnumerable<TSource, TAccumulate>(_source, _seed, _accumulator);
             }
@@ -208,7 +208,7 @@ namespace System.Linq
                 _accumulator = accumulator;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new ScanAsyncEnumerableWithTask<TSource>(_source, _accumulator);
             }
@@ -282,7 +282,7 @@ namespace System.Linq
                 _accumulator = accumulator;
             }
 
-            public override AsyncIterator<TAccumulate> Clone()
+            public override AsyncIteratorBase<TAccumulate> Clone()
             {
                 return new ScanAsyncEnumerableWithTask<TSource, TAccumulate>(_source, _seed, _accumulator);
             }

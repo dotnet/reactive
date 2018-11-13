@@ -47,7 +47,7 @@ namespace System.Linq
                 _finallyAction = finallyAction;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new FinallyAsyncIterator<TSource>(_source, _finallyAction);
             }
@@ -105,7 +105,7 @@ namespace System.Linq
                 _finallyAction = finallyAction;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new FinallyAsyncIteratorWithTask<TSource>(_source, _finallyAction);
             }

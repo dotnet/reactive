@@ -101,7 +101,7 @@ namespace System.Linq
                 _comparer = comparer ?? EqualityComparer<TSource>.Default;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new DistinctUntilChangedAsyncIterator<TSource>(_source, _comparer);
             }
@@ -172,7 +172,7 @@ namespace System.Linq
                 _comparer = comparer ?? EqualityComparer<TKey>.Default;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new DistinctUntilChangedAsyncIterator<TSource, TKey>(_source, _keySelector, _comparer);
             }
@@ -243,7 +243,7 @@ namespace System.Linq
                 _comparer = comparer ?? EqualityComparer<TKey>.Default;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new DistinctUntilChangedAsyncIteratorWithTask<TSource, TKey>(_source, _keySelector, _comparer);
             }

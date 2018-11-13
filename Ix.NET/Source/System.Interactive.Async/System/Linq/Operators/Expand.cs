@@ -49,7 +49,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new ExpandAsyncIterator<TSource>(_source, _selector);
             }
@@ -139,7 +139,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new ExpandAsyncIteratorWithTask<TSource>(_source, _selector);
             }

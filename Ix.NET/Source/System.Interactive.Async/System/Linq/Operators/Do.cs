@@ -147,7 +147,7 @@ namespace System.Linq
                 _onCompleted = onCompleted;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new DoAsyncIterator<TSource>(_source, _onNext, _onError, _onCompleted);
             }
@@ -223,7 +223,7 @@ namespace System.Linq
                 _onCompleted = onCompleted;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new DoAsyncIteratorWithTask<TSource>(_source, _onNext, _onError, _onCompleted);
             }

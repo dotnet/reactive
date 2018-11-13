@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-    internal abstract class AsyncIteratorBase<TSource> : IAsyncEnumerable<TSource>, IAsyncEnumerator<TSource>
+    internal abstract partial class AsyncIteratorBase<TSource> : IAsyncEnumerable<TSource>, IAsyncEnumerator<TSource>
     {
         private readonly int _threadId;
 
@@ -66,12 +66,12 @@ namespace System.Linq
             }
         }
 
-        public abstract AsyncIterator<TSource> Clone();
+        public abstract AsyncIteratorBase<TSource> Clone();
 
         protected abstract ValueTask<bool> MoveNextCore();
     }
 
-    internal abstract partial class AsyncIterator<TSource> : AsyncIteratorBase<TSource>
+    internal abstract class AsyncIterator<TSource> : AsyncIteratorBase<TSource>
     {
         protected TSource _current;
 

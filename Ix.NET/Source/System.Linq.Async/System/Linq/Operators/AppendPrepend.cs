@@ -105,7 +105,7 @@ namespace System.Linq
                 _appending = appending;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new AppendPrepend1AsyncIterator<TSource>(_source, _item, _appending);
             }
@@ -297,7 +297,7 @@ namespace System.Linq
                 _appendCount = appendCount;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new AppendPrependNAsyncIterator<TSource>(_source, _prepended, _appended, _prependCount, _appendCount);
             }

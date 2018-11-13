@@ -56,7 +56,7 @@ namespace System.Linq
                 _sources = sources;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new OnErrorResumeNextAsyncIterator<TSource>(_sources);
             }

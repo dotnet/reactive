@@ -33,7 +33,7 @@ namespace System.Linq
             _index = 0;
         }
 
-        public override AsyncIterator<TSource> Clone()
+        public override AsyncIteratorBase<TSource> Clone()
         {
             return new AsyncListPartition<TSource>(_source, _minIndexInclusive, _maxIndexInclusive);
         }

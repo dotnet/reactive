@@ -55,7 +55,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new ZipAsyncIterator<TFirst, TSecond, TResult>(_first, _second, _selector);
             }
@@ -127,7 +127,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new ZipAsyncIteratorWithTask<TFirst, TSecond, TResult>(_first, _second, _selector);
             }

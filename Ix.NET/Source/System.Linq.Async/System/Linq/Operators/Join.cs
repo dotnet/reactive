@@ -102,7 +102,7 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(_outer, _inner, _outerKeySelector, _innerKeySelector, _resultSelector, _comparer);
             }
@@ -229,7 +229,7 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new JoinAsyncIteratorWithTask<TOuter, TInner, TKey, TResult>(_outer, _inner, _outerKeySelector, _innerKeySelector, _resultSelector, _comparer);
             }

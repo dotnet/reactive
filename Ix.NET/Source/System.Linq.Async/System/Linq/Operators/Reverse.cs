@@ -76,7 +76,7 @@ namespace System.Linq
                 return _source.Count(cancellationToken);
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new ReverseAsyncIterator<TSource>(_source);
             }

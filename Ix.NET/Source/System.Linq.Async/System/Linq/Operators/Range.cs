@@ -39,7 +39,7 @@ namespace System.Linq
                 _end = start + count;
             }
 
-            public override AsyncIterator<int> Clone() => new RangeAsyncIterator(_start, _end - _start);
+            public override AsyncIteratorBase<int> Clone() => new RangeAsyncIterator(_start, _end - _start);
 
             public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(_end - _start);
 

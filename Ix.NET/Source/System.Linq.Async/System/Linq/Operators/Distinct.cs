@@ -71,7 +71,7 @@ namespace System.Linq
                 }
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new DistinctAsyncIterator<TSource>(_source, _comparer);
             }

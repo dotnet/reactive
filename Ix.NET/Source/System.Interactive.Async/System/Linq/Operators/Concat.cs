@@ -51,7 +51,7 @@ namespace System.Linq
                 _source = source;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new ConcatEnumerableAsyncIterator<TSource>(_source);
             }
@@ -140,7 +140,7 @@ namespace System.Linq
                 _source = source;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new ConcatAsyncEnumerableAsyncIterator<TSource>(_source);
             }

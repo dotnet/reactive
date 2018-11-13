@@ -43,7 +43,7 @@ namespace System.Linq
                 _defaultValue = defaultValue;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new DefaultIfEmptyAsyncIterator<TSource>(_source, _defaultValue);
             }

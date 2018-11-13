@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -18,7 +17,7 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            if (source is AsyncIterator<TSource> iterator)
+            if (source is AsyncIteratorBase<TSource> iterator)
             {
                 return iterator.Where(predicate);
             }
@@ -44,7 +43,7 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            if (source is AsyncIterator<TSource> iterator)
+            if (source is AsyncIteratorBase<TSource> iterator)
             {
                 return iterator.Where(predicate);
             }
@@ -88,7 +87,7 @@ namespace System.Linq
                 _predicate = predicate;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new WhereEnumerableAsyncIterator<TSource>(_source, _predicate);
             }
@@ -159,7 +158,7 @@ namespace System.Linq
                 _predicate = predicate;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new WhereEnumerableWithIndexAsyncIterator<TSource>(_source, _predicate);
             }
@@ -225,7 +224,7 @@ namespace System.Linq
                 _predicate = predicate;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new WhereEnumerableAsyncIteratorWithTask<TSource>(_source, _predicate);
             }
@@ -291,7 +290,7 @@ namespace System.Linq
                 _predicate = predicate;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new WhereEnumerableWithIndexAsyncIteratorWithTask<TSource>(_source, _predicate);
             }
@@ -361,7 +360,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new WhereSelectEnumerableAsyncIterator<TSource, TResult>(_source, _predicate, _selector);
             }

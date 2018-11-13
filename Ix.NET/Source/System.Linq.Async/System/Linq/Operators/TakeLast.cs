@@ -41,7 +41,7 @@ namespace System.Linq
                 _count = count;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new TakeLastAsyncIterator<TSource>(_source, _count);
             }

@@ -68,7 +68,7 @@ namespace System.Linq
                 _predicate = predicate;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new SkipWhileAsyncIterator<TSource>(_source, _predicate);
             }
@@ -145,7 +145,7 @@ namespace System.Linq
                 _predicate = predicate;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new SkipWhileWithIndexAsyncIterator<TSource>(_source, _predicate);
             }
@@ -228,7 +228,7 @@ namespace System.Linq
                 _predicate = predicate;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new SkipWhileAsyncIteratorWithTask<TSource>(_source, _predicate);
             }
@@ -305,7 +305,7 @@ namespace System.Linq
                 _predicate = predicate;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new SkipWhileWithIndexAsyncIteratorWithTask<TSource>(_source, _predicate);
             }

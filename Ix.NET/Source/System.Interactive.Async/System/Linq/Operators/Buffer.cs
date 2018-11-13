@@ -53,7 +53,7 @@ namespace System.Linq
                 _skip = skip;
             }
 
-            public override AsyncIterator<IList<TSource>> Clone()
+            public override AsyncIteratorBase<IList<TSource>> Clone()
             {
                 return new BufferAsyncIterator<TSource>(_source, _count, _skip);
             }

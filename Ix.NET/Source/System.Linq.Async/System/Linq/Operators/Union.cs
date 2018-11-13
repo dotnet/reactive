@@ -213,7 +213,7 @@ namespace System.Linq
                 _second = second;
             }
 
-            public override AsyncIterator<TSource> Clone() => new UnionAsyncIterator2<TSource>(_first, _second, _comparer);
+            public override AsyncIteratorBase<TSource> Clone() => new UnionAsyncIterator2<TSource>(_first, _second, _comparer);
 
             internal override IAsyncEnumerable<TSource> GetEnumerable(int index)
             {
@@ -255,7 +255,7 @@ namespace System.Linq
                 _headIndex = headIndex;
             }
 
-            public override AsyncIterator<TSource> Clone() => new UnionAsyncIteratorN<TSource>(_sources, _headIndex, _comparer);
+            public override AsyncIteratorBase<TSource> Clone() => new UnionAsyncIteratorN<TSource>(_sources, _headIndex, _comparer);
 
             internal override IAsyncEnumerable<TSource> GetEnumerable(int index) => index > _headIndex ? null : _sources.GetNode(_headIndex - index).Item;
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-    internal partial class AsyncIterator<TSource>
+    internal partial class AsyncIteratorBase<TSource>
     {
         public virtual IAsyncEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector)
         {

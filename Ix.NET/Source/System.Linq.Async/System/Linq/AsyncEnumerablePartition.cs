@@ -46,7 +46,7 @@ namespace System.Linq
 
         private int Limit => (_maxIndexInclusive + 1) - _minIndexInclusive; // This is that upper bound.
 
-        public override AsyncIterator<TSource> Clone()
+        public override AsyncIteratorBase<TSource> Clone()
         {
             return new AsyncEnumerablePartition<TSource>(_source, _minIndexInclusive, _maxIndexInclusive);
         }

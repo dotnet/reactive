@@ -93,7 +93,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectEnumerableAsyncIterator<TSource, TResult>(_source, _selector);
             }
@@ -154,7 +154,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectEnumerableWithIndexAsyncIterator<TSource, TResult>(_source, _selector);
             }
@@ -217,7 +217,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectIListIterator<TSource, TResult>(_source, _selector);
             }
@@ -328,7 +328,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectEnumerableAsyncIteratorWithTask<TSource, TResult>(_source, _selector);
             }
@@ -389,7 +389,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectEnumerableWithIndexAsyncIteratorWithTask<TSource, TResult>(_source, _selector);
             }
@@ -457,7 +457,7 @@ namespace System.Linq
                 _selector = selector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new SelectIListIteratorWithTask<TSource, TResult>(_source, _selector);
             }

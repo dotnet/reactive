@@ -36,7 +36,7 @@ namespace System.Linq
                 _source = source;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new CastAsyncIterator<TResult>(_source);
             }

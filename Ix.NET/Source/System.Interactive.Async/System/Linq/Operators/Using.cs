@@ -48,7 +48,7 @@ namespace System.Linq
                 _enumerableFactory = enumerableFactory;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new UsingAsyncIterator<TSource, TResource>(_resourceFactory, _enumerableFactory);
             }
@@ -117,7 +117,7 @@ namespace System.Linq
                 _enumerableFactory = enumerableFactory;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new UsingAsyncIteratorWithTask<TSource, TResource>(_resourceFactory, _enumerableFactory);
             }

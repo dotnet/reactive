@@ -31,7 +31,7 @@ namespace System.Linq
                 _source = source;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new IgnoreElementsAsyncIterator<TSource>(_source);
             }

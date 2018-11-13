@@ -88,7 +88,7 @@ namespace System.Linq
             _parent = parent;
         }
 
-        public override AsyncIterator<TElement> Clone()
+        public override AsyncIteratorBase<TElement> Clone()
         {
             return new OrderedAsyncEnumerable<TElement, TKey>(_source, _keySelector, _comparer, _descending, _parent);
         }
@@ -125,7 +125,7 @@ namespace System.Linq
             _parent = parent;
         }
 
-        public override AsyncIterator<TElement> Clone()
+        public override AsyncIteratorBase<TElement> Clone()
         {
             return new OrderedAsyncEnumerableWithTask<TElement, TKey>(_source, _keySelector, _comparer, _descending, _parent);
         }

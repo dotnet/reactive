@@ -53,7 +53,7 @@ namespace System.Linq
                 _second = second;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new AmbAsyncIterator<TSource>(_first, _second);
             }
@@ -148,7 +148,7 @@ namespace System.Linq
                 _sources = sources;
             }
 
-            public override AsyncIterator<TSource> Clone()
+            public override AsyncIteratorBase<TSource> Clone()
             {
                 return new AmbAsyncIteratorN<TSource>(_sources);
             }

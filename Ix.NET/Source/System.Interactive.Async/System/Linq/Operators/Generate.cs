@@ -46,7 +46,7 @@ namespace System.Linq
                 _resultSelector = resultSelector;
             }
 
-            public override AsyncIterator<TResult> Clone()
+            public override AsyncIteratorBase<TResult> Clone()
             {
                 return new GenerateAsyncIterator<TState, TResult>(_initialState, _condition, _iterate, _resultSelector);
             }
