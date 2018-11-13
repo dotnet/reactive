@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,20 +26,18 @@ namespace System.Linq
 
             private sealed class NeverAsyncEnumerator : IAsyncEnumerator<TValue>
             {
-                public TValue Current => throw new InvalidOperationException();
-
                 private readonly CancellationToken _token;
 
                 private CancellationTokenRegistration _registration;
-
                 private bool _once;
-
                 private TaskCompletionSource<bool> _task;
 
                 public NeverAsyncEnumerator(CancellationToken token)
                 {
                     _token = token;
                 }
+
+                public TValue Current => throw new InvalidOperationException();
 
                 public ValueTask DisposeAsync()
                 {
@@ -55,6 +52,7 @@ namespace System.Linq
                     {
                         return new ValueTask<bool>(false);
                     }
+
                     _once = true;
                     _task = new TaskCompletionSource<bool>();
                     _registration = _token.Register(state => ((NeverAsyncEnumerator)state)._task.SetCanceled(), this);
