@@ -87,9 +87,20 @@ namespace System.Linq
 
                                 if (winner == delay)
                                 {
-                                    // we still have to wait for the "next" to complete
-                                    // before we can dispose _enumerator
-                                    _loserTask = next.ContinueWith(async (t, state) => await ((IAsyncDisposable)state).DisposeAsync(), _enumerator);
+                                    // NB: We still have to wait for the MoveNextAsync operation to complete before we can
+                                    //     dispose _enumerator. The resulting task will be used by DisposeAsync. Also note
+                                    //     that throwing an exception here causes a call to DisposeAsync, where we pick up
+                                    //     the task prepared below.
+
+                                    // NB: Any exception reported by a timed out MoveNextAsync operation won't be reported
+                                    //     to the caller, but the task's exception is not marked as observed, so unhandled
+                                    //     exception handlers can still observe the exception.
+
+                                    // REVIEW: Should exceptions reported by a timed out MoveNextAsync operation come out
+                                    //         when attempting to call DisposeAsync?
+
+                                    _loserTask = next.ContinueWith((_, state) => ((IAsyncDisposable)state).DisposeAsync().AsTask(), _enumerator);
+
                                     throw new TimeoutException();
                                 }
 
