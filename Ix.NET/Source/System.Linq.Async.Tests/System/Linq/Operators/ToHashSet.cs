@@ -23,11 +23,11 @@ namespace Tests
         }
 
         [Fact]
-        public void ToHashSet1()
+        public async Task ToHashSet1()
         {
             var xs = new[] { 1, 2, 1, 2, 3, 4, 1, 2, 3, 4 };
             var res = xs.ToAsyncEnumerable().ToHashSet();
-            Assert.True(res.Result.OrderBy(x => x).SequenceEqual(new[] { 1, 2, 3, 4 }));
+            Assert.True((await res).OrderBy(x => x).SequenceEqual(new[] { 1, 2, 3, 4 }));
         }
     }
 }

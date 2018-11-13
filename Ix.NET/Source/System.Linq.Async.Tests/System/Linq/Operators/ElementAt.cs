@@ -27,35 +27,35 @@ namespace Tests
         public void ElementAt1()
         {
             var res = AsyncEnumerable.Empty<int>().ElementAt(0);
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is ArgumentOutOfRangeException);
+            AssertThrowsAsync<ArgumentOutOfRangeException>(res);
         }
 
         [Fact]
-        public void ElementAt2()
+        public async Task ElementAt2Async()
         {
             var res = Return42.ElementAt(0);
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
         public void ElementAt3()
         {
             var res = Return42.ElementAt(1);
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is ArgumentOutOfRangeException);
+            AssertThrowsAsync<ArgumentOutOfRangeException>(res);
         }
 
         [Fact]
-        public void ElementAt4()
+        public async Task ElementAt4Async()
         {
             var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAt(1);
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
         public void ElementAt5()
         {
             var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAt(7);
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is ArgumentOutOfRangeException);
+            AssertThrowsAsync<ArgumentOutOfRangeException>(res);
         }
 
         [Fact]

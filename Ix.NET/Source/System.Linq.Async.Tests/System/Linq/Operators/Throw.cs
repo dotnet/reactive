@@ -23,11 +23,7 @@ namespace Tests
             var xs = Throw<int>(ex);
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
-        }
-
-        private void Nop(object o)
-        {
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
     }
 }

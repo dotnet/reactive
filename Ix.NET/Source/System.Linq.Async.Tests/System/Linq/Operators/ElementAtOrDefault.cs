@@ -21,45 +21,45 @@ namespace Tests
         }
 
         [Fact]
-        public void ElementAtOrDefault1()
+        public async Task ElementAtOrDefault1Async()
         {
             var res = AsyncEnumerable.Empty<int>().ElementAtOrDefault(0);
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
 
         [Fact]
-        public void ElementAtOrDefault2()
+        public async Task ElementAtOrDefault2Async()
         {
             var res = Return42.ElementAtOrDefault(0);
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
-        public void ElementAtOrDefault3()
+        public async Task ElementAtOrDefault3Async()
         {
             var res = Return42.ElementAtOrDefault(1);
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
 
         [Fact]
-        public void ElementAtOrDefault4()
+        public async Task ElementAtOrDefault4Async()
         {
             var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAtOrDefault(1);
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
-        public void ElementAtOrDefault5()
+        public async Task ElementAtOrDefault5Async()
         {
             var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAtOrDefault(7);
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
 
         [Fact]
-        public void ElementAtOrDefault6()
+        public async Task ElementAtOrDefault6Async()
         {
             var res = Return42.ElementAtOrDefault(-1);
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
 
         [Fact]

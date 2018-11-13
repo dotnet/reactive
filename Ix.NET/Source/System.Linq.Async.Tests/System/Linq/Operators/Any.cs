@@ -25,17 +25,17 @@ namespace Tests
         }
 
         [Fact]
-        public void Any1()
+        public async Task Any1Async()
         {
             var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Any(x => x % 2 == 0);
-            Assert.True(res.Result);
+            Assert.True(await res);
         }
 
         [Fact]
-        public void Any2()
+        public async Task Any2Async()
         {
             var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().Any(x => x % 2 != 0);
-            Assert.False(res.Result);
+            Assert.False(await res);
         }
 
         [Fact]
@@ -55,17 +55,17 @@ namespace Tests
         }
 
         [Fact]
-        public void Any5()
+        public async Task Any5Async()
         {
             var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Any();
-            Assert.True(res.Result);
+            Assert.True(await res);
         }
 
         [Fact]
-        public void Any6()
+        public async Task Any6Async()
         {
             var res = new int[0].ToAsyncEnumerable().Any();
-            Assert.False(res.Result);
+            Assert.False(await res);
         }
     }
 }

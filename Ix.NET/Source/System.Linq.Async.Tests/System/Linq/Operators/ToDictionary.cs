@@ -46,10 +46,10 @@ namespace Tests
         }
 
         [Fact]
-        public void ToDictionary1()
+        public async Task ToDictionary1Async()
         {
             var xs = new[] { 1, 4 }.ToAsyncEnumerable();
-            var res = xs.ToDictionary(x => x % 2).Result;
+            var res = await xs.ToDictionary(x => x % 2);
             Assert.True(res[0] == 4);
             Assert.True(res[1] == 1);
         }
@@ -58,14 +58,14 @@ namespace Tests
         public void ToDictionary2()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            AssertThrows<Exception>(() => xs.ToDictionary(x => x % 2).Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is ArgumentException);
+            AssertThrowsAsync<ArgumentException>(xs.ToDictionary(x => x % 2));
         }
 
         [Fact]
-        public void ToDictionary3()
+        public async Task ToDictionary3Async()
         {
             var xs = new[] { 1, 4 }.ToAsyncEnumerable();
-            var res = xs.ToDictionary(x => x % 2, x => x + 1).Result;
+            var res = await xs.ToDictionary(x => x % 2, x => x + 1);
             Assert.True(res[0] == 5);
             Assert.True(res[1] == 2);
         }
@@ -74,14 +74,14 @@ namespace Tests
         public void ToDictionary4()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            AssertThrows<Exception>(() => xs.ToDictionary(x => x % 2, x => x + 1).Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is ArgumentException);
+            AssertThrowsAsync<ArgumentException>(xs.ToDictionary(x => x % 2, x => x + 1));
         }
 
         [Fact]
-        public void ToDictionary5()
+        public async Task ToDictionary5Async()
         {
             var xs = new[] { 1, 4 }.ToAsyncEnumerable();
-            var res = xs.ToDictionary(x => x % 2, new Eq()).Result;
+            var res = await xs.ToDictionary(x => x % 2, new Eq());
             Assert.True(res[0] == 4);
             Assert.True(res[1] == 1);
         }
@@ -90,14 +90,14 @@ namespace Tests
         public void ToDictionary6()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            AssertThrows<Exception>(() => xs.ToDictionary(x => x % 2, new Eq()).Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is ArgumentException);
+            AssertThrowsAsync<ArgumentException>(xs.ToDictionary(x => x % 2, new Eq()));
         }
 
         [Fact]
-        public void ToDictionary7()
+        public async Task ToDictionary7Async()
         {
             var xs = new[] { 1, 4 }.ToAsyncEnumerable();
-            var res = xs.ToDictionary(x => x % 2, x => x, new Eq()).Result;
+            var res = await xs.ToDictionary(x => x % 2, x => x, new Eq());
             Assert.True(res[0] == 4);
             Assert.True(res[1] == 1);
         }

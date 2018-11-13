@@ -84,173 +84,173 @@ namespace Tests
         }
 
         [Fact]
-        public void Average1()
+        public async Task Average1()
         {
             var xs = new[] { 1, 2, 3 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), ys.Average().Result);
-            Assert.Equal(xs.Average(), ys.Average(x => x).Result);
+            Assert.Equal(xs.Average(), await ys.Average());
+            Assert.Equal(xs.Average(), await ys.Average(x => x));
         }
 
         [Fact]
-        public void Average2()
+        public async Task Average2()
         {
             var xs = new[] { 1, default(int?), 3 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), ys.Average().Result);
-            Assert.Equal(xs.Average(), ys.Average(x => x).Result);
+            Assert.Equal(xs.Average(), await ys.Average());
+            Assert.Equal(xs.Average(), await ys.Average(x => x));
         }
 
         [Fact]
-        public void Average3()
+        public async Task Average3()
         {
             var xs = new[] { 1L, 2L, 3L };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), ys.Average().Result);
-            Assert.Equal(xs.Average(), ys.Average(x => x).Result);
+            Assert.Equal(xs.Average(), await ys.Average());
+            Assert.Equal(xs.Average(), await ys.Average(x => x));
         }
 
         [Fact]
-        public void Average4()
+        public async Task Average4()
         {
             var xs = new[] { 1L, default(long?), 3L };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), ys.Average().Result);
-            Assert.Equal(xs.Average(), ys.Average(x => x).Result);
+            Assert.Equal(xs.Average(), await ys.Average());
+            Assert.Equal(xs.Average(), await ys.Average(x => x));
         }
 
         [Fact]
-        public void Average5()
+        public async Task Average5()
         {
             var xs = new[] { 1.0, 2.0, 3.0 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), ys.Average().Result);
-            Assert.Equal(xs.Average(), ys.Average(x => x).Result);
+            Assert.Equal(xs.Average(), await ys.Average());
+            Assert.Equal(xs.Average(), await ys.Average(x => x));
         }
 
         [Fact]
-        public void Average6()
+        public async Task Average6()
         {
             var xs = new[] { 1.0, default(double?), 3.0 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), ys.Average().Result);
-            Assert.Equal(xs.Average(), ys.Average(x => x).Result);
+            Assert.Equal(xs.Average(), await ys.Average());
+            Assert.Equal(xs.Average(), await ys.Average(x => x));
         }
 
         [Fact]
-        public void Average7()
+        public async Task Average7()
         {
             var xs = new[] { 1.0f, 2.0f, 3.0f };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), ys.Average().Result);
-            Assert.Equal(xs.Average(), ys.Average(x => x).Result);
+            Assert.Equal(xs.Average(), await ys.Average());
+            Assert.Equal(xs.Average(), await ys.Average(x => x));
         }
 
         [Fact]
-        public void Average8()
+        public async Task Average8()
         {
             var xs = new[] { 1.0f, default(float?), 3.0f };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), ys.Average().Result);
-            Assert.Equal(xs.Average(), ys.Average(x => x).Result);
+            Assert.Equal(xs.Average(), await ys.Average());
+            Assert.Equal(xs.Average(), await ys.Average(x => x));
         }
 
         [Fact]
-        public void Average9()
+        public async Task Average9()
         {
             var xs = new[] { 1.0m, 2.0m, 3.0m };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), ys.Average().Result);
-            Assert.Equal(xs.Average(), ys.Average(x => x).Result);
+            Assert.Equal(xs.Average(), await ys.Average());
+            Assert.Equal(xs.Average(), await ys.Average(x => x));
         }
 
         [Fact]
-        public void Average10()
+        public async Task Average10()
         {
             var xs = new[] { 1.0m, default(decimal?), 3.0m };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), ys.Average().Result);
-            Assert.Equal(xs.Average(), ys.Average(x => x).Result);
+            Assert.Equal(xs.Average(), await ys.Average());
+            Assert.Equal(xs.Average(), await ys.Average(x => x));
         }
 
         [Fact]
-        public void Average11()
+        public async Task Average11()
         {
             var xs = new int[0];
             var ys = xs.ToAsyncEnumerable();
-            AssertThrows<Exception>(() => ys.Average().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.Average());
         }
 
         [Fact]
-        public void Average12()
+        public async Task Average12()
         {
             var xs = new int?[0];
             var ys = xs.ToAsyncEnumerable();
-            Assert.Null(ys.Average().Result);
+            Assert.Null(await ys.Average());
         }
 
         [Fact]
-        public void Average13()
+        public async Task Average13()
         {
             var xs = new long[0];
             var ys = xs.ToAsyncEnumerable();
-            AssertThrows<Exception>(() => ys.Average().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.Average());
         }
 
         [Fact]
-        public void Average14()
+        public async Task Average14()
         {
             var xs = new long?[0];
             var ys = xs.ToAsyncEnumerable();
-            Assert.Null(ys.Average().Result);
+            Assert.Null(await ys.Average());
         }
 
         [Fact]
-        public void Average15()
+        public async Task Average15()
         {
             var xs = new double[0];
             var ys = xs.ToAsyncEnumerable();
-            AssertThrows<Exception>(() => ys.Average().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.Average());
         }
 
         [Fact]
-        public void Average16()
+        public async Task Average16()
         {
             var xs = new double?[0];
             var ys = xs.ToAsyncEnumerable();
-            Assert.Null(ys.Average().Result);
+            Assert.Null(await ys.Average());
         }
 
         [Fact]
-        public void Average17()
+        public async Task Average17()
         {
             var xs = new float[0];
             var ys = xs.ToAsyncEnumerable();
-            AssertThrows<Exception>(() => ys.Average().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.Average());
         }
 
         [Fact]
-        public void Average18()
+        public async Task Average18()
         {
             var xs = new float?[0];
             var ys = xs.ToAsyncEnumerable();
-            Assert.Null(ys.Average().Result);
+            Assert.Null(await ys.Average());
         }
 
         [Fact]
-        public void Average19()
+        public async Task Average19()
         {
             var xs = new decimal[0];
             var ys = xs.ToAsyncEnumerable();
-            AssertThrows<Exception>(() => ys.Average().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.Average());
         }
 
         [Fact]
-        public void Average20()
+        public async Task Average20()
         {
             var xs = new decimal?[0];
             var ys = xs.ToAsyncEnumerable();
-            Assert.Null(ys.Average().Result);
+            Assert.Null(await ys.Average());
         }
     }
 }

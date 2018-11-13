@@ -37,11 +37,11 @@ namespace Tests
         }
 
         [Fact]
-        public void Aggregate1()
+        public async Task Aggregate1Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate((x, y) => x * y);
-            Assert.Equal(24, ys.Result);
+            Assert.Equal(24, await ys);
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace Tests
         {
             var xs = new int[0].ToAsyncEnumerable();
             var ys = xs.Aggregate((x, y) => x * y);
-            AssertThrows<Exception>(() => ys.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            AssertThrowsAsync<InvalidOperationException>(ys);
         }
 
         [Fact]
@@ -71,19 +71,19 @@ namespace Tests
         }
 
         [Fact]
-        public void Aggregate5()
+        public async Task Aggregate5Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => x * y);
-            Assert.Equal(24, ys.Result);
+            Assert.Equal(24, await ys);
         }
 
         [Fact]
-        public void Aggregate6()
+        public async Task Aggregate6Async()
         {
             var xs = new int[0].ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => x * y);
-            Assert.Equal(1, ys.Result);
+            Assert.Equal(1, await ys);
         }
 
         [Fact]
@@ -105,19 +105,19 @@ namespace Tests
         }
 
         [Fact]
-        public void Aggregate9()
+        public async Task Aggregate9Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => x * y, x => x + 1);
-            Assert.Equal(25, ys.Result);
+            Assert.Equal(25, await ys);
         }
 
         [Fact]
-        public void Aggregate10()
+        public async Task Aggregate10Async()
         {
             var xs = new int[0].ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => x * y, x => x + 1);
-            Assert.Equal(2, ys.Result);
+            Assert.Equal(2, await ys);
         }
 
         [Fact]

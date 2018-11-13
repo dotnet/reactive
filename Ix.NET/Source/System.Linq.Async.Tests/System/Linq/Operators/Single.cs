@@ -29,35 +29,35 @@ namespace Tests
         public void Single1()
         {
             var res = AsyncEnumerable.Empty<int>().Single();
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
         public void Single2()
         {
             var res = AsyncEnumerable.Empty<int>().Single(x => true);
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
         public void Single3()
         {
             var res = Return42.Single(x => x % 2 != 0);
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
-        public void Single4()
+        public async Task Single4Async()
         {
             var res = Return42.Single();
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
-        public void Single5()
+        public async Task Single5Async()
         {
             var res = Return42.Single(x => x % 2 == 0);
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
@@ -80,28 +80,28 @@ namespace Tests
         public void Single8()
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().Single();
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
-        public void Single9()
+        public async Task Single9Async()
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().Single(x => x % 2 != 0);
-            Assert.Equal(45, res.Result);
+            Assert.Equal(45, await res);
         }
 
         [Fact]
         public void Single10()
         {
             var res = new[] { 42, 23, 45, 90 }.ToAsyncEnumerable().Single(x => x % 2 != 0);
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
         public void Single11()
         {
             var res = new int[0].ToAsyncEnumerable().Single();
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            AssertThrowsAsync<InvalidOperationException>(res);
         }
     }
 }

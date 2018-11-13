@@ -47,10 +47,10 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookup1()
+        public async Task ToLookup1Async()
         {
             var xs = new[] { 1, 4 }.ToAsyncEnumerable();
-            var res = xs.ToLookup(x => x % 2).Result;
+            var res = await xs.ToLookup(x => x % 2);
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(4, res[0]);
@@ -59,10 +59,10 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookup2()
+        public async Task ToLookup2Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            var res = xs.ToLookup(x => x % 2).Result;
+            var res = await xs.ToLookup(x => x % 2);
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(4, res[0]);
@@ -72,10 +72,10 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookup3()
+        public async Task ToLookup3Async()
         {
             var xs = new[] { 1, 4 }.ToAsyncEnumerable();
-            var res = xs.ToLookup(x => x % 2, x => x + 1).Result;
+            var res = await xs.ToLookup(x => x % 2, x => x + 1);
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(5, res[0]);
@@ -84,10 +84,10 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookup4()
+        public async Task ToLookup4Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            var res = xs.ToLookup(x => x % 2, x => x + 1).Result;
+            var res = await xs.ToLookup(x => x % 2, x => x + 1);
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(5, res[0]);
@@ -97,10 +97,10 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookup5()
+        public async Task ToLookup5Async()
         {
             var xs = new[] { 1, 4 }.ToAsyncEnumerable();
-            var res = xs.ToLookup(x => x % 2, new Eq()).Result;
+            var res = await xs.ToLookup(x => x % 2, new Eq());
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(4, res[0]);
@@ -109,10 +109,10 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookup6()
+        public async Task ToLookup6Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            var res = xs.ToLookup(x => x % 2, new Eq()).Result;
+            var res = await xs.ToLookup(x => x % 2, new Eq());
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(4, res[0]);
@@ -122,19 +122,19 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookup7()
+        public async Task ToLookup7Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            var res = xs.ToLookup(x => x % 2).Result;
+            var res = await xs.ToLookup(x => x % 2);
             foreach (var g in res)
                 Assert.True(g.Key == 0 || g.Key == 1);
         }
 
         [Fact]
-        public void ToLookup8()
+        public async Task ToLookup8Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            var res = xs.ToLookup(x => x % 2).Result;
+            var res = await xs.ToLookup(x => x % 2);
 #pragma warning disable IDE0007 // Use implicit type
             foreach (IGrouping<int, int> g in (IEnumerable)res)
                 Assert.True(g.Key == 0 || g.Key == 1);
@@ -142,10 +142,10 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookup9()
+        public async Task ToLookup9Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            var res = xs.ToLookup(x => x % 2, x => x, new Eq()).Result;
+            var res = await xs.ToLookup(x => x % 2, x => x, new Eq());
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(4, res[0]);

@@ -67,7 +67,7 @@ namespace Tests
 
             var e = res.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.Equal(2, e.Current.Key);
             var g1 = e.Current.GetAsyncEnumerator();
             await HasNextAsync(g1, xs[0]);
@@ -76,19 +76,19 @@ namespace Tests
             await HasNextAsync(g1, xs[5]);
             await NoNextAsync(g1);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.Equal(6, e.Current.Key);
             var g2 = e.Current.GetAsyncEnumerator();
             await HasNextAsync(g2, xs[1]);
             await NoNextAsync(g2);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.Equal(1, e.Current.Key);
             var g3 = e.Current.GetAsyncEnumerator();
             await HasNextAsync(g3, xs[3]);
             await NoNextAsync(g3);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.Equal(4, e.Current.Key);
             var g4 = e.Current.GetAsyncEnumerator();
             await HasNextAsync(g4, xs[6]);
@@ -116,19 +116,19 @@ namespace Tests
 
             var e = res.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g1 = e.Current;
             Assert.Equal(2, g1.Key);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g2 = e.Current;
             Assert.Equal(6, g2.Key);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g3 = e.Current;
             Assert.Equal(1, g3.Key);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g4 = e.Current;
             Assert.Equal(4, g4.Key);
 
@@ -178,55 +178,32 @@ namespace Tests
         [Fact]
         public void GroupBy5()
         {
-            var xs = GetXs().ToAsyncEnumerable();
+            var ex = new Exception("Bang!");
+            var xs = GetXs(ex).ToAsyncEnumerable();
             var ys = xs.GroupBy(x => x);
 
             var e = ys.GetAsyncEnumerator();
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
-
-            //Assert.True(e.MoveNext().Result);
-            //var g1 = e.Current;
-            //Assert.Equal(g1.Key, 42);
-            //var g1e = g1.GetEnumerator();
-            //await HasNextAsync(g1e, 42);
-
-            //Assert.True(e.MoveNext().Result);
-            //var g2 = e.Current;
-            //Assert.Equal(g2.Key, 43);
-            //var g2e = g2.GetEnumerator();
-            //await HasNextAsync(g2e, 43);
-
-
-            //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
-            //AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
         public void GroupBy6()
         {
-            var xs = GetXs().ToAsyncEnumerable();
+            var ex = new Exception("Bang!");
+            var xs = GetXs(ex).ToAsyncEnumerable();
             var ys = xs.GroupBy(x => x);
 
             var e = ys.GetAsyncEnumerator();
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
-
-            //Assert.True(e.MoveNext().Result);
-            //var g1 = e.Current;
-            //Assert.Equal(g1.Key, 42);
-            //var g1e = g1.GetEnumerator();
-            //await HasNextAsync(g1e, 42);
-            //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
-
-
+            AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
-        private static IEnumerable<int> GetXs()
+        private static IEnumerable<int> GetXs(Exception ex)
         {
             yield return 42;
             yield return 43;
-            throw new Exception("Bang!");
+            throw ex;
         }
 
         [Fact]
@@ -251,13 +228,13 @@ namespace Tests
 
             AssertThrowsAsync(e.MoveNextAsync(), ex);
 
-            //Assert.True(e.MoveNext().Result);
+            //Assert.True(await e.MoveNext());
             //var g1 = e.Current;
             //Assert.Equal(g1.Key, 1);
             //var g1e = g1.GetEnumerator();
             //await HasNextAsync(g1e, 1);
 
-            //Assert.True(e.MoveNext().Result);
+            //Assert.True(await e.MoveNext());
             //var g2 = e.Current;
             //Assert.Equal(g2.Key, 2);
             //var g2e = g2.GetEnumerator();
@@ -276,7 +253,7 @@ namespace Tests
 
             var e = ys.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
             var g1e = g1.GetAsyncEnumerator();
@@ -286,7 +263,7 @@ namespace Tests
             await HasNextAsync(g1e, 'j');
             await NoNextAsync(g1e);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g2 = e.Current;
             Assert.Equal(1, g2.Key);
             var g2e = g2.GetAsyncEnumerator();
@@ -295,7 +272,7 @@ namespace Tests
             await HasNextAsync(g2e, 'h');
             await NoNextAsync(g2e);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g3 = e.Current;
             Assert.Equal(2, g3.Key);
             var g3e = g3.GetAsyncEnumerator();
@@ -341,7 +318,7 @@ namespace Tests
 
             var e = ys.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
             var g1e = g1.GetAsyncEnumerator();
@@ -351,7 +328,7 @@ namespace Tests
             await HasNextAsync(g1e, 9);
             await NoNextAsync(g1e);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g2 = e.Current;
             Assert.Equal(1, g2.Key);
             var g2e = g2.GetAsyncEnumerator();
@@ -360,7 +337,7 @@ namespace Tests
             await HasNextAsync(g2e, 7);
             await NoNextAsync(g2e);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g3 = e.Current;
             Assert.Equal(2, g3.Key);
             var g3e = g3.GetAsyncEnumerator();
@@ -380,7 +357,7 @@ namespace Tests
 
             var e = ys.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
             var g1e = g1.GetAsyncEnumerator();
@@ -390,7 +367,7 @@ namespace Tests
             await HasNextAsync(g1e, 'j');
             await NoNextAsync(g1e);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g2 = e.Current;
             Assert.Equal(1, g2.Key);
             var g2e = g2.GetAsyncEnumerator();
@@ -399,7 +376,7 @@ namespace Tests
             await HasNextAsync(g2e, 'h');
             await NoNextAsync(g2e);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g3 = e.Current;
             Assert.Equal(2, g3.Key);
             var g3e = g3.GetAsyncEnumerator();
@@ -445,7 +422,7 @@ namespace Tests
 
             var e = ys.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
             var g1e = g1.GetAsyncEnumerator();
@@ -456,7 +433,7 @@ namespace Tests
             await NoNextAsync(g1e);
             await g1e.DisposeAsync();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g2 = e.Current;
             Assert.Equal(1, g2.Key);
             var g2e = g2.GetAsyncEnumerator();
@@ -466,7 +443,7 @@ namespace Tests
             await NoNextAsync(g2e);
             await g2e.DisposeAsync();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g3 = e.Current;
             Assert.Equal(2, g3.Key);
             var g3e = g3.GetAsyncEnumerator();
@@ -490,7 +467,7 @@ namespace Tests
             var e = ys.GetAsyncEnumerator();
             await e.DisposeAsync();
 
-            Assert.False(e.MoveNextAsync().Result);
+            Assert.False(await e.MoveNextAsync());
         }
 
         [Fact]
@@ -501,7 +478,7 @@ namespace Tests
 
             var e = ys.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
             var g1e = g1.GetAsyncEnumerator();
@@ -515,7 +492,7 @@ namespace Tests
             await NoNextAsync(g1e);
             await g1e.DisposeAsync();
 
-            Assert.False(e.MoveNextAsync().Result);
+            Assert.False(await e.MoveNextAsync());
         }
 
         [Fact]

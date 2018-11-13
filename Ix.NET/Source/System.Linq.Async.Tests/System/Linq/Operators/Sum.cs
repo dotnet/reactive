@@ -84,93 +84,93 @@ namespace Tests
         }
 
         [Fact]
-        public void Sum1()
+        public async Task Sum1Async()
         {
             var xs = new[] { 1, 2, 3 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Sum(), ys.Sum().Result);
-            Assert.Equal(xs.Sum(), ys.Sum(x => x).Result);
+            Assert.Equal(xs.Sum(), await ys.Sum());
+            Assert.Equal(xs.Sum(), await ys.Sum(x => x));
         }
 
         [Fact]
-        public void Sum2()
+        public async Task Sum2Async()
         {
             var xs = new[] { 1, default(int?), 3 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Sum(), ys.Sum().Result);
-            Assert.Equal(xs.Sum(), ys.Sum(x => x).Result);
+            Assert.Equal(xs.Sum(), await ys.Sum());
+            Assert.Equal(xs.Sum(), await ys.Sum(x => x));
         }
 
         [Fact]
-        public void Sum3()
+        public async Task Sum3Async()
         {
             var xs = new[] { 1L, 2L, 3L };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Sum(), ys.Sum().Result);
-            Assert.Equal(xs.Sum(), ys.Sum(x => x).Result);
+            Assert.Equal(xs.Sum(), await ys.Sum());
+            Assert.Equal(xs.Sum(), await ys.Sum(x => x));
         }
 
         [Fact]
-        public void Sum4()
+        public async Task Sum4Async()
         {
             var xs = new[] { 1L, default(long?), 3L };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Sum(), ys.Sum().Result);
-            Assert.Equal(xs.Sum(), ys.Sum(x => x).Result);
+            Assert.Equal(xs.Sum(), await ys.Sum());
+            Assert.Equal(xs.Sum(), await ys.Sum(x => x));
         }
 
         [Fact]
-        public void Sum5()
+        public async Task Sum5Async()
         {
             var xs = new[] { 1.0, 2.0, 3.0 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Sum(), ys.Sum().Result);
-            Assert.Equal(xs.Sum(), ys.Sum(x => x).Result);
+            Assert.Equal(xs.Sum(), await ys.Sum());
+            Assert.Equal(xs.Sum(), await ys.Sum(x => x));
         }
 
         [Fact]
-        public void Sum6()
+        public async Task Sum6Async()
         {
             var xs = new[] { 1.0, default(double?), 3.0 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Sum(), ys.Sum().Result);
-            Assert.Equal(xs.Sum(), ys.Sum(x => x).Result);
+            Assert.Equal(xs.Sum(), await ys.Sum());
+            Assert.Equal(xs.Sum(), await ys.Sum(x => x));
         }
 
         [Fact]
-        public void Sum7()
+        public async Task Sum7Async()
         {
             var xs = new[] { 1.0f, 2.0f, 3.0f };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Sum(), ys.Sum().Result);
-            Assert.Equal(xs.Sum(), ys.Sum(x => x).Result);
+            Assert.Equal(xs.Sum(), await ys.Sum());
+            Assert.Equal(xs.Sum(), await ys.Sum(x => x));
         }
 
         [Fact]
-        public void Sum8()
+        public async Task Sum8Async()
         {
             var xs = new[] { 1.0f, default(float?), 3.0f };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Sum(), ys.Sum().Result);
-            Assert.Equal(xs.Sum(), ys.Sum(x => x).Result);
+            Assert.Equal(xs.Sum(), await ys.Sum());
+            Assert.Equal(xs.Sum(), await ys.Sum(x => x));
         }
 
         [Fact]
-        public void Sum9()
+        public async Task Sum9Async()
         {
             var xs = new[] { 1.0m, 2.0m, 3.0m };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Sum(), ys.Sum().Result);
-            Assert.Equal(xs.Sum(), ys.Sum(x => x).Result);
+            Assert.Equal(xs.Sum(), await ys.Sum());
+            Assert.Equal(xs.Sum(), await ys.Sum(x => x));
         }
 
         [Fact]
-        public void Sum10()
+        public async Task Sum10Async()
         {
             var xs = new[] { 1.0m, default(decimal?), 3.0m };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Sum(), ys.Sum().Result);
-            Assert.Equal(xs.Sum(), ys.Sum(x => x).Result);
+            Assert.Equal(xs.Sum(), await ys.Sum());
+            Assert.Equal(xs.Sum(), await ys.Sum(x => x));
         }
     }
 }

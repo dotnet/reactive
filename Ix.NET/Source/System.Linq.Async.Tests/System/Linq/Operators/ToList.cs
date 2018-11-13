@@ -21,19 +21,19 @@ namespace Tests
         }
 
         [Fact]
-        public void ToList1()
+        public async Task ToList1()
         {
             var xs = new[] { 42, 25, 39 };
             var res = xs.ToAsyncEnumerable().ToList();
-            Assert.True(res.Result.SequenceEqual(xs));
+            Assert.True((await res).SequenceEqual(xs));
         }
 
         [Fact]
-        public void ToList2()
+        public async Task ToList2()
         {
             var xs = AsyncEnumerable.Empty<int>();
             var res = xs.ToList();
-            Assert.True(res.Result.Count == 0);
+            Assert.True((await res).Count == 0);
         }
 
         [Fact]

@@ -92,102 +92,102 @@ namespace Tests
         }
 
         [Fact]
-        public void Min1()
+        public async Task Min1Async()
         {
             var xs = new[] { 2, 1, 3 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Min(), ys.Min().Result);
-            Assert.Equal(xs.Min(), ys.Min(x => x).Result);
+            Assert.Equal(xs.Min(), await ys.Min());
+            Assert.Equal(xs.Min(), await ys.Min(x => x));
         }
 
         [Fact]
-        public void Min2()
+        public async Task Min2Async()
         {
             var xs = new[] { 2, default(int?), 3 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Min(), ys.Min().Result);
-            Assert.Equal(xs.Min(), ys.Min(x => x).Result);
+            Assert.Equal(xs.Min(), await ys.Min());
+            Assert.Equal(xs.Min(), await ys.Min(x => x));
         }
 
         [Fact]
-        public void Min3()
+        public async Task Min3Async()
         {
             var xs = new[] { 2L, 1L, 3L };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Min(), ys.Min().Result);
-            Assert.Equal(xs.Min(), ys.Min(x => x).Result);
+            Assert.Equal(xs.Min(), await ys.Min());
+            Assert.Equal(xs.Min(), await ys.Min(x => x));
         }
 
         [Fact]
-        public void Min4()
+        public async Task Min4Async()
         {
             var xs = new[] { 2L, default(long?), 3L };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Min(), ys.Min().Result);
-            Assert.Equal(xs.Min(), ys.Min(x => x).Result);
+            Assert.Equal(xs.Min(), await ys.Min());
+            Assert.Equal(xs.Min(), await ys.Min(x => x));
         }
 
         [Fact]
-        public void Min5()
+        public async Task Min5Async()
         {
             var xs = new[] { 2.0, 1.0, 3.0 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Min(), ys.Min().Result);
-            Assert.Equal(xs.Min(), ys.Min(x => x).Result);
+            Assert.Equal(xs.Min(), await ys.Min());
+            Assert.Equal(xs.Min(), await ys.Min(x => x));
         }
 
         [Fact]
-        public void Min6()
+        public async Task Min6Async()
         {
             var xs = new[] { 2.0, default(double?), 3.0 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Min(), ys.Min().Result);
-            Assert.Equal(xs.Min(), ys.Min(x => x).Result);
+            Assert.Equal(xs.Min(), await ys.Min());
+            Assert.Equal(xs.Min(), await ys.Min(x => x));
         }
 
         [Fact]
-        public void Min7()
+        public async Task Min7Async()
         {
             var xs = new[] { 2.0f, 1.0f, 3.0f };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Min(), ys.Min().Result);
-            Assert.Equal(xs.Min(), ys.Min(x => x).Result);
+            Assert.Equal(xs.Min(), await ys.Min());
+            Assert.Equal(xs.Min(), await ys.Min(x => x));
         }
 
         [Fact]
-        public void Min8()
+        public async Task Min8Async()
         {
             var xs = new[] { 2.0f, default(float?), 3.0f };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Min(), ys.Min().Result);
-            Assert.Equal(xs.Min(), ys.Min(x => x).Result);
+            Assert.Equal(xs.Min(), await ys.Min());
+            Assert.Equal(xs.Min(), await ys.Min(x => x));
         }
 
         [Fact]
-        public void Min9()
+        public async Task Min9Async()
         {
             var xs = new[] { 2.0m, 1.0m, 3.0m };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Min(), ys.Min().Result);
-            Assert.Equal(xs.Min(), ys.Min(x => x).Result);
+            Assert.Equal(xs.Min(), await ys.Min());
+            Assert.Equal(xs.Min(), await ys.Min(x => x));
         }
 
         [Fact]
-        public void Min10()
+        public async Task Min10Async()
         {
             var xs = new[] { 2.0m, default(decimal?), 3.0m };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Min(), ys.Min().Result);
-            Assert.Equal(xs.Min(), ys.Min(x => x).Result);
+            Assert.Equal(xs.Min(), await ys.Min());
+            Assert.Equal(xs.Min(), await ys.Min(x => x));
         }
 
         [Fact]
-        public void Min11()
+        public async Task Min11Async()
         {
             var xs = new[] { DateTime.Now.AddDays(1), DateTime.Now.Subtract(TimeSpan.FromDays(1)), DateTime.Now.AddDays(2), DateTime.Now };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Min(), ys.Min().Result);
-            Assert.Equal(xs.Min(), ys.Min(x => x).Result);
+            Assert.Equal(xs.Min(), await ys.Min());
+            Assert.Equal(xs.Min(), await ys.Min(x => x));
         }
     }
 }

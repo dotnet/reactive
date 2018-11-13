@@ -29,35 +29,35 @@ namespace Tests
         public void Last1()
         {
             var res = AsyncEnumerable.Empty<int>().Last();
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
         public void Last2()
         {
             var res = AsyncEnumerable.Empty<int>().Last(x => true);
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
         public void Last3()
         {
             var res = Return42.Last(x => x % 2 != 0);
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
-        public void Last4()
+        public async Task Last4Async()
         {
             var res = Return42.Last();
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
-        public void Last5()
+        public async Task Last5Async()
         {
             var res = Return42.Last(x => x % 2 == 0);
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
@@ -77,17 +77,17 @@ namespace Tests
         }
 
         [Fact]
-        public void Last8()
+        public async Task Last8Async()
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().Last();
-            Assert.Equal(90, res.Result);
+            Assert.Equal(90, await res);
         }
 
         [Fact]
-        public void Last9()
+        public async Task Last9Async()
         {
             var res = new[] { 42, 23, 45, 90 }.ToAsyncEnumerable().Last(x => x % 2 != 0);
-            Assert.Equal(45, res.Result);
+            Assert.Equal(45, await res);
         }
     }
 }

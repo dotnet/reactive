@@ -14,9 +14,9 @@ namespace Tests
     public class AsyncEnumerableTests
     {
         protected static readonly IAsyncEnumerable<int> Return42 = new[] { 42 }.ToAsyncEnumerable();
-        protected static Func<Exception, bool> SingleInnerExceptionMatches(Exception ex) => e => ((AggregateException)e).Flatten().InnerExceptions.Single() == ex;
+        private static Func<Exception, bool> SingleInnerExceptionMatches(Exception ex) => e => ((AggregateException)e).Flatten().InnerExceptions.Single() == ex;
 
-        protected const int WaitTimeoutMs = 5000;
+        private const int WaitTimeoutMs = 5000;
 
 #pragma warning disable xUnit1013 // Public method should be marked as test
         public void AssertThrows<E>(Action a, Func<E, bool> assert)
@@ -38,6 +38,11 @@ namespace Tests
             {
                 Assert.True(false);
             }
+        }
+
+        public void AssertThrowsAsync<TException>(Task t)
+        {
+            AssertThrows<AggregateException>(() => t.Wait(WaitTimeoutMs), ex => ex.Flatten().InnerExceptions.Single() is TException);
         }
 
         public void AssertThrowsAsync(Task t, Exception e)

@@ -23,17 +23,17 @@ namespace Tests
         }
 
         [Fact]
-        public void All1()
+        public async Task All1Async()
         {
             var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().All(x => x % 2 == 0);
-            Assert.False(res.Result);
+            Assert.False(await res);
         }
 
         [Fact]
-        public void All2()
+        public async Task All2Async()
         {
             var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().All(x => x % 2 == 0);
-            Assert.True(res.Result);
+            Assert.True(await res);
         }
 
         [Fact]

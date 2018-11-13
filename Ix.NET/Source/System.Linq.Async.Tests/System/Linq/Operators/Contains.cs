@@ -24,35 +24,35 @@ namespace Tests
         }
 
         [Fact]
-        public void Contains1()
+        public async Task Contains1Async()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
             var ys = xs.Contains(3);
-            Assert.True(ys.Result);
+            Assert.True(await ys);
         }
 
         [Fact]
-        public void Contains2()
+        public async Task Contains2Async()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
             var ys = xs.Contains(6);
-            Assert.False(ys.Result);
+            Assert.False(await ys);
         }
 
         [Fact]
-        public void Contains3()
+        public async Task Contains3Async()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
             var ys = xs.Contains(-3, new Eq());
-            Assert.True(ys.Result);
+            Assert.True(await ys);
         }
 
         [Fact]
-        public void Contains4()
+        public async Task Contains4Async()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
             var ys = xs.Contains(-6, new Eq());
-            Assert.False(ys.Result);
+            Assert.False(await ys);
         }
 
         private sealed class Eq : IEqualityComparer<int>

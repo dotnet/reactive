@@ -29,35 +29,35 @@ namespace Tests
         public void First1()
         {
             var res = AsyncEnumerable.Empty<int>().First();
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
         public void First2()
         {
             var res = AsyncEnumerable.Empty<int>().First(x => true);
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
         public void First3()
         {
             var res = Return42.First(x => x % 2 != 0);
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            AssertThrowsAsync<InvalidOperationException>(res);
         }
 
         [Fact]
-        public void First4()
+        public async Task First4Async()
         {
             var res = Return42.First();
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
-        public void First5()
+        public async Task First5Async()
         {
             var res = Return42.First(x => x % 2 == 0);
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
@@ -77,17 +77,17 @@ namespace Tests
         }
 
         [Fact]
-        public void First8()
+        public async Task First8Async()
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().First();
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
-        public void First9()
+        public async Task First9Async()
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().First(x => x % 2 != 0);
-            Assert.Equal(45, res.Result);
+            Assert.Equal(45, await res);
         }
     }
 }

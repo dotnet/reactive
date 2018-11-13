@@ -26,38 +26,38 @@ namespace Tests
         }
 
         [Fact]
-        public void LastOrDefault1()
+        public async Task LastOrDefault1Async()
         {
             var res = AsyncEnumerable.Empty<int>().LastOrDefault();
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
 
         [Fact]
-        public void LastOrDefault2()
+        public async Task LastOrDefault2Async()
         {
             var res = AsyncEnumerable.Empty<int>().LastOrDefault(x => true);
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
 
         [Fact]
-        public void LastOrDefault3()
+        public async Task LastOrDefault3Async()
         {
             var res = Return42.LastOrDefault(x => x % 2 != 0);
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
 
         [Fact]
-        public void LastOrDefault4()
+        public async Task LastOrDefault4Async()
         {
             var res = Return42.LastOrDefault();
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
-        public void LastOrDefault5()
+        public async Task LastOrDefault5Async()
         {
             var res = Return42.LastOrDefault(x => x % 2 == 0);
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
@@ -77,24 +77,24 @@ namespace Tests
         }
 
         [Fact]
-        public void LastOrDefault8()
+        public async Task LastOrDefault8Async()
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().LastOrDefault();
-            Assert.Equal(90, res.Result);
+            Assert.Equal(90, await res);
         }
 
         [Fact]
-        public void LastOrDefault9()
+        public async Task LastOrDefault9Async()
         {
             var res = new[] { 42, 23, 45, 90 }.ToAsyncEnumerable().LastOrDefault(x => x % 2 != 0);
-            Assert.Equal(45, res.Result);
+            Assert.Equal(45, await res);
         }
 
         [Fact]
-        public void LastOrDefault10()
+        public async Task LastOrDefault10Async()
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().LastOrDefault(x => x < 10);
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
     }
 }

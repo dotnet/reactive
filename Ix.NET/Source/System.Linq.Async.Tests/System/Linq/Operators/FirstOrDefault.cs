@@ -26,38 +26,38 @@ namespace Tests
         }
 
         [Fact]
-        public void FirstOrDefault1()
+        public async Task FirstOrDefault1Async()
         {
             var res = AsyncEnumerable.Empty<int>().FirstOrDefault();
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
 
         [Fact]
-        public void FirstOrDefault2()
+        public async Task FirstOrDefault2Async()
         {
             var res = AsyncEnumerable.Empty<int>().FirstOrDefault(x => true);
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
 
         [Fact]
-        public void FirstOrDefault3()
+        public async Task FirstOrDefault3Async()
         {
             var res = Return42.FirstOrDefault(x => x % 2 != 0);
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
 
         [Fact]
-        public void FirstOrDefault4()
+        public async Task FirstOrDefault4Async()
         {
             var res = Return42.FirstOrDefault();
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
-        public void FirstOrDefault5()
+        public async Task FirstOrDefault5Async()
         {
             var res = Return42.FirstOrDefault(x => x % 2 == 0);
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
@@ -77,24 +77,24 @@ namespace Tests
         }
 
         [Fact]
-        public void FirstOrDefault8()
+        public async Task FirstOrDefault8Async()
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().FirstOrDefault();
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
-        public void FirstOrDefault9()
+        public async Task FirstOrDefault9Async()
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().FirstOrDefault(x => x % 2 != 0);
-            Assert.Equal(45, res.Result);
+            Assert.Equal(45, await res);
         }
 
         [Fact]
-        public void FirstOrDefault10()
+        public async Task FirstOrDefault10Async()
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().FirstOrDefault(x => x < 10);
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
     }
 }

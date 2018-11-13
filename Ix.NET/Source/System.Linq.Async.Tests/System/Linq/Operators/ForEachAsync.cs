@@ -28,22 +28,22 @@ namespace Tests
         }
 
         [Fact]
-        public void ForEachAsync1()
+        public async Task ForEachAsync1()
         {
             var sum = 0;
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            xs.ForEachAsync(x => sum += x).Wait(WaitTimeoutMs);
+            await xs.ForEachAsync(x => sum += x);
             Assert.Equal(10, sum);
         }
 
         [Fact]
-        public void ForEachAsync2()
+        public async Task ForEachAsync2()
         {
             var sum = 0;
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            xs.ForEachAsync((x, i) => sum += x * i).Wait(WaitTimeoutMs);
+            await xs.ForEachAsync((x, i) => sum += x * i);
             Assert.Equal(1 * 0 + 2 * 1 + 3 * 2 + 4 * 3, sum);
         }
 
