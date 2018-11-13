@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 #if !HAS_AWAIT_FOREACH
+
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -189,4 +190,5 @@ namespace System.Linq
         }
     }
 }
+
 #endif
