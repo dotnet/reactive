@@ -8,8 +8,26 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        // NB: Synchronous LINQ to Objects doesn't hide the implementation of the source either.
+        public static IAsyncEnumerable<T> CreateEnumerable<T>(Func<CancellationToken, IAsyncEnumerator<T>> getEnumerator)
+        {
+            if (getEnumerator == null)
+                throw Error.ArgumentNull(nameof(getEnumerator));
 
-        public static IAsyncEnumerable<TSource> AsAsyncEnumerable<TSource>(this IAsyncEnumerable<TSource> source) => source;
+            return new AnonymousAsyncEnumerable<T>(getEnumerator);
+        }
+
+        private sealed class AnonymousAsyncEnumerable<T> : IAsyncEnumerable<T>
+        {
+            private readonly Func<CancellationToken, IAsyncEnumerator<T>> _getEnumerator;
+
+            public AnonymousAsyncEnumerable(Func<CancellationToken, IAsyncEnumerator<T>> getEnumerator)
+            {
+                Debug.Assert(getEnumerator != null);
+
+                _getEnumerator = getEnumerator;
+            }
+
+            public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken) => _getEnumerator(cancellationToken);
+        }
     }
 }
