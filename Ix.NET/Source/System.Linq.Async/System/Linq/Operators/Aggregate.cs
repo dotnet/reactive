@@ -161,28 +161,28 @@ namespace System.Linq
 
         private static async Task<TSource> AggregateCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator, CancellationToken cancellationToken)
         {
-            var first = true;
-            var acc = default(TSource);
-
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
+                if (!await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    throw Error.NoElements();
+                }
+
+                var acc = e.Current;
+
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    acc = first ? e.Current : accumulator(acc, e.Current);
-                    first = false;
+                    acc = accumulator(acc, e.Current);
                 }
+
+                return acc;
             }
             finally
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
-
-            if (first)
-                throw Error.NoElements();
-
-            return acc;
         }
 
         private static async Task<TResult> AggregateCore<TSource, TResult>(IAsyncEnumerable<TSource> source, TResult seed, Func<TResult, TSource, Task<TResult>> accumulator, CancellationToken cancellationToken)
@@ -229,28 +229,28 @@ namespace System.Linq
 
         private static async Task<TSource> AggregateCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TSource, Task<TSource>> accumulator, CancellationToken cancellationToken)
         {
-            var first = true;
-            var acc = default(TSource);
-
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
+                if (!await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    throw Error.NoElements();
+                }
+
+                var acc = e.Current;
+
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    acc = first ? e.Current : await accumulator(acc, e.Current).ConfigureAwait(false);
-                    first = false;
+                    acc = await accumulator(acc, e.Current).ConfigureAwait(false);
                 }
+
+                return acc;
             }
             finally
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
-
-            if (first)
-                throw Error.NoElements();
-
-            return acc;
         }
     }
 }
