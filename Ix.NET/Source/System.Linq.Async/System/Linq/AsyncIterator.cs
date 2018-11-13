@@ -8,6 +8,14 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+    // REVIEW: The base class below was introduced to avoid the overhead of storing a field of type TSource if the
+    //         value of the iterator can trivially be inferred from another field (e.g. in Repeat). It is also used
+    //         by the Defer operator in System.Interactive.Async. For some operators such as Where, Skip, Take, and
+    //         Concat, it could be used to retrieve the value from the underlying enumerator. However, performance
+    //         of this approach is a bit worse in some cases, so we don't go ahead with it for now. One decision to
+    //         make is whether it's okay for Current to throw an exception when MoveNextAsync returns false, e.g.
+    //         by omitting a null check for an enumerator field.
+
     internal abstract partial class AsyncIteratorBase<TSource> : IAsyncEnumerable<TSource>, IAsyncEnumerator<TSource>
     {
         private readonly int _threadId;
