@@ -76,20 +76,6 @@ namespace System.Collections.Generic
             );
         }
 
-        /// <summary>
-        /// Wraps the specified enumerator in an enumerable.
-        /// </summary>
-        /// <typeparam name="T">The type of the elements returned by the enumerator.</typeparam>
-        /// <param name="source">The enumerator to wrap.</param>
-        /// <returns>An enumerable wrapping the specified enumerator.</returns>
-        public static IAsyncEnumerable<T> AsEnumerable<T>(this IAsyncEnumerator<T> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return AsyncEnumerable.CreateEnumerable<T>(_ => source);
-        }
-
         internal static IAsyncEnumerator<T> Create<T>(Func<TaskCompletionSource<bool>, ValueTask<bool>> moveNext, Func<T> current, Func<ValueTask> dispose)
         {
             return new AnonymousAsyncIterator<T>(
