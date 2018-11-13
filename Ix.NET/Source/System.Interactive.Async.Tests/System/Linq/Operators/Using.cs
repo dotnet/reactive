@@ -102,7 +102,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Using4()
+        public async Task Using4Async()
         {
             var i = 0;
             var disposed = new TaskCompletionSource<bool>();
@@ -122,11 +122,11 @@ namespace Tests
 
             Assert.Equal(0, i);
 
-            HasNext(e, 42);
+            await HasNextAsync(e, 42);
 
             Assert.Equal(1, i);
 
-            NoNext(e);
+            await NoNextAsync(e);
 
             Assert.True(disposed.Task.Result);
         }

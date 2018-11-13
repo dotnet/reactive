@@ -27,47 +27,47 @@ namespace Tests
         }
 
         [Fact]
-        public void DistinctUntilChanged1()
+        public async Task DistinctUntilChanged1Async()
         {
             var xs = new[] { 1, 2, 2, 3, 4, 4, 4, 4, 5, 6, 6, 7, 3, 2, 2, 1, 1 }.ToAsyncEnumerable().DistinctUntilChanged();
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 5);
-            HasNext(e, 6);
-            HasNext(e, 7);
-            HasNext(e, 3);
-            HasNext(e, 2);
-            HasNext(e, 1);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await HasNextAsync(e, 7);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 1);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void DistinctUntilChanged2()
+        public async Task DistinctUntilChanged2Async()
         {
             var xs = new[] { 1, 2, 3, 4, 3, 5, 2 }.ToAsyncEnumerable().DistinctUntilChanged(x => (x + 1) / 2);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 3);
-            HasNext(e, 5);
-            HasNext(e, 2);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 2);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void DistinctUntilChanged3()
+        public async Task DistinctUntilChanged3Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4, 3, 5, 2 }.ToAsyncEnumerable().DistinctUntilChanged(x => { if (x == 4) throw ex; return x; });
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
 

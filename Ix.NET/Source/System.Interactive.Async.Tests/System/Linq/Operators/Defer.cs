@@ -18,22 +18,22 @@ namespace Tests
         }
 
         [Fact]
-        public void Defer1()
+        public async System.Threading.Tasks.Task Defer1Async()
         {
             var x = 0;
             var xs = AsyncEnumerableEx.Defer<int>(() => new[] { x }.ToAsyncEnumerable());
 
             {
                 var e = xs.GetAsyncEnumerator();
-                HasNext(e, 0);
-                NoNext(e);
+                await HasNextAsync(e, 0);
+                await NoNextAsync(e);
             }
 
             {
                 x++;
                 var e = xs.GetAsyncEnumerator();
-                HasNext(e, 1);
-                NoNext(e);
+                await HasNextAsync(e, 1);
+                await NoNextAsync(e);
             }
         }
     }

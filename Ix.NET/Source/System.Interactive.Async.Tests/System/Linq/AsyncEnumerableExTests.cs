@@ -41,14 +41,14 @@ namespace Tests
             }
         }
 
-        public void NoNext<T>(IAsyncEnumerator<T> e)
+        protected async Task NoNextAsync<T>(IAsyncEnumerator<T> e)
         {
-            Assert.False(e.MoveNextAsync().Result);
+            Assert.False(await e.MoveNextAsync());
         }
 
-        public void HasNext<T>(IAsyncEnumerator<T> e, T value)
+        protected async Task HasNextAsync<T>(IAsyncEnumerator<T> e, T value)
         {
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.Equal(value, e.Current);
         }
 

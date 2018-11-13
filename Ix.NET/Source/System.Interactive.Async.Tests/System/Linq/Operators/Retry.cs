@@ -21,21 +21,21 @@ namespace Tests
         }
 
         [Fact]
-        public void Retry1()
+        public async System.Threading.Tasks.Task Retry1Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Retry();
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Retry2()
+        public async System.Threading.Tasks.Task Retry2Async()
         {
             var ex = new InvalidOperationException("Bang!");
 
@@ -44,15 +44,15 @@ namespace Tests
             var res = xs.Retry();
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
         }
     }
 }

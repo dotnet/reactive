@@ -20,7 +20,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Concat4()
+        public async Task Concat4Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 4, 5 }.ToAsyncEnumerable();
@@ -29,19 +29,19 @@ namespace Tests
             var res = AsyncEnumerableEx.Concat(xs, ys, zs);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 5);
-            HasNext(e, 6);
-            HasNext(e, 7);
-            HasNext(e, 8);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await HasNextAsync(e, 7);
+            await HasNextAsync(e, 8);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Concat5()
+        public async Task Concat5Async()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -51,25 +51,25 @@ namespace Tests
             var res = AsyncEnumerableEx.Concat(xs, ys, zs);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 5);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 5);
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
 
         [Fact]
-        public void Concat6()
+        public async Task Concat6Async()
         {
             var res = AsyncEnumerableEx.Concat(ConcatXss());
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 5);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 5);
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
         }
 

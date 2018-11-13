@@ -25,15 +25,15 @@ namespace Tests
         }
 
         [Fact]
-        public void Distinct1()
+        public async Task Distinct1Async()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable().Distinct(x => x / 2);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -71,13 +71,13 @@ namespace Tests
         }
 
         [Fact]
-        public void Distinct11()
+        public async Task Distinct11Async()
         {
             var xs = AsyncEnumerable.Empty<int>().Distinct(k => k);
 
             var e = xs.GetAsyncEnumerator();
 
-            NoNext(e);
+            await NoNextAsync(e);
         }
     }
 }

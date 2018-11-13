@@ -20,7 +20,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Finally1()
+        public async Task Finally1Async()
         {
             var b = false;
 
@@ -29,13 +29,13 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
 
             Assert.False(b);
-            NoNext(e);
+            await NoNextAsync(e);
 
             Assert.True(b);
         }
 
         [Fact]
-        public void Finally2()
+        public async Task Finally2Async()
         {
             var b = false;
 
@@ -44,10 +44,10 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
 
             Assert.False(b);
-            HasNext(e, 42);
+            await HasNextAsync(e, 42);
 
             Assert.False(b);
-            NoNext(e);
+            await NoNextAsync(e);
 
             Assert.True(b);
         }
@@ -70,7 +70,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Finally4()
+        public async Task Finally4Async()
         {
             var b = false;
 
@@ -79,13 +79,13 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
 
             Assert.False(b);
-            HasNext(e, 1);
+            await HasNextAsync(e, 1);
 
             Assert.False(b);
-            HasNext(e, 2);
+            await HasNextAsync(e, 2);
 
             Assert.False(b);
-            NoNext(e);
+            await NoNextAsync(e);
 
             Assert.True(b);
         }
@@ -100,7 +100,7 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
 
             Assert.False(b);
-            HasNext(e, 1);
+            await HasNextAsync(e, 1);
 
             await e.DisposeAsync();
 

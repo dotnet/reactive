@@ -25,12 +25,12 @@ namespace Tests
             var xs = AsyncEnumerableEx.Generate(0, x => x < 5, x => x + 1, x => x * x);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 0);
-            HasNext(e, 1);
-            HasNext(e, 4);
-            HasNext(e, 9);
-            HasNext(e, 16);
-            NoNext(e);
+            await HasNextAsync(e, 0);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 9);
+            await HasNextAsync(e, 16);
+            await NoNextAsync(e);
             await e.DisposeAsync();
         }
 
@@ -45,24 +45,24 @@ namespace Tests
         }
 
         [Fact]
-        public void Generate3()
+        public async Task Generate3Async()
         {
             var ex = new Exception("Bang!");
             var xs = AsyncEnumerableEx.Generate(0, x => true, x => x + 1, x => { if (x == 1) throw ex; return x * x; });
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 0);
+            await HasNextAsync(e, 0);
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 
         [Fact]
-        public void Generate4()
+        public async Task Generate4Async()
         {
             var ex = new Exception("Bang!");
             var xs = AsyncEnumerableEx.Generate(0, x => true, x => { throw ex; }, x => x * x);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 0);
+            await HasNextAsync(e, 0);
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 

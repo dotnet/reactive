@@ -10,10 +10,10 @@ namespace Tests
     public class Return : AsyncEnumerableExTests
     {
         [Fact]
-        public void Return1()
+        public async System.Threading.Tasks.Task Return1Async()
         {
             var xs = AsyncEnumerableEx.Return(42);
-            HasNext(xs.GetAsyncEnumerator(), 42);
+            await HasNextAsync(xs.GetAsyncEnumerator(), 42);
         }
     }
 }

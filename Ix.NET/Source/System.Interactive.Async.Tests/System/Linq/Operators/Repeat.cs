@@ -18,11 +18,11 @@ namespace Tests
             var xs = AsyncEnumerableEx.Repeat(2);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 2);
-            HasNext(e, 2);
-            HasNext(e, 2);
-            HasNext(e, 2);
-            HasNext(e, 2);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 2);
             await e.DisposeAsync();
         }
 
@@ -43,67 +43,67 @@ namespace Tests
         }
 
         [Fact]
-        public void RepeatSequence1()
+        public async Task RepeatSequence1Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Repeat();
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
         }
 
         [Fact]
-        public void RepeatSequence2()
+        public async Task RepeatSequence2Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Repeat(3);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void RepeatSequence3()
+        public async Task RepeatSequence3Async()
         {
             var i = 0;
             var xs = RepeatXs(() => i++).ToAsyncEnumerable().Repeat(3);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await NoNextAsync(e);
 
             Assert.Equal(3, i);
         }
 
         [Fact]
-        public void RepeatSequence4()
+        public async Task RepeatSequence4Async()
         {
             var i = 0;
             var xs = RepeatXs(() => i++).ToAsyncEnumerable().Repeat(0);
 
             var e = xs.GetAsyncEnumerator();
 
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]

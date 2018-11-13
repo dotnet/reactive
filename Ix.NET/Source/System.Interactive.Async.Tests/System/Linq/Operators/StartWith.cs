@@ -18,37 +18,37 @@ namespace Tests
         }
 
         [Fact]
-        public void StartWith1()
+        public async System.Threading.Tasks.Task StartWith1Async()
         {
             var xs = AsyncEnumerable.Empty<int>().StartWith(1, 2);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void StartWith2()
+        public async System.Threading.Tasks.Task StartWith2Async()
         {
             var xs = Return42.StartWith(40, 41);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 40);
-            HasNext(e, 41);
-            HasNext(e, 42);
-            NoNext(e);
+            await HasNextAsync(e, 40);
+            await HasNextAsync(e, 41);
+            await HasNextAsync(e, 42);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void StartWith3()
+        public async System.Threading.Tasks.Task StartWith3Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex).StartWith(1, 2);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
     }

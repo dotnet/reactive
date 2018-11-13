@@ -36,22 +36,22 @@ namespace Tests
         }
 
         [Fact]
-        public void Do1()
+        public async Task Do1Async()
         {
             var sum = 0;
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Do(x => sum += x);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
+            await HasNextAsync(e, 1);
             Assert.Equal(1, sum);
-            HasNext(e, 2);
+            await HasNextAsync(e, 2);
             Assert.Equal(3, sum);
-            HasNext(e, 3);
+            await HasNextAsync(e, 3);
             Assert.Equal(6, sum);
-            HasNext(e, 4);
+            await HasNextAsync(e, 4);
             Assert.Equal(10, sum);
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Do3()
+        public async Task Do3Async()
         {
             var sum = 0;
             var fail = false;
@@ -75,22 +75,22 @@ namespace Tests
             var ys = xs.Do(x => sum += x, ex => { fail = true; }, () => { done = true; });
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
+            await HasNextAsync(e, 1);
             Assert.Equal(1, sum);
-            HasNext(e, 2);
+            await HasNextAsync(e, 2);
             Assert.Equal(3, sum);
-            HasNext(e, 3);
+            await HasNextAsync(e, 3);
             Assert.Equal(6, sum);
-            HasNext(e, 4);
+            await HasNextAsync(e, 4);
             Assert.Equal(10, sum);
-            NoNext(e);
+            await NoNextAsync(e);
 
             Assert.False(fail);
             Assert.True(done);
         }
 
         [Fact]
-        public void Do4()
+        public async Task Do4Async()
         {
             var sum = 0;
             var done = false;
@@ -98,15 +98,15 @@ namespace Tests
             var ys = xs.Do(x => sum += x, () => { done = true; });
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
+            await HasNextAsync(e, 1);
             Assert.Equal(1, sum);
-            HasNext(e, 2);
+            await HasNextAsync(e, 2);
             Assert.Equal(3, sum);
-            HasNext(e, 3);
+            await HasNextAsync(e, 3);
             Assert.Equal(6, sum);
-            HasNext(e, 4);
+            await HasNextAsync(e, 4);
             Assert.Equal(10, sum);
-            NoNext(e);
+            await NoNextAsync(e);
 
             Assert.True(done);
         }

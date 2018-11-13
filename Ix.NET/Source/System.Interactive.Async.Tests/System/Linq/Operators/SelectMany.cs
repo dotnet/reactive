@@ -18,7 +18,7 @@ namespace Tests
         }
 
         [Fact]
-        public void SelectMany1()
+        public async System.Threading.Tasks.Task SelectMany1Async()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = new[] { 3, 4 }.ToAsyncEnumerable();
@@ -26,13 +26,13 @@ namespace Tests
             var res = xs.SelectMany(ys);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
     }
 }

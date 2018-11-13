@@ -19,30 +19,30 @@ namespace Tests
         }
 
         [Fact]
-        public void IgnoreElements1()
+        public async Task IgnoreElements1Async()
         {
             var xs = AsyncEnumerable.Empty<int>().IgnoreElements();
 
             var e = xs.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void IgnoreElements2()
+        public async Task IgnoreElements2Async()
         {
             var xs = Return42.IgnoreElements();
 
             var e = xs.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void IgnoreElements3()
+        public async Task IgnoreElements3Async()
         {
             var xs = AsyncEnumerable.Range(0, 10).IgnoreElements();
 
             var e = xs.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
