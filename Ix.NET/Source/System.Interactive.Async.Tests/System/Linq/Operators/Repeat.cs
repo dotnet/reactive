@@ -115,21 +115,21 @@ namespace Tests
         }
 
         [Fact]
-        public void RepeatSequence6()
+        public async Task RepeatSequence6Async()
         {
             var xs = new FailRepeat().ToAsyncEnumerable().Repeat();
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NotImplementedException);
+            await AssertThrowsAsync<NotImplementedException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public void RepeatSequence7()
+        public async Task RepeatSequence7Async()
         {
             var xs = new FailRepeat().ToAsyncEnumerable().Repeat(3);
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NotImplementedException);
+            await AssertThrowsAsync<NotImplementedException>(e.MoveNextAsync().AsTask());
         }
 
         private static IEnumerable<int> RepeatXs(Action started)

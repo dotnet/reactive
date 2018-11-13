@@ -55,14 +55,14 @@ namespace Tests
         }
 
         [Fact]
-        public void Do2()
+        public async Task Do2()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Do(x => { throw ex; });
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -112,7 +112,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Do5()
+        public async Task Do5()
         {
             var ex = new Exception("Bang");
             var exa = default(Exception);
@@ -122,7 +122,7 @@ namespace Tests
             var ys = xs.Do(x => { hasv = true; }, exx => { exa = exx; }, () => { done = true; });
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ex_.InnerException == ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
 
             Assert.False(hasv);
             Assert.False(done);
@@ -130,7 +130,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Do6()
+        public async Task Do6()
         {
             var ex = new Exception("Bang");
             var exa = default(Exception);
@@ -139,7 +139,7 @@ namespace Tests
             var ys = xs.Do(x => { hasv = true; }, exx => { exa = exx; });
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ex_.InnerException == ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
 
             Assert.False(hasv);
             Assert.Same(exa, ex);

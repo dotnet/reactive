@@ -41,9 +41,9 @@ namespace Tests
 
             await disposed.Task;
 
-            Assert.True(disposed.Task.Result);
+            Assert.True(await disposed.Task);
 
-            Assert.False(e.MoveNextAsync().Result);
+            Assert.False(await e.MoveNextAsync());
 
             var next = await e.MoveNextAsync();
             Assert.False(next);
@@ -92,22 +92,22 @@ namespace Tests
         }
 
         [Fact]
-        public void SelectManyDisposeInvokedOnlyOnce()
+        public async Task SelectManyDisposeInvokedOnlyOnceAsync()
         {
             var disposeCounter = new DisposeCounter();
 
-            var result = new[] { 1 }.ToAsyncEnumerable().SelectMany(i => disposeCounter).Select(i => i).ToList().Result;
+            var result = await new[] { 1 }.ToAsyncEnumerable().SelectMany(i => disposeCounter).Select(i => i).ToList();
 
             Assert.Empty(result);
             Assert.Equal(1, disposeCounter.DisposeCount);
         }
 
         [Fact]
-        public void SelectManyInnerDispose()
+        public async Task SelectManyInnerDisposeAsync()
         {
             var disposes = Enumerable.Range(0, 10).Select(_ => new DisposeCounter()).ToList();
 
-            var result = AsyncEnumerable.Range(0, 10).SelectMany(i => disposes[i]).Select(i => i).ToList().Result;
+            var result = await AsyncEnumerable.Range(0, 10).SelectMany(i => disposes[i]).Select(i => i).ToList();
 
             Assert.Empty(result);
             Assert.True(disposes.All(d => d.DisposeCount == 1));

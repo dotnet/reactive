@@ -56,13 +56,14 @@ namespace Tests
             await HasNextAsync(e, 3);
             await HasNextAsync(e, 4);
             await HasNextAsync(e, 5);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
         public async Task Concat6Async()
         {
-            var res = AsyncEnumerableEx.Concat(ConcatXss());
+            var ex = new Exception("Bang");
+            var res = AsyncEnumerableEx.Concat(ConcatXss(ex));
 
             var e = res.GetAsyncEnumerator();
             await HasNextAsync(e, 1);
@@ -70,7 +71,7 @@ namespace Tests
             await HasNextAsync(e, 3);
             await HasNextAsync(e, 4);
             await HasNextAsync(e, 5);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -85,11 +86,11 @@ namespace Tests
             await SequenceIdentity(res);
         }
 
-        private static IEnumerable<IAsyncEnumerable<int>> ConcatXss()
+        private static IEnumerable<IAsyncEnumerable<int>> ConcatXss(Exception ex)
         {
             yield return new[] { 1, 2, 3 }.ToAsyncEnumerable();
             yield return new[] { 4, 5 }.ToAsyncEnumerable();
-            throw new Exception("Bang!");
+            throw ex;
         }
     }
 }

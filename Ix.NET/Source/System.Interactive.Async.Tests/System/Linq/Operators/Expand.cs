@@ -36,13 +36,13 @@ namespace Tests
         }
 
         [Fact]
-        public void Expand2()
+        public async Task Expand2()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(new Func<int, IAsyncEnumerable<int>>(x => { throw ex; }));
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
             await HasNextAsync(e, 2);
             await HasNextAsync(e, 3);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NullReferenceException);
+            await AssertThrowsAsync<NullReferenceException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]

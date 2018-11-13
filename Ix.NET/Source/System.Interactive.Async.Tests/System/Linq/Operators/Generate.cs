@@ -35,13 +35,13 @@ namespace Tests
         }
 
         [Fact]
-        public void Generate2()
+        public async Task Generate2Async()
         {
             var ex = new Exception("Bang!");
             var xs = AsyncEnumerableEx.Generate(0, x => { throw ex; }, x => x + 1, x => x * x);
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Tests
 
             var e = xs.GetAsyncEnumerator();
             await HasNextAsync(e, 0);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace Tests
 
             var e = xs.GetAsyncEnumerator();
             await HasNextAsync(e, 0);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

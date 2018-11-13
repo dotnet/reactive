@@ -46,13 +46,13 @@ namespace Tests
         }
 
         [Fact]
-        public void IgnoreElements4()
+        public async Task IgnoreElements4Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex).IgnoreElements();
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

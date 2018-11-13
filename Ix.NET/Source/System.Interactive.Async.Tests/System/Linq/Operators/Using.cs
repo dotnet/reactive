@@ -128,11 +128,11 @@ namespace Tests
 
             await NoNextAsync(e);
 
-            Assert.True(disposed.Task.Result);
+            Assert.True(await disposed.Task);
         }
 
         [Fact]
-        public void Using5()
+        public async Task Using5Async()
         {
             var ex = new Exception("Bang!");
             var i = 0;
@@ -153,11 +153,11 @@ namespace Tests
 
             Assert.Equal(0, i);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
 
             Assert.Equal(1, i);
 
-            Assert.True(disposed.Task.Result);
+            Assert.True(await disposed.Task);
         }
 
         [Fact]

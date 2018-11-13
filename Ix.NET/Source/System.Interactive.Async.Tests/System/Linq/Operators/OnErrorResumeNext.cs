@@ -88,20 +88,21 @@ namespace Tests
         [Fact]
         public async Task OnErrorResumeNext10Async()
         {
-            var res = OnErrorResumeNextXss().OnErrorResumeNext();
+            var ex = new Exception("Bang!");
+            var res = OnErrorResumeNextXss(ex).OnErrorResumeNext();
 
             var e = res.GetAsyncEnumerator();
             await HasNextAsync(e, 1);
             await HasNextAsync(e, 2);
             await HasNextAsync(e, 3);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
-        private IEnumerable<IAsyncEnumerable<int>> OnErrorResumeNextXss()
+        private IEnumerable<IAsyncEnumerable<int>> OnErrorResumeNextXss(Exception ex)
         {
             yield return new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(new Exception("!!!")));
-            throw new Exception("Bang!");
+            throw ex;
         }
 
         [Fact]

@@ -112,7 +112,7 @@ namespace Tests
             await HasNextAsync(e, 2);
             await HasNextAsync(e, 3);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
 
             Assert.False(err);
         }
@@ -133,7 +133,7 @@ namespace Tests
             await HasNextAsync(e, 2);
             await HasNextAsync(e, 3);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex2));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex2);
         }
 
         [Fact]
@@ -160,7 +160,7 @@ namespace Tests
             await HasNextAsync(e, 2);
             await HasNextAsync(e, 3);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
@@ -224,20 +224,21 @@ namespace Tests
         [Fact]
         public async Task Catch10Async()
         {
-            var res = CatchXss().Catch();
+            var ex = new Exception("Bang!");
+            var res = CatchXss(ex).Catch();
 
             var e = res.GetAsyncEnumerator();
             await HasNextAsync(e, 1);
             await HasNextAsync(e, 2);
             await HasNextAsync(e, 3);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
-        private IEnumerable<IAsyncEnumerable<int>> CatchXss()
+        private IEnumerable<IAsyncEnumerable<int>> CatchXss(Exception ex)
         {
             yield return new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(new Exception("!!!")));
-            throw new Exception("Bang!");
+            throw ex;
         }
 
         [Fact]
@@ -257,7 +258,7 @@ namespace Tests
             await HasNextAsync(e, 2);
             await HasNextAsync(e, 3);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

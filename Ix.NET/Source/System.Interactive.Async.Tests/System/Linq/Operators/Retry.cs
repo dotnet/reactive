@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -21,7 +22,7 @@ namespace Tests
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Retry1Async()
+        public async Task Retry1Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -35,7 +36,7 @@ namespace Tests
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Retry2Async()
+        public async Task Retry2Async()
         {
             var ex = new InvalidOperationException("Bang!");
 

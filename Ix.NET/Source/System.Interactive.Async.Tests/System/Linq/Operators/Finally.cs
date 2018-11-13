@@ -53,7 +53,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Finally3()
+        public async Task Finally3Async()
         {
             var ex = new Exception("Bang!");
 
@@ -64,7 +64,7 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
 
             Assert.False(b);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
 
             Assert.True(b);
         }

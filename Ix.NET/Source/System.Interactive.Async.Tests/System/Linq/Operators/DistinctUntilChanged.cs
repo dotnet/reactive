@@ -68,7 +68,7 @@ namespace Tests
             await HasNextAsync(e, 1);
             await HasNextAsync(e, 2);
             await HasNextAsync(e, 3);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

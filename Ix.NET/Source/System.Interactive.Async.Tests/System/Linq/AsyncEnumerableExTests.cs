@@ -15,30 +15,28 @@ namespace Tests
     {
         protected static readonly IAsyncEnumerable<int> Return42 = AsyncEnumerableEx.Return(42);
         protected static IAsyncEnumerable<T> Throw<T>(Exception exception) => AsyncEnumerableEx.Throw<T>(exception);
-        protected static Func<Exception, bool> SingleInnerExceptionMatches(Exception ex) => e => ((AggregateException)e).Flatten().InnerExceptions.Single() == ex;
 
-        protected const int WaitTimeoutMs = 5000;
-
-#pragma warning disable xUnit1013 // Public method should be marked as test
-        public void AssertThrows<E>(Action a, Func<E, bool> assert)
-            where E : Exception
+        protected async Task AssertThrowsAsync<TException>(Task t)
+            where TException : Exception
         {
-            var hasFailed = false;
+            await Assert.ThrowsAsync<TException>(() => t);
+        }
 
+        protected async Task AssertThrowsAsync(Task t, Exception e)
+        {
             try
             {
-                a();
+                await t;
             }
-            catch (E e)
+            catch (Exception ex)
             {
-                Assert.True(assert(e));
-                hasFailed = true;
+                Assert.Same(e, ex);
             }
+        }
 
-            if (!hasFailed)
-            {
-                Assert.True(false);
-            }
+        protected Task AssertThrowsAsync<T>(ValueTask<T> t, Exception e)
+        {
+            return AssertThrowsAsync(t.AsTask(), e);
         }
 
         protected async Task NoNextAsync<T>(IAsyncEnumerator<T> e)
@@ -67,6 +65,5 @@ namespace Tests
 
             res1.ShouldAllBeEquivalentTo(res2);
         }
-#pragma warning restore xUnit1013 // Public method should be marked as test
     }
 }

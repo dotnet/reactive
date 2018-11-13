@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -18,7 +19,7 @@ namespace Tests
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Defer1Async()
+        public async Task Defer1Async()
         {
             var x = 0;
             var xs = AsyncEnumerableEx.Defer<int>(() => new[] { x }.ToAsyncEnumerable());

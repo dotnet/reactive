@@ -4,6 +4,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -18,7 +19,7 @@ namespace Tests
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task SelectMany1Async()
+        public async Task SelectMany1Async()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = new[] { 3, 4 }.ToAsyncEnumerable();

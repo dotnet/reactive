@@ -30,47 +30,47 @@ namespace Tests
         }
 
         [Fact]
-        public void MinBy1()
+        public async Task MinBy1Async()
         {
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MinBy(x => x / 2);
-            var res = xs.Result;
+            var res = await xs;
 
             Assert.True(res.SequenceEqual(new[] { 3, 2 }));
         }
 
         [Fact]
-        public void MinBy2()
+        public async Task MinBy2Async()
         {
             var xs = new int[0].ToAsyncEnumerable().MinBy(x => x / 2);
 
-            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            await AssertThrowsAsync<InvalidOperationException>(xs);
         }
 
         [Fact]
-        public void MinBy3()
+        public async Task MinBy3Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MinBy(x => { if (x == 3) throw ex; return x; });
 
-            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(xs, ex);
         }
 
         [Fact]
-        public void MinBy4()
+        public async Task MinBy4Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MinBy(x => { if (x == 4) throw ex; return x; });
 
-            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(xs, ex);
         }
 
         [Fact]
-        public void MinBy5()
+        public async Task MinBy5Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().Concat(Throw<int>(ex)).MinBy(x => x, Comparer<int>.Default);
 
-            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(xs, ex);
         }
     }
 }

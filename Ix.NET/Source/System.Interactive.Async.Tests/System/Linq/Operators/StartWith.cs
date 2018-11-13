@@ -4,6 +4,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -18,7 +19,7 @@ namespace Tests
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task StartWith1Async()
+        public async Task StartWith1Async()
         {
             var xs = AsyncEnumerable.Empty<int>().StartWith(1, 2);
 
@@ -29,7 +30,7 @@ namespace Tests
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task StartWith2Async()
+        public async Task StartWith2Async()
         {
             var xs = Return42.StartWith(40, 41);
 
@@ -41,7 +42,7 @@ namespace Tests
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task StartWith3Async()
+        public async Task StartWith3Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex).StartWith(1, 2);
@@ -49,7 +50,7 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
             await HasNextAsync(e, 1);
             await HasNextAsync(e, 2);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
     }
 }
