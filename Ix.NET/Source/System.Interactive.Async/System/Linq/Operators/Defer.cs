@@ -17,7 +17,7 @@ namespace System.Linq
             if (factory == null)
                 throw Error.ArgumentNull(nameof(factory));
 
-            return CreateEnumerable(ct => factory().GetAsyncEnumerator(ct));
+            return new DeferIterator<TSource>(factory);
         }
 
         public static IAsyncEnumerable<TSource> Defer<TSource>(Func<Task<IAsyncEnumerable<TSource>>> factory)
@@ -25,96 +25,120 @@ namespace System.Linq
             if (factory == null)
                 throw Error.ArgumentNull(nameof(factory));
 
-            return new AnonymousAsyncEnumerableWithTask<TSource>(async ct => (await factory().ConfigureAwait(false)).GetAsyncEnumerator(ct));
+            return new AsyncDeferIterator<TSource>(factory);
         }
 
-        private sealed class AnonymousAsyncEnumerableWithTask<T> : IAsyncEnumerable<T>
+        private sealed class DeferIterator<T> : AsyncIteratorBase<T>
         {
-            private readonly Func<CancellationToken, Task<IAsyncEnumerator<T>>> _getEnumerator;
+            private readonly Func<IAsyncEnumerable<T>> _factory;
+            private IAsyncEnumerator<T> _enumerator;
 
-            public AnonymousAsyncEnumerableWithTask(Func<CancellationToken, Task<IAsyncEnumerator<T>>> getEnumerator)
+            public DeferIterator(Func<IAsyncEnumerable<T>> factory)
             {
-                Debug.Assert(getEnumerator != null);
+                Debug.Assert(factory != null);
 
-                _getEnumerator = getEnumerator;
+                _factory = factory;
             }
 
-            public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken) => new Enumerator(_getEnumerator, cancellationToken);
+            public override T Current => _enumerator == null ? default : _enumerator.Current;
 
-            private sealed class Enumerator : IAsyncEnumerator<T>
+            public override AsyncIteratorBase<T> Clone()
             {
-                private Func<CancellationToken, Task<IAsyncEnumerator<T>>> _getEnumerator;
-                private readonly CancellationToken _cancellationToken;
-                private IAsyncEnumerator<T> _enumerator;
+                return new DeferIterator<T>(_factory);
+            }
 
-                public Enumerator(Func<CancellationToken, Task<IAsyncEnumerator<T>>> getEnumerator, CancellationToken cancellationToken)
+            public override async ValueTask DisposeAsync()
+            {
+                if (_enumerator != null)
                 {
-                    Debug.Assert(getEnumerator != null);
-
-                    _getEnumerator = getEnumerator;
-                    _cancellationToken = cancellationToken;
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
-                public T Current
-                {
-                    get
-                    {
-                        if (_enumerator == null)
-                            throw new InvalidOperationException();
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
 
-                        return _enumerator.Current;
-                    }
+            protected override ValueTask<bool> MoveNextCore()
+            {
+                if (_enumerator == null)
+                {
+                    return InitializeAndMoveNextAsync();
                 }
 
-                public async ValueTask DisposeAsync()
-                {
-                    var old = Interlocked.Exchange(ref _enumerator, DisposedEnumerator.Instance);
+                return _enumerator.MoveNextAsync();
+            }
 
-                    if (_enumerator != null)
-                    {
-                        await _enumerator.DisposeAsync().ConfigureAwait(false);
-                    }
+            private async ValueTask<bool> InitializeAndMoveNextAsync()
+            {
+                // NB: Using an async method to ensure any exception is reported via the task.
+
+                try
+                {
+                    _enumerator = _factory().GetAsyncEnumerator(_cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _enumerator = Throw<T>(ex).GetAsyncEnumerator(_cancellationToken);
+                    throw;
                 }
 
-                public ValueTask<bool> MoveNextAsync()
-                {
-                    if (_enumerator == null)
-                    {
-                        return InitAndMoveNextAsync();
-                    }
+                return await _enumerator.MoveNextAsync().ConfigureAwait(false);
+            }
+        }
 
-                    return _enumerator.MoveNextAsync();
+        private sealed class AsyncDeferIterator<T> : AsyncIteratorBase<T>
+        {
+            private readonly Func<Task<IAsyncEnumerable<T>>> _factory;
+            private IAsyncEnumerator<T> _enumerator;
+
+            public AsyncDeferIterator(Func< Task<IAsyncEnumerable<T>>> factory)
+            {
+                Debug.Assert(factory != null);
+
+                _factory = factory;
+            }
+
+            public override T Current => _enumerator == null ? default : _enumerator.Current;
+
+            public override AsyncIteratorBase<T> Clone()
+            {
+                return new AsyncDeferIterator<T>(_factory);
+            }
+
+            public override async ValueTask DisposeAsync()
+            {
+                if (_enumerator != null)
+                {
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
                 }
 
-                private async ValueTask<bool> InitAndMoveNextAsync()
-                {
-                    try
-                    {
-                        _enumerator = await _getEnumerator(_cancellationToken).ConfigureAwait(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        _enumerator = Throw<T>(ex).GetAsyncEnumerator(_cancellationToken);
-                        throw;
-                    }
-                    finally
-                    {
-                        _getEnumerator = null;
-                    }
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
 
-                    return await _enumerator.MoveNextAsync().ConfigureAwait(false);
+            protected override ValueTask<bool> MoveNextCore()
+            {
+                if (_enumerator == null)
+                {
+                    return InitializeAndMoveNextAsync();
                 }
 
-                private sealed class DisposedEnumerator : IAsyncEnumerator<T>
+                return _enumerator.MoveNextAsync();
+            }
+
+            private async ValueTask<bool> InitializeAndMoveNextAsync()
+            {
+                try
                 {
-                    public static readonly DisposedEnumerator Instance = new DisposedEnumerator();
-
-                    public T Current => throw new ObjectDisposedException("this");
-
-                    public ValueTask DisposeAsync() => default;
-
-                    public ValueTask<bool> MoveNextAsync() => throw new ObjectDisposedException("this");
+                    _enumerator = (await _factory().ConfigureAwait(false)).GetAsyncEnumerator(_cancellationToken);
                 }
+                catch (Exception ex)
+                {
+                    _enumerator = Throw<T>(ex).GetAsyncEnumerator(_cancellationToken);
+                    throw;
+                }
+
+                return await _enumerator.MoveNextAsync().ConfigureAwait(false);
             }
         }
     }
