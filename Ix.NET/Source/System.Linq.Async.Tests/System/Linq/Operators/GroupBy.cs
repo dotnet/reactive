@@ -227,22 +227,6 @@ namespace Tests
             var e = ys.GetAsyncEnumerator();
 
             AssertThrowsAsync(e.MoveNextAsync(), ex);
-
-            //Assert.True(await e.MoveNext());
-            //var g1 = e.Current;
-            //Assert.Equal(g1.Key, 1);
-            //var g1e = g1.GetEnumerator();
-            //await HasNextAsync(g1e, 1);
-
-            //Assert.True(await e.MoveNext());
-            //var g2 = e.Current;
-            //Assert.Equal(g2.Key, 2);
-            //var g2e = g2.GetEnumerator();
-            //await HasNextAsync(g2e, 2);
-
-
-            //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
-            //AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
 
         [Fact]

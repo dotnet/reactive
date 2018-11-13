@@ -19,27 +19,6 @@ namespace Tests
         private const int WaitTimeoutMs = 5000;
 
 #pragma warning disable xUnit1013 // Public method should be marked as test
-        public void AssertThrows<E>(Action a, Func<E, bool> assert)
-            where E : Exception
-        {
-            var hasFailed = false;
-
-            try
-            {
-                a();
-            }
-            catch (E e)
-            {
-                Assert.True(assert(e));
-                hasFailed = true;
-            }
-
-            if (!hasFailed)
-            {
-                Assert.True(false);
-            }
-        }
-
         public void AssertThrowsAsync<TException>(Task t)
         {
             AssertThrows<AggregateException>(() => t.Wait(WaitTimeoutMs), ex => ex.Flatten().InnerExceptions.Single() is TException);
@@ -76,16 +55,10 @@ namespace Tests
             await en1.DisposeAsync();
             await en2.DisposeAsync();
 
-            var e1t = enumerable.ToList();
-            var e2t = enumerable.ToList();
+            var res1 = await enumerable.ToList();
+            var res2 = await enumerable.ToList();
 
-            await Task.WhenAll(e1t, e2t);
-
-
-            var e1Result = e1t.Result;
-            var e2Result = e2t.Result;
-
-            e1Result.ShouldAllBeEquivalentTo(e2Result);
+            res1.ShouldAllBeEquivalentTo(res2);
         }
 #pragma warning restore xUnit1013 // Public method should be marked as test
 
@@ -108,6 +81,27 @@ namespace Tests
                     current: null,
                     dispose: null)
             );
+        }
+
+        private void AssertThrows<E>(Action a, Func<E, bool> assert)
+            where E : Exception
+        {
+            var hasFailed = false;
+
+            try
+            {
+                a();
+            }
+            catch (E e)
+            {
+                Assert.True(assert(e));
+                hasFailed = true;
+            }
+
+            if (!hasFailed)
+            {
+                Assert.True(false);
+            }
         }
     }
 }
