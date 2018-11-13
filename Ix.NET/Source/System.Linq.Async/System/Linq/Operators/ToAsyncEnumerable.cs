@@ -38,7 +38,7 @@ namespace System.Linq
                     var called = 0;
 
                     var value = default(TSource);
-                    return CreateEnumerator(
+                    return AsyncEnumerator.Create(
                         async () =>
                         {
                             if (Interlocked.CompareExchange(ref called, 1, 0) == 0)
@@ -69,7 +69,7 @@ namespace System.Linq
 
                     var ctr = ct.Register(subscription.Dispose);
 
-                    return CreateEnumerator(
+                    return AsyncEnumerator.Create(
                         tcs =>
                         {
                             var hasValue = false;

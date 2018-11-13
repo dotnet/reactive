@@ -79,7 +79,7 @@ namespace Tests
 #endif
 
             return AsyncEnumerable.CreateEnumerable(
-                _ => AsyncEnumerable.CreateEnumerator<TValue>(
+                _ => AsyncEnumerator.Create<TValue>(
                     () => moveNextThrows,
                     current: null,
                     dispose: null)

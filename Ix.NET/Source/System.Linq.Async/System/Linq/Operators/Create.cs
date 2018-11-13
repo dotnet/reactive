@@ -19,16 +19,6 @@ namespace System.Linq
             return new AnonymousAsyncEnumerable<T>(getEnumerator);
         }
 
-        public static IAsyncEnumerator<T> CreateEnumerator<T>(Func<ValueTask<bool>> moveNext, Func<T> current, Func<ValueTask> dispose)
-        {
-            return AsyncEnumerator.Create(moveNext, current, dispose);
-        }
-
-        private static IAsyncEnumerator<T> CreateEnumerator<T>(Func<TaskCompletionSource<bool>, ValueTask<bool>> moveNext, Func<T> current, Func<ValueTask> dispose)
-        {
-            return AsyncEnumerator.Create(moveNext, current, dispose);
-        }
-
         private sealed class AnonymousAsyncEnumerable<T> : IAsyncEnumerable<T>
         {
             private readonly Func<CancellationToken, IAsyncEnumerator<T>> _getEnumerator;
