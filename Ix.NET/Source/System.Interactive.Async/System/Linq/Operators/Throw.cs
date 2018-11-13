@@ -23,16 +23,7 @@ namespace System.Linq
             var moveNextThrows = new ValueTask<bool>(Task.FromException<bool>(exception));
 #endif
 
-            //
-            // REVIEW: Honor cancellation using conditional expression in MoveNextAsync?
-            //
-
-            return AsyncEnumerable.CreateEnumerable(
-                _ => AsyncEnumerator.Create<TValue>(
-                    () => moveNextThrows,
-                    current: null,
-                    dispose: null)
-            );
+            return new ThrowEnumerable<TValue>(moveNextThrows);
         }
 
         private sealed class ThrowEnumerable<TValue> : IAsyncEnumerable<TValue>
