@@ -15,37 +15,37 @@ namespace Tests
         [Fact]
         public void SelectMany_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(default, default(Func<int, IAsyncEnumerable<int>>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(default, default(Func<int, int, IAsyncEnumerable<int>>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(Return42, default(Func<int, IAsyncEnumerable<int>>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(Return42, default(Func<int, int, IAsyncEnumerable<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectMany(default, default(Func<int, IAsyncEnumerable<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectMany(default, default(Func<int, int, IAsyncEnumerable<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectMany(Return42, default(Func<int, IAsyncEnumerable<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectMany(Return42, default(Func<int, int, IAsyncEnumerable<int>>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(default, default(Func<int, IAsyncEnumerable<int>>), (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(default, default(Func<int, int, IAsyncEnumerable<int>>), (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(Return42, default(Func<int, IAsyncEnumerable<int>>), (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(Return42, default(Func<int, int, IAsyncEnumerable<int>>), (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(Return42, x => default, default(Func<int, int, int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int, int>(Return42, (x, i) => default, default(Func<int, int, int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectMany(default, default(Func<int, IAsyncEnumerable<int>>), (x, y) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectMany(default, default(Func<int, int, IAsyncEnumerable<int>>), (x, y) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectMany(Return42, default(Func<int, IAsyncEnumerable<int>>), (x, y) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectMany(Return42, default(Func<int, int, IAsyncEnumerable<int>>), (x, y) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectMany(Return42, x => default, default(Func<int, int, int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectMany(Return42, (x, i) => default, default(Func<int, int, int>)));
         }
 
         [Fact]
-        public void SelectMany1()
+        public async Task SelectMany1Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.SelectMany(x => Enumerable.Range(0, x).ToAsyncEnumerable());
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 0);
-            HasNext(e, 0);
-            HasNext(e, 1);
-            HasNext(e, 0);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            NoNext(e);
+            await HasNextAsync(e, 0);
+            await HasNextAsync(e, 0);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 0);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void SelectMany2()
+        public async Task SelectMany2Async()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -58,25 +58,25 @@ namespace Tests
             });
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 0);
-            HasNext(e, 0);
-            HasNext(e, 1);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await HasNextAsync(e, 0);
+            await HasNextAsync(e, 0);
+            await HasNextAsync(e, 1);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void SelectMany3()
+        public async Task SelectMany3Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
             var ys = xs.SelectMany(x => Enumerable.Range(0, x).ToAsyncEnumerable());
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void SelectMany4()
+        public async Task SelectMany4Async()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -89,30 +89,30 @@ namespace Tests
             });
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 0);
-            HasNext(e, 0);
-            HasNext(e, 1);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await HasNextAsync(e, 0);
+            await HasNextAsync(e, 0);
+            await HasNextAsync(e, 1);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void SelectMany5()
+        public async Task SelectMany5Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.SelectMany((x, i) => Enumerable.Range(i + 5, x).ToAsyncEnumerable());
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 5);
-            HasNext(e, 6);
-            HasNext(e, 7);
-            HasNext(e, 7);
-            HasNext(e, 8);
-            HasNext(e, 9);
-            NoNext(e);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await HasNextAsync(e, 7);
+            await HasNextAsync(e, 7);
+            await HasNextAsync(e, 8);
+            await HasNextAsync(e, 9);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void SelectMany6()
+        public async Task SelectMany6Async()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -125,25 +125,25 @@ namespace Tests
             });
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 0);
-            HasNext(e, 0);
-            HasNext(e, 1);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await HasNextAsync(e, 0);
+            await HasNextAsync(e, 0);
+            await HasNextAsync(e, 1);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void SelectMany7()
+        public async Task SelectMany7Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
             var ys = xs.SelectMany((x, i) => Enumerable.Range(0, x).ToAsyncEnumerable());
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void SelectMany8()
+        public async Task SelectMany8Async()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -156,46 +156,46 @@ namespace Tests
             });
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 0);
-            HasNext(e, 0);
-            HasNext(e, 1);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await HasNextAsync(e, 0);
+            await HasNextAsync(e, 0);
+            await HasNextAsync(e, 1);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void SelectMany9()
+        public async Task SelectMany9Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.SelectMany(x => Enumerable.Range(3, x).ToAsyncEnumerable(), (x, y) => x * y);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 3);
-            HasNext(e, 6);
-            HasNext(e, 8);
-            HasNext(e, 9);
-            HasNext(e, 12);
-            HasNext(e, 15);
-            NoNext(e);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 6);
+            await HasNextAsync(e, 8);
+            await HasNextAsync(e, 9);
+            await HasNextAsync(e, 12);
+            await HasNextAsync(e, 15);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void SelectMany10()
+        public async Task SelectMany10Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.SelectMany((x, i) => Enumerable.Range(i + 3, x).ToAsyncEnumerable(), (x, y) => x * y);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 3);
-            HasNext(e, 8);
-            HasNext(e, 10);
-            HasNext(e, 15);
-            HasNext(e, 18);
-            HasNext(e, 21);
-            NoNext(e);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 8);
+            await HasNextAsync(e, 10);
+            await HasNextAsync(e, 15);
+            await HasNextAsync(e, 18);
+            await HasNextAsync(e, 21);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void SelectMany11()
+        public async Task SelectMany11Async()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -207,15 +207,15 @@ namespace Tests
             });
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 3);
-            HasNext(e, 6);
-            HasNext(e, 8);
-            HasNext(e, 9);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 6);
+            await HasNextAsync(e, 8);
+            await HasNextAsync(e, 9);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void SelectMany12()
+        public async Task SelectMany12Async()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -227,10 +227,10 @@ namespace Tests
             });
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 3);
-            HasNext(e, 8);
-            HasNext(e, 10);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 8);
+            await HasNextAsync(e, 10);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

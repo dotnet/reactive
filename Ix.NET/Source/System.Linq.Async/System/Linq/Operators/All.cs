@@ -13,19 +13,9 @@ namespace System.Linq
         public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
-
-            return AllCore(source, predicate, CancellationToken.None);
-        }
-
-        public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return AllCore(source, predicate, CancellationToken.None);
         }
@@ -33,19 +23,29 @@ namespace System.Linq
         public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return AllCore(source, predicate, cancellationToken);
+        }
+
+        public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
+
+            return AllCore(source, predicate, CancellationToken.None);
         }
 
         public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return AllCore(source, predicate, cancellationToken);
         }

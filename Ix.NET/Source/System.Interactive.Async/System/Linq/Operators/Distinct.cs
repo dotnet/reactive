@@ -14,21 +14,19 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
 
-            return DistinctCore(source, keySelector, EqualityComparer<TKey>.Default);
+            return DistinctCore(source, keySelector, comparer: null);
         }
 
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(keySelector));
 
             return DistinctCore(source, keySelector, comparer);
         }
@@ -36,21 +34,21 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
 
-            return DistinctCore(source, keySelector, EqualityComparer<TKey>.Default);
+            return DistinctCore<TSource, TKey>(source, keySelector, comparer: null);
         }
 
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(comparer));
 
             return DistinctCore(source, keySelector, comparer);
         }
@@ -78,7 +76,6 @@ namespace System.Linq
             {
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;
@@ -145,12 +142,12 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
 
                         if (!await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
@@ -161,9 +158,9 @@ namespace System.Linq
                         var element = _enumerator.Current;
                         _set = new Set<TKey>(_comparer);
                         _set.Add(_keySelector(element));
-                        current = element;
+                        _current = element;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         return true;
 
                     case AsyncIteratorState.Iterating:
@@ -172,7 +169,7 @@ namespace System.Linq
                             element = _enumerator.Current;
                             if (_set.Add(_keySelector(element)))
                             {
-                                current = element;
+                                _current = element;
                                 return true;
                             }
                         }
@@ -193,7 +190,7 @@ namespace System.Linq
 
                 try
                 {
-                    while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
                         var item = enu.Current;
                         if (s.Add(_keySelector(item)))
@@ -224,7 +221,6 @@ namespace System.Linq
             {
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;
@@ -291,12 +287,12 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
 
                         if (!await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
@@ -307,9 +303,9 @@ namespace System.Linq
                         var element = _enumerator.Current;
                         _set = new Set<TKey>(_comparer);
                         _set.Add(await _keySelector(element).ConfigureAwait(false));
-                        current = element;
+                        _current = element;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         return true;
 
                     case AsyncIteratorState.Iterating:
@@ -318,7 +314,7 @@ namespace System.Linq
                             element = _enumerator.Current;
                             if (_set.Add(await _keySelector(element).ConfigureAwait(false)))
                             {
-                                current = element;
+                                _current = element;
                                 return true;
                             }
                         }
@@ -339,7 +335,7 @@ namespace System.Linq
 
                 try
                 {
-                    while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
                         var item = enu.Current;
                         if (s.Add(await _keySelector(item).ConfigureAwait(false)))

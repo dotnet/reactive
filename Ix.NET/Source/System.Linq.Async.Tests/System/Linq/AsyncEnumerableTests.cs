@@ -14,50 +14,42 @@ namespace Tests
     public class AsyncEnumerableTests
     {
         protected static readonly IAsyncEnumerable<int> Return42 = new[] { 42 }.ToAsyncEnumerable();
-        protected static Func<Exception, bool> SingleInnerExceptionMatches(Exception ex) => e => ((AggregateException)e).Flatten().InnerExceptions.Single() == ex;
 
-        protected const int WaitTimeoutMs = 5000;
-
-#pragma warning disable xUnit1013 // Public method should be marked as test
-        public void AssertThrows<E>(Action a)
-            where E : Exception
+        protected async Task AssertThrowsAsync<TException>(Task t)
+            where TException : Exception
         {
-            Assert.Throws<E>(a);
+            await Assert.ThrowsAsync<TException>(() => t);
         }
 
-        public void AssertThrows<E>(Action a, Func<E, bool> assert)
-            where E : Exception
+        protected async Task AssertThrowsAsync(Task t, Exception e)
         {
-            var hasFailed = false;
-
             try
             {
-                a();
+                await t;
             }
-            catch (E e)
+            catch (Exception ex)
             {
-                Assert.True(assert(e));
-                hasFailed = true;
-            }
-
-            if (!hasFailed)
-            {
-                Assert.True(false);
+                Assert.Same(e, ex);
             }
         }
 
-        public void NoNext<T>(IAsyncEnumerator<T> e)
+        protected Task AssertThrowsAsync<T>(ValueTask<T> t, Exception e)
         {
-            Assert.False(e.MoveNextAsync().Result);
+            return AssertThrowsAsync(t.AsTask(), e);
         }
 
-        public void HasNext<T>(IAsyncEnumerator<T> e, T value)
+        protected async Task NoNextAsync<T>(IAsyncEnumerator<T> e)
         {
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.False(await e.MoveNextAsync());
+        }
+
+        protected async Task HasNextAsync<T>(IAsyncEnumerator<T> e, T value)
+        {
+            Assert.True(await e.MoveNextAsync());
             Assert.Equal(value, e.Current);
         }
 
-        public async Task SequenceIdentity<T>(IAsyncEnumerable<T> enumerable)
+        protected async Task SequenceIdentity<T>(IAsyncEnumerable<T> enumerable)
         {
             var en1 = enumerable.GetAsyncEnumerator();
             var en2 = enumerable.GetAsyncEnumerator();
@@ -67,18 +59,11 @@ namespace Tests
             await en1.DisposeAsync();
             await en2.DisposeAsync();
 
-            var e1t = enumerable.ToList();
-            var e2t = enumerable.ToList();
+            var res1 = await enumerable.ToList();
+            var res2 = await enumerable.ToList();
 
-            await Task.WhenAll(e1t, e2t);
-
-
-            var e1Result = e1t.Result;
-            var e2Result = e2t.Result;
-
-            e1Result.ShouldAllBeEquivalentTo(e2Result);
+            res1.ShouldAllBeEquivalentTo(res2);
         }
-#pragma warning restore xUnit1013 // Public method should be marked as test
 
         protected static IAsyncEnumerable<TValue> Throw<TValue>(Exception exception)
         {
@@ -99,6 +84,27 @@ namespace Tests
                     current: null,
                     dispose: null)
             );
+        }
+
+        private void AssertThrows<E>(Action a, Func<E, bool> assert)
+            where E : Exception
+        {
+            var hasFailed = false;
+
+            try
+            {
+                a();
+            }
+            catch (E e)
+            {
+                Assert.True(assert(e));
+                hasFailed = true;
+            }
+
+            if (!hasFailed)
+            {
+                Assert.True(false);
+            }
         }
     }
 }

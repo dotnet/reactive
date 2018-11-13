@@ -21,58 +21,56 @@ namespace Tests
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MaxBy(default(IAsyncEnumerable<int>), x => x, Comparer<int>.Default));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MaxBy(Return42, default(Func<int, int>), Comparer<int>.Default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MaxBy(Return42, x => x, default(IComparer<int>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MaxBy(default(IAsyncEnumerable<int>), x => x, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MaxBy(Return42, default(Func<int, int>), CancellationToken.None));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MaxBy(default(IAsyncEnumerable<int>), x => x, Comparer<int>.Default, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MaxBy(Return42, default(Func<int, int>), Comparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MaxBy(Return42, x => x, default, CancellationToken.None));
         }
 
         [Fact]
-        public void MaxBy1()
+        public async Task MaxBy1Async()
         {
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MaxBy(x => x / 2);
-            var res = xs.Result;
+            var res = await xs;
 
             Assert.True(res.SequenceEqual(new[] { 7, 6 }));
         }
 
         [Fact]
-        public void MaxBy2()
+        public async Task MaxBy2()
         {
             var xs = new int[0].ToAsyncEnumerable().MaxBy(x => x / 2);
 
-            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            await AssertThrowsAsync<InvalidOperationException>(xs);
         }
 
         [Fact]
-        public void MaxBy3()
+        public async Task MaxBy3()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MaxBy(x => { if (x == 3) throw ex; return x; });
 
-            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(xs, ex);
         }
 
         [Fact]
-        public void MaxBy4()
+        public async Task MaxBy4()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().MaxBy(x => { if (x == 4) throw ex; return x; });
 
-            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(xs, ex);
         }
 
         [Fact]
-        public void MaxBy5()
+        public async Task MaxBy5()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().Concat(Throw<int>(ex)).MaxBy(x => x, Comparer<int>.Default);
 
-            AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(xs, ex);
         }
     }
 }

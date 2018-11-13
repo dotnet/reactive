@@ -15,8 +15,8 @@ namespace Tests
         [Fact]
         public void Using_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Using<int, IDisposable>(default, _ => default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Using<int, IDisposable>(() => new MyD(null), default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Using<int, IDisposable>(default, _ => default(IAsyncEnumerable<int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Using<int, IDisposable>(() => new MyD(null), default));
         }
 
         [Fact]
@@ -35,9 +35,12 @@ namespace Tests
             );
 
             Assert.Equal(0, i);
+            Assert.Equal(0, d);
 
             var e = xs.GetAsyncEnumerator();
-            Assert.Equal(1, i);
+
+            Assert.Equal(0, i);
+            Assert.Equal(0, d);
         }
 
         [Fact]
@@ -56,16 +59,20 @@ namespace Tests
             );
 
             Assert.Equal(0, i);
+            Assert.Equal(0, d);
 
             var e = xs.GetAsyncEnumerator();
-            Assert.Equal(1, i);
+            Assert.Equal(0, i);
+            Assert.Equal(0, d);
 
             await e.DisposeAsync();
-            Assert.Equal(1, d);
+
+            Assert.Equal(0, i);
+            Assert.Equal(0, d);
         }
 
         [Fact]
-        public void Using3()
+        public async Task Using3()
         {
             var ex = new Exception("Bang!");
             var i = 0;
@@ -81,14 +88,21 @@ namespace Tests
             );
 
             Assert.Equal(0, i);
+            Assert.Equal(0, d);
 
-            AssertThrows<Exception>(() => xs.GetAsyncEnumerator(), ex_ => ex_ == ex);
+            var e = xs.GetAsyncEnumerator();
 
-            Assert.Equal(1, d);
+            Assert.Equal(0, i);
+            Assert.Equal(0, d);
+
+            await e.DisposeAsync();
+
+            Assert.Equal(0, i);
+            Assert.Equal(0, d);
         }
 
         [Fact]
-        public void Using4()
+        public async Task Using4Async()
         {
             var i = 0;
             var disposed = new TaskCompletionSource<bool>();
@@ -105,16 +119,20 @@ namespace Tests
             Assert.Equal(0, i);
 
             var e = xs.GetAsyncEnumerator();
+
+            Assert.Equal(0, i);
+
+            await HasNextAsync(e, 42);
+
             Assert.Equal(1, i);
 
-            HasNext(e, 42);
-            NoNext(e);
+            await NoNextAsync(e);
 
-            Assert.True(disposed.Task.Result);
+            Assert.True(await disposed.Task);
         }
 
         [Fact]
-        public void Using5()
+        public async Task Using5Async()
         {
             var ex = new Exception("Bang!");
             var i = 0;
@@ -132,11 +150,14 @@ namespace Tests
             Assert.Equal(0, i);
 
             var e = xs.GetAsyncEnumerator();
+
+            Assert.Equal(0, i);
+
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
+
             Assert.Equal(1, i);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
-
-            Assert.True(disposed.Task.Result);
+            Assert.True(await disposed.Task);
         }
 
         [Fact]

@@ -12,42 +12,38 @@ namespace System.Linq
         public static IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
 
-            return source.OrderBy(keySelector, Comparer<TKey>.Default);
+            return OrderBy(source, keySelector, comparer: null);
         }
 
         public static IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
 
-            return source.OrderBy(keySelector, Comparer<TKey>.Default);
+            return OrderBy<TSource, TKey>(source, keySelector, comparer: null);
         }
 
         public static IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(keySelector));
 
             return new OrderedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer, descending: false, parent: null);
         }
         public static IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(keySelector));
 
             return new OrderedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer, descending: false, parent: null);
         }
@@ -55,31 +51,29 @@ namespace System.Linq
         public static IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
 
-            return source.OrderByDescending(keySelector, Comparer<TKey>.Default);
+            return source.OrderByDescending(keySelector, comparer: null);
         }
 
         public static IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
 
-            return source.OrderByDescending(keySelector, Comparer<TKey>.Default);
+            return source.OrderByDescending<TSource, TKey>(keySelector, comparer: null);
         }
 
         public static IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(keySelector));
 
             return new OrderedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer, descending: true, parent: null);
         }
@@ -87,11 +81,9 @@ namespace System.Linq
         public static IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(keySelector));
 
             return new OrderedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer, descending: true, parent: null);
         }
@@ -99,9 +91,9 @@ namespace System.Linq
         public static IOrderedAsyncEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
 
             return source.ThenBy(keySelector, Comparer<TKey>.Default);
         }
@@ -109,9 +101,9 @@ namespace System.Linq
         public static IOrderedAsyncEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
 
             return source.ThenBy(keySelector, Comparer<TKey>.Default);
         }
@@ -119,11 +111,9 @@ namespace System.Linq
         public static IOrderedAsyncEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(keySelector));
 
             return source.CreateOrderedEnumerable(keySelector, comparer, descending: false);
         }
@@ -131,11 +121,9 @@ namespace System.Linq
         public static IOrderedAsyncEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(keySelector));
 
             return source.CreateOrderedEnumerable(keySelector, comparer, descending: false);
         }
@@ -143,31 +131,29 @@ namespace System.Linq
         public static IOrderedAsyncEnumerable<TSource> ThenByDescending<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
 
-            return source.ThenByDescending(keySelector, Comparer<TKey>.Default);
+            return source.CreateOrderedEnumerable(keySelector, Comparer<TKey>.Default, descending: true);
         }
 
         public static IOrderedAsyncEnumerable<TSource> ThenByDescending<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
 
-            return source.ThenByDescending(keySelector, Comparer<TKey>.Default);
+            return source.CreateOrderedEnumerable(keySelector, Comparer<TKey>.Default, descending: true);
         }
 
         public static IOrderedAsyncEnumerable<TSource> ThenByDescending<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(keySelector));
 
             return source.CreateOrderedEnumerable(keySelector, comparer, descending: true);
         }
@@ -175,11 +161,9 @@ namespace System.Linq
         public static IOrderedAsyncEnumerable<TSource> ThenByDescending<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(keySelector));
 
             return source.CreateOrderedEnumerable(keySelector, comparer, descending: true);
         }

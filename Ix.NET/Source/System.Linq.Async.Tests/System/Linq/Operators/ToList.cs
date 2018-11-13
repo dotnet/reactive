@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,27 +20,27 @@ namespace Tests
         }
 
         [Fact]
-        public void ToList1()
+        public async Task ToList1()
         {
             var xs = new[] { 42, 25, 39 };
             var res = xs.ToAsyncEnumerable().ToList();
-            Assert.True(res.Result.SequenceEqual(xs));
+            Assert.True((await res).SequenceEqual(xs));
         }
 
         [Fact]
-        public void ToList2()
+        public async Task ToList2()
         {
             var xs = AsyncEnumerable.Empty<int>();
             var res = xs.ToList();
-            Assert.True(res.Result.Count == 0);
+            Assert.True((await res).Count == 0);
         }
 
         [Fact]
-        public void ToList3()
+        public async Task ToList3Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).ToList();
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(res, ex);
         }
     }
 }

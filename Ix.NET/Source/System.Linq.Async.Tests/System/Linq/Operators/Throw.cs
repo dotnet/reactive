@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Linq;
 using Xunit;
 
 namespace Tests
@@ -13,22 +12,17 @@ namespace Tests
         [Fact]
         public void Throw_Null()
         {
-            AssertThrows<ArgumentNullException>(() => Throw<int>(default));
+            Assert.Throws<ArgumentNullException>(() => Throw<int>(default));
         }
 
         [Fact]
-        public void Throw1()
+        public async System.Threading.Tasks.Task Throw1Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
-            AssertThrows<InvalidOperationException>(() => Nop(e.Current));
-        }
-
-        private void Nop(object o)
-        {
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
     }
 }

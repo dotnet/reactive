@@ -15,58 +15,58 @@ namespace Tests
         [Fact]
         public void Do_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(default, x => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, default(Action<int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(default, x => { }));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, default(Action<int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(default, x => { }, () => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, default, () => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, x => { }, default(Action)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(default, x => { }, () => { }));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, default, () => { }));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, x => { }, default(Action)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(default, x => { }, ex => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, default, ex => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, x => { }, default(Action<Exception>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(default, x => { }, ex => { }));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, default, ex => { }));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, x => { }, default(Action<Exception>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(default, x => { }, ex => { }, () => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, default, ex => { }, () => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, x => { }, default, () => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, x => { }, ex => { }, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(default, x => { }, ex => { }, () => { }));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, default, ex => { }, () => { }));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, x => { }, default, () => { }));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, x => { }, ex => { }, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(default, new MyObs()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, default(IObserver<int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(default, new MyObs()));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(Return42, default(IObserver<int>)));
         }
 
         [Fact]
-        public void Do1()
+        public async Task Do1Async()
         {
             var sum = 0;
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Do(x => sum += x);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
+            await HasNextAsync(e, 1);
             Assert.Equal(1, sum);
-            HasNext(e, 2);
+            await HasNextAsync(e, 2);
             Assert.Equal(3, sum);
-            HasNext(e, 3);
+            await HasNextAsync(e, 3);
             Assert.Equal(6, sum);
-            HasNext(e, 4);
+            await HasNextAsync(e, 4);
             Assert.Equal(10, sum);
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Do2()
+        public async Task Do2()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Do(x => { throw ex; });
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Do3()
+        public async Task Do3Async()
         {
             var sum = 0;
             var fail = false;
@@ -75,22 +75,22 @@ namespace Tests
             var ys = xs.Do(x => sum += x, ex => { fail = true; }, () => { done = true; });
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
+            await HasNextAsync(e, 1);
             Assert.Equal(1, sum);
-            HasNext(e, 2);
+            await HasNextAsync(e, 2);
             Assert.Equal(3, sum);
-            HasNext(e, 3);
+            await HasNextAsync(e, 3);
             Assert.Equal(6, sum);
-            HasNext(e, 4);
+            await HasNextAsync(e, 4);
             Assert.Equal(10, sum);
-            NoNext(e);
+            await NoNextAsync(e);
 
             Assert.False(fail);
             Assert.True(done);
         }
 
         [Fact]
-        public void Do4()
+        public async Task Do4Async()
         {
             var sum = 0;
             var done = false;
@@ -98,21 +98,21 @@ namespace Tests
             var ys = xs.Do(x => sum += x, () => { done = true; });
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
+            await HasNextAsync(e, 1);
             Assert.Equal(1, sum);
-            HasNext(e, 2);
+            await HasNextAsync(e, 2);
             Assert.Equal(3, sum);
-            HasNext(e, 3);
+            await HasNextAsync(e, 3);
             Assert.Equal(6, sum);
-            HasNext(e, 4);
+            await HasNextAsync(e, 4);
             Assert.Equal(10, sum);
-            NoNext(e);
+            await NoNextAsync(e);
 
             Assert.True(done);
         }
 
         [Fact]
-        public void Do5()
+        public async Task Do5()
         {
             var ex = new Exception("Bang");
             var exa = default(Exception);
@@ -122,7 +122,7 @@ namespace Tests
             var ys = xs.Do(x => { hasv = true; }, exx => { exa = exx; }, () => { done = true; });
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ex_.InnerException == ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
 
             Assert.False(hasv);
             Assert.False(done);
@@ -130,7 +130,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Do6()
+        public async Task Do6()
         {
             var ex = new Exception("Bang");
             var exa = default(Exception);
@@ -139,7 +139,7 @@ namespace Tests
             var ys = xs.Do(x => { hasv = true; }, exx => { exa = exx; });
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ex_.InnerException == ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
 
             Assert.False(hasv);
             Assert.Same(exa, ex);

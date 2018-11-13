@@ -13,7 +13,7 @@ namespace System.Linq
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return LastCore(source, CancellationToken.None);
         }
@@ -21,7 +21,7 @@ namespace System.Linq
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return LastCore(source, cancellationToken);
         }
@@ -29,9 +29,9 @@ namespace System.Linq
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return LastCore(source, predicate, CancellationToken.None);
         }
@@ -39,9 +39,9 @@ namespace System.Linq
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return LastCore(source, predicate, cancellationToken);
         }
@@ -49,9 +49,9 @@ namespace System.Linq
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return LastCore(source, predicate, CancellationToken.None);
         }
@@ -59,9 +59,9 @@ namespace System.Linq
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return LastCore(source, predicate, cancellationToken);
         }
@@ -70,21 +70,21 @@ namespace System.Linq
         {
             var last = await TryGetLast(source, cancellationToken).ConfigureAwait(false);
 
-            return last.HasValue ? last.Value : throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            return last.HasValue ? last.Value : throw Error.NoElements();
         }
 
         private static async Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
-            return last.HasValue ? last.Value : throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            return last.HasValue ? last.Value : throw Error.NoElements();
         }
 
         private static async Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
             var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
-            return last.HasValue ? last.Value : throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            return last.HasValue ? last.Value : throw Error.NoElements();
         }
     }
 }

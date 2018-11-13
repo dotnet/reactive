@@ -14,9 +14,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> IgnoreElements<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+                throw Error.ArgumentNull(nameof(source));
 
             return new IgnoreElementsAsyncIterator<TSource>(source);
         }
@@ -49,13 +47,13 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
-                        state = AsyncIteratorState.Iterating;
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:

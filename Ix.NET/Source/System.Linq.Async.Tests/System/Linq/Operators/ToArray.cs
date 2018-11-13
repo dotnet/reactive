@@ -21,27 +21,27 @@ namespace Tests
         }
 
         [Fact]
-        public void ToArray1()
+        public async Task ToArray1()
         {
             var xs = new[] { 42, 25, 39 };
             var res = xs.ToAsyncEnumerable().ToArray();
-            Assert.True(res.Result.SequenceEqual(xs));
+            Assert.True((await res).SequenceEqual(xs));
         }
 
         [Fact]
-        public void ToArray2()
+        public async Task ToArray2()
         {
             var xs = AsyncEnumerable.Empty<int>();
             var res = xs.ToArray();
-            Assert.True(res.Result.Length == 0);
+            Assert.True((await res).Length == 0);
         }
 
         [Fact]
-        public void ToArray3()
+        public async Task ToArray3Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).ToArray();
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]

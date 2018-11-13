@@ -14,9 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> OnErrorResumeNext<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException(nameof(first));
+                throw Error.ArgumentNull(nameof(first));
             if (second == null)
-                throw new ArgumentNullException(nameof(second));
+                throw Error.ArgumentNull(nameof(second));
 
             return OnErrorResumeNextCore(new[] { first, second });
         }
@@ -24,7 +24,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> OnErrorResumeNext<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+                throw Error.ArgumentNull(nameof(sources));
 
             return OnErrorResumeNextCore(sources);
         }
@@ -32,7 +32,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> OnErrorResumeNext<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+                throw Error.ArgumentNull(nameof(sources));
 
             return OnErrorResumeNextCore(sources);
         }
@@ -78,14 +78,14 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _sourcesEnumerator = _sources.GetEnumerator();
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -98,14 +98,14 @@ namespace System.Linq
                                     break; // while -- done, nothing else to do
                                 }
 
-                                _enumerator = _sourcesEnumerator.Current.GetAsyncEnumerator(cancellationToken);
+                                _enumerator = _sourcesEnumerator.Current.GetAsyncEnumerator(_cancellationToken);
                             }
 
                             try
                             {
                                 if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = _enumerator.Current;
+                                    _current = _enumerator.Current;
                                     return true;
                                 }
                             }

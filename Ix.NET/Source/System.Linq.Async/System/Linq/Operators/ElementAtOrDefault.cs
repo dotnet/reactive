@@ -13,7 +13,7 @@ namespace System.Linq
         public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return ElementAtOrDefaultCore(source, index, CancellationToken.None);
         }
@@ -21,23 +21,14 @@ namespace System.Linq
         public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (index < 0)
-                throw new ArgumentOutOfRangeException(nameof(index));
+                throw Error.ArgumentNull(nameof(source));
 
             return ElementAtOrDefaultCore(source, index, cancellationToken);
         }
 
         private static async Task<TSource> ElementAtOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
-            if (source is IList<TSource> list)
-            {
-                if (index < list.Count)
-                {
-                    return list[index];
-                }
-            }
-            else if (source is IAsyncPartition<TSource> p)
+            if (source is IAsyncPartition<TSource> p)
             {
                 var first = await p.TryGetElementAsync(index, cancellationToken).ConfigureAwait(false);
 
@@ -46,25 +37,36 @@ namespace System.Linq
                     return first.Value;
                 }
             }
-            else
+
+            if (index >= 0)
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
-
-                try
+                if (source is IList<TSource> list)
                 {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    if (index < list.Count)
                     {
-                        if (index == 0)
-                        {
-                            return e.Current;
-                        }
-
-                        index--;
+                        return list[index];
                     }
                 }
-                finally
+                else
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    var e = source.GetAsyncEnumerator(cancellationToken);
+
+                    try
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            if (index == 0)
+                            {
+                                return e.Current;
+                            }
+
+                            index--;
+                        }
+                    }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
                 }
             }
 

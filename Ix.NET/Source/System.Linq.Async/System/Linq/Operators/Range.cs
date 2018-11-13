@@ -14,11 +14,11 @@ namespace System.Linq
         public static IAsyncEnumerable<int> Range(int start, int count)
         {
             if (count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw Error.ArgumentOutOfRange(nameof(count));
 
             var end = (long)start + count - 1L;
             if (count < 0 || end > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw Error.ArgumentOutOfRange(nameof(count));
 
             if (count == 0)
                 return Empty<int>();
@@ -107,20 +107,20 @@ namespace System.Linq
 
             public Task<Maybe<int>> TryGetLastAsync(CancellationToken cancellationToken) => Task.FromResult(new Maybe<int>(_end - 1));
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        current = _start;
+                        _current = _start;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        current++;
+                        _current++;
 
-                        if (current != _end)
+                        if (_current != _end)
                         {
                             return true;
                         }

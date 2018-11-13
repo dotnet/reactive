@@ -14,9 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Expand<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TSource>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
             return new ExpandAsyncIterator<TSource>(source, selector);
         }
@@ -24,9 +24,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Expand<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<IAsyncEnumerable<TSource>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
             return new ExpandAsyncIteratorWithTask<TSource>(source, selector);
         }
@@ -67,15 +67,15 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _queue = new Queue<IAsyncEnumerable<TSource>>();
                         _queue.Enqueue(_source);
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -92,7 +92,7 @@ namespace System.Linq
                                         await _enumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    _enumerator = src.GetAsyncEnumerator(cancellationToken);
+                                    _enumerator = src.GetAsyncEnumerator(_cancellationToken);
 
                                     continue; // loop
                                 }
@@ -105,7 +105,7 @@ namespace System.Linq
                                 var item = _enumerator.Current;
                                 var next = _selector(item);
                                 _queue.Enqueue(next);
-                                current = item;
+                                _current = item;
                                 return true;
                             }
 
@@ -157,15 +157,15 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _queue = new Queue<IAsyncEnumerable<TSource>>();
                         _queue.Enqueue(_source);
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -182,7 +182,7 @@ namespace System.Linq
                                         await _enumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    _enumerator = src.GetAsyncEnumerator(cancellationToken);
+                                    _enumerator = src.GetAsyncEnumerator(_cancellationToken);
 
                                     continue; // loop
                                 }
@@ -195,7 +195,7 @@ namespace System.Linq
                                 var item = _enumerator.Current;
                                 var next = await _selector(item).ConfigureAwait(false);
                                 _queue.Enqueue(next);
-                                current = item;
+                                _current = item;
                                 return true;
                             }
 

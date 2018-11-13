@@ -92,102 +92,102 @@ namespace Tests
         }
 
         [Fact]
-        public void Max1()
+        public async Task Max1Async()
         {
             var xs = new[] { 2, 7, 3 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Max(), ys.Max().Result);
-            Assert.Equal(xs.Max(), ys.Max(x => x).Result);
+            Assert.Equal(xs.Max(), await ys.Max());
+            Assert.Equal(xs.Max(), await ys.Max(x => x));
         }
 
         [Fact]
-        public void Max2()
+        public async Task Max2Async()
         {
             var xs = new[] { 2, default(int?), 3, 1 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Max(), ys.Max().Result);
-            Assert.Equal(xs.Max(), ys.Max(x => x).Result);
+            Assert.Equal(xs.Max(), await ys.Max());
+            Assert.Equal(xs.Max(), await ys.Max(x => x));
         }
 
         [Fact]
-        public void Max3()
+        public async Task Max3Async()
         {
             var xs = new[] { 2L, 7L, 3L };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Max(), ys.Max().Result);
-            Assert.Equal(xs.Max(), ys.Max(x => x).Result);
+            Assert.Equal(xs.Max(), await ys.Max());
+            Assert.Equal(xs.Max(), await ys.Max(x => x));
         }
 
         [Fact]
-        public void Max4()
+        public async Task Max4Async()
         {
             var xs = new[] { 2L, default(long?), 3L, 1L };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Max(), ys.Max().Result);
-            Assert.Equal(xs.Max(), ys.Max(x => x).Result);
+            Assert.Equal(xs.Max(), await ys.Max());
+            Assert.Equal(xs.Max(), await ys.Max(x => x));
         }
 
         [Fact]
-        public void Max5()
+        public async Task Max5Async()
         {
             var xs = new[] { 2.0, 7.0, 3.0 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Max(), ys.Max().Result);
-            Assert.Equal(xs.Max(), ys.Max(x => x).Result);
+            Assert.Equal(xs.Max(), await ys.Max());
+            Assert.Equal(xs.Max(), await ys.Max(x => x));
         }
 
         [Fact]
-        public void Max6()
+        public async Task Max6Async()
         {
             var xs = new[] { 2.0, default(double?), 3.0, 1.0 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Max(), ys.Max().Result);
-            Assert.Equal(xs.Max(), ys.Max(x => x).Result);
+            Assert.Equal(xs.Max(), await ys.Max());
+            Assert.Equal(xs.Max(), await ys.Max(x => x));
         }
 
         [Fact]
-        public void Max7()
+        public async Task Max7Async()
         {
             var xs = new[] { 2.0f, 7.0f, 3.0f };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Max(), ys.Max().Result);
-            Assert.Equal(xs.Max(), ys.Max(x => x).Result);
+            Assert.Equal(xs.Max(), await ys.Max());
+            Assert.Equal(xs.Max(), await ys.Max(x => x));
         }
 
         [Fact]
-        public void Max8()
+        public async Task Max8Async()
         {
             var xs = new[] { 2.0f, default(float?), 3.0f, 1.0f };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Max(), ys.Max().Result);
-            Assert.Equal(xs.Max(), ys.Max(x => x).Result);
+            Assert.Equal(xs.Max(), await ys.Max());
+            Assert.Equal(xs.Max(), await ys.Max(x => x));
         }
 
         [Fact]
-        public void Max9()
+        public async Task Max9Async()
         {
             var xs = new[] { 2.0m, 7.0m, 3.0m };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Max(), ys.Max().Result);
-            Assert.Equal(xs.Max(), ys.Max(x => x).Result);
+            Assert.Equal(xs.Max(), await ys.Max());
+            Assert.Equal(xs.Max(), await ys.Max(x => x));
         }
 
         [Fact]
-        public void Max10()
+        public async Task Max10Async()
         {
             var xs = new[] { 2.0m, default(decimal?), 3.0m, 1.0m };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Max(), ys.Max().Result);
-            Assert.Equal(xs.Max(), ys.Max(x => x).Result);
+            Assert.Equal(xs.Max(), await ys.Max());
+            Assert.Equal(xs.Max(), await ys.Max(x => x));
         }
 
         [Fact]
-        public void Max11()
+        public async Task Max11Async()
         {
             var xs = new[] { DateTime.Now.AddDays(1), DateTime.Now.Subtract(TimeSpan.FromDays(1)), DateTime.Now.AddDays(2), DateTime.Now };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Max(), ys.Max().Result);
-            Assert.Equal(xs.Max(), ys.Max(x => x).Result);
+            Assert.Equal(xs.Max(), await ys.Max());
+            Assert.Equal(xs.Max(), await ys.Max(x => x));
         }
     }
 }

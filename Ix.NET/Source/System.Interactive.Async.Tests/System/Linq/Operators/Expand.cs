@@ -15,45 +15,45 @@ namespace Tests
         [Fact]
         public void Expand_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Expand(default(IAsyncEnumerable<int>), x => default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Expand(Return42, default(Func<int, IAsyncEnumerable<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Expand(default(IAsyncEnumerable<int>), x => default(IAsyncEnumerable<int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Expand(Return42, default(Func<int, IAsyncEnumerable<int>>)));
         }
 
         [Fact]
-        public void Expand1()
+        public async Task Expand1Async()
         {
             var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(x => AsyncEnumerableEx.Return(x - 1).Repeat(x - 1));
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 2);
-            HasNext(e, 1);
-            HasNext(e, 1);
-            NoNext(e);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 1);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Expand2()
+        public async Task Expand2()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(new Func<int, IAsyncEnumerable<int>>(x => { throw ex; }));
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Expand3()
+        public async Task Expand3Async()
         {
             var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(x => default(IAsyncEnumerable<int>));
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 2);
-            HasNext(e, 3);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NullReferenceException);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await AssertThrowsAsync<NullReferenceException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]

@@ -14,7 +14,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IAsyncEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+                throw Error.ArgumentNull(nameof(sources));
 
             return new ConcatAsyncEnumerableAsyncIterator<TSource>(sources);
         }
@@ -22,7 +22,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+                throw Error.ArgumentNull(nameof(sources));
 
             return ConcatCore(sources);
         }
@@ -30,7 +30,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Concat<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+                throw Error.ArgumentNull(nameof(sources));
 
             return ConcatCore(sources);
         }
@@ -81,14 +81,14 @@ namespace System.Linq
             private const int State_OuterNext = 1;
             private const int State_While = 4;
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _outerEnumerator = _source.GetEnumerator();
                         _mode = State_OuterNext;
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -103,7 +103,7 @@ namespace System.Linq
                                         await _currentEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    _currentEnumerator = _outerEnumerator.Current.GetAsyncEnumerator(cancellationToken);
+                                    _currentEnumerator = _outerEnumerator.Current.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_While;
                                     goto case State_While;
@@ -113,7 +113,7 @@ namespace System.Linq
                             case State_While:
                                 if (await _currentEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = _currentEnumerator.Current;
+                                    _current = _currentEnumerator.Current;
                                     return true;
                                 }
 
@@ -170,14 +170,14 @@ namespace System.Linq
             private const int State_OuterNext = 1;
             private const int State_While = 4;
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _outerEnumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _outerEnumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _mode = State_OuterNext;
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -192,7 +192,7 @@ namespace System.Linq
                                         await _currentEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    _currentEnumerator = _outerEnumerator.Current.GetAsyncEnumerator(cancellationToken);
+                                    _currentEnumerator = _outerEnumerator.Current.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_While;
                                     goto case State_While;
@@ -202,7 +202,7 @@ namespace System.Linq
                             case State_While:
                                 if (await _currentEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    current = _currentEnumerator.Current;
+                                    _current = _currentEnumerator.Current;
                                     return true;
                                 }
 

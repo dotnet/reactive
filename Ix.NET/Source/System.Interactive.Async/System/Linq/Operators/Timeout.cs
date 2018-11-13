@@ -14,11 +14,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Timeout<TSource>(this IAsyncEnumerable<TSource> source, TimeSpan timeout)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             var num = (long)timeout.TotalMilliseconds;
             if (num < -1L || num > int.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(timeout));
+                throw Error.ArgumentOutOfRange(nameof(timeout));
 
             return new TimeoutAsyncIterator<TSource>(source, timeout);
         }
@@ -62,14 +62,14 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -99,7 +99,7 @@ namespace System.Linq
 
                         if (await moveNext.ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 

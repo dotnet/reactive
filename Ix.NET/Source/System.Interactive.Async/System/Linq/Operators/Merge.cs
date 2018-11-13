@@ -14,7 +14,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Merge<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+                throw Error.ArgumentNull(nameof(sources));
 
             return new MergeAsyncIterator<TSource>(sources);
         }
@@ -22,7 +22,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Merge<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+                throw Error.ArgumentNull(nameof(sources));
 
             return sources.ToAsyncEnumerable().SelectMany(source => source);
         }
@@ -30,7 +30,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Merge<TSource>(this IAsyncEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException(nameof(sources));
+                throw Error.ArgumentNull(nameof(sources));
 
             return sources.SelectMany(source => source);
         }
@@ -76,9 +76,9 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         var n = _sources.Length;
@@ -89,12 +89,12 @@ namespace System.Linq
 
                         for (var i = 0; i < n; i++)
                         {
-                            var enumerator = _sources[i].GetAsyncEnumerator(cancellationToken);
+                            var enumerator = _sources[i].GetAsyncEnumerator(_cancellationToken);
                             _enumerators[i] = enumerator;
                             _moveNexts[i] = enumerator.MoveNextAsync();
                         }
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -118,7 +118,7 @@ namespace System.Linq
                             else
                             {
                                 var enumerator = _enumerators[index];
-                                current = enumerator.Current;
+                                _current = enumerator.Current;
                                 _moveNexts[index] = enumerator.MoveNextAsync();
                                 return true;
                             }

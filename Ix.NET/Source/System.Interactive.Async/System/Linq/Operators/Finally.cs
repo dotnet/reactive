@@ -14,9 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Finally<TSource>(this IAsyncEnumerable<TSource> source, Action finallyAction)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (finallyAction == null)
-                throw new ArgumentNullException(nameof(finallyAction));
+                throw Error.ArgumentNull(nameof(finallyAction));
 
             return new FinallyAsyncIterator<TSource>(source, finallyAction);
         }
@@ -24,9 +24,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Finally<TSource>(this IAsyncEnumerable<TSource> source, Func<Task> finallyAction)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (finallyAction == null)
-                throw new ArgumentNullException(nameof(finallyAction));
+                throw Error.ArgumentNull(nameof(finallyAction));
 
             return new FinallyAsyncIteratorWithTask<TSource>(source, finallyAction);
         }
@@ -65,19 +65,19 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
-                        state = AsyncIteratorState.Iterating;
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 
@@ -123,19 +123,19 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
-                        state = AsyncIteratorState.Iterating;
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 

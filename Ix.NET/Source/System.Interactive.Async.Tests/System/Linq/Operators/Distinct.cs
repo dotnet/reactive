@@ -15,26 +15,25 @@ namespace Tests
         [Fact]
         public void Distinct_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct<int, int>(Return42, default(Func<int, int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Distinct<int, int>(Return42, default(Func<int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(Return42, default(Func<int, int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(Return42, default(Func<int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(Return42, default(Func<int, int>), EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(Return42, x => x, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(Return42, default(Func<int, int>), EqualityComparer<int>.Default));
         }
 
         [Fact]
-        public void Distinct1()
+        public async Task Distinct1Async()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable().Distinct(x => x / 2);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -72,13 +71,13 @@ namespace Tests
         }
 
         [Fact]
-        public void Distinct11()
+        public async Task Distinct11Async()
         {
             var xs = AsyncEnumerable.Empty<int>().Distinct(k => k);
 
             var e = xs.GetAsyncEnumerator();
 
-            NoNext(e);
+            await NoNextAsync(e);
         }
     }
 }

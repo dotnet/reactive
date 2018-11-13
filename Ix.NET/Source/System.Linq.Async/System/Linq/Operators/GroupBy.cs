@@ -14,21 +14,19 @@ namespace System.Linq
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
 
-            return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default);
+            return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer: null);
         }
 
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(keySelector));
 
             return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer);
         }
@@ -36,21 +34,19 @@ namespace System.Linq
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
 
-            return new GroupedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default);
+            return new GroupedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer: null);
         }
 
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(keySelector));
 
             return new GroupedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer);
         }
@@ -58,25 +54,23 @@ namespace System.Linq
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException(nameof(elementSelector));
+                throw Error.ArgumentNull(nameof(elementSelector));
 
-            return source.GroupBy(keySelector, elementSelector, EqualityComparer<TKey>.Default);
+            return new GroupedAsyncEnumerable<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null);
         }
 
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException(nameof(elementSelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(elementSelector));
 
             return new GroupedAsyncEnumerable<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
         }
@@ -84,25 +78,23 @@ namespace System.Linq
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException(nameof(elementSelector));
+                throw Error.ArgumentNull(nameof(elementSelector));
 
-            return source.GroupBy(keySelector, elementSelector, EqualityComparer<TKey>.Default);
+            return new GroupedAsyncEnumerableWithTask<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null);
         }
 
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException(nameof(elementSelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(elementSelector));
 
             return new GroupedAsyncEnumerableWithTask<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
         }
@@ -110,25 +102,23 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, IAsyncEnumerable<TSource>, TResult> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
-            return GroupBy(source, keySelector, resultSelector, EqualityComparer<TKey>.Default);
+            return new GroupedResultAsyncEnumerable<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer: null);
         }
 
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, IAsyncEnumerable<TSource>, TResult> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
             return new GroupedResultAsyncEnumerable<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer);
         }
@@ -136,25 +126,23 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, Task<TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
-            return GroupBy(source, keySelector, resultSelector, EqualityComparer<TKey>.Default);
+            return new GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer: null);
         }
 
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, Task<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
             return new GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer);
         }
@@ -162,29 +150,27 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException(nameof(elementSelector));
+                throw Error.ArgumentNull(nameof(elementSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
-            return source.GroupBy(keySelector, elementSelector, EqualityComparer<TKey>.Default).Select(g => resultSelector(g.Key, g));
+            return source.GroupBy(keySelector, elementSelector, comparer: null).Select(g => resultSelector(g.Key, g));
         }
 
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException(nameof(elementSelector));
+                throw Error.ArgumentNull(nameof(elementSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
             return source.GroupBy(keySelector, elementSelector, comparer).Select(g => resultSelector(g.Key, g));
         }
@@ -192,29 +178,27 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, Task<TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException(nameof(elementSelector));
+                throw Error.ArgumentNull(nameof(elementSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
-            return source.GroupBy(keySelector, elementSelector, EqualityComparer<TKey>.Default).Select(g => resultSelector(g.Key, g));
+            return source.GroupBy<TSource, TKey, TElement>(keySelector, elementSelector, comparer: null).Select(g => resultSelector(g.Key, g));
         }
 
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, Task<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
+                throw Error.ArgumentNull(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException(nameof(elementSelector));
+                throw Error.ArgumentNull(nameof(elementSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException(nameof(resultSelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(resultSelector));
 
             return source.GroupBy(keySelector, elementSelector, comparer).Select(g => resultSelector(g.Key, g));
         }
@@ -234,7 +218,6 @@ namespace System.Linq
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
                 Debug.Assert(resultSelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;
@@ -259,20 +242,20 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                        _lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, _cancellationToken).ConfigureAwait(false);
                         _enumerator = _lookup.ApplyResultSelector(_resultSelector).GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (_enumerator.MoveNext())
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 
@@ -295,16 +278,21 @@ namespace System.Linq
                 return l.ToList(_resultSelector);
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return Core();
 
-                return l.Count;
+                async Task<int> Core()
+                {
+                    var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+
+                    return l.Count;
+                }
             }
         }
 
@@ -323,7 +311,6 @@ namespace System.Linq
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
                 Debug.Assert(resultSelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;
@@ -348,20 +335,20 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _lookup = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
-                        _enumerator = _lookup.Select(async g => await _resultSelector(g.Key, g).ConfigureAwait(false)).GetAsyncEnumerator(cancellationToken);
-                        state = AsyncIteratorState.Iterating;
+                        _lookup = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, _cancellationToken).ConfigureAwait(false);
+                        _enumerator = _lookup.Select(async g => await _resultSelector(g.Key, g).ConfigureAwait(false)).GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 
@@ -384,16 +371,21 @@ namespace System.Linq
                 return await l.ToList(_resultSelector).ConfigureAwait(false);
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return Core();
 
-                return l.Count;
+                async Task<int> Core()
+                {
+                    var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+
+                    return l.Count;
+                }
             }
         }
 
@@ -412,7 +404,6 @@ namespace System.Linq
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
                 Debug.Assert(elementSelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;
@@ -437,20 +428,20 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
+                        _lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, _cancellationToken).ConfigureAwait(false);
                         _enumerator = _lookup.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (_enumerator.MoveNext())
                         {
-                            current = (IAsyncGrouping<TKey, TElement>)_enumerator.Current;
+                            _current = (IAsyncGrouping<TKey, TElement>)_enumerator.Current;
                             return true;
                         }
 
@@ -473,16 +464,21 @@ namespace System.Linq
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var l = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return Core();
 
-                return l.Count;
+                async Task<int> Core()
+                {
+                    var l = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
+
+                    return l.Count;
+                }
             }
         }
 
@@ -501,7 +497,6 @@ namespace System.Linq
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
                 Debug.Assert(elementSelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;
@@ -526,20 +521,20 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _lookup = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
+                        _lookup = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, _cancellationToken).ConfigureAwait(false);
                         _enumerator = _lookup.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (_enumerator.MoveNext())
                         {
-                            current = (IAsyncGrouping<TKey, TElement>)_enumerator.Current;
+                            _current = (IAsyncGrouping<TKey, TElement>)_enumerator.Current;
                             return true;
                         }
 
@@ -562,16 +557,21 @@ namespace System.Linq
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return Core();
 
-                return l.Count;
+                async Task<int> Core()
+                {
+                    var l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
+
+                    return l.Count;
+                }
             }
         }
 
@@ -588,7 +588,6 @@ namespace System.Linq
             {
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;
@@ -611,20 +610,20 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                        _lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, _cancellationToken).ConfigureAwait(false);
                         _enumerator = _lookup.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (_enumerator.MoveNext())
                         {
-                            current = (IAsyncGrouping<TKey, TSource>)_enumerator.Current;
+                            _current = (IAsyncGrouping<TKey, TSource>)_enumerator.Current;
                             return true;
                         }
 
@@ -647,16 +646,21 @@ namespace System.Linq
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return Core();
 
-                return l.Count;
+                async Task<int> Core()
+                {
+                    var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+
+                    return l.Count;
+                }
             }
         }
 
@@ -673,7 +677,6 @@ namespace System.Linq
             {
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
-                Debug.Assert(comparer != null);
 
                 _source = source;
                 _keySelector = keySelector;
@@ -696,20 +699,20 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _lookup = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                        _lookup = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, _cancellationToken).ConfigureAwait(false);
                         _enumerator = _lookup.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (_enumerator.MoveNext())
                         {
-                            current = (IAsyncGrouping<TKey, TSource>)_enumerator.Current;
+                            _current = (IAsyncGrouping<TKey, TSource>)_enumerator.Current;
                             return true;
                         }
 
@@ -732,16 +735,21 @@ namespace System.Linq
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                return Core();
 
-                return l.Count;
+                async Task<int> Core()
+                {
+                    var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+
+                    return l.Count;
+                }
             }
         }
     }

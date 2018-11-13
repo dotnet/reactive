@@ -14,11 +14,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> selector)
         {
             if (first == null)
-                throw new ArgumentNullException(nameof(first));
+                throw Error.ArgumentNull(nameof(first));
             if (second == null)
-                throw new ArgumentNullException(nameof(second));
+                throw Error.ArgumentNull(nameof(second));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
             return new ZipAsyncIterator<TFirst, TSecond, TResult>(first, second, selector);
         }
@@ -26,11 +26,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, Task<TResult>> selector)
         {
             if (first == null)
-                throw new ArgumentNullException(nameof(first));
+                throw Error.ArgumentNull(nameof(first));
             if (second == null)
-                throw new ArgumentNullException(nameof(second));
+                throw Error.ArgumentNull(nameof(second));
             if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+                throw Error.ArgumentNull(nameof(selector));
 
             return new ZipAsyncIteratorWithTask<TFirst, TSecond, TResult>(first, second, selector);
         }
@@ -62,43 +62,40 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_firstEnumerator != null)
-                {
-                    await _firstEnumerator.DisposeAsync().ConfigureAwait(false);
-                    _firstEnumerator = null;
-                }
-
                 if (_secondEnumerator != null)
                 {
                     await _secondEnumerator.DisposeAsync().ConfigureAwait(false);
                     _secondEnumerator = null;
                 }
 
+                if (_firstEnumerator != null)
+                {
+                    await _firstEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _firstEnumerator = null;
+                }
+
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                // REVIEW: Earlier versions of this operator performed concurrent MoveNextAsync calls, which isn't a great default and
+                //         results in an unexpected source of concurrency. However, a concurrent Zip may be a worthy addition to the
+                //         API or System.Interactive.Async as a complementary implementation besides the conservative default.
+
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _firstEnumerator = _first.GetAsyncEnumerator(cancellationToken);
-                        _secondEnumerator = _second.GetAsyncEnumerator(cancellationToken);
+                        _firstEnumerator = _first.GetAsyncEnumerator(_cancellationToken);
+                        _secondEnumerator = _second.GetAsyncEnumerator(_cancellationToken);
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-
-                        // We kick these off and join so they can potentially run in parallel
-                        var ft = _firstEnumerator.MoveNextAsync();
-                        var st = _secondEnumerator.MoveNextAsync();
-                        
-                        await Task.WhenAll(ft.AsTask(), st.AsTask()).ConfigureAwait(false);
-
-                        if (ft.Result && st.Result)
+                        if (await _firstEnumerator.MoveNextAsync().ConfigureAwait(false) && await _secondEnumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _selector(_firstEnumerator.Current, _secondEnumerator.Current);
+                            _current = _selector(_firstEnumerator.Current, _secondEnumerator.Current);
                             return true;
                         }
 
@@ -137,42 +134,40 @@ namespace System.Linq
 
             public override async ValueTask DisposeAsync()
             {
-                if (_firstEnumerator != null)
-                {
-                    await _firstEnumerator.DisposeAsync().ConfigureAwait(false);
-                    _firstEnumerator = null;
-                }
-
                 if (_secondEnumerator != null)
                 {
                     await _secondEnumerator.DisposeAsync().ConfigureAwait(false);
                     _secondEnumerator = null;
                 }
 
+                if (_firstEnumerator != null)
+                {
+                    await _firstEnumerator.DisposeAsync().ConfigureAwait(false);
+                    _firstEnumerator = null;
+                }
+
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                // REVIEW: Earlier versions of this operator performed concurrent MoveNextAsync calls, which isn't a great default and
+                //         results in an unexpected source of concurrency. However, a concurrent Zip may be a worthy addition to the
+                //         API or System.Interactive.Async as a complementary implementation besides the conservative default.
+
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _firstEnumerator = _first.GetAsyncEnumerator(cancellationToken);
-                        _secondEnumerator = _second.GetAsyncEnumerator(cancellationToken);
+                        _firstEnumerator = _first.GetAsyncEnumerator(_cancellationToken);
+                        _secondEnumerator = _second.GetAsyncEnumerator(_cancellationToken);
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-
-                        // We kick these off and join so they can potentially run in parallel
-                        var ft = _firstEnumerator.MoveNextAsync();
-                        var st = _secondEnumerator.MoveNextAsync();
-                        await Task.WhenAll(ft.AsTask(), st.AsTask()).ConfigureAwait(false);
-
-                        if (ft.Result && st.Result)
+                        if (await _firstEnumerator.MoveNextAsync().ConfigureAwait(false) && await _secondEnumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = await _selector(_firstEnumerator.Current, _secondEnumerator.Current).ConfigureAwait(false);
+                            _current = await _selector(_firstEnumerator.Current, _secondEnumerator.Current).ConfigureAwait(false);
                             return true;
                         }
 

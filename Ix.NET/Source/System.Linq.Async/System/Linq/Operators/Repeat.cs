@@ -13,7 +13,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Repeat<TResult>(TResult element, int count)
         {
             if (count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw Error.ArgumentOutOfRange(nameof(count));
 
             return new RepeatAsyncIterator<TResult>(element, count);
         }
@@ -58,19 +58,19 @@ namespace System.Linq
                 return Task.FromResult(res);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _remaining = _count;
 
                         if (_remaining > 0)
                         {
-                            current = _element;
+                            _current = _element;
                         }
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
 
                         goto case AsyncIteratorState.Iterating;
 

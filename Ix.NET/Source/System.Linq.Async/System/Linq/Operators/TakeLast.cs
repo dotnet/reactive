@@ -14,7 +14,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> TakeLast<TSource>(this IAsyncEnumerable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             if (count <= 0)
             {
@@ -59,16 +59,16 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _queue = new Queue<TSource>();
                         _isDone = false;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
 
@@ -102,7 +102,7 @@ namespace System.Linq
 
                             if (_queue.Count > 0)
                             {
-                                current = _queue.Dequeue();
+                                _current = _queue.Dequeue();
                                 return true;
                             }
 

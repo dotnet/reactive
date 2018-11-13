@@ -6,8 +6,6 @@ namespace System.Threading.Tasks
 {
     internal static class TaskExt
     {
-        public static readonly ValueTask<bool> True = new ValueTask<bool>(true);
-        public static readonly ValueTask<bool> False = new ValueTask<bool>(false);
-        public static readonly ValueTask CompletedTask = new ValueTask(Task.FromResult(true));
+        public static readonly Task<int> MinusOne = Task.FromResult(-1);
     }
 }

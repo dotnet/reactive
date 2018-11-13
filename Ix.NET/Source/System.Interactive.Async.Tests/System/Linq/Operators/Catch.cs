@@ -15,17 +15,17 @@ namespace Tests
         [Fact]
         public void Catch_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int, Exception>(default, x => default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int, Exception>(Return42, default(Func<Exception, IAsyncEnumerable<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int, Exception>(default, x => default(IAsyncEnumerable<int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int, Exception>(Return42, default(Func<Exception, IAsyncEnumerable<int>>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default, Return42));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(Return42, default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default, Return42));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(Return42, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
         }
 
         [Fact]
-        public void Catch1()
+        public async Task Catch1Async()
         {
             var err = false;
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -34,16 +34,16 @@ namespace Tests
             var res = xs.Catch<int, Exception>(ex_ => { err = true; return ys; });
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await NoNextAsync(e);
 
             Assert.False(err);
         }
 
         [Fact]
-        public void Catch2()
+        public async Task Catch2Async()
         {
             var ex = new InvalidOperationException("Bang!");
 
@@ -54,23 +54,23 @@ namespace Tests
             var res = xs.Catch<int, InvalidOperationException>(ex_ => { err = true; return ys; });
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
 
             Assert.False(err);
 
-            HasNext(e, 4);
+            await HasNextAsync(e, 4);
 
             Assert.True(err);
 
-            HasNext(e, 5);
-            HasNext(e, 6);
-            NoNext(e);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Catch3()
+        public async Task Catch3Async()
         {
             var ex = new InvalidOperationException("Bang!");
 
@@ -81,23 +81,23 @@ namespace Tests
             var res = xs.Catch<int, Exception>(ex_ => { err = true; return ys; });
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
 
             Assert.False(err);
 
-            HasNext(e, 4);
+            await HasNextAsync(e, 4);
 
             Assert.True(err);
 
-            HasNext(e, 5);
-            HasNext(e, 6);
-            NoNext(e);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Catch4()
+        public async Task Catch4Async()
         {
             var ex = new DivideByZeroException();
 
@@ -108,17 +108,17 @@ namespace Tests
             var res = xs.Catch<int, InvalidOperationException>(ex_ => { err = true; return ys; });
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
 
             Assert.False(err);
         }
 
         [Fact]
-        public void Catch5()
+        public async Task Catch5Async()
         {
             var ex = new InvalidOperationException("Bang!");
             var ex2 = new Exception("Oops!");
@@ -129,15 +129,15 @@ namespace Tests
             var res = xs.Catch<int, InvalidOperationException>(ex_ => { if (ex_.Message == "Bang!") throw ex2; return ys; });
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex2));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex2);
         }
 
         [Fact]
-        public void Catch6()
+        public async Task Catch6Async()
         {
             var ex = new InvalidOperationException("Bang!");
 
@@ -147,24 +147,24 @@ namespace Tests
             var res = xs.Catch<int, InvalidOperationException>(ex_ => { err = true; return xs; });
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
 
             Assert.False(err);
 
-            HasNext(e, 1);
+            await HasNextAsync(e, 1);
 
             Assert.True(err);
 
-            HasNext(e, 2);
-            HasNext(e, 3);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Catch7()
+        public async Task Catch7Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
@@ -172,14 +172,14 @@ namespace Tests
             var res = AsyncEnumerableEx.Catch(xs, ys);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Catch8()
+        public async Task Catch8Async()
         {
             var ex = new InvalidOperationException("Bang!");
 
@@ -189,17 +189,17 @@ namespace Tests
             var res = AsyncEnumerableEx.Catch(xs, ys);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 5);
-            HasNext(e, 6);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Catch9()
+        public async Task Catch9Async()
         {
             var ex = new InvalidOperationException("Bang!");
 
@@ -209,39 +209,40 @@ namespace Tests
             var res = AsyncEnumerableEx.Catch(new[] { xs, xs, ys, ys });
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 5);
-            HasNext(e, 6);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Catch10()
+        public async Task Catch10Async()
         {
-            var res = CatchXss().Catch();
+            var ex = new Exception("Bang!");
+            var res = CatchXss(ex).Catch();
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
-        private IEnumerable<IAsyncEnumerable<int>> CatchXss()
+        private IEnumerable<IAsyncEnumerable<int>> CatchXss(Exception ex)
         {
             yield return new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(new Exception("!!!")));
-            throw new Exception("Bang!");
+            throw ex;
         }
 
         [Fact]
-        public void Catch11()
+        public async Task Catch11Async()
         {
             var ex = new InvalidOperationException("Bang!");
 
@@ -250,23 +251,23 @@ namespace Tests
             var res = AsyncEnumerableEx.Catch(new[] { xs, xs });
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Catch12()
+        public async Task Catch12Async()
         {
             var res = AsyncEnumerableEx.Catch(Enumerable.Empty<IAsyncEnumerable<int>>());
 
             var e = res.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]

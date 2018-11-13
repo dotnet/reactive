@@ -15,50 +15,44 @@ namespace Tests
         [Fact]
         public void IgnoreElements_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.IgnoreElements(default(IAsyncEnumerable<int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.IgnoreElements(default(IAsyncEnumerable<int>)));
         }
 
         [Fact]
-        public void IgnoreElements1()
+        public async Task IgnoreElements1Async()
         {
             var xs = AsyncEnumerable.Empty<int>().IgnoreElements();
 
             var e = xs.GetAsyncEnumerator();
-            NoNext(e);
-
-            AssertThrows<InvalidOperationException>(() => { var ignored = e.Current; });
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void IgnoreElements2()
+        public async Task IgnoreElements2Async()
         {
             var xs = Return42.IgnoreElements();
 
             var e = xs.GetAsyncEnumerator();
-            NoNext(e);
-
-            AssertThrows<InvalidOperationException>(() => { var ignored = e.Current; });
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void IgnoreElements3()
+        public async Task IgnoreElements3Async()
         {
             var xs = AsyncEnumerable.Range(0, 10).IgnoreElements();
 
             var e = xs.GetAsyncEnumerator();
-            NoNext(e);
-
-            AssertThrows<InvalidOperationException>(() => { var ignored = e.Current; });
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void IgnoreElements4()
+        public async Task IgnoreElements4Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex).IgnoreElements();
 
             var e = xs.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

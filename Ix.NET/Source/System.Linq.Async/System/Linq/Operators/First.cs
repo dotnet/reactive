@@ -13,7 +13,7 @@ namespace System.Linq
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return FirstCore(source, CancellationToken.None);
         }
@@ -21,7 +21,7 @@ namespace System.Linq
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return FirstCore(source, cancellationToken);
         }
@@ -29,9 +29,9 @@ namespace System.Linq
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return FirstCore(source, predicate, CancellationToken.None);
         }
@@ -39,9 +39,9 @@ namespace System.Linq
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return FirstCore(source, predicate, cancellationToken);
         }
@@ -49,9 +49,9 @@ namespace System.Linq
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return FirstCore(source, predicate, CancellationToken.None);
         }
@@ -59,9 +59,9 @@ namespace System.Linq
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw Error.ArgumentNull(nameof(predicate));
 
             return FirstCore(source, predicate, cancellationToken);
         }
@@ -70,21 +70,21 @@ namespace System.Linq
         {
             var first = await TryGetFirst(source, cancellationToken).ConfigureAwait(false);
 
-            return first.HasValue ? first.Value : throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            return first.HasValue ? first.Value : throw Error.NoElements();
         }
 
         private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
-            return first.HasValue ? first.Value : throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            return first.HasValue ? first.Value : throw Error.NoElements();
         }
 
         private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
             var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
-            return first.HasValue ? first.Value : throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            return first.HasValue ? first.Value : throw Error.NoElements();
         }
     }
 }

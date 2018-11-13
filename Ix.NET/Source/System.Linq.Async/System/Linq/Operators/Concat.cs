@@ -14,9 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException(nameof(first));
+                throw Error.ArgumentNull(nameof(first));
             if (second == null)
-                throw new ArgumentNullException(nameof(second));
+                throw Error.ArgumentNull(nameof(second));
 
             return first is ConcatAsyncIterator<TSource> concatFirst ?
                        concatFirst.Concat(second) :
@@ -100,29 +100,34 @@ namespace System.Linq
                 return list;
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return -1;
+                    return TaskExt.MinusOne;
                 }
 
-                var count = 0;
-                for (var i = 0; ; i++)
+                return Core();
+
+                async Task<int> Core()
                 {
-                    var source = GetAsyncEnumerable(i);
-                    if (source == null)
+                    var count = 0;
+                    for (var i = 0; ; i++)
                     {
-                        break;
+                        var source = GetAsyncEnumerable(i);
+                        if (source == null)
+                        {
+                            break;
+                        }
+
+                        checked
+                        {
+                            count += await source.Count(cancellationToken).ConfigureAwait(false);
+                        }
                     }
 
-                    checked
-                    {
-                        count += await source.Count(cancellationToken).ConfigureAwait(false);
-                    }
+                    return count;
                 }
-
-                return count;
             }
 
             public override async ValueTask DisposeAsync()
@@ -136,22 +141,22 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                if (state == AsyncIteratorState.Allocated)
+                if (_state == AsyncIteratorState.Allocated)
                 {
-                    _enumerator = GetAsyncEnumerable(0).GetAsyncEnumerator(cancellationToken);
-                    state = AsyncIteratorState.Iterating;
+                    _enumerator = GetAsyncEnumerable(0).GetAsyncEnumerator(_cancellationToken);
+                    _state = AsyncIteratorState.Iterating;
                     _counter = 2;
                 }
 
-                if (state == AsyncIteratorState.Iterating)
+                if (_state == AsyncIteratorState.Iterating)
                 {
                     while (true)
                     {
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
                         // note, this is simply to match the logic of 
@@ -160,7 +165,7 @@ namespace System.Linq
                         if (next != null)
                         {
                             await _enumerator.DisposeAsync().ConfigureAwait(false);
-                            _enumerator = next.GetAsyncEnumerator(cancellationToken);
+                            _enumerator = next.GetAsyncEnumerator(_cancellationToken);
                             continue;
                         }
 

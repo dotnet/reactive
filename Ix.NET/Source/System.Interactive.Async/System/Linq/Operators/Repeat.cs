@@ -19,7 +19,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return new RepeatSequenceAsyncIterator<TSource>(source, -1);
         }
@@ -27,9 +27,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count));
+                throw Error.ArgumentOutOfRange(nameof(count));
 
             return new RepeatSequenceAsyncIterator<TSource>(source, count);
         }
@@ -48,12 +48,12 @@ namespace System.Linq
                 return new RepeatElementAsyncIterator<TResult>(_element);
             }
 
-            protected override ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override ValueTask<bool> MoveNextCore()
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                _cancellationToken.ThrowIfCancellationRequested();
 
-                current = _element;
-                return TaskExt.True;
+                _current = _element;
+                return new ValueTask<bool>(true);
             }
         }
 
@@ -92,9 +92,9 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
 
@@ -107,15 +107,15 @@ namespace System.Linq
                         if (!_isInfinite && _currentCount-- == 0)
                             break;
 
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
-                        state = AsyncIteratorState.Iterating;
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
 
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 

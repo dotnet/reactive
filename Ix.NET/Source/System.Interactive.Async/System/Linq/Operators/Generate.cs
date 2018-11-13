@@ -14,19 +14,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
         {
             if (condition == null)
-            {
-                throw new ArgumentNullException(nameof(condition));
-            }
-
+                throw Error.ArgumentNull(nameof(condition));
             if (iterate == null)
-            {
-                throw new ArgumentNullException(nameof(iterate));
-            }
-
+                throw Error.ArgumentNull(nameof(iterate));
             if (resultSelector == null)
-            {
-                throw new ArgumentNullException(nameof(resultSelector));
-            }
+                throw Error.ArgumentNull(nameof(resultSelector));
 
             return new GenerateAsyncIterator<TState, TResult>(initialState, condition, iterate, resultSelector);
         }
@@ -66,15 +58,15 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _started = false;
                         _currentState = _initialState;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -87,7 +79,7 @@ namespace System.Linq
 
                         if (_condition(_currentState))
                         {
-                            current = _resultSelector(_currentState);
+                            _current = _resultSelector(_currentState);
                             return true;
                         }
                         break;

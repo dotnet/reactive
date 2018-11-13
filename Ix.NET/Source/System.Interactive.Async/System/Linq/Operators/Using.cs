@@ -14,9 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Using<TSource, TResource>(Func<TResource> resourceFactory, Func<TResource, IAsyncEnumerable<TSource>> enumerableFactory) where TResource : IDisposable
         {
             if (resourceFactory == null)
-                throw new ArgumentNullException(nameof(resourceFactory));
+                throw Error.ArgumentNull(nameof(resourceFactory));
             if (enumerableFactory == null)
-                throw new ArgumentNullException(nameof(enumerableFactory));
+                throw Error.ArgumentNull(nameof(enumerableFactory));
 
             return new UsingAsyncIterator<TSource, TResource>(resourceFactory, enumerableFactory);
         }
@@ -24,9 +24,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Using<TSource, TResource>(Func<Task<TResource>> resourceFactory, Func<TResource, Task<IAsyncEnumerable<TSource>>> enumerableFactory) where TResource : IDisposable
         {
             if (resourceFactory == null)
-                throw new ArgumentNullException(nameof(resourceFactory));
+                throw Error.ArgumentNull(nameof(resourceFactory));
             if (enumerableFactory == null)
-                throw new ArgumentNullException(nameof(enumerableFactory));
+                throw Error.ArgumentNull(nameof(enumerableFactory));
 
             return new UsingAsyncIteratorWithTask<TSource, TResource>(resourceFactory, enumerableFactory);
         }
@@ -36,7 +36,6 @@ namespace System.Linq
             private readonly Func<TResource, IAsyncEnumerable<TSource>> _enumerableFactory;
             private readonly Func<TResource> _resourceFactory;
 
-            private IAsyncEnumerable<TSource> _enumerable;
             private IAsyncEnumerator<TSource> _enumerator;
             private TResource _resource;
 
@@ -71,19 +70,24 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                // NB: Earlier behavior of this operator was more eager, causing the resource factory to be called upon calling
+                //     GetAsyncEnumerator. This is inconsistent with asynchronous "using" and with a C# 8.0 async iterator with
+                //     a using statement inside, so this logic got moved to MoveNextAsync instead.
+
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _enumerable.GetAsyncEnumerator(cancellationToken);
-                        state = AsyncIteratorState.Iterating;
+                        _resource = _resourceFactory();
+                        _enumerator = _enumerableFactory(_resource).GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 
@@ -92,16 +96,6 @@ namespace System.Linq
                 }
 
                 return false;
-            }
-
-            protected override void OnGetEnumerator(CancellationToken cancellationToken)
-            {
-                // REVIEW: Wire cancellation to the functions.
-
-                _resource = _resourceFactory();
-                _enumerable = _enumerableFactory(_resource);
-
-                base.OnGetEnumerator(cancellationToken);
             }
         }
 
@@ -145,22 +139,22 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _resource = await _resourceFactory().ConfigureAwait(false);
                         _enumerable = await _enumerableFactory(_resource).ConfigureAwait(false);
 
-                        _enumerator = _enumerable.GetAsyncEnumerator(cancellationToken);
-                        state = AsyncIteratorState.Iterating;
+                        _enumerator = _enumerable.GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 

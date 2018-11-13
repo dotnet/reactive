@@ -15,45 +15,41 @@ namespace Tests
         [Fact]
         public void GroupBy_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default, x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(Return42, default(Func<int, int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default, x => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default(Func<int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default, x => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(Return42, default(Func<int, int>), EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(Return42, x => x, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default, x => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default(Func<int, int>), EqualityComparer<int>.Default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, default(Func<int, int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, x => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, x => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, x => x, default(Func<int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, x => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, x => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, default(Func<int, int>), EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, x => x, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, x => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default, x => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, x => x, default(Func<int, int>), EqualityComparer<int>.Default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, (x, ys) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, (x, ys) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, default(Func<int, IAsyncEnumerable<int>, int>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, (x, ys) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, (x, ys) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, x => x, default(Func<int, IAsyncEnumerable<int>, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, (x, ys) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, (x, ys) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, default(Func<int, IAsyncEnumerable<int>, int>), EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, x => x, (x, ys) => x, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, (x, ys) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default, (x, ys) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, x => x, default(Func<int, IAsyncEnumerable<int>, int>), EqualityComparer<int>.Default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default, x => x, x => x, (x, ys) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default, x => x, (x, ys) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, default, (x, ys) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default, x => x, x => x, (x, ys) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default, x => x, (x, ys) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, default, (x, ys) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, default));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default, x => x, x => x, (x, ys) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default, x => x, (x, ys) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, default, (x, ys) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, default, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, (x, ys) => x, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default, x => x, x => x, (x, ys) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default, x => x, (x, ys) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, default, (x, ys) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, default, EqualityComparer<int>.Default));
         }
 
         [Fact]
-        public void GroupBy1()
+        public async Task GroupBy1()
         {
             var xs = new[] {
                 new { Name = "Bart", Age = 27 },
@@ -71,38 +67,38 @@ namespace Tests
 
             var e = res.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.Equal(2, e.Current.Key);
             var g1 = e.Current.GetAsyncEnumerator();
-            HasNext(g1, xs[0]);
-            HasNext(g1, xs[2]);
-            HasNext(g1, xs[4]);
-            HasNext(g1, xs[5]);
-            NoNext(g1);
+            await HasNextAsync(g1, xs[0]);
+            await HasNextAsync(g1, xs[2]);
+            await HasNextAsync(g1, xs[4]);
+            await HasNextAsync(g1, xs[5]);
+            await NoNextAsync(g1);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.Equal(6, e.Current.Key);
             var g2 = e.Current.GetAsyncEnumerator();
-            HasNext(g2, xs[1]);
-            NoNext(g2);
+            await HasNextAsync(g2, xs[1]);
+            await NoNextAsync(g2);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.Equal(1, e.Current.Key);
             var g3 = e.Current.GetAsyncEnumerator();
-            HasNext(g3, xs[3]);
-            NoNext(g3);
+            await HasNextAsync(g3, xs[3]);
+            await NoNextAsync(g3);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.Equal(4, e.Current.Key);
             var g4 = e.Current.GetAsyncEnumerator();
-            HasNext(g4, xs[6]);
-            NoNext(g4);
+            await HasNextAsync(g4, xs[6]);
+            await NoNextAsync(g4);
 
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void GroupBy2()
+        public async Task GroupBy2()
         {
             var xs = new[] {
                 new { Name = "Bart", Age = 27 },
@@ -120,325 +116,286 @@ namespace Tests
 
             var e = res.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g1 = e.Current;
             Assert.Equal(2, g1.Key);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g2 = e.Current;
             Assert.Equal(6, g2.Key);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g3 = e.Current;
             Assert.Equal(1, g3.Key);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g4 = e.Current;
             Assert.Equal(4, g4.Key);
 
-            NoNext(e);
+            await NoNextAsync(e);
 
             var g1e = g1.GetAsyncEnumerator();
-            HasNext(g1e, xs[0]);
-            HasNext(g1e, xs[2]);
-            HasNext(g1e, xs[4]);
-            HasNext(g1e, xs[5]);
-            NoNext(g1e);
+            await HasNextAsync(g1e, xs[0]);
+            await HasNextAsync(g1e, xs[2]);
+            await HasNextAsync(g1e, xs[4]);
+            await HasNextAsync(g1e, xs[5]);
+            await NoNextAsync(g1e);
 
             var g2e = g2.GetAsyncEnumerator();
-            HasNext(g2e, xs[1]);
-            NoNext(g2e);
+            await HasNextAsync(g2e, xs[1]);
+            await NoNextAsync(g2e);
 
             var g3e = g3.GetAsyncEnumerator();
-            HasNext(g3e, xs[3]);
-            NoNext(g3e);
+            await HasNextAsync(g3e, xs[3]);
+            await NoNextAsync(g3e);
 
             var g4e = g4.GetAsyncEnumerator();
-            HasNext(g4e, xs[6]);
-            NoNext(g4e);
+            await HasNextAsync(g4e, xs[6]);
+            await NoNextAsync(g4e);
         }
 
         [Fact]
-        public void GroupBy3()
+        public async Task GroupBy3()
         {
             var xs = AsyncEnumerable.Empty<int>();
             var ys = xs.GroupBy(x => x);
 
             var e = ys.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void GroupBy4()
+        public async Task GroupBy4Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = xs.GroupBy(x => x);
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void GroupBy5()
+        public async Task GroupBy5Async()
         {
-            var xs = GetXs().ToAsyncEnumerable();
+            var ex = new Exception("Bang!");
+            var xs = GetXs(ex).ToAsyncEnumerable();
             var ys = xs.GroupBy(x => x);
 
             var e = ys.GetAsyncEnumerator();
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
-
-            //Assert.True(e.MoveNext().Result);
-            //var g1 = e.Current;
-            //Assert.Equal(g1.Key, 42);
-            //var g1e = g1.GetEnumerator();
-            //HasNext(g1e, 42);
-
-            //Assert.True(e.MoveNext().Result);
-            //var g2 = e.Current;
-            //Assert.Equal(g2.Key, 43);
-            //var g2e = g2.GetEnumerator();
-            //HasNext(g2e, 43);
-
-
-            //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
-            //AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void GroupBy6()
+        public async Task GroupBy6Async()
         {
-            var xs = GetXs().ToAsyncEnumerable();
+            var ex = new Exception("Bang!");
+            var xs = GetXs(ex).ToAsyncEnumerable();
             var ys = xs.GroupBy(x => x);
 
             var e = ys.GetAsyncEnumerator();
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
-
-            //Assert.True(e.MoveNext().Result);
-            //var g1 = e.Current;
-            //Assert.Equal(g1.Key, 42);
-            //var g1e = g1.GetEnumerator();
-            //HasNext(g1e, 42);
-            //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
-
-
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
-        private static IEnumerable<int> GetXs()
+        private static IEnumerable<int> GetXs(Exception ex)
         {
             yield return 42;
             yield return 43;
-            throw new Exception("Bang!");
+            throw ex;
         }
 
         [Fact]
-        public void GroupBy7()
+        public async Task GroupBy7Async()
         {
             var ex = new Exception("Bang!");
             var xs = Return42;
-            var ys = xs.GroupBy<int, int>(new Func<int, int>(x => { throw ex; }));
+            var ys = xs.GroupBy(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void GroupBy8()
+        public async Task GroupBy8Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
-            var ys = xs.GroupBy<int, int>(x => { if (x == 3) throw ex; return x; });
+            var ys = xs.GroupBy(x => { if (x == 3) throw ex; return x; });
 
             var e = ys.GetAsyncEnumerator();
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
-
-            //Assert.True(e.MoveNext().Result);
-            //var g1 = e.Current;
-            //Assert.Equal(g1.Key, 1);
-            //var g1e = g1.GetEnumerator();
-            //HasNext(g1e, 1);
-
-            //Assert.True(e.MoveNext().Result);
-            //var g2 = e.Current;
-            //Assert.Equal(g2.Key, 2);
-            //var g2e = g2.GetEnumerator();
-            //HasNext(g2e, 2);
-
-
-            //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
-            //AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void GroupBy9()
+        public async Task GroupBy9()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
 
             var e = ys.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
             var g1e = g1.GetAsyncEnumerator();
-            HasNext(g1e, 'a');
-            HasNext(g1e, 'd');
-            HasNext(g1e, 'g');
-            HasNext(g1e, 'j');
-            NoNext(g1e);
+            await HasNextAsync(g1e, 'a');
+            await HasNextAsync(g1e, 'd');
+            await HasNextAsync(g1e, 'g');
+            await HasNextAsync(g1e, 'j');
+            await NoNextAsync(g1e);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g2 = e.Current;
             Assert.Equal(1, g2.Key);
             var g2e = g2.GetAsyncEnumerator();
-            HasNext(g2e, 'b');
-            HasNext(g2e, 'e');
-            HasNext(g2e, 'h');
-            NoNext(g2e);
+            await HasNextAsync(g2e, 'b');
+            await HasNextAsync(g2e, 'e');
+            await HasNextAsync(g2e, 'h');
+            await NoNextAsync(g2e);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g3 = e.Current;
             Assert.Equal(2, g3.Key);
             var g3e = g3.GetAsyncEnumerator();
-            HasNext(g3e, 'c');
-            HasNext(g3e, 'f');
-            HasNext(g3e, 'i');
-            NoNext(g3e);
+            await HasNextAsync(g3e, 'c');
+            await HasNextAsync(g3e, 'f');
+            await HasNextAsync(g3e, 'i');
+            await NoNextAsync(g3e);
 
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void GroupBy10()
+        public async Task GroupBy10()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, "0 - adgj");
-            HasNext(e, "1 - beh");
-            HasNext(e, "2 - cfi");
-            NoNext(e);
+            await HasNextAsync(e, "0 - adgj");
+            await HasNextAsync(e, "1 - beh");
+            await HasNextAsync(e, "2 - cfi");
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void GroupBy11()
+        public async Task GroupBy11()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, "0 - 0369");
-            HasNext(e, "1 - 147");
-            HasNext(e, "2 - 258");
-            NoNext(e);
+            await HasNextAsync(e, "0 - 0369");
+            await HasNextAsync(e, "1 - 147");
+            await HasNextAsync(e, "2 - 258");
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void GroupBy12()
+        public async Task GroupBy12()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, new EqMod(3));
 
             var e = ys.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
             var g1e = g1.GetAsyncEnumerator();
-            HasNext(g1e, 0);
-            HasNext(g1e, 3);
-            HasNext(g1e, 6);
-            HasNext(g1e, 9);
-            NoNext(g1e);
+            await HasNextAsync(g1e, 0);
+            await HasNextAsync(g1e, 3);
+            await HasNextAsync(g1e, 6);
+            await HasNextAsync(g1e, 9);
+            await NoNextAsync(g1e);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g2 = e.Current;
             Assert.Equal(1, g2.Key);
             var g2e = g2.GetAsyncEnumerator();
-            HasNext(g2e, 1);
-            HasNext(g2e, 4);
-            HasNext(g2e, 7);
-            NoNext(g2e);
+            await HasNextAsync(g2e, 1);
+            await HasNextAsync(g2e, 4);
+            await HasNextAsync(g2e, 7);
+            await NoNextAsync(g2e);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g3 = e.Current;
             Assert.Equal(2, g3.Key);
             var g3e = g3.GetAsyncEnumerator();
-            HasNext(g3e, 2);
-            HasNext(g3e, 5);
-            HasNext(g3e, 8);
-            NoNext(g3e);
+            await HasNextAsync(g3e, 2);
+            await HasNextAsync(g3e, 5);
+            await HasNextAsync(g3e, 8);
+            await NoNextAsync(g3e);
 
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void GroupBy13()
+        public async Task GroupBy13()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
 
             var e = ys.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
             var g1e = g1.GetAsyncEnumerator();
-            HasNext(g1e, 'a');
-            HasNext(g1e, 'd');
-            HasNext(g1e, 'g');
-            HasNext(g1e, 'j');
-            NoNext(g1e);
+            await HasNextAsync(g1e, 'a');
+            await HasNextAsync(g1e, 'd');
+            await HasNextAsync(g1e, 'g');
+            await HasNextAsync(g1e, 'j');
+            await NoNextAsync(g1e);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g2 = e.Current;
             Assert.Equal(1, g2.Key);
             var g2e = g2.GetAsyncEnumerator();
-            HasNext(g2e, 'b');
-            HasNext(g2e, 'e');
-            HasNext(g2e, 'h');
-            NoNext(g2e);
+            await HasNextAsync(g2e, 'b');
+            await HasNextAsync(g2e, 'e');
+            await HasNextAsync(g2e, 'h');
+            await NoNextAsync(g2e);
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g3 = e.Current;
             Assert.Equal(2, g3.Key);
             var g3e = g3.GetAsyncEnumerator();
-            HasNext(g3e, 'c');
-            HasNext(g3e, 'f');
-            HasNext(g3e, 'i');
-            NoNext(g3e);
+            await HasNextAsync(g3e, 'c');
+            await HasNextAsync(g3e, 'f');
+            await HasNextAsync(g3e, 'i');
+            await NoNextAsync(g3e);
 
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void GroupBy14()
+        public async Task GroupBy14()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result, new EqMod(3));
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, "0 - adgj");
-            HasNext(e, "1 - beh");
-            HasNext(e, "2 - cfi");
-            NoNext(e);
+            await HasNextAsync(e, "0 - adgj");
+            await HasNextAsync(e, "1 - beh");
+            await HasNextAsync(e, "2 - cfi");
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void GroupBy15()
+        public async Task GroupBy15()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result, new EqMod(3));
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, "0 - 0369");
-            HasNext(e, "1 - 147");
-            HasNext(e, "2 - 258");
-            NoNext(e);
+            await HasNextAsync(e, "0 - 0369");
+            await HasNextAsync(e, "1 - 147");
+            await HasNextAsync(e, "2 - 258");
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -449,38 +406,38 @@ namespace Tests
 
             var e = ys.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
             var g1e = g1.GetAsyncEnumerator();
-            HasNext(g1e, 'a');
-            HasNext(g1e, 'd');
-            HasNext(g1e, 'g');
-            HasNext(g1e, 'j');
-            NoNext(g1e);
+            await HasNextAsync(g1e, 'a');
+            await HasNextAsync(g1e, 'd');
+            await HasNextAsync(g1e, 'g');
+            await HasNextAsync(g1e, 'j');
+            await NoNextAsync(g1e);
             await g1e.DisposeAsync();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g2 = e.Current;
             Assert.Equal(1, g2.Key);
             var g2e = g2.GetAsyncEnumerator();
-            HasNext(g2e, 'b');
-            HasNext(g2e, 'e');
-            HasNext(g2e, 'h');
-            NoNext(g2e);
+            await HasNextAsync(g2e, 'b');
+            await HasNextAsync(g2e, 'e');
+            await HasNextAsync(g2e, 'h');
+            await NoNextAsync(g2e);
             await g2e.DisposeAsync();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g3 = e.Current;
             Assert.Equal(2, g3.Key);
             var g3e = g3.GetAsyncEnumerator();
-            HasNext(g3e, 'c');
-            HasNext(g3e, 'f');
-            HasNext(g3e, 'i');
-            NoNext(g3e);
+            await HasNextAsync(g3e, 'c');
+            await HasNextAsync(g3e, 'f');
+            await HasNextAsync(g3e, 'i');
+            await NoNextAsync(g3e);
             await g3e.DisposeAsync();
 
-            NoNext(e);
+            await NoNextAsync(e);
 
             await e.DisposeAsync();
         }
@@ -494,7 +451,7 @@ namespace Tests
             var e = ys.GetAsyncEnumerator();
             await e.DisposeAsync();
 
-            Assert.False(e.MoveNextAsync().Result);
+            Assert.False(await e.MoveNextAsync());
         }
 
         [Fact]
@@ -505,21 +462,21 @@ namespace Tests
 
             var e = ys.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
             var g1e = g1.GetAsyncEnumerator();
-            HasNext(g1e, 'a');
+            await HasNextAsync(g1e, 'a');
 
             await e.DisposeAsync();
 
-            HasNext(g1e, 'd');
-            HasNext(g1e, 'g');
-            HasNext(g1e, 'j');
-            NoNext(g1e);
+            await HasNextAsync(g1e, 'd');
+            await HasNextAsync(g1e, 'g');
+            await HasNextAsync(g1e, 'j');
+            await NoNextAsync(g1e);
             await g1e.DisposeAsync();
 
-            Assert.False(e.MoveNextAsync().Result);
+            Assert.False(await e.MoveNextAsync());
         }
 
         [Fact]

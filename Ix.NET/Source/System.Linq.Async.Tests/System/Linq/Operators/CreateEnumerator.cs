@@ -15,17 +15,17 @@ namespace Tests
         [Fact]
         public void CreateEnumerator_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerator<int>(default, () => 3, () => TaskExt.CompletedTask));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerator(default, () => 3, () => new ValueTask()));
         }
 
         [Fact]
         public void CreateEnumerator_Throws()
         {
-            var iter = AsyncEnumerable.CreateEnumerator<int>(() => TaskExt.True, () => 3, () => TaskExt.CompletedTask);
+            var iter = AsyncEnumerable.CreateEnumerator(() => new ValueTask<bool>(false), () => 3, () => new ValueTask());
 
             var enu = (IAsyncEnumerable<int>)iter;
 
-            AssertThrows<NotSupportedException>(() => enu.GetAsyncEnumerator());
+            Assert.Throws<NotSupportedException>(() => enu.GetAsyncEnumerator());
         }
     }
 }

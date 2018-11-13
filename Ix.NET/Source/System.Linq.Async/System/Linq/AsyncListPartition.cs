@@ -38,11 +38,11 @@ namespace System.Linq
             return new AsyncListPartition<TSource>(_source, _minIndexInclusive, _maxIndexInclusive);
         }
 
-        protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+        protected override async ValueTask<bool> MoveNextCore()
         {
             if ((uint)_index <= (uint)(_maxIndexInclusive - _minIndexInclusive) && _index < _source.Count - _minIndexInclusive)
             {
-                current = _source[_minIndexInclusive + _index];
+                _current = _source[_minIndexInclusive + _index];
                 ++_index;
                 return true;
             }
@@ -144,11 +144,11 @@ namespace System.Linq
             {
                 return Task.FromResult(
 #if NO_ARRAY_EMPTY
-                EmptyArray<TSource>.Value
+                    EmptyArray<TSource>.Value
 #else
-                Array.Empty<TSource>()
+                    Array.Empty<TSource>()
 #endif
-                    );
+                );
             }
 
             var array = new TSource[count];

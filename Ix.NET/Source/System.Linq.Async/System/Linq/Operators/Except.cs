@@ -14,21 +14,19 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Except<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException(nameof(first));
+                throw Error.ArgumentNull(nameof(first));
             if (second == null)
-                throw new ArgumentNullException(nameof(second));
+                throw Error.ArgumentNull(nameof(second));
 
-            return first.Except(second, EqualityComparer<TSource>.Default);
+            return new ExceptAsyncIterator<TSource>(first, second, comparer: null);
         }
 
         public static IAsyncEnumerable<TSource> Except<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
-                throw new ArgumentNullException(nameof(first));
+                throw Error.ArgumentNull(nameof(first));
             if (second == null)
-                throw new ArgumentNullException(nameof(second));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(second));
 
             return new ExceptAsyncIterator<TSource>(first, second, comparer);
         }
@@ -39,18 +37,13 @@ namespace System.Linq
             private readonly IAsyncEnumerable<TSource> _first;
             private readonly IAsyncEnumerable<TSource> _second;
 
-            private Task _fillSetTask;
-
             private IAsyncEnumerator<TSource> _firstEnumerator;
             private Set<TSource> _set;
-
-            private bool _setFilled;
 
             public ExceptAsyncIterator(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
             {
                 Debug.Assert(first != null);
                 Debug.Assert(second != null);
-                Debug.Assert(comparer != null);
 
                 _first = first;
                 _second = second;
@@ -75,43 +68,34 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                // NB: Earlier implementations of this operator constructed the set for the second source concurrently
+                //     with the first MoveNextAsync call on the first source. This resulted in an unexpected source of
+                //     concurrency, which isn't a great default behavior because it's very hard to suppress or control
+                //     this behavior.
+
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _firstEnumerator = _first.GetAsyncEnumerator(cancellationToken);
-                        _set = new Set<TSource>(_comparer);
-                        _setFilled = false;
-                        _fillSetTask = FillSetAsync();
+                        _set = await AsyncEnumerableHelpers.ToSet(_second, _comparer, _cancellationToken).ConfigureAwait(false);
+                        _firstEnumerator = _first.GetAsyncEnumerator(_cancellationToken);
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         bool moveNext;
                         do
                         {
-                            if (!_setFilled)
-                            {
-                                // This is here so we don't need to call Task.WhenAll each time after the set is filled
-                                var moveNextTask = _firstEnumerator.MoveNextAsync();
-                                await Task.WhenAll(moveNextTask.AsTask(), _fillSetTask).ConfigureAwait(false);
-
-                                _setFilled = true;
-                                moveNext = moveNextTask.Result;
-                            }
-                            else
-                            {
-                                moveNext = await _firstEnumerator.MoveNextAsync().ConfigureAwait(false);
-                            }
+                            moveNext = await _firstEnumerator.MoveNextAsync().ConfigureAwait(false);
 
                             if (moveNext)
                             {
                                 var item = _firstEnumerator.Current;
                                 if (_set.Add(item))
                                 {
-                                    current = item;
+                                    _current = item;
                                     return true;
                                 }
                             }
@@ -122,16 +106,6 @@ namespace System.Linq
                 }
 
                 return false;
-            }
-
-            private async Task FillSetAsync()
-            {
-                var array = await _second.ToArray().ConfigureAwait(false);
-
-                foreach (var t in array)
-                {
-                    _set.Add(t);
-                }
             }
         }
     }

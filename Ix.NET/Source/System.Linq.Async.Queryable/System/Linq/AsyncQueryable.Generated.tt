@@ -129,7 +129,7 @@ foreach (var m in typeof(AsyncEnumerable).GetMethods()
                         .OrderBy(m => m.Name)
                         .ThenBy(m => m.IsGenericMethod ? m.GetGenericArguments().Length : 0)
                         .ThenBy(m => m.GetParameters().Length)
-                        .ThenBy(m => string.Join(", ", m.GetParameters().Select(p => p.Name))))
+                        .ThenBy(m => string.Join(", ", m.GetParameters().Select((p, i) => toQuoted(p.ParameterType, i) + " " + p.Name))))
 {
     var genArgs = m.GetGenericArguments();
 

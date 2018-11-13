@@ -15,37 +15,36 @@ namespace Tests
         [Fact]
         public void Distinct_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(default, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(Return42, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Distinct(default, EqualityComparer<int>.Default));
         }
 
         [Fact]
-        public void Distinct1()
+        public async Task Distinct1()
         {
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 5);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Distinct2()
+        public async Task Distinct2()
         {
             var xs = new[] { 1, -2, -1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct(new Eq());
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, -2);
-            HasNext(e, 3);
-            HasNext(e, 5);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, -2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
@@ -83,13 +82,13 @@ namespace Tests
         }
 
         [Fact]
-        public void Distinct12()
+        public async Task Distinct12()
         {
             var xs = AsyncEnumerable.Empty<int>().Distinct();
 
             var e = xs.GetAsyncEnumerator();
 
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         private sealed class Eq : IEqualityComparer<int>

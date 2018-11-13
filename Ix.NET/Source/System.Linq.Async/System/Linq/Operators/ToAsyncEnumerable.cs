@@ -15,7 +15,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             // optimize these adapters for lists and collections
             if (source is IList<TSource> list)
@@ -30,7 +30,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this Task<TSource> task)
         {
             if (task == null)
-                throw new ArgumentNullException(nameof(task));
+                throw Error.ArgumentNull(nameof(task));
 
             return CreateEnumerable(
                 _ =>
@@ -39,7 +39,7 @@ namespace System.Linq
 
                     var value = default(TSource);
                     return CreateEnumerator(
-                        async ct =>
+                        async () =>
                         {
                             if (Interlocked.CompareExchange(ref called, 1, 0) == 0)
                             {
@@ -49,14 +49,14 @@ namespace System.Linq
                             return false;
                         },
                         () => value,
-                        () => TaskExt.CompletedTask);
+                        () => default);
                 });
         }
 
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return CreateEnumerable(
                 ct =>
@@ -118,7 +118,7 @@ namespace System.Linq
                             ctr.Dispose();
                             subscription.Dispose();
                             // Should we cancel in-flight operations somehow?
-                            return TaskExt.CompletedTask;
+                            return default;
                         });
                 });
         }
@@ -152,19 +152,19 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _enumerator = _source.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (_enumerator.MoveNext())
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 
@@ -221,19 +221,19 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _enumerator = _source.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (_enumerator.MoveNext())
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 
@@ -325,19 +325,19 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _enumerator = _source.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         if (_enumerator.MoveNext())
                         {
-                            current = _enumerator.Current;
+                            _current = _enumerator.Current;
                             return true;
                         }
 

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,53 +16,57 @@ namespace Tests
         public async Task ElementAtOrDefault_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefault<int>(default, 0));
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAtOrDefault<int>(Return42, -1));
-
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefault<int>(default, 0, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAtOrDefault<int>(Return42, -1, CancellationToken.None));
         }
 
         [Fact]
-        public void ElementAtOrDefault1()
+        public async Task ElementAtOrDefault1Async()
         {
             var res = AsyncEnumerable.Empty<int>().ElementAtOrDefault(0);
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
 
         [Fact]
-        public void ElementAtOrDefault2()
+        public async Task ElementAtOrDefault2Async()
         {
             var res = Return42.ElementAtOrDefault(0);
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
-        public void ElementAtOrDefault3()
+        public async Task ElementAtOrDefault3Async()
         {
             var res = Return42.ElementAtOrDefault(1);
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
 
         [Fact]
-        public void ElementAtOrDefault4()
+        public async Task ElementAtOrDefault4Async()
         {
             var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAtOrDefault(1);
-            Assert.Equal(42, res.Result);
+            Assert.Equal(42, await res);
         }
 
         [Fact]
-        public void ElementAtOrDefault5()
+        public async Task ElementAtOrDefault5Async()
         {
             var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAtOrDefault(7);
-            Assert.Equal(0, res.Result);
+            Assert.Equal(0, await res);
         }
 
         [Fact]
-        public void ElementAtOrDefault6()
+        public async Task ElementAtOrDefault6Async()
+        {
+            var res = Return42.ElementAtOrDefault(-1);
+            Assert.Equal(0, await res);
+        }
+
+        [Fact]
+        public async Task ElementAtOrDefault7Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).ElementAtOrDefault(15);
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(res, ex);
         }
     }
 }

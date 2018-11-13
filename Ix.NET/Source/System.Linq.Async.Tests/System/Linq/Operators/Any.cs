@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,55 +17,55 @@ namespace Tests
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(default));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(default, x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(Return42, default(Func<int, bool>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any(Return42, default(Func<int, bool>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(default, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(default, x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(Return42, default(Func<int, bool>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any(Return42, default(Func<int, bool>), CancellationToken.None));
         }
 
         [Fact]
-        public void Any1()
+        public async Task Any1Async()
         {
             var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Any(x => x % 2 == 0);
-            Assert.True(res.Result);
+            Assert.True(await res);
         }
 
         [Fact]
-        public void Any2()
+        public async Task Any2Async()
         {
             var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().Any(x => x % 2 != 0);
-            Assert.False(res.Result);
+            Assert.False(await res);
         }
 
         [Fact]
-        public void Any3()
+        public async Task Any3Async()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).Any(x => x % 2 == 0);
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public void Any4()
+        public async Task Any4Async()
         {
             var ex = new Exception("Bang!");
             var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().Any(new Func<int, bool>(x => { throw ex; }));
-            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public void Any5()
+        public async Task Any5Async()
         {
             var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Any();
-            Assert.True(res.Result);
+            Assert.True(await res);
         }
 
         [Fact]
-        public void Any6()
+        public async Task Any6Async()
         {
             var res = new int[0].ToAsyncEnumerable().Any();
-            Assert.False(res.Result);
+            Assert.False(await res);
         }
     }
 }

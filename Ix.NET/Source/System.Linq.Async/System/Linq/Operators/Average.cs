@@ -18,7 +18,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 long sum = e.Current;
@@ -86,7 +86,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 var sum = e.Current;
@@ -154,7 +154,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 var sum = e.Current;
@@ -222,7 +222,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 double sum = e.Current;
@@ -287,7 +287,7 @@ namespace System.Linq
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    throw Error.NoElements();
                 }
 
                 var sum = e.Current;

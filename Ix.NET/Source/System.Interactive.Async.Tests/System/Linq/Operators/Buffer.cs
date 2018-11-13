@@ -15,66 +15,66 @@ namespace Tests
         [Fact]
         public void Buffer_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Buffer(default(IAsyncEnumerable<int>), 1));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Buffer(default(IAsyncEnumerable<int>), 1, 1));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Buffer(default(IAsyncEnumerable<int>), 1));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.Buffer(default(IAsyncEnumerable<int>), 1, 1));
 
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Buffer(Return42, -1));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Buffer(Return42, -1, 1));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Buffer(Return42, 1, -1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Buffer(Return42, -1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Buffer(Return42, -1, 1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Buffer(Return42, 1, -1));
         }
 
         [Fact]
-        public void Buffer1()
+        public async Task Buffer1Async()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable().Buffer(2);
 
             var e = xs.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.True(e.Current.SequenceEqual(new[] { 1, 2 }));
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.True(e.Current.SequenceEqual(new[] { 3, 4 }));
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.True(e.Current.SequenceEqual(new[] { 5 }));
 
-            Assert.False(e.MoveNextAsync().Result);
+            Assert.False(await e.MoveNextAsync());
         }
 
         [Fact]
-        public void Buffer2()
+        public async Task Buffer2Async()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable().Buffer(3, 2);
 
             var e = xs.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.True(e.Current.SequenceEqual(new[] { 1, 2, 3 }));
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.True(e.Current.SequenceEqual(new[] { 3, 4, 5 }));
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.True(e.Current.SequenceEqual(new[] { 5 }));
 
-            Assert.False(e.MoveNextAsync().Result);
+            Assert.False(await e.MoveNextAsync());
         }
 
         [Fact]
-        public void Buffer3()
+        public async Task Buffer3Async()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable().Buffer(2, 3);
 
             var e = xs.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.True(e.Current.SequenceEqual(new[] { 1, 2 }));
 
-            Assert.True(e.MoveNextAsync().Result);
+            Assert.True(await e.MoveNextAsync());
             Assert.True(e.Current.SequenceEqual(new[] { 4, 5 }));
 
-            Assert.False(e.MoveNextAsync().Result);
+            Assert.False(await e.MoveNextAsync());
         }
 
         [Fact]

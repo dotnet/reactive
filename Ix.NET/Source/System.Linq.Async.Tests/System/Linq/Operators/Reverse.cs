@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -15,52 +14,52 @@ namespace Tests
         [Fact]
         public void Reverse_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Reverse<int>(default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Reverse<int>(default));
         }
 
         [Fact]
-        public void Reverse1()
+        public async Task Reverse1Async()
         {
             var xs = AsyncEnumerable.Empty<int>();
             var ys = xs.Reverse();
 
             var e = ys.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Reverse2()
+        public async Task Reverse2Async()
         {
             var xs = Return42;
             var ys = xs.Reverse();
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 42);
-            NoNext(e);
+            await HasNextAsync(e, 42);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Reverse3()
+        public async Task Reverse3Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.Reverse();
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 3);
-            HasNext(e, 2);
-            HasNext(e, 1);
-            NoNext(e);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 1);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Reverse4()
+        public async Task Reverse4Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = xs.Reverse();
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

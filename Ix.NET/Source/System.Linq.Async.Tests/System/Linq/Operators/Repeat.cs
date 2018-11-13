@@ -14,30 +14,30 @@ namespace Tests
         [Fact]
         public void Repeat_Null()
         {
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerable.Repeat(0, -1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => AsyncEnumerable.Repeat(0, -1));
         }
 
         [Fact]
-        public void Repeat1()
+        public async Task Repeat1Async()
         {
             var xs = AsyncEnumerable.Repeat(2, 5);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 2);
-            HasNext(e, 2);
-            HasNext(e, 2);
-            HasNext(e, 2);
-            HasNext(e, 2);
-            NoNext(e);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 2);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Repeat2()
+        public async Task Repeat2Async()
         {
             var xs = AsyncEnumerable.Repeat(2, 0);
 
             var e = xs.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
     }
 }

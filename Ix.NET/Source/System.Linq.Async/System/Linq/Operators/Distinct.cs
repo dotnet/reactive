@@ -14,17 +14,15 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
-            return source.Distinct(EqualityComparer<TSource>.Default);
+            return new DistinctAsyncIterator<TSource>(source, comparer: null);
         }
 
         public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(source));
 
             return new DistinctAsyncIterator<TSource>(source, comparer);
         }
@@ -57,9 +55,20 @@ namespace System.Linq
                 return s.ToList();
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
-                return onlyIfCheap ? -1 : (await FillSetAsync(cancellationToken).ConfigureAwait(false)).Count;
+                if (onlyIfCheap)
+                {
+                    return TaskExt.MinusOne;
+                }
+
+                return Core();
+
+                async Task<int> Core()
+                {
+                    var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                    return s.Count;
+                }
             }
 
             public override AsyncIterator<TSource> Clone()
@@ -79,12 +88,12 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         if (!await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             await DisposeAsync().ConfigureAwait(false);
@@ -94,9 +103,9 @@ namespace System.Linq
                         var element = _enumerator.Current;
                         _set = new Set<TSource>(_comparer);
                         _set.Add(element);
-                        current = element;
+                        _current = element;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         return true;
 
                     case AsyncIteratorState.Iterating:
@@ -105,7 +114,7 @@ namespace System.Linq
                             element = _enumerator.Current;
                             if (_set.Add(element))
                             {
-                                current = element;
+                                _current = element;
                                 return true;
                             }
                         }
@@ -117,13 +126,9 @@ namespace System.Linq
                 return false;
             }
 
-            private async Task<Set<TSource>> FillSetAsync(CancellationToken cancellationToken)
+            private Task<Set<TSource>> FillSetAsync(CancellationToken cancellationToken)
             {
-                var s = new Set<TSource>(_comparer);
-
-                await s.UnionWithAsync(_source, cancellationToken).ConfigureAwait(false);
-
-                return s;
+                return AsyncEnumerableHelpers.ToSet(_source, _comparer, cancellationToken);
             }
         }
     }

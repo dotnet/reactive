@@ -14,9 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException(nameof(onNext));
+                throw Error.ArgumentNull(nameof(onNext));
 
             return DoCore(source, onNext: onNext, onError: null, onCompleted: null);
         }
@@ -24,11 +24,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action onCompleted)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException(nameof(onNext));
+                throw Error.ArgumentNull(nameof(onNext));
             if (onCompleted == null)
-                throw new ArgumentNullException(nameof(onCompleted));
+                throw Error.ArgumentNull(nameof(onCompleted));
 
             return DoCore(source, onNext: onNext, onError: null, onCompleted: onCompleted);
         }
@@ -36,11 +36,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException(nameof(onNext));
+                throw Error.ArgumentNull(nameof(onNext));
             if (onError == null)
-                throw new ArgumentNullException(nameof(onError));
+                throw Error.ArgumentNull(nameof(onError));
 
             return DoCore(source, onNext: onNext, onError: onError, onCompleted: null);
         }
@@ -48,13 +48,13 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException(nameof(onNext));
+                throw Error.ArgumentNull(nameof(onNext));
             if (onError == null)
-                throw new ArgumentNullException(nameof(onError));
+                throw Error.ArgumentNull(nameof(onError));
             if (onCompleted == null)
-                throw new ArgumentNullException(nameof(onCompleted));
+                throw Error.ArgumentNull(nameof(onCompleted));
 
             return DoCore(source, onNext, onError, onCompleted);
         }
@@ -62,9 +62,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException(nameof(onNext));
+                throw Error.ArgumentNull(nameof(onNext));
 
             return DoCore(source, onNext: onNext, onError: null, onCompleted: null);
         }
@@ -72,11 +72,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Task> onCompleted)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException(nameof(onNext));
+                throw Error.ArgumentNull(nameof(onNext));
             if (onCompleted == null)
-                throw new ArgumentNullException(nameof(onCompleted));
+                throw Error.ArgumentNull(nameof(onCompleted));
 
             return DoCore(source, onNext: onNext, onError: null, onCompleted: onCompleted);
         }
@@ -84,11 +84,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task> onError)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException(nameof(onNext));
+                throw Error.ArgumentNull(nameof(onNext));
             if (onError == null)
-                throw new ArgumentNullException(nameof(onError));
+                throw Error.ArgumentNull(nameof(onError));
 
             return DoCore(source, onNext: onNext, onError: onError, onCompleted: null);
         }
@@ -96,13 +96,13 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task> onError, Func<Task> onCompleted)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException(nameof(onNext));
+                throw Error.ArgumentNull(nameof(onNext));
             if (onError == null)
-                throw new ArgumentNullException(nameof(onError));
+                throw Error.ArgumentNull(nameof(onError));
             if (onCompleted == null)
-                throw new ArgumentNullException(nameof(onCompleted));
+                throw Error.ArgumentNull(nameof(onCompleted));
 
             return DoCore(source, onNext, onError, onCompleted);
         }
@@ -110,9 +110,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, IObserver<TSource> observer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
+                throw Error.ArgumentNull(nameof(observer));
 
             return DoCore(source, new Action<TSource>(observer.OnNext), new Action<Exception>(observer.OnError), new Action(observer.OnCompleted));
         }
@@ -163,13 +163,13 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
-                        state = AsyncIteratorState.Iterating;
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -177,8 +177,8 @@ namespace System.Linq
                         {
                             if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
-                                current = _enumerator.Current;
-                                _onNext(current);
+                                _current = _enumerator.Current;
+                                _onNext(_current);
 
                                 return true;
                             }
@@ -239,13 +239,13 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
-                        state = AsyncIteratorState.Iterating;
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -253,8 +253,8 @@ namespace System.Linq
                         {
                             if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
-                                current = _enumerator.Current;
-                                await _onNext(current).ConfigureAwait(false);
+                                _current = _enumerator.Current;
+                                await _onNext(_current).ConfigureAwait(false);
 
                                 return true;
                             }

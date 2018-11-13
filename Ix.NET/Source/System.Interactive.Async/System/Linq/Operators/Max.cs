@@ -13,9 +13,7 @@ namespace System.Linq
         public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(source));
 
             return MaxCore(source, comparer, CancellationToken.None);
         }
@@ -23,25 +21,28 @@ namespace System.Linq
         public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
-
+                throw Error.ArgumentNull(nameof(source));
+            
             return MaxCore(source, comparer, cancellationToken);
         }
 
         private static async Task<TSource> MaxCore<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
+            if (comparer == null)
+            {
+                comparer = Comparer<TSource>.Default;
+            }
+
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
-                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                if (!await e.MoveNextAsync().ConfigureAwait(false))
+                    throw Error.NoElements();
 
                 var max = e.Current;
 
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     var cur = e.Current;
 

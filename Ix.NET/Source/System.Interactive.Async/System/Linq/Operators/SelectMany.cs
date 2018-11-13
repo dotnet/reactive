@@ -11,9 +11,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TOther> SelectMany<TSource, TOther>(this IAsyncEnumerable<TSource> source, IAsyncEnumerable<TOther> other)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (other == null)
-                throw new ArgumentNullException(nameof(other));
+                throw Error.ArgumentNull(nameof(other));
 
             return source.SelectMany(_ => other);
         }

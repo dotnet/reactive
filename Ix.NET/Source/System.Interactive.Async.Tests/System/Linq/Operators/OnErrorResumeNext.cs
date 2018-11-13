@@ -15,14 +15,14 @@ namespace Tests
         [Fact]
         public void OnErrorResumeNext_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default, Return42));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(Return42, default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default, Return42));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(Return42, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
         }
 
         [Fact]
-        public void OnErrorResumeNext7()
+        public async Task OnErrorResumeNext7Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
@@ -30,17 +30,17 @@ namespace Tests
             var res = AsyncEnumerableEx.OnErrorResumeNext(xs, ys);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 5);
-            HasNext(e, 6);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void OnErrorResumeNext8()
+        public async Task OnErrorResumeNext8Async()
         {
             var ex = new InvalidOperationException("Bang!");
 
@@ -50,17 +50,17 @@ namespace Tests
             var res = AsyncEnumerableEx.OnErrorResumeNext(xs, ys);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 5);
-            HasNext(e, 6);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void OnErrorResumeNext9()
+        public async Task OnErrorResumeNext9Async()
         {
             var ex = new InvalidOperationException("Bang!");
 
@@ -70,42 +70,43 @@ namespace Tests
             var res = AsyncEnumerableEx.OnErrorResumeNext(new[] { xs, xs, ys, ys });
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 5);
-            HasNext(e, 6);
-            HasNext(e, 4);
-            HasNext(e, 5);
-            HasNext(e, 6);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 6);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void OnErrorResumeNext10()
+        public async Task OnErrorResumeNext10Async()
         {
-            var res = OnErrorResumeNextXss().OnErrorResumeNext();
+            var ex = new Exception("Bang!");
+            var res = OnErrorResumeNextXss(ex).OnErrorResumeNext();
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
 
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
-        private IEnumerable<IAsyncEnumerable<int>> OnErrorResumeNextXss()
+        private IEnumerable<IAsyncEnumerable<int>> OnErrorResumeNextXss(Exception ex)
         {
             yield return new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(new Exception("!!!")));
-            throw new Exception("Bang!");
+            throw ex;
         }
 
         [Fact]
-        public void OnErrorResumeNext11()
+        public async Task OnErrorResumeNext11Async()
         {
             var ex = new InvalidOperationException("Bang!");
 
@@ -114,22 +115,22 @@ namespace Tests
             var res = AsyncEnumerableEx.OnErrorResumeNext(new[] { xs, xs });
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void OnErrorResumeNext12()
+        public async Task OnErrorResumeNext12Async()
         {
             var res = AsyncEnumerableEx.OnErrorResumeNext(Enumerable.Empty<IAsyncEnumerable<int>>());
 
             var e = res.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]

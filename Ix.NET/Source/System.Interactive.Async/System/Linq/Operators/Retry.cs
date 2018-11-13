@@ -11,7 +11,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Retry<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return new[] { source }.Repeat().Catch();
         }
@@ -19,9 +19,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Retry<TSource>(this IAsyncEnumerable<TSource> source, int retryCount)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
             if (retryCount < 0)
-                throw new ArgumentOutOfRangeException(nameof(retryCount));
+                throw Error.ArgumentOutOfRange(nameof(retryCount));
 
             return new[] { source }.Repeat(retryCount).Catch();
         }

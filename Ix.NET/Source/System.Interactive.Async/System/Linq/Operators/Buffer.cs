@@ -14,14 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<IList<TSource>> Buffer<TSource>(this IAsyncEnumerable<TSource> source, int count)
         {
             if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
+                throw Error.ArgumentNull(nameof(source));
             if (count <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(count));
-            }
+                throw Error.ArgumentOutOfRange(nameof(count));
 
             return new BufferAsyncIterator<TSource>(source, count, count);
         }
@@ -29,19 +24,11 @@ namespace System.Linq
         public static IAsyncEnumerable<IList<TSource>> Buffer<TSource>(this IAsyncEnumerable<TSource> source, int count, int skip)
         {
             if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
+                throw Error.ArgumentNull(nameof(source));
             if (count <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(count));
-            }
-
+                throw Error.ArgumentOutOfRange(nameof(count));
             if (skip <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(skip));
-            }
+                throw Error.ArgumentOutOfRange(nameof(skip));
 
             return new BufferAsyncIterator<TSource>(source, count, skip);
         }
@@ -84,17 +71,17 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
                         _buffers = new Queue<IList<TSource>>();
                         _index = 0;
                         _stopped = false;
 
-                        state = AsyncIteratorState.Iterating;
+                        _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -117,7 +104,7 @@ namespace System.Linq
 
                                     if (_buffers.Count > 0 && _buffers.Peek().Count == _count)
                                     {
-                                        current = _buffers.Dequeue();
+                                        _current = _buffers.Dequeue();
                                         return true;
                                     }
 
@@ -133,7 +120,7 @@ namespace System.Linq
 
                             if (_buffers.Count > 0)
                             {
-                                current = _buffers.Dequeue();
+                                _current = _buffers.Dequeue();
                                 return true;
                             }
 

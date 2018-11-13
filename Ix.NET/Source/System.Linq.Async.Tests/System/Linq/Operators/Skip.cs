@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -15,7 +14,7 @@ namespace Tests
         [Fact]
         public void Skip_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Skip<int>(default, 5));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Skip<int>(default, 5));
         }
 
         //[Fact]
@@ -25,54 +24,54 @@ namespace Tests
         //    var ys = xs.Skip(-2);
 
         //    var e = ys.GetEnumerator();
-        //    NoNext(e);
+        //    await NoNextAsync(e);
         //}
 
         [Fact]
-        public void Skip1()
+        public async Task Skip1()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Skip(2);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Skip2()
+        public async Task Skip2()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Skip(10);
 
             var e = ys.GetAsyncEnumerator();
-            NoNext(e);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Skip3()
+        public async Task Skip3()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Skip(0);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Skip4()
+        public async Task Skip4Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
             var ys = xs.Skip(2);
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]

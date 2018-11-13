@@ -14,22 +14,25 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException(nameof(first));
+                throw Error.ArgumentNull(nameof(first));
             if (second == null)
-                throw new ArgumentNullException(nameof(second));
+                throw Error.ArgumentNull(nameof(second));
 
-            return first.Union(second, EqualityComparer<TSource>.Default);
+            return UnionCore(first, second, comparer: null);
         }
 
         public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
-                throw new ArgumentNullException(nameof(first));
+                throw Error.ArgumentNull(nameof(first));
             if (second == null)
-                throw new ArgumentNullException(nameof(second));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(second));
 
+            return UnionCore(first, second, comparer);
+        }
+
+        private static IAsyncEnumerable<TSource> UnionCore<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
+        {
             return first is UnionAsyncIterator<TSource> union && AreEqualityComparersEqual(comparer, union._comparer) ? union.Union(second) : new UnionAsyncIterator2<TSource>(first, second, comparer);
         }
 
@@ -85,7 +88,7 @@ namespace System.Linq
                 var set = new Set<TSource>(_comparer);
                 var element = _enumerator.Current;
                 set.Add(element);
-                current = element;
+                _current = element;
                 _set = set;
             }
 
@@ -99,7 +102,7 @@ namespace System.Linq
                     var element = _enumerator.Current;
                     if (set.Add(element))
                     {
-                        current = element;
+                        _current = element;
                         return true;
                     }
                 }
@@ -107,9 +110,9 @@ namespace System.Linq
                 return false;
             }
 
-            protected sealed override async ValueTask<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected sealed override async ValueTask<bool> MoveNextCore()
             {
-                switch (state)
+                switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
                         _index = 0;
@@ -118,14 +121,14 @@ namespace System.Linq
                         {
                             ++_index;
 
-                            var enumerator = enumerable.GetAsyncEnumerator(cancellationToken);
+                            var enumerator = enumerable.GetAsyncEnumerator(_cancellationToken);
 
                             if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
                                 await SetEnumeratorAsync(enumerator).ConfigureAwait(false);
                                 StoreFirst();
 
-                                state = AsyncIteratorState.Iterating;
+                                _state = AsyncIteratorState.Iterating;
                                 return true;
                             }
                         }
@@ -146,7 +149,7 @@ namespace System.Linq
                                 break;
                             }
 
-                            await SetEnumeratorAsync(enumerable.GetAsyncEnumerator(cancellationToken)).ConfigureAwait(false);
+                            await SetEnumeratorAsync(enumerable.GetAsyncEnumerator(_cancellationToken)).ConfigureAwait(false);
                             ++_index;
                         }
 
@@ -169,7 +172,19 @@ namespace System.Linq
                         return set;
                     }
 
-                    await set.UnionWithAsync(enumerable, cancellationToken).ConfigureAwait(false);
+                    var e = enumerable.GetAsyncEnumerator(cancellationToken);
+
+                    try
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            set.Add(e.Current);
+                        }
+                    }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
                 }
             }
 
@@ -177,7 +192,7 @@ namespace System.Linq
 
             public Task<List<TSource>> ToListAsync(CancellationToken cancellationToken) => FillSetAsync(cancellationToken).ContinueWith(set => set.Result.ToList());
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => onlyIfCheap ? Task.FromResult(-1) : FillSetAsync(cancellationToken).ContinueWith(set => set.Result.Count);
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => onlyIfCheap ? TaskExt.MinusOne : FillSetAsync(cancellationToken).ContinueWith(set => set.Result.Count);
         }
 
         /// <summary>

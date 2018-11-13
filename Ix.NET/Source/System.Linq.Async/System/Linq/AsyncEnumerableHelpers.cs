@@ -106,6 +106,27 @@ namespace System.Collections.Generic
             return result;
         }
 
+        internal static async Task<Set<T>> ToSet<T>(IAsyncEnumerable<T> source, IEqualityComparer<T> comparer, CancellationToken cancellationToken)
+        {
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                var set = new Set<T>(comparer);
+
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    set.Add(e.Current);
+                }
+
+                return set;
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+        }
+
         internal struct ArrayWithLength<T>
         {
             public T[] Array;

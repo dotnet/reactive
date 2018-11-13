@@ -13,28 +13,46 @@ namespace System.Linq
         public static Task<List<TSource>> ToList<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
-            return ToList(source, CancellationToken.None);
+            return ToListCore(source, CancellationToken.None);
         }
 
         public static Task<List<TSource>> ToList<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
+            return ToListCore(source, cancellationToken);
+        }
+
+        private static Task<List<TSource>> ToListCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        {
             if (source is IAsyncIListProvider<TSource> listProvider)
                 return listProvider.ToListAsync(cancellationToken);
 
-            return source.Aggregate(
-                new List<TSource>(),
-                (list, x) =>
+            return Core();
+
+            async Task<List<TSource>> Core()
+            {
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
                 {
-                    list.Add(x);
+                    var list = new List<TSource>();
+
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        list.Add(e.Current);
+                    }
+
                     return list;
-                },
-                cancellationToken
-            );
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+            }
         }
     }
 }

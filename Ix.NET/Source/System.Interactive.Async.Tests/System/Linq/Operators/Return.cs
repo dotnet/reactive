@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -10,10 +11,10 @@ namespace Tests
     public class Return : AsyncEnumerableExTests
     {
         [Fact]
-        public void Return1()
+        public async Task Return1Async()
         {
             var xs = AsyncEnumerableEx.Return(42);
-            HasNext(xs.GetAsyncEnumerator(), 42);
+            await HasNextAsync(xs.GetAsyncEnumerator(), 42);
         }
     }
 }

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,135 +16,135 @@ namespace Tests
         public async Task Aggregate_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int>(default, (x, y) => x + y));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int>(Return42, default(Func<int, int, int>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate(Return42, default(Func<int, int, int>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int>(default, 0, (x, y) => x + y));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int>(Return42, 0, default(Func<int, int, int>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate(Return42, 0, default(Func<int, int, int>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(default, 0, (x, y) => x + y, z => z));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(Return42, 0, default, z => z));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate(Return42, 0, default, z => z));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(Return42, 0, (x, y) => x + y, default));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int>(default, (x, y) => x + y, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int>(Return42, default(Func<int, int, int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate(Return42, default(Func<int, int, int>), CancellationToken.None));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int>(default, 0, (x, y) => x + y, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int>(Return42, 0, default(Func<int, int, int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate(Return42, 0, default(Func<int, int, int>), CancellationToken.None));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(default, 0, (x, y) => x + y, z => z, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(Return42, 0, default, z => z, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate(Return42, 0, default, z => z, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(Return42, 0, (x, y) => x + y, default, CancellationToken.None));
         }
 
         [Fact]
-        public void Aggregate1()
+        public async Task Aggregate1Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate((x, y) => x * y);
-            Assert.Equal(24, ys.Result);
+            Assert.Equal(24, await ys);
         }
 
         [Fact]
-        public void Aggregate2()
+        public async Task Aggregate2Async()
         {
             var xs = new int[0].ToAsyncEnumerable();
             var ys = xs.Aggregate((x, y) => x * y);
-            AssertThrows<Exception>(() => ys.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+            await AssertThrowsAsync<InvalidOperationException>(ys);
         }
 
         [Fact]
-        public void Aggregate3()
+        public async Task Aggregate3Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = xs.Aggregate((x, y) => x * y);
-            AssertThrows<Exception>(() => ys.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public void Aggregate4()
+        public async Task Aggregate4Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(new Func<int, int, int>((x, y) => { throw ex; }));
-            AssertThrows<Exception>(() => ys.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public void Aggregate5()
+        public async Task Aggregate5Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => x * y);
-            Assert.Equal(24, ys.Result);
+            Assert.Equal(24, await ys);
         }
 
         [Fact]
-        public void Aggregate6()
+        public async Task Aggregate6Async()
         {
             var xs = new int[0].ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => x * y);
-            Assert.Equal(1, ys.Result);
+            Assert.Equal(1, await ys);
         }
 
         [Fact]
-        public void Aggregate7()
+        public async Task Aggregate7Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = xs.Aggregate(1, (x, y) => x * y);
-            AssertThrows<Exception>(() => ys.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public void Aggregate8()
+        public async Task Aggregate8Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(1, new Func<int, int, int>((x, y) => { throw ex; }));
-            AssertThrows<Exception>(() => ys.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public void Aggregate9()
+        public async Task Aggregate9Async()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => x * y, x => x + 1);
-            Assert.Equal(25, ys.Result);
+            Assert.Equal(25, await ys);
         }
 
         [Fact]
-        public void Aggregate10()
+        public async Task Aggregate10Async()
         {
             var xs = new int[0].ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => x * y, x => x + 1);
-            Assert.Equal(2, ys.Result);
+            Assert.Equal(2, await ys);
         }
 
         [Fact]
-        public void Aggregate11()
+        public async Task Aggregate11Async()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = xs.Aggregate(1, (x, y) => x * y, x => x + 1);
-            AssertThrows<Exception>(() => ys.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public void Aggregate12()
+        public async Task Aggregate12Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => { throw ex; }, x => x + 1);
-            AssertThrows<Exception>(() => ys.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public void Aggregate13()
+        public async Task Aggregate13Async()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate<int, int, int>(1, (x, y) => x * y, x => { throw ex; });
-            AssertThrows<Exception>(() => ys.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            await AssertThrowsAsync(ys, ex);
         }
     }
 }

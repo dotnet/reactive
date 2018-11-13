@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -14,12 +14,12 @@ namespace Tests
         [Fact]
         public void SelectMany_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.SelectMany<int, int>(default, Return42));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.SelectMany<int, int>(Return42, default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.SelectMany<int, int>(default, Return42));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerableEx.SelectMany<int, int>(Return42, default));
         }
 
         [Fact]
-        public void SelectMany1()
+        public async Task SelectMany1Async()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = new[] { 3, 4 }.ToAsyncEnumerable();
@@ -27,13 +27,13 @@ namespace Tests
             var res = xs.SelectMany(ys);
 
             var e = res.GetAsyncEnumerator();
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace System.Threading.Tasks
             public static ConfiguredAsyncEnumerable<T> ConfigureAwait<T>(this IAsyncEnumerable<T> enumerable, bool continueOnCapturedContext)
             {
                 if (enumerable == null)
-                    throw new ArgumentNullException(nameof(enumerable));
+                    throw Error.ArgumentNull(nameof(enumerable));
 
                 return new ConfiguredAsyncEnumerable<T>(enumerable, continueOnCapturedContext);
             }

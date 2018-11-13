@@ -13,7 +13,7 @@ namespace System.Linq
         public static Task<bool> Contains<TSource>(this IAsyncEnumerable<TSource> source, TSource value)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return ContainsCore(source, value, CancellationToken.None);
         }
@@ -21,7 +21,7 @@ namespace System.Linq
         public static Task<bool> Contains<TSource>(this IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
+                throw Error.ArgumentNull(nameof(source));
 
             return ContainsCore(source, value, cancellationToken);
         }
@@ -29,9 +29,7 @@ namespace System.Linq
         public static Task<bool> Contains<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(source));
 
             return ContainsCore(source, value, comparer, CancellationToken.None);
         }
@@ -39,9 +37,7 @@ namespace System.Linq
         public static Task<bool> Contains<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+                throw Error.ArgumentNull(nameof(source));
 
             return ContainsCore(source, value, comparer, cancellationToken);
         }

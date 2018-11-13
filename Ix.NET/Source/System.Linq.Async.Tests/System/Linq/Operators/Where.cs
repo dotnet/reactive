@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -15,101 +14,100 @@ namespace Tests
         [Fact]
         public void Where_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(default, x => true));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(default, (x, i) => true));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(Return42, default(Func<int, bool>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(Return42, default(Func<int, int, bool>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Where<int>(default, x => true));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Where<int>(default, (x, i) => true));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Where(Return42, default(Func<int, bool>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Where(Return42, default(Func<int, int, bool>)));
         }
 
         [Fact]
-        public void Where1()
+        public async Task Where1()
         {
             var xs = new[] { 8, 5, 7, 4, 6, 9, 2, 1, 0 }.ToAsyncEnumerable();
             var ys = xs.Where(x => x % 2 == 0);
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 8);
-            HasNext(e, 4);
-            HasNext(e, 6);
-            HasNext(e, 2);
-            HasNext(e, 0);
-            NoNext(e);
+            await HasNextAsync(e, 8);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 6);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 0);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Where2()
+        public async Task Where2()
         {
             var xs = new[] { 8, 5, 7, 4, 6, 9, 2, 1, 0 }.ToAsyncEnumerable();
             var ys = xs.Where((x, i) => i % 2 == 0);
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 8);
-            HasNext(e, 7);
-            HasNext(e, 6);
-            HasNext(e, 2);
-            HasNext(e, 0);
-            NoNext(e);
+            await HasNextAsync(e, 8);
+            await HasNextAsync(e, 7);
+            await HasNextAsync(e, 6);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 0);
+            await NoNextAsync(e);
         }
 
         [Fact]
-        public void Where3()
+        public async Task Where3()
         {
             var xs = new[] { 8, 5, 7, 4, 6, 9, 2, 1, 0 }.ToAsyncEnumerable();
             var ex = new Exception("Bang");
             var ys = xs.Where(x => { if (x == 4) throw ex; return true; });
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 8);
-            HasNext(e, 5);
-            HasNext(e, 7);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await HasNextAsync(e, 8);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 7);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Where4()
+        public async Task Where4()
         {
             var xs = new[] { 8, 5, 7, 4, 6, 9, 2, 1, 0 }.ToAsyncEnumerable();
             var ex = new Exception("Bang");
             var ys = xs.Where((x, i) => { if (i == 3) throw ex; return true; });
 
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 8);
-            HasNext(e, 5);
-            HasNext(e, 7);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await HasNextAsync(e, 8);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 7);
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Where5()
+        public async Task Where5Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
             var ys = xs.Where(x => true);
 
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public void Where6()
+        public async Task Where6Async()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
 
             var ys = xs.Where((x, i) => true);
             var e = ys.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
-
         [Fact]
-        public void Where7()
+        public async Task Where7()
         {
             var xs = new[] { 8, 5, 7, 4, 6, 9, 2, 1, 0 }.ToAsyncEnumerable();
             var ys = xs.Where(x => x % 2 == 0).Where(x => x > 5);
             var e = ys.GetAsyncEnumerator();
-            HasNext(e, 8);
-            HasNext(e, 6);
-            NoNext(e);
+            await HasNextAsync(e, 8);
+            await HasNextAsync(e, 6);
+            await NoNextAsync(e);
         }
 
         [Fact]

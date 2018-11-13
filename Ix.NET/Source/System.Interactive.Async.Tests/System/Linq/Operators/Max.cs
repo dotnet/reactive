@@ -17,10 +17,8 @@ namespace Tests
         public async Task Max_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.Max(default, Comparer<DateTime>.Default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.Max(AsyncEnumerable.Empty<DateTime>(), default));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.Max(default, Comparer<DateTime>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.Max(AsyncEnumerable.Empty<DateTime>(), default, CancellationToken.None));
         }
     }
 }
