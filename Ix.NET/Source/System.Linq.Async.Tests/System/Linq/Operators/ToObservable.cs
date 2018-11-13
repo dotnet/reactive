@@ -143,9 +143,9 @@ namespace Tests
 
             var ae = AsyncEnumerable.CreateEnumerable(
                 _ => AsyncEnumerable.CreateEnumerator<int>(
-                    () => TaskExt.False,
+                    () => new ValueTask<bool>(false),
                     () => { throw new InvalidOperationException(); },
-                    () => { evt.Set(); return TaskExt.CompletedTask; }));
+                    () => { evt.Set(); return default; }));
 
             ae
                 .ToObservable()
@@ -186,7 +186,7 @@ namespace Tests
                     () =>
                     {
                         evt.Set();
-                        return TaskExt.CompletedTask;
+                        return default;
                     }));
 
             subscription = ae
@@ -234,7 +234,7 @@ namespace Tests
                     () =>
                     {
                         evt.Set();
-                        return TaskExt.CompletedTask;
+                        return default;
                     }));
 
             subscription = ae
