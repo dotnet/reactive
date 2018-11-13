@@ -3,12 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
 {
-    partial class AsyncIterator<TSource>
+    internal partial class AsyncIterator<TSource>
     {
         public virtual IAsyncEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector)
         {
