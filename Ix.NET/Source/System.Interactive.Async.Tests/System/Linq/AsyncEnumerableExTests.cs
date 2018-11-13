@@ -52,7 +52,7 @@ namespace Tests
             Assert.Equal(value, e.Current);
         }
 
-        public async Task SequenceIdentity<T>(IAsyncEnumerable<T> enumerable)
+        protected async Task SequenceIdentity<T>(IAsyncEnumerable<T> enumerable)
         {
             var en1 = enumerable.GetAsyncEnumerator();
             var en2 = enumerable.GetAsyncEnumerator();
@@ -62,16 +62,10 @@ namespace Tests
             await en1.DisposeAsync();
             await en2.DisposeAsync();
 
-            var e1t = enumerable.ToList();
-            var e2t = enumerable.ToList();
+            var res1 = await enumerable.ToList();
+            var res2 = await enumerable.ToList();
 
-            await Task.WhenAll(e1t, e2t);
-
-
-            var e1Result = e1t.Result;
-            var e2Result = e2t.Result;
-
-            e1Result.ShouldAllBeEquivalentTo(e2Result);
+            res1.ShouldAllBeEquivalentTo(res2);
         }
 #pragma warning restore xUnit1013 // Public method should be marked as test
     }
