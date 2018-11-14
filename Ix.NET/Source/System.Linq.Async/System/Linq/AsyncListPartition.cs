@@ -89,38 +89,38 @@ namespace System.Linq
             }
         }
 
-        public Task<Maybe<TSource>> TryGetElementAsync(int index, CancellationToken cancellationToken)
+        public ValueTask<Maybe<TSource>> TryGetElementAsync(int index, CancellationToken cancellationToken)
         {
             if ((uint)index <= (uint)(_maxIndexInclusive - _minIndexInclusive) && index < _source.Count - _minIndexInclusive)
             {
                 var res = _source[_minIndexInclusive + index];
-                return Task.FromResult(new Maybe<TSource>(res));
+                return new ValueTask<Maybe<TSource>>(new Maybe<TSource>(res));
             }
 
-            return Task.FromResult(new Maybe<TSource>());
+            return new ValueTask<Maybe<TSource>>(new Maybe<TSource>());
         }
 
-        public Task<Maybe<TSource>> TryGetFirstAsync(CancellationToken cancellationToken)
+        public ValueTask<Maybe<TSource>> TryGetFirstAsync(CancellationToken cancellationToken)
         {
             if (_source.Count > _minIndexInclusive)
             {
                 var res = _source[_minIndexInclusive];
-                return Task.FromResult(new Maybe<TSource>(res));
+                return new ValueTask<Maybe<TSource>>(new Maybe<TSource>(res));
             }
 
-            return Task.FromResult(new Maybe<TSource>());
+            return new ValueTask<Maybe<TSource>>(new Maybe<TSource>());
         }
 
-        public Task<Maybe<TSource>> TryGetLastAsync(CancellationToken cancellationToken)
+        public ValueTask<Maybe<TSource>> TryGetLastAsync(CancellationToken cancellationToken)
         {
             var lastIndex = _source.Count - 1;
             if (lastIndex >= _minIndexInclusive)
             {
                 var res = _source[Math.Min(lastIndex, _maxIndexInclusive)];
-                return Task.FromResult(new Maybe<TSource>(res));
+                return new ValueTask<Maybe<TSource>>(new Maybe<TSource>(res));
             }
 
-            return Task.FromResult(new Maybe<TSource>());
+            return new ValueTask<Maybe<TSource>>(new Maybe<TSource>());
         }
 
         private int Count

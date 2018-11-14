@@ -93,19 +93,19 @@ namespace System.Linq
                 return Task.FromResult(res);
             }
 
-            public Task<Maybe<int>> TryGetElementAsync(int index, CancellationToken cancellationToken)
+            public ValueTask<Maybe<int>> TryGetElementAsync(int index, CancellationToken cancellationToken)
             {
                 if ((uint)index < (uint)(_end - _start))
                 {
-                    return Task.FromResult(new Maybe<int>(_start + index));
+                    return new ValueTask<Maybe<int>>(new Maybe<int>(_start + index));
                 }
 
-                return Task.FromResult(new Maybe<int>());
+                return new ValueTask<Maybe<int>>(new Maybe<int>());
             }
 
-            public Task<Maybe<int>> TryGetFirstAsync(CancellationToken cancellationToken) => Task.FromResult(new Maybe<int>(_start));
+            public ValueTask<Maybe<int>> TryGetFirstAsync(CancellationToken cancellationToken) => new ValueTask<Maybe<int>>(new Maybe<int>(_start));
 
-            public Task<Maybe<int>> TryGetLastAsync(CancellationToken cancellationToken) => Task.FromResult(new Maybe<int>(_end - 1));
+            public ValueTask<Maybe<int>> TryGetLastAsync(CancellationToken cancellationToken) => new ValueTask<Maybe<int>>(new Maybe<int>(_end - 1));
 
             protected override async ValueTask<bool> MoveNextCore()
             {

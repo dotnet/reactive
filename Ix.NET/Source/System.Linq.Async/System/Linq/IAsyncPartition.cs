@@ -32,20 +32,20 @@ namespace System.Linq
         /// <param name="index">The 0-based index to access.</param>
         /// <param name="cancellationToken">Token to observe for cancellation requests.</param>
         /// <returns>The element if found, otherwise, the default value of <see cref="Maybe{TElement}"/>.</returns>
-        Task<Maybe<TElement>> TryGetElementAsync(int index, CancellationToken cancellationToken);
+        ValueTask<Maybe<TElement>> TryGetElementAsync(int index, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the first item in this sequence.
         /// </summary>
         /// <param name="cancellationToken">Token to observe for cancellation requests.</param>
         /// <returns>The element if found, otherwise, the default value of <see cref="Maybe{TElement}"/>.</returns>
-        Task<Maybe<TElement>> TryGetFirstAsync(CancellationToken cancellationToken);
+        ValueTask<Maybe<TElement>> TryGetFirstAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the last item in this sequence.
         /// </summary>
         /// <param name="cancellationToken">Token to observe for cancellation requests.</param>
         /// <returns>The element if found, otherwise, the default value of <see cref="Maybe{TElement}"/>.</returns>
-        Task<Maybe<TElement>> TryGetLastAsync(CancellationToken cancellationToken);
+        ValueTask<Maybe<TElement>> TryGetLastAsync(CancellationToken cancellationToken);
     }
 }

@@ -217,7 +217,7 @@ namespace System.Linq
             return new AsyncEnumerablePartition<TSource>(_source, _minIndexInclusive, maxIndex);
         }
 
-        public async Task<Maybe<TSource>> TryGetElementAsync(int index, CancellationToken cancellationToken)
+        public async ValueTask<Maybe<TSource>> TryGetElementAsync(int index, CancellationToken cancellationToken)
         {
             // If the index is negative or >= our max count, return early.
             if (index >= 0 && (!HasLimit || index < Limit))
@@ -242,7 +242,7 @@ namespace System.Linq
             return new Maybe<TSource>();
         }
 
-        public async Task<Maybe<TSource>> TryGetFirstAsync(CancellationToken cancellationToken)
+        public async ValueTask<Maybe<TSource>> TryGetFirstAsync(CancellationToken cancellationToken)
         {
             var en = _source.GetAsyncEnumerator(cancellationToken);
 
@@ -261,7 +261,7 @@ namespace System.Linq
             return new Maybe<TSource>();
         }
 
-        public async Task<Maybe<TSource>> TryGetLastAsync(CancellationToken cancellationToken)
+        public async ValueTask<Maybe<TSource>> TryGetLastAsync(CancellationToken cancellationToken)
         {
             var en = _source.GetAsyncEnumerator(cancellationToken);
 
@@ -356,21 +356,21 @@ namespace System.Linq
             return list;
         }
 
-        private Task<bool> SkipBeforeFirstAsync(IAsyncEnumerator<TSource> en) => SkipBeforeAsync(_minIndexInclusive, en);
+        private ValueTask<bool> SkipBeforeFirstAsync(IAsyncEnumerator<TSource> en) => SkipBeforeAsync(_minIndexInclusive, en);
 
-        private static async Task<bool> SkipBeforeAsync(int index, IAsyncEnumerator<TSource> en)
+        private static async ValueTask<bool> SkipBeforeAsync(int index, IAsyncEnumerator<TSource> en)
         {
             var n = await SkipAndCountAsync(index, en).ConfigureAwait(false);
             return n == index;
         }
 
-        private static async Task<int> SkipAndCountAsync(int index, IAsyncEnumerator<TSource> en)
+        private static async ValueTask<int> SkipAndCountAsync(int index, IAsyncEnumerator<TSource> en)
         {
             Debug.Assert(index >= 0);
             return (int)await SkipAndCountAsync((uint)index, en).ConfigureAwait(false);
         }
 
-        private static async Task<uint> SkipAndCountAsync(uint index, IAsyncEnumerator<TSource> en)
+        private static async ValueTask<uint> SkipAndCountAsync(uint index, IAsyncEnumerator<TSource> en)
         {
             Debug.Assert(en != null);
 

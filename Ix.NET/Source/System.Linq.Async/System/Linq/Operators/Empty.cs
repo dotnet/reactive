@@ -34,11 +34,11 @@ namespace System.Linq
 
             public Task<List<TValue>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(new List<TValue>());
 
-            public Task<Maybe<TValue>> TryGetElementAsync(int index, CancellationToken cancellationToken) => Task.FromResult(new Maybe<TValue>());
+            public ValueTask<Maybe<TValue>> TryGetElementAsync(int index, CancellationToken cancellationToken) => new ValueTask<Maybe<TValue>>(new Maybe<TValue>());
 
-            public Task<Maybe<TValue>> TryGetFirstAsync(CancellationToken cancellationToken) => Task.FromResult(new Maybe<TValue>());
+            public ValueTask<Maybe<TValue>> TryGetFirstAsync(CancellationToken cancellationToken) => new ValueTask<Maybe<TValue>>(new Maybe<TValue>());
 
-            public Task<Maybe<TValue>> TryGetLastAsync(CancellationToken cancellationToken) => Task.FromResult(new Maybe<TValue>());
+            public ValueTask<Maybe<TValue>> TryGetLastAsync(CancellationToken cancellationToken) => new ValueTask<Maybe<TValue>>(new Maybe<TValue>());
 
             public ValueTask<bool> MoveNextAsync() => new ValueTask<bool>(false);
 

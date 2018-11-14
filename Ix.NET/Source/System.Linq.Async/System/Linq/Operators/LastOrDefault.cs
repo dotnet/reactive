@@ -87,14 +87,14 @@ namespace System.Linq
             return last.HasValue ? last.Value : default;
         }
 
-        private static Task<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        private static ValueTask<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source is IList<TSource> list)
             {
                 var count = list.Count;
                 if (count > 0)
                 {
-                    return Task.FromResult(new Maybe<TSource>(list[count - 1]));
+                    return new ValueTask<Maybe<TSource>>(new Maybe<TSource>(list[count - 1]));
                 }
             }
             else if (source is IAsyncPartition<TSource> p)
@@ -105,7 +105,7 @@ namespace System.Linq
             {
                 return Core();
 
-                async Task<Maybe<TSource>> Core()
+                async ValueTask<Maybe<TSource>> Core()
                 {
                     var last = default(TSource);
                     var hasLast = false;
@@ -129,7 +129,7 @@ namespace System.Linq
                 }
             }
 
-            return Task.FromResult(new Maybe<TSource>());
+            return new ValueTask<Maybe<TSource>>(new Maybe<TSource>());
         }
 
         private static async Task<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)

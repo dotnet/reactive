@@ -87,13 +87,13 @@ namespace System.Linq
             return first.HasValue ? first.Value : default;
         }
 
-        private static Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        private static ValueTask<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source is IList<TSource> list)
             {
                 if (list.Count > 0)
                 {
-                    return Task.FromResult(new Maybe<TSource>(list[0]));
+                    return new ValueTask<Maybe<TSource>>(new Maybe<TSource>(list[0]));
                 }
             }
             else if (source is IAsyncPartition<TSource> p)
@@ -104,7 +104,7 @@ namespace System.Linq
             {
                 return Core();
 
-                async Task<Maybe<TSource>> Core()
+                async ValueTask<Maybe<TSource>> Core()
                 {
                     var e = source.GetAsyncEnumerator(cancellationToken);
 
@@ -124,7 +124,7 @@ namespace System.Linq
                 }
             }
 
-            return Task.FromResult(new Maybe<TSource>());
+            return new ValueTask<Maybe<TSource>>(new Maybe<TSource>());
         }
 
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
