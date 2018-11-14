@@ -46,7 +46,7 @@ namespace System.Linq
             return AnyCore(source, predicate, cancellationToken);
         }
 
-        public static Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -56,7 +56,7 @@ namespace System.Linq
             return AnyCore(source, predicate, CancellationToken.None);
         }
 
-        public static Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        public static Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -100,7 +100,7 @@ namespace System.Linq
             return false;
         }
 
-        private static async Task<bool> AnyCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        private static async Task<bool> AnyCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator(cancellationToken);
 

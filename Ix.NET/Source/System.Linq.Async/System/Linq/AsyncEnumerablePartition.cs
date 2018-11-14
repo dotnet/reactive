@@ -158,7 +158,7 @@ namespace System.Linq
             return new SelectIPartitionIterator<TSource, TResult>(this, selector);
         }
 
-        public override IAsyncEnumerable<TResult> Select<TResult>(Func<TSource, Task<TResult>> selector)
+        public override IAsyncEnumerable<TResult> Select<TResult>(Func<TSource, ValueTask<TResult>> selector)
         {
             return new SelectIPartitionIterator<TSource, TResult>(this, selector);
         }

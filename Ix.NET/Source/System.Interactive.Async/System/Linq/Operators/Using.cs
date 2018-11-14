@@ -21,7 +21,7 @@ namespace System.Linq
             return new UsingAsyncIterator<TSource, TResource>(resourceFactory, enumerableFactory);
         }
 
-        public static IAsyncEnumerable<TSource> Using<TSource, TResource>(Func<Task<TResource>> resourceFactory, Func<TResource, Task<IAsyncEnumerable<TSource>>> enumerableFactory) where TResource : IDisposable
+        public static IAsyncEnumerable<TSource> Using<TSource, TResource>(Func<Task<TResource>> resourceFactory, Func<TResource, ValueTask<IAsyncEnumerable<TSource>>> enumerableFactory) where TResource : IDisposable
         {
             if (resourceFactory == null)
                 throw Error.ArgumentNull(nameof(resourceFactory));
@@ -101,14 +101,14 @@ namespace System.Linq
 
         private sealed class UsingAsyncIteratorWithTask<TSource, TResource> : AsyncIterator<TSource> where TResource : IDisposable
         {
-            private readonly Func<TResource, Task<IAsyncEnumerable<TSource>>> _enumerableFactory;
+            private readonly Func<TResource, ValueTask<IAsyncEnumerable<TSource>>> _enumerableFactory;
             private readonly Func<Task<TResource>> _resourceFactory;
 
             private IAsyncEnumerable<TSource> _enumerable;
             private IAsyncEnumerator<TSource> _enumerator;
             private TResource _resource;
 
-            public UsingAsyncIteratorWithTask(Func<Task<TResource>> resourceFactory, Func<TResource, Task<IAsyncEnumerable<TSource>>> enumerableFactory)
+            public UsingAsyncIteratorWithTask(Func<Task<TResource>> resourceFactory, Func<TResource, ValueTask<IAsyncEnumerable<TSource>>> enumerableFactory)
             {
                 Debug.Assert(resourceFactory != null);
                 Debug.Assert(enumerableFactory != null);

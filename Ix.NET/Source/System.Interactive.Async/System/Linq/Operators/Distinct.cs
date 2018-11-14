@@ -31,7 +31,7 @@ namespace System.Linq
             return DistinctCore(source, keySelector, comparer);
         }
 
-        public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector)
+        public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -41,7 +41,7 @@ namespace System.Linq
             return DistinctCore<TSource, TKey>(source, keySelector, comparer: null);
         }
 
-        public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -58,7 +58,7 @@ namespace System.Linq
             return new DistinctAsyncIterator<TSource, TKey>(source, keySelector, comparer);
         }
 
-        private static IAsyncEnumerable<TSource> DistinctCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        private static IAsyncEnumerable<TSource> DistinctCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             return new DistinctAsyncIteratorWithTask<TSource, TKey>(source, keySelector, comparer);
         }
@@ -211,13 +211,13 @@ namespace System.Linq
         private sealed class DistinctAsyncIteratorWithTask<TSource, TKey> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
             private readonly IEqualityComparer<TKey> _comparer;
-            private readonly Func<TSource, Task<TKey>> _keySelector;
+            private readonly Func<TSource, ValueTask<TKey>> _keySelector;
             private readonly IAsyncEnumerable<TSource> _source;
 
             private IAsyncEnumerator<TSource> _enumerator;
             private Set<TKey> _set;
 
-            public DistinctAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+            public DistinctAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);

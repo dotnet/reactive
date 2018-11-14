@@ -46,7 +46,7 @@ namespace System.Linq
             return MaxCore(source, selector, cancellationToken);
         }
 
-        public static Task<TResult> Max<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TResult>> selector)
+        public static Task<TResult> Max<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -56,7 +56,7 @@ namespace System.Linq
             return MaxCore(source, selector, CancellationToken.None);
         }
 
-        public static Task<TResult> Max<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TResult>> selector, CancellationToken cancellationToken)
+        public static Task<TResult> Max<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

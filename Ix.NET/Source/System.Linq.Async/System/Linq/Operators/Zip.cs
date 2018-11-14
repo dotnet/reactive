@@ -23,7 +23,7 @@ namespace System.Linq
             return new ZipAsyncIterator<TFirst, TSecond, TResult>(first, second, selector);
         }
 
-        public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, Task<TResult>> selector)
+        public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector)
         {
             if (first == null)
                 throw Error.ArgumentNull(nameof(first));
@@ -111,12 +111,12 @@ namespace System.Linq
         {
             private readonly IAsyncEnumerable<TFirst> _first;
             private readonly IAsyncEnumerable<TSecond> _second;
-            private readonly Func<TFirst, TSecond, Task<TResult>> _selector;
+            private readonly Func<TFirst, TSecond, ValueTask<TResult>> _selector;
 
             private IAsyncEnumerator<TFirst> _firstEnumerator;
             private IAsyncEnumerator<TSecond> _secondEnumerator;
 
-            public ZipAsyncIteratorWithTask(IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, Task<TResult>> selector)
+            public ZipAsyncIteratorWithTask(IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector)
             {
                 Debug.Assert(first != null);
                 Debug.Assert(second != null);

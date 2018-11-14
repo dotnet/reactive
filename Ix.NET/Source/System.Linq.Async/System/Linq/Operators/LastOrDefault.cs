@@ -46,7 +46,7 @@ namespace System.Linq
             return LastOrDefaultCore(source, predicate, cancellationToken);
         }
 
-        public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -56,7 +56,7 @@ namespace System.Linq
             return LastOrDefaultCore(source, predicate, CancellationToken.None);
         }
 
-        public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -80,7 +80,7 @@ namespace System.Linq
             return last.HasValue ? last.Value : default;
         }
 
-        private static async Task<TSource> LastOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        private static async Task<TSource> LastOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
             var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
@@ -165,7 +165,7 @@ namespace System.Linq
             return new Maybe<TSource>();
         }
 
-        private static async Task<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        private static async Task<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
             var last = default(TSource);
             var hasLast = false;

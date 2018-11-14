@@ -36,7 +36,7 @@ namespace System.Linq
             return new WhereEnumerableWithIndexAsyncIterator<TSource>(source, predicate);
         }
 
-        public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -52,7 +52,7 @@ namespace System.Linq
             return new WhereEnumerableAsyncIteratorWithTask<TSource>(source, predicate);
         }
 
-        public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task<bool>> predicate)
+        public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -67,7 +67,7 @@ namespace System.Linq
             return x => predicate1(x) && predicate2(x);
         }
 
-        private static Func<TSource, Task<bool>> CombinePredicates<TSource>(Func<TSource, Task<bool>> predicate1, Func<TSource, Task<bool>> predicate2)
+        private static Func<TSource, ValueTask<bool>> CombinePredicates<TSource>(Func<TSource, ValueTask<bool>> predicate1, Func<TSource, ValueTask<bool>> predicate2)
         {
             return async x => await predicate1(x).ConfigureAwait(false) && await predicate2(x).ConfigureAwait(false);
         }
@@ -211,11 +211,11 @@ namespace System.Linq
 
         internal sealed class WhereEnumerableAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, Task<bool>> _predicate;
+            private readonly Func<TSource, ValueTask<bool>> _predicate;
             private readonly IAsyncEnumerable<TSource> _source;
             private IAsyncEnumerator<TSource> _enumerator;
 
-            public WhereEnumerableAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+            public WhereEnumerableAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(predicate != null);
@@ -240,7 +240,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            public override IAsyncEnumerable<TSource> Where(Func<TSource, Task<bool>> predicate)
+            public override IAsyncEnumerable<TSource> Where(Func<TSource, ValueTask<bool>> predicate)
             {
                 return new WhereEnumerableAsyncIteratorWithTask<TSource>(_source, CombinePredicates(_predicate, predicate));
             }
@@ -275,13 +275,13 @@ namespace System.Linq
 
         internal sealed class WhereEnumerableWithIndexAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, int, Task<bool>> _predicate;
+            private readonly Func<TSource, int, ValueTask<bool>> _predicate;
             private readonly IAsyncEnumerable<TSource> _source;
 
             private IAsyncEnumerator<TSource> _enumerator;
             private int _index;
 
-            public WhereEnumerableWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, Task<bool>> predicate)
+            public WhereEnumerableWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(predicate != null);

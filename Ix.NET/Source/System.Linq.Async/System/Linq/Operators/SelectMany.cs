@@ -21,7 +21,7 @@ namespace System.Linq
             return new SelectManyAsyncIterator<TSource, TResult>(source, selector);
         }
 
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<IAsyncEnumerable<TResult>>> selector)
+        public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TResult>>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -41,7 +41,7 @@ namespace System.Linq
             return new SelectManyWithIndexAsyncIterator<TSource, TResult>(source, selector);
         }
 
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task<IAsyncEnumerable<TResult>>> selector)
+        public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TResult>>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -63,7 +63,7 @@ namespace System.Linq
             return new SelectManyAsyncIterator<TSource, TCollection, TResult>(source, selector, resultSelector);
         }
 
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<IAsyncEnumerable<TCollection>>> selector, Func<TSource, TCollection, Task<TResult>> resultSelector)
+        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>> selector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -87,7 +87,7 @@ namespace System.Linq
             return new SelectManyWithIndexAsyncIterator<TSource, TCollection, TResult>(source, selector, resultSelector);
         }
 
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task<IAsyncEnumerable<TCollection>>> selector, Func<TSource, TCollection, Task<TResult>> resultSelector)
+        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>> selector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -195,14 +195,14 @@ namespace System.Linq
             private const int State_Source = 1;
             private const int State_Result = 2;
 
-            private readonly Func<TSource, Task<IAsyncEnumerable<TResult>>> _selector;
+            private readonly Func<TSource, ValueTask<IAsyncEnumerable<TResult>>> _selector;
             private readonly IAsyncEnumerable<TSource> _source;
 
             private int _mode;
             private IAsyncEnumerator<TResult> _resultEnumerator;
             private IAsyncEnumerator<TSource> _sourceEnumerator;
 
-            public SelectManyAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<IAsyncEnumerable<TResult>>> selector)
+            public SelectManyAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TResult>>> selector)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(selector != null);
@@ -384,8 +384,8 @@ namespace System.Linq
             private const int State_Source = 1;
             private const int State_Result = 2;
 
-            private readonly Func<TSource, Task<IAsyncEnumerable<TCollection>>> _collectionSelector;
-            private readonly Func<TSource, TCollection, Task<TResult>> _resultSelector;
+            private readonly Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>> _collectionSelector;
+            private readonly Func<TSource, TCollection, ValueTask<TResult>> _resultSelector;
             private readonly IAsyncEnumerable<TSource> _source;
 
             private TSource _currentSource;
@@ -393,7 +393,7 @@ namespace System.Linq
             private IAsyncEnumerator<TCollection> _resultEnumerator;
             private IAsyncEnumerator<TSource> _sourceEnumerator;
 
-            public SelectManyAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, Task<TResult>> resultSelector)
+            public SelectManyAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(collectionSelector != null);
@@ -588,8 +588,8 @@ namespace System.Linq
             private const int State_Source = 1;
             private const int State_Result = 2;
 
-            private readonly Func<TSource, int, Task<IAsyncEnumerable<TCollection>>> _collectionSelector;
-            private readonly Func<TSource, TCollection, Task<TResult>> _resultSelector;
+            private readonly Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>> _collectionSelector;
+            private readonly Func<TSource, TCollection, ValueTask<TResult>> _resultSelector;
             private readonly IAsyncEnumerable<TSource> _source;
 
             private TSource _currentSource;
@@ -598,7 +598,7 @@ namespace System.Linq
             private IAsyncEnumerator<TCollection> _resultEnumerator;
             private IAsyncEnumerator<TSource> _sourceEnumerator;
 
-            public SelectManyWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, Task<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, Task<TResult>> resultSelector)
+            public SelectManyWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(collectionSelector != null);
@@ -792,7 +792,7 @@ namespace System.Linq
             private const int State_Source = 1;
             private const int State_Result = 2;
 
-            private readonly Func<TSource, int, Task<IAsyncEnumerable<TResult>>> _selector;
+            private readonly Func<TSource, int, ValueTask<IAsyncEnumerable<TResult>>> _selector;
             private readonly IAsyncEnumerable<TSource> _source;
 
             private int _index;
@@ -800,7 +800,7 @@ namespace System.Linq
             private IAsyncEnumerator<TResult> _resultEnumerator;
             private IAsyncEnumerator<TSource> _sourceEnumerator;
 
-            public SelectManyWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, Task<IAsyncEnumerable<TResult>>> selector)
+            public SelectManyWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TResult>>> selector)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(selector != null);

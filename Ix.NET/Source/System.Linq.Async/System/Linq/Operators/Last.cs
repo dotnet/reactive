@@ -46,7 +46,7 @@ namespace System.Linq
             return LastCore(source, predicate, cancellationToken);
         }
 
-        public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -56,7 +56,7 @@ namespace System.Linq
             return LastCore(source, predicate, CancellationToken.None);
         }
 
-        public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -80,7 +80,7 @@ namespace System.Linq
             return last.HasValue ? last.Value : throw Error.NoElements();
         }
 
-        private static async Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        private static async Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
             var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 

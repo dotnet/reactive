@@ -23,7 +23,7 @@ namespace System.Linq
             return new CatchAsyncIterator<TSource, TException>(source, handler);
         }
 
-        public static IAsyncEnumerable<TSource> Catch<TSource, TException>(this IAsyncEnumerable<TSource> source, Func<TException, Task<IAsyncEnumerable<TSource>>> handler)
+        public static IAsyncEnumerable<TSource> Catch<TSource, TException>(this IAsyncEnumerable<TSource> source, Func<TException, ValueTask<IAsyncEnumerable<TSource>>> handler)
             where TException : Exception
         {
             if (source == null)
@@ -160,13 +160,13 @@ namespace System.Linq
 
         private sealed class CatchAsyncIteratorWithTask<TSource, TException> : AsyncIterator<TSource> where TException : Exception
         {
-            private readonly Func<TException, Task<IAsyncEnumerable<TSource>>> _handler;
+            private readonly Func<TException, ValueTask<IAsyncEnumerable<TSource>>> _handler;
             private readonly IAsyncEnumerable<TSource> _source;
 
             private IAsyncEnumerator<TSource> _enumerator;
             private bool _isDone;
 
-            public CatchAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TException, Task<IAsyncEnumerable<TSource>>> handler)
+            public CatchAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TException, ValueTask<IAsyncEnumerable<TSource>>> handler)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(handler != null);

@@ -14,7 +14,7 @@ namespace System.Linq
             return new AsyncEnumerable.SelectEnumerableAsyncIterator<TSource, TResult>(this, selector);
         }
 
-        public virtual IAsyncEnumerable<TResult> Select<TResult>(Func<TSource, Task<TResult>> selector)
+        public virtual IAsyncEnumerable<TResult> Select<TResult>(Func<TSource, ValueTask<TResult>> selector)
         {
             return new AsyncEnumerable.SelectEnumerableAsyncIteratorWithTask<TSource, TResult>(this, selector);
         }
@@ -24,7 +24,7 @@ namespace System.Linq
             return new AsyncEnumerable.WhereEnumerableAsyncIterator<TSource>(this, predicate);
         }
 
-        public virtual IAsyncEnumerable<TSource> Where(Func<TSource, Task<bool>> predicate)
+        public virtual IAsyncEnumerable<TSource> Where(Func<TSource, ValueTask<bool>> predicate)
         {
             return new AsyncEnumerable.WhereEnumerableAsyncIteratorWithTask<TSource>(this, predicate);
         }

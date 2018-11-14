@@ -30,24 +30,24 @@ namespace System.Linq
             return ToDictionaryCore(source, keySelector, x => x, EqualityComparer<TKey>.Default, cancellationToken);
         }
 
-        public static Task<Dictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector)
+        public static Task<Dictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
 
-            return ToDictionaryCore(source, keySelector, x => Task.FromResult(x), EqualityComparer<TKey>.Default, CancellationToken.None);
+            return ToDictionaryCore(source, keySelector, x => new ValueTask<TSource>(x), EqualityComparer<TKey>.Default, CancellationToken.None);
         }
 
-        public static Task<Dictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, CancellationToken cancellationToken)
+        public static Task<Dictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
 
-            return ToDictionaryCore(source, keySelector, x => Task.FromResult(x), EqualityComparer<TKey>.Default, cancellationToken);
+            return ToDictionaryCore(source, keySelector, x => new ValueTask<TSource>(x), EqualityComparer<TKey>.Default, cancellationToken);
         }
 
         public static Task<Dictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
@@ -70,24 +70,24 @@ namespace System.Linq
             return ToDictionaryCore(source, keySelector, x => x, comparer, cancellationToken);
         }
 
-        public static Task<Dictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        public static Task<Dictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
 
-            return ToDictionaryCore(source, keySelector, x => Task.FromResult(x), comparer, CancellationToken.None);
+            return ToDictionaryCore(source, keySelector, x => new ValueTask<TSource>(x), comparer, CancellationToken.None);
         }
 
-        public static Task<Dictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        public static Task<Dictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
 
-            return ToDictionaryCore(source, keySelector, x => Task.FromResult(x), comparer, cancellationToken);
+            return ToDictionaryCore(source, keySelector, x => new ValueTask<TSource>(x), comparer, cancellationToken);
         }
 
         public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
@@ -114,7 +114,7 @@ namespace System.Linq
             return ToDictionaryCore(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, cancellationToken);
         }
 
-        public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector)
+        public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -126,7 +126,7 @@ namespace System.Linq
             return ToDictionaryCore(source, keySelector, elementSelector, EqualityComparer<TKey>.Default, CancellationToken.None);
         }
 
-        public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, CancellationToken cancellationToken)
+        public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -162,7 +162,7 @@ namespace System.Linq
             return ToDictionaryCore(source, keySelector, elementSelector, comparer, cancellationToken);
         }
 
-        public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer)
+        public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -174,7 +174,7 @@ namespace System.Linq
             return ToDictionaryCore(source, keySelector, elementSelector, comparer, CancellationToken.None);
         }
 
-        public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -212,7 +212,7 @@ namespace System.Linq
             }
         }
 
-        private static async Task<Dictionary<TKey, TElement>> ToDictionaryCore<TSource, TKey, TElement>(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        private static async Task<Dictionary<TKey, TElement>> ToDictionaryCore<TSource, TKey, TElement>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator(cancellationToken);
 

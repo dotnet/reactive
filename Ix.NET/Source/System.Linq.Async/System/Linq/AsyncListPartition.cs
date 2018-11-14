@@ -57,7 +57,7 @@ namespace System.Linq
             return new SelectListPartitionIterator<TSource, TResult>(_source, selector, _minIndexInclusive, _maxIndexInclusive);
         }
 
-        public override IEnumerable<TResult> Select<TResult>(Func<TSource, Task<TResult>> selector)
+        public override IEnumerable<TResult> Select<TResult>(Func<TSource, ValueTask<TResult>> selector)
         {
             return new SelectListPartitionIterator<TSource, TResult>(_source, selector, _minIndexInclusive, _maxIndexInclusive);
         }

@@ -43,7 +43,7 @@ namespace System.Linq
             return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
         }
 
-        public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, Task<TKey>> outerKeySelector, Func<TInner, Task<TKey>> innerKeySelector, Func<TOuter, TInner, Task<TResult>> resultSelector)
+        public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, TInner, ValueTask<TResult>> resultSelector)
         {
             if (outer == null)
                 throw Error.ArgumentNull(nameof(outer));
@@ -59,7 +59,7 @@ namespace System.Linq
             return new JoinAsyncIteratorWithTask<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer: null);
         }
 
-        public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, Task<TKey>> outerKeySelector, Func<TInner, Task<TKey>> innerKeySelector, Func<TOuter, TInner, Task<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, TInner, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (outer == null)
                 throw Error.ArgumentNull(nameof(outer));
@@ -206,14 +206,14 @@ namespace System.Linq
         {
             private readonly IAsyncEnumerable<TOuter> _outer;
             private readonly IAsyncEnumerable<TInner> _inner;
-            private readonly Func<TOuter, Task<TKey>> _outerKeySelector;
-            private readonly Func<TInner, Task<TKey>> _innerKeySelector;
-            private readonly Func<TOuter, TInner, Task<TResult>> _resultSelector;
+            private readonly Func<TOuter, ValueTask<TKey>> _outerKeySelector;
+            private readonly Func<TInner, ValueTask<TKey>> _innerKeySelector;
+            private readonly Func<TOuter, TInner, ValueTask<TResult>> _resultSelector;
             private readonly IEqualityComparer<TKey> _comparer;
 
             private IAsyncEnumerator<TOuter> _outerEnumerator;
 
-            public JoinAsyncIteratorWithTask(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, Task<TKey>> outerKeySelector, Func<TInner, Task<TKey>> innerKeySelector, Func<TOuter, TInner, Task<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
+            public JoinAsyncIteratorWithTask(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, TInner, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
             {
                 Debug.Assert(outer != null);
                 Debug.Assert(inner != null);

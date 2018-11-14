@@ -46,7 +46,7 @@ namespace System.Linq
             return source.Select(selector).Average(cancellationToken);
         }
 
-        public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<int>> selector)
+        public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -56,7 +56,7 @@ namespace System.Linq
             return source.Select(selector).Average(CancellationToken.None);
         }
 
-        public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<int>> selector, CancellationToken cancellationToken)
+        public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -102,7 +102,7 @@ namespace System.Linq
             return source.Select(selector).Average(cancellationToken);
         }
 
-        public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<long>> selector)
+        public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -112,7 +112,7 @@ namespace System.Linq
             return source.Select(selector).Average(CancellationToken.None);
         }
 
-        public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<long>> selector, CancellationToken cancellationToken)
+        public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -158,7 +158,7 @@ namespace System.Linq
             return source.Select(selector).Average(cancellationToken);
         }
 
-        public static Task<float> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<float>> selector)
+        public static Task<float> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -168,7 +168,7 @@ namespace System.Linq
             return source.Select(selector).Average(CancellationToken.None);
         }
 
-        public static Task<float> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<float>> selector, CancellationToken cancellationToken)
+        public static Task<float> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -214,7 +214,7 @@ namespace System.Linq
             return source.Select(selector).Average(cancellationToken);
         }
 
-        public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<double>> selector)
+        public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -224,7 +224,7 @@ namespace System.Linq
             return source.Select(selector).Average(CancellationToken.None);
         }
 
-        public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<double>> selector, CancellationToken cancellationToken)
+        public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -270,7 +270,7 @@ namespace System.Linq
             return source.Select(selector).Average(cancellationToken);
         }
 
-        public static Task<decimal> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal>> selector)
+        public static Task<decimal> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -280,7 +280,7 @@ namespace System.Linq
             return source.Select(selector).Average(CancellationToken.None);
         }
 
-        public static Task<decimal> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal>> selector, CancellationToken cancellationToken)
+        public static Task<decimal> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -326,7 +326,7 @@ namespace System.Linq
             return source.Select(selector).Average(cancellationToken);
         }
 
-        public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<int?>> selector)
+        public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -336,7 +336,7 @@ namespace System.Linq
             return source.Select(selector).Average(CancellationToken.None);
         }
 
-        public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<int?>> selector, CancellationToken cancellationToken)
+        public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -382,7 +382,7 @@ namespace System.Linq
             return source.Select(selector).Average(cancellationToken);
         }
 
-        public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<long?>> selector)
+        public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -392,7 +392,7 @@ namespace System.Linq
             return source.Select(selector).Average(CancellationToken.None);
         }
 
-        public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<long?>> selector, CancellationToken cancellationToken)
+        public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -438,7 +438,7 @@ namespace System.Linq
             return source.Select(selector).Average(cancellationToken);
         }
 
-        public static Task<float?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<float?>> selector)
+        public static Task<float?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -448,7 +448,7 @@ namespace System.Linq
             return source.Select(selector).Average(CancellationToken.None);
         }
 
-        public static Task<float?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<float?>> selector, CancellationToken cancellationToken)
+        public static Task<float?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -494,7 +494,7 @@ namespace System.Linq
             return source.Select(selector).Average(cancellationToken);
         }
 
-        public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<double?>> selector)
+        public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -504,7 +504,7 @@ namespace System.Linq
             return source.Select(selector).Average(CancellationToken.None);
         }
 
-        public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<double?>> selector, CancellationToken cancellationToken)
+        public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -550,7 +550,7 @@ namespace System.Linq
             return source.Select(selector).Average(cancellationToken);
         }
 
-        public static Task<decimal?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal?>> selector)
+        public static Task<decimal?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -560,7 +560,7 @@ namespace System.Linq
             return source.Select(selector).Average(CancellationToken.None);
         }
 
-        public static Task<decimal?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal?>> selector, CancellationToken cancellationToken)
+        public static Task<decimal?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

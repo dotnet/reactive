@@ -369,7 +369,7 @@ namespace System.Linq.Internal
             }
         }
 
-        internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             Debug.Assert(source != null);
             Debug.Assert(keySelector != null);
@@ -398,7 +398,7 @@ namespace System.Linq.Internal
             return lookup;
         }
 
-        internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             Debug.Assert(source != null);
             Debug.Assert(keySelector != null);
@@ -423,7 +423,7 @@ namespace System.Linq.Internal
             return lookup;
         }
 
-        internal static async Task<LookupWithTask<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        internal static async Task<LookupWithTask<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
@@ -499,7 +499,7 @@ namespace System.Linq.Internal
             return (key == null) ? 0 : _comparer.GetHashCode(key) & 0x7FFFFFFF;
         }
 
-        internal async Task<TResult[]> ToArray<TResult>(Func<TKey, IAsyncEnumerable<TElement>, Task<TResult>> resultSelector)
+        internal async Task<TResult[]> ToArray<TResult>(Func<TKey, IAsyncEnumerable<TElement>, ValueTask<TResult>> resultSelector)
         {
             var array = new TResult[Count];
             var index = 0;
@@ -518,7 +518,7 @@ namespace System.Linq.Internal
             return array;
         }
 
-        internal async Task<List<TResult>> ToList<TResult>(Func<TKey, IAsyncEnumerable<TElement>, Task<TResult>> resultSelector)
+        internal async Task<List<TResult>> ToList<TResult>(Func<TKey, IAsyncEnumerable<TElement>, ValueTask<TResult>> resultSelector)
         {
             var list = new List<TResult>(Count);
             var g = _lastGrouping;

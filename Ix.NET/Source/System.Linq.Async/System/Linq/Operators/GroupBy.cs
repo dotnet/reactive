@@ -31,7 +31,7 @@ namespace System.Linq
             return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer);
         }
 
-        public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector)
+        public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -41,7 +41,7 @@ namespace System.Linq
             return new GroupedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer: null);
         }
 
-        public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -75,7 +75,7 @@ namespace System.Linq
             return new GroupedAsyncEnumerable<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
         }
 
-        public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector)
+        public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -87,7 +87,7 @@ namespace System.Linq
             return new GroupedAsyncEnumerableWithTask<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null);
         }
 
-        public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -123,7 +123,7 @@ namespace System.Linq
             return new GroupedResultAsyncEnumerable<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer);
         }
 
-        public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, Task<TResult>> resultSelector)
+        public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -135,7 +135,7 @@ namespace System.Linq
             return new GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer: null);
         }
 
-        public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, Task<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -175,7 +175,7 @@ namespace System.Linq
             return source.GroupBy(keySelector, elementSelector, comparer).Select(g => resultSelector(g.Key, g));
         }
 
-        public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, Task<TResult>> resultSelector)
+        public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -189,7 +189,7 @@ namespace System.Linq
             return source.GroupBy<TSource, TKey, TElement>(keySelector, elementSelector, comparer: null).Select(g => resultSelector(g.Key, g));
         }
 
-        public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, Task<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -299,14 +299,14 @@ namespace System.Linq
         internal sealed class GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private readonly IAsyncEnumerable<TSource> _source;
-            private readonly Func<TSource, Task<TKey>> _keySelector;
-            private readonly Func<TKey, IAsyncEnumerable<TSource>, Task<TResult>> _resultSelector;
+            private readonly Func<TSource, ValueTask<TKey>> _keySelector;
+            private readonly Func<TKey, IAsyncEnumerable<TSource>, ValueTask<TResult>> _resultSelector;
             private readonly IEqualityComparer<TKey> _comparer;
 
             private Internal.LookupWithTask<TKey, TSource> _lookup;
             private IAsyncEnumerator<TResult> _enumerator;
 
-            public GroupedResultAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, Task<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
+            public GroupedResultAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TKey, IAsyncEnumerable<TSource>, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
@@ -485,14 +485,14 @@ namespace System.Linq
         internal sealed class GroupedAsyncEnumerableWithTask<TSource, TKey, TElement> : AsyncIterator<IAsyncGrouping<TKey, TElement>>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
         {
             private readonly IAsyncEnumerable<TSource> _source;
-            private readonly Func<TSource, Task<TKey>> _keySelector;
-            private readonly Func<TSource, Task<TElement>> _elementSelector;
+            private readonly Func<TSource, ValueTask<TKey>> _keySelector;
+            private readonly Func<TSource, ValueTask<TElement>> _elementSelector;
             private readonly IEqualityComparer<TKey> _comparer;
 
             private Internal.LookupWithTask<TKey, TElement> _lookup;
             private IEnumerator<IGrouping<TKey, TElement>> _enumerator;
 
-            public GroupedAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer)
+            public GroupedAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
@@ -668,13 +668,13 @@ namespace System.Linq
         internal sealed class GroupedAsyncEnumerableWithTask<TSource, TKey> : AsyncIterator<IAsyncGrouping<TKey, TSource>>, IAsyncIListProvider<IAsyncGrouping<TKey, TSource>>
         {
             private readonly IAsyncEnumerable<TSource> _source;
-            private readonly Func<TSource, Task<TKey>> _keySelector;
+            private readonly Func<TSource, ValueTask<TKey>> _keySelector;
             private readonly IEqualityComparer<TKey> _comparer;
 
             private Internal.LookupWithTask<TKey, TSource> _lookup;
             private IEnumerator<IGrouping<TKey, TSource>> _enumerator;
 
-            public GroupedAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+            public GroupedAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);

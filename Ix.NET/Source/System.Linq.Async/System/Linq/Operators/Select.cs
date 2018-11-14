@@ -39,7 +39,7 @@ namespace System.Linq
             return new SelectEnumerableWithIndexAsyncIterator<TSource, TResult>(source, selector);
         }
 
-        public static IAsyncEnumerable<TResult> Select<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TResult>> selector)
+        public static IAsyncEnumerable<TResult> Select<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -57,7 +57,7 @@ namespace System.Linq
             return new SelectEnumerableAsyncIteratorWithTask<TSource, TResult>(source, selector);
         }
 
-        public static IAsyncEnumerable<TResult> Select<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task<TResult>> selector)
+        public static IAsyncEnumerable<TResult> Select<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<TResult>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -72,7 +72,7 @@ namespace System.Linq
             return x => selector2(selector1(x));
         }
 
-        private static Func<TSource, Task<TResult>> CombineSelectors<TSource, TMiddle, TResult>(Func<TSource, Task<TMiddle>> selector1, Func<TMiddle, Task<TResult>> selector2)
+        private static Func<TSource, ValueTask<TResult>> CombineSelectors<TSource, TMiddle, TResult>(Func<TSource, ValueTask<TMiddle>> selector1, Func<TMiddle, ValueTask<TResult>> selector2)
         {
             return async x => await selector2(await selector1(x).ConfigureAwait(false)).ConfigureAwait(false);
         }
@@ -314,12 +314,12 @@ namespace System.Linq
 
         internal sealed class SelectEnumerableAsyncIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>
         {
-            private readonly Func<TSource, Task<TResult>> _selector;
+            private readonly Func<TSource, ValueTask<TResult>> _selector;
             private readonly IAsyncEnumerable<TSource> _source;
 
             private IAsyncEnumerator<TSource> _enumerator;
 
-            public SelectEnumerableAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<TResult>> selector)
+            public SelectEnumerableAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(selector != null);
@@ -344,7 +344,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            public override IAsyncEnumerable<TResult1> Select<TResult1>(Func<TResult, Task<TResult1>> selector)
+            public override IAsyncEnumerable<TResult1> Select<TResult1>(Func<TResult, ValueTask<TResult1>> selector)
             {
                 return new SelectEnumerableAsyncIteratorWithTask<TSource, TResult1>(_source, CombineSelectors(_selector, selector));
             }
@@ -375,12 +375,12 @@ namespace System.Linq
 
         internal sealed class SelectEnumerableWithIndexAsyncIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>
         {
-            private readonly Func<TSource, int, Task<TResult>> _selector;
+            private readonly Func<TSource, int, ValueTask<TResult>> _selector;
             private readonly IAsyncEnumerable<TSource> _source;
             private IAsyncEnumerator<TSource> _enumerator;
             private int _index;
 
-            public SelectEnumerableWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, Task<TResult>> selector)
+            public SelectEnumerableWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<TResult>> selector)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(selector != null);
@@ -444,11 +444,11 @@ namespace System.Linq
 
         internal sealed class SelectIListIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
-            private readonly Func<TSource, Task<TResult>> _selector;
+            private readonly Func<TSource, ValueTask<TResult>> _selector;
             private readonly IList<TSource> _source;
             private IEnumerator<TSource> _enumerator;
 
-            public SelectIListIteratorWithTask(IList<TSource> source, Func<TSource, Task<TResult>> selector)
+            public SelectIListIteratorWithTask(IList<TSource> source, Func<TSource, ValueTask<TResult>> selector)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(selector != null);
@@ -500,7 +500,7 @@ namespace System.Linq
                 }
             }
 
-            public override IAsyncEnumerable<TResult1> Select<TResult1>(Func<TResult, Task<TResult1>> selector)
+            public override IAsyncEnumerable<TResult1> Select<TResult1>(Func<TResult, ValueTask<TResult1>> selector)
             {
                 return new SelectIListIteratorWithTask<TSource, TResult1>(_source, CombineSelectors(_selector, selector));
             }

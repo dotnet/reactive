@@ -140,7 +140,7 @@ namespace System.Linq
             return value;
         }
 
-        private static async Task<TResult> MinCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, Task<TResult>> selector, CancellationToken cancellationToken)
+        private static async Task<TResult> MinCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken)
         {
             var comparer = Comparer<TResult>.Default;
             var value = default(TResult);

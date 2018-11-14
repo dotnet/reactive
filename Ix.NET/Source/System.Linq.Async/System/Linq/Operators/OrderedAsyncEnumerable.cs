@@ -23,7 +23,7 @@ namespace System.Linq
             return new OrderedAsyncEnumerable<TElement, TKey>(_source, keySelector, comparer, descending, this);
         }
 
-        IOrderedAsyncEnumerable<TElement> IOrderedAsyncEnumerable<TElement>.CreateOrderedEnumerable<TKey>(Func<TElement, Task<TKey>> keySelector, IComparer<TKey> comparer, bool descending)
+        IOrderedAsyncEnumerable<TElement> IOrderedAsyncEnumerable<TElement>.CreateOrderedEnumerable<TKey>(Func<TElement, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending)
         {
             return new OrderedAsyncEnumerableWithTask<TElement, TKey>(_source, keySelector, comparer, descending, this);
         }
@@ -110,10 +110,10 @@ namespace System.Linq
     {
         private readonly IComparer<TKey> _comparer;
         private readonly bool _descending;
-        private readonly Func<TElement, Task<TKey>> _keySelector;
+        private readonly Func<TElement, ValueTask<TKey>> _keySelector;
         private readonly OrderedAsyncEnumerable<TElement> _parent;
 
-        public OrderedAsyncEnumerableWithTask(IAsyncEnumerable<TElement> source, Func<TElement, Task<TKey>> keySelector, IComparer<TKey> comparer, bool descending, OrderedAsyncEnumerable<TElement> parent)
+        public OrderedAsyncEnumerableWithTask(IAsyncEnumerable<TElement> source, Func<TElement, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending, OrderedAsyncEnumerable<TElement> parent)
         {
             Debug.Assert(source != null);
             Debug.Assert(keySelector != null);
@@ -282,9 +282,9 @@ namespace System.Linq
 
     internal sealed class AsyncKeySelectorAsyncEnumerableSorter<TElement, TKey> : AsyncEnumerableSorterBase<TElement, TKey>
     {
-        private readonly Func<TElement, Task<TKey>> _keySelector;
+        private readonly Func<TElement, ValueTask<TKey>> _keySelector;
 
-        public AsyncKeySelectorAsyncEnumerableSorter(Func<TElement, Task<TKey>> keySelector, IComparer<TKey> comparer, bool descending, AsyncEnumerableSorter<TElement> next)
+        public AsyncKeySelectorAsyncEnumerableSorter(Func<TElement, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending, AsyncEnumerableSorter<TElement> next)
             : base(comparer, descending, next)
         {
             _keySelector = keySelector;

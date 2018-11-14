@@ -47,7 +47,7 @@ namespace System.Linq
             return CountCore(source, predicate, cancellationToken);
         }
 
-        public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -57,7 +57,7 @@ namespace System.Linq
             return CountCore(source, predicate, CancellationToken.None);
         }
 
-        public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -133,7 +133,7 @@ namespace System.Linq
             return count;
         }
 
-        private static async Task<int> CountCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        private static async Task<int> CountCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
             var count = 0;
 

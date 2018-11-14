@@ -21,7 +21,7 @@ namespace System.Linq
             return new ExpandAsyncIterator<TSource>(source, selector);
         }
 
-        public static IAsyncEnumerable<TSource> Expand<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<IAsyncEnumerable<TSource>>> selector)
+        public static IAsyncEnumerable<TSource> Expand<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TSource>>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -123,14 +123,14 @@ namespace System.Linq
 
         private sealed class ExpandAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, Task<IAsyncEnumerable<TSource>>> _selector;
+            private readonly Func<TSource, ValueTask<IAsyncEnumerable<TSource>>> _selector;
             private readonly IAsyncEnumerable<TSource> _source;
 
             private IAsyncEnumerator<TSource> _enumerator;
 
             private Queue<IAsyncEnumerable<TSource>> _queue;
 
-            public ExpandAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<IAsyncEnumerable<TSource>>> selector)
+            public ExpandAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TSource>>> selector)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(selector != null);

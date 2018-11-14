@@ -792,7 +792,7 @@ namespace System.Linq
             return value;
         }
 
-        private static async Task<int> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<int>> selector, CancellationToken cancellationToken)
+        private static async Task<int> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken)
         {
             int value;
 
@@ -823,7 +823,7 @@ namespace System.Linq
             return value;
         }
 
-        private static async Task<int?> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<int?>> selector, CancellationToken cancellationToken)
+        private static async Task<int?> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken)
         {
             int? value = null;
 
@@ -869,7 +869,7 @@ namespace System.Linq
             return value;
         }
 
-        private static async Task<long> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<long>> selector, CancellationToken cancellationToken)
+        private static async Task<long> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken)
         {
             long value;
 
@@ -900,7 +900,7 @@ namespace System.Linq
             return value;
         }
 
-        private static async Task<long?> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<long?>> selector, CancellationToken cancellationToken)
+        private static async Task<long?> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken)
         {
             long? value = null;
 
@@ -942,7 +942,7 @@ namespace System.Linq
             return value;
         }
 
-        private static async Task<float> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<float>> selector, CancellationToken cancellationToken)
+        private static async Task<float> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken)
         {
             float value;
 
@@ -986,7 +986,7 @@ namespace System.Linq
             return value;
         }
 
-        private static async Task<float?> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<float?>> selector, CancellationToken cancellationToken)
+        private static async Task<float?> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken)
         {
             float? value = null;
 
@@ -1032,7 +1032,7 @@ namespace System.Linq
             return value;
         }
 
-        private static async Task<double> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<double>> selector, CancellationToken cancellationToken)
+        private static async Task<double> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken)
         {
             double value;
 
@@ -1067,7 +1067,7 @@ namespace System.Linq
             return value;
         }
 
-        private static async Task<double?> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<double?>> selector, CancellationToken cancellationToken)
+        private static async Task<double?> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken)
         {
             double? value = null;
 
@@ -1113,7 +1113,7 @@ namespace System.Linq
             return value;
         }
 
-        private static async Task<decimal> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal>> selector, CancellationToken cancellationToken)
+        private static async Task<decimal> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken)
         {
             decimal value;
 
@@ -1144,7 +1144,7 @@ namespace System.Linq
             return value;
         }
 
-        private static async Task<decimal?> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal?>> selector, CancellationToken cancellationToken)
+        private static async Task<decimal?> MinCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
         {
             decimal? value = null;
 

@@ -47,7 +47,7 @@ namespace System.Linq
             return DistinctUntilChangedCore(source, keySelector, comparer);
         }
 
-        public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector)
+        public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -57,7 +57,7 @@ namespace System.Linq
             return DistinctUntilChangedCore<TSource, TKey>(source, keySelector, comparer: null);
         }
 
-        public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -79,7 +79,7 @@ namespace System.Linq
             return new DistinctUntilChangedAsyncIterator<TSource, TKey>(source, keySelector, comparer);
         }
 
-        private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             return new DistinctUntilChangedAsyncIteratorWithTask<TSource, TKey>(source, keySelector, comparer);
         }
@@ -229,14 +229,14 @@ namespace System.Linq
         private sealed class DistinctUntilChangedAsyncIteratorWithTask<TSource, TKey> : AsyncIterator<TSource>
         {
             private readonly IEqualityComparer<TKey> _comparer;
-            private readonly Func<TSource, Task<TKey>> _keySelector;
+            private readonly Func<TSource, ValueTask<TKey>> _keySelector;
             private readonly IAsyncEnumerable<TSource> _source;
             private TKey _currentKeyValue;
 
             private IAsyncEnumerator<TSource> _enumerator;
             private bool _hasCurrentKey;
 
-            public DistinctUntilChangedAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+            public DistinctUntilChangedAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
             {
                 _source = source;
                 _keySelector = keySelector;

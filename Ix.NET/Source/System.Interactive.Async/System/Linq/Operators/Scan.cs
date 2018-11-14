@@ -31,7 +31,7 @@ namespace System.Linq
             return new ScanAsyncEnumerable<TSource, TAccumulate>(source, seed, accumulator);
         }
 
-        public static IAsyncEnumerable<TSource> Scan<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, Task<TSource>> accumulator)
+        public static IAsyncEnumerable<TSource> Scan<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> accumulator)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -41,7 +41,7 @@ namespace System.Linq
             return new ScanAsyncEnumerableWithTask<TSource>(source, accumulator);
         }
 
-        public static IAsyncEnumerable<TAccumulate> Scan<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, Task<TAccumulate>> accumulator)
+        public static IAsyncEnumerable<TAccumulate> Scan<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -191,7 +191,7 @@ namespace System.Linq
 
         private sealed class ScanAsyncEnumerableWithTask<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, TSource, Task<TSource>> _accumulator;
+            private readonly Func<TSource, TSource, ValueTask<TSource>> _accumulator;
             private readonly IAsyncEnumerable<TSource> _source;
 
             private TSource _accumulated;
@@ -199,7 +199,7 @@ namespace System.Linq
 
             private bool _hasSeed;
 
-            public ScanAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, Func<TSource, TSource, Task<TSource>> accumulator)
+            public ScanAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> accumulator)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(accumulator != null);
@@ -265,14 +265,14 @@ namespace System.Linq
 
         private sealed class ScanAsyncEnumerableWithTask<TSource, TAccumulate> : AsyncIterator<TAccumulate>
         {
-            private readonly Func<TAccumulate, TSource, Task<TAccumulate>> _accumulator;
+            private readonly Func<TAccumulate, TSource, ValueTask<TAccumulate>> _accumulator;
             private readonly TAccumulate _seed;
             private readonly IAsyncEnumerable<TSource> _source;
 
             private TAccumulate _accumulated;
             private IAsyncEnumerator<TSource> _enumerator;
 
-            public ScanAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, Task<TAccumulate>> accumulator)
+            public ScanAsyncEnumerableWithTask(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(accumulator != null);

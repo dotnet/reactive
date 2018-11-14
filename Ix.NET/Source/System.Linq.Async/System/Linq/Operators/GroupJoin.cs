@@ -42,7 +42,7 @@ namespace System.Linq
             return new GroupJoinAsyncEnumerable<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
         }
 
-        public static IAsyncEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, Task<TKey>> outerKeySelector, Func<TInner, Task<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, Task<TResult>> resultSelector)
+        public static IAsyncEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> resultSelector)
         {
             if (outer == null)
                 throw Error.ArgumentNull(nameof(outer));
@@ -58,7 +58,7 @@ namespace System.Linq
             return new GroupJoinAsyncEnumerableWithTask<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer: null);
         }
 
-        public static IAsyncEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, Task<TKey>> outerKeySelector, Func<TInner, Task<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, Task<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (outer == null)
                 throw Error.ArgumentNull(nameof(outer));
@@ -172,17 +172,17 @@ namespace System.Linq
         {
             private readonly IEqualityComparer<TKey> _comparer;
             private readonly IAsyncEnumerable<TInner> _inner;
-            private readonly Func<TInner, Task<TKey>> _innerKeySelector;
+            private readonly Func<TInner, ValueTask<TKey>> _innerKeySelector;
             private readonly IAsyncEnumerable<TOuter> _outer;
-            private readonly Func<TOuter, Task<TKey>> _outerKeySelector;
-            private readonly Func<TOuter, IAsyncEnumerable<TInner>, Task<TResult>> _resultSelector;
+            private readonly Func<TOuter, ValueTask<TKey>> _outerKeySelector;
+            private readonly Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> _resultSelector;
 
             public GroupJoinAsyncEnumerableWithTask(
                 IAsyncEnumerable<TOuter> outer,
                 IAsyncEnumerable<TInner> inner,
-                Func<TOuter, Task<TKey>> outerKeySelector,
-                Func<TInner, Task<TKey>> innerKeySelector,
-                Func<TOuter, IAsyncEnumerable<TInner>, Task<TResult>> resultSelector,
+                Func<TOuter, ValueTask<TKey>> outerKeySelector,
+                Func<TInner, ValueTask<TKey>> innerKeySelector,
+                Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> resultSelector,
                 IEqualityComparer<TKey> comparer)
             {
                 _outer = outer;
@@ -207,10 +207,10 @@ namespace System.Linq
             {
                 private readonly IEqualityComparer<TKey> _comparer;
                 private readonly IAsyncEnumerable<TInner> _inner;
-                private readonly Func<TInner, Task<TKey>> _innerKeySelector;
+                private readonly Func<TInner, ValueTask<TKey>> _innerKeySelector;
                 private readonly IAsyncEnumerator<TOuter> _outer;
-                private readonly Func<TOuter, Task<TKey>> _outerKeySelector;
-                private readonly Func<TOuter, IAsyncEnumerable<TInner>, Task<TResult>> _resultSelector;
+                private readonly Func<TOuter, ValueTask<TKey>> _outerKeySelector;
+                private readonly Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> _resultSelector;
                 private readonly CancellationToken _cancellationToken;
 
                 private Internal.LookupWithTask<TKey, TInner> _lookup;
@@ -218,9 +218,9 @@ namespace System.Linq
                 public GroupJoinAsyncEnumeratorWithTask(
                     IAsyncEnumerator<TOuter> outer,
                     IAsyncEnumerable<TInner> inner,
-                    Func<TOuter, Task<TKey>> outerKeySelector,
-                    Func<TInner, Task<TKey>> innerKeySelector,
-                    Func<TOuter, IAsyncEnumerable<TInner>, Task<TResult>> resultSelector,
+                    Func<TOuter, ValueTask<TKey>> outerKeySelector,
+                    Func<TInner, ValueTask<TKey>> innerKeySelector,
+                    Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> resultSelector,
                     IEqualityComparer<TKey> comparer,
                     CancellationToken cancellationToken)
                 {

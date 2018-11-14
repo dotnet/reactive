@@ -31,7 +31,7 @@ namespace System.Linq
             return new SkipWhileWithIndexAsyncIterator<TSource>(source, predicate);
         }
 
-        public static IAsyncEnumerable<TSource> SkipWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static IAsyncEnumerable<TSource> SkipWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -41,7 +41,7 @@ namespace System.Linq
             return new SkipWhileAsyncIteratorWithTask<TSource>(source, predicate);
         }
 
-        public static IAsyncEnumerable<TSource> SkipWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task<bool>> predicate)
+        public static IAsyncEnumerable<TSource> SkipWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -213,13 +213,13 @@ namespace System.Linq
 
         private sealed class SkipWhileAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, Task<bool>> _predicate;
+            private readonly Func<TSource, ValueTask<bool>> _predicate;
             private readonly IAsyncEnumerable<TSource> _source;
 
             private bool _doMoveNext;
             private IAsyncEnumerator<TSource> _enumerator;
 
-            public SkipWhileAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+            public SkipWhileAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
             {
                 Debug.Assert(predicate != null);
                 Debug.Assert(source != null);
@@ -289,14 +289,14 @@ namespace System.Linq
 
         private sealed class SkipWhileWithIndexAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
-            private readonly Func<TSource, int, Task<bool>> _predicate;
+            private readonly Func<TSource, int, ValueTask<bool>> _predicate;
             private readonly IAsyncEnumerable<TSource> _source;
 
             private bool _doMoveNext;
             private IAsyncEnumerator<TSource> _enumerator;
             private int _index;
 
-            public SkipWhileWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, Task<bool>> predicate)
+            public SkipWhileWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
             {
                 Debug.Assert(predicate != null);
                 Debug.Assert(source != null);
