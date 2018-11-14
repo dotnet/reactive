@@ -71,7 +71,7 @@ foreach (var o in os)
             return SumCore(source, selector, cancellationToken);
         }
 
-        public static Task<<#=o.type#>> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<<#=o.type#>>> selector)
+        public static Task<<#=o.type#>> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=o.type#>>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -81,7 +81,7 @@ foreach (var o in os)
             return SumCore(source, selector, CancellationToken.None);
         }
 
-        public static Task<<#=o.type#>> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<<#=o.type#>>> selector, CancellationToken cancellationToken)
+        public static Task<<#=o.type#>> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
