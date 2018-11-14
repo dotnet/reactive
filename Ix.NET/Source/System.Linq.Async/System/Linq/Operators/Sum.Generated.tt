@@ -167,7 +167,7 @@ else
             return sum;
         }
 
-        private static async Task<<#=o.type#>> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<<#=o.type#>>> selector, CancellationToken cancellationToken)
+        private static async Task<<#=o.type#>> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken)
         {
             var sum = <#=o.zero#>;
 
