@@ -68,7 +68,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.Reverse();
 
-            Assert.Equal(new[] { 3, 2, 1 }, await ys.ToArray());
+            Assert.Equal(new[] { 3, 2, 1 }, await ys.ToArrayAsync());
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.Reverse();
 
-            Assert.Equal(new[] { 3, 2, 1 }, await ys.ToList());
+            Assert.Equal(new[] { 3, 2, 1 }, await ys.ToListAsync());
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.Reverse();
 
-            Assert.Equal(3, await ys.Count());
+            Assert.Equal(3, await ys.CountAsync());
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.Reverse().Prepend(4); // to trigger onlyIfCheap
 
-            Assert.Equal(new[] { 4, 3, 2, 1 }, await ys.ToArray());
+            Assert.Equal(new[] { 4, 3, 2, 1 }, await ys.ToArrayAsync());
         }
     }
 }

@@ -105,7 +105,7 @@ namespace Tests
             var c = xs.Concat(ys).Concat(zs);
 
             var res = new[] { 1, 2, 3, 4, 5, 6, 7, 8 };
-            Assert.True(res.SequenceEqual(await c.ToArray()));
+            Assert.True(res.SequenceEqual(await c.ToArrayAsync()));
         }
 
         [Fact]
@@ -118,7 +118,7 @@ namespace Tests
             var c = xs.Concat(ys).Concat(zs);
 
             var res = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
-            Assert.True(res.SequenceEqual(await c.ToList()));
+            Assert.True(res.SequenceEqual(await c.ToListAsync()));
         }
 
         [Fact]
@@ -130,7 +130,7 @@ namespace Tests
 
             var c = xs.Concat(ys).Concat(zs);
 
-            Assert.Equal(8, await c.Count());
+            Assert.Equal(8, await c.CountAsync());
         }
     }
 }

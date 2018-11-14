@@ -122,7 +122,7 @@ namespace System.Linq
 
                         checked
                         {
-                            count += await source.Count(cancellationToken).ConfigureAwait(false);
+                            count += await source.CountAsync(cancellationToken).ConfigureAwait(false);
                         }
                     }
 

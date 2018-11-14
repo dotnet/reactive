@@ -53,7 +53,7 @@ namespace Tests
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
 
             var res = new[] { 1, 2, 3, 5, 4 };
-            Assert.True(res.SequenceEqual(await xs.ToArray()));
+            Assert.True(res.SequenceEqual(await xs.ToArrayAsync()));
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Tests
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
 
             var res = new List<int> { 1, 2, 3, 5, 4 };
-            Assert.True(res.SequenceEqual(await xs.ToList()));
+            Assert.True(res.SequenceEqual(await xs.ToListAsync()));
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
 
-            Assert.Equal(5, await xs.Count());
+            Assert.Equal(5, await xs.CountAsync());
         }
 
         [Fact]

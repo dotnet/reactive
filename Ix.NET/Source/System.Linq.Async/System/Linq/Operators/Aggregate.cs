@@ -10,7 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<TSource> Aggregate<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
+        public static Task<TSource> AggregateAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -20,7 +20,7 @@ namespace System.Linq
             return AggregateCore(source, accumulator, CancellationToken.None);
         }
 
-        public static Task<TSource> Aggregate<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator, CancellationToken cancellationToken)
+        public static Task<TSource> AggregateAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -30,7 +30,7 @@ namespace System.Linq
             return AggregateCore(source, accumulator, cancellationToken);
         }
 
-        public static Task<TSource> Aggregate<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> accumulator)
+        public static Task<TSource> AggregateAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> accumulator)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -40,7 +40,7 @@ namespace System.Linq
             return AggregateCore(source, accumulator, CancellationToken.None);
         }
 
-        public static Task<TSource> Aggregate<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> accumulator, CancellationToken cancellationToken)
+        public static Task<TSource> AggregateAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> accumulator, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -50,7 +50,7 @@ namespace System.Linq
             return AggregateCore(source, accumulator, cancellationToken);
         }
 
-        public static Task<TAccumulate> Aggregate<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
+        public static Task<TAccumulate> AggregateAsync<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -60,7 +60,7 @@ namespace System.Linq
             return AggregateCore(source, seed, accumulator, x => x, CancellationToken.None);
         }
 
-        public static Task<TAccumulate> Aggregate<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, CancellationToken cancellationToken)
+        public static Task<TAccumulate> AggregateAsync<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -70,7 +70,7 @@ namespace System.Linq
             return AggregateCore(source, seed, accumulator, x => x, cancellationToken);
         }
 
-        public static Task<TAccumulate> Aggregate<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator)
+        public static Task<TAccumulate> AggregateAsync<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -80,7 +80,7 @@ namespace System.Linq
             return AggregateCore(source, seed, accumulator, CancellationToken.None);
         }
 
-        public static Task<TAccumulate> Aggregate<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, CancellationToken cancellationToken)
+        public static Task<TAccumulate> AggregateAsync<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -90,7 +90,7 @@ namespace System.Linq
             return AggregateCore(source, seed, accumulator, cancellationToken);
         }
 
-        public static Task<TResult> Aggregate<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, Func<TAccumulate, TResult> resultSelector)
+        public static Task<TResult> AggregateAsync<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, Func<TAccumulate, TResult> resultSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -102,7 +102,7 @@ namespace System.Linq
             return AggregateCore(source, seed, accumulator, resultSelector, CancellationToken.None);
         }
 
-        public static Task<TResult> Aggregate<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, Func<TAccumulate, TResult> resultSelector, CancellationToken cancellationToken)
+        public static Task<TResult> AggregateAsync<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, Func<TAccumulate, TResult> resultSelector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -114,7 +114,7 @@ namespace System.Linq
             return AggregateCore(source, seed, accumulator, resultSelector, cancellationToken);
         }
 
-        public static Task<TResult> Aggregate<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, Func<TAccumulate, ValueTask<TResult>> resultSelector)
+        public static Task<TResult> AggregateAsync<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, Func<TAccumulate, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -126,7 +126,7 @@ namespace System.Linq
             return AggregateCore(source, seed, accumulator, resultSelector, CancellationToken.None);
         }
 
-        public static Task<TResult> Aggregate<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, Func<TAccumulate, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken)
+        public static Task<TResult> AggregateAsync<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> accumulator, Func<TAccumulate, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

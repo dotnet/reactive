@@ -10,7 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source)
+        public static Task<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -18,7 +18,7 @@ namespace System.Linq
             return SingleCore(source, CancellationToken.None);
         }
 
-        public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        public static Task<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -26,7 +26,7 @@ namespace System.Linq
             return SingleCore(source, cancellationToken);
         }
 
-        public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static Task<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -36,7 +36,7 @@ namespace System.Linq
             return SingleCore(source, predicate, CancellationToken.None);
         }
 
-        public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        public static Task<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -46,7 +46,7 @@ namespace System.Linq
             return SingleCore(source, predicate, cancellationToken);
         }
 
-        public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
+        public static Task<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -56,7 +56,7 @@ namespace System.Linq
             return SingleCore(source, predicate, CancellationToken.None);
         }
 
-        public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        public static Task<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

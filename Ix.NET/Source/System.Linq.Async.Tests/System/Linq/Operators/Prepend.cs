@@ -43,7 +43,7 @@ namespace Tests
 
             var a = new[] { 4, 1, 2, 3 };
 
-            var arr = await res.ToArray();
+            var arr = await res.ToArrayAsync();
             Assert.Equal(a, arr);
         }
 
@@ -56,7 +56,7 @@ namespace Tests
 
             var a = new List<int> { 4, 1, 2, 3 };
 
-            var arr = await res.ToList();
+            var arr = await res.ToListAsync();
             Assert.Equal(a, arr);
         }
 
@@ -66,7 +66,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Prepend(4);
-            Assert.Equal(4, await res.Count());
+            Assert.Equal(4, await res.CountAsync());
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace Tests
 
             var a = new[] { 4, 1, 2, 3 };
 
-            var arr = await res.ToArray();
+            var arr = await res.ToArrayAsync();
             Assert.Equal(a, arr);
         }
 
@@ -91,7 +91,7 @@ namespace Tests
 
             var a = new List<int> { 4, 1, 2, 3 };
 
-            var arr = await res.ToList();
+            var arr = await res.ToListAsync();
             Assert.Equal(a, arr);
         }
 
@@ -101,7 +101,7 @@ namespace Tests
             var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
             var res = xs.Prepend(4);
-            Assert.Equal(4, await res.Count());
+            Assert.Equal(4, await res.CountAsync());
         }
 
         [Fact]
@@ -145,7 +145,7 @@ namespace Tests
 
             var a = new[] { 6, 5, 4, 1, 2, 3 };
 
-            var arr = await res.ToArray();
+            var arr = await res.ToArrayAsync();
             Assert.Equal(a, arr);
         }
 
@@ -160,7 +160,7 @@ namespace Tests
 
             var a = new List<int> { 6, 5, 4, 1, 2, 3 };
 
-            var arr = await res.ToList();
+            var arr = await res.ToListAsync();
             Assert.Equal(a, arr);
         }
 
@@ -173,7 +173,7 @@ namespace Tests
                         .Prepend(5)
                         .Prepend(6);
 
-            Assert.Equal(6, await res.Count());
+            Assert.Equal(6, await res.CountAsync());
         }
 
         [Fact]
@@ -187,7 +187,7 @@ namespace Tests
 
             var a = new[] { 6, 5, 4, 1, 2, 3 };
 
-            var arr = await res.ToArray();
+            var arr = await res.ToArrayAsync();
             Assert.Equal(a, arr);
         }
 
@@ -202,7 +202,7 @@ namespace Tests
 
             var a = new List<int> { 6, 5, 4, 1, 2, 3 };
 
-            var arr = await res.ToList();
+            var arr = await res.ToListAsync();
             Assert.Equal(a, arr);
         }
 
@@ -215,7 +215,7 @@ namespace Tests
                         .Prepend(5)
                         .Prepend(6);
 
-            Assert.Equal(6, await res.Count());
+            Assert.Equal(6, await res.CountAsync());
         }
     }
 }

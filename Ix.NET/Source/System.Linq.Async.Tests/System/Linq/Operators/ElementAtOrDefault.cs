@@ -15,49 +15,49 @@ namespace Tests
         [Fact]
         public async Task ElementAtOrDefault_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefault<int>(default, 0));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefault<int>(default, 0, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefaultAsync<int>(default, 0));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefaultAsync<int>(default, 0, CancellationToken.None));
         }
 
         [Fact]
         public async Task ElementAtOrDefault1Async()
         {
-            var res = AsyncEnumerable.Empty<int>().ElementAtOrDefault(0);
+            var res = AsyncEnumerable.Empty<int>().ElementAtOrDefaultAsync(0);
             Assert.Equal(0, await res);
         }
 
         [Fact]
         public async Task ElementAtOrDefault2Async()
         {
-            var res = Return42.ElementAtOrDefault(0);
+            var res = Return42.ElementAtOrDefaultAsync(0);
             Assert.Equal(42, await res);
         }
 
         [Fact]
         public async Task ElementAtOrDefault3Async()
         {
-            var res = Return42.ElementAtOrDefault(1);
+            var res = Return42.ElementAtOrDefaultAsync(1);
             Assert.Equal(0, await res);
         }
 
         [Fact]
         public async Task ElementAtOrDefault4Async()
         {
-            var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAtOrDefault(1);
+            var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAtOrDefaultAsync(1);
             Assert.Equal(42, await res);
         }
 
         [Fact]
         public async Task ElementAtOrDefault5Async()
         {
-            var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAtOrDefault(7);
+            var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAtOrDefaultAsync(7);
             Assert.Equal(0, await res);
         }
 
         [Fact]
         public async Task ElementAtOrDefault6Async()
         {
-            var res = Return42.ElementAtOrDefault(-1);
+            var res = Return42.ElementAtOrDefaultAsync(-1);
             Assert.Equal(0, await res);
         }
 
@@ -65,7 +65,7 @@ namespace Tests
         public async Task ElementAtOrDefault7Async()
         {
             var ex = new Exception("Bang!");
-            var res = Throw<int>(ex).ElementAtOrDefault(15);
+            var res = Throw<int>(ex).ElementAtOrDefaultAsync(15);
             await AssertThrowsAsync(res, ex);
         }
     }

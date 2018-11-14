@@ -118,7 +118,7 @@ namespace Tests
 
             var xs = set.ToAsyncEnumerable();
 
-            var arr = await xs.ToArray();
+            var arr = await xs.ToArrayAsync();
 
             Assert.True(set.SetEquals(arr));
         }
@@ -129,7 +129,7 @@ namespace Tests
             var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
             var xs = set.ToAsyncEnumerable();
 
-            var arr = await xs.ToList();
+            var arr = await xs.ToListAsync();
 
             Assert.True(set.SetEquals(arr));
         }
@@ -140,7 +140,7 @@ namespace Tests
             var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
             var xs = set.ToAsyncEnumerable();
 
-            var c = await xs.Count();
+            var c = await xs.CountAsync();
 
             Assert.Equal(set.Count, c);
         }

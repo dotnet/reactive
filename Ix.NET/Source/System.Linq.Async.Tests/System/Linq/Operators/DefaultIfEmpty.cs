@@ -112,7 +112,7 @@ namespace Tests
 
             var res = new[] { 42 };
 
-            Assert.True(res.SequenceEqual(await xs.ToArray()));
+            Assert.True(res.SequenceEqual(await xs.ToArrayAsync()));
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace Tests
 
             var res = new List<int> { 42 };
 
-            Assert.True(res.SequenceEqual(await xs.ToList()));
+            Assert.True(res.SequenceEqual(await xs.ToListAsync()));
         }
 
         [Fact]
@@ -130,7 +130,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty(42);
 
-            Assert.Equal(1, await xs.Count());
+            Assert.Equal(1, await xs.CountAsync());
         }
 
 
@@ -141,7 +141,7 @@ namespace Tests
 
             var res = new[] { 1, 2, 3, 4 };
 
-            Assert.True(res.SequenceEqual(await xs.ToArray()));
+            Assert.True(res.SequenceEqual(await xs.ToArrayAsync()));
         }
 
         [Fact]
@@ -151,7 +151,7 @@ namespace Tests
 
             var res = new List<int> { 1, 2, 3, 4 };
 
-            Assert.True(res.SequenceEqual(await xs.ToList()));
+            Assert.True(res.SequenceEqual(await xs.ToListAsync()));
         }
 
         [Fact]
@@ -159,7 +159,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty(24);
 
-            Assert.Equal(4, await xs.Count());
+            Assert.Equal(4, await xs.CountAsync());
         }
 
         [Fact]

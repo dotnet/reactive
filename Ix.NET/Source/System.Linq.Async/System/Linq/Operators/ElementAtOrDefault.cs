@@ -10,7 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index)
+        public static Task<TSource> ElementAtOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, int index)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -18,7 +18,7 @@ namespace System.Linq
             return ElementAtOrDefaultCore(source, index, CancellationToken.None);
         }
 
-        public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
+        public static Task<TSource> ElementAtOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

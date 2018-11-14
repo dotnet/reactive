@@ -15,15 +15,15 @@ namespace Tests
         [Fact]
         public async Task ToList_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToList<int>(default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToList<int>(default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToListAsync<int>(default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToListAsync<int>(default, CancellationToken.None));
         }
 
         [Fact]
         public async Task ToList1()
         {
             var xs = new[] { 42, 25, 39 };
-            var res = xs.ToAsyncEnumerable().ToList();
+            var res = xs.ToAsyncEnumerable().ToListAsync();
             Assert.True((await res).SequenceEqual(xs));
         }
 
@@ -31,7 +31,7 @@ namespace Tests
         public async Task ToList2()
         {
             var xs = AsyncEnumerable.Empty<int>();
-            var res = xs.ToList();
+            var res = xs.ToListAsync();
             Assert.True((await res).Count == 0);
         }
 
@@ -39,7 +39,7 @@ namespace Tests
         public async Task ToList3Async()
         {
             var ex = new Exception("Bang!");
-            var res = Throw<int>(ex).ToList();
+            var res = Throw<int>(ex).ToListAsync();
             await AssertThrowsAsync(res, ex);
         }
     }

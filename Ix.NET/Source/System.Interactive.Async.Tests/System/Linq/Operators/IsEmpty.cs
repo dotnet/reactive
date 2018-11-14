@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,8 +15,8 @@ namespace Tests
         [Fact]
         public async Task IsEmpty_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmpty<int>(default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmpty<int>(default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmptyAsync<int>(default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmptyAsync<int>(default, CancellationToken.None));
         }
     }
 }

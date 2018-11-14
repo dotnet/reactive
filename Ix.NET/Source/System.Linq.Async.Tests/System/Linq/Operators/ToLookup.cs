@@ -17,40 +17,40 @@ namespace Tests
         [Fact]
         public async Task ToLookup_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int>(default, x => 0));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup(Return42, default(Func<int, int>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int>(default, x => 0));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync(Return42, default(Func<int, int>)));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int>(default, x => 0, EqualityComparer<int>.Default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup(Return42, default(Func<int, int>), EqualityComparer<int>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int>(default, x => 0, EqualityComparer<int>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync(Return42, default(Func<int, int>), EqualityComparer<int>.Default));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int, int>(default, x => 0, x => 0));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int, int>(Return42, default, x => 0));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int, int>(Return42, x => 0, default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int, int>(default, x => 0, x => 0));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int, int>(Return42, default, x => 0));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int, int>(Return42, x => 0, default));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int, int>(default, x => 0, x => 0, EqualityComparer<int>.Default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup(Return42, default, x => 0, EqualityComparer<int>.Default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int, int>(Return42, x => 0, default, EqualityComparer<int>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int, int>(default, x => 0, x => 0, EqualityComparer<int>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync(Return42, default, x => 0, EqualityComparer<int>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int, int>(Return42, x => 0, default, EqualityComparer<int>.Default));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int>(default, x => 0, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup(Return42, default(Func<int, int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int>(default, x => 0, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync(Return42, default(Func<int, int>), CancellationToken.None));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int>(default, x => 0, EqualityComparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup(Return42, default(Func<int, int>), EqualityComparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int>(default, x => 0, EqualityComparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync(Return42, default(Func<int, int>), EqualityComparer<int>.Default, CancellationToken.None));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int, int>(default, x => 0, x => 0, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int, int>(Return42, default, x => 0, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int, int>(Return42, x => 0, default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int, int>(default, x => 0, x => 0, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int, int>(Return42, default, x => 0, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int, int>(Return42, x => 0, default, CancellationToken.None));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int, int>(default, x => 0, x => 0, EqualityComparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup(Return42, default, x => 0, EqualityComparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookup<int, int, int>(Return42, x => 0, default, EqualityComparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int, int>(default, x => 0, x => 0, EqualityComparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync(Return42, default, x => 0, EqualityComparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToLookupAsync<int, int, int>(Return42, x => 0, default, EqualityComparer<int>.Default, CancellationToken.None));
         }
 
         [Fact]
         public async Task ToLookup1Async()
         {
             var xs = new[] { 1, 4 }.ToAsyncEnumerable();
-            var res = await xs.ToLookup(x => x % 2);
+            var res = await xs.ToLookupAsync(x => x % 2);
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(4, res[0]);
@@ -62,7 +62,7 @@ namespace Tests
         public async Task ToLookup2Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            var res = await xs.ToLookup(x => x % 2);
+            var res = await xs.ToLookupAsync(x => x % 2);
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(4, res[0]);
@@ -75,7 +75,7 @@ namespace Tests
         public async Task ToLookup3Async()
         {
             var xs = new[] { 1, 4 }.ToAsyncEnumerable();
-            var res = await xs.ToLookup(x => x % 2, x => x + 1);
+            var res = await xs.ToLookupAsync(x => x % 2, x => x + 1);
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(5, res[0]);
@@ -87,7 +87,7 @@ namespace Tests
         public async Task ToLookup4Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            var res = await xs.ToLookup(x => x % 2, x => x + 1);
+            var res = await xs.ToLookupAsync(x => x % 2, x => x + 1);
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(5, res[0]);
@@ -100,7 +100,7 @@ namespace Tests
         public async Task ToLookup5Async()
         {
             var xs = new[] { 1, 4 }.ToAsyncEnumerable();
-            var res = await xs.ToLookup(x => x % 2, new Eq());
+            var res = await xs.ToLookupAsync(x => x % 2, new Eq());
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(4, res[0]);
@@ -112,7 +112,7 @@ namespace Tests
         public async Task ToLookup6Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            var res = await xs.ToLookup(x => x % 2, new Eq());
+            var res = await xs.ToLookupAsync(x => x % 2, new Eq());
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(4, res[0]);
@@ -125,7 +125,7 @@ namespace Tests
         public async Task ToLookup7Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            var res = await xs.ToLookup(x => x % 2);
+            var res = await xs.ToLookupAsync(x => x % 2);
             foreach (var g in res)
                 Assert.True(g.Key == 0 || g.Key == 1);
         }
@@ -134,7 +134,7 @@ namespace Tests
         public async Task ToLookup8Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            var res = await xs.ToLookup(x => x % 2);
+            var res = await xs.ToLookupAsync(x => x % 2);
 #pragma warning disable IDE0007 // Use implicit type
             foreach (IGrouping<int, int> g in (IEnumerable)res)
                 Assert.True(g.Key == 0 || g.Key == 1);
@@ -145,7 +145,7 @@ namespace Tests
         public async Task ToLookup9Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            var res = await xs.ToLookup(x => x % 2, x => x, new Eq());
+            var res = await xs.ToLookupAsync(x => x % 2, x => x, new Eq());
             Assert.True(res.Contains(0));
             Assert.True(res.Contains(1));
             Assert.Contains(4, res[0]);

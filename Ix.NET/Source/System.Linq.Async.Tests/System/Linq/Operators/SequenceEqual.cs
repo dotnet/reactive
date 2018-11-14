@@ -16,24 +16,24 @@ namespace Tests
         [Fact]
         public async Task SequenceEqual_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual(default, Return42));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual(Return42, default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(default, Return42));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(Return42, default));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual(default, Return42, new Eq()));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual(Return42, default, new Eq()));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(default, Return42, new Eq()));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(Return42, default, new Eq()));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual(default, Return42, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual(Return42, default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(default, Return42, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(Return42, default, CancellationToken.None));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual(default, Return42, new Eq(), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqual(Return42, default, new Eq(), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(default, Return42, new Eq(), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(Return42, default, new Eq(), CancellationToken.None));
         }
 
         [Fact]
         public async Task SequenceEqual1Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
-            var res = xs.SequenceEqual(xs);
+            var res = xs.SequenceEqualAsync(xs);
             Assert.True(await res);
         }
 
@@ -41,7 +41,7 @@ namespace Tests
         public async Task SequenceEqual2Async()
         {
             var xs = AsyncEnumerable.Empty<int>();
-            var res = xs.SequenceEqual(xs);
+            var res = xs.SequenceEqualAsync(xs);
             Assert.True(await res);
         }
 
@@ -50,7 +50,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 1, 3, 2 }.ToAsyncEnumerable();
-            var res = xs.SequenceEqual(ys);
+            var res = xs.SequenceEqualAsync(ys);
             Assert.False(await res);
         }
 
@@ -59,7 +59,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable();
-            var res = xs.SequenceEqual(ys);
+            var res = xs.SequenceEqualAsync(ys);
             Assert.False(await res);
         }
 
@@ -68,7 +68,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var res = xs.SequenceEqual(ys);
+            var res = xs.SequenceEqualAsync(ys);
             Assert.False(await res);
         }
 
@@ -78,7 +78,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = Throw<int>(ex);
-            var res = xs.SequenceEqual(ys);
+            var res = xs.SequenceEqualAsync(ys);
 
             await AssertThrowsAsync(res, ex);
         }
@@ -89,7 +89,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var res = xs.SequenceEqual(ys);
+            var res = xs.SequenceEqualAsync(ys);
 
             await AssertThrowsAsync(res, ex);
         }
@@ -98,7 +98,7 @@ namespace Tests
         public async Task SequenceEqual8Async()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
-            var res = xs.SequenceEqual(xs, new Eq());
+            var res = xs.SequenceEqualAsync(xs, new Eq());
             Assert.True(await res);
         }
 
@@ -106,7 +106,7 @@ namespace Tests
         public async Task SequenceEqual9Async()
         {
             var xs = AsyncEnumerable.Empty<int>();
-            var res = xs.SequenceEqual(xs, new Eq());
+            var res = xs.SequenceEqualAsync(xs, new Eq());
             Assert.True(await res);
         }
 
@@ -115,7 +115,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 1, 3, 2 }.ToAsyncEnumerable();
-            var res = xs.SequenceEqual(ys, new Eq());
+            var res = xs.SequenceEqualAsync(ys, new Eq());
             Assert.False(await res);
         }
 
@@ -124,7 +124,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable();
-            var res = xs.SequenceEqual(ys, new Eq());
+            var res = xs.SequenceEqualAsync(ys, new Eq());
             Assert.False(await res);
         }
 
@@ -133,7 +133,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var res = xs.SequenceEqual(ys, new Eq());
+            var res = xs.SequenceEqualAsync(ys, new Eq());
             Assert.False(await res);
         }
 
@@ -143,7 +143,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = Throw<int>(ex);
-            var res = xs.SequenceEqual(ys, new Eq());
+            var res = xs.SequenceEqualAsync(ys, new Eq());
 
             await AssertThrowsAsync(res, ex);
         }
@@ -154,7 +154,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var res = xs.SequenceEqual(ys, new Eq());
+            var res = xs.SequenceEqualAsync(ys, new Eq());
 
             await AssertThrowsAsync(res, ex);
         }
@@ -164,7 +164,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, -3, 4 }.ToAsyncEnumerable();
             var ys = new[] { 1, -2, 3, 4 }.ToAsyncEnumerable();
-            var res = xs.SequenceEqual(ys, new Eq());
+            var res = xs.SequenceEqualAsync(ys, new Eq());
             Assert.True(await res);
         }
 
@@ -173,7 +173,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, -3, 4 }.ToAsyncEnumerable();
             var ys = new[] { 1, -2, 3, 4 }.ToAsyncEnumerable();
-            var res = xs.SequenceEqual(ys, new EqEx());
+            var res = xs.SequenceEqualAsync(ys, new EqEx());
             await AssertThrowsAsync<NotImplementedException>(res);
         }
 

@@ -10,7 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
+        public static Task<bool> AllAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -20,7 +20,7 @@ namespace System.Linq
             return AllCore(source, predicate, CancellationToken.None);
         }
 
-        public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        public static Task<bool> AllAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -30,7 +30,7 @@ namespace System.Linq
             return AllCore(source, predicate, cancellationToken);
         }
 
-        public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
+        public static Task<bool> AllAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -40,7 +40,7 @@ namespace System.Linq
             return AllCore(source, predicate, CancellationToken.None);
         }
 
-        public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        public static Task<bool> AllAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

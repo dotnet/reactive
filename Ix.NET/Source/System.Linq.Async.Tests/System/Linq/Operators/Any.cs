@@ -15,26 +15,26 @@ namespace Tests
         [Fact]
         public async Task Any_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(default, x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any(Return42, default(Func<int, bool>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AnyAsync<int>(default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AnyAsync<int>(default, x => true));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AnyAsync(Return42, default(Func<int, bool>)));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(default, x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any(Return42, default(Func<int, bool>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AnyAsync<int>(default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AnyAsync<int>(default, x => true, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AnyAsync(Return42, default(Func<int, bool>), CancellationToken.None));
         }
 
         [Fact]
         public async Task Any1Async()
         {
-            var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Any(x => x % 2 == 0);
+            var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().AnyAsync(x => x % 2 == 0);
             Assert.True(await res);
         }
 
         [Fact]
         public async Task Any2Async()
         {
-            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().Any(x => x % 2 != 0);
+            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AnyAsync(x => x % 2 != 0);
             Assert.False(await res);
         }
 
@@ -42,7 +42,7 @@ namespace Tests
         public async Task Any3Async()
         {
             var ex = new Exception("Bang!");
-            var res = Throw<int>(ex).Any(x => x % 2 == 0);
+            var res = Throw<int>(ex).AnyAsync(x => x % 2 == 0);
             await AssertThrowsAsync(res, ex);
         }
 
@@ -50,21 +50,21 @@ namespace Tests
         public async Task Any4Async()
         {
             var ex = new Exception("Bang!");
-            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().Any(new Func<int, bool>(x => { throw ex; }));
+            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AnyAsync(new Func<int, bool>(x => { throw ex; }));
             await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
         public async Task Any5Async()
         {
-            var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Any();
+            var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().AnyAsync();
             Assert.True(await res);
         }
 
         [Fact]
         public async Task Any6Async()
         {
-            var res = new int[0].ToAsyncEnumerable().Any();
+            var res = new int[0].ToAsyncEnumerable().AnyAsync();
             Assert.False(await res);
         }
     }

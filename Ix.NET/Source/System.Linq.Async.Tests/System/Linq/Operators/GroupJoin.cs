@@ -34,7 +34,7 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = new[] { 4, 7, 6, 2, 3, 4, 8, 9 }.ToAsyncEnumerable();
 
-            var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
+            var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.AggregateAsync("", (s, j) => s + j).Result);
 
             var e = res.GetAsyncEnumerator();
             await HasNextAsync(e, "0 - 639");
@@ -49,7 +49,7 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = new[] { 3, 6, 4 }.ToAsyncEnumerable();
 
-            var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
+            var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.AggregateAsync("", (s, j) => s + j).Result);
 
             var e = res.GetAsyncEnumerator();
             await HasNextAsync(e, "0 - 36");
@@ -65,7 +65,7 @@ namespace Tests
             var xs = Throw<int>(ex);
             var ys = new[] { 3, 6, 4 }.ToAsyncEnumerable();
 
-            var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
+            var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.AggregateAsync("", (s, j) => s + j).Result);
 
             var e = res.GetAsyncEnumerator();
             await AssertThrowsAsync(e.MoveNextAsync(), ex);
@@ -78,7 +78,7 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = Throw<int>(ex);
 
-            var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
+            var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.AggregateAsync("", (s, j) => s + j).Result);
 
             var e = res.GetAsyncEnumerator();
             await AssertThrowsAsync(e.MoveNextAsync(), ex);
@@ -91,7 +91,7 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = new[] { 3, 6, 4 }.ToAsyncEnumerable();
 
-            var res = xs.GroupJoin(ys, x => { throw ex; }, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
+            var res = xs.GroupJoin(ys, x => { throw ex; }, y => y % 3, (x, i) => x + " - " + i.AggregateAsync("", (s, j) => s + j).Result);
 
             var e = res.GetAsyncEnumerator();
             await AssertThrowsAsync(e.MoveNextAsync(), ex);
@@ -104,7 +104,7 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = new[] { 3, 6, 4 }.ToAsyncEnumerable();
 
-            var res = xs.GroupJoin(ys, x => x % 3, y => { throw ex; }, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
+            var res = xs.GroupJoin(ys, x => x % 3, y => { throw ex; }, (x, i) => x + " - " + i.AggregateAsync("", (s, j) => s + j).Result);
 
             var e = res.GetAsyncEnumerator();
             await AssertThrowsAsync(e.MoveNextAsync(), ex);
@@ -121,7 +121,7 @@ namespace Tests
             {
                 if (x == 1)
                     throw ex;
-                return x + " - " + i.Aggregate("", (s, j) => s + j).Result;
+                return x + " - " + i.AggregateAsync("", (s, j) => s + j).Result;
             });
 
             var e = res.GetAsyncEnumerator();

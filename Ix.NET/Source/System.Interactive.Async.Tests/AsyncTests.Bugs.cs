@@ -88,7 +88,7 @@ namespace Tests
                 .Take(1)
                 .Do(_ => { });
 
-            Assert.Equal("Check", await enumerable.First());
+            Assert.Equal("Check", await enumerable.FirstAsync());
         }
 
         [Fact]
@@ -96,7 +96,7 @@ namespace Tests
         {
             var disposeCounter = new DisposeCounter();
 
-            var result = await new[] { 1 }.ToAsyncEnumerable().SelectMany(i => disposeCounter).Select(i => i).ToList();
+            var result = await new[] { 1 }.ToAsyncEnumerable().SelectMany(i => disposeCounter).Select(i => i).ToListAsync();
 
             Assert.Empty(result);
             Assert.Equal(1, disposeCounter.DisposeCount);
@@ -107,7 +107,7 @@ namespace Tests
         {
             var disposes = Enumerable.Range(0, 10).Select(_ => new DisposeCounter()).ToList();
 
-            var result = await AsyncEnumerable.Range(0, 10).SelectMany(i => disposes[i]).Select(i => i).ToList();
+            var result = await AsyncEnumerable.Range(0, 10).SelectMany(i => disposes[i]).Select(i => i).ToListAsync();
 
             Assert.Empty(result);
             Assert.True(disposes.All(d => d.DisposeCount == 1));

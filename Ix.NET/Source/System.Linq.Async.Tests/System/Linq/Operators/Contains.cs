@@ -16,18 +16,18 @@ namespace Tests
         [Fact]
         public async Task Contains_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains(default, 42));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains(default, 42, EqualityComparer<int>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42, EqualityComparer<int>.Default));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains(default, 42, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains(default, 42, EqualityComparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42, EqualityComparer<int>.Default, CancellationToken.None));
         }
 
         [Fact]
         public async Task Contains1Async()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
-            var ys = xs.Contains(3);
+            var ys = xs.ContainsAsync(3);
             Assert.True(await ys);
         }
 
@@ -35,7 +35,7 @@ namespace Tests
         public async Task Contains2Async()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
-            var ys = xs.Contains(6);
+            var ys = xs.ContainsAsync(6);
             Assert.False(await ys);
         }
 
@@ -43,7 +43,7 @@ namespace Tests
         public async Task Contains3Async()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
-            var ys = xs.Contains(-3, new Eq());
+            var ys = xs.ContainsAsync(-3, new Eq());
             Assert.True(await ys);
         }
 
@@ -51,7 +51,7 @@ namespace Tests
         public async Task Contains4Async()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
-            var ys = xs.Contains(-6, new Eq());
+            var ys = xs.ContainsAsync(-6, new Eq());
             Assert.False(await ys);
         }
 

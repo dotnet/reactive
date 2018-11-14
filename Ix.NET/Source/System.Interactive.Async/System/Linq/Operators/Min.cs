@@ -10,7 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
-        public static Task<TSource> Min<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer)
+        public static Task<TSource> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -18,7 +18,7 @@ namespace System.Linq
             return MinCore(source, comparer, CancellationToken.None);
         }
 
-        public static Task<TSource> Min<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+        public static Task<TSource> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

@@ -10,7 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<List<TSource>> ToList<TSource>(this IAsyncEnumerable<TSource> source)
+        public static Task<List<TSource>> ToListAsync<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -18,7 +18,7 @@ namespace System.Linq
             return ToListCore(source, CancellationToken.None);
         }
 
-        public static Task<List<TSource>> ToList<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        public static Task<List<TSource>> ToListAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

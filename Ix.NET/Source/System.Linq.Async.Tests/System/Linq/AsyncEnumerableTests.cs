@@ -59,8 +59,8 @@ namespace Tests
             await en1.DisposeAsync();
             await en2.DisposeAsync();
 
-            var res1 = await enumerable.ToList();
-            var res2 = await enumerable.ToList();
+            var res1 = await enumerable.ToListAsync();
+            var res2 = await enumerable.ToListAsync();
 
             res1.ShouldAllBeEquivalentTo(res2);
         }

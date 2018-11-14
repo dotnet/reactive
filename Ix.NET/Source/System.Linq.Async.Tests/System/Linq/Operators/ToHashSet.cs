@@ -16,17 +16,17 @@ namespace Tests
         [Fact]
         public async Task ToHashSet_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSetAsync<int>(default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSetAsync<int>(default, CancellationToken.None));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet(default, EqualityComparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSetAsync(default, EqualityComparer<int>.Default, CancellationToken.None));
         }
 
         [Fact]
         public async Task ToHashSet1()
         {
             var xs = new[] { 1, 2, 1, 2, 3, 4, 1, 2, 3, 4 };
-            var res = xs.ToAsyncEnumerable().ToHashSet();
+            var res = xs.ToAsyncEnumerable().ToHashSetAsync();
             Assert.True((await res).OrderBy(x => x).SequenceEqual(new[] { 1, 2, 3, 4 }));
         }
     }

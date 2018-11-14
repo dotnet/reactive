@@ -36,7 +36,7 @@ namespace System.Linq
 
             public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var array = await _source.ToArray(cancellationToken).ConfigureAwait(false);
+                var array = await _source.ToArrayAsync(cancellationToken).ConfigureAwait(false);
 
                 // Array.Reverse() involves boxing for non-primitive value types, but
                 // checking that has its own cost, so just use this approach for all types.
@@ -52,7 +52,7 @@ namespace System.Linq
 
             public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var list = await _source.ToList(cancellationToken).ConfigureAwait(false);
+                var list = await _source.ToListAsync(cancellationToken).ConfigureAwait(false);
 
                 list.Reverse();
                 return list;
@@ -73,7 +73,7 @@ namespace System.Linq
                     }
                 }
 
-                return _source.Count(cancellationToken);
+                return _source.CountAsync(cancellationToken);
             }
 
             public override AsyncIteratorBase<TSource> Clone()
@@ -92,7 +92,7 @@ namespace System.Linq
                 switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _items = await _source.ToArray(_cancellationToken).ConfigureAwait(false);
+                        _items = await _source.ToArrayAsync(_cancellationToken).ConfigureAwait(false);
                         _index = _items.Length - 1;
 
                         _state = AsyncIteratorState.Iterating;

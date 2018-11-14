@@ -77,7 +77,7 @@ namespace System.Linq
                 {
                     // If HasLimit is false, we contain everything past _minIndexInclusive.
                     // Therefore, we have to iterate the whole enumerable.
-                    return Math.Max(await _source.Count(cancellationToken).ConfigureAwait(false) - _minIndexInclusive, 0);
+                    return Math.Max(await _source.CountAsync(cancellationToken).ConfigureAwait(false) - _minIndexInclusive, 0);
                 }
 
                 var en = _source.GetAsyncEnumerator(cancellationToken);

@@ -33,7 +33,7 @@ namespace System.Linq
             switch (_state)
             {
                 case AsyncIteratorState.Allocated:
-                    _buffer = await _source.ToArray(_cancellationToken).ConfigureAwait(false);
+                    _buffer = await _source.ToArrayAsync(_cancellationToken).ConfigureAwait(false);
 
                     // REVIEW: If we add selectors with CancellationToken support, we should feed the token to Sort.
 

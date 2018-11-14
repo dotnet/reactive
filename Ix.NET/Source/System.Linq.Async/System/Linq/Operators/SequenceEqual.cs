@@ -10,7 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
+        public static Task<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
                 throw Error.ArgumentNull(nameof(first));
@@ -20,7 +20,7 @@ namespace System.Linq
             return SequenceEqualCore(first, second, comparer: null, CancellationToken.None);
         }
 
-        public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken)
+        public static Task<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken)
         {
             if (first == null)
                 throw Error.ArgumentNull(nameof(first));
@@ -30,7 +30,7 @@ namespace System.Linq
             return SequenceEqualCore(first, second, comparer: null, cancellationToken);
         }
 
-        public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
+        public static Task<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
                 throw Error.ArgumentNull(nameof(first));
@@ -40,7 +40,7 @@ namespace System.Linq
             return SequenceEqualCore(first, second, comparer, CancellationToken.None);
         }
 
-        public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
+        public static Task<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (first == null)
                 throw Error.ArgumentNull(nameof(first));

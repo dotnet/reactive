@@ -460,31 +460,31 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<bool> IsEmpty<TSource>(this IAsyncQueryable<TSource> source)
+        public static Task<bool> IsEmptyAsync<TSource>(this IAsyncQueryable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<bool>(Expression.Call(InfoOf(() => AsyncQueryableEx.IsEmpty<TSource>(default(IAsyncQueryable<TSource>))), source.Expression), CancellationToken.None);
+            return source.Provider.ExecuteAsync<bool>(Expression.Call(InfoOf(() => AsyncQueryableEx.IsEmptyAsync<TSource>(default(IAsyncQueryable<TSource>))), source.Expression), CancellationToken.None);
 #else
             return source.Provider.ExecuteAsync<bool>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)), source.Expression), CancellationToken.None);
 #endif
         }
 
-        public static Task<bool> IsEmpty<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken)
+        public static Task<bool> IsEmptyAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<bool>(Expression.Call(InfoOf(() => AsyncQueryableEx.IsEmpty<TSource>(default(IAsyncQueryable<TSource>), default(CancellationToken))), source.Expression, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<bool>(Expression.Call(InfoOf(() => AsyncQueryableEx.IsEmptyAsync<TSource>(default(IAsyncQueryable<TSource>), default(CancellationToken))), source.Expression, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #else
             return source.Provider.ExecuteAsync<bool>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)), source.Expression, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #endif
         }
 
-        public static Task<TSource> Max<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer)
+        public static Task<TSource> MaxAsync<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -492,13 +492,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.Max<TSource>(default(IAsyncQueryable<TSource>), default(IComparer<TSource>))), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>))), CancellationToken.None);
+            return source.Provider.ExecuteAsync<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxAsync<TSource>(default(IAsyncQueryable<TSource>), default(IComparer<TSource>))), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>))), CancellationToken.None);
 #else
             return source.Provider.ExecuteAsync<TSource>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>))), CancellationToken.None);
 #endif
         }
 
-        public static Task<TSource> Max<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+        public static Task<TSource> MaxAsync<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -506,13 +506,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.Max<TSource>(default(IAsyncQueryable<TSource>), default(IComparer<TSource>), default(CancellationToken))), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxAsync<TSource>(default(IAsyncQueryable<TSource>), default(IComparer<TSource>), default(CancellationToken))), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #else
             return source.Provider.ExecuteAsync<TSource>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #endif
         }
 
-        public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
+        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -520,13 +520,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(keySelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>))), source.Expression, keySelector), CancellationToken.None);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>))), source.Expression, keySelector), CancellationToken.None);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector), CancellationToken.None);
 #endif
         }
 
-        public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector)
+        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -534,13 +534,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(keySelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>))), source.Expression, keySelector), CancellationToken.None);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>))), source.Expression, keySelector), CancellationToken.None);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector), CancellationToken.None);
 #endif
         }
 
-        public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, CancellationToken cancellationToken)
+        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -548,13 +548,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(keySelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #endif
         }
 
-        public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
+        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -564,13 +564,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
 #endif
         }
 
-        public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken)
+        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -578,13 +578,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(keySelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #endif
         }
 
-        public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer)
+        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -594,13 +594,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
 #endif
         }
 
-        public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
+        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -610,13 +610,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #endif
         }
 
-        public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
+        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -626,7 +626,7 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #endif
@@ -644,7 +644,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<TSource> Min<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer)
+        public static Task<TSource> MinAsync<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -652,13 +652,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.Min<TSource>(default(IAsyncQueryable<TSource>), default(IComparer<TSource>))), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>))), CancellationToken.None);
+            return source.Provider.ExecuteAsync<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinAsync<TSource>(default(IAsyncQueryable<TSource>), default(IComparer<TSource>))), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>))), CancellationToken.None);
 #else
             return source.Provider.ExecuteAsync<TSource>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>))), CancellationToken.None);
 #endif
         }
 
-        public static Task<TSource> Min<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+        public static Task<TSource> MinAsync<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -666,13 +666,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.Min<TSource>(default(IAsyncQueryable<TSource>), default(IComparer<TSource>), default(CancellationToken))), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinAsync<TSource>(default(IAsyncQueryable<TSource>), default(IComparer<TSource>), default(CancellationToken))), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #else
             return source.Provider.ExecuteAsync<TSource>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #endif
         }
 
-        public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
+        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -680,13 +680,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(keySelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>))), source.Expression, keySelector), CancellationToken.None);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>))), source.Expression, keySelector), CancellationToken.None);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector), CancellationToken.None);
 #endif
         }
 
-        public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector)
+        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -694,13 +694,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(keySelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>))), source.Expression, keySelector), CancellationToken.None);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>))), source.Expression, keySelector), CancellationToken.None);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector), CancellationToken.None);
 #endif
         }
 
-        public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, CancellationToken cancellationToken)
+        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -708,13 +708,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(keySelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #endif
         }
 
-        public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
+        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -724,13 +724,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
 #endif
         }
 
-        public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken)
+        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -738,13 +738,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(keySelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #endif
         }
 
-        public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer)
+        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -754,13 +754,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
 #endif
         }
 
-        public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
+        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -770,13 +770,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #endif
         }
 
-        public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
+        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -786,7 +786,7 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinBy<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
+            return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #else
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
 #endif

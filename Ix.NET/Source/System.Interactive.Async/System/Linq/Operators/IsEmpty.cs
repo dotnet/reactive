@@ -10,7 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
-        public static Task<bool> IsEmpty<TSource>(this IAsyncEnumerable<TSource> source)
+        public static Task<bool> IsEmptyAsync<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -18,7 +18,7 @@ namespace System.Linq
             return IsEmptyCore(source, CancellationToken.None);
         }
 
-        public static Task<bool> IsEmpty<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        public static Task<bool> IsEmptyAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -28,7 +28,7 @@ namespace System.Linq
 
         private static async Task<bool> IsEmptyCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            return !await source.Any(cancellationToken).ConfigureAwait(false);
+            return !await source.AnyAsync(cancellationToken).ConfigureAwait(false);
         }
     }
 }

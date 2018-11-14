@@ -95,13 +95,13 @@ namespace System.Linq
 
             public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var array = await _source.ToArray(cancellationToken).ConfigureAwait(false);
+                var array = await _source.ToArrayAsync(cancellationToken).ConfigureAwait(false);
                 return array.Length == 0 ? new[] { _defaultValue } : array;
             }
 
             public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var list = await _source.ToList(cancellationToken).ConfigureAwait(false);
+                var list = await _source.ToListAsync(cancellationToken).ConfigureAwait(false);
                 if (list.Count == 0)
                 {
                     list.Add(_defaultValue);
@@ -115,7 +115,7 @@ namespace System.Linq
                 int count;
                 if (!onlyIfCheap || _source is ICollection<TSource> || _source is ICollection)
                 {
-                    count = await _source.Count(cancellationToken).ConfigureAwait(false);
+                    count = await _source.CountAsync(cancellationToken).ConfigureAwait(false);
                 }
                 else
                 {
