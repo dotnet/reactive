@@ -58,7 +58,7 @@ foreach (var o in os)
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return source.Select(selector).AverageAsync(CancellationToken.None);
+            return AverageCore(source, selector, CancellationToken.None);
         }
 
         public static Task<<#=o.res#>> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=o.type#>> selector, CancellationToken cancellationToken)
@@ -68,7 +68,7 @@ foreach (var o in os)
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return source.Select(selector).AverageAsync(cancellationToken);
+            return AverageCore(source, selector, cancellationToken);
         }
 
         public static Task<<#=o.res#>> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=o.type#>>> selector)
@@ -78,7 +78,7 @@ foreach (var o in os)
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return source.Select(selector).AverageAsync(CancellationToken.None);
+            return AverageCore(source, selector, CancellationToken.None);
         }
 
         public static Task<<#=o.res#>> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken)
@@ -88,7 +88,7 @@ foreach (var o in os)
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return source.Select(selector).AverageAsync(cancellationToken);
+            return AverageCore(source, selector, cancellationToken);
         }
 
 <#
