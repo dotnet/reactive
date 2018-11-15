@@ -141,7 +141,7 @@ namespace Tests
                 public ValueTask DisposeAsync()
                 {
                     _disposeCounter.DisposeCount++;
-                    return new ValueTask(Task.FromResult(true));
+                    return default;
                 }
 
                 public ValueTask<bool> MoveNextAsync()
