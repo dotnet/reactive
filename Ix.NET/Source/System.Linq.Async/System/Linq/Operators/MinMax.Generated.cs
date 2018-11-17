@@ -66,6 +66,18 @@ namespace System.Linq
             return MaxCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<int> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MaxCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<int?> MaxAsync(this IAsyncEnumerable<int?> source)
         {
             if (source == null)
@@ -121,6 +133,18 @@ namespace System.Linq
 
             return MaxCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<int?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MaxCore(source, selector, cancellationToken);
+        }
+#endif
 
         public static Task<long> MaxAsync(this IAsyncEnumerable<long> source)
         {
@@ -178,6 +202,18 @@ namespace System.Linq
             return MaxCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<long> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MaxCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<long?> MaxAsync(this IAsyncEnumerable<long?> source)
         {
             if (source == null)
@@ -233,6 +269,18 @@ namespace System.Linq
 
             return MaxCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<long?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MaxCore(source, selector, cancellationToken);
+        }
+#endif
 
         public static Task<float> MaxAsync(this IAsyncEnumerable<float> source)
         {
@@ -290,6 +338,18 @@ namespace System.Linq
             return MaxCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<float> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MaxCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<float?> MaxAsync(this IAsyncEnumerable<float?> source)
         {
             if (source == null)
@@ -345,6 +405,18 @@ namespace System.Linq
 
             return MaxCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<float?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MaxCore(source, selector, cancellationToken);
+        }
+#endif
 
         public static Task<double> MaxAsync(this IAsyncEnumerable<double> source)
         {
@@ -402,6 +474,18 @@ namespace System.Linq
             return MaxCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<double> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MaxCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<double?> MaxAsync(this IAsyncEnumerable<double?> source)
         {
             if (source == null)
@@ -457,6 +541,18 @@ namespace System.Linq
 
             return MaxCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<double?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MaxCore(source, selector, cancellationToken);
+        }
+#endif
 
         public static Task<decimal> MaxAsync(this IAsyncEnumerable<decimal> source)
         {
@@ -514,6 +610,18 @@ namespace System.Linq
             return MaxCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<decimal> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MaxCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<decimal?> MaxAsync(this IAsyncEnumerable<decimal?> source)
         {
             if (source == null)
@@ -569,6 +677,18 @@ namespace System.Linq
 
             return MaxCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<decimal?> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MaxCore(source, selector, cancellationToken);
+        }
+#endif
 
         public static Task<int> MinAsync(this IAsyncEnumerable<int> source)
         {
@@ -626,6 +746,18 @@ namespace System.Linq
             return MinCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<int> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MinCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<int?> MinAsync(this IAsyncEnumerable<int?> source)
         {
             if (source == null)
@@ -681,6 +813,18 @@ namespace System.Linq
 
             return MinCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<int?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MinCore(source, selector, cancellationToken);
+        }
+#endif
 
         public static Task<long> MinAsync(this IAsyncEnumerable<long> source)
         {
@@ -738,6 +882,18 @@ namespace System.Linq
             return MinCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<long> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MinCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<long?> MinAsync(this IAsyncEnumerable<long?> source)
         {
             if (source == null)
@@ -793,6 +949,18 @@ namespace System.Linq
 
             return MinCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<long?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MinCore(source, selector, cancellationToken);
+        }
+#endif
 
         public static Task<float> MinAsync(this IAsyncEnumerable<float> source)
         {
@@ -850,6 +1018,18 @@ namespace System.Linq
             return MinCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<float> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MinCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<float?> MinAsync(this IAsyncEnumerable<float?> source)
         {
             if (source == null)
@@ -905,6 +1085,18 @@ namespace System.Linq
 
             return MinCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<float?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MinCore(source, selector, cancellationToken);
+        }
+#endif
 
         public static Task<double> MinAsync(this IAsyncEnumerable<double> source)
         {
@@ -962,6 +1154,18 @@ namespace System.Linq
             return MinCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<double> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MinCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<double?> MinAsync(this IAsyncEnumerable<double?> source)
         {
             if (source == null)
@@ -1017,6 +1221,18 @@ namespace System.Linq
 
             return MinCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<double?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MinCore(source, selector, cancellationToken);
+        }
+#endif
 
         public static Task<decimal> MinAsync(this IAsyncEnumerable<decimal> source)
         {
@@ -1074,6 +1290,18 @@ namespace System.Linq
             return MinCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<decimal> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MinCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<decimal?> MinAsync(this IAsyncEnumerable<decimal?> source)
         {
             if (source == null)
@@ -1129,6 +1357,18 @@ namespace System.Linq
 
             return MinCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<decimal?> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return MinCore(source, selector, cancellationToken);
+        }
+#endif
 
     }
 }

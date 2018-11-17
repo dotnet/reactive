@@ -50,6 +50,18 @@ namespace System.Linq
             return AllCore(source, predicate, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<bool> AllAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
+
+            return AllCore(source, predicate, cancellationToken);
+        }
+#endif
+
         private static async Task<bool> AllCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator(cancellationToken);
@@ -89,5 +101,27 @@ namespace System.Linq
 
             return true;
         }
+
+#if !NO_DEEP_CANCELLATION
+        private static async Task<bool> AllCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        {
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    if (!await predicate(e.Current, cancellationToken).ConfigureAwait(false))
+                        return false;
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return true;
+        }
+#endif
     }
 }

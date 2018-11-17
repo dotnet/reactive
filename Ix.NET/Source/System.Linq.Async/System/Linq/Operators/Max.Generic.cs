@@ -204,5 +204,72 @@ namespace System.Linq
 
             return value;
         }
+
+#if !NO_DEEP_CANCELLATION
+        private static async Task<TResult> MaxCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken)
+        {
+            var comparer = Comparer<TResult>.Default;
+            var value = default(TResult);
+            if (value == null)
+            {
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
+                {
+                    do
+                    {
+                        if (!await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            return value;
+                        }
+
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    }
+                    while (value == null);
+
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        if (x != null && comparer.Compare(x, value) > 0)
+                        {
+                            value = x;
+                        }
+                    }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+            }
+            else
+            {
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
+                {
+                    if (!await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        throw Error.NoElements();
+                    }
+
+                    value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        if (comparer.Compare(x, value) > 0)
+                        {
+                            value = x;
+                        }
+                    }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+            }
+
+            return value;
+        }
+#endif
     }
 }

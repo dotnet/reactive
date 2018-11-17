@@ -41,6 +41,18 @@ namespace System.Linq
             return new SkipWhileAsyncIteratorWithTask<TSource>(source, predicate);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static IAsyncEnumerable<TSource> SkipWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
+
+            return new SkipWhileAsyncIteratorWithTaskAndCancellation<TSource>(source, predicate);
+        }
+#endif
+
         public static IAsyncEnumerable<TSource> SkipWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
         {
             if (source == null)
@@ -50,6 +62,18 @@ namespace System.Linq
 
             return new SkipWhileWithIndexAsyncIteratorWithTask<TSource>(source, predicate);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static IAsyncEnumerable<TSource> SkipWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
+
+            return new SkipWhileWithIndexAsyncIteratorWithTaskAndCancellation<TSource>(source, predicate);
+        }
+#endif
 
         private sealed class SkipWhileAsyncIterator<TSource> : AsyncIterator<TSource>
         {
@@ -287,6 +311,84 @@ namespace System.Linq
             }
         }
 
+#if !NO_DEEP_CANCELLATION
+        private sealed class SkipWhileAsyncIteratorWithTaskAndCancellation<TSource> : AsyncIterator<TSource>
+        {
+            private readonly Func<TSource, CancellationToken, ValueTask<bool>> _predicate;
+            private readonly IAsyncEnumerable<TSource> _source;
+
+            private bool _doMoveNext;
+            private IAsyncEnumerator<TSource> _enumerator;
+
+            public SkipWhileAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate)
+            {
+                Debug.Assert(predicate != null);
+                Debug.Assert(source != null);
+
+                _source = source;
+                _predicate = predicate;
+            }
+
+            public override AsyncIteratorBase<TSource> Clone()
+            {
+                return new SkipWhileAsyncIteratorWithTaskAndCancellation<TSource>(_source, _predicate);
+            }
+
+            public override async ValueTask DisposeAsync()
+            {
+                if (_enumerator != null)
+                {
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                }
+
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            protected override async ValueTask<bool> MoveNextCore()
+            {
+                switch (_state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+
+                        // skip elements as requested
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var element = _enumerator.Current;
+                            if (!await _predicate(element, _cancellationToken).ConfigureAwait(false))
+                            {
+                                _doMoveNext = false;
+                                _state = AsyncIteratorState.Iterating;
+                                goto case AsyncIteratorState.Iterating;
+                            }
+                        }
+
+                        break;
+
+                    case AsyncIteratorState.Iterating:
+                        if (_doMoveNext && await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            _current = _enumerator.Current;
+                            return true;
+                        }
+
+                        if (!_doMoveNext)
+                        {
+                            _current = _enumerator.Current;
+                            _doMoveNext = true;
+                            return true;
+                        }
+
+                        break;
+                }
+
+                await DisposeAsync().ConfigureAwait(false);
+                return false;
+            }
+        }
+#endif
+
         private sealed class SkipWhileWithIndexAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, int, ValueTask<bool>> _predicate;
@@ -370,5 +472,91 @@ namespace System.Linq
                 return false;
             }
         }
+
+#if !NO_DEEP_CANCELLATION
+        private sealed class SkipWhileWithIndexAsyncIteratorWithTaskAndCancellation<TSource> : AsyncIterator<TSource>
+        {
+            private readonly Func<TSource, int, CancellationToken, ValueTask<bool>> _predicate;
+            private readonly IAsyncEnumerable<TSource> _source;
+
+            private bool _doMoveNext;
+            private IAsyncEnumerator<TSource> _enumerator;
+            private int _index;
+
+            public SkipWhileWithIndexAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate)
+            {
+                Debug.Assert(predicate != null);
+                Debug.Assert(source != null);
+
+                _source = source;
+                _predicate = predicate;
+            }
+
+            public override AsyncIteratorBase<TSource> Clone()
+            {
+                return new SkipWhileWithIndexAsyncIteratorWithTaskAndCancellation<TSource>(_source, _predicate);
+            }
+
+            public override async ValueTask DisposeAsync()
+            {
+                if (_enumerator != null)
+                {
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                }
+
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            protected override async ValueTask<bool> MoveNextCore()
+            {
+                switch (_state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _index = -1;
+
+                        // skip elements as requested
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var element = _enumerator.Current;
+
+                            checked
+                            {
+                                _index++;
+                            }
+
+                            if (!await _predicate(element, _index, _cancellationToken).ConfigureAwait(false))
+                            {
+                                _doMoveNext = false;
+                                _state = AsyncIteratorState.Iterating;
+                                goto case AsyncIteratorState.Iterating;
+                            }
+                        }
+
+                        break;
+
+                    case AsyncIteratorState.Iterating:
+                        if (_doMoveNext && await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            _current = _enumerator.Current;
+                            return true;
+                        }
+
+                        if (!_doMoveNext)
+                        {
+                            _current = _enumerator.Current;
+                            _doMoveNext = true;
+                            return true;
+                        }
+
+                        break;
+                }
+
+                await DisposeAsync().ConfigureAwait(false);
+                return false;
+            }
+        }
+#endif
     }
 }

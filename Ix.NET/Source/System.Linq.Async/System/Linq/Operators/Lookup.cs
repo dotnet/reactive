@@ -398,6 +398,37 @@ namespace System.Linq.Internal
             return lookup;
         }
 
+#if !NO_DEEP_CANCELLATION
+        internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        {
+            Debug.Assert(source != null);
+            Debug.Assert(keySelector != null);
+            Debug.Assert(elementSelector != null);
+
+            var lookup = new LookupWithTask<TKey, TElement>(comparer);
+
+            var enu = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await enu.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var key = await keySelector(enu.Current, cancellationToken).ConfigureAwait(false);
+                    var group = lookup.GetGrouping(key, create: true);
+
+                    var element = await elementSelector(enu.Current, cancellationToken).ConfigureAwait(false);
+                    group.Add(element);
+                }
+            }
+            finally
+            {
+                await enu.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return lookup;
+        }
+#endif
+
         internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             Debug.Assert(source != null);
@@ -423,6 +454,33 @@ namespace System.Linq.Internal
             return lookup;
         }
 
+#if !NO_DEEP_CANCELLATION
+        internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        {
+            Debug.Assert(source != null);
+            Debug.Assert(keySelector != null);
+
+            var lookup = new LookupWithTask<TKey, TElement>(comparer);
+
+            var enu = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await enu.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var key = await keySelector(enu.Current, cancellationToken).ConfigureAwait(false);
+                    lookup.GetGrouping(key, create: true).Add(enu.Current);
+                }
+            }
+            finally
+            {
+                await enu.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return lookup;
+        }
+#endif
+
         internal static async Task<LookupWithTask<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
@@ -447,6 +505,33 @@ namespace System.Linq.Internal
 
             return lookup;
         }
+
+#if !NO_DEEP_CANCELLATION
+        internal static async Task<LookupWithTask<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        {
+            var lookup = new LookupWithTask<TKey, TElement>(comparer);
+
+            var enu = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await enu.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var key = await keySelector(enu.Current, cancellationToken).ConfigureAwait(false);
+                    if (key != null)
+                    {
+                        lookup.GetGrouping(key, create: true).Add(enu.Current);
+                    }
+                }
+            }
+            finally
+            {
+                await enu.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return lookup;
+        }
+#endif
 
         internal Grouping<TKey, TElement> GetGrouping(TKey key, bool create)
         {
@@ -518,6 +603,27 @@ namespace System.Linq.Internal
             return array;
         }
 
+#if !NO_DEEP_CANCELLATION
+        internal async Task<TResult[]> ToArray<TResult>(Func<TKey, IAsyncEnumerable<TElement>, CancellationToken, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken)
+        {
+            var array = new TResult[Count];
+            var index = 0;
+            var g = _lastGrouping;
+            if (g != null)
+            {
+                do
+                {
+                    g = g._next;
+                    g.Trim();
+                    array[index] = await resultSelector(g._key, g._elements.ToAsyncEnumerable(), cancellationToken).ConfigureAwait(false);
+                    ++index;
+                } while (g != _lastGrouping);
+            }
+
+            return array;
+        }
+#endif
+
         internal async Task<List<TResult>> ToList<TResult>(Func<TKey, IAsyncEnumerable<TElement>, ValueTask<TResult>> resultSelector)
         {
             var list = new List<TResult>(Count);
@@ -536,6 +642,27 @@ namespace System.Linq.Internal
 
             return list;
         }
+
+#if !NO_DEEP_CANCELLATION
+        internal async Task<List<TResult>> ToList<TResult>(Func<TKey, IAsyncEnumerable<TElement>, CancellationToken, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken)
+        {
+            var list = new List<TResult>(Count);
+            var g = _lastGrouping;
+            if (g != null)
+            {
+                do
+                {
+                    g = g._next;
+                    g.Trim();
+
+                    var result = await resultSelector(g._key, g._elements.ToAsyncEnumerable(), cancellationToken).ConfigureAwait(false);
+                    list.Add(result);
+                } while (g != _lastGrouping);
+            }
+
+            return list;
+        }
+#endif
 
         private void Resize()
         {

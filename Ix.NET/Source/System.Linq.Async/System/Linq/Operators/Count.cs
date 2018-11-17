@@ -67,6 +67,18 @@ namespace System.Linq
             return CountCore(source, predicate, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
+
+            return CountCore(source, predicate, cancellationToken);
+        }
+#endif
+
         private static Task<int> CountCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             switch (source)
@@ -159,5 +171,34 @@ namespace System.Linq
 
             return count;
         }
+
+#if !NO_DEEP_CANCELLATION
+        private static async Task<int> CountCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        {
+            var count = 0;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    if (await predicate(e.Current, cancellationToken).ConfigureAwait(false))
+                    {
+                        checked
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return count;
+        }
+#endif
     }
 }

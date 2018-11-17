@@ -28,6 +28,11 @@ namespace System.Linq
             return new OrderedAsyncEnumerableWithTask<TElement, TKey>(_source, keySelector, comparer, descending, this);
         }
 
+        IOrderedAsyncEnumerable<TElement> IOrderedAsyncEnumerable<TElement>.CreateOrderedEnumerable<TKey>(Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending)
+        {
+            return new OrderedAsyncEnumerableWithTaskAndCancellation<TElement, TKey>(_source, keySelector, comparer, descending, this);
+        }
+
         protected override async ValueTask<bool> MoveNextCore()
         {
             switch (_state)
@@ -37,7 +42,7 @@ namespace System.Linq
 
                     // REVIEW: If we add selectors with CancellationToken support, we should feed the token to Sort.
 
-                    var sorter = GetAsyncEnumerableSorter(next: null);
+                    var sorter = GetAsyncEnumerableSorter(next: null, _cancellationToken);
                     _indexes = await sorter.Sort(_buffer, _buffer.Length).ConfigureAwait(false);
                     _index = 0;
 
@@ -66,7 +71,7 @@ namespace System.Linq
             await base.DisposeAsync().ConfigureAwait(false);
         }
 
-        internal abstract AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement> next);
+        internal abstract AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement> next, CancellationToken cancellationToken);
     }
 
     internal sealed class OrderedAsyncEnumerable<TElement, TKey> : OrderedAsyncEnumerable<TElement>
@@ -93,13 +98,13 @@ namespace System.Linq
             return new OrderedAsyncEnumerable<TElement, TKey>(_source, _keySelector, _comparer, _descending, _parent);
         }
 
-        internal override AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement> next)
+        internal override AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement> next, CancellationToken cancellationToken)
         {
             var sorter = new SyncKeySelectorAsyncEnumerableSorter<TElement, TKey>(_keySelector, _comparer, _descending, next);
 
             if (_parent != null)
             {
-                return _parent.GetAsyncEnumerableSorter(sorter);
+                return _parent.GetAsyncEnumerableSorter(sorter, cancellationToken);
             }
 
             return sorter;
@@ -130,18 +135,57 @@ namespace System.Linq
             return new OrderedAsyncEnumerableWithTask<TElement, TKey>(_source, _keySelector, _comparer, _descending, _parent);
         }
 
-        internal override AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement> next)
+        internal override AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement> next, CancellationToken cancellationToken)
         {
             var sorter = new AsyncKeySelectorAsyncEnumerableSorter<TElement, TKey>(_keySelector, _comparer, _descending, next);
 
             if (_parent != null)
             {
-                return _parent.GetAsyncEnumerableSorter(sorter);
+                return _parent.GetAsyncEnumerableSorter(sorter, cancellationToken);
             }
 
             return sorter;
         }
     }
+
+#if !NO_DEEP_CANCELLATION
+    internal sealed class OrderedAsyncEnumerableWithTaskAndCancellation<TElement, TKey> : OrderedAsyncEnumerable<TElement>
+    {
+        private readonly IComparer<TKey> _comparer;
+        private readonly bool _descending;
+        private readonly Func<TElement, CancellationToken, ValueTask<TKey>> _keySelector;
+        private readonly OrderedAsyncEnumerable<TElement> _parent;
+
+        public OrderedAsyncEnumerableWithTaskAndCancellation(IAsyncEnumerable<TElement> source, Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending, OrderedAsyncEnumerable<TElement> parent)
+        {
+            Debug.Assert(source != null);
+            Debug.Assert(keySelector != null);
+
+            _source = source;
+            _keySelector = keySelector;
+            _comparer = comparer;
+            _descending = descending;
+            _parent = parent;
+        }
+
+        public override AsyncIteratorBase<TElement> Clone()
+        {
+            return new OrderedAsyncEnumerableWithTaskAndCancellation<TElement, TKey>(_source, _keySelector, _comparer, _descending, _parent);
+        }
+
+        internal override AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement> next, CancellationToken cancellationToken)
+        {
+            var sorter = new AsyncKeySelectorAsyncEnumerableSorterWithCancellation<TElement, TKey>(_keySelector, _comparer, _descending, next, cancellationToken);
+
+            if (_parent != null)
+            {
+                return _parent.GetAsyncEnumerableSorter(sorter, cancellationToken);
+            }
+
+            return sorter;
+        }
+    }
+#endif
 
     internal abstract class AsyncEnumerableSorter<TElement>
     {
@@ -305,4 +349,34 @@ namespace System.Linq
             }
         }
     }
+
+#if !NO_DEEP_CANCELLATION
+    internal sealed class AsyncKeySelectorAsyncEnumerableSorterWithCancellation<TElement, TKey> : AsyncEnumerableSorterBase<TElement, TKey>
+    {
+        private readonly Func<TElement, CancellationToken, ValueTask<TKey>> _keySelector;
+        private readonly CancellationToken _cancellationToken;
+
+        public AsyncKeySelectorAsyncEnumerableSorterWithCancellation(Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending, AsyncEnumerableSorter<TElement> next, CancellationToken cancellationToken)
+            : base(comparer, descending, next)
+        {
+            _keySelector = keySelector;
+            _cancellationToken = cancellationToken;
+        }
+
+        internal override async ValueTask ComputeKeys(TElement[] elements, int count)
+        {
+            _keys = new TKey[count];
+
+            for (var i = 0; i < count; i++)
+            {
+                _keys[i] = await _keySelector(elements[i], _cancellationToken).ConfigureAwait(false);
+            }
+
+            if (_next != null)
+            {
+                await _next.ComputeKeys(elements, count).ConfigureAwait(false);
+            }
+        }
+    }
+#endif
 }

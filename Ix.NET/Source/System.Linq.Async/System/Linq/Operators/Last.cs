@@ -66,6 +66,18 @@ namespace System.Linq
             return LastCore(source, predicate, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<TSource> LastAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
+
+            return LastCore(source, predicate, cancellationToken);
+        }
+#endif
+
         private static async Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             var last = await TryGetLast(source, cancellationToken).ConfigureAwait(false);
@@ -86,5 +98,14 @@ namespace System.Linq
 
             return last.HasValue ? last.Value : throw Error.NoElements();
         }
+
+#if !NO_DEEP_CANCELLATION
+        private static async Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        {
+            var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
+
+            return last.HasValue ? last.Value : throw Error.NoElements();
+        }
+#endif
     }
 }

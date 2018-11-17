@@ -66,6 +66,18 @@ namespace System.Linq
             return FirstCore(source, predicate, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<TSource> FirstAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
+
+            return FirstCore(source, predicate, cancellationToken);
+        }
+#endif
+
         private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             var first = await TryGetFirst(source, cancellationToken).ConfigureAwait(false);
@@ -86,5 +98,15 @@ namespace System.Linq
 
             return first.HasValue ? first.Value : throw Error.NoElements();
         }
+
+#if !NO_DEEP_CANCELLATION
+
+        private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        {
+            var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
+
+            return first.HasValue ? first.Value : throw Error.NoElements();
+        }
+#endif
     }
 }

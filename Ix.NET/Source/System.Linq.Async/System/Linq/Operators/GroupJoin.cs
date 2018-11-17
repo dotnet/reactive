@@ -58,6 +58,24 @@ namespace System.Linq
             return new GroupJoinAsyncEnumerableWithTask<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer: null);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static IAsyncEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, CancellationToken, ValueTask<TKey>> outerKeySelector, Func<TInner, CancellationToken, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, CancellationToken, ValueTask<TResult>> resultSelector)
+        {
+            if (outer == null)
+                throw Error.ArgumentNull(nameof(outer));
+            if (inner == null)
+                throw Error.ArgumentNull(nameof(inner));
+            if (outerKeySelector == null)
+                throw Error.ArgumentNull(nameof(outerKeySelector));
+            if (innerKeySelector == null)
+                throw Error.ArgumentNull(nameof(innerKeySelector));
+            if (resultSelector == null)
+                throw Error.ArgumentNull(nameof(resultSelector));
+
+            return new GroupJoinAsyncEnumerableWithTaskAndCancellation<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer: null);
+        }
+#endif
+
         public static IAsyncEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (outer == null)
@@ -73,6 +91,24 @@ namespace System.Linq
 
             return new GroupJoinAsyncEnumerableWithTask<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static IAsyncEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, CancellationToken, ValueTask<TKey>> outerKeySelector, Func<TInner, CancellationToken, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, CancellationToken, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey> comparer)
+        {
+            if (outer == null)
+                throw Error.ArgumentNull(nameof(outer));
+            if (inner == null)
+                throw Error.ArgumentNull(nameof(inner));
+            if (outerKeySelector == null)
+                throw Error.ArgumentNull(nameof(outerKeySelector));
+            if (innerKeySelector == null)
+                throw Error.ArgumentNull(nameof(innerKeySelector));
+            if (resultSelector == null)
+                throw Error.ArgumentNull(nameof(resultSelector));
+
+            return new GroupJoinAsyncEnumerableWithTaskAndCancellation<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
+        }
+#endif
 
         private sealed class GroupJoinAsyncEnumerable<TOuter, TInner, TKey, TResult> : IAsyncEnumerable<TResult>
         {
@@ -261,5 +297,101 @@ namespace System.Linq
                 public ValueTask DisposeAsync() => _outer.DisposeAsync();
             }
         }
+
+#if !NO_DEEP_CANCELLATION
+        private sealed class GroupJoinAsyncEnumerableWithTaskAndCancellation<TOuter, TInner, TKey, TResult> : IAsyncEnumerable<TResult>
+        {
+            private readonly IEqualityComparer<TKey> _comparer;
+            private readonly IAsyncEnumerable<TInner> _inner;
+            private readonly Func<TInner, CancellationToken, ValueTask<TKey>> _innerKeySelector;
+            private readonly IAsyncEnumerable<TOuter> _outer;
+            private readonly Func<TOuter, CancellationToken, ValueTask<TKey>> _outerKeySelector;
+            private readonly Func<TOuter, IAsyncEnumerable<TInner>, CancellationToken, ValueTask<TResult>> _resultSelector;
+
+            public GroupJoinAsyncEnumerableWithTaskAndCancellation(
+                IAsyncEnumerable<TOuter> outer,
+                IAsyncEnumerable<TInner> inner,
+                Func<TOuter, CancellationToken, ValueTask<TKey>> outerKeySelector,
+                Func<TInner, CancellationToken, ValueTask<TKey>> innerKeySelector,
+                Func<TOuter, IAsyncEnumerable<TInner>, CancellationToken, ValueTask<TResult>> resultSelector,
+                IEqualityComparer<TKey> comparer)
+            {
+                _outer = outer;
+                _inner = inner;
+                _outerKeySelector = outerKeySelector;
+                _innerKeySelector = innerKeySelector;
+                _resultSelector = resultSelector;
+                _comparer = comparer;
+            }
+
+            public IAsyncEnumerator<TResult> GetAsyncEnumerator(CancellationToken cancellationToken)
+                => new GroupJoinAsyncEnumeratorWithTask(
+                    _outer.GetAsyncEnumerator(cancellationToken),
+                    _inner,
+                    _outerKeySelector,
+                    _innerKeySelector,
+                    _resultSelector,
+                    _comparer,
+                    cancellationToken);
+
+            private sealed class GroupJoinAsyncEnumeratorWithTask : IAsyncEnumerator<TResult>
+            {
+                private readonly IEqualityComparer<TKey> _comparer;
+                private readonly IAsyncEnumerable<TInner> _inner;
+                private readonly Func<TInner, CancellationToken, ValueTask<TKey>> _innerKeySelector;
+                private readonly IAsyncEnumerator<TOuter> _outer;
+                private readonly Func<TOuter, CancellationToken, ValueTask<TKey>> _outerKeySelector;
+                private readonly Func<TOuter, IAsyncEnumerable<TInner>, CancellationToken, ValueTask<TResult>> _resultSelector;
+                private readonly CancellationToken _cancellationToken;
+
+                private Internal.LookupWithTask<TKey, TInner> _lookup;
+
+                public GroupJoinAsyncEnumeratorWithTask(
+                    IAsyncEnumerator<TOuter> outer,
+                    IAsyncEnumerable<TInner> inner,
+                    Func<TOuter, CancellationToken, ValueTask<TKey>> outerKeySelector,
+                    Func<TInner, CancellationToken, ValueTask<TKey>> innerKeySelector,
+                    Func<TOuter, IAsyncEnumerable<TInner>, CancellationToken, ValueTask<TResult>> resultSelector,
+                    IEqualityComparer<TKey> comparer,
+                    CancellationToken cancellationToken)
+                {
+                    _outer = outer;
+                    _inner = inner;
+                    _outerKeySelector = outerKeySelector;
+                    _innerKeySelector = innerKeySelector;
+                    _resultSelector = resultSelector;
+                    _comparer = comparer;
+                    _cancellationToken = cancellationToken;
+                }
+
+                public async ValueTask<bool> MoveNextAsync()
+                {
+                    // nothing to do 
+                    if (!await _outer.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        return false;
+                    }
+
+                    if (_lookup == null)
+                    {
+                        _lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer, _cancellationToken).ConfigureAwait(false);
+                    }
+
+                    var item = _outer.Current;
+
+                    var outerKey = await _outerKeySelector(item, _cancellationToken).ConfigureAwait(false);
+                    var inner = _lookup[outerKey].ToAsyncEnumerable();
+
+                    Current = await _resultSelector(item, inner, _cancellationToken).ConfigureAwait(false);
+
+                    return true;
+                }
+
+                public TResult Current { get; private set; }
+
+                public ValueTask DisposeAsync() => _outer.DisposeAsync();
+            }
+        }
+#endif
     }
 }

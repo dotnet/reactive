@@ -66,6 +66,18 @@ namespace System.Linq
             return SingleCore(source, predicate, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
+
+            return SingleCore(source, predicate, cancellationToken);
+        }
+#endif
+
         private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source is IList<TSource> list)
@@ -165,5 +177,39 @@ namespace System.Linq
                 await e.DisposeAsync().ConfigureAwait(false);
             }
         }
+
+#if !NO_DEEP_CANCELLATION
+        private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        {
+            var e = source.GetAsyncEnumerator(cancellationToken);
+
+            try
+            {
+                while (await e.MoveNextAsync().ConfigureAwait(false))
+                {
+                    var result = e.Current;
+
+                    if (await predicate(result, cancellationToken).ConfigureAwait(false))
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            if (await predicate(e.Current, cancellationToken).ConfigureAwait(false))
+                            {
+                                throw Error.MoreThanOneElement();
+                            }
+                        }
+
+                        return result;
+                    }
+                }
+
+                throw Error.NoElements();
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+        }
+#endif
     }
 }

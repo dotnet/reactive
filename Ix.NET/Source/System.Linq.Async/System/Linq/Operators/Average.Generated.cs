@@ -66,6 +66,18 @@ namespace System.Linq
             return AverageCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<double> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return AverageCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<double> AverageAsync(this IAsyncEnumerable<long> source)
         {
             if (source == null)
@@ -121,6 +133,18 @@ namespace System.Linq
 
             return AverageCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<double> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return AverageCore(source, selector, cancellationToken);
+        }
+#endif
 
         public static Task<float> AverageAsync(this IAsyncEnumerable<float> source)
         {
@@ -178,6 +202,18 @@ namespace System.Linq
             return AverageCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<float> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return AverageCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<double> AverageAsync(this IAsyncEnumerable<double> source)
         {
             if (source == null)
@@ -233,6 +269,18 @@ namespace System.Linq
 
             return AverageCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<double> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return AverageCore(source, selector, cancellationToken);
+        }
+#endif
 
         public static Task<decimal> AverageAsync(this IAsyncEnumerable<decimal> source)
         {
@@ -290,6 +338,18 @@ namespace System.Linq
             return AverageCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<decimal> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return AverageCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<double?> AverageAsync(this IAsyncEnumerable<int?> source)
         {
             if (source == null)
@@ -345,6 +405,18 @@ namespace System.Linq
 
             return AverageCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<double?> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return AverageCore(source, selector, cancellationToken);
+        }
+#endif
 
         public static Task<double?> AverageAsync(this IAsyncEnumerable<long?> source)
         {
@@ -402,6 +474,18 @@ namespace System.Linq
             return AverageCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<double?> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return AverageCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<float?> AverageAsync(this IAsyncEnumerable<float?> source)
         {
             if (source == null)
@@ -457,6 +541,18 @@ namespace System.Linq
 
             return AverageCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<float?> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return AverageCore(source, selector, cancellationToken);
+        }
+#endif
 
         public static Task<double?> AverageAsync(this IAsyncEnumerable<double?> source)
         {
@@ -514,6 +610,18 @@ namespace System.Linq
             return AverageCore(source, selector, cancellationToken);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static Task<double?> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return AverageCore(source, selector, cancellationToken);
+        }
+#endif
+
         public static Task<decimal?> AverageAsync(this IAsyncEnumerable<decimal?> source)
         {
             if (source == null)
@@ -569,6 +677,18 @@ namespace System.Linq
 
             return AverageCore(source, selector, cancellationToken);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static Task<decimal?> AverageAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return AverageCore(source, selector, cancellationToken);
+        }
+#endif
 
     }
 }

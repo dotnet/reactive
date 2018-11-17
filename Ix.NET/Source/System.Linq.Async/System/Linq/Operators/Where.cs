@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -52,6 +53,24 @@ namespace System.Linq
             return new WhereEnumerableAsyncIteratorWithTask<TSource>(source, predicate);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
+
+            if (source is AsyncIteratorBase<TSource> iterator)
+            {
+                return iterator.Where(predicate);
+            }
+
+            // TODO: Can we add array/list optimizations here, does it make sense?
+            return new WhereEnumerableAsyncIteratorWithTaskAndCancellation<TSource>(source, predicate);
+        }
+#endif
+
         public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
         {
             if (source == null)
@@ -62,6 +81,18 @@ namespace System.Linq
             return new WhereEnumerableWithIndexAsyncIteratorWithTask<TSource>(source, predicate);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
+
+            return new WhereEnumerableWithIndexAsyncIteratorWithTaskAndCancellation<TSource>(source, predicate);
+        }
+#endif
+
         private static Func<TSource, bool> CombinePredicates<TSource>(Func<TSource, bool> predicate1, Func<TSource, bool> predicate2)
         {
             return x => predicate1(x) && predicate2(x);
@@ -71,6 +102,13 @@ namespace System.Linq
         {
             return async x => await predicate1(x).ConfigureAwait(false) && await predicate2(x).ConfigureAwait(false);
         }
+
+#if !NO_DEEP_CANCELLATION
+        private static Func<TSource, CancellationToken, ValueTask<bool>> CombinePredicates<TSource>(Func<TSource, CancellationToken, ValueTask<bool>> predicate1, Func<TSource, CancellationToken, ValueTask<bool>> predicate2)
+        {
+            return async (x, ct) => await predicate1(x, ct).ConfigureAwait(false) && await predicate2(x, ct).ConfigureAwait(false);
+        }
+#endif
 
         internal sealed class WhereEnumerableAsyncIterator<TSource> : AsyncIterator<TSource>
         {
@@ -273,6 +311,72 @@ namespace System.Linq
             }
         }
 
+#if !NO_DEEP_CANCELLATION
+        internal sealed class WhereEnumerableAsyncIteratorWithTaskAndCancellation<TSource> : AsyncIterator<TSource>
+        {
+            private readonly Func<TSource, CancellationToken, ValueTask<bool>> _predicate;
+            private readonly IAsyncEnumerable<TSource> _source;
+            private IAsyncEnumerator<TSource> _enumerator;
+
+            public WhereEnumerableAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate)
+            {
+                Debug.Assert(source != null);
+                Debug.Assert(predicate != null);
+
+                _source = source;
+                _predicate = predicate;
+            }
+
+            public override AsyncIteratorBase<TSource> Clone()
+            {
+                return new WhereEnumerableAsyncIteratorWithTaskAndCancellation<TSource>(_source, _predicate);
+            }
+
+            public override async ValueTask DisposeAsync()
+            {
+                if (_enumerator != null)
+                {
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                }
+
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            public override IAsyncEnumerable<TSource> Where(Func<TSource, CancellationToken, ValueTask<bool>> predicate)
+            {
+                return new WhereEnumerableAsyncIteratorWithTaskAndCancellation<TSource>(_source, CombinePredicates(_predicate, predicate));
+            }
+
+            protected override async ValueTask<bool> MoveNextCore()
+            {
+                switch (_state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var item = _enumerator.Current;
+                            if (await _predicate(item, _cancellationToken).ConfigureAwait(false))
+                            {
+                                _current = item;
+                                return true;
+                            }
+                        }
+
+                        await DisposeAsync().ConfigureAwait(false);
+                        break;
+                }
+
+                return false;
+            }
+        }
+#endif
+
         internal sealed class WhereEnumerableWithIndexAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, int, ValueTask<bool>> _predicate;
@@ -340,6 +444,76 @@ namespace System.Linq
                 return false;
             }
         }
+
+#if !NO_DEEP_CANCELLATION
+        internal sealed class WhereEnumerableWithIndexAsyncIteratorWithTaskAndCancellation<TSource> : AsyncIterator<TSource>
+        {
+            private readonly Func<TSource, int, CancellationToken, ValueTask<bool>> _predicate;
+            private readonly IAsyncEnumerable<TSource> _source;
+
+            private IAsyncEnumerator<TSource> _enumerator;
+            private int _index;
+
+            public WhereEnumerableWithIndexAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate)
+            {
+                Debug.Assert(source != null);
+                Debug.Assert(predicate != null);
+
+                _source = source;
+                _predicate = predicate;
+            }
+
+            public override AsyncIteratorBase<TSource> Clone()
+            {
+                return new WhereEnumerableWithIndexAsyncIteratorWithTaskAndCancellation<TSource>(_source, _predicate);
+            }
+
+            public override async ValueTask DisposeAsync()
+            {
+                if (_enumerator != null)
+                {
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                }
+
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            protected override async ValueTask<bool> MoveNextCore()
+            {
+                switch (_state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _index = -1;
+                        _state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var item = _enumerator.Current;
+
+                            checked
+                            {
+                                _index++;
+                            }
+
+                            if (await _predicate(item, _index, _cancellationToken).ConfigureAwait(false))
+                            {
+                                _current = item;
+                                return true;
+                            }
+                        }
+
+                        await DisposeAsync().ConfigureAwait(false);
+                        break;
+                }
+
+                return false;
+            }
+        }
+#endif
 
         internal sealed class WhereSelectEnumerableAsyncIterator<TSource, TResult> : AsyncIterator<TResult>
         {
