@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using static System.Linq.AsyncEnumerable;
 
 namespace System.Linq
 {
@@ -27,6 +26,16 @@ namespace System.Linq
 
             return new AsyncDeferIterator<TSource>(factory);
         }
+
+#if !NO_DEEP_CANCELLATION
+        public static IAsyncEnumerable<TSource> Defer<TSource>(Func<CancellationToken, Task<IAsyncEnumerable<TSource>>> factory)
+        {
+            if (factory == null)
+                throw Error.ArgumentNull(nameof(factory));
+
+            return new AsyncDeferIteratorWithCancellation<TSource>(factory);
+        }
+#endif
 
         private sealed class DeferIterator<T> : AsyncIteratorBase<T>
         {
@@ -141,5 +150,63 @@ namespace System.Linq
                 return await _enumerator.MoveNextAsync().ConfigureAwait(false);
             }
         }
+
+#if !NO_DEEP_CANCELLATION
+        private sealed class AsyncDeferIteratorWithCancellation<T> : AsyncIteratorBase<T>
+        {
+            private readonly Func<CancellationToken, Task<IAsyncEnumerable<T>>> _factory;
+            private IAsyncEnumerator<T> _enumerator;
+
+            public AsyncDeferIteratorWithCancellation(Func<CancellationToken, Task<IAsyncEnumerable<T>>> factory)
+            {
+                Debug.Assert(factory != null);
+
+                _factory = factory;
+            }
+
+            public override T Current => _enumerator == null ? default : _enumerator.Current;
+
+            public override AsyncIteratorBase<T> Clone()
+            {
+                return new AsyncDeferIteratorWithCancellation<T>(_factory);
+            }
+
+            public override async ValueTask DisposeAsync()
+            {
+                if (_enumerator != null)
+                {
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                }
+
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            protected override ValueTask<bool> MoveNextCore()
+            {
+                if (_enumerator == null)
+                {
+                    return InitializeAndMoveNextAsync();
+                }
+
+                return _enumerator.MoveNextAsync();
+            }
+
+            private async ValueTask<bool> InitializeAndMoveNextAsync()
+            {
+                try
+                {
+                    _enumerator = (await _factory(_cancellationToken).ConfigureAwait(false)).GetAsyncEnumerator(_cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _enumerator = Throw<T>(ex).GetAsyncEnumerator(_cancellationToken);
+                    throw;
+                }
+
+                return await _enumerator.MoveNextAsync().ConfigureAwait(false);
+            }
+        }
+#endif
     }
 }

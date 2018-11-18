@@ -34,6 +34,19 @@ namespace System.Linq
             return new CatchAsyncIteratorWithTask<TSource, TException>(source, handler);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static IAsyncEnumerable<TSource> Catch<TSource, TException>(this IAsyncEnumerable<TSource> source, Func<TException, CancellationToken, ValueTask<IAsyncEnumerable<TSource>>> handler)
+            where TException : Exception
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (handler == null)
+                throw Error.ArgumentNull(nameof(handler));
+
+            return new CatchAsyncIteratorWithTaskAndCancellation<TSource, TException>(source, handler);
+        }
+#endif
+
         public static IAsyncEnumerable<TSource> Catch<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
@@ -250,6 +263,101 @@ namespace System.Linq
                 return false;
             }
         }
+
+#if !NO_DEEP_CANCELLATION
+        private sealed class CatchAsyncIteratorWithTaskAndCancellation<TSource, TException> : AsyncIterator<TSource> where TException : Exception
+        {
+            private readonly Func<TException, CancellationToken, ValueTask<IAsyncEnumerable<TSource>>> _handler;
+            private readonly IAsyncEnumerable<TSource> _source;
+
+            private IAsyncEnumerator<TSource> _enumerator;
+            private bool _isDone;
+
+            public CatchAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TException, CancellationToken, ValueTask<IAsyncEnumerable<TSource>>> handler)
+            {
+                Debug.Assert(source != null);
+                Debug.Assert(handler != null);
+
+                _source = source;
+                _handler = handler;
+            }
+
+            public override AsyncIteratorBase<TSource> Clone()
+            {
+                return new CatchAsyncIteratorWithTaskAndCancellation<TSource, TException>(_source, _handler);
+            }
+
+            public override async ValueTask DisposeAsync()
+            {
+                if (_enumerator != null)
+                {
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                }
+
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            protected override async ValueTask<bool> MoveNextCore()
+            {
+                switch (_state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _isDone = false;
+
+                        _state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        while (true)
+                        {
+                            if (!_isDone)
+                            {
+                                try
+                                {
+                                    if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                                    {
+                                        _current = _enumerator.Current;
+                                        return true;
+                                    }
+                                }
+                                catch (TException ex)
+                                {
+                                    // Note: Ideally we'd dipose of the previous enumerator before
+                                    // invoking the handler, but we use this order to preserve
+                                    // current behavior
+                                    var inner = await _handler(ex, _cancellationToken).ConfigureAwait(false);
+                                    var err = inner.GetAsyncEnumerator(_cancellationToken);
+
+                                    if (_enumerator != null)
+                                    {
+                                        await _enumerator.DisposeAsync().ConfigureAwait(false);
+                                    }
+
+                                    _enumerator = err;
+                                    _isDone = true;
+                                    continue; // loop so we hit the catch state
+                                }
+                            }
+
+                            if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                            {
+                                _current = _enumerator.Current;
+                                return true;
+                            }
+
+                            break; // while
+                        }
+
+                        break; // case
+                }
+
+                await DisposeAsync().ConfigureAwait(false);
+                return false;
+            }
+        }
+#endif
 
         private sealed class CatchAsyncIterator<TSource> : AsyncIterator<TSource>
         {

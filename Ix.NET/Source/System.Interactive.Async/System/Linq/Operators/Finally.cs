@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -30,6 +29,8 @@ namespace System.Linq
 
             return new FinallyAsyncIteratorWithTask<TSource>(source, finallyAction);
         }
+
+        // REVIEW: No cancellation support for finally action.
 
         private sealed class FinallyAsyncIterator<TSource> : AsyncIterator<TSource>
         {

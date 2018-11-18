@@ -41,6 +41,9 @@ namespace System.Linq
             return DistinctCore<TSource, TKey>(source, keySelector, comparer: null);
         }
 
+#if !NO_DEEP_CANCELLATION // TODO
+#endif
+
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
@@ -52,6 +55,9 @@ namespace System.Linq
 
             return DistinctCore(source, keySelector, comparer);
         }
+
+#if !NO_DEEP_CANCELLATION // TODO
+#endif
 
         private static IAsyncEnumerable<TSource> DistinctCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {

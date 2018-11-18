@@ -11,6 +11,8 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
+        // REVIEW: Should we convert Task-based overloads to ValueTask?
+
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext)
         {
             if (source == null)
@@ -107,6 +109,56 @@ namespace System.Linq
             return DoCore(source, onNext, onError, onCompleted);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (onNext == null)
+                throw Error.ArgumentNull(nameof(onNext));
+
+            return DoCore(source, onNext: onNext, onError: null, onCompleted: null);
+        }
+
+        public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<CancellationToken, Task> onCompleted)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (onNext == null)
+                throw Error.ArgumentNull(nameof(onNext));
+            if (onCompleted == null)
+                throw Error.ArgumentNull(nameof(onCompleted));
+
+            return DoCore(source, onNext: onNext, onError: null, onCompleted: onCompleted);
+        }
+
+        public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<Exception, CancellationToken, Task> onError)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (onNext == null)
+                throw Error.ArgumentNull(nameof(onNext));
+            if (onError == null)
+                throw Error.ArgumentNull(nameof(onError));
+
+            return DoCore(source, onNext: onNext, onError: onError, onCompleted: null);
+        }
+
+        public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<Exception, CancellationToken, Task> onError, Func<CancellationToken, Task> onCompleted)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (onNext == null)
+                throw Error.ArgumentNull(nameof(onNext));
+            if (onError == null)
+                throw Error.ArgumentNull(nameof(onError));
+            if (onCompleted == null)
+                throw Error.ArgumentNull(nameof(onCompleted));
+
+            return DoCore(source, onNext, onError, onCompleted);
+        }
+#endif
+
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, IObserver<TSource> observer)
         {
             if (source == null)
@@ -126,6 +178,13 @@ namespace System.Linq
         {
             return new DoAsyncIteratorWithTask<TSource>(source, onNext, onError, onCompleted);
         }
+
+#if !NO_DEEP_CANCELLATION
+        private static IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<Exception, CancellationToken, Task> onError, Func<CancellationToken, Task> onCompleted)
+        {
+            return new DoAsyncIteratorWithTaskAndCancellation<TSource>(source, onNext, onError, onCompleted);
+        }
+#endif
 
         private sealed class DoAsyncIterator<TSource> : AsyncIterator<TSource>
         {
@@ -281,5 +340,86 @@ namespace System.Linq
                 return false;
             }
         }
+
+#if !NO_DEEP_CANCELLATION
+        private sealed class DoAsyncIteratorWithTaskAndCancellation<TSource> : AsyncIterator<TSource>
+        {
+            private readonly Func<CancellationToken, Task> _onCompleted;
+            private readonly Func<Exception, CancellationToken, Task> _onError;
+            private readonly Func<TSource, CancellationToken, Task> _onNext;
+            private readonly IAsyncEnumerable<TSource> _source;
+
+            private IAsyncEnumerator<TSource> _enumerator;
+
+            public DoAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<Exception, CancellationToken, Task> onError, Func<CancellationToken, Task> onCompleted)
+            {
+                Debug.Assert(source != null);
+                Debug.Assert(onNext != null);
+
+                _source = source;
+                _onNext = onNext;
+                _onError = onError;
+                _onCompleted = onCompleted;
+            }
+
+            public override AsyncIteratorBase<TSource> Clone()
+            {
+                return new DoAsyncIteratorWithTaskAndCancellation<TSource>(_source, _onNext, _onError, _onCompleted);
+            }
+
+            public override async ValueTask DisposeAsync()
+            {
+                if (_enumerator != null)
+                {
+                    await _enumerator.DisposeAsync().ConfigureAwait(false);
+                    _enumerator = null;
+                }
+
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            protected override async ValueTask<bool> MoveNextCore()
+            {
+                switch (_state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        try
+                        {
+                            if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                            {
+                                _current = _enumerator.Current;
+                                await _onNext(_current, _cancellationToken).ConfigureAwait(false);
+
+                                return true;
+                            }
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            throw;
+                        }
+                        catch (Exception ex) when (_onError != null)
+                        {
+                            await _onError(ex, _cancellationToken).ConfigureAwait(false);
+                            throw;
+                        }
+
+                        if (_onCompleted != null)
+                        {
+                            await _onCompleted(_cancellationToken).ConfigureAwait(false);
+                        }
+
+                        await DisposeAsync().ConfigureAwait(false);
+                        break;
+                }
+
+                return false;
+            }
+        }
+#endif
     }
 }
