@@ -136,7 +136,7 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToSharedStateAsyncEnumerable(state);
             var ys = new[] { 3, 6, 4 }.ToSharedStateAsyncEnumerable(state);
 
-            async Task f() => await xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result).Last();
+            async Task f() => await xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.AggregateAsync("", (s, j) => s + j).Result).LastAsync();
 
             await f(); // Should not throw
         }

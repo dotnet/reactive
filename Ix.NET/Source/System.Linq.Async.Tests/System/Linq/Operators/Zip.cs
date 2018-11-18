@@ -113,7 +113,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToSharedStateAsyncEnumerable();
             var res = xs.Zip(xs, (x, y) => x * y);
 
-            async Task f() => await res.Last();
+            async Task f() => await res.LastAsync();
 
             await f(); // Should not throw
         }

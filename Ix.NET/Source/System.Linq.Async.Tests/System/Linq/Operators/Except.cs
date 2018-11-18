@@ -63,7 +63,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToSharedStateAsyncEnumerable(state);
             var ys = new[] { 3, 5, 1, 4 }.ToSharedStateAsyncEnumerable(state);
 
-            async Task f() => await xs.Except(ys).Last();
+            async Task f() => await xs.Except(ys).LastAsync();
 
             await f(); // Should not throw
         }

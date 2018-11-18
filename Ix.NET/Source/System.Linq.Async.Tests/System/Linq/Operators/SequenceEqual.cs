@@ -181,7 +181,7 @@ namespace Tests
         public async Task SequenceEqual_Concurrency()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToSharedStateAsyncEnumerable();
-            async Task f() => await xs.SequenceEqual(xs);
+            async Task f() => await xs.SequenceEqualAsync(xs);
             await f(); // Should not throw
         }
 

@@ -220,7 +220,7 @@ namespace Tests
 
             async Task f() => await xs
                 .OrderBy(async x => await state.GetTask(x))
-                .ThenBy(async x => await state.GetTask(x)).Last();
+                .ThenBy(async x => await state.GetTask(x)).LastAsync();
 
             await f(); // Should not throw
         }

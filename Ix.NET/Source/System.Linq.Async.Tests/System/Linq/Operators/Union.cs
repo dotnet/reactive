@@ -80,7 +80,7 @@ namespace Tests
             var ys = new[] { 3, 5, 1, 4 }.ToSharedStateAsyncEnumerable(state);
             var zs = new[] { 5, 7, 8, 1 }.ToSharedStateAsyncEnumerable(state);
 
-            async Task f() => await xs.Union(ys).Union(zs).Last();
+            async Task f() => await xs.Union(ys).Union(zs).LastAsync();
 
             await f(); // Should not throw
         }
