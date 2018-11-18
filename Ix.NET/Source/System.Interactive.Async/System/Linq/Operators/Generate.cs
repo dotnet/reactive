@@ -23,6 +23,8 @@ namespace System.Linq
             return new GenerateAsyncIterator<TState, TResult>(initialState, condition, iterate, resultSelector);
         }
 
+        // REVIEW: Add async variant?
+
         private sealed class GenerateAsyncIterator<TState, TResult> : AsyncIterator<TResult>
         {
             private readonly Func<TState, bool> _condition;
