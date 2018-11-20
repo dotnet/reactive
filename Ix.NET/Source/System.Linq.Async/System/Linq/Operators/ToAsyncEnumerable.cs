@@ -18,39 +18,15 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(source));
 
             // optimize these adapters for lists and collections
-            if (source is IList<TSource> list)
-                return new AsyncIListEnumerableAdapter<TSource>(list);
-
-            if (source is ICollection<TSource> collection)
-                return new AsyncICollectionEnumerableAdapter<TSource>(collection);
+            switch (source)
+            {
+                case IList<TSource> list:
+                    return new AsyncIListEnumerableAdapter<TSource>(list);
+                case ICollection<TSource> collection:
+                    return new AsyncICollectionEnumerableAdapter<TSource>(collection);
+            }
 
             return new AsyncEnumerableAdapter<TSource>(source);
-        }
-
-        public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this Task<TSource> task)
-        {
-            if (task == null)
-                throw Error.ArgumentNull(nameof(task));
-
-            return CreateEnumerable(
-                _ =>
-                {
-                    var called = 0;
-
-                    var value = default(TSource);
-                    return AsyncEnumerator.Create(
-                        async () =>
-                        {
-                            if (Interlocked.CompareExchange(ref called, 1, 0) == 0)
-                            {
-                                value = await task.ConfigureAwait(false);
-                                return true;
-                            }
-                            return false;
-                        },
-                        () => value,
-                        () => default);
-                });
         }
 
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IObservable<TSource> source)
