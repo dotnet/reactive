@@ -42,10 +42,7 @@ namespace System.Linq
                 _source = source;
             }
 
-            public override AsyncIteratorBase<T> Clone()
-            {
-                return new AsyncEnumerableAdapter<T>(_source);
-            }
+            public override AsyncIteratorBase<T> Clone() => new AsyncEnumerableAdapter<T>(_source);
 
             public override async ValueTask DisposeAsync()
             {
@@ -83,20 +80,11 @@ namespace System.Linq
 
             // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
             // and short circuit as appropriate
-            public Task<T[]> ToArrayAsync(CancellationToken cancellationToken)
-            {
-                return Task.FromResult(_source.ToArray());
-            }
+            public Task<T[]> ToArrayAsync(CancellationToken cancellationToken) => Task.FromResult(_source.ToArray());
 
-            public Task<List<T>> ToListAsync(CancellationToken cancellationToken)
-            {
-                return Task.FromResult(_source.ToList());
-            }
+            public Task<List<T>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(_source.ToList());
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
-            {
-                return Task.FromResult(_source.Count());
-            }
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(_source.Count());
         }
 
         private sealed class AsyncIListEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>, IList<T>
@@ -111,10 +99,7 @@ namespace System.Linq
                 _source = source;
             }
 
-            public override AsyncIteratorBase<T> Clone()
-            {
-                return new AsyncIListEnumerableAdapter<T>(_source);
-            }
+            public override AsyncIteratorBase<T> Clone() => new AsyncIListEnumerableAdapter<T>(_source);
 
             public override async ValueTask DisposeAsync()
             {
@@ -150,27 +135,15 @@ namespace System.Linq
                 return false;
             }
 
-            public override IAsyncEnumerable<TResult> Select<TResult>(Func<T, TResult> selector)
-            {
-                return new SelectIListIterator<T, TResult>(_source, selector);
-            }
+            public override IAsyncEnumerable<TResult> Select<TResult>(Func<T, TResult> selector) => new SelectIListIterator<T, TResult>(_source, selector);
 
             // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
             // and short circuit as appropriate
-            public Task<T[]> ToArrayAsync(CancellationToken cancellationToken)
-            {
-                return Task.FromResult(_source.ToArray());
-            }
+            public Task<T[]> ToArrayAsync(CancellationToken cancellationToken) => Task.FromResult(_source.ToArray());
 
-            public Task<List<T>> ToListAsync(CancellationToken cancellationToken)
-            {
-                return Task.FromResult(_source.ToList());
-            }
+            public Task<List<T>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(_source.ToList());
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
-            {
-                return Task.FromResult(_source.Count);
-            }
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(_source.Count);
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator() => _source.GetEnumerator();
 
@@ -198,8 +171,8 @@ namespace System.Linq
 
             T IList<T>.this[int index]
             {
-                get { return _source[index]; }
-                set { _source[index] = value; }
+                get => _source[index];
+                set => _source[index] = value;
             }
         }
 
@@ -215,10 +188,7 @@ namespace System.Linq
                 _source = source;
             }
 
-            public override AsyncIteratorBase<T> Clone()
-            {
-                return new AsyncICollectionEnumerableAdapter<T>(_source);
-            }
+            public override AsyncIteratorBase<T> Clone() => new AsyncICollectionEnumerableAdapter<T>(_source);
 
             public override async ValueTask DisposeAsync()
             {
@@ -256,20 +226,11 @@ namespace System.Linq
 
             // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
             // and short circuit as appropriate
-            public Task<T[]> ToArrayAsync(CancellationToken cancellationToken)
-            {
-                return Task.FromResult(_source.ToArray());
-            }
+            public Task<T[]> ToArrayAsync(CancellationToken cancellationToken) => Task.FromResult(_source.ToArray());
 
-            public Task<List<T>> ToListAsync(CancellationToken cancellationToken)
-            {
-                return Task.FromResult(_source.ToList());
-            }
+            public Task<List<T>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(_source.ToList());
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
-            {
-                return Task.FromResult(_source.Count);
-            }
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(_source.Count);
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator() => _source.GetEnumerator();
 
