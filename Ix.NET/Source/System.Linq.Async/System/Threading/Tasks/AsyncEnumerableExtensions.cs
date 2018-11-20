@@ -19,7 +19,10 @@ namespace System.Threading.Tasks
                 return new ConfiguredAsyncEnumerable<T>(enumerable, continueOnCapturedContext);
             }
 
-            public struct ConfiguredAsyncEnumerable<T>
+            // REVIEW: Explicit implementation of the interfaces allows for composition with other "modifier operators" such as WithCancellation.
+            //         We expect that the "await foreach" statement will bind to the public struct methods, thus avoiding boxing.
+
+            public struct ConfiguredAsyncEnumerable<T> : IAsyncEnumerable<T>
             {
                 private readonly IAsyncEnumerable<T> _enumerable;
                 private readonly bool _continueOnCapturedContext;
@@ -33,7 +36,10 @@ namespace System.Threading.Tasks
                 public ConfiguredAsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken) =>
                     new ConfiguredAsyncEnumerator(_enumerable.GetAsyncEnumerator(cancellationToken), _continueOnCapturedContext);
 
-                public struct ConfiguredAsyncEnumerator
+                IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken cancellationToken) =>
+                    GetAsyncEnumerator(cancellationToken);
+
+                public struct ConfiguredAsyncEnumerator : IAsyncEnumerator<T>
                 {
                     private readonly IAsyncEnumerator<T> _enumerator;
                     private readonly bool _continueOnCapturedContext;
@@ -51,6 +57,12 @@ namespace System.Threading.Tasks
 
                     public ConfiguredValueTaskAwaitable DisposeAsync() =>
                         _enumerator.DisposeAsync().ConfigureAwait(_continueOnCapturedContext);
+
+                    async ValueTask<bool> IAsyncEnumerator<T>.MoveNextAsync() =>
+                        await _enumerator.MoveNextAsync().ConfigureAwait(_continueOnCapturedContext);
+
+                    async ValueTask IAsyncDisposable.DisposeAsync() =>
+                        await _enumerator.DisposeAsync().ConfigureAwait(_continueOnCapturedContext);
                 }
             }
         }
