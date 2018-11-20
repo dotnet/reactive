@@ -38,17 +38,22 @@ namespace System.Linq
             return new AsyncListPartition<TSource>(_source, _minIndexInclusive, _maxIndexInclusive);
         }
 
-        protected override async ValueTask<bool> MoveNextCore()
+        protected override ValueTask<bool> MoveNextCore()
         {
             if ((uint)_index <= (uint)(_maxIndexInclusive - _minIndexInclusive) && _index < _source.Count - _minIndexInclusive)
             {
                 _current = _source[_minIndexInclusive + _index];
                 ++_index;
-                return true;
+                return new ValueTask<bool>(true);
             }
 
-            await DisposeAsync().ConfigureAwait(false);
-            return false;
+            return Core();
+
+            async ValueTask<bool> Core()
+            {
+                await DisposeAsync().ConfigureAwait(false);
+                return false;
+            }
         }
 
 #if NOT_YET

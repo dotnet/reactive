@@ -107,7 +107,7 @@ namespace System.Linq
 
             public ValueTask<Maybe<int>> TryGetLastAsync(CancellationToken cancellationToken) => new ValueTask<Maybe<int>>(new Maybe<int>(_end - 1));
 
-            protected override async ValueTask<bool> MoveNextCore()
+            protected override ValueTask<bool> MoveNextCore()
             {
                 switch (_state)
                 {
@@ -115,21 +115,26 @@ namespace System.Linq
                         _current = _start;
 
                         _state = AsyncIteratorState.Iterating;
-                        return true;
+                        return new ValueTask<bool>(true);
 
                     case AsyncIteratorState.Iterating:
                         _current++;
 
                         if (_current != _end)
                         {
-                            return true;
+                            return new ValueTask<bool>(true);
                         }
 
                         break;
                 }
 
-                await DisposeAsync().ConfigureAwait(false);
-                return false;
+                return Core();
+
+                async ValueTask<bool> Core()
+                {
+                    await DisposeAsync().ConfigureAwait(false);
+                    return false;
+                }
             }
         }
     }
