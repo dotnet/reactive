@@ -22,7 +22,7 @@ namespace System.Threading.Tasks
             // REVIEW: Explicit implementation of the interfaces allows for composition with other "modifier operators" such as WithCancellation.
             //         We expect that the "await foreach" statement will bind to the public struct methods, thus avoiding boxing.
 
-            public struct ConfiguredAsyncEnumerable<T> : IAsyncEnumerable<T>
+            public readonly struct ConfiguredAsyncEnumerable<T> : IAsyncEnumerable<T>
             {
                 private readonly IAsyncEnumerable<T> _enumerable;
                 private readonly bool _continueOnCapturedContext;
@@ -39,7 +39,7 @@ namespace System.Threading.Tasks
                 IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken cancellationToken) =>
                     GetAsyncEnumerator(cancellationToken);
 
-                public struct ConfiguredAsyncEnumerator : IAsyncEnumerator<T>
+                public readonly struct ConfiguredAsyncEnumerator : IAsyncEnumerator<T>
                 {
                     private readonly IAsyncEnumerator<T> _enumerator;
                     private readonly bool _continueOnCapturedContext;

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Linq
 {
-    internal struct Maybe<T> : IEquatable<Maybe<T>>
+    internal readonly struct Maybe<T> : IEquatable<Maybe<T>>
     {
         public Maybe(T value)
         {

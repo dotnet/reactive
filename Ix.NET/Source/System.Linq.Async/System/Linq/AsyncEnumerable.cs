@@ -19,7 +19,7 @@ namespace System.Linq
             return new AnonymousAsyncEnumerable<T>(getEnumerator);
         }
 
-        public static IAsyncEnumerable<T> WithCancellation<T>(this IAsyncEnumerable<T> source, CancellationToken cancellationToken)
+        public static WithCancellationAsyncEnumerable<T> WithCancellation<T>(this IAsyncEnumerable<T> source, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -44,7 +44,7 @@ namespace System.Linq
         // REVIEW: Explicit implementation of the interfaces allows for composition with other "modifier operators" such as ConfigureAwait.
         //         We expect that the "await foreach" statement will bind to the public struct methods, thus avoiding boxing.
 
-        public struct WithCancellationAsyncEnumerable<T> : IAsyncEnumerable<T>
+        public readonly struct WithCancellationAsyncEnumerable<T> : IAsyncEnumerable<T>
         {
             private readonly IAsyncEnumerable<T> _source;
             private readonly CancellationToken _cancellationToken;
@@ -63,7 +63,7 @@ namespace System.Linq
             IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken cancellationToken)
                 => GetAsyncEnumerator(cancellationToken);
 
-            public struct WithCancellationAsyncEnumerator : IAsyncEnumerator<T>
+            public readonly struct WithCancellationAsyncEnumerator : IAsyncEnumerator<T>
             {
                 private readonly IAsyncEnumerator<T> _enumerator;
 
