@@ -117,7 +117,6 @@ namespace System.Linq
                         _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
-
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
@@ -181,7 +180,6 @@ namespace System.Linq
                         _index = -1;
                         _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
-
 
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
@@ -251,7 +249,6 @@ namespace System.Linq
 
                         _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
-
 
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
@@ -383,7 +380,6 @@ namespace System.Linq
                         _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
-
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
@@ -454,7 +450,6 @@ namespace System.Linq
                         _index = -1;
                         _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
-
 
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
