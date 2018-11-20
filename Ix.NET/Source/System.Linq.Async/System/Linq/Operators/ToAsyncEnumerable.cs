@@ -99,7 +99,7 @@ namespace System.Linq
                 });
         }
 
-        internal sealed class AsyncEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>
+        private sealed class AsyncEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>
         {
             private readonly IEnumerable<T> _source;
 
@@ -169,7 +169,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class AsyncIListEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>, IList<T>
+        private sealed class AsyncIListEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>, IList<T>
         {
             private readonly IList<T> _source;
             private IEnumerator<T> _enumerator;
@@ -273,7 +273,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class AsyncICollectionEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>, ICollection<T>
+        private sealed class AsyncICollectionEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>, ICollection<T>
         {
             private readonly ICollection<T> _source;
             private IEnumerator<T> _enumerator;
