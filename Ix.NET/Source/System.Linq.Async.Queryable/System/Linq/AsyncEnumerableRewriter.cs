@@ -250,7 +250,7 @@ namespace System.Linq
             return true;
         }
 
-        private ReadOnlyCollection<Expression> FixupQuotedArgs(MethodInfo method, ReadOnlyCollection<Expression> argList)
+        private static ReadOnlyCollection<Expression> FixupQuotedArgs(MethodInfo method, ReadOnlyCollection<Expression> argList)
         {
             //
             // Get all of the method parameters. No fix-up needed if empty.
@@ -303,7 +303,7 @@ namespace System.Linq
             return argList;
         }
 
-        private Expression FixupQuotedExpression(Type type, Expression expression)
+        private static Expression FixupQuotedExpression(Type type, Expression expression)
         {
             var res = expression;
 
