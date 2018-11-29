@@ -33,8 +33,12 @@ namespace System.Threading.Tasks
                     _continueOnCapturedContext = continueOnCapturedContext;
                 }
 
-                public ConfiguredAsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken) =>
-                    new ConfiguredAsyncEnumerator(_enumerable.GetAsyncEnumerator(cancellationToken), _continueOnCapturedContext);
+                public ConfiguredAsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken)
+                {
+                    cancellationToken.ThrowIfCancellationRequested(); // NB: [LDM-2018-11-28] Equivalent to async iterator behavior.
+
+                    return new ConfiguredAsyncEnumerator(_enumerable.GetAsyncEnumerator(cancellationToken), _continueOnCapturedContext);
+                }
 
                 IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken cancellationToken) =>
                     GetAsyncEnumerator(cancellationToken);

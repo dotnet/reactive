@@ -118,6 +118,8 @@ namespace System.Linq
         /// <returns>A new enumerator instance used to enumerate the elements in the sequence.</returns>
         public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
+
             if (_enumerable == null)
             {
                 var expression = Expression.Lambda<Func<IAsyncEnumerable<T>>>(new AsyncEnumerableRewriter().Visit(_expression), null);

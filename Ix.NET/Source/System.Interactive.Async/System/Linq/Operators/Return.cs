@@ -28,6 +28,8 @@ namespace System.Linq
 
             public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken)
             {
+                cancellationToken.ThrowIfCancellationRequested(); // NB: [LDM-2018-11-28] Equivalent to async iterator behavior.
+
                 return new ReturnEnumerator(_value);
             }
 

@@ -38,7 +38,12 @@ namespace System.Linq
                 _getEnumerator = getEnumerator;
             }
 
-            public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken) => _getEnumerator(cancellationToken);
+            public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested(); // NB: [LDM-2018-11-28] Equivalent to async iterator behavior.
+
+                return _getEnumerator(cancellationToken);
+            }
         }
 
         // REVIEW: Explicit implementation of the interfaces allows for composition with other "modifier operators" such as ConfigureAwait.
@@ -56,6 +61,7 @@ namespace System.Linq
             }
 
             // REVIEW: Should we simply ignore the second cancellation token or should we link the two?
+            // REVIEW: [LDM-2018-11-28] Should we have eager cancellation here too?
 
             public WithCancellationAsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken)
                 => new WithCancellationAsyncEnumerator(_source.GetAsyncEnumerator(_cancellationToken));

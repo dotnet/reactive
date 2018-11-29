@@ -89,6 +89,11 @@ namespace System.Linq.Internal
             }
         }
 
-        IAsyncEnumerator<TElement> IAsyncEnumerable<TElement>.GetAsyncEnumerator(CancellationToken cancellationToken) => this.ToAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
+        IAsyncEnumerator<TElement> IAsyncEnumerable<TElement>.GetAsyncEnumerator(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested(); // NB: [LDM-2018-11-28] Equivalent to async iterator behavior.
+
+            return this.ToAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
+        }
     }
 }

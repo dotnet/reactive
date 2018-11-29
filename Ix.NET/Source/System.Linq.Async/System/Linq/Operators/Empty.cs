@@ -42,7 +42,12 @@ namespace System.Linq
 
             public ValueTask<bool> MoveNextAsync() => new ValueTask<bool>(false);
 
-            public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken) => this;
+            public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested(); // NB: [LDM-2018-11-28] Equivalent to async iterator behavior.
+
+                return this;
+            }
 
             public ValueTask DisposeAsync() => default;
         }

@@ -136,7 +136,10 @@ namespace System.Linq
             }
 
             public IAsyncEnumerator<TResult> GetAsyncEnumerator(CancellationToken cancellationToken)
-                => new GroupJoinAsyncEnumerator(
+            {
+                cancellationToken.ThrowIfCancellationRequested(); // NB: [LDM-2018-11-28] Equivalent to async iterator behavior.
+
+                return new GroupJoinAsyncEnumerator(
                     _outer.GetAsyncEnumerator(cancellationToken),
                     _inner,
                     _outerKeySelector,
@@ -144,6 +147,7 @@ namespace System.Linq
                     _resultSelector,
                     _comparer,
                     cancellationToken);
+            }
 
             private sealed class GroupJoinAsyncEnumerator : IAsyncEnumerator<TResult>
             {
@@ -230,7 +234,10 @@ namespace System.Linq
             }
 
             public IAsyncEnumerator<TResult> GetAsyncEnumerator(CancellationToken cancellationToken)
-                => new GroupJoinAsyncEnumeratorWithTask(
+            {
+                cancellationToken.ThrowIfCancellationRequested(); // NB: [LDM-2018-11-28] Equivalent to async iterator behavior.
+
+                return new GroupJoinAsyncEnumeratorWithTask(
                     _outer.GetAsyncEnumerator(cancellationToken),
                     _inner,
                     _outerKeySelector,
@@ -238,6 +245,7 @@ namespace System.Linq
                     _resultSelector,
                     _comparer,
                     cancellationToken);
+            }
 
             private sealed class GroupJoinAsyncEnumeratorWithTask : IAsyncEnumerator<TResult>
             {
@@ -325,7 +333,10 @@ namespace System.Linq
             }
 
             public IAsyncEnumerator<TResult> GetAsyncEnumerator(CancellationToken cancellationToken)
-                => new GroupJoinAsyncEnumeratorWithTask(
+            {
+                cancellationToken.ThrowIfCancellationRequested(); // NB: [LDM-2018-11-28] Equivalent to async iterator behavior.
+
+                return new GroupJoinAsyncEnumeratorWithTask(
                     _outer.GetAsyncEnumerator(cancellationToken),
                     _inner,
                     _outerKeySelector,
@@ -333,6 +344,7 @@ namespace System.Linq
                     _resultSelector,
                     _comparer,
                     cancellationToken);
+            }
 
             private sealed class GroupJoinAsyncEnumeratorWithTask : IAsyncEnumerator<TResult>
             {
