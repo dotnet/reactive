@@ -19,12 +19,14 @@ namespace System.Linq
             return new AnonymousAsyncEnumerable<T>(getEnumerator);
         }
 
-        public static WithCancellationAsyncEnumerable<T> WithCancellation<T>(this IAsyncEnumerable<T> source, CancellationToken cancellationToken)
+        // REVIEW: [LDM-2018-11-28] Should return type be a struct or just the interface type?
+
+        public static WithCancellationTokenAsyncEnumerable<T> WithCancellationToken<T>(this IAsyncEnumerable<T> source, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return new WithCancellationAsyncEnumerable<T>(source, cancellationToken);
+            return new WithCancellationTokenAsyncEnumerable<T>(source, cancellationToken);
         }
 
         private sealed class AnonymousAsyncEnumerable<T> : IAsyncEnumerable<T>
@@ -49,12 +51,12 @@ namespace System.Linq
         // REVIEW: Explicit implementation of the interfaces allows for composition with other "modifier operators" such as ConfigureAwait.
         //         We expect that the "await foreach" statement will bind to the public struct methods, thus avoiding boxing.
 
-        public readonly struct WithCancellationAsyncEnumerable<T> : IAsyncEnumerable<T>
+        public readonly struct WithCancellationTokenAsyncEnumerable<T> : IAsyncEnumerable<T>
         {
             private readonly IAsyncEnumerable<T> _source;
             private readonly CancellationToken _cancellationToken;
 
-            public WithCancellationAsyncEnumerable(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
+            public WithCancellationTokenAsyncEnumerable(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
             {
                 _source = source;
                 _cancellationToken = cancellationToken;
