@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -21,7 +20,6 @@ namespace System.Linq
         private sealed class TaskToAsyncEnumerable<T> : AsyncIterator<T>
         {
             private readonly Task<T> _task;
-            private int _called;
 
             public TaskToAsyncEnumerable(Task<T> task) => _task = task;
 
@@ -29,8 +27,9 @@ namespace System.Linq
 
             protected override async ValueTask<bool> MoveNextCore()
             {
-                if (Interlocked.CompareExchange(ref _called, 1, 0) == 0)
+                if (_state == AsyncIteratorState.Allocated)
                 {
+                    _state = AsyncIteratorState.Iterating;
                     _current = await _task.ConfigureAwait(false);
                     return true;
                 }
