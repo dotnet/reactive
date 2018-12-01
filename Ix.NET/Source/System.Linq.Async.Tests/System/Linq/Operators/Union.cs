@@ -80,9 +80,9 @@ namespace Tests
             var ys = new[] { 3, 5, 1, 4 }.ToSharedStateAsyncEnumerable(state);
             var zs = new[] { 5, 7, 8, 1 }.ToSharedStateAsyncEnumerable(state);
 
-            async Task f() => await xs.Union(ys).Union(zs).LastAsync();
+            await xs.Union(ys).Union(zs).LastAsync();
 
-            await f(); // Should not throw
+            Assert.Equal(0, state.ConcurrentAccessCount);
         }
 
         private sealed class Eq : IEqualityComparer<int>

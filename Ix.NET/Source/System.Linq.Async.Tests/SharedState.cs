@@ -10,12 +10,16 @@ namespace Tests
         private readonly object _locker = new object();
         private bool _inUse = false;
 
+        public int ConcurrentAccessCount { get; private set; }
+
         public IDisposable Use()
         {
             lock (_locker)
             {
                 if (_inUse)
-                    throw new InvalidOperationException("Iterator already in use");
+                {
+                    ConcurrentAccessCount++;
+                }
                 _inUse = true;
             }
 

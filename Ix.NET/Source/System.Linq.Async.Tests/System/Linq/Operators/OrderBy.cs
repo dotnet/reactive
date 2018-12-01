@@ -218,11 +218,11 @@ namespace Tests
             var state = new SharedState();
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToSharedStateAsyncEnumerable(state);
 
-            async Task f() => await xs
+            await xs
                 .OrderBy(async x => await state.GetTask(x))
                 .ThenBy(async x => await state.GetTask(x)).LastAsync();
 
-            await f(); // Should not throw
+            Assert.Equal(0, state.ConcurrentAccessCount);
         }
     }
 }

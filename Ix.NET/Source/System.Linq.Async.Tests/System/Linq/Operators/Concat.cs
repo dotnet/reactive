@@ -141,9 +141,9 @@ namespace Tests
             var ys = new[] { 4, 5 }.ToSharedStateAsyncEnumerable(state);
             var zs = new[] { 6, 7, 8 }.ToSharedStateAsyncEnumerable(state);
 
-            async Task f() => await xs.Concat(ys).Concat(zs).LastAsync();
+            await xs.Concat(ys).Concat(zs).LastAsync();
 
-            await f(); // Should not throw
+            Assert.Equal(0, state.ConcurrentAccessCount);
         }
     }
 }

@@ -9,14 +9,14 @@ namespace Tests
 {
     static public class TestExts
     {
-        public static IAsyncEnumerable<T> ToSharedStateAsyncEnumerable<T>(this IEnumerable<T> enumerable, SharedState state = null)
+        public static IAsyncEnumerable<T> ToSharedStateAsyncEnumerable<T>(this IEnumerable<T> enumerable, SharedState state)
         {
-            return new SharedStateAsyncEnumerable<T>(enumerable.ToAsyncEnumerable(), state ?? new SharedState());
+            return new SharedStateAsyncEnumerable<T>(enumerable.ToAsyncEnumerable(), state);
         }
 
-        public static IAsyncEnumerable<T> ToSharedStateAsyncEnumerable<T>(this IAsyncEnumerable<T> enumerable, SharedState state = null)
+        public static IAsyncEnumerable<T> ToSharedStateAsyncEnumerable<T>(this IAsyncEnumerable<T> enumerable, SharedState state)
         {
-            return new SharedStateAsyncEnumerable<T>(enumerable, state ?? new SharedState());
+            return new SharedStateAsyncEnumerable<T>(enumerable, state);
         }
 
         private class SharedStateAsyncEnumerable<T> : IAsyncEnumerable<T>

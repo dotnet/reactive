@@ -180,9 +180,12 @@ namespace Tests
         [Fact]
         public async Task SequenceEqual_Concurrency()
         {
-            var xs = new[] { 1, 2, 3, 4 }.ToSharedStateAsyncEnumerable();
-            async Task f() => await xs.SequenceEqualAsync(xs);
-            await f(); // Should not throw
+            var state = new SharedState();
+            var xs = new[] { 1, 2, 3, 4 }.ToSharedStateAsyncEnumerable(state);
+
+            await xs.SequenceEqualAsync(xs);
+
+            Assert.Equal(0, state.ConcurrentAccessCount);
         }
 
         private sealed class EqEx : IEqualityComparer<int>

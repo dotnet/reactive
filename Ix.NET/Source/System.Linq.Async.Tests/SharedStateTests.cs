@@ -17,9 +17,9 @@ namespace Tests
             var t1 = state.GetTask();
             var t2 = state.GetTask();
 
-            Task f() => Task.WhenAll(t1.AsTask(), t2.AsTask());
+            await Task.WhenAll(t1.AsTask(), t2.AsTask());
 
-            await Assert.ThrowsAsync<InvalidOperationException>(f);
+            Assert.Equal(1, state.ConcurrentAccessCount);
         }
 
         [Fact]
@@ -27,13 +27,10 @@ namespace Tests
         {
             var state = new SharedState();
 
-            async Task f()
-            {
-                await state.GetTask();
-                await state.GetTask();
-            }
+            await state.GetTask();
+            await state.GetTask();
 
-            await f(); // Should not throw
+            Assert.Equal(0, state.ConcurrentAccessCount);
         }
 
         [Fact]
@@ -50,9 +47,9 @@ namespace Tests
             var t1 = e1.MoveNextAsync();
             var t2 = e2.MoveNextAsync();
 
-            Task f() => Task.WhenAll(t1.AsTask(), t2.AsTask());
+            await Task.WhenAll(t1.AsTask(), t2.AsTask());
 
-            await Assert.ThrowsAsync<InvalidOperationException>(f);
+            Assert.Equal(1, state.ConcurrentAccessCount);
         }
 
         [Fact]
@@ -66,13 +63,10 @@ namespace Tests
             var e1 = seq1.GetAsyncEnumerator();
             var e2 = seq2.GetAsyncEnumerator();
 
-            async Task f()
-            {
-                await e1.MoveNextAsync();
-                await e2.MoveNextAsync();
-            }
+            await e1.MoveNextAsync();
+            await e2.MoveNextAsync();
 
-            await f(); // Should not throw
+            Assert.Equal(0, state.ConcurrentAccessCount);
         }
 
         [Fact]
@@ -89,9 +83,9 @@ namespace Tests
             var t1 = e1.DisposeAsync();
             var t2 = e2.DisposeAsync();
 
-            Task f() => Task.WhenAll(t1.AsTask(), t2.AsTask());
+            await Task.WhenAll(t1.AsTask(), t2.AsTask());
 
-            await Assert.ThrowsAsync<InvalidOperationException>(f);
+            Assert.Equal(1, state.ConcurrentAccessCount);
         }
 
         [Fact]
@@ -105,13 +99,10 @@ namespace Tests
             var e1 = seq1.GetAsyncEnumerator();
             var e2 = seq2.GetAsyncEnumerator();
 
-            async Task f()
-            {
-                await e1.DisposeAsync();
-                await e2.DisposeAsync();
-            }
+            await e1.DisposeAsync();
+            await e2.DisposeAsync();
 
-            await f(); // Should not throw
+            Assert.Equal(0, state.ConcurrentAccessCount);
         }
     }
 }

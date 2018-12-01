@@ -65,9 +65,9 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToSharedStateAsyncEnumerable(state);
             var ys = new[] { 3, 5, 1, 4 }.ToSharedStateAsyncEnumerable(state);
 
-            async Task f() => await xs.Intersect(ys).LastAsync();
+            await xs.Intersect(ys).LastAsync();
 
-            await f(); // Should not throw
+            Assert.Equal(0, state.ConcurrentAccessCount);
         }
 
         private sealed class Eq : IEqualityComparer<int>
