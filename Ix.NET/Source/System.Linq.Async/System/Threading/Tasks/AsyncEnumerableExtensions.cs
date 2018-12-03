@@ -17,6 +17,14 @@ namespace System.Threading.Tasks
             return new ConfiguredAsyncEnumerable<T>(enumerable, continueOnCapturedContext);
         }
 
+        public static ConfiguredAsyncEnumerable<T>.ConfiguredAsyncEnumerator ConfigureAwait<T>(this IAsyncEnumerator<T> enumerator, bool continueOnCapturedContext)
+        {
+            if (enumerator == null)
+                throw Error.ArgumentNull(nameof(enumerator));
+
+            return new ConfiguredAsyncEnumerable<T>.ConfiguredAsyncEnumerator(enumerator, continueOnCapturedContext);
+        }
+
         // REVIEW: Explicit implementation of the interfaces allows for composition with other "modifier operators" such as WithCancellation.
         //         We expect that the "await foreach" statement will bind to the public struct methods, thus avoiding boxing.
 
