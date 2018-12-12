@@ -1,9 +1,14 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net46;uap10.0;uap10.0.16299</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0;netstandard2.0;net46;uap10.0;uap10.0.16299</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>       
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <Description>Reactive Extensions (Rx) for .NET</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
 
@@ -34,7 +39,7 @@
   </ItemGroup>
   
   <!-- Windows includes for Desktop and UWP -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' or $(TargetFramework.StartsWith('uap10.0')) ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' or $(TargetFramework.StartsWith('uap10.0')) or '$(TargetFramework)' == 'netcoreapp3.0'">
     <Compile Include="Platforms\Windows\**\*.cs" />
     <EmbeddedResource Include="Platforms\Windows\**\*.resx" />    
   </ItemGroup>
@@ -45,6 +50,9 @@
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' or '$(TargetFramework)' == 'netcoreapp3.0'">
     <Compile Include="Platforms\Desktop\**\*.cs" />
   </ItemGroup>
   

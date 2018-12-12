@@ -10,6 +10,18 @@ using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
 using Xunit;
 
+#if HAS_DISPATCHER
+using System.Windows.Threading;
+using System.Reactive;
+using System.Reactive.Subjects;
+
+#endif
+
+#if HAS_WINFORMS
+using System.Windows.Forms;
+#endif
+
+
 namespace ReactiveTests.Tests
 {
     public class SubscribeOnTest : TestBase
@@ -112,6 +124,28 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
             Application.Exit();
             Assert.True(okay);
+        }
+
+        private Label CreateLabel()
+        {
+            var loaded = new ManualResetEvent(false);
+            var lbl = default(Label);
+
+            var t = new Thread(() =>
+            {
+                lbl = new Label();
+                var frm = new Form { Controls = { lbl }, Width = 0, Height = 0, FormBorderStyle = FormBorderStyle.None, ShowInTaskbar = false };
+                frm.Load += (_, __) =>
+                {
+                    loaded.Set();
+                };
+                Application.Run(frm);
+            });
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+
+            loaded.WaitOne();
+            return lbl;
         }
 #endif
 
