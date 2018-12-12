@@ -28,6 +28,10 @@ variables:
   BuildPlatform: Any CPU
     
 steps:
+- task: DotNetCoreInstaller@0
+  inputs:
+    version: '3.0.100-preview-009812'
+
 - task: DotNetCoreCLI@2  
   inputs:
     command: custom
