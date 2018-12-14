@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.0;netcoreapp2.1</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
@@ -8,18 +8,12 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Source\ReactiveX.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0' ">
-    <UseWPF>true</UseWPF>
-    <UseWindowsForms>true</UseWindowsForms>
-  </PropertyGroup>
-
   
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netcoreapp2.1'">
     <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-    <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;HAS_WINFORMS;HAS_DISPATCHER;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;DESKTOPCLR;LINUX</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;LINUX</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
