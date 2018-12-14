@@ -135,6 +135,8 @@ jobs:
     inputs:
       artifactName: artifacts
       downloadPath: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
+      
+  - script: mv $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages/artifacts/*.* $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
 
   - task: DotNetCoreCLI@2
     displayName: Update Rx
