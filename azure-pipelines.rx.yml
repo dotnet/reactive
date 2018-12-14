@@ -20,83 +20,145 @@ pr:
       - .editorconfig
       - azure-pipelines.rx.yml
 
-pool:
-  vmImage: vs2017-win2016
+jobs:
+- job: Build
+  pool:
+    vmImage: vs2017-win2016
 
-variables: 
-  BuildConfiguration: Release
-  BuildPlatform: Any CPU
+  variables: 
+    BuildConfiguration: Release
+    BuildPlatform: Any CPU
+      
+  steps:
+  - task: DotNetCoreInstaller@0
+    inputs:
+      version: '3.0.100-preview-009812'
+
+  - task: DotNetCoreCLI@2  
+    inputs:
+      command: custom
+      custom: tool
+      arguments: install --tool-path . nbgv
+    displayName: Install NBGV tool
+
+  - script: nbgv cloud -a -p Rx.NET\Source
+    displayName: Set Version
+
+  - task: MSBuild@1
+    displayName: Build System.Reactive.sln
+    inputs:
+      solution: Rx.NET/Source/System.Reactive.sln    
+      msbuildArguments: /restore /t:build /p:CreatePackage=true /p:NoPackageAnalysis=true /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
+      platform: $(BuildPlatform)
+      configuration: $(BuildConfiguration)
+      maximumCpuCount: true
+
+  - task: NuGetCommand@2
+    displayName: Pack compatibility package
+    inputs:
+      command: custom
+      arguments: pack Rx.NET/Source/facades/System.Reactive.Compatibility.nuspec -Version $(NBGV_NuGetPackageVersion) -MinClientVersion 2.12 -NoPackageAnalysis -outputdirectory $(Build.ArtifactStagingDirectory)\artifacts
     
-steps:
-- task: DotNetCoreInstaller@0
-  inputs:
-    version: '3.0.100-preview-009812'
+  - task: MSBuild@1
+    displayName: Build for Test (ppdb) workaround
+    inputs:
+      solution: Rx.NET/Source/System.Reactive.sln    
+      msbuildArguments: /t:build /p:DebugType=portable
+      platform: $(BuildPlatform)
+      configuration: $(BuildConfiguration)
+      maximumCpuCount: true
 
-- task: DotNetCoreCLI@2  
-  inputs:
-    command: custom
-    custom: tool
-    arguments: install --tool-path . nbgv
-  displayName: Install NBGV tool
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: test
+      projects: Rx.NET/Source/tests/Tests.System.Reactive/*.csproj
+      arguments: -c $(BuildConfiguration) --no-build --no-restore --filter "SkipCI!=true" --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Rx.NET/Source/CodeCoverage.runsettings
+    displayName: Run Unit Tests
 
-- script: nbgv cloud -a -p Rx.NET\Source
-  displayName: Set Version
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: test
+      projects: Rx.NET/Source/tests/Tests.System.Reactive.ApiApprovals/Tests.System.Reactive.ApiApprovals.csproj
+      arguments: -c $(BuildConfiguration) --no-build --no-restore 
+    displayName: Run Api Approvals Tests
 
-- task: MSBuild@1
-  displayName: Build System.Reactive.sln
-  inputs:
-    solution: Rx.NET/Source/System.Reactive.sln    
-    msbuildArguments: /restore /t:build /p:CreatePackage=true /p:NoPackageAnalysis=true /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
-    platform: $(BuildPlatform)
-    configuration: $(BuildConfiguration)
-    maximumCpuCount: true
+  - task: whitesource.ws-bolt.bolt.wss.WhiteSource Bolt@18
+    displayName: 'WhiteSource Bolt'
+    enabled: false
+    
+  - task: PowerShell@2
+    displayName: Authenticode Sign Packages
+    inputs:
+      filePath: Rx.NET/Source/build/Sign-Package.ps1
+    env:
+      SignClientUser: $(SignClientUser)
+      SignClientSecret: $(SignClientSecret)
+      ArtifactDirectory: $(Build.ArtifactStagingDirectory)\artifacts
+    condition: and(succeeded(), not(eq(variables['build.reason'], 'PullRequest')), not(eq(variables['SignClientSecret'], '')), not(eq(variables['SignClientUser'], '')))
 
-- task: NuGetCommand@2
-  displayName: Pack compatibility package
-  inputs:
-    command: custom
-    arguments: pack Rx.NET/Source/facades/System.Reactive.Compatibility.nuspec -Version $(NBGV_NuGetPackageVersion) -MinClientVersion 2.12 -NoPackageAnalysis -outputdirectory $(Build.ArtifactStagingDirectory)\artifacts
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: $(Build.ArtifactStagingDirectory)\artifacts
+      ArtifactName: artifacts
+      publishLocation: Container
+
+- job: Linux_Test
+  dependsOn: Build
+  pool:
+    vmImage: ubuntu-16.04
   
-- task: MSBuild@1
-  displayName: Build for Test (ppdb) workaround
-  inputs:
-    solution: Rx.NET/Source/System.Reactive.sln    
-    msbuildArguments: /t:build /p:DebugType=portable
-    platform: $(BuildPlatform)
-    configuration: $(BuildConfiguration)
-    maximumCpuCount: true
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: test
-    projects: Rx.NET/Source/tests/Tests.System.Reactive/*.csproj
-    arguments: -c $(BuildConfiguration) --no-build --no-restore --filter "SkipCI!=true" --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Rx.NET/Source/CodeCoverage.runsettings
-  displayName: Run Unit Tests
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: test
-    projects: Rx.NET/Source/tests/Tests.System.Reactive.ApiApprovals/Tests.System.Reactive.ApiApprovals.csproj
-    arguments: -c $(BuildConfiguration) --no-build --no-restore 
-  displayName: Run Api Approvals Tests
-
-- task: whitesource.ws-bolt.bolt.wss.WhiteSource Bolt@18
-  displayName: 'WhiteSource Bolt'
-  enabled: false
+  variables: 
+    BuildConfiguration: Release
+    BuildPlatform: Any CPU
   
-- task: PowerShell@2
-  displayName: Authenticode Sign Packages
-  inputs:
-    filePath: Rx.NET/Source/build/Sign-Package.ps1
-  env:
-    SignClientUser: $(SignClientUser)
-    SignClientSecret: $(SignClientSecret)
-    ArtifactDirectory: $(Build.ArtifactStagingDirectory)\artifacts
-  condition: and(succeeded(), not(eq(variables['build.reason'], 'PullRequest')), not(eq(variables['SignClientSecret'], '')), not(eq(variables['SignClientUser'], '')))
+  steps:
+  - task: DotNetCoreInstaller@0
+    inputs:
+      version: '3.0.100-preview-009812'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: $(Build.ArtifactStagingDirectory)\artifacts
-    ArtifactName: artifacts
-    publishLocation: Container
+  - task: DotNetCoreCLI@2  
+    inputs:
+      command: custom
+      custom: tool
+      arguments: install --tool-path . nbgv
+    displayName: Install NBGV tool
 
+  - script: nbgv cloud -a -p Rx.NET\Source
+    displayName: Set Version
+
+  - task: DownloadBuildArtifacts@0
+    displayName: 'Download Build Artifacts'
+    inputs:
+      artifactName: artifacts
+      downloadPath: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
+
+  - task: DotNetCoreCLI@2
+    displayName: Update Rx
+    inputs:
+      command: custom
+      projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
+      custom: add
+      arguments: package System.Reactive -v $(NBGV_NuGetPackageVersion) -s $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
+
+  - task: DotNetCoreCLI@2
+    displayName: Update Aliases
+    inputs:
+      command: custom
+      projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
+      custom: add
+      arguments: package System.Reactive.Observable.Aliases -v $(NBGV_NuGetPackageVersion) -s $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
+
+  - task: DotNetCoreCLI@2
+    displayName: Update Testing
+    inputs:
+      command: custom
+      projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
+      custom: add
+      arguments: package Microsoft.Reactive.Testing -v $(NBGV_NuGetPackageVersion) -s $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: test
+      projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
+      arguments: -c $(BuildConfiguration)
+    displayName: Run Tests on Linux
