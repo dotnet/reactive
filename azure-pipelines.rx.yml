@@ -116,10 +116,6 @@ jobs:
     inputs:
       version: '2.2.100'
 
-  - task: DotNetCoreInstaller@0
-    inputs:
-      version: '3.0.100-preview-009812'
-
   - task: DotNetCoreCLI@2  
     inputs:
       command: custom
@@ -129,6 +125,10 @@ jobs:
 
   - script: ./nbgv cloud -a -p Rx.NET/Source
     displayName: Set Version
+
+  - task: DotNetCoreInstaller@0
+    inputs:
+      version: '3.0.100-preview-009812'
 
   - task: DownloadBuildArtifacts@0
     displayName: 'Download Build Artifacts'
