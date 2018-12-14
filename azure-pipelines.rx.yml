@@ -41,7 +41,7 @@ jobs:
       arguments: install --tool-path . nbgv
     displayName: Install NBGV tool
 
-  - script: nbgv cloud -a -p Rx.NET\Source
+  - script: ./nbgv cloud -a -p Rx.NET/Source
     displayName: Set Version
 
   - task: MSBuild@1
