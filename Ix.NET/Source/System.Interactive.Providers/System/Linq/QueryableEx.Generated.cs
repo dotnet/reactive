@@ -2152,11 +2152,7 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> TakeLast<TSource>(IEnumerable<TSource> source, int count)
         {
-#if REFERENCE_ASSEMBLY
-            return null;
-#else
             return EnumerableEx.TakeLast(source, count);
-#endif
         }
 #pragma warning restore 1591
 
@@ -2190,11 +2186,7 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> SkipLast<TSource>(IEnumerable<TSource> source, int count)
         {
-#if REFERENCE_ASSEMBLY
-            return null;
-#else
             return EnumerableEx.SkipLast(source, count);
-#endif
         }
 #pragma warning restore 1591
 

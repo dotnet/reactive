@@ -8,7 +8,7 @@ namespace System.Linq
 {
     public static partial class EnumerableEx
     {
-#if !(REFERENCE_ASSEMBLY && (NETCOREAPP2_0 || NETSTANDARD2_1))
+#if !(NETCOREAPP2_0 || NETSTANDARD2_1)
         /// <summary>
         /// Bypasses a specified number of contiguous elements from the end of the sequence and returns the remaining elements.
         /// </summary>
@@ -33,7 +33,6 @@ namespace System.Linq
 
             return SkipLastCore(source, count);
         }
-#endif
 
         private static IEnumerable<TSource> SkipLastCore<TSource>(this IEnumerable<TSource> source, int count)
         {
@@ -49,5 +48,6 @@ namespace System.Linq
                 }
             }
         }
+#endif
     }
 }
