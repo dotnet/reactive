@@ -21,12 +21,12 @@ namespace System.Linq
 
         // REVIEW: [LDM-2018-11-28] Should return type be a struct or just the interface type?
 
-        public static WithCancellationTokenAsyncEnumerable<T> WithCancellationToken<T>(this IAsyncEnumerable<T> source, CancellationToken cancellationToken)
+        public static WithCancellationAsyncEnumerable<T> WithCancellation<T>(this IAsyncEnumerable<T> source, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return new WithCancellationTokenAsyncEnumerable<T>(source, cancellationToken);
+            return new WithCancellationAsyncEnumerable<T>(source, cancellationToken);
         }
 
         private sealed class AnonymousAsyncEnumerable<T> : IAsyncEnumerable<T>
@@ -51,12 +51,12 @@ namespace System.Linq
         // REVIEW: Explicit implementation of the interfaces allows for composition with other "modifier operators" such as ConfigureAwait.
         //         We expect that the "await foreach" statement will bind to the public struct methods, thus avoiding boxing.
 
-        public readonly struct WithCancellationTokenAsyncEnumerable<T> : IAsyncEnumerable<T>
+        public readonly struct WithCancellationAsyncEnumerable<T> : IAsyncEnumerable<T>
         {
             private readonly IAsyncEnumerable<T> _source;
             private readonly CancellationToken _cancellationToken;
 
-            public WithCancellationTokenAsyncEnumerable(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
+            public WithCancellationAsyncEnumerable(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
             {
                 _source = source;
                 _cancellationToken = cancellationToken;
@@ -75,10 +75,7 @@ namespace System.Linq
             {
                 private readonly IAsyncEnumerator<T> _enumerator;
 
-                public WithCancellationAsyncEnumerator(IAsyncEnumerator<T> enumerator)
-                {
-                    _enumerator = enumerator;
-                }
+                public WithCancellationAsyncEnumerator(IAsyncEnumerator<T> enumerator) => _enumerator = enumerator;
 
                 public T Current => _enumerator.Current;
 
