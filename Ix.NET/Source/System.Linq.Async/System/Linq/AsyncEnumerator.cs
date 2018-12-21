@@ -12,7 +12,7 @@ namespace System.Collections.Generic
     /// <summary>
     /// Provides a set of extension methods for <see cref="IAsyncEnumerator{T}"/>.
     /// </summary>
-    public static class AsyncEnumerator
+    public static partial class AsyncEnumerator
     {
         /// <summary>
         /// Creates a new enumerator using the specified delegates implementing the members of <see cref="IAsyncEnumerator{T}"/>.
@@ -50,30 +50,6 @@ namespace System.Collections.Generic
             cancellationToken.ThrowIfCancellationRequested();
 
             return source.MoveNextAsync();
-        }
-
-        /// <summary>
-        /// Wraps the specified enumerator with an enumerator that checks for cancellation upon every invocation
-        /// of the <see cref="IAsyncEnumerator{T}.MoveNextAsync"/> method.
-        /// </summary>
-        /// <typeparam name="T">The type of the elements returned by the enumerator.</typeparam>
-        /// <param name="source">The enumerator to augment with cancellation support.</param>
-        /// <param name="cancellationToken">The cancellation token to observe.</param>
-        /// <returns>An enumerator that honors cancellation requests.</returns>
-        public static IAsyncEnumerator<T> WithCancellation<T>(this IAsyncEnumerator<T> source, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return new AnonymousAsyncIterator<T>(
-                moveNext: () =>
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    return source.MoveNextAsync();
-                },
-                currentFunc: () => source.Current,
-                dispose: source.DisposeAsync
-            );
         }
 
         internal static IAsyncEnumerator<T> Create<T>(Func<TaskCompletionSource<bool>, ValueTask<bool>> moveNext, Func<T> current, Func<ValueTask> dispose)
