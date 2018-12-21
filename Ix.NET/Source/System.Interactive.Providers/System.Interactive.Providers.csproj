@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>Interactive Extensions Providers Library used to build query providers and express queries over enumerable sequences.</Description>
@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\System.Interactive\System.Interactive.csproj" />
-    <ReferenceAssemblyProjectReference Include="..\refs\System.Interactive.Providers.Ref\System.Interactive.Providers.Ref.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
