@@ -143,7 +143,7 @@ namespace System.Linq
             _slots = newSlots;
         }
 
-        internal struct Slot
+        private struct Slot
         {
             internal int _hashCode;
             internal int _next;
