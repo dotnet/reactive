@@ -14,6 +14,15 @@ using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
 using Xunit;
 
+#if HAS_DISPATCHER
+using System.Windows.Threading;
+#endif
+
+#if HAS_WINFORMS
+using System.Windows.Forms;
+#endif
+
+
 namespace ReactiveTests.Tests
 {
     public class ObserveOnTest : TestBase
