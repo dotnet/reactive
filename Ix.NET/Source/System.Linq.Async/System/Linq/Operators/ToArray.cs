@@ -24,9 +24,9 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(source));
 
             if (source is IAsyncIListProvider<TSource> arrayProvider)
-                return arrayProvider.ToArrayAsync(cancellationToken);
+                return arrayProvider.ToArrayAsync(cancellationToken).AsTask();
 
-            return AsyncEnumerableHelpers.ToArray(source, cancellationToken);
+            return AsyncEnumerableHelpers.ToArray(source, cancellationToken).AsTask();
         }
     }
 }

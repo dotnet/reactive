@@ -66,12 +66,12 @@ namespace System.Linq
             private int _counter;
             private IAsyncEnumerator<TSource> _enumerator;
 
-            public Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
+            public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 return AsyncEnumerableHelpers.ToArray(this, cancellationToken);
             }
 
-            public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
                 var list = new List<TSource>();
                 for (var i = 0; ; i++)
@@ -100,16 +100,16 @@ namespace System.Linq
                 return list;
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 return Core();
 
-                async Task<int> Core()
+                async ValueTask<int> Core()
                 {
                     var count = 0;
                     for (var i = 0; ; i++)

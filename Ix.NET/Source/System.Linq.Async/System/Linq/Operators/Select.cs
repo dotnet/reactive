@@ -272,11 +272,11 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 var count = 0;
@@ -291,7 +291,7 @@ namespace System.Linq
                     }
                 }
 
-                return Task.FromResult(count);
+                return new ValueTask<int>(count);
             }
 
             public override IAsyncEnumerable<TResult1> Select<TResult1>(Func<TResult, TResult1> selector)
@@ -299,7 +299,7 @@ namespace System.Linq
                 return new SelectIListIterator<TSource, TResult1>(_source, CombineSelectors(_selector, selector));
             }
 
-            public Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            public ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var n = _source.Count;
 
@@ -310,10 +310,10 @@ namespace System.Linq
                     res[i] = _selector(_source[i]);
                 }
 
-                return Task.FromResult(res);
+                return new ValueTask<TResult[]>(res);
             }
 
-            public Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            public ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
                 var n = _source.Count;
 
@@ -324,7 +324,7 @@ namespace System.Linq
                     res.Add(_selector(_source[i]));
                 }
 
-                return Task.FromResult(res);
+                return new ValueTask<List<TResult>>(res);
             }
 
             protected override async ValueTask<bool> MoveNextCore()
@@ -641,16 +641,16 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 return Core();
 
-                async Task<int> Core()
+                async ValueTask<int> Core()
                 {
                     var count = 0;
 
@@ -673,7 +673,7 @@ namespace System.Linq
                 return new SelectIListIteratorWithTask<TSource, TResult1>(_source, CombineSelectors(_selector, selector));
             }
 
-            public async Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var n = _source.Count;
 
@@ -687,7 +687,7 @@ namespace System.Linq
                 return res;
             }
 
-            public async Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
                 var n = _source.Count;
 
@@ -757,16 +757,16 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 return Core();
 
-                async Task<int> Core()
+                async ValueTask<int> Core()
                 {
                     var count = 0;
 
@@ -789,7 +789,7 @@ namespace System.Linq
                 return new SelectIListIteratorWithTaskAndCancellation<TSource, TResult1>(_source, CombineSelectors(_selector, selector));
             }
 
-            public async Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var n = _source.Count;
 
@@ -803,7 +803,7 @@ namespace System.Linq
                 return res;
             }
 
-            public async Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
                 var n = _source.Count;
 

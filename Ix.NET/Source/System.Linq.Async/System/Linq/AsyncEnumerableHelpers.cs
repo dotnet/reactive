@@ -11,14 +11,14 @@ namespace System.Collections.Generic
     // Based on https://github.com/dotnet/corefx/blob/ec2685715b01d12f16b08d0dfa326649b12db8ec/src/Common/src/System/Collections/Generic/EnumerableHelpers.cs
     internal static class AsyncEnumerableHelpers
     {
-        internal static async Task<T[]> ToArray<T>(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
+        internal static async ValueTask<T[]> ToArray<T>(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
         {
             var result = await ToArrayWithLength(source, cancellationToken).ConfigureAwait(false);
             Array.Resize(ref result.Array, result.Length);
             return result.Array;
         }
 
-        internal static async Task<ArrayWithLength<T>> ToArrayWithLength<T>(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
+        internal static async ValueTask<ArrayWithLength<T>> ToArrayWithLength<T>(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
         {
             var result = new ArrayWithLength<T>();
             // Check for short circuit optimizations. This one is very unlikely

@@ -32,9 +32,9 @@ namespace System.Linq
 
             public override AsyncIteratorBase<TResult> Clone() => new RepeatAsyncIterator<TResult>(_element, _count);
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(_count);
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(_count);
 
-            public Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            public ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var res = new TResult[_count];
 
@@ -43,10 +43,10 @@ namespace System.Linq
                     res[i] = _element;
                 }
 
-                return Task.FromResult(res);
+                return new ValueTask<TResult[]>(res);
             }
 
-            public Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            public ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
                 var res = new List<TResult>(_count);
 
@@ -55,7 +55,7 @@ namespace System.Linq
                     res.Add(_element);
                 }
 
-                return Task.FromResult(res);
+                return new ValueTask<List<TResult>>(res);
             }
 
             protected override async ValueTask<bool> MoveNextCore()

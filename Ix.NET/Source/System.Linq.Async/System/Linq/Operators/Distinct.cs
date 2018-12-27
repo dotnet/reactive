@@ -43,28 +43,28 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s.ToArray();
             }
 
-            public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
                 var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s.ToList();
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 return Core();
 
-                async Task<int> Core()
+                async ValueTask<int> Core()
                 {
                     var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                     return s.Count;

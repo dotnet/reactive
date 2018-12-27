@@ -142,12 +142,12 @@ namespace System.Linq
             }
         }
 
-        public Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
+        public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
         {
             var count = Count;
             if (count == 0)
             {
-                return Task.FromResult(
+                return new ValueTask<TSource[]>(
 #if NO_ARRAY_EMPTY
                     EmptyArray<TSource>.Value
 #else
@@ -162,15 +162,15 @@ namespace System.Linq
                 array[i] = _source[curIdx];
             }
 
-            return Task.FromResult(array);
+            return new ValueTask<TSource[]>(array);
         }
 
-        public Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
+        public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
         {
             var count = Count;
             if (count == 0)
             {
-                return Task.FromResult(new List<TSource>());
+                return new ValueTask<List<TSource>>(new List<TSource>());
             }
 
             var list = new List<TSource>(count);
@@ -180,12 +180,12 @@ namespace System.Linq
                 list.Add(_source[i]);
             }
 
-            return Task.FromResult(list);
+            return new ValueTask<List<TSource>>(list);
         }
 
-        public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+        public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
         {
-            return Task.FromResult(Count);
+            return new ValueTask<int>(Count);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace System.Linq
                 _source = source;
             }
 
-            public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var array = await _source.ToArrayAsync(cancellationToken).ConfigureAwait(false);
 
@@ -50,7 +50,7 @@ namespace System.Linq
                 return array;
             }
 
-            public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
                 var list = await _source.ToListAsync(cancellationToken).ConfigureAwait(false);
 
@@ -58,7 +58,7 @@ namespace System.Linq
                 return list;
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
@@ -69,11 +69,11 @@ namespace System.Linq
 
                     if (!(_source is ICollection<TSource>) && !(_source is ICollection))
                     {
-                        return TaskExt.MinusOne;
+                        return new ValueTask<int>(-1);
                     }
                 }
 
-                return _source.CountAsync(cancellationToken);
+                return new ValueTask<int>(_source.CountAsync(cancellationToken));
             }
 
             public override AsyncIteratorBase<TSource> Clone()

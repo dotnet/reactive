@@ -86,9 +86,9 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            public abstract Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken);
-            public abstract Task<List<TSource>> ToListAsync(CancellationToken cancellationToken);
-            public abstract Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken);
+            public abstract ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken);
+            public abstract ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken);
+            public abstract ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken);
         }
 
         private sealed class AppendPrepend1AsyncIterator<TSource> : AppendPrependAsyncIterator<TSource>
@@ -177,7 +177,7 @@ namespace System.Linq
                 }
             }
 
-            public override async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
+            public override async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
                 if (count == -1)
@@ -227,7 +227,7 @@ namespace System.Linq
                 return array;
             }
 
-            public override async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
+            public override async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
                 var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
                 var list = count == -1 ? new List<TSource>() : new List<TSource>(count);
@@ -260,7 +260,7 @@ namespace System.Linq
                 return list;
             }
 
-            public override async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public override async ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (_source is IAsyncIListProvider<TSource> listProv)
                 {
@@ -386,7 +386,7 @@ namespace System.Linq
                 return new AppendPrependNAsyncIterator<TSource>(_source, res, _appended, _prependCount + 1, _appendCount);
             }
 
-            public override async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
+            public override async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
                 if (count == -1)
@@ -434,7 +434,7 @@ namespace System.Linq
                 return array;
             }
 
-            public override async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
+            public override async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
                 var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
                 var list = count == -1 ? new List<TSource>() : new List<TSource>(count);
@@ -471,7 +471,7 @@ namespace System.Linq
                 return list;
             }
 
-            public override async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public override async ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (_source is IAsyncIListProvider<TSource> listProv)
                 {

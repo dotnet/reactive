@@ -93,13 +93,13 @@ namespace System.Linq
                 return false;
             }
 
-            public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var array = await _source.ToArrayAsync(cancellationToken).ConfigureAwait(false);
                 return array.Length == 0 ? new[] { _defaultValue } : array;
             }
 
-            public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
                 var list = await _source.ToListAsync(cancellationToken).ConfigureAwait(false);
                 if (list.Count == 0)
@@ -110,7 +110,7 @@ namespace System.Linq
                 return list;
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public async ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 int count;
                 if (!onlyIfCheap || _source is ICollection<TSource> || _source is ICollection)

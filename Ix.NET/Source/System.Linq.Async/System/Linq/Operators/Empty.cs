@@ -18,13 +18,13 @@ namespace System.Linq
 
             public TValue Current => default;
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(0);
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(0);
 
             public IAsyncPartition<TValue> Skip(int count) => this;
 
             public IAsyncPartition<TValue> Take(int count) => this;
 
-            public Task<TValue[]> ToArrayAsync(CancellationToken cancellationToken) => Task.FromResult(
+            public ValueTask<TValue[]> ToArrayAsync(CancellationToken cancellationToken) => new ValueTask<TValue[]>(
 #if NO_ARRAY_EMPTY
                 EmptyArray<TValue>.Value
 #else
@@ -32,7 +32,7 @@ namespace System.Linq
 #endif
                 );
 
-            public Task<List<TValue>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(new List<TValue>());
+            public ValueTask<List<TValue>> ToListAsync(CancellationToken cancellationToken) => new ValueTask<List<TValue>>(new List<TValue>());
 
             public ValueTask<Maybe<TValue>> TryGetElementAsync(int index, CancellationToken cancellationToken) => new ValueTask<Maybe<TValue>>(new Maybe<TValue>());
 

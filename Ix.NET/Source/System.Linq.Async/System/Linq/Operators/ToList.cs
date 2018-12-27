@@ -29,7 +29,7 @@ namespace System.Linq
         private static Task<List<TSource>> ToListCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source is IAsyncIListProvider<TSource> listProvider)
-                return listProvider.ToListAsync(cancellationToken);
+                return listProvider.ToListAsync(cancellationToken).AsTask();
 
             return Core();
 

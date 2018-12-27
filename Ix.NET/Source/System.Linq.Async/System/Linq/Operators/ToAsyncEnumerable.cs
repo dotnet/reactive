@@ -80,11 +80,11 @@ namespace System.Linq
 
             // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
             // and short circuit as appropriate
-            public Task<T[]> ToArrayAsync(CancellationToken cancellationToken) => Task.FromResult(_source.ToArray());
+            public ValueTask<T[]> ToArrayAsync(CancellationToken cancellationToken) => new ValueTask<T[]>(_source.ToArray());
 
-            public Task<List<T>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(_source.ToList());
+            public ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken) => new ValueTask<List<T>>(_source.ToList());
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(_source.Count());
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(_source.Count());
         }
 
         private sealed class AsyncIListEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>, IList<T>
@@ -139,11 +139,11 @@ namespace System.Linq
 
             // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
             // and short circuit as appropriate
-            public Task<T[]> ToArrayAsync(CancellationToken cancellationToken) => Task.FromResult(_source.ToArray());
+            public ValueTask<T[]> ToArrayAsync(CancellationToken cancellationToken) => new ValueTask<T[]>(_source.ToArray());
 
-            public Task<List<T>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(_source.ToList());
+            public ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken) => new ValueTask<List<T>>(_source.ToList());
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(_source.Count);
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(_source.Count);
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator() => _source.GetEnumerator();
 
@@ -226,11 +226,11 @@ namespace System.Linq
 
             // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
             // and short circuit as appropriate
-            public Task<T[]> ToArrayAsync(CancellationToken cancellationToken) => Task.FromResult(_source.ToArray());
+            public ValueTask<T[]> ToArrayAsync(CancellationToken cancellationToken) => new ValueTask<T[]>(_source.ToArray());
 
-            public Task<List<T>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(_source.ToList());
+            public ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken) => new ValueTask<List<T>>(_source.ToList());
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(_source.Count);
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(_source.Count);
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator() => _source.GetEnumerator();
 

@@ -86,7 +86,7 @@ namespace System.Linq
                 case ICollection<TSource> collection:
                     return Task.FromResult(collection.Count);
                 case IAsyncIListProvider<TSource> listProv:
-                    return listProv.GetCountAsync(onlyIfCheap: false, cancellationToken);
+                    return listProv.GetCountAsync(onlyIfCheap: false, cancellationToken).AsTask();
                 case ICollection collection:
                     return Task.FromResult(collection.Count);
             }

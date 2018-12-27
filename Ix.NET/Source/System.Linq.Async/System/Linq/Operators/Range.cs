@@ -41,7 +41,7 @@ namespace System.Linq
 
             public override AsyncIteratorBase<int> Clone() => new RangeAsyncIterator(_start, _end - _start);
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(_end - _start);
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(_end - _start);
 
             public IAsyncPartition<int> Skip(int count)
             {
@@ -67,7 +67,7 @@ namespace System.Linq
                 return new RangeAsyncIterator(_start, count);
             }
 
-            public Task<int[]> ToArrayAsync(CancellationToken cancellationToken)
+            public ValueTask<int[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var res = new int[_end - _start];
 
@@ -78,10 +78,10 @@ namespace System.Linq
                     res[i] = value++;
                 }
 
-                return Task.FromResult(res);
+                return new ValueTask<int[]>(res);
             }
 
-            public Task<List<int>> ToListAsync(CancellationToken cancellationToken)
+            public ValueTask<List<int>> ToListAsync(CancellationToken cancellationToken)
             {
                 var res = new List<int>(_end - _start);
 
@@ -90,7 +90,7 @@ namespace System.Linq
                     res.Add(value);
                 }
 
-                return Task.FromResult(res);
+                return new ValueTask<List<int>>(res);
             }
 
             public ValueTask<Maybe<int>> TryGetElementAsync(int index, CancellationToken cancellationToken)

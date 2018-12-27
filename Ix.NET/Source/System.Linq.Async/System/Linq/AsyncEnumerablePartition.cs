@@ -62,16 +62,16 @@ namespace System.Linq
             await base.DisposeAsync().ConfigureAwait(false);
         }
 
-        public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+        public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
         {
             if (onlyIfCheap)
             {
-                return TaskExt.MinusOne;
+                return new ValueTask<int>(-1);
             }
 
             return Core();
 
-            async Task<int> Core()
+            async ValueTask<int> Core()
             {
                 if (!HasLimit)
                 {
@@ -291,7 +291,7 @@ namespace System.Linq
             return new Maybe<TSource>();
         }
 
-        public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
+        public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
         {
             var en = _source.GetAsyncEnumerator(cancellationToken);
 
@@ -327,7 +327,7 @@ namespace System.Linq
 #endif
         }
 
-        public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
+        public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
         {
             var list = new List<TSource>();
 

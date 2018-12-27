@@ -92,7 +92,7 @@ namespace System.Linq
                 _set = set;
             }
 
-            private async Task<bool> GetNextAsync()
+            private async ValueTask<bool> GetNextAsync()
             {
                 var set = _set;
                 Debug.Assert(set != null);
@@ -188,11 +188,33 @@ namespace System.Linq
                 }
             }
 
-            public Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken) => FillSetAsync(cancellationToken).ContinueWith(set => set.Result.ToArray());
+            public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                var set = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                return set.ToArray();
+            }
 
-            public Task<List<TSource>> ToListAsync(CancellationToken cancellationToken) => FillSetAsync(cancellationToken).ContinueWith(set => set.Result.ToList());
+            public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
+            {
+                var set = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                return set.ToList();
+            }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => onlyIfCheap ? TaskExt.MinusOne : FillSetAsync(cancellationToken).ContinueWith(set => set.Result.Count);
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            {
+                if (onlyIfCheap)
+                {
+                    return new ValueTask<int>(-1);
+                }
+
+                return Core();
+
+                async ValueTask<int> Core()
+                {
+                    var set = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                    return set.Count;
+                }
+            }
         }
 
         /// <summary>

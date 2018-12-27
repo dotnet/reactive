@@ -88,19 +88,19 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s.ToArray();
             }
 
-            public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
                 var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s;
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public async ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
@@ -233,19 +233,19 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s.ToArray();
             }
 
-            public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
                 var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s;
             }
 
-            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public async ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
@@ -332,7 +332,7 @@ namespace System.Linq
                 return false;
             }
 
-            private async Task<List<TSource>> FillSetAsync(CancellationToken cancellationToken)
+            private async ValueTask<List<TSource>> FillSetAsync(CancellationToken cancellationToken)
             {
                 var s = new Set<TKey>(_comparer);
                 var r = new List<TSource>();

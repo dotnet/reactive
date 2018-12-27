@@ -267,9 +267,9 @@ namespace System.Linq.Internal
             _groupings = newGroupings;
         }
 
-        public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+        public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
         {
-            return Task.FromResult(Count);
+            return new ValueTask<int>(Count);
         }
 
         IAsyncEnumerator<IAsyncGrouping<TKey, TElement>> IAsyncEnumerable<IAsyncGrouping<TKey, TElement>>.GetAsyncEnumerator(CancellationToken cancellationToken)
@@ -279,7 +279,7 @@ namespace System.Linq.Internal
             return Enumerable.Cast<IAsyncGrouping<TKey, TElement>>(this).ToAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
         }
 
-        Task<List<IAsyncGrouping<TKey, TElement>>> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)
+        ValueTask<List<IAsyncGrouping<TKey, TElement>>> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)
         {
             var list = new List<IAsyncGrouping<TKey, TElement>>(Count);
             var g = _lastGrouping;
@@ -293,10 +293,10 @@ namespace System.Linq.Internal
                 while (g != _lastGrouping);
             }
 
-            return Task.FromResult(list);
+            return new ValueTask<List<IAsyncGrouping<TKey, TElement>>>(list);
         }
 
-        Task<IAsyncGrouping<TKey, TElement>[]> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToArrayAsync(CancellationToken cancellationToken)
+        ValueTask<IAsyncGrouping<TKey, TElement>[]> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToArrayAsync(CancellationToken cancellationToken)
         {
             var array = new IAsyncGrouping<TKey, TElement>[Count];
             var index = 0;
@@ -312,7 +312,7 @@ namespace System.Linq.Internal
                 while (g != _lastGrouping);
             }
 
-            return Task.FromResult(array);
+            return new ValueTask<IAsyncGrouping<TKey, TElement>[]>(array);
         }
     }
 
@@ -682,9 +682,9 @@ namespace System.Linq.Internal
             _groupings = newGroupings;
         }
 
-        public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+        public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
         {
-            return Task.FromResult(Count);
+            return new ValueTask<int>(Count);
         }
 
         IAsyncEnumerator<IAsyncGrouping<TKey, TElement>> IAsyncEnumerable<IAsyncGrouping<TKey, TElement>>.GetAsyncEnumerator(CancellationToken cancellationToken)
@@ -694,7 +694,7 @@ namespace System.Linq.Internal
             return Enumerable.Cast<IAsyncGrouping<TKey, TElement>>(this).ToAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
         }
 
-        Task<List<IAsyncGrouping<TKey, TElement>>> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)
+        ValueTask<List<IAsyncGrouping<TKey, TElement>>> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)
         {
             var list = new List<IAsyncGrouping<TKey, TElement>>(Count);
             var g = _lastGrouping;
@@ -708,10 +708,10 @@ namespace System.Linq.Internal
                 while (g != _lastGrouping);
             }
 
-            return Task.FromResult(list);
+            return new ValueTask<List<IAsyncGrouping<TKey, TElement>>>(list);
         }
 
-        Task<IAsyncGrouping<TKey, TElement>[]> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToArrayAsync(CancellationToken cancellationToken)
+        ValueTask<IAsyncGrouping<TKey, TElement>[]> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToArrayAsync(CancellationToken cancellationToken)
         {
             var array = new IAsyncGrouping<TKey, TElement>[Count];
             var index = 0;
@@ -727,7 +727,7 @@ namespace System.Linq.Internal
                 while (g != _lastGrouping);
             }
 
-            return Task.FromResult(array);
+            return new ValueTask<IAsyncGrouping<TKey, TElement>[]>(array);
         }
     }
 }

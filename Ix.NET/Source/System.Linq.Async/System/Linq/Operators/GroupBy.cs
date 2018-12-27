@@ -378,28 +378,28 @@ namespace System.Linq
                 return false;
             }
 
-            public async Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return l.ToArray(_resultSelector);
             }
 
-            public async Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
                 var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return l.ToList(_resultSelector);
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 return Core();
 
-                async Task<int> Core()
+                async ValueTask<int> Core()
                 {
                     var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
@@ -471,28 +471,28 @@ namespace System.Linq
                 return false;
             }
 
-            public async Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArray(_resultSelector).ConfigureAwait(false);
             }
 
-            public async Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
                 var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToList(_resultSelector).ConfigureAwait(false);
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 return Core();
 
-                async Task<int> Core()
+                async ValueTask<int> Core()
                 {
                     var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
@@ -565,28 +565,28 @@ namespace System.Linq
                 return false;
             }
 
-            public async Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArray(_resultSelector, cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
                 var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToList(_resultSelector, cancellationToken).ConfigureAwait(false);
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 return Core();
 
-                async Task<int> Core()
+                async ValueTask<int> Core()
                 {
                     var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
@@ -659,28 +659,28 @@ namespace System.Linq
                 return false;
             }
             
-            public async Task<IAsyncGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<IAsyncGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<List<IAsyncGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<IAsyncGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
             {
                 IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 return Core();
 
-                async Task<int> Core()
+                async ValueTask<int> Core()
                 {
                     var l = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
 
@@ -752,28 +752,28 @@ namespace System.Linq
                 return false;
             }
 
-            public async Task<IAsyncGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<IAsyncGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<List<IAsyncGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<IAsyncGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
             {
                 IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 return Core();
 
-                async Task<int> Core()
+                async ValueTask<int> Core()
                 {
                     var l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
 
@@ -846,28 +846,28 @@ namespace System.Linq
                 return false;
             }
 
-            public async Task<IAsyncGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<IAsyncGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<List<IAsyncGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<IAsyncGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
             {
                 IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 return Core();
 
-                async Task<int> Core()
+                async ValueTask<int> Core()
                 {
                     var l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
 
@@ -937,28 +937,28 @@ namespace System.Linq
                 return false;
             }
 
-            public async Task<IAsyncGrouping<TKey, TSource>[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<IAsyncGrouping<TKey, TSource>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<List<IAsyncGrouping<TKey, TSource>>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<IAsyncGrouping<TKey, TSource>>> ToListAsync(CancellationToken cancellationToken)
             {
                 IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 return Core();
 
-                async Task<int> Core()
+                async ValueTask<int> Core()
                 {
                     var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
@@ -1027,28 +1027,28 @@ namespace System.Linq
                 return false;
             }
 
-            public async Task<IAsyncGrouping<TKey, TSource>[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<IAsyncGrouping<TKey, TSource>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<List<IAsyncGrouping<TKey, TSource>>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<IAsyncGrouping<TKey, TSource>>> ToListAsync(CancellationToken cancellationToken)
             {
                 IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 return Core();
 
-                async Task<int> Core()
+                async ValueTask<int> Core()
                 {
                     var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
@@ -1118,28 +1118,28 @@ namespace System.Linq
                 return false;
             }
 
-            public async Task<IAsyncGrouping<TKey, TSource>[]> ToArrayAsync(CancellationToken cancellationToken)
+            public async ValueTask<IAsyncGrouping<TKey, TSource>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public async Task<List<IAsyncGrouping<TKey, TSource>>> ToListAsync(CancellationToken cancellationToken)
+            public async ValueTask<List<IAsyncGrouping<TKey, TSource>>> ToListAsync(CancellationToken cancellationToken)
             {
                 IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 if (onlyIfCheap)
                 {
-                    return TaskExt.MinusOne;
+                    return new ValueTask<int>(-1);
                 }
 
                 return Core();
 
-                async Task<int> Core()
+                async ValueTask<int> Core()
                 {
                     var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
