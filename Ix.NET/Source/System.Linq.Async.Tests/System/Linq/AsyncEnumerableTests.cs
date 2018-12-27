@@ -78,11 +78,11 @@ namespace Tests
             var moveNextThrows = new ValueTask<bool>(Task.FromException<bool>(exception));
 #endif
 
-            return AsyncEnumerable.CreateEnumerable(
+            return AsyncEnumerable.Create(
                 _ => AsyncEnumerator.Create<TValue>(
                     () => moveNextThrows,
-                    current: null,
-                    dispose: null)
+                    getCurrent: null,
+                    disposeAsync: null)
             );
         }
 

@@ -141,7 +141,7 @@ namespace Tests
             var fail = false;
             var evt = new ManualResetEvent(false);
 
-            var ae = AsyncEnumerable.CreateEnumerable(
+            var ae = AsyncEnumerable.Create(
                 _ => AsyncEnumerator.Create<int>(
                     () => new ValueTask<bool>(false),
                     () => { throw new InvalidOperationException(); },
@@ -175,7 +175,7 @@ namespace Tests
             var subscription = default(IDisposable);
             var subscriptionAssignedTcs = new TaskCompletionSource<object>();
 
-            var ae = AsyncEnumerable.CreateEnumerable(
+            var ae = AsyncEnumerable.Create(
                 _ => AsyncEnumerator.Create(
                     async () =>
                     {
@@ -221,7 +221,7 @@ namespace Tests
             var subscription = default(IDisposable);
             var subscriptionAssignedTcs = new TaskCompletionSource<object>();
 
-            var ae = AsyncEnumerable.CreateEnumerable(
+            var ae = AsyncEnumerable.Create(
                 _ => AsyncEnumerator.Create(
                     async () =>
                     {

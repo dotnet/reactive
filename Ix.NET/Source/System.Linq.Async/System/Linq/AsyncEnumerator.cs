@@ -14,22 +14,29 @@ namespace System.Collections.Generic
     /// </summary>
     public static partial class AsyncEnumerator
     {
+        //
+        // REVIEW: Create methods may not belong in System.Linq.Async. Async iterators can be
+        //         used to implement these interfaces. Move to System.Interactive.Async?
+        //
+
         /// <summary>
         /// Creates a new enumerator using the specified delegates implementing the members of <see cref="IAsyncEnumerator{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the elements returned by the enumerator.</typeparam>
-        /// <param name="moveNext">The delegate implementing the <see cref="IAsyncEnumerator{T}.MoveNextAsync"/> method.</param>
-        /// <param name="current">The delegate implementing the <see cref="IAsyncEnumerator{T}.Current"/> property getter.</param>
-        /// <param name="dispose">The delegate implementing the <see cref="IAsyncDisposable.DisposeAsync"/> method.</param>
+        /// <param name="moveNextAsync">The delegate implementing the <see cref="IAsyncEnumerator{T}.MoveNextAsync"/> method.</param>
+        /// <param name="getCurrent">The delegate implementing the <see cref="IAsyncEnumerator{T}.Current"/> property getter.</param>
+        /// <param name="disposeAsync">The delegate implementing the <see cref="IAsyncDisposable.DisposeAsync"/> method.</param>
         /// <returns>A new enumerator instance.</returns>
-        public static IAsyncEnumerator<T> Create<T>(Func<ValueTask<bool>> moveNext, Func<T> current, Func<ValueTask> dispose)
+        public static IAsyncEnumerator<T> Create<T>(Func<ValueTask<bool>> moveNextAsync, Func<T> getCurrent, Func<ValueTask> disposeAsync)
         {
-            if (moveNext == null)
-                throw Error.ArgumentNull(nameof(moveNext));
+            if (moveNextAsync == null)
+                throw Error.ArgumentNull(nameof(moveNextAsync));
 
-            // Note: Many methods pass null in for the second two params. We're assuming
-            // That the caller is responsible and knows what they're doing
-            return new AnonymousAsyncIterator<T>(moveNext, current, dispose);
+            //
+            // NB: Callers can pass null for the second two parameters, which can be useful to
+            //     implement enumerators that throw or yield no results.
+            //
+            return new AnonymousAsyncIterator<T>(moveNextAsync, getCurrent, disposeAsync);
         }
 
         /// <summary>
@@ -50,20 +57,6 @@ namespace System.Collections.Generic
             cancellationToken.ThrowIfCancellationRequested();
 
             return source.MoveNextAsync();
-        }
-
-        internal static IAsyncEnumerator<T> Create<T>(Func<TaskCompletionSource<bool>, ValueTask<bool>> moveNext, Func<T> current, Func<ValueTask> dispose)
-        {
-            return new AnonymousAsyncIterator<T>(
-                async () =>
-                {
-                    var tcs = new TaskCompletionSource<bool>();
-
-                    return await moveNext(tcs).ConfigureAwait(false);
-                },
-                current,
-                dispose
-            );
         }
 
         private sealed class AnonymousAsyncIterator<T> : AsyncIterator<T>

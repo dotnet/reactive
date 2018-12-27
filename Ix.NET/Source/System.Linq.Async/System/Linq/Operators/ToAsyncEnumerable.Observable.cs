@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -14,146 +16,177 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return CreateEnumerable(
-                ct =>
-                {
-                    var observer = new ToAsyncEnumerableObserver<TSource>();
-
-                    var subscription = source.Subscribe(observer);
-
-                    // REVIEW: Review possible concurrency issues with Dispose calls.
-
-                    var ctr = ct.Register(subscription.Dispose);
-
-                    return AsyncEnumerator.Create(
-                        tcs =>
-                        {
-                            var hasValue = false;
-                            var hasCompleted = false;
-                            var error = default(Exception);
-
-                            lock (observer.SyncRoot)
-                            {
-                                if (observer.Values.Count > 0)
-                                {
-                                    hasValue = true;
-                                    observer.Current = observer.Values.Dequeue();
-                                }
-                                else if (observer.HasCompleted)
-                                {
-                                    hasCompleted = true;
-                                }
-                                else if (observer.Error != null)
-                                {
-                                    error = observer.Error;
-                                }
-                                else
-                                {
-                                    observer.TaskCompletionSource = tcs;
-                                }
-                            }
-
-                            if (hasValue)
-                            {
-                                tcs.TrySetResult(true);
-                            }
-                            else if (hasCompleted)
-                            {
-                                tcs.TrySetResult(false);
-                            }
-                            else if (error != null)
-                            {
-                                tcs.TrySetException(error);
-                            }
-
-                            return new ValueTask<bool>(tcs.Task);
-                        },
-                        () => observer.Current,
-                        () =>
-                        {
-                            ctr.Dispose();
-                            subscription.Dispose();
-                            // Should we cancel in-flight operations somehow?
-                            return default;
-                        });
-                });
+            return new ObservableAsyncEnumerable<TSource>(source);
         }
 
-        private sealed class ToAsyncEnumerableObserver<T> : IObserver<T>
+        private sealed class ObservableAsyncEnumerable<TSource> : AsyncIterator<TSource>, IObserver<TSource>
         {
-            public readonly Queue<T> Values;
+            private readonly IObservable<TSource> _source;
 
-            public T Current;
-            public Exception Error;
-            public bool HasCompleted;
-            public TaskCompletionSource<bool> TaskCompletionSource;
+            private ConcurrentQueue<TSource> _values = new ConcurrentQueue<TSource>();
+            private Exception _error;
+            private bool _completed;
+            private TaskCompletionSource<bool> _signal;
+            private IDisposable _subscription;
+            private CancellationTokenRegistration _ctr;
 
-            public ToAsyncEnumerableObserver()
+            public ObservableAsyncEnumerable(IObservable<TSource> source) => _source = source;
+
+            public override AsyncIteratorBase<TSource> Clone() => new ObservableAsyncEnumerable<TSource>(_source);
+
+            public override ValueTask DisposeAsync()
             {
-                Values = new Queue<T>();
+                Dispose();
+
+                return base.DisposeAsync();
             }
 
-            public object SyncRoot
+            protected override async ValueTask<bool> MoveNextCore()
             {
-                get { return Values; }
+                //
+                // REVIEW: How often should we check? At the very least, we want to prevent
+                //         subscribing if cancellation is requested. A case may be made to
+                //         check for each iteration, namely because this operator is a bridge
+                //         with another interface. However, we also wire up cancellation to
+                //         the observable subscription, so there's redundancy here.
+                //
+                _cancellationToken.ThrowIfCancellationRequested();
+
+                switch (_state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        //
+                        // NB: Breaking change to align with lazy nature of async iterators.
+                        //
+                        //     In previous implementations, the Subscribe call happened during
+                        //     the call to GetAsyncEnumerator.
+                        //
+                        // REVIEW: Confirm this design point. This implementation is compatible
+                        //         with an async iterator using "yield return", e.g. subscribing
+                        //         to the observable sequence and yielding values out of a local
+                        //         queue filled by observer callbacks. However, it departs from
+                        //         the dual treatment of Subscribe/GetEnumerator.
+                        //
+
+                        _subscription = _source.Subscribe(this);
+                        _ctr = _cancellationToken.Register(OnCanceled, state: null);
+                        _state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        while (true)
+                        {
+                            var completed = Volatile.Read(ref _completed);
+
+                            if (_values.TryDequeue(out _current))
+                            {
+                                return true;
+                            }
+                            else if (completed)
+                            {
+                                var error = _error;
+
+                                if (error != null)
+                                {
+                                    throw error;
+                                }
+
+                                return false;
+                            }
+
+                            await Resume().ConfigureAwait(false);
+                            Volatile.Write(ref _signal, null);
+                        }
+                }
+
+                await DisposeAsync().ConfigureAwait(false);
+                return false;
             }
 
             public void OnCompleted()
             {
-                var tcs = default(TaskCompletionSource<bool>);
+                Volatile.Write(ref _completed, true);
 
-                lock (SyncRoot)
-                {
-                    HasCompleted = true;
-
-                    if (TaskCompletionSource != null)
-                    {
-                        tcs = TaskCompletionSource;
-                        TaskCompletionSource = null;
-                    }
-                }
-
-                tcs?.TrySetResult(false);
+                DisposeSubscription();
+                OnNotification();
             }
 
             public void OnError(Exception error)
             {
-                var tcs = default(TaskCompletionSource<bool>);
+                _error = error;
+                Volatile.Write(ref _completed, true);
 
-                lock (SyncRoot)
-                {
-                    Error = error;
-
-                    if (TaskCompletionSource != null)
-                    {
-                        tcs = TaskCompletionSource;
-                        TaskCompletionSource = null;
-                    }
-                }
-
-                tcs?.TrySetException(error);
+                DisposeSubscription();
+                OnNotification();
             }
 
-            public void OnNext(T value)
+            public void OnNext(TSource value)
             {
-                var tcs = default(TaskCompletionSource<bool>);
+                _values?.Enqueue(value);
 
-                lock (SyncRoot)
+                OnNotification();
+            }
+
+            private void OnNotification()
+            {
+                while (true)
                 {
-                    if (TaskCompletionSource == null)
-                    {
-                        Values.Enqueue(value);
-                    }
-                    else
-                    {
-                        Current = value;
+                    var signal = Volatile.Read(ref _signal);
 
-                        tcs = TaskCompletionSource;
-                        TaskCompletionSource = null;
+                    if (signal == TaskExt.True)
+                    {
+                        return;
+                    }
+
+                    if (signal != null)
+                    {
+                        signal.TrySetResult(true);
+                        return;
+                    }
+
+                    if (Interlocked.CompareExchange(ref _signal, TaskExt.True, null) == null)
+                    {
+                        return;
                     }
                 }
+            }
 
-                tcs?.TrySetResult(true);
+            private void Dispose()
+            {
+                _ctr.Dispose();
+                DisposeSubscription();
+
+                _values = null;
+                _error = null;
+            }
+
+            private void DisposeSubscription() => Interlocked.Exchange(ref _subscription, null)?.Dispose();
+
+            private void OnCanceled(object state) => Dispose();
+
+            private Task Resume()
+            {
+                TaskCompletionSource<bool> newSignal = null;
+
+                while (true)
+                {
+                    var signal = Volatile.Read(ref _signal);
+
+                    if (signal != null)
+                    {
+                        return signal.Task;
+                    }
+
+                    if (newSignal == null)
+                    {
+                        newSignal = new TaskCompletionSource<bool>();
+                    }
+
+                    if (Interlocked.CompareExchange(ref _signal, newSignal, null) == null)
+                    {
+                        return newSignal.Task;
+                    }
+                }
             }
         }
     }
