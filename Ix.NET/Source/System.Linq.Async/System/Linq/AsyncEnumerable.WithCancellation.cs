@@ -12,7 +12,7 @@ namespace System.Linq
     {
         // REVIEW: [LDM-2018-11-28] Should return type be a struct or just the interface type? Should this live in the System.Linq namespace or in System.Collections.Generic?
 
-        public static WithCancellationTokenAsyncEnumerable<T> WithCancellationToken<T>(this IAsyncEnumerable<T> source, CancellationToken cancellationToken)
+        public static WithCancellationTokenAsyncEnumerable<T> WithCancellation<T>(this IAsyncEnumerable<T> source, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -47,10 +47,7 @@ namespace System.Linq
             {
                 private readonly IAsyncEnumerator<T> _enumerator;
 
-                public WithCancellationAsyncEnumerator(IAsyncEnumerator<T> enumerator)
-                {
-                    _enumerator = enumerator;
-                }
+                public WithCancellationAsyncEnumerator(IAsyncEnumerator<T> enumerator) => _enumerator = enumerator;
 
                 public T Current => _enumerator.Current;
 
