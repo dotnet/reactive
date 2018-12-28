@@ -50,8 +50,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return DistinctCore(source, keySelector, comparer);
         }

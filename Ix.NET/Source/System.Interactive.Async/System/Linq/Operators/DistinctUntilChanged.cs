@@ -75,8 +75,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return DistinctUntilChangedCore(source, keySelector, comparer);
         }
@@ -88,8 +86,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(source));
             if (keySelector == null)
                 throw Error.ArgumentNull(nameof(keySelector));
-            if (comparer == null)
-                throw Error.ArgumentNull(nameof(comparer));
 
             return DistinctUntilChangedCore(source, keySelector, comparer);
         }
