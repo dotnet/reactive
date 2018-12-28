@@ -38,7 +38,24 @@ namespace System.Linq
             // REVIEW: [LDM-2018-11-28] Should we have eager cancellation here too?
 
             public WithCancellationAsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken)
-                => new WithCancellationAsyncEnumerator(_source.GetAsyncEnumerator(_cancellationToken));
+            {
+                CancellationToken token;
+
+                if (cancellationToken == default)
+                {
+                    token = _cancellationToken;
+                }
+                else if (_cancellationToken == default)
+                {
+                    token = cancellationToken;
+                }
+                else
+                {
+                    token = CancellationTokenSource.CreateLinkedTokenSource(_cancellationToken, cancellationToken).Token;
+                }
+
+                return new WithCancellationAsyncEnumerator(_source.GetAsyncEnumerator(token));
+            }
 
             IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken cancellationToken)
                 => GetAsyncEnumerator(cancellationToken);
