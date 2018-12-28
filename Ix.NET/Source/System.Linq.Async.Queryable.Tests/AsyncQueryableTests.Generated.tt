@@ -15,7 +15,7 @@
 <#@ output extension=".cs" #>
 <#
 var nullableParameterNames = new[] { "comparer" };
-var failing = new[] { "TakeLast" };
+var failing = new string[0];
 var exclude = new[] { "ForEach", "ForEachAsync", "ToEnumerable", "ToAsyncEnumerable", "ToObservable", "AsAsyncEnumerable", "WithCancellation" };
 
 var toQuotedImpl = default(Func<Type, int, bool, string>);

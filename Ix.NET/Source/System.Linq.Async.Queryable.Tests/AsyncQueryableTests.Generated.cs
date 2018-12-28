@@ -4805,7 +4805,8 @@ namespace Tests
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.TakeLast<int>(default(IAsyncQueryable<int>), 1), ane => ane.ParamName == "source");
 
             var res = AsyncQueryable.TakeLast<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1);
-            // TODO: investigate test hang
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
         }
 
         [Fact]
