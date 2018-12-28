@@ -274,7 +274,7 @@ namespace System.Linq
                     return count == -1 ? -1 : count + 1;
                 }
 
-                return !onlyIfCheap || _source is ICollection<TSource> ? await _source.CountAsync(cancellationToken).ConfigureAwait(false) + 1 : -1;
+                return !onlyIfCheap || _source is ICollection<TSource> || _source is ICollection ? await _source.CountAsync(cancellationToken).ConfigureAwait(false) + 1 : -1;
             }
         }
 
@@ -489,7 +489,7 @@ namespace System.Linq
                     return count == -1 ? -1 : count + _appendCount + _prependCount;
                 }
 
-                return !onlyIfCheap || _source is ICollection<TSource> ? await _source.CountAsync(cancellationToken).ConfigureAwait(false) + _appendCount + _prependCount : -1;
+                return !onlyIfCheap || _source is ICollection<TSource> || _source is ICollection ? await _source.CountAsync(cancellationToken).ConfigureAwait(false) + _appendCount + _prependCount : -1;
             }
         }
     }
