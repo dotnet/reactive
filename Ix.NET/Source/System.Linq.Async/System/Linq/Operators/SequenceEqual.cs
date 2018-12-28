@@ -52,14 +52,32 @@ namespace System.Linq
 
         private static Task<bool> SequenceEqualCore<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
-            if (first is ICollection<TSource> firstCol && second is ICollection<TSource> secondCol && firstCol.Count != secondCol.Count)
-            {
-                return Task.FromResult(false);
-            }
-
             if (comparer == null)
             {
                 comparer = EqualityComparer<TSource>.Default;
+            }
+
+            if (first is ICollection<TSource> firstCol && second is ICollection<TSource> secondCol)
+            {
+                if (firstCol.Count != secondCol.Count)
+                {
+                    return Task.FromResult(false);
+                }
+
+                if (firstCol is IList<TSource> firstList && secondCol is IList<TSource> secondList)
+                {
+                    int count = firstCol.Count;
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (!comparer.Equals(firstList[i], secondList[i]))
+                        {
+                            return Task.FromResult(false);
+                        }
+                    }
+
+                    return Task.FromResult(true);
+                }
             }
 
             return Core();
