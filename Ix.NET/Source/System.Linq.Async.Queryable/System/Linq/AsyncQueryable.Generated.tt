@@ -14,7 +14,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 <#
-var exclude = new[] { "ForEach", "ForEachAsync", "ToEnumerable", "ToAsyncEnumerable", "ToObservable", "AsAsyncEnumerable" };
+var exclude = new[] { "ForEach", "ForEachAsync", "ToEnumerable", "ToAsyncEnumerable", "ToObservable", "AsAsyncEnumerable", "WithCancellation" };
 
 var toQuotedImpl = default(Func<Type, int, bool, string>);
 toQuotedImpl = (t, i, b) =>
