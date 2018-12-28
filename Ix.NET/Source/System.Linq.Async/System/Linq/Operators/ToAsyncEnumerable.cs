@@ -17,7 +17,6 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            // optimize these adapters for lists and collections
             switch (source)
             {
                 case IList<TSource> list:
@@ -78,8 +77,11 @@ namespace System.Linq
                 return false;
             }
 
-            // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
-            // and short circuit as appropriate
+            //
+            // NB: These optimizations rely on the System.Linq implementation of IEnumerable<T> operators to optimize
+            //     and short-circuit as appropriate.
+            //
+
             public ValueTask<T[]> ToArrayAsync(CancellationToken cancellationToken) => new ValueTask<T[]>(_source.ToArray());
 
             public ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken) => new ValueTask<List<T>>(_source.ToList());
@@ -137,8 +139,11 @@ namespace System.Linq
 
             public override IAsyncEnumerable<TResult> Select<TResult>(Func<T, TResult> selector) => new SelectIListIterator<T, TResult>(_source, selector);
 
-            // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
-            // and short circuit as appropriate
+            //
+            // NB: These optimizations rely on the System.Linq implementation of IEnumerable<T> operators to optimize
+            //     and short-circuit as appropriate.
+            //
+
             public ValueTask<T[]> ToArrayAsync(CancellationToken cancellationToken) => new ValueTask<T[]>(_source.ToArray());
 
             public ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken) => new ValueTask<List<T>>(_source.ToList());
@@ -224,8 +229,11 @@ namespace System.Linq
                 return false;
             }
 
-            // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
-            // and short circuit as appropriate
+            //
+            // NB: These optimizations rely on the System.Linq implementation of IEnumerable<T> operators to optimize
+            //     and short-circuit as appropriate.
+            //
+
             public ValueTask<T[]> ToArrayAsync(CancellationToken cancellationToken) => new ValueTask<T[]>(_source.ToArray());
 
             public ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken) => new ValueTask<List<T>>(_source.ToList());
