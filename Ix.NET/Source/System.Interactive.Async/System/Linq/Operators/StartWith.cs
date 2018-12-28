@@ -12,6 +12,8 @@ namespace System.Linq
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
+            if (values == null)
+                throw Error.ArgumentNull(nameof(values));
 
             return values.ToAsyncEnumerable().Concat(source);
         }
