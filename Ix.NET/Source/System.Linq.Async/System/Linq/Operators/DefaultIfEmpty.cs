@@ -117,10 +117,13 @@ namespace System.Linq
                 {
                     count = await _source.CountAsync(cancellationToken).ConfigureAwait(false);
                 }
+                else if (_source is IAsyncIListProvider<TSource> listProv)
+                {
+                    count = await listProv.GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
+                }
                 else
                 {
-                    var listProv = _source as IAsyncIListProvider<TSource>;
-                    count = listProv == null ? -1 : await listProv.GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
+                    count = -1;
                 }
 
                 return count == 0 ? 1 : count;
