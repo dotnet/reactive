@@ -10,10 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
-        public static IAsyncEnumerable<TValue> Return<TValue>(TValue value)
-        {
-            return new ReturnEnumerable<TValue>(value);
-        }
+        public static IAsyncEnumerable<TValue> Return<TValue>(TValue value) => new ReturnEnumerable<TValue>(value);
 
         // REVIEW: Add support for IAsyncPartition<T>.
 
@@ -21,10 +18,7 @@ namespace System.Linq
         {
             private readonly TValue _value;
 
-            public ReturnEnumerable(TValue value)
-            {
-                _value = value;
-            }
+            public ReturnEnumerable(TValue value) => _value = value;
 
             public IAsyncEnumerator<TValue> GetAsyncEnumerator(CancellationToken cancellationToken)
             {
@@ -43,10 +37,7 @@ namespace System.Linq
             {
                 private bool _once;
 
-                public ReturnEnumerator(TValue current)
-                {
-                    Current = current;
-                }
+                public ReturnEnumerator(TValue current) => Current = current;
 
                 public TValue Current { get; private set; }
 

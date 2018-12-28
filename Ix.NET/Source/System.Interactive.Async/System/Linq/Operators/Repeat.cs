@@ -38,10 +38,7 @@ namespace System.Linq
         {
             private readonly TResult _element;
 
-            public RepeatElementAsyncIterator(TResult element)
-            {
-                _element = element;
-            }
+            public RepeatElementAsyncIterator(TResult element) => _element = element;
 
             public override AsyncIteratorBase<TResult> Clone()
             {

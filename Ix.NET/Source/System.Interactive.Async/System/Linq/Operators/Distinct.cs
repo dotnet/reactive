@@ -140,6 +140,7 @@ namespace System.Linq
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
                         TSource item = enu.Current;
+
                         if (s.Add(_keySelector(item)))
                         {
                             count++;
@@ -196,6 +197,7 @@ namespace System.Linq
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             element = _enumerator.Current;
+
                             if (_set.Add(_keySelector(element)))
                             {
                                 _current = element;
@@ -222,6 +224,7 @@ namespace System.Linq
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
                         TSource item = enu.Current;
+
                         if (s.Add(_keySelector(item)))
                         {
                             r.Add(item);
@@ -285,6 +288,7 @@ namespace System.Linq
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
                         TSource item = enu.Current;
+
                         if (s.Add(await _keySelector(item).ConfigureAwait(false)))
                         {
                             count++;
@@ -341,6 +345,7 @@ namespace System.Linq
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             element = _enumerator.Current;
+
                             if (_set.Add(await _keySelector(element).ConfigureAwait(false)))
                             {
                                 _current = element;
@@ -367,6 +372,7 @@ namespace System.Linq
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
                         TSource item = enu.Current;
+
                         if (s.Add(await _keySelector(item).ConfigureAwait(false)))
                         {
                             r.Add(item);
@@ -431,6 +437,7 @@ namespace System.Linq
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
                         TSource item = enu.Current;
+
                         if (s.Add(await _keySelector(item, cancellationToken).ConfigureAwait(false)))
                         {
                             count++;
@@ -487,6 +494,7 @@ namespace System.Linq
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             element = _enumerator.Current;
+
                             if (_set.Add(await _keySelector(element, _cancellationToken).ConfigureAwait(false)))
                             {
                                 _current = element;
@@ -513,6 +521,7 @@ namespace System.Linq
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
                         TSource item = enu.Current;
+
                         if (s.Add(await _keySelector(item, cancellationToken).ConfigureAwait(false)))
                         {
                             r.Add(item);

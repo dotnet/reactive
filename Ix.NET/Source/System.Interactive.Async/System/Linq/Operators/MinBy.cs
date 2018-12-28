@@ -167,6 +167,7 @@ namespace System.Linq
                     TKey key = keySelector(cur);
 
                     int cmp = compare(key, resKey);
+
                     if (cmp == 0)
                     {
                         result.Add(cur);
@@ -207,6 +208,7 @@ namespace System.Linq
                     TKey key = await keySelector(cur).ConfigureAwait(false);
 
                     int cmp = compare(key, resKey);
+
                     if (cmp == 0)
                     {
                         result.Add(cur);
@@ -248,6 +250,7 @@ namespace System.Linq
                     TKey key = await keySelector(cur, cancellationToken).ConfigureAwait(false);
 
                     int cmp = compare(key, resKey);
+
                     if (cmp == 0)
                     {
                         result.Add(cur);

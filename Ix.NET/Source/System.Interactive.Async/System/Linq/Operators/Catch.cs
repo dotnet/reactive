@@ -137,7 +137,7 @@ namespace System.Linq
                                 }
                                 catch (TException ex)
                                 {
-                                    // Note: Ideally we'd dipose of the previous enumerator before
+                                    // Note: Ideally we'd dispose of the previous enumerator before
                                     // invoking the handler, but we use this order to preserve
                                     // current behavior
                                     IAsyncEnumerable<TSource> inner = _handler(ex);
@@ -230,7 +230,7 @@ namespace System.Linq
                                 }
                                 catch (TException ex)
                                 {
-                                    // Note: Ideally we'd dipose of the previous enumerator before
+                                    // Note: Ideally we'd dispose of the previous enumerator before
                                     // invoking the handler, but we use this order to preserve
                                     // current behavior
                                     IAsyncEnumerable<TSource> inner = await _handler(ex).ConfigureAwait(false);
@@ -324,7 +324,7 @@ namespace System.Linq
                                 }
                                 catch (TException ex)
                                 {
-                                    // Note: Ideally we'd dipose of the previous enumerator before
+                                    // Note: Ideally we'd dispose of the previous enumerator before
                                     // invoking the handler, but we use this order to preserve
                                     // current behavior
                                     IAsyncEnumerable<TSource> inner = await _handler(ex, _cancellationToken).ConfigureAwait(false);

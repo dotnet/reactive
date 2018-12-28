@@ -238,6 +238,7 @@ namespace System.Linq
                             {
                                 comparerEquals = _comparer.Equals(_currentKeyValue, key);
                             }
+
                             if (!_hasCurrentKey || !comparerEquals)
                             {
                                 _hasCurrentKey = true;
@@ -309,6 +310,7 @@ namespace System.Linq
                             {
                                 comparerEquals = _comparer.Equals(_currentKeyValue, key);
                             }
+
                             if (!_hasCurrentKey || !comparerEquals)
                             {
                                 _hasCurrentKey = true;
@@ -381,6 +383,7 @@ namespace System.Linq
                             {
                                 comparerEquals = _comparer.Equals(_currentKeyValue, key);
                             }
+
                             if (!_hasCurrentKey || !comparerEquals)
                             {
                                 _hasCurrentKey = true;

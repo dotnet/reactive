@@ -10,10 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
-        public static IAsyncEnumerable<TValue> Never<TValue>()
-        {
-            return NeverAsyncEnumerable<TValue>.Instance;
-        }
+        public static IAsyncEnumerable<TValue> Never<TValue>() => NeverAsyncEnumerable<TValue>.Instance;
 
         private sealed class NeverAsyncEnumerable<TValue> : IAsyncEnumerable<TValue>
         {
@@ -34,10 +31,7 @@ namespace System.Linq
                 private bool _once;
                 private TaskCompletionSource<bool> _task;
 
-                public NeverAsyncEnumerator(CancellationToken token)
-                {
-                    _token = token;
-                }
+                public NeverAsyncEnumerator(CancellationToken token) => _token = token;
 
                 public TValue Current => throw new InvalidOperationException();
 

@@ -128,6 +128,7 @@ namespace System.Linq
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             TSource item = _enumerator.Current;
+
                             if (!_hasSeed)
                             {
                                 _hasSeed = true;
@@ -266,6 +267,7 @@ namespace System.Linq
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             TSource item = _enumerator.Current;
+
                             if (!_hasSeed)
                             {
                                 _hasSeed = true;
@@ -341,6 +343,7 @@ namespace System.Linq
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             TSource item = _enumerator.Current;
+
                             if (!_hasSeed)
                             {
                                 _hasSeed = true;
