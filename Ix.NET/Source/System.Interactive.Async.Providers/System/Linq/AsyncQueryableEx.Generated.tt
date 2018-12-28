@@ -15,6 +15,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 <#
+var nullableParameterNames = new[] { "comparer" };
 var exclude = new[] { "ForEach", "ForEachAsync", "ToEnumerable", "ToAsyncEnumerable", "ToObservable", "AsAsyncEnumerable" };
 
 var toQuotedImpl = default(Func<Type, int, bool, string>);
@@ -254,7 +255,7 @@ foreach (var m in typeof(AsyncEnumerableEx).GetMethods()
 var any = false;
 foreach (var p in m.GetParameters())
 {
-    if (!p.ParameterType.IsValueType && !p.ParameterType.IsGenericParameter)
+    if (!p.ParameterType.IsValueType && !p.ParameterType.IsGenericParameter && !nullableParameterNames.Contains(p.Name))
     {
         any = true;
 #>

@@ -166,8 +166,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.CreateQuery<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.Distinct<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, CancellationToken, ValueTask<TKey>>>), default(IEqualityComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IEqualityComparer<TKey>))));
@@ -182,8 +180,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.CreateQuery<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.Distinct<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IEqualityComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IEqualityComparer<TKey>))));
@@ -198,8 +194,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.CreateQuery<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.Distinct<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IEqualityComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IEqualityComparer<TKey>))));
@@ -224,8 +218,6 @@ namespace System.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.CreateQuery<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.DistinctUntilChanged<TSource>(default(IAsyncQueryable<TSource>), default(IEqualityComparer<TSource>))), source.Expression, Expression.Constant(comparer, typeof(IEqualityComparer<TSource>))));
@@ -282,8 +274,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.CreateQuery<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.DistinctUntilChanged<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, CancellationToken, ValueTask<TKey>>>), default(IEqualityComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IEqualityComparer<TKey>))));
@@ -298,8 +288,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.CreateQuery<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.DistinctUntilChanged<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IEqualityComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IEqualityComparer<TKey>))));
@@ -314,8 +302,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.CreateQuery<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.DistinctUntilChanged<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IEqualityComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IEqualityComparer<TKey>))));
@@ -640,8 +626,6 @@ namespace System.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxAsync<TSource>(default(IAsyncQueryable<TSource>), default(IComparer<TSource>))), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>))), CancellationToken.None);
@@ -654,8 +638,6 @@ namespace System.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxAsync<TSource>(default(IAsyncQueryable<TSource>), default(IComparer<TSource>), default(CancellationToken))), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
@@ -726,8 +708,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
@@ -756,8 +736,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
@@ -772,8 +750,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, CancellationToken, ValueTask<TKey>>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
@@ -788,8 +764,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
@@ -804,8 +778,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MaxByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
@@ -830,8 +802,6 @@ namespace System.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinAsync<TSource>(default(IAsyncQueryable<TSource>), default(IComparer<TSource>))), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>))), CancellationToken.None);
@@ -844,8 +814,6 @@ namespace System.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinAsync<TSource>(default(IAsyncQueryable<TSource>), default(IComparer<TSource>), default(CancellationToken))), source.Expression, Expression.Constant(comparer, typeof(IComparer<TSource>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
@@ -916,8 +884,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
@@ -946,8 +912,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IComparer<TKey>))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>))), CancellationToken.None);
@@ -962,8 +926,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, CancellationToken, ValueTask<TKey>>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
@@ -978,8 +940,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
@@ -994,8 +954,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
 #if CRIPPLED_REFLECTION
             return source.Provider.ExecuteAsync<IList<TSource>>(Expression.Call(InfoOf(() => AsyncQueryableEx.MinByAsync<TSource, TKey>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<TKey>>>), default(IComparer<TKey>), default(CancellationToken))), source.Expression, keySelector, Expression.Constant(comparer, typeof(IComparer<TKey>)), Expression.Constant(cancellationToken, typeof(CancellationToken))), cancellationToken);
