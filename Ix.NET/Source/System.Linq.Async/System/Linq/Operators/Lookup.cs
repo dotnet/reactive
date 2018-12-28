@@ -281,6 +281,8 @@ namespace System.Linq.Internal
 
         ValueTask<List<IAsyncGrouping<TKey, TElement>>> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var list = new List<IAsyncGrouping<TKey, TElement>>(Count);
             var g = _lastGrouping;
             if (g != null)
@@ -298,6 +300,8 @@ namespace System.Linq.Internal
 
         ValueTask<IAsyncGrouping<TKey, TElement>[]> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToArrayAsync(CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var array = new IAsyncGrouping<TKey, TElement>[Count];
             var index = 0;
             var g = _lastGrouping;
@@ -608,6 +612,8 @@ namespace System.Linq.Internal
 #if !NO_DEEP_CANCELLATION
         internal async Task<TResult[]> ToArray<TResult>(Func<TKey, IAsyncEnumerable<TElement>, CancellationToken, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var array = new TResult[Count];
             var index = 0;
             var g = _lastGrouping;
@@ -648,6 +654,8 @@ namespace System.Linq.Internal
 #if !NO_DEEP_CANCELLATION
         internal async Task<List<TResult>> ToList<TResult>(Func<TKey, IAsyncEnumerable<TElement>, CancellationToken, ValueTask<TResult>> resultSelector, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var list = new List<TResult>(Count);
             var g = _lastGrouping;
             if (g != null)
@@ -696,6 +704,8 @@ namespace System.Linq.Internal
 
         ValueTask<List<IAsyncGrouping<TKey, TElement>>> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var list = new List<IAsyncGrouping<TKey, TElement>>(Count);
             var g = _lastGrouping;
             if (g != null)
@@ -713,6 +723,8 @@ namespace System.Linq.Internal
 
         ValueTask<IAsyncGrouping<TKey, TElement>[]> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToArrayAsync(CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var array = new IAsyncGrouping<TKey, TElement>[Count];
             var index = 0;
             var g = _lastGrouping;

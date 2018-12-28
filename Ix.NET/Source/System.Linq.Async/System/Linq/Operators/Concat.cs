@@ -73,6 +73,8 @@ namespace System.Linq
 
             public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var list = new List<TSource>();
                 for (var i = 0; ; i++)
                 {
@@ -111,6 +113,8 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var count = 0;
                     for (var i = 0; ; i++)
                     {

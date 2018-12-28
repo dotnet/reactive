@@ -162,6 +162,8 @@ namespace System.Linq
 
             private async Task<Set<TSource>> FillSetAsync(CancellationToken cancellationToken)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var set = new Set<TSource>(_comparer);
 
                 for (var index = 0; ; ++index)

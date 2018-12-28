@@ -20,6 +20,8 @@ namespace System.Collections.Generic
 
         internal static async ValueTask<ArrayWithLength<T>> ToArrayWithLength<T>(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var result = new ArrayWithLength<T>();
             // Check for short circuit optimizations. This one is very unlikely
             // but could be here as a group

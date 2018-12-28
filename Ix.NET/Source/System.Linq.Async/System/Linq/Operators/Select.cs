@@ -279,6 +279,8 @@ namespace System.Linq
                     return new ValueTask<int>(-1);
                 }
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var count = 0;
 
                 foreach (var item in _source)
@@ -301,6 +303,8 @@ namespace System.Linq
 
             public ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var n = _source.Count;
 
                 var res = new TResult[n];
@@ -315,6 +319,8 @@ namespace System.Linq
 
             public ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var n = _source.Count;
 
                 var res = new List<TResult>(n);
@@ -652,6 +658,8 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var count = 0;
 
                     foreach (var item in _source)
@@ -675,6 +683,8 @@ namespace System.Linq
 
             public async ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var n = _source.Count;
 
                 var res = new TResult[n];
@@ -689,6 +699,8 @@ namespace System.Linq
 
             public async ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var n = _source.Count;
 
                 var res = new List<TResult>(n);
@@ -768,6 +780,8 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var count = 0;
 
                     foreach (var item in _source)
@@ -791,6 +805,8 @@ namespace System.Linq
 
             public async ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var n = _source.Count;
 
                 var res = new TResult[n];
@@ -805,6 +821,8 @@ namespace System.Linq
 
             public async ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var n = _source.Count;
 
                 var res = new List<TResult>(n);

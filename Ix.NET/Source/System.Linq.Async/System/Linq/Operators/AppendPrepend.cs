@@ -185,6 +185,8 @@ namespace System.Linq
                     return await AsyncEnumerableHelpers.ToArray(this, cancellationToken).ConfigureAwait(false);
                 }
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var array = new TSource[count];
                 int index;
                 if (_appending)
@@ -230,13 +232,15 @@ namespace System.Linq
             public override async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
                 var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
+
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var list = count == -1 ? new List<TSource>() : new List<TSource>(count);
 
                 if (!_appending)
                 {
                     list.Add(_item);
                 }
-
 
                 var en = _source.GetAsyncEnumerator(cancellationToken);
 

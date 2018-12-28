@@ -82,11 +82,26 @@ namespace System.Linq
             //     and short-circuit as appropriate.
             //
 
-            public ValueTask<T[]> ToArrayAsync(CancellationToken cancellationToken) => new ValueTask<T[]>(_source.ToArray());
+            public ValueTask<T[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
 
-            public ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken) => new ValueTask<List<T>>(_source.ToList());
+                return new ValueTask<T[]>(_source.ToArray());
+            }
 
-            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(_source.Count());
+            public ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                return new ValueTask<List<T>>(_source.ToList());
+            }
+
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                return new ValueTask<int>(_source.Count());
+            }
         }
 
         private sealed class AsyncIListEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>, IList<T>
@@ -144,11 +159,26 @@ namespace System.Linq
             //     and short-circuit as appropriate.
             //
 
-            public ValueTask<T[]> ToArrayAsync(CancellationToken cancellationToken) => new ValueTask<T[]>(_source.ToArray());
+            public ValueTask<T[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
 
-            public ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken) => new ValueTask<List<T>>(_source.ToList());
+                return new ValueTask<T[]>(_source.ToArray());
+            }
 
-            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(_source.Count);
+            public ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                return new ValueTask<List<T>>(_source.ToList());
+            }
+
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                return new ValueTask<int>(_source.Count);
+            }
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator() => _source.GetEnumerator();
 
@@ -234,11 +264,26 @@ namespace System.Linq
             //     and short-circuit as appropriate.
             //
 
-            public ValueTask<T[]> ToArrayAsync(CancellationToken cancellationToken) => new ValueTask<T[]>(_source.ToArray());
+            public ValueTask<T[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
 
-            public ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken) => new ValueTask<List<T>>(_source.ToList());
+                return new ValueTask<T[]>(_source.ToArray());
+            }
 
-            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(_source.Count);
+            public ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                return new ValueTask<List<T>>(_source.ToList());
+            }
+
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                return new ValueTask<int>(_source.Count);
+            }
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator() => _source.GetEnumerator();
 

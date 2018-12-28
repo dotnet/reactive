@@ -36,6 +36,8 @@ namespace System.Linq
 
             public ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var res = new TResult[_count];
 
                 for (var i = 0; i < _count; i++)
@@ -48,6 +50,8 @@ namespace System.Linq
 
             public ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var res = new List<TResult>(_count);
 
                 for (var i = 0; i < _count; i++)
