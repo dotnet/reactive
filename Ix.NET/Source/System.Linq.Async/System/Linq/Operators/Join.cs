@@ -111,7 +111,7 @@ namespace System.Linq
         }
 #endif
 
-        internal sealed class JoinAsyncIterator<TOuter, TInner, TKey, TResult> : AsyncIterator<TResult>
+        private sealed class JoinAsyncIterator<TOuter, TInner, TKey, TResult> : AsyncIterator<TResult>
         {
             private readonly IAsyncEnumerable<TOuter> _outer;
             private readonly IAsyncEnumerable<TInner> _inner;
@@ -238,7 +238,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class JoinAsyncIteratorWithTask<TOuter, TInner, TKey, TResult> : AsyncIterator<TResult>
+        private sealed class JoinAsyncIteratorWithTask<TOuter, TInner, TKey, TResult> : AsyncIterator<TResult>
         {
             private readonly IAsyncEnumerable<TOuter> _outer;
             private readonly IAsyncEnumerable<TInner> _inner;
@@ -366,7 +366,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal sealed class JoinAsyncIteratorWithTaskAndCancellation<TOuter, TInner, TKey, TResult> : AsyncIterator<TResult>
+        private sealed class JoinAsyncIteratorWithTaskAndCancellation<TOuter, TInner, TKey, TResult> : AsyncIterator<TResult>
         {
             private readonly IAsyncEnumerable<TOuter> _outer;
             private readonly IAsyncEnumerable<TInner> _inner;

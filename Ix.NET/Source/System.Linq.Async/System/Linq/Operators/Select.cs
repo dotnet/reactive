@@ -177,7 +177,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class SelectEnumerableWithIndexAsyncIterator<TSource, TResult> : AsyncIterator<TResult>
+        private sealed class SelectEnumerableWithIndexAsyncIterator<TSource, TResult> : AsyncIterator<TResult>
         {
             private readonly Func<TSource, int, TResult> _selector;
             private readonly IAsyncEnumerable<TSource> _source;
@@ -481,7 +481,7 @@ namespace System.Linq
         }
 #endif
 
-        internal sealed class SelectEnumerableWithIndexAsyncIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>
+        private sealed class SelectEnumerableWithIndexAsyncIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>
         {
             private readonly Func<TSource, int, ValueTask<TResult>> _selector;
             private readonly IAsyncEnumerable<TSource> _source;
@@ -546,7 +546,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal sealed class SelectEnumerableWithIndexAsyncIteratorWithTaskAndCancellation<TSource, TResult> : AsyncIterator<TResult>
+        private sealed class SelectEnumerableWithIndexAsyncIteratorWithTaskAndCancellation<TSource, TResult> : AsyncIterator<TResult>
         {
             private readonly Func<TSource, int, CancellationToken, ValueTask<TResult>> _selector;
             private readonly IAsyncEnumerable<TSource> _source;
@@ -616,7 +616,7 @@ namespace System.Linq
         //     elements in order to ensure side-effects. We should consider whether we want to follow this implementation
         //     strategy or support IAsyncPartition<TResult> in a less efficient but more correct manner here.
 
-        internal sealed class SelectIListIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
+        private sealed class SelectIListIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private readonly Func<TSource, ValueTask<TResult>> _selector;
             private readonly IList<TSource> _source;
@@ -738,7 +738,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal sealed class SelectIListIteratorWithTaskAndCancellation<TSource, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
+        private sealed class SelectIListIteratorWithTaskAndCancellation<TSource, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private readonly Func<TSource, CancellationToken, ValueTask<TResult>> _selector;
             private readonly IList<TSource> _source;

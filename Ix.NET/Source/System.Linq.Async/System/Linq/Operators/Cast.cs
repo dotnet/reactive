@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -15,7 +14,6 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            // Check to see if it already is and short-circuit
             if (source is IAsyncEnumerable<TResult> typedSource)
             {
                 return typedSource;
@@ -24,15 +22,13 @@ namespace System.Linq
             return new CastAsyncIterator<TResult>(source);
         }
 
-        internal sealed class CastAsyncIterator<TResult> : AsyncIterator<TResult>
+        private sealed class CastAsyncIterator<TResult> : AsyncIterator<TResult>
         {
             private readonly IAsyncEnumerable<object> _source;
             private IAsyncEnumerator<object> _enumerator;
 
             public CastAsyncIterator(IAsyncEnumerable<object> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 

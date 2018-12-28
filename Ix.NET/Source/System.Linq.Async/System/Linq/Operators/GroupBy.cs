@@ -315,7 +315,7 @@ namespace System.Linq
         }
 #endif
 
-        internal sealed class GroupedResultAsyncEnumerable<TSource, TKey, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
+        private sealed class GroupedResultAsyncEnumerable<TSource, TKey, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private readonly IAsyncEnumerable<TSource> _source;
             private readonly Func<TSource, TKey> _keySelector;
@@ -408,7 +408,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
+        private sealed class GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private readonly IAsyncEnumerable<TSource> _source;
             private readonly Func<TSource, ValueTask<TKey>> _keySelector;
@@ -502,7 +502,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal sealed class GroupedResultAsyncEnumerableWithTaskAndCancellation<TSource, TKey, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
+        private sealed class GroupedResultAsyncEnumerableWithTaskAndCancellation<TSource, TKey, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private readonly IAsyncEnumerable<TSource> _source;
             private readonly Func<TSource, CancellationToken, ValueTask<TKey>> _keySelector;
@@ -596,7 +596,7 @@ namespace System.Linq
         }
 #endif
 
-        internal sealed class GroupedAsyncEnumerable<TSource, TKey, TElement> : AsyncIterator<IAsyncGrouping<TKey, TElement>>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
+        private sealed class GroupedAsyncEnumerable<TSource, TKey, TElement> : AsyncIterator<IAsyncGrouping<TKey, TElement>>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
         {
             private readonly IAsyncEnumerable<TSource> _source;
             private readonly Func<TSource, TKey> _keySelector;
@@ -689,7 +689,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class GroupedAsyncEnumerableWithTask<TSource, TKey, TElement> : AsyncIterator<IAsyncGrouping<TKey, TElement>>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
+        private sealed class GroupedAsyncEnumerableWithTask<TSource, TKey, TElement> : AsyncIterator<IAsyncGrouping<TKey, TElement>>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
         {
             private readonly IAsyncEnumerable<TSource> _source;
             private readonly Func<TSource, ValueTask<TKey>> _keySelector;
@@ -783,7 +783,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal sealed class GroupedAsyncEnumerableWithTaskAndCancellation<TSource, TKey, TElement> : AsyncIterator<IAsyncGrouping<TKey, TElement>>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
+        private sealed class GroupedAsyncEnumerableWithTaskAndCancellation<TSource, TKey, TElement> : AsyncIterator<IAsyncGrouping<TKey, TElement>>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
         {
             private readonly IAsyncEnumerable<TSource> _source;
             private readonly Func<TSource, CancellationToken, ValueTask<TKey>> _keySelector;
@@ -877,7 +877,7 @@ namespace System.Linq
         }
 #endif
 
-        internal sealed class GroupedAsyncEnumerable<TSource, TKey> : AsyncIterator<IAsyncGrouping<TKey, TSource>>, IAsyncIListProvider<IAsyncGrouping<TKey, TSource>>
+        private sealed class GroupedAsyncEnumerable<TSource, TKey> : AsyncIterator<IAsyncGrouping<TKey, TSource>>, IAsyncIListProvider<IAsyncGrouping<TKey, TSource>>
         {
             private readonly IAsyncEnumerable<TSource> _source;
             private readonly Func<TSource, TKey> _keySelector;
@@ -967,7 +967,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class GroupedAsyncEnumerableWithTask<TSource, TKey> : AsyncIterator<IAsyncGrouping<TKey, TSource>>, IAsyncIListProvider<IAsyncGrouping<TKey, TSource>>
+        private sealed class GroupedAsyncEnumerableWithTask<TSource, TKey> : AsyncIterator<IAsyncGrouping<TKey, TSource>>, IAsyncIListProvider<IAsyncGrouping<TKey, TSource>>
         {
             private readonly IAsyncEnumerable<TSource> _source;
             private readonly Func<TSource, ValueTask<TKey>> _keySelector;
@@ -1058,7 +1058,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal sealed class GroupedAsyncEnumerableWithTaskAndCancellation<TSource, TKey> : AsyncIterator<IAsyncGrouping<TKey, TSource>>, IAsyncIListProvider<IAsyncGrouping<TKey, TSource>>
+        private sealed class GroupedAsyncEnumerableWithTaskAndCancellation<TSource, TKey> : AsyncIterator<IAsyncGrouping<TKey, TSource>>, IAsyncIListProvider<IAsyncGrouping<TKey, TSource>>
         {
             private readonly IAsyncEnumerable<TSource> _source;
             private readonly Func<TSource, CancellationToken, ValueTask<TKey>> _keySelector;

@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -19,15 +17,13 @@ namespace System.Linq
             return new OfTypeAsyncIterator<TResult>(source);
         }
 
-        internal sealed class OfTypeAsyncIterator<TResult> : AsyncIterator<TResult>
+        private sealed class OfTypeAsyncIterator<TResult> : AsyncIterator<TResult>
         {
             private readonly IAsyncEnumerable<object> _source;
             private IAsyncEnumerator<object> _enumerator;
 
             public OfTypeAsyncIterator(IAsyncEnumerable<object> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 

@@ -179,7 +179,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class WhereEnumerableWithIndexAsyncIterator<TSource> : AsyncIterator<TSource>
+        private sealed class WhereEnumerableWithIndexAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, int, bool> _predicate;
             private readonly IAsyncEnumerable<TSource> _source;
@@ -377,7 +377,7 @@ namespace System.Linq
         }
 #endif
 
-        internal sealed class WhereEnumerableWithIndexAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
+        private sealed class WhereEnumerableWithIndexAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, int, ValueTask<bool>> _predicate;
             private readonly IAsyncEnumerable<TSource> _source;
@@ -446,7 +446,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal sealed class WhereEnumerableWithIndexAsyncIteratorWithTaskAndCancellation<TSource> : AsyncIterator<TSource>
+        private sealed class WhereEnumerableWithIndexAsyncIteratorWithTaskAndCancellation<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, int, CancellationToken, ValueTask<bool>> _predicate;
             private readonly IAsyncEnumerable<TSource> _source;
@@ -515,7 +515,7 @@ namespace System.Linq
         }
 #endif
 
-        internal sealed class WhereSelectEnumerableAsyncIterator<TSource, TResult> : AsyncIterator<TResult>
+        private sealed class WhereSelectEnumerableAsyncIterator<TSource, TResult> : AsyncIterator<TResult>
         {
             private readonly Func<TSource, bool> _predicate;
             private readonly Func<TSource, TResult> _selector;
