@@ -85,26 +85,5 @@ namespace Tests
                     disposeAsync: null)
             );
         }
-
-        private void AssertThrows<E>(Action a, Func<E, bool> assert)
-            where E : Exception
-        {
-            var hasFailed = false;
-
-            try
-            {
-                a();
-            }
-            catch (E e)
-            {
-                Assert.True(assert(e));
-                hasFailed = true;
-            }
-
-            if (!hasFailed)
-            {
-                Assert.True(false);
-            }
-        }
     }
 }

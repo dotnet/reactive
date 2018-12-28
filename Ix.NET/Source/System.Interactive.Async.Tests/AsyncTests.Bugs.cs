@@ -69,13 +69,6 @@ namespace Tests
             Assert.True(result);
         }
 
-        private static IEnumerable<int> Blocking(ManualResetEvent evt, ManualResetEvent blockingStarted)
-        {
-            blockingStarted.Set();
-            evt.WaitOne();
-            yield return 42;
-        }
-
         [Fact]
         public async Task TakeOneFromSelectMany()
         {
