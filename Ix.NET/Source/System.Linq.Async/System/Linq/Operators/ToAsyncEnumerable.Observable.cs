@@ -76,7 +76,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (true)
                         {
-                            var completed = Volatile.Read(ref _completed);
+                            bool completed = Volatile.Read(ref _completed);
 
                             if (_values.TryDequeue(out _current))
                             {
@@ -84,7 +84,7 @@ namespace System.Linq
                             }
                             else if (completed)
                             {
-                                var error = _error;
+                                Exception error = _error;
 
                                 if (error != null)
                                 {
@@ -131,7 +131,7 @@ namespace System.Linq
             {
                 while (true)
                 {
-                    var signal = Volatile.Read(ref _signal);
+                    TaskCompletionSource<bool> signal = Volatile.Read(ref _signal);
 
                     if (signal == TaskExt.True)
                     {
@@ -170,7 +170,7 @@ namespace System.Linq
 
                 while (true)
                 {
-                    var signal = Volatile.Read(ref _signal);
+                    TaskCompletionSource<bool> signal = Volatile.Read(ref _signal);
 
                     if (signal != null)
                     {

@@ -21,7 +21,7 @@ namespace System.Linq
 
             IEnumerable<TSource> Core()
             {
-                var e = source.GetAsyncEnumerator(default);
+                IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(default);
 
                 try
                 {
@@ -46,7 +46,7 @@ namespace System.Linq
 
         private static void Wait(ValueTask task)
         {
-            var awaiter = task.GetAwaiter();
+            Runtime.CompilerServices.ValueTaskAwaiter awaiter = task.GetAwaiter();
 
             if (!awaiter.IsCompleted)
             {
@@ -59,7 +59,7 @@ namespace System.Linq
 
         private static T Wait<T>(ValueTask<T> task)
         {
-            var awaiter = task.GetAwaiter();
+            Runtime.CompilerServices.ValueTaskAwaiter<T> awaiter = task.GetAwaiter();
 
             if (!awaiter.IsCompleted)
             {

@@ -80,21 +80,21 @@ namespace System.Linq
 
         private static async Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            var last = await TryGetLast(source, cancellationToken).ConfigureAwait(false);
+            Maybe<TSource> last = await TryGetLast(source, cancellationToken).ConfigureAwait(false);
 
             return last.HasValue ? last.Value : throw Error.NoElements();
         }
 
         private static async Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
+            Maybe<TSource> last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
             return last.HasValue ? last.Value : throw Error.NoElements();
         }
 
         private static async Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
+            Maybe<TSource> last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
             return last.HasValue ? last.Value : throw Error.NoElements();
         }
@@ -102,7 +102,7 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
+            Maybe<TSource> last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
             return last.HasValue ? last.Value : throw Error.NoElements();
         }

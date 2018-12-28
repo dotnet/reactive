@@ -127,7 +127,7 @@ namespace System.Linq
 
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = _enumerator.Current;
+                            TSource item = _enumerator.Current;
                             if (!_hasSeed)
                             {
                                 _hasSeed = true;
@@ -199,7 +199,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = _enumerator.Current;
+                            TSource item = _enumerator.Current;
                             _accumulated = _accumulator(_accumulated, item);
                             _current = _accumulated;
                             return true;
@@ -265,7 +265,7 @@ namespace System.Linq
 
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = _enumerator.Current;
+                            TSource item = _enumerator.Current;
                             if (!_hasSeed)
                             {
                                 _hasSeed = true;
@@ -340,7 +340,7 @@ namespace System.Linq
 
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = _enumerator.Current;
+                            TSource item = _enumerator.Current;
                             if (!_hasSeed)
                             {
                                 _hasSeed = true;
@@ -413,7 +413,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = _enumerator.Current;
+                            TSource item = _enumerator.Current;
                             _accumulated = await _accumulator(_accumulated, item).ConfigureAwait(false);
                             _current = _accumulated;
                             return true;
@@ -479,7 +479,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = _enumerator.Current;
+                            TSource item = _enumerator.Current;
                             _accumulated = await _accumulator(_accumulated, item, _cancellationToken).ConfigureAwait(false);
                             _current = _accumulated;
                             return true;

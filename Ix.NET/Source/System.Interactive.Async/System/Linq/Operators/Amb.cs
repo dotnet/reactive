@@ -74,13 +74,13 @@ namespace System.Linq
                 switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        var firstEnumerator = _first.GetAsyncEnumerator(_cancellationToken);
-                        var secondEnumerator = _second.GetAsyncEnumerator(_cancellationToken);
+                        IAsyncEnumerator<TSource> firstEnumerator = _first.GetAsyncEnumerator(_cancellationToken);
+                        IAsyncEnumerator<TSource> secondEnumerator = _second.GetAsyncEnumerator(_cancellationToken);
 
-                        var firstMoveNext = firstEnumerator.MoveNextAsync().AsTask();
-                        var secondMoveNext = secondEnumerator.MoveNextAsync().AsTask();
+                        Task<bool> firstMoveNext = firstEnumerator.MoveNextAsync().AsTask();
+                        Task<bool> secondMoveNext = secondEnumerator.MoveNextAsync().AsTask();
 
-                        var winner = await Task.WhenAny(firstMoveNext, secondMoveNext).ConfigureAwait(false);
+                        Task<bool> winner = await Task.WhenAny(firstMoveNext, secondMoveNext).ConfigureAwait(false);
 
                         //
                         // REVIEW: An alternative option is to call DisposeAsync on the other and await it, but this has two drawbacks:
@@ -95,7 +95,7 @@ namespace System.Linq
                         {
                             _enumerator = firstEnumerator;
 
-                            var ignored = secondMoveNext.ContinueWith(_ =>
+                            Task ignored = secondMoveNext.ContinueWith(_ =>
                             {
                                 secondEnumerator.DisposeAsync();
                             });
@@ -104,7 +104,7 @@ namespace System.Linq
                         {
                             _enumerator = secondEnumerator;
 
-                            var ignored = firstMoveNext.ContinueWith(_ =>
+                            Task ignored = firstMoveNext.ContinueWith(_ =>
                             {
                                 firstEnumerator.DisposeAsync();
                             });
@@ -169,20 +169,20 @@ namespace System.Linq
                 switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        var n = _sources.Length;
+                        int n = _sources.Length;
 
                         var enumerators = new IAsyncEnumerator<TSource>[n];
                         var moveNexts = new ValueTask<bool>[n];
 
                         for (var i = 0; i < n; i++)
                         {
-                            var enumerator = _sources[i].GetAsyncEnumerator(_cancellationToken);
+                            IAsyncEnumerator<TSource> enumerator = _sources[i].GetAsyncEnumerator(_cancellationToken);
 
                             enumerators[i] = enumerator;
                             moveNexts[i] = enumerator.MoveNextAsync();
                         }
 
-                        var winner = await Task.WhenAny(moveNexts.Select(t => t.AsTask())).ConfigureAwait(false);
+                        Task<bool> winner = await Task.WhenAny(moveNexts.Select(t => t.AsTask())).ConfigureAwait(false);
 
                         //
                         // REVIEW: An alternative option is to call DisposeAsync on the other and await it, but this has two drawbacks:
@@ -193,7 +193,7 @@ namespace System.Linq
                         // The approach below has one drawback, namely that exceptions raised by any loser are dropped on the floor.
                         //
 
-                        var winnerIndex = Array.IndexOf(moveNexts, winner);
+                        int winnerIndex = Array.IndexOf(moveNexts, winner);
 
                         _enumerator = enumerators[winnerIndex];
 
@@ -201,7 +201,7 @@ namespace System.Linq
                         {
                             if (i != winnerIndex)
                             {
-                                var ignored = moveNexts[i].AsTask().ContinueWith(_ =>
+                                Task ignored = moveNexts[i].AsTask().ContinueWith(_ =>
                                 {
                                     enumerators[i].DisposeAsync();
                                 });

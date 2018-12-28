@@ -41,12 +41,12 @@ namespace System.Linq
 
         public void Dispose()
         {
-            var d1 = Interlocked.Exchange(ref _d1, null);
+            IDisposable d1 = Interlocked.Exchange(ref _d1, null);
             if (d1 != null)
             {
                 d1.Dispose();
 
-                var d2 = Interlocked.Exchange(ref _d2, null);
+                IDisposable d2 = Interlocked.Exchange(ref _d2, null);
                 if (d2 != null)
                 {
                     d2.Dispose();

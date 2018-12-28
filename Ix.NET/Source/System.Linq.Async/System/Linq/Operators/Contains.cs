@@ -54,7 +54,7 @@ namespace System.Linq
 
         private static async Task<bool> ContainsCore<TSource>(IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {

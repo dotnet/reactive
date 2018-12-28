@@ -32,7 +32,7 @@ namespace System.Linq
         {
             cancellationToken.ThrowIfCancellationRequested(); // NB: [LDM-2018-11-28] Equivalent to async iterator behavior.
 
-            var enumerator = _state == AsyncIteratorState.New && _threadId == Environment.CurrentManagedThreadId
+            AsyncIteratorBase<TSource> enumerator = _state == AsyncIteratorState.New && _threadId == Environment.CurrentManagedThreadId
                 ? this
                 : Clone();
 

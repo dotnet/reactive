@@ -64,7 +64,7 @@ namespace System.Linq
 
         private static async Task<bool> AllCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -84,7 +84,7 @@ namespace System.Linq
 
         private static async Task<bool> AllCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -105,7 +105,7 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<bool> AllCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {

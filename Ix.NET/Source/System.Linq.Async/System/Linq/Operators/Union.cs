@@ -86,7 +86,7 @@ namespace System.Linq
             private void StoreFirst()
             {
                 var set = new Set<TSource>(_comparer);
-                var element = _enumerator.Current;
+                TSource element = _enumerator.Current;
                 set.Add(element);
                 _current = element;
                 _set = set;
@@ -94,12 +94,12 @@ namespace System.Linq
 
             private async ValueTask<bool> GetNextAsync()
             {
-                var set = _set;
+                Set<TSource> set = _set;
                 Debug.Assert(set != null);
 
                 while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var element = _enumerator.Current;
+                    TSource element = _enumerator.Current;
                     if (set.Add(element))
                     {
                         _current = element;
@@ -117,11 +117,11 @@ namespace System.Linq
                     case AsyncIteratorState.Allocated:
                         _index = 0;
 
-                        for (var enumerable = GetEnumerable(0); enumerable != null; enumerable = GetEnumerable(_index))
+                        for (IAsyncEnumerable<TSource> enumerable = GetEnumerable(0); enumerable != null; enumerable = GetEnumerable(_index))
                         {
                             ++_index;
 
-                            var enumerator = enumerable.GetAsyncEnumerator(_cancellationToken);
+                            IAsyncEnumerator<TSource> enumerator = enumerable.GetAsyncEnumerator(_cancellationToken);
 
                             if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
@@ -143,7 +143,7 @@ namespace System.Linq
                                 return true;
                             }
 
-                            var enumerable = GetEnumerable(_index);
+                            IAsyncEnumerable<TSource> enumerable = GetEnumerable(_index);
                             if (enumerable == null)
                             {
                                 break;
@@ -168,13 +168,13 @@ namespace System.Linq
 
                 for (var index = 0; ; ++index)
                 {
-                    var enumerable = GetEnumerable(index);
+                    IAsyncEnumerable<TSource> enumerable = GetEnumerable(index);
                     if (enumerable == null)
                     {
                         return set;
                     }
 
-                    var e = enumerable.GetAsyncEnumerator(cancellationToken);
+                    IAsyncEnumerator<TSource> e = enumerable.GetAsyncEnumerator(cancellationToken);
 
                     try
                     {
@@ -192,13 +192,13 @@ namespace System.Linq
 
             public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var set = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                Set<TSource> set = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return set.ToArray();
             }
 
             public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var set = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                Set<TSource> set = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return set.ToList();
             }
 
@@ -213,7 +213,7 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
-                    var set = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                    Set<TSource> set = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                     return set.Count;
                 }
             }
@@ -255,7 +255,7 @@ namespace System.Linq
 
             internal override UnionAsyncIterator<TSource> Union(IAsyncEnumerable<TSource> next)
             {
-                var sources = new SingleLinkedNode<IAsyncEnumerable<TSource>>(_first).Add(_second).Add(next);
+                SingleLinkedNode<IAsyncEnumerable<TSource>> sources = new SingleLinkedNode<IAsyncEnumerable<TSource>>(_first).Add(_second).Add(next);
                 return new UnionAsyncIteratorN<TSource>(sources, 2, _comparer);
             }
         }

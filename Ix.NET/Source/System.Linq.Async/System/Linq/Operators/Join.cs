@@ -196,7 +196,7 @@ namespace System.Linq
 
                             case State_DoLoop:
                                 _item = _outerEnumerator.Current;
-                                var g = _lookup.GetGrouping(_outerKeySelector(_item), create: false);
+                                Internal.Grouping<TKey, TInner> g = _lookup.GetGrouping(_outerKeySelector(_item), create: false);
                                 if (g != null)
                                 {
                                     _count = g._count;
@@ -221,7 +221,7 @@ namespace System.Linq
                                 return true;
 
                             case State_While:
-                                var hasNext = await _outerEnumerator.MoveNextAsync().ConfigureAwait(false);
+                                bool hasNext = await _outerEnumerator.MoveNextAsync().ConfigureAwait(false);
                                 if (hasNext)
                                 {
                                     goto case State_DoLoop;
@@ -323,7 +323,7 @@ namespace System.Linq
 
                             case State_DoLoop:
                                 _item = _outerEnumerator.Current;
-                                var g = _lookup.GetGrouping(await _outerKeySelector(_item).ConfigureAwait(false), create: false);
+                                Internal.Grouping<TKey, TInner> g = _lookup.GetGrouping(await _outerKeySelector(_item).ConfigureAwait(false), create: false);
                                 if (g != null)
                                 {
                                     _count = g._count;
@@ -348,7 +348,7 @@ namespace System.Linq
                                 return true;
 
                             case State_While:
-                                var hasNext = await _outerEnumerator.MoveNextAsync().ConfigureAwait(false);
+                                bool hasNext = await _outerEnumerator.MoveNextAsync().ConfigureAwait(false);
                                 if (hasNext)
                                 {
                                     goto case State_DoLoop;
@@ -451,7 +451,7 @@ namespace System.Linq
 
                             case State_DoLoop:
                                 _item = _outerEnumerator.Current;
-                                var g = _lookup.GetGrouping(await _outerKeySelector(_item, _cancellationToken).ConfigureAwait(false), create: false);
+                                Internal.Grouping<TKey, TInner> g = _lookup.GetGrouping(await _outerKeySelector(_item, _cancellationToken).ConfigureAwait(false), create: false);
                                 if (g != null)
                                 {
                                     _count = g._count;
@@ -476,7 +476,7 @@ namespace System.Linq
                                 return true;
 
                             case State_While:
-                                var hasNext = await _outerEnumerator.MoveNextAsync().ConfigureAwait(false);
+                                bool hasNext = await _outerEnumerator.MoveNextAsync().ConfigureAwait(false);
                                 if (hasNext)
                                 {
                                     goto case State_DoLoop;

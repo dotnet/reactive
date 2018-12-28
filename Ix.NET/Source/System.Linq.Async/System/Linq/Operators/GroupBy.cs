@@ -380,13 +380,13 @@ namespace System.Linq
 
             public async ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                Internal.Lookup<TKey, TSource> l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return l.ToArray(_resultSelector);
             }
 
             public async ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
-                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                Internal.Lookup<TKey, TSource> l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return l.ToList(_resultSelector);
             }
 
@@ -401,7 +401,7 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
-                    var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                    Internal.Lookup<TKey, TSource> l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
                     return l.Count;
                 }
@@ -473,13 +473,13 @@ namespace System.Linq
 
             public async ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                Internal.LookupWithTask<TKey, TSource> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArray(_resultSelector).ConfigureAwait(false);
             }
 
             public async ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
-                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                Internal.LookupWithTask<TKey, TSource> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToList(_resultSelector).ConfigureAwait(false);
             }
 
@@ -494,7 +494,7 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
-                    var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                    Internal.LookupWithTask<TKey, TSource> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
                     return l.Count;
                 }
@@ -567,13 +567,13 @@ namespace System.Linq
 
             public async ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                Internal.LookupWithTask<TKey, TSource> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArray(_resultSelector, cancellationToken).ConfigureAwait(false);
             }
 
             public async ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
-                var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                Internal.LookupWithTask<TKey, TSource> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToList(_resultSelector, cancellationToken).ConfigureAwait(false);
             }
 
@@ -588,7 +588,7 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
-                    var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                    Internal.LookupWithTask<TKey, TSource> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
                     return l.Count;
                 }
@@ -682,7 +682,7 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
-                    var l = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
+                    Internal.Lookup<TKey, TElement> l = await Internal.Lookup<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
 
                     return l.Count;
                 }
@@ -775,7 +775,7 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
-                    var l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
+                    Internal.LookupWithTask<TKey, TElement> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
 
                     return l.Count;
                 }
@@ -869,7 +869,7 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
-                    var l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
+                    Internal.LookupWithTask<TKey, TElement> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(_source, _keySelector, _elementSelector, _comparer, cancellationToken).ConfigureAwait(false);
 
                     return l.Count;
                 }
@@ -960,7 +960,7 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
-                    var l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                    Internal.Lookup<TKey, TSource> l = await Internal.Lookup<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
                     return l.Count;
                 }
@@ -1050,7 +1050,7 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
-                    var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                    Internal.LookupWithTask<TKey, TSource> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
                     return l.Count;
                 }
@@ -1141,7 +1141,7 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
-                    var l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
+                    Internal.LookupWithTask<TKey, TSource> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(_source, _keySelector, _comparer, cancellationToken).ConfigureAwait(false);
 
                     return l.Count;
                 }

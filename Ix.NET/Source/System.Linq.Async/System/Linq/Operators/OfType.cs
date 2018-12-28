@@ -55,7 +55,8 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = _enumerator.Current;
+                            object item = _enumerator.Current;
+
                             if (item is TResult res)
                             {
                                 _current = res;

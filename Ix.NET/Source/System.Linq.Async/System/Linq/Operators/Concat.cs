@@ -78,13 +78,13 @@ namespace System.Linq
                 var list = new List<TSource>();
                 for (var i = 0; ; i++)
                 {
-                    var source = GetAsyncEnumerable(i);
+                    IAsyncEnumerable<TSource> source = GetAsyncEnumerable(i);
                     if (source == null)
                     {
                         break;
                     }
 
-                    var e = source.GetAsyncEnumerator(cancellationToken);
+                    IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
                     try
                     {
@@ -118,7 +118,7 @@ namespace System.Linq
                     var count = 0;
                     for (var i = 0; ; i++)
                     {
-                        var source = GetAsyncEnumerable(i);
+                        IAsyncEnumerable<TSource> source = GetAsyncEnumerable(i);
                         if (source == null)
                         {
                             break;
@@ -169,7 +169,7 @@ namespace System.Linq
                         //     https://github.com/dotnet/corefx/blob/f7539b726c4bc2385b7f49e5751c1cff2f2c7368/src/System.Linq/src/System/Linq/Concat.cs#L240
                         //
 
-                        var next = GetAsyncEnumerable(_counter++ - 1);
+                        IAsyncEnumerable<TSource> next = GetAsyncEnumerable(_counter++ - 1);
                         if (next != null)
                         {
                             await _enumerator.DisposeAsync().ConfigureAwait(false);
@@ -242,7 +242,7 @@ namespace System.Linq
                 // that has its _nextIndex equal to index.  If we don't find one, then it
                 // must be prior to any of them, so call GetEnumerable on the previous
                 // Concat2Iterator.  This avoids a deep recursive call chain.
-                var current = this;
+                ConcatNAsyncIterator<TSource> current = this;
                 while (true)
                 {
                     if (index == current._nextIndex)

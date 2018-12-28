@@ -97,7 +97,7 @@ namespace System.Linq
             {
                 var count = 0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -122,7 +122,7 @@ namespace System.Linq
         {
             var count = 0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -149,7 +149,7 @@ namespace System.Linq
         {
             var count = 0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -177,7 +177,7 @@ namespace System.Linq
         {
             var count = 0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {

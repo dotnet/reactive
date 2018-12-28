@@ -42,7 +42,7 @@ namespace System.Linq
 
                     // REVIEW: If we add selectors with CancellationToken support, we should feed the token to Sort.
 
-                    var sorter = GetAsyncEnumerableSorter(next: null, _cancellationToken);
+                    AsyncEnumerableSorter<TElement> sorter = GetAsyncEnumerableSorter(next: null, _cancellationToken);
                     _indexes = await sorter.Sort(_buffer, _buffer.Length).ConfigureAwait(false);
                     _index = 0;
 
@@ -213,9 +213,9 @@ namespace System.Linq
         {
             do
             {
-                var i = left;
-                var j = right;
-                var x = map[i + (j - i >> 1)];
+                int i = left;
+                int j = right;
+                int x = map[i + (j - i >> 1)];
 
                 do
                 {
@@ -236,7 +236,7 @@ namespace System.Linq
 
                     if (i < j)
                     {
-                        var temp = map[i];
+                        int temp = map[i];
                         map[i] = map[j];
                         map[j] = temp;
                     }
@@ -285,7 +285,7 @@ namespace System.Linq
 
         internal override int CompareKeys(int index1, int index2)
         {
-            var c = _comparer.Compare(_keys[index1], _keys[index2]);
+            int c = _comparer.Compare(_keys[index1], _keys[index2]);
 
             if (c == 0)
             {

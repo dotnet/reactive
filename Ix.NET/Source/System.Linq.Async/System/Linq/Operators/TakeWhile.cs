@@ -120,7 +120,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = _enumerator.Current;
+                            TSource item = _enumerator.Current;
                             if (!_predicate(item))
                             {
                                 break;
@@ -184,7 +184,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = _enumerator.Current;
+                            TSource item = _enumerator.Current;
 
                             checked
                             {
@@ -253,7 +253,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = _enumerator.Current;
+                            TSource item = _enumerator.Current;
                             if (!await _predicate(item).ConfigureAwait(false))
                             {
                                 break;
@@ -318,7 +318,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = _enumerator.Current;
+                            TSource item = _enumerator.Current;
                             if (!await _predicate(item, _cancellationToken).ConfigureAwait(false))
                             {
                                 break;
@@ -383,7 +383,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = _enumerator.Current;
+                            TSource item = _enumerator.Current;
 
                             checked
                             {
@@ -454,7 +454,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var item = _enumerator.Current;
+                            TSource item = _enumerator.Current;
 
                             checked
                             {

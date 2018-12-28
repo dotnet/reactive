@@ -119,7 +119,7 @@ namespace System.Linq
 
         private static async Task ForEachAsyncCore<TSource>(IAsyncEnumerable<TSource> source, Action<TSource> action, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -136,7 +136,7 @@ namespace System.Linq
 
         private static async Task ForEachAsyncCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> action, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -155,7 +155,7 @@ namespace System.Linq
         {
             var index = 0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -174,7 +174,7 @@ namespace System.Linq
         {
             var index = 0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {

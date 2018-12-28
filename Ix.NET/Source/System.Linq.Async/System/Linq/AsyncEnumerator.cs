@@ -84,7 +84,7 @@ namespace System.Collections.Generic
 
             public override async ValueTask DisposeAsync()
             {
-                var dispose = Interlocked.Exchange(ref _dispose, null);
+                Func<ValueTask> dispose = Interlocked.Exchange(ref _dispose, null);
 
                 if (dispose != null)
                 {

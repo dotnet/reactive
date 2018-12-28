@@ -113,13 +113,13 @@ namespace System.Linq
 
             public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                List<TSource> s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s.ToArray();
             }
 
             public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                List<TSource> s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s;
             }
 
@@ -133,13 +133,13 @@ namespace System.Linq
                 var count = 0;
                 var s = new Set<TKey>(_comparer);
 
-                var enu = _source.GetAsyncEnumerator(cancellationToken);
+                IAsyncEnumerator<TSource> enu = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var item = enu.Current;
+                        TSource item = enu.Current;
                         if (s.Add(_keySelector(item)))
                         {
                             count++;
@@ -184,7 +184,7 @@ namespace System.Linq
                             return false;
                         }
 
-                        var element = _enumerator.Current;
+                        TSource element = _enumerator.Current;
                         _set = new Set<TKey>(_comparer);
                         _set.Add(_keySelector(element));
                         _current = element;
@@ -215,13 +215,13 @@ namespace System.Linq
                 var s = new Set<TKey>(_comparer);
                 var r = new List<TSource>();
 
-                var enu = _source.GetAsyncEnumerator(cancellationToken);
+                IAsyncEnumerator<TSource> enu = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var item = enu.Current;
+                        TSource item = enu.Current;
                         if (s.Add(_keySelector(item)))
                         {
                             r.Add(item);
@@ -258,13 +258,13 @@ namespace System.Linq
 
             public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                List<TSource> s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s.ToArray();
             }
 
             public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                List<TSource> s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s;
             }
 
@@ -278,13 +278,13 @@ namespace System.Linq
                 var count = 0;
                 var s = new Set<TKey>(_comparer);
 
-                var enu = _source.GetAsyncEnumerator(cancellationToken);
+                IAsyncEnumerator<TSource> enu = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var item = enu.Current;
+                        TSource item = enu.Current;
                         if (s.Add(await _keySelector(item).ConfigureAwait(false)))
                         {
                             count++;
@@ -329,7 +329,7 @@ namespace System.Linq
                             return false;
                         }
 
-                        var element = _enumerator.Current;
+                        TSource element = _enumerator.Current;
                         _set = new Set<TKey>(_comparer);
                         _set.Add(await _keySelector(element).ConfigureAwait(false));
                         _current = element;
@@ -360,13 +360,13 @@ namespace System.Linq
                 var s = new Set<TKey>(_comparer);
                 var r = new List<TSource>();
 
-                var enu = _source.GetAsyncEnumerator(cancellationToken);
+                IAsyncEnumerator<TSource> enu = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var item = enu.Current;
+                        TSource item = enu.Current;
                         if (s.Add(await _keySelector(item).ConfigureAwait(false)))
                         {
                             r.Add(item);
@@ -404,13 +404,13 @@ namespace System.Linq
 
             public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                List<TSource> s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s.ToArray();
             }
 
             public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                List<TSource> s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s;
             }
 
@@ -424,13 +424,13 @@ namespace System.Linq
                 var count = 0;
                 var s = new Set<TKey>(_comparer);
 
-                var enu = _source.GetAsyncEnumerator(cancellationToken);
+                IAsyncEnumerator<TSource> enu = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var item = enu.Current;
+                        TSource item = enu.Current;
                         if (s.Add(await _keySelector(item, cancellationToken).ConfigureAwait(false)))
                         {
                             count++;
@@ -475,7 +475,7 @@ namespace System.Linq
                             return false;
                         }
 
-                        var element = _enumerator.Current;
+                        TSource element = _enumerator.Current;
                         _set = new Set<TKey>(_comparer);
                         _set.Add(await _keySelector(element, _cancellationToken).ConfigureAwait(false));
                         _current = element;
@@ -506,13 +506,13 @@ namespace System.Linq
                 var s = new Set<TKey>(_comparer);
                 var r = new List<TSource>();
 
-                var enu = _source.GetAsyncEnumerator(cancellationToken);
+                IAsyncEnumerator<TSource> enu = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
                     while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var item = enu.Current;
+                        TSource item = enu.Current;
                         if (s.Add(await _keySelector(item, cancellationToken).ConfigureAwait(false)))
                         {
                             r.Add(item);

@@ -80,7 +80,7 @@ namespace System.Linq
                                 {
                                     if (_count > 0)
                                     {
-                                        var item = _enumerator.Current;
+                                        TSource item = _enumerator.Current;
                                         if (_queue.Count >= _count)
                                         {
                                             _queue.Dequeue();

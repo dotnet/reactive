@@ -35,7 +35,7 @@ namespace System.Linq
 
             async Task<List<TSource>> Core()
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {

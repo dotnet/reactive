@@ -91,13 +91,13 @@ namespace System.Linq
                             {
                                 if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
-                                    var item = _enumerator.Current;
+                                    TSource item = _enumerator.Current;
                                     if (_index++ % _skip == 0)
                                     {
                                         _buffers.Enqueue(new List<TSource>(_count));
                                     }
 
-                                    foreach (var buffer in _buffers)
+                                    foreach (IList<TSource> buffer in _buffers)
                                     {
                                         buffer.Add(item);
                                     }

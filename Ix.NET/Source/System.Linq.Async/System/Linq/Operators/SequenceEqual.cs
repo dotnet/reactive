@@ -66,11 +66,11 @@ namespace System.Linq
 
             async Task<bool> Core()
             {
-                var e1 = first.GetAsyncEnumerator(cancellationToken);
+                IAsyncEnumerator<TSource> e1 = first.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
-                    var e2 = second.GetAsyncEnumerator(cancellationToken);
+                    IAsyncEnumerator<TSource> e2 = second.GetAsyncEnumerator(cancellationToken);
 
                     try
                     {

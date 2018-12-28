@@ -80,7 +80,7 @@ namespace System.Linq
                     return Math.Max(await _source.CountAsync(cancellationToken).ConfigureAwait(false) - _minIndexInclusive, 0);
                 }
 
-                var en = _source.GetAsyncEnumerator(cancellationToken);
+                IAsyncEnumerator<TSource> en = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -93,7 +93,7 @@ namespace System.Linq
                     // At the same time, however, we are guaranteed that our max count can fit
                     // in an int because if that is true, then _minIndexInclusive must > 0.
 
-                    var count = await SkipAndCountAsync((uint)_maxIndexInclusive + 1, en).ConfigureAwait(false);
+                    uint count = await SkipAndCountAsync((uint)_maxIndexInclusive + 1, en).ConfigureAwait(false);
                     Debug.Assert(count != (uint)int.MaxValue + 1 || _minIndexInclusive > 0, "Our return value will be incorrect.");
                     return Math.Max((int)count - _minIndexInclusive, 0);
                 }
@@ -166,7 +166,8 @@ namespace System.Linq
 
         public IAsyncPartition<TSource> Skip(int count)
         {
-            var minIndex = _minIndexInclusive + count;
+            int minIndex = _minIndexInclusive + count;
+
             if (!HasLimit)
             {
                 if (minIndex < 0)
@@ -191,7 +192,8 @@ namespace System.Linq
 
         public IAsyncPartition<TSource> Take(int count)
         {
-            var maxIndex = _minIndexInclusive + count - 1;
+            int maxIndex = _minIndexInclusive + count - 1;
+
             if (!HasLimit)
             {
                 if (maxIndex < 0)
@@ -222,7 +224,7 @@ namespace System.Linq
             // If the index is negative or >= our max count, return early.
             if (index >= 0 && (!HasLimit || index < Limit))
             {
-                var en = _source.GetAsyncEnumerator(cancellationToken);
+                IAsyncEnumerator<TSource> en = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -244,7 +246,7 @@ namespace System.Linq
 
         public async ValueTask<Maybe<TSource>> TryGetFirstAsync(CancellationToken cancellationToken)
         {
-            var en = _source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> en = _source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -263,14 +265,14 @@ namespace System.Linq
 
         public async ValueTask<Maybe<TSource>> TryGetLastAsync(CancellationToken cancellationToken)
         {
-            var en = _source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> en = _source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 if (await SkipBeforeFirstAsync(en).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var remaining = Limit - 1; // Max number of items left, not counting the current element.
-                    var comparand = HasLimit ? 0 : int.MinValue; // If we don't have an upper bound, have the comparison always return true.
+                    int remaining = Limit - 1; // Max number of items left, not counting the current element.
+                    int comparand = HasLimit ? 0 : int.MinValue; // If we don't have an upper bound, have the comparison always return true.
                     TSource result;
 
                     do
@@ -293,16 +295,16 @@ namespace System.Linq
 
         public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
         {
-            var en = _source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> en = _source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 if (await SkipBeforeFirstAsync(en).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var remaining = Limit - 1; // Max number of items left, not counting the current element.
-                    var comparand = HasLimit ? 0 : int.MinValue; // If we don't have an upper bound, have the comparison always return true.
+                    int remaining = Limit - 1; // Max number of items left, not counting the current element.
+                    int comparand = HasLimit ? 0 : int.MinValue; // If we don't have an upper bound, have the comparison always return true.
 
-                    var maxCapacity = HasLimit ? Limit : int.MaxValue;
+                    int maxCapacity = HasLimit ? Limit : int.MaxValue;
                     var builder = new List<TSource>(maxCapacity);
 
                     do
@@ -331,14 +333,14 @@ namespace System.Linq
         {
             var list = new List<TSource>();
 
-            var en = _source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> en = _source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 if (await SkipBeforeFirstAsync(en).ConfigureAwait(false) && await en.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var remaining = Limit - 1; // Max number of items left, not counting the current element.
-                    var comparand = HasLimit ? 0 : int.MinValue; // If we don't have an upper bound, have the comparison always return true.
+                    int remaining = Limit - 1; // Max number of items left, not counting the current element.
+                    int comparand = HasLimit ? 0 : int.MinValue; // If we don't have an upper bound, have the comparison always return true.
 
                     do
                     {
@@ -360,7 +362,7 @@ namespace System.Linq
 
         private static async ValueTask<bool> SkipBeforeAsync(int index, IAsyncEnumerator<TSource> en)
         {
-            var n = await SkipAndCountAsync(index, en).ConfigureAwait(false);
+            int n = await SkipAndCountAsync(index, en).ConfigureAwait(false);
             return n == index;
         }
 

@@ -80,21 +80,21 @@ namespace System.Linq
 
         private static async Task<TSource> LastOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            var last = await TryGetLast(source, cancellationToken).ConfigureAwait(false);
+            Maybe<TSource> last = await TryGetLast(source, cancellationToken).ConfigureAwait(false);
 
             return last.HasValue ? last.Value : default;
         }
 
         private static async Task<TSource> LastOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
+            Maybe<TSource> last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
             return last.HasValue ? last.Value : default;
         }
 
         private static async Task<TSource> LastOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
+            Maybe<TSource> last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
             return last.HasValue ? last.Value : default;
         }
@@ -102,7 +102,7 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<TSource> LastOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
+            Maybe<TSource> last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
             return last.HasValue ? last.Value : default;
         }
@@ -112,7 +112,8 @@ namespace System.Linq
         {
             if (source is IList<TSource> list)
             {
-                var count = list.Count;
+                int count = list.Count;
+
                 if (count > 0)
                 {
                     return new ValueTask<Maybe<TSource>>(new Maybe<TSource>(list[count - 1]));
@@ -131,7 +132,7 @@ namespace System.Linq
                     var last = default(TSource);
                     var hasLast = false;
 
-                    var e = source.GetAsyncEnumerator(cancellationToken);
+                    IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
                     try
                     {
@@ -158,13 +159,13 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = e.Current;
+                    TSource value = e.Current;
 
                     if (predicate(value))
                     {
@@ -191,13 +192,13 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = e.Current;
+                    TSource value = e.Current;
 
                     if (await predicate(value).ConfigureAwait(false))
                     {
@@ -225,13 +226,13 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = e.Current;
+                    TSource value = e.Current;
 
                     if (await predicate(value, cancellationToken).ConfigureAwait(false))
                     {

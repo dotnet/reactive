@@ -179,7 +179,8 @@ namespace System.Linq
 
             public override async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
+                int count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
+
                 if (count == -1)
                 {
                     return await AsyncEnumerableHelpers.ToArray(this, cancellationToken).ConfigureAwait(false);
@@ -189,6 +190,7 @@ namespace System.Linq
 
                 var array = new TSource[count];
                 int index;
+
                 if (_appending)
                 {
                     index = 0;
@@ -205,7 +207,7 @@ namespace System.Linq
                 }
                 else
                 {
-                    var en = _source.GetAsyncEnumerator(cancellationToken);
+                    IAsyncEnumerator<TSource> en = _source.GetAsyncEnumerator(cancellationToken);
 
                     try
                     {
@@ -231,18 +233,18 @@ namespace System.Linq
 
             public override async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
+                int count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var list = count == -1 ? new List<TSource>() : new List<TSource>(count);
+                List<TSource> list = count == -1 ? new List<TSource>() : new List<TSource>(count);
 
                 if (!_appending)
                 {
                     list.Add(_item);
                 }
 
-                var en = _source.GetAsyncEnumerator(cancellationToken);
+                IAsyncEnumerator<TSource> en = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -268,7 +270,7 @@ namespace System.Linq
             {
                 if (_source is IAsyncIListProvider<TSource> listProv)
                 {
-                    var count = await listProv.GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
+                    int count = await listProv.GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
                     return count == -1 ? -1 : count + 1;
                 }
 
@@ -380,19 +382,20 @@ namespace System.Linq
 
             public override AppendPrependAsyncIterator<TSource> Append(TSource item)
             {
-                var res = _appended != null ? _appended.Add(item) : new SingleLinkedNode<TSource>(item);
+                SingleLinkedNode<TSource> res = _appended != null ? _appended.Add(item) : new SingleLinkedNode<TSource>(item);
                 return new AppendPrependNAsyncIterator<TSource>(_source, _prepended, res, _prependCount, _appendCount + 1);
             }
 
             public override AppendPrependAsyncIterator<TSource> Prepend(TSource item)
             {
-                var res = _prepended != null ? _prepended.Add(item) : new SingleLinkedNode<TSource>(item);
+                SingleLinkedNode<TSource> res = _prepended != null ? _prepended.Add(item) : new SingleLinkedNode<TSource>(item);
                 return new AppendPrependNAsyncIterator<TSource>(_source, res, _appended, _prependCount + 1, _appendCount);
             }
 
             public override async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
+                int count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
+
                 if (count == -1)
                 {
                     return await AsyncEnumerableHelpers.ToArray(this, cancellationToken).ConfigureAwait(false);
@@ -400,7 +403,8 @@ namespace System.Linq
 
                 var array = new TSource[count];
                 var index = 0;
-                for (var n = _prepended; n != null; n = n.Linked)
+
+                for (SingleLinkedNode<TSource> n = _prepended; n != null; n = n.Linked)
                 {
                     array[index] = n.Item;
                     ++index;
@@ -412,7 +416,7 @@ namespace System.Linq
                 }
                 else
                 {
-                    var en = _source.GetAsyncEnumerator(cancellationToken);
+                    IAsyncEnumerator<TSource> en = _source.GetAsyncEnumerator(cancellationToken);
 
                     try
                     {
@@ -429,7 +433,7 @@ namespace System.Linq
                 }
 
                 index = array.Length;
-                for (var n = _appended; n != null; n = n.Linked)
+                for (SingleLinkedNode<TSource> n = _appended; n != null; n = n.Linked)
                 {
                     --index;
                     array[index] = n.Item;
@@ -440,14 +444,16 @@ namespace System.Linq
 
             public override async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
-                var list = count == -1 ? new List<TSource>() : new List<TSource>(count);
-                for (var n = _prepended; n != null; n = n.Linked)
+                int count = await GetCountAsync(onlyIfCheap: true, cancellationToken).ConfigureAwait(false);
+
+                List<TSource> list = count == -1 ? new List<TSource>() : new List<TSource>(count);
+
+                for (SingleLinkedNode<TSource> n = _prepended; n != null; n = n.Linked)
                 {
                     list.Add(n.Item);
                 }
 
-                var en = _source.GetAsyncEnumerator(cancellationToken);
+                IAsyncEnumerator<TSource> en = _source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -463,7 +469,7 @@ namespace System.Linq
 
                 if (_appended != null)
                 {
-                    using (var en2 = _appended.GetEnumerator(_appendCount))
+                    using (IEnumerator<TSource> en2 = _appended.GetEnumerator(_appendCount))
                     {
                         while (en2.MoveNext())
                         {
@@ -479,7 +485,7 @@ namespace System.Linq
             {
                 if (_source is IAsyncIListProvider<TSource> listProv)
                 {
-                    var count = await listProv.GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
+                    int count = await listProv.GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
                     return count == -1 ? -1 : count + _appendCount + _prependCount;
                 }
 

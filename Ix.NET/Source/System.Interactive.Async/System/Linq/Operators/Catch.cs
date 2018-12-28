@@ -140,8 +140,8 @@ namespace System.Linq
                                     // Note: Ideally we'd dipose of the previous enumerator before
                                     // invoking the handler, but we use this order to preserve
                                     // current behavior
-                                    var inner = _handler(ex);
-                                    var err = inner.GetAsyncEnumerator(_cancellationToken);
+                                    IAsyncEnumerable<TSource> inner = _handler(ex);
+                                    IAsyncEnumerator<TSource> err = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     if (_enumerator != null)
                                     {
@@ -233,8 +233,8 @@ namespace System.Linq
                                     // Note: Ideally we'd dipose of the previous enumerator before
                                     // invoking the handler, but we use this order to preserve
                                     // current behavior
-                                    var inner = await _handler(ex).ConfigureAwait(false);
-                                    var err = inner.GetAsyncEnumerator(_cancellationToken);
+                                    IAsyncEnumerable<TSource> inner = await _handler(ex).ConfigureAwait(false);
+                                    IAsyncEnumerator<TSource> err = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     if (_enumerator != null)
                                     {
@@ -327,8 +327,8 @@ namespace System.Linq
                                     // Note: Ideally we'd dipose of the previous enumerator before
                                     // invoking the handler, but we use this order to preserve
                                     // current behavior
-                                    var inner = await _handler(ex, _cancellationToken).ConfigureAwait(false);
-                                    var err = inner.GetAsyncEnumerator(_cancellationToken);
+                                    IAsyncEnumerable<TSource> inner = await _handler(ex, _cancellationToken).ConfigureAwait(false);
+                                    IAsyncEnumerator<TSource> err = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     if (_enumerator != null)
                                     {

@@ -59,13 +59,13 @@ namespace System.Linq
             {
                 if (_enumerators != null)
                 {
-                    var n = _enumerators.Length;
+                    int n = _enumerators.Length;
 
                     var disposes = new ValueTask[n];
 
                     for (var i = 0; i < n; i++)
                     {
-                        var dispose = _enumerators[i].DisposeAsync();
+                        ValueTask dispose = _enumerators[i].DisposeAsync();
                         disposes[i] = dispose;
                     }
 
@@ -81,7 +81,7 @@ namespace System.Linq
                 switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        var n = _sources.Length;
+                        int n = _sources.Length;
 
                         _enumerators = new IAsyncEnumerator<TSource>[n];
                         _moveNexts = new ValueTask<bool>[n];
@@ -89,7 +89,7 @@ namespace System.Linq
 
                         for (var i = 0; i < n; i++)
                         {
-                            var enumerator = _sources[i].GetAsyncEnumerator(_cancellationToken);
+                            IAsyncEnumerator<TSource> enumerator = _sources[i].GetAsyncEnumerator(_cancellationToken);
                             _enumerators[i] = enumerator;
                             _moveNexts[i] = enumerator.MoveNextAsync();
                         }
@@ -106,9 +106,9 @@ namespace System.Linq
                             //         want to consider a "prefer fairness" option.
                             //
 
-                            var moveNext = await Task.WhenAny(_moveNexts.Select(t => t.AsTask())).ConfigureAwait(false);
+                            Task<bool> moveNext = await Task.WhenAny(_moveNexts.Select(t => t.AsTask())).ConfigureAwait(false);
 
-                            var index = Array.IndexOf(_moveNexts, moveNext);
+                            int index = Array.IndexOf(_moveNexts, moveNext);
 
                             if (!await moveNext.ConfigureAwait(false))
                             {
@@ -117,7 +117,7 @@ namespace System.Linq
                             }
                             else
                             {
-                                var enumerator = _enumerators[index];
+                                IAsyncEnumerator<TSource> enumerator = _enumerators[index];
                                 _current = enumerator.Current;
                                 _moveNexts[index] = enumerator.MoveNextAsync();
                                 return true;

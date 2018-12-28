@@ -215,7 +215,7 @@ namespace System.Linq
                                         await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    var inner = _selector(_sourceEnumerator.Current);
+                                    IAsyncEnumerable<TResult> inner = _selector(_sourceEnumerator.Current);
                                     _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
@@ -306,7 +306,7 @@ namespace System.Linq
                                         await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    var inner = await _selector(_sourceEnumerator.Current).ConfigureAwait(false);
+                                    IAsyncEnumerable<TResult> inner = await _selector(_sourceEnumerator.Current).ConfigureAwait(false);
                                     _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
@@ -398,7 +398,7 @@ namespace System.Linq
                                         await _resultEnumerator.DisposeAsync().ConfigureAwait(false);
                                     }
 
-                                    var inner = await _selector(_sourceEnumerator.Current, _cancellationToken).ConfigureAwait(false);
+                                    IAsyncEnumerable<TResult> inner = await _selector(_sourceEnumerator.Current, _cancellationToken).ConfigureAwait(false);
                                     _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
@@ -497,7 +497,7 @@ namespace System.Linq
                                     }
 
                                     _currentSource = _sourceEnumerator.Current;
-                                    var inner = _collectionSelector(_currentSource);
+                                    IAsyncEnumerable<TCollection> inner = _collectionSelector(_currentSource);
                                     _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
@@ -595,7 +595,7 @@ namespace System.Linq
                                     }
 
                                     _currentSource = _sourceEnumerator.Current;
-                                    var inner = await _collectionSelector(_currentSource).ConfigureAwait(false);
+                                    IAsyncEnumerable<TCollection> inner = await _collectionSelector(_currentSource).ConfigureAwait(false);
                                     _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
@@ -694,7 +694,7 @@ namespace System.Linq
                                     }
 
                                     _currentSource = _sourceEnumerator.Current;
-                                    var inner = await _collectionSelector(_currentSource, _cancellationToken).ConfigureAwait(false);
+                                    IAsyncEnumerable<TCollection> inner = await _collectionSelector(_currentSource, _cancellationToken).ConfigureAwait(false);
                                     _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
@@ -801,7 +801,7 @@ namespace System.Linq
                                         _index++;
                                     }
 
-                                    var inner = _collectionSelector(_currentSource, _index);
+                                    IAsyncEnumerable<TCollection> inner = _collectionSelector(_currentSource, _index);
                                     _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
@@ -907,7 +907,7 @@ namespace System.Linq
                                         _index++;
                                     }
 
-                                    var inner = await _collectionSelector(_currentSource, _index).ConfigureAwait(false);
+                                    IAsyncEnumerable<TCollection> inner = await _collectionSelector(_currentSource, _index).ConfigureAwait(false);
                                     _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
@@ -1014,7 +1014,7 @@ namespace System.Linq
                                         _index++;
                                     }
 
-                                    var inner = await _collectionSelector(_currentSource, _index, _cancellationToken).ConfigureAwait(false);
+                                    IAsyncEnumerable<TCollection> inner = await _collectionSelector(_currentSource, _index, _cancellationToken).ConfigureAwait(false);
                                     _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
@@ -1113,7 +1113,7 @@ namespace System.Linq
                                         _index++;
                                     }
 
-                                    var inner = _selector(_sourceEnumerator.Current, _index);
+                                    IAsyncEnumerable<TResult> inner = _selector(_sourceEnumerator.Current, _index);
                                     _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
@@ -1211,7 +1211,7 @@ namespace System.Linq
                                         _index++;
                                     }
 
-                                    var inner = await _selector(_sourceEnumerator.Current, _index).ConfigureAwait(false);
+                                    IAsyncEnumerable<TResult> inner = await _selector(_sourceEnumerator.Current, _index).ConfigureAwait(false);
                                     _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;
@@ -1310,7 +1310,7 @@ namespace System.Linq
                                         _index++;
                                     }
 
-                                    var inner = await _selector(_sourceEnumerator.Current, _index, _cancellationToken).ConfigureAwait(false);
+                                    IAsyncEnumerable<TResult> inner = await _selector(_sourceEnumerator.Current, _index, _cancellationToken).ConfigureAwait(false);
                                     _resultEnumerator = inner.GetAsyncEnumerator(_cancellationToken);
 
                                     _mode = State_Result;

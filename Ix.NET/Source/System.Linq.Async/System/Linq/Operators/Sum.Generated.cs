@@ -80,9 +80,9 @@ namespace System.Linq
 
         private static async Task<int> SumCore(IAsyncEnumerable<int> source, CancellationToken cancellationToken)
         {
-            var sum = 0;
+            int sum = 0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<int> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -104,15 +104,15 @@ namespace System.Linq
 
         private static async Task<int> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken)
         {
-            var sum = 0;
+            int sum = 0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = selector(e.Current);
+                    int value = selector(e.Current);
 
                     checked
                     {
@@ -130,15 +130,15 @@ namespace System.Linq
 
         private static async Task<int> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0;
+            int sum = 0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current).ConfigureAwait(false);
+                    int value = await selector(e.Current).ConfigureAwait(false);
 
                     checked
                     {
@@ -157,15 +157,15 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<int> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0;
+            int sum = 0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    int value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     checked
                     {
@@ -252,9 +252,9 @@ namespace System.Linq
 
         private static async Task<long> SumCore(IAsyncEnumerable<long> source, CancellationToken cancellationToken)
         {
-            var sum = 0L;
+            long sum = 0L;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<long> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -276,15 +276,15 @@ namespace System.Linq
 
         private static async Task<long> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken)
         {
-            var sum = 0L;
+            long sum = 0L;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = selector(e.Current);
+                    long value = selector(e.Current);
 
                     checked
                     {
@@ -302,15 +302,15 @@ namespace System.Linq
 
         private static async Task<long> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0L;
+            long sum = 0L;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current).ConfigureAwait(false);
+                    long value = await selector(e.Current).ConfigureAwait(false);
 
                     checked
                     {
@@ -329,15 +329,15 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<long> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0L;
+            long sum = 0L;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    long value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     checked
                     {
@@ -424,9 +424,9 @@ namespace System.Linq
 
         private static async Task<float> SumCore(IAsyncEnumerable<float> source, CancellationToken cancellationToken)
         {
-            var sum = 0.0f;
+            float sum = 0.0f;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<float> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -445,15 +445,15 @@ namespace System.Linq
 
         private static async Task<float> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken)
         {
-            var sum = 0.0f;
+            float sum = 0.0f;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = selector(e.Current);
+                    float value = selector(e.Current);
 
                     sum += value;
                 }
@@ -468,15 +468,15 @@ namespace System.Linq
 
         private static async Task<float> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0.0f;
+            float sum = 0.0f;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current).ConfigureAwait(false);
+                    float value = await selector(e.Current).ConfigureAwait(false);
 
                     sum += value;
                 }
@@ -492,15 +492,15 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<float> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0.0f;
+            float sum = 0.0f;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    float value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     sum += value;
                 }
@@ -584,9 +584,9 @@ namespace System.Linq
 
         private static async Task<double> SumCore(IAsyncEnumerable<double> source, CancellationToken cancellationToken)
         {
-            var sum = 0.0;
+            double sum = 0.0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<double> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -605,15 +605,15 @@ namespace System.Linq
 
         private static async Task<double> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken)
         {
-            var sum = 0.0;
+            double sum = 0.0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = selector(e.Current);
+                    double value = selector(e.Current);
 
                     sum += value;
                 }
@@ -628,15 +628,15 @@ namespace System.Linq
 
         private static async Task<double> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0.0;
+            double sum = 0.0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current).ConfigureAwait(false);
+                    double value = await selector(e.Current).ConfigureAwait(false);
 
                     sum += value;
                 }
@@ -652,15 +652,15 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<double> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0.0;
+            double sum = 0.0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    double value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     sum += value;
                 }
@@ -744,9 +744,9 @@ namespace System.Linq
 
         private static async Task<decimal> SumCore(IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
         {
-            var sum = 0m;
+            decimal sum = 0m;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<decimal> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -765,15 +765,15 @@ namespace System.Linq
 
         private static async Task<decimal> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken)
         {
-            var sum = 0m;
+            decimal sum = 0m;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = selector(e.Current);
+                    decimal value = selector(e.Current);
 
                     sum += value;
                 }
@@ -788,15 +788,15 @@ namespace System.Linq
 
         private static async Task<decimal> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0m;
+            decimal sum = 0m;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current).ConfigureAwait(false);
+                    decimal value = await selector(e.Current).ConfigureAwait(false);
 
                     sum += value;
                 }
@@ -812,15 +812,15 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<decimal> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0m;
+            decimal sum = 0m;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    decimal value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     sum += value;
                 }
@@ -904,9 +904,9 @@ namespace System.Linq
 
         private static async Task<int?> SumCore(IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
         {
-            var sum = 0;
+            int sum = 0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<int?> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -928,15 +928,15 @@ namespace System.Linq
 
         private static async Task<int?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken)
         {
-            var sum = 0;
+            int sum = 0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = selector(e.Current);
+                    int? value = selector(e.Current);
 
                     checked
                     {
@@ -954,15 +954,15 @@ namespace System.Linq
 
         private static async Task<int?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0;
+            int sum = 0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current).ConfigureAwait(false);
+                    int? value = await selector(e.Current).ConfigureAwait(false);
 
                     checked
                     {
@@ -981,15 +981,15 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<int?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0;
+            int sum = 0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    int? value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     checked
                     {
@@ -1076,9 +1076,9 @@ namespace System.Linq
 
         private static async Task<long?> SumCore(IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
         {
-            var sum = 0L;
+            long sum = 0L;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<long?> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1100,15 +1100,15 @@ namespace System.Linq
 
         private static async Task<long?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken)
         {
-            var sum = 0L;
+            long sum = 0L;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = selector(e.Current);
+                    long? value = selector(e.Current);
 
                     checked
                     {
@@ -1126,15 +1126,15 @@ namespace System.Linq
 
         private static async Task<long?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0L;
+            long sum = 0L;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current).ConfigureAwait(false);
+                    long? value = await selector(e.Current).ConfigureAwait(false);
 
                     checked
                     {
@@ -1153,15 +1153,15 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<long?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0L;
+            long sum = 0L;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    long? value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     checked
                     {
@@ -1248,9 +1248,9 @@ namespace System.Linq
 
         private static async Task<float?> SumCore(IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
         {
-            var sum = 0.0f;
+            float sum = 0.0f;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<float?> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1269,15 +1269,15 @@ namespace System.Linq
 
         private static async Task<float?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken)
         {
-            var sum = 0.0f;
+            float sum = 0.0f;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = selector(e.Current);
+                    float? value = selector(e.Current);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -1292,15 +1292,15 @@ namespace System.Linq
 
         private static async Task<float?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0.0f;
+            float sum = 0.0f;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current).ConfigureAwait(false);
+                    float? value = await selector(e.Current).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -1316,15 +1316,15 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<float?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0.0f;
+            float sum = 0.0f;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    float? value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -1408,9 +1408,9 @@ namespace System.Linq
 
         private static async Task<double?> SumCore(IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
         {
-            var sum = 0.0;
+            double sum = 0.0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<double?> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1429,15 +1429,15 @@ namespace System.Linq
 
         private static async Task<double?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken)
         {
-            var sum = 0.0;
+            double sum = 0.0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = selector(e.Current);
+                    double? value = selector(e.Current);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -1452,15 +1452,15 @@ namespace System.Linq
 
         private static async Task<double?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0.0;
+            double sum = 0.0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current).ConfigureAwait(false);
+                    double? value = await selector(e.Current).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -1476,15 +1476,15 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<double?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0.0;
+            double sum = 0.0;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    double? value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -1568,9 +1568,9 @@ namespace System.Linq
 
         private static async Task<decimal?> SumCore(IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
         {
-            var sum = 0m;
+            decimal sum = 0m;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<decimal?> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1589,15 +1589,15 @@ namespace System.Linq
 
         private static async Task<decimal?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken)
         {
-            var sum = 0m;
+            decimal sum = 0m;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = selector(e.Current);
+                    decimal? value = selector(e.Current);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -1612,15 +1612,15 @@ namespace System.Linq
 
         private static async Task<decimal?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0m;
+            decimal sum = 0m;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current).ConfigureAwait(false);
+                    decimal? value = await selector(e.Current).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -1636,15 +1636,15 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<decimal?> SumCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
         {
-            var sum = 0m;
+            decimal sum = 0m;
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    decimal? value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }

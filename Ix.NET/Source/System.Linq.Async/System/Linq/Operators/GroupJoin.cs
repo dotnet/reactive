@@ -192,10 +192,10 @@ namespace System.Linq
                         _lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer, _cancellationToken).ConfigureAwait(false);
                     }
 
-                    var item = _outer.Current;
+                    TOuter item = _outer.Current;
 
-                    var outerKey = _outerKeySelector(item);
-                    var inner = _lookup[outerKey].ToAsyncEnumerable();
+                    TKey outerKey = _outerKeySelector(item);
+                    IAsyncEnumerable<TInner> inner = _lookup[outerKey].ToAsyncEnumerable();
 
                     Current = _resultSelector(item, inner);
 
@@ -290,10 +290,10 @@ namespace System.Linq
                         _lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer, _cancellationToken).ConfigureAwait(false);
                     }
 
-                    var item = _outer.Current;
+                    TOuter item = _outer.Current;
 
-                    var outerKey = await _outerKeySelector(item).ConfigureAwait(false);
-                    var inner = _lookup[outerKey].ToAsyncEnumerable();
+                    TKey outerKey = await _outerKeySelector(item).ConfigureAwait(false);
+                    IAsyncEnumerable<TInner> inner = _lookup[outerKey].ToAsyncEnumerable();
 
                     Current = await _resultSelector(item, inner).ConfigureAwait(false);
 
@@ -389,10 +389,10 @@ namespace System.Linq
                         _lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer, _cancellationToken).ConfigureAwait(false);
                     }
 
-                    var item = _outer.Current;
+                    TOuter item = _outer.Current;
 
-                    var outerKey = await _outerKeySelector(item, _cancellationToken).ConfigureAwait(false);
-                    var inner = _lookup[outerKey].ToAsyncEnumerable();
+                    TKey outerKey = await _outerKeySelector(item, _cancellationToken).ConfigureAwait(false);
+                    IAsyncEnumerable<TInner> inner = _lookup[outerKey].ToAsyncEnumerable();
 
                     Current = await _resultSelector(item, inner, _cancellationToken).ConfigureAwait(false);
 
