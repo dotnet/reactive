@@ -15,7 +15,7 @@
 <#@ output extension=".cs" #>
 <#
 var failing = new[] { "TakeLast" };
-var exclude = new[] { "ForEach", "ForEachAsync", "ToEnumerable", "ToAsyncEnumerable", "ToObservable", "AsAsyncEnumerable" };
+var exclude = new[] { "ForEach", "ForEachAsync", "ToEnumerable", "ToAsyncEnumerable", "ToObservable", "AsAsyncEnumerable", "WithCancellation" };
 
 var toQuotedImpl = default(Func<Type, int, bool, string>);
 toQuotedImpl = (t, i, b) =>

@@ -57,6 +57,16 @@ namespace Tests
         [Fact]
         public void AggregateAsync5()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int>(default(IAsyncQueryable<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, CancellationToken, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "accumulator");
+
+            var res = AsyncQueryable.AggregateAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AggregateAsync6()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int>(default(IAsyncQueryable<int>), 1, (int arg0, int arg1) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, default(Expression<Func<int, int, int>>)), ane => ane.ParamName == "accumulator");
 
@@ -65,7 +75,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AggregateAsync6()
+        public void AggregateAsync7()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int>(default(IAsyncQueryable<int>), 1, (int arg0, int arg1) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, default(Expression<Func<int, int, ValueTask<int>>>)), ane => ane.ParamName == "accumulator");
@@ -75,7 +85,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AggregateAsync7()
+        public void AggregateAsync8()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int>(default(IAsyncQueryable<int>), 1, (int arg0, int arg1) => default(int), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, default(Expression<Func<int, int, int>>), CancellationToken.None), ane => ane.ParamName == "accumulator");
@@ -85,7 +95,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AggregateAsync8()
+        public void AggregateAsync9()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int>(default(IAsyncQueryable<int>), 1, (int arg0, int arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, default(Expression<Func<int, int, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "accumulator");
@@ -95,7 +105,17 @@ namespace Tests
         }
 
         [Fact]
-        public void AggregateAsync9()
+        public void AggregateAsync10()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int>(default(IAsyncQueryable<int>), 1, (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, default(Expression<Func<int, int, CancellationToken, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "accumulator");
+
+            var res = AsyncQueryable.AggregateAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AggregateAsync11()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int, int>(default(IAsyncQueryable<int>), 1, (int arg0, int arg1) => default(int), (int arg0) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, default(Expression<Func<int, int, int>>), (int arg0) => default(int)), ane => ane.ParamName == "accumulator");
@@ -106,7 +126,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AggregateAsync10()
+        public void AggregateAsync12()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int, int>(default(IAsyncQueryable<int>), 1, (int arg0, int arg1) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, default(Expression<Func<int, int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "accumulator");
@@ -117,7 +137,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AggregateAsync11()
+        public void AggregateAsync13()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int, int>(default(IAsyncQueryable<int>), 1, (int arg0, int arg1) => default(int), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, default(Expression<Func<int, int, int>>), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "accumulator");
@@ -128,13 +148,24 @@ namespace Tests
         }
 
         [Fact]
-        public void AggregateAsync12()
+        public void AggregateAsync14()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int, int>(default(IAsyncQueryable<int>), 1, (int arg0, int arg1) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, default(Expression<Func<int, int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "accumulator");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, (int arg0, int arg1) => default(ValueTask<int>), default(Expression<Func<int, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "resultSelector");
 
             var res = AsyncQueryable.AggregateAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, (int arg0, int arg1) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AggregateAsync15()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int, int>(default(IAsyncQueryable<int>), 1, (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, default(Expression<Func<int, int, CancellationToken, ValueTask<int>>>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "accumulator");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AggregateAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "resultSelector");
+
+            var res = AsyncQueryable.AggregateAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1, (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -175,6 +206,16 @@ namespace Tests
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AllAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
 
             var res = AsyncQueryable.AllAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<bool>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AllAsync5()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AllAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AllAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.AllAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -237,6 +278,16 @@ namespace Tests
         }
 
         [Fact]
+        public void AnyAsync7()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AnyAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AnyAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.AnyAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void Append1()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Append<int>(default(IAsyncQueryable<int>), 1), ane => ane.ParamName == "source");
@@ -249,24 +300,6 @@ namespace Tests
         [Fact]
         public void AverageAsync1()
         {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<float>)), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.AverageAsync(new float[] { default(float) }.ToAsyncEnumerable().AsAsyncQueryable());
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void AverageAsync2()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<double>)), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.AverageAsync(new double[] { default(double) }.ToAsyncEnumerable().AsAsyncQueryable());
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void AverageAsync3()
-        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<decimal>)), ane => ane.ParamName == "source");
 
             var res = AsyncQueryable.AverageAsync(new decimal[] { default(decimal) }.ToAsyncEnumerable().AsAsyncQueryable());
@@ -274,7 +307,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync4()
+        public void AverageAsync2()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<int?>)), ane => ane.ParamName == "source");
 
@@ -283,7 +316,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync5()
+        public void AverageAsync3()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<long?>)), ane => ane.ParamName == "source");
 
@@ -292,7 +325,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync6()
+        public void AverageAsync4()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<float?>)), ane => ane.ParamName == "source");
 
@@ -301,7 +334,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync7()
+        public void AverageAsync5()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<double?>)), ane => ane.ParamName == "source");
 
@@ -310,7 +343,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync8()
+        public void AverageAsync6()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<decimal?>)), ane => ane.ParamName == "source");
 
@@ -319,7 +352,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync9()
+        public void AverageAsync7()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<int>)), ane => ane.ParamName == "source");
 
@@ -328,7 +361,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync10()
+        public void AverageAsync8()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<long>)), ane => ane.ParamName == "source");
 
@@ -337,16 +370,25 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync11()
+        public void AverageAsync9()
         {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<float>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<float>)), ane => ane.ParamName == "source");
 
-            var res = AsyncQueryable.AverageAsync(new float[] { default(float) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
+            var res = AsyncQueryable.AverageAsync(new float[] { default(float) }.ToAsyncEnumerable().AsAsyncQueryable());
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
         [Fact]
-        public void AverageAsync12()
+        public void AverageAsync10()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<double>)), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.AverageAsync(new double[] { default(double) }.ToAsyncEnumerable().AsAsyncQueryable());
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync11()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<double>), CancellationToken.None), ane => ane.ParamName == "source");
 
@@ -355,7 +397,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync13()
+        public void AverageAsync12()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
 
@@ -364,7 +406,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync14()
+        public void AverageAsync13()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<int?>), CancellationToken.None), ane => ane.ParamName == "source");
 
@@ -373,7 +415,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync15()
+        public void AverageAsync14()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<long?>), CancellationToken.None), ane => ane.ParamName == "source");
 
@@ -382,7 +424,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync16()
+        public void AverageAsync15()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<float?>), CancellationToken.None), ane => ane.ParamName == "source");
 
@@ -391,7 +433,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync17()
+        public void AverageAsync16()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<double?>), CancellationToken.None), ane => ane.ParamName == "source");
 
@@ -400,7 +442,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync18()
+        public void AverageAsync17()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<decimal?>), CancellationToken.None), ane => ane.ParamName == "source");
 
@@ -409,7 +451,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync19()
+        public void AverageAsync18()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<int>), CancellationToken.None), ane => ane.ParamName == "source");
 
@@ -418,7 +460,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync20()
+        public void AverageAsync19()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<long>), CancellationToken.None), ane => ane.ParamName == "source");
 
@@ -427,37 +469,16 @@ namespace Tests
         }
 
         [Fact]
+        public void AverageAsync20()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync(default(IAsyncQueryable<float>), CancellationToken.None), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.AverageAsync(new float[] { default(float) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void AverageAsync21()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void AverageAsync22()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(float)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(float));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void AverageAsync23()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void AverageAsync24()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(double)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double>>)), ane => ane.ParamName == "selector");
@@ -467,7 +488,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync25()
+        public void AverageAsync22()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double>>>)), ane => ane.ParamName == "selector");
@@ -477,7 +498,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync26()
+        public void AverageAsync23()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(decimal)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal>>)), ane => ane.ParamName == "selector");
@@ -487,7 +508,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync27()
+        public void AverageAsync24()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal>>>)), ane => ane.ParamName == "selector");
@@ -497,7 +518,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync28()
+        public void AverageAsync25()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int?>>)), ane => ane.ParamName == "selector");
@@ -507,7 +528,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync29()
+        public void AverageAsync26()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int?>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int?>>>)), ane => ane.ParamName == "selector");
@@ -517,7 +538,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync30()
+        public void AverageAsync27()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<long>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long?>>)), ane => ane.ParamName == "selector");
@@ -527,7 +548,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync31()
+        public void AverageAsync28()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long?>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long?>>>)), ane => ane.ParamName == "selector");
@@ -537,7 +558,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync32()
+        public void AverageAsync29()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<float>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float?>>)), ane => ane.ParamName == "selector");
@@ -547,7 +568,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync33()
+        public void AverageAsync30()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float?>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float?>>>)), ane => ane.ParamName == "selector");
@@ -557,7 +578,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync34()
+        public void AverageAsync31()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<double>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double?>>)), ane => ane.ParamName == "selector");
@@ -567,7 +588,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync35()
+        public void AverageAsync32()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double?>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double?>>>)), ane => ane.ParamName == "selector");
@@ -577,7 +598,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync36()
+        public void AverageAsync33()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<decimal>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal?>>)), ane => ane.ParamName == "selector");
@@ -587,7 +608,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync37()
+        public void AverageAsync34()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal?>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal?>>>)), ane => ane.ParamName == "selector");
@@ -597,7 +618,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync38()
+        public void AverageAsync35()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>)), ane => ane.ParamName == "selector");
@@ -607,7 +628,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync39()
+        public void AverageAsync36()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>)), ane => ane.ParamName == "selector");
@@ -617,7 +638,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync40()
+        public void AverageAsync37()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(long)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long>>)), ane => ane.ParamName == "selector");
@@ -627,37 +648,37 @@ namespace Tests
         }
 
         [Fact]
+        public void AverageAsync38()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync39()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(float)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(float));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync40()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void AverageAsync41()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long>>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void AverageAsync42()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(float), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(float), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void AverageAsync43()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float>>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void AverageAsync44()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(double), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -667,7 +688,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync45()
+        public void AverageAsync42()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -677,7 +698,17 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync46()
+        public void AverageAsync43()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<double>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<double>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<double>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync44()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(decimal), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -687,7 +718,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync47()
+        public void AverageAsync45()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -697,7 +728,17 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync48()
+        public void AverageAsync46()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<decimal>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<decimal>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync47()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<int>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int?>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -707,12 +748,22 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync49()
+        public void AverageAsync48()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int?>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
 
             var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync49()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int?>), CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -739,6 +790,16 @@ namespace Tests
         [Fact]
         public void AverageAsync52()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<long?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<long?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<long?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync53()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<float>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float?>>), CancellationToken.None), ane => ane.ParamName == "selector");
 
@@ -747,7 +808,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync53()
+        public void AverageAsync54()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float?>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -757,7 +818,17 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync54()
+        public void AverageAsync55()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<float?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<float?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<float?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync56()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<double>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double?>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -767,7 +838,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync55()
+        public void AverageAsync57()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double?>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -777,7 +848,17 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync56()
+        public void AverageAsync58()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<double?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<double?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<double?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync59()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal?>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -787,7 +868,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync57()
+        public void AverageAsync60()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal?>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -797,7 +878,17 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync58()
+        public void AverageAsync61()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<decimal?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<decimal?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<decimal?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync62()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -807,7 +898,7 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync59()
+        public void AverageAsync63()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -817,12 +908,72 @@ namespace Tests
         }
 
         [Fact]
-        public void AverageAsync60()
+        public void AverageAsync64()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync65()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(long), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long>>), CancellationToken.None), ane => ane.ParamName == "selector");
 
             var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(long), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync66()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync67()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<long>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<long>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<long>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync68()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(float), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(float), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync69()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void AverageAsync70()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<float>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<float>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.AverageAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<float>), CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -940,6 +1091,16 @@ namespace Tests
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.CountAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
 
             var res = AsyncQueryable.CountAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<bool>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void CountAsync7()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.CountAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.CountAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.CountAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -1102,6 +1263,16 @@ namespace Tests
         }
 
         [Fact]
+        public void FirstAsync7()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.FirstAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.FirstAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.FirstAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void FirstOrDefaultAsync1()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.FirstOrDefaultAsync<int>(default(IAsyncQueryable<int>)), ane => ane.ParamName == "source");
@@ -1160,6 +1331,16 @@ namespace Tests
         }
 
         [Fact]
+        public void FirstOrDefaultAsync7()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.FirstOrDefaultAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.FirstOrDefaultAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.FirstOrDefaultAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void GroupBy1()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int)), ane => ane.ParamName == "source");
@@ -1184,6 +1365,17 @@ namespace Tests
         [Fact]
         public void GroupBy3()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "keySelector");
+
+            var res = AsyncQueryable.GroupBy<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void GroupBy4()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
@@ -1194,7 +1386,7 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy4()
+        public void GroupBy5()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
@@ -1206,7 +1398,19 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy5()
+        public void GroupBy6()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.GroupBy<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default);
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void GroupBy7()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0) => default(int)), ane => ane.ParamName == "keySelector");
@@ -1218,7 +1422,7 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy6()
+        public void GroupBy8()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "keySelector");
@@ -1230,7 +1434,19 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy7()
+        public void GroupBy9()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, CancellationToken arg1) => default(ValueTask<int>)), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "elementSelector");
+
+            var res = AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void GroupBy10()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0, IAsyncEnumerable<int> arg1) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0, IAsyncEnumerable<int> arg1) => default(int)), ane => ane.ParamName == "keySelector");
@@ -1242,7 +1458,7 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy8()
+        public void GroupBy11()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>)), ane => ane.ParamName == "keySelector");
@@ -1254,7 +1470,19 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy9()
+        public void GroupBy12()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "resultSelector");
+
+            var res = AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void GroupBy13()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
@@ -1267,7 +1495,7 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy10()
+        public void GroupBy14()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
@@ -1280,7 +1508,20 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy11()
+        public void GroupBy15()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), EqualityComparer<int>.Default), ane => ane.ParamName == "elementSelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default);
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void GroupBy16()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0, IAsyncEnumerable<int> arg1) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0, IAsyncEnumerable<int> arg1) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
@@ -1293,7 +1534,7 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy12()
+        public void GroupBy17()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
@@ -1306,7 +1547,20 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy13()
+        public void GroupBy18()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>>), EqualityComparer<int>.Default), ane => ane.ParamName == "resultSelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.GroupBy<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default);
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void GroupBy19()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0) => default(int), (int arg0, IAsyncEnumerable<int> arg1) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0) => default(int), (int arg0, IAsyncEnumerable<int> arg1) => default(int)), ane => ane.ParamName == "keySelector");
@@ -1319,7 +1573,7 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy14()
+        public void GroupBy20()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>)), ane => ane.ParamName == "keySelector");
@@ -1332,7 +1586,20 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy15()
+        public void GroupBy21()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "elementSelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "resultSelector");
+
+            var res = AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void GroupBy22()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0) => default(int), (int arg0, IAsyncEnumerable<int> arg1) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0) => default(int), (int arg0, IAsyncEnumerable<int> arg1) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
@@ -1346,7 +1613,7 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy16()
+        public void GroupBy23()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
@@ -1355,6 +1622,20 @@ namespace Tests
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
 
             var res = AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>), EqualityComparer<int>.Default);
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void GroupBy24()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "elementSelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>>), EqualityComparer<int>.Default), ane => ane.ParamName == "resultSelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.GroupBy<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default);
             var task = res.ForEachAsync(_ => { });
             AssertEx.SucceedOrFailProper(() => task.Wait());
         }
@@ -1390,6 +1671,20 @@ namespace Tests
         [Fact]
         public void GroupJoin3()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(default(IAsyncQueryable<int>), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "outer");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(IAsyncEnumerable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "inner");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "outerKeySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "innerKeySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "resultSelector");
+
+            var res = AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void GroupJoin4()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(default(IAsyncQueryable<int>), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0) => default(int), (int arg0) => default(int), (int arg0, IAsyncEnumerable<int> arg1) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "outer");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(IAsyncEnumerable<int>), (int arg0) => default(int), (int arg0) => default(int), (int arg0, IAsyncEnumerable<int> arg1) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "inner");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), default(Expression<Func<int, int>>), (int arg0) => default(int), (int arg0, IAsyncEnumerable<int> arg1) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "outerKeySelector");
@@ -1403,7 +1698,7 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupJoin4()
+        public void GroupJoin5()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(default(IAsyncQueryable<int>), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "outer");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(IAsyncEnumerable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "inner");
@@ -1413,6 +1708,21 @@ namespace Tests
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
 
             var res = AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1) => default(ValueTask<int>), EqualityComparer<int>.Default);
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void GroupJoin6()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(default(IAsyncQueryable<int>), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "outer");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(IAsyncEnumerable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "inner");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "outerKeySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "innerKeySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>>), EqualityComparer<int>.Default), ane => ane.ParamName == "resultSelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.GroupJoin<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, IAsyncEnumerable<int> arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default);
             var task = res.ForEachAsync(_ => { });
             AssertEx.SucceedOrFailProper(() => task.Wait());
         }
@@ -1471,6 +1781,20 @@ namespace Tests
         [Fact]
         public void Join3()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(default(IAsyncQueryable<int>), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "outer");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(IAsyncEnumerable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "inner");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "outerKeySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "innerKeySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, int, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "resultSelector");
+
+            var res = AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void Join4()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(default(IAsyncQueryable<int>), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0) => default(int), (int arg0) => default(int), (int arg0, int arg1) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "outer");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(IAsyncEnumerable<int>), (int arg0) => default(int), (int arg0) => default(int), (int arg0, int arg1) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "inner");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), default(Expression<Func<int, int>>), (int arg0) => default(int), (int arg0, int arg1) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "outerKeySelector");
@@ -1484,7 +1808,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Join4()
+        public void Join5()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(default(IAsyncQueryable<int>), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), (int arg0, int arg1) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "outer");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(IAsyncEnumerable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), (int arg0, int arg1) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "inner");
@@ -1494,6 +1818,21 @@ namespace Tests
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), (int arg0, int arg1) => default(ValueTask<int>), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
 
             var res = AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), (int arg0, int arg1) => default(ValueTask<int>), EqualityComparer<int>.Default);
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void Join6()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(default(IAsyncQueryable<int>), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "outer");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(IAsyncEnumerable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "inner");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "outerKeySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "innerKeySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, int, CancellationToken, ValueTask<int>>>), EqualityComparer<int>.Default), ane => ane.ParamName == "resultSelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.Join<int, int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>), EqualityComparer<int>.Default);
             var task = res.ForEachAsync(_ => { });
             AssertEx.SucceedOrFailProper(() => task.Wait());
         }
@@ -1557,6 +1896,16 @@ namespace Tests
         }
 
         [Fact]
+        public void LastAsync7()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.LastAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.LastAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.LastAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void LastOrDefaultAsync1()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.LastOrDefaultAsync<int>(default(IAsyncQueryable<int>)), ane => ane.ParamName == "source");
@@ -1615,6 +1964,16 @@ namespace Tests
         }
 
         [Fact]
+        public void LastOrDefaultAsync7()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.LastOrDefaultAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.LastOrDefaultAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.LastOrDefaultAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void LongCountAsync1()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.LongCountAsync<int>(default(IAsyncQueryable<int>)), ane => ane.ParamName == "source");
@@ -1669,6 +2028,16 @@ namespace Tests
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.LongCountAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
 
             var res = AsyncQueryable.LongCountAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<bool>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void LongCountAsync7()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.LongCountAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.LongCountAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.LongCountAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -1873,6 +2242,16 @@ namespace Tests
         [Fact]
         public void MaxAsync23()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long?>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long?>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long?>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MaxAsync24()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(float)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float>>)), ane => ane.ParamName == "selector");
 
@@ -1881,7 +2260,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync24()
+        public void MaxAsync25()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float>>>)), ane => ane.ParamName == "selector");
@@ -1891,7 +2270,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync25()
+        public void MaxAsync26()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<float>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float?>>)), ane => ane.ParamName == "selector");
@@ -1901,7 +2280,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync26()
+        public void MaxAsync27()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float?>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float?>>>)), ane => ane.ParamName == "selector");
@@ -1911,7 +2290,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync27()
+        public void MaxAsync28()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(double)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double>>)), ane => ane.ParamName == "selector");
@@ -1921,7 +2300,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync28()
+        public void MaxAsync29()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double>>>)), ane => ane.ParamName == "selector");
@@ -1931,7 +2310,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync29()
+        public void MaxAsync30()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<double>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double?>>)), ane => ane.ParamName == "selector");
@@ -1941,7 +2320,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync30()
+        public void MaxAsync31()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double?>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double?>>>)), ane => ane.ParamName == "selector");
@@ -1951,7 +2330,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync31()
+        public void MaxAsync32()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(decimal)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal>>)), ane => ane.ParamName == "selector");
@@ -1961,7 +2340,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync32()
+        public void MaxAsync33()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal>>>)), ane => ane.ParamName == "selector");
@@ -1971,7 +2350,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync33()
+        public void MaxAsync34()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<decimal>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal?>>)), ane => ane.ParamName == "selector");
@@ -1981,7 +2360,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync34()
+        public void MaxAsync35()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal?>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal?>>>)), ane => ane.ParamName == "selector");
@@ -1991,7 +2370,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync35()
+        public void MaxAsync36()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>)), ane => ane.ParamName == "selector");
@@ -2001,7 +2380,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync36()
+        public void MaxAsync37()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>)), ane => ane.ParamName == "selector");
@@ -2011,7 +2390,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync37()
+        public void MaxAsync38()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int?>>)), ane => ane.ParamName == "selector");
@@ -2021,7 +2400,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync38()
+        public void MaxAsync39()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int?>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int?>>>)), ane => ane.ParamName == "selector");
@@ -2031,7 +2410,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync39()
+        public void MaxAsync40()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(long)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long>>)), ane => ane.ParamName == "selector");
@@ -2041,7 +2420,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync40()
+        public void MaxAsync41()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long>>>)), ane => ane.ParamName == "selector");
@@ -2051,22 +2430,12 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync41()
+        public void MaxAsync42()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<long>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long?>>)), ane => ane.ParamName == "selector");
 
             var res = AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<long>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MaxAsync42()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long?>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long?>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long?>));
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -2083,6 +2452,16 @@ namespace Tests
         [Fact]
         public void MaxAsync44()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<long?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<long?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<long?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MaxAsync45()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(float), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float>>), CancellationToken.None), ane => ane.ParamName == "selector");
 
@@ -2091,7 +2470,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync45()
+        public void MaxAsync46()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2101,7 +2480,17 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync46()
+        public void MaxAsync47()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<float>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<float>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<float>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MaxAsync48()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<float>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float?>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2111,7 +2500,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync47()
+        public void MaxAsync49()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float?>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2121,7 +2510,17 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync48()
+        public void MaxAsync50()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<float?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<float?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<float?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MaxAsync51()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(double), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2131,7 +2530,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync49()
+        public void MaxAsync52()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2141,7 +2540,17 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync50()
+        public void MaxAsync53()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<double>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<double>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<double>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MaxAsync54()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<double>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double?>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2151,7 +2560,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync51()
+        public void MaxAsync55()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double?>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2161,7 +2570,17 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync52()
+        public void MaxAsync56()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<double?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<double?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<double?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MaxAsync57()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(decimal), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2171,7 +2590,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync53()
+        public void MaxAsync58()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2181,7 +2600,17 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync54()
+        public void MaxAsync59()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<decimal>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<decimal>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MaxAsync60()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal?>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2191,7 +2620,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync55()
+        public void MaxAsync61()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal?>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2201,7 +2630,17 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync56()
+        public void MaxAsync62()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<decimal?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<decimal?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<decimal?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MaxAsync63()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2211,7 +2650,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync57()
+        public void MaxAsync64()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2221,7 +2660,17 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync58()
+        public void MaxAsync65()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MaxAsync66()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<int>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int?>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2231,7 +2680,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync59()
+        public void MaxAsync67()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int?>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2241,7 +2690,17 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync60()
+        public void MaxAsync68()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MaxAsync69()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(long), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2251,7 +2710,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync61()
+        public void MaxAsync70()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2261,7 +2720,17 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync62()
+        public void MaxAsync71()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<long>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<long>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<long>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MaxAsync72()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<long>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long?>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2271,7 +2740,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync63()
+        public void MaxAsync73()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>)), ane => ane.ParamName == "selector");
@@ -2281,7 +2750,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync64()
+        public void MaxAsync74()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>)), ane => ane.ParamName == "selector");
@@ -2291,7 +2760,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync65()
+        public void MaxAsync75()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2301,7 +2770,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MaxAsync66()
+        public void MaxAsync76()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2311,79 +2780,17 @@ namespace Tests
         }
 
         [Fact]
+        public void MaxAsync77()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MaxAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MaxAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void MinAsync1()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<float>)), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new float[] { default(float) }.ToAsyncEnumerable().AsAsyncQueryable());
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync2()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<float?>)), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new float?[] { default(float?) }.ToAsyncEnumerable().AsAsyncQueryable());
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync3()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<double>)), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new double[] { default(double) }.ToAsyncEnumerable().AsAsyncQueryable());
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync4()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<double?>)), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new double?[] { default(double?) }.ToAsyncEnumerable().AsAsyncQueryable());
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync5()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<decimal>)), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new decimal[] { default(decimal) }.ToAsyncEnumerable().AsAsyncQueryable());
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync6()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<decimal?>)), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new decimal?[] { default(decimal?) }.ToAsyncEnumerable().AsAsyncQueryable());
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync7()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<int>)), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable());
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync8()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<int?>)), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new int?[] { default(int?) }.ToAsyncEnumerable().AsAsyncQueryable());
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync9()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<long>)), ane => ane.ParamName == "source");
 
@@ -2392,7 +2799,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MinAsync10()
+        public void MinAsync2()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<long?>)), ane => ane.ParamName == "source");
 
@@ -2401,79 +2808,79 @@ namespace Tests
         }
 
         [Fact]
+        public void MinAsync3()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<float>)), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new float[] { default(float) }.ToAsyncEnumerable().AsAsyncQueryable());
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync4()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<float?>)), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new float?[] { default(float?) }.ToAsyncEnumerable().AsAsyncQueryable());
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync5()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<double>)), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new double[] { default(double) }.ToAsyncEnumerable().AsAsyncQueryable());
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync6()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<double?>)), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new double?[] { default(double?) }.ToAsyncEnumerable().AsAsyncQueryable());
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync7()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<decimal>)), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new decimal[] { default(decimal) }.ToAsyncEnumerable().AsAsyncQueryable());
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync8()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<decimal?>)), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new decimal?[] { default(decimal?) }.ToAsyncEnumerable().AsAsyncQueryable());
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync9()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<int>)), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable());
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync10()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<int?>)), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new int?[] { default(int?) }.ToAsyncEnumerable().AsAsyncQueryable());
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void MinAsync11()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<float>), CancellationToken.None), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new float[] { default(float) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync12()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<float?>), CancellationToken.None), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new float?[] { default(float?) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync13()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<double>), CancellationToken.None), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new double[] { default(double) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync14()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<double?>), CancellationToken.None), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new double?[] { default(double?) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync15()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new decimal[] { default(decimal) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync16()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<decimal?>), CancellationToken.None), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new decimal?[] { default(decimal?) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync17()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<int>), CancellationToken.None), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync18()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<int?>), CancellationToken.None), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.MinAsync(new int?[] { default(int?) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync19()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<long>), CancellationToken.None), ane => ane.ParamName == "source");
 
@@ -2482,11 +2889,83 @@ namespace Tests
         }
 
         [Fact]
-        public void MinAsync20()
+        public void MinAsync12()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<long?>), CancellationToken.None), ane => ane.ParamName == "source");
 
             var res = AsyncQueryable.MinAsync(new long?[] { default(long?) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync13()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<float>), CancellationToken.None), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new float[] { default(float) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync14()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<float?>), CancellationToken.None), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new float?[] { default(float?) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync15()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<double>), CancellationToken.None), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new double[] { default(double) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync16()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<double?>), CancellationToken.None), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new double?[] { default(double?) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync17()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new decimal[] { default(decimal) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync18()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<decimal?>), CancellationToken.None), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new decimal?[] { default(decimal?) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync19()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<int>), CancellationToken.None), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync20()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync(default(IAsyncQueryable<int?>), CancellationToken.None), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.MinAsync(new int?[] { default(int?) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -2511,176 +2990,6 @@ namespace Tests
         [Fact]
         public void MinAsync23()
         {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long?>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long?>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long?>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync24()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(float)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(float));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync25()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync26()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<float>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float?>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<float>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync27()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float?>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float?>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float?>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync28()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(double)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(double));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync29()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<double>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync30()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<double>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double?>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<double>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync31()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double?>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double?>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<double?>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync32()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(decimal)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(decimal));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync33()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<decimal>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync34()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<decimal>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal?>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<decimal>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync35()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal?>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal?>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<decimal?>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync36()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(int)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync37()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync38()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<int>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int?>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<int>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync39()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int?>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int?>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int?>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync40()
-        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(long)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long>>)), ane => ane.ParamName == "selector");
 
@@ -2689,7 +2998,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MinAsync41()
+        public void MinAsync24()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long>>>)), ane => ane.ParamName == "selector");
@@ -2699,7 +3008,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MinAsync42()
+        public void MinAsync25()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<long>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long?>>)), ane => ane.ParamName == "selector");
@@ -2709,167 +3018,187 @@ namespace Tests
         }
 
         [Fact]
+        public void MinAsync26()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long?>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long?>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long?>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync27()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(float)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(float));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync28()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync29()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<float>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float?>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<float>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync30()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float?>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float?>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float?>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync31()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(double)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(double));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync32()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<double>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync33()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<double>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double?>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<double>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync34()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double?>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double?>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<double?>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync35()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(decimal)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(decimal));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync36()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<decimal>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync37()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<decimal>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal?>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<decimal>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync38()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal?>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal?>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<decimal?>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync39()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(int)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync40()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync41()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int?>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<int>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync42()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int?>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int?>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int?>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void MinAsync43()
         {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long?>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<decimal?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<decimal?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
 
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long?>), CancellationToken.None);
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<decimal?>), CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
         [Fact]
         public void MinAsync44()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(float), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(float), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync45()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float>>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync46()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<float>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float?>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<float>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync47()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float?>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float?>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync48()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(double), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(double), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync49()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double>>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<double>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync50()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<double>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double?>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<double>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync51()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double?>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<double?>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync52()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(decimal), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(decimal), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync53()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal>>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<decimal>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync54()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal?>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<decimal>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync55()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal?>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<decimal?>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync56()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync57()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync58()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<int>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int?>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<int>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void MinAsync59()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int?>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2879,7 +3208,17 @@ namespace Tests
         }
 
         [Fact]
-        public void MinAsync60()
+        public void MinAsync45()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync46()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(long), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2889,7 +3228,7 @@ namespace Tests
         }
 
         [Fact]
-        public void MinAsync61()
+        public void MinAsync47()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2899,7 +3238,17 @@ namespace Tests
         }
 
         [Fact]
-        public void MinAsync62()
+        public void MinAsync48()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<long>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<long>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<long>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync49()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<long>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long?>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2909,17 +3258,237 @@ namespace Tests
         }
 
         [Fact]
+        public void MinAsync50()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync51()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<long?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<long?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<long?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync52()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(float), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(float), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync53()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync54()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<float>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<float>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<float>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync55()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<float>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float?>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<float>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync56()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync57()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<float?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<float?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<float?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync58()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(double), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(double), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync59()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<double>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync60()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<double>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<double>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<double>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync61()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<double>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double?>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<double>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync62()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<double?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void MinAsync63()
         {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>)), ane => ane.ParamName == "selector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<double?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<double?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
 
-            var res = AsyncQueryable.MinAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>));
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<double?>), CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
         [Fact]
         public void MinAsync64()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(decimal), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(decimal), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync65()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<decimal>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync66()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<decimal>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<decimal>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync67()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal?>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<decimal>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync68()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<decimal?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync69()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync70()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync71()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync72()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int?>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync73()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>)), ane => ane.ParamName == "selector");
@@ -2929,7 +3498,27 @@ namespace Tests
         }
 
         [Fact]
-        public void MinAsync65()
+        public void MinAsync74()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync75()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.MinAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void MinAsync76()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -2939,12 +3528,12 @@ namespace Tests
         }
 
         [Fact]
-        public void MinAsync66()
+        public void MinAsync77()
         {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), CancellationToken.None), ane => ane.ParamName == "selector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.MinAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "selector");
 
-            var res = AsyncQueryable.MinAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int), CancellationToken.None);
+            var res = AsyncQueryable.MinAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -2997,6 +3586,16 @@ namespace Tests
         }
 
         [Fact]
+        public void OrderBy5()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderBy<int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), Comparer<int>.Default), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderBy<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), Comparer<int>.Default), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderBy<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(IComparer<int>)), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.OrderBy<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), Comparer<int>.Default);
+        }
+
+        [Fact]
         public void OrderByDescending1()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderByDescending<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int)), ane => ane.ParamName == "source");
@@ -3017,6 +3616,15 @@ namespace Tests
         [Fact]
         public void OrderByDescending3()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderByDescending<int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderByDescending<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "keySelector");
+
+            var res = AsyncQueryable.OrderByDescending<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>));
+        }
+
+        [Fact]
+        public void OrderByDescending4()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderByDescending<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), Comparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderByDescending<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), Comparer<int>.Default), ane => ane.ParamName == "keySelector");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderByDescending<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int), default(IComparer<int>)), ane => ane.ParamName == "comparer");
@@ -3025,13 +3633,23 @@ namespace Tests
         }
 
         [Fact]
-        public void OrderByDescending4()
+        public void OrderByDescending5()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderByDescending<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), Comparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderByDescending<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), Comparer<int>.Default), ane => ane.ParamName == "keySelector");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderByDescending<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>), default(IComparer<int>)), ane => ane.ParamName == "comparer");
 
             var res = AsyncQueryable.OrderByDescending<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>), Comparer<int>.Default);
+        }
+
+        [Fact]
+        public void OrderByDescending6()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderByDescending<int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), Comparer<int>.Default), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderByDescending<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), Comparer<int>.Default), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.OrderByDescending<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(IComparer<int>)), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.OrderByDescending<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), Comparer<int>.Default);
         }
 
         [Fact]
@@ -3090,10 +3708,32 @@ namespace Tests
         [Fact]
         public void Select4()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Select<int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Select<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.Select<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void Select5()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Select<int, int>(default(IAsyncQueryable<int>), (int arg0, int arg1) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Select<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, ValueTask<int>>>)), ane => ane.ParamName == "selector");
 
             var res = AsyncQueryable.Select<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, int arg1) => default(ValueTask<int>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void Select6()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Select<int, int>(default(IAsyncQueryable<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Select<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.Select<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>));
             var task = res.ForEachAsync(_ => { });
             AssertEx.SucceedOrFailProper(() => task.Wait());
         }
@@ -3123,6 +3763,17 @@ namespace Tests
         [Fact]
         public void SelectMany3()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<IAsyncEnumerable<int>>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<IAsyncEnumerable<int>>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SelectMany<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<IAsyncEnumerable<int>>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void SelectMany4()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int>(default(IAsyncQueryable<int>), (int arg0, int arg1) => new int[] { default(int) }.ToAsyncEnumerable()), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, IAsyncEnumerable<int>>>)), ane => ane.ParamName == "selector");
 
@@ -3132,7 +3783,7 @@ namespace Tests
         }
 
         [Fact]
-        public void SelectMany4()
+        public void SelectMany5()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int>(default(IAsyncQueryable<int>), (int arg0, int arg1) => default(ValueTask<IAsyncEnumerable<int>>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, ValueTask<IAsyncEnumerable<int>>>>)), ane => ane.ParamName == "selector");
@@ -3143,7 +3794,18 @@ namespace Tests
         }
 
         [Fact]
-        public void SelectMany5()
+        public void SelectMany6()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int>(default(IAsyncQueryable<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<IAsyncEnumerable<int>>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, CancellationToken, ValueTask<IAsyncEnumerable<int>>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SelectMany<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<IAsyncEnumerable<int>>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void SelectMany7()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, int arg1) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, IAsyncEnumerable<int>>>), (int arg0, int arg1) => default(int)), ane => ane.ParamName == "selector");
@@ -3155,7 +3817,7 @@ namespace Tests
         }
 
         [Fact]
-        public void SelectMany6()
+        public void SelectMany8()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<IAsyncEnumerable<int>>), (int arg0, int arg1) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<IAsyncEnumerable<int>>>>), (int arg0, int arg1) => default(ValueTask<int>)), ane => ane.ParamName == "selector");
@@ -3167,7 +3829,19 @@ namespace Tests
         }
 
         [Fact]
-        public void SelectMany7()
+        public void SelectMany9()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<IAsyncEnumerable<int>>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<IAsyncEnumerable<int>>>>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "selector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<IAsyncEnumerable<int>>), default(Expression<Func<int, int, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "resultSelector");
+
+            var res = AsyncQueryable.SelectMany<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<IAsyncEnumerable<int>>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void SelectMany10()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(default(IAsyncQueryable<int>), (int arg0, int arg1) => new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, int arg1) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, IAsyncEnumerable<int>>>), (int arg0, int arg1) => default(int)), ane => ane.ParamName == "selector");
@@ -3179,13 +3853,25 @@ namespace Tests
         }
 
         [Fact]
-        public void SelectMany8()
+        public void SelectMany11()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(default(IAsyncQueryable<int>), (int arg0, int arg1) => default(ValueTask<IAsyncEnumerable<int>>), (int arg0, int arg1) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, ValueTask<IAsyncEnumerable<int>>>>), (int arg0, int arg1) => default(ValueTask<int>)), ane => ane.ParamName == "selector");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, int arg1) => default(ValueTask<IAsyncEnumerable<int>>), default(Expression<Func<int, int, ValueTask<int>>>)), ane => ane.ParamName == "resultSelector");
 
             var res = AsyncQueryable.SelectMany<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, int arg1) => default(ValueTask<IAsyncEnumerable<int>>), (int arg0, int arg1) => default(ValueTask<int>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void SelectMany12()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(default(IAsyncQueryable<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<IAsyncEnumerable<int>>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, CancellationToken, ValueTask<IAsyncEnumerable<int>>>>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "selector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SelectMany<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<IAsyncEnumerable<int>>), default(Expression<Func<int, int, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "resultSelector");
+
+            var res = AsyncQueryable.SelectMany<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<IAsyncEnumerable<int>>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>));
             var task = res.ForEachAsync(_ => { });
             AssertEx.SucceedOrFailProper(() => task.Wait());
         }
@@ -3291,6 +3977,16 @@ namespace Tests
         }
 
         [Fact]
+        public void SingleAsync7()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SingleAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SingleAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.SingleAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void SingleOrDefaultAsync1()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SingleOrDefaultAsync<int>(default(IAsyncQueryable<int>)), ane => ane.ParamName == "source");
@@ -3345,6 +4041,16 @@ namespace Tests
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SingleOrDefaultAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
 
             var res = AsyncQueryable.SingleOrDefaultAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<bool>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SingleOrDefaultAsync7()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SingleOrDefaultAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SingleOrDefaultAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<bool>>>), CancellationToken.None), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.SingleOrDefaultAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<bool>), CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -3404,6 +4110,17 @@ namespace Tests
         [Fact]
         public void SkipWhile4()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SkipWhile<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<bool>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SkipWhile<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<bool>>>)), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.SkipWhile<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<bool>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void SkipWhile5()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SkipWhile<int>(default(IAsyncQueryable<int>), (int arg0, int arg1) => default(ValueTask<bool>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SkipWhile<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, ValueTask<bool>>>)), ane => ane.ParamName == "predicate");
 
@@ -3413,7 +4130,27 @@ namespace Tests
         }
 
         [Fact]
+        public void SkipWhile6()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SkipWhile<int>(default(IAsyncQueryable<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<bool>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SkipWhile<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, CancellationToken, ValueTask<bool>>>)), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.SkipWhile<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<bool>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
         public void SumAsync1()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<float?>)), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.SumAsync(new float?[] { default(float?) }.ToAsyncEnumerable().AsAsyncQueryable());
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync2()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<double?>)), ane => ane.ParamName == "source");
 
@@ -3422,20 +4159,11 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync2()
+        public void SumAsync3()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<decimal?>)), ane => ane.ParamName == "source");
 
             var res = AsyncQueryable.SumAsync(new decimal?[] { default(decimal?) }.ToAsyncEnumerable().AsAsyncQueryable());
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync3()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<long>)), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.SumAsync(new long[] { default(long) }.ToAsyncEnumerable().AsAsyncQueryable());
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -3487,15 +4215,6 @@ namespace Tests
         [Fact]
         public void SumAsync9()
         {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<float?>)), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.SumAsync(new float?[] { default(float?) }.ToAsyncEnumerable().AsAsyncQueryable());
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync10()
-        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<int>)), ane => ane.ParamName == "source");
 
             var res = AsyncQueryable.SumAsync(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable());
@@ -3503,7 +4222,25 @@ namespace Tests
         }
 
         [Fact]
+        public void SumAsync10()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<long>)), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.SumAsync(new long[] { default(long) }.ToAsyncEnumerable().AsAsyncQueryable());
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void SumAsync11()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<float?>), CancellationToken.None), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.SumAsync(new float?[] { default(float?) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync12()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<double?>), CancellationToken.None), ane => ane.ParamName == "source");
 
@@ -3512,20 +4249,11 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync12()
+        public void SumAsync13()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<decimal?>), CancellationToken.None), ane => ane.ParamName == "source");
 
             var res = AsyncQueryable.SumAsync(new decimal?[] { default(decimal?) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync13()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<long>), CancellationToken.None), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.SumAsync(new long[] { default(long) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -3577,15 +4305,6 @@ namespace Tests
         [Fact]
         public void SumAsync19()
         {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<float?>), CancellationToken.None), ane => ane.ParamName == "source");
-
-            var res = AsyncQueryable.SumAsync(new float?[] { default(float?) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync20()
-        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<int>), CancellationToken.None), ane => ane.ParamName == "source");
 
             var res = AsyncQueryable.SumAsync(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
@@ -3593,177 +4312,16 @@ namespace Tests
         }
 
         [Fact]
+        public void SumAsync20()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync(default(IAsyncQueryable<long>), CancellationToken.None), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.SumAsync(new long[] { default(long) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void SumAsync21()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float?>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float?>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float?>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync22()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<double>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double?>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<double>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync23()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double?>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double?>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<double?>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync24()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<decimal>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal?>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<decimal>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync25()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal?>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal?>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<decimal?>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync26()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(long)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(long));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync27()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync28()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(float)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(float));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync29()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync30()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(double)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(double));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync31()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<double>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync32()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(decimal)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(decimal));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync33()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<decimal>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync34()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<int>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int?>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<int>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync35()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int?>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int?>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int?>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync36()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<long>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long?>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<long>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync37()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long?>)), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long?>>>)), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long?>));
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync38()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<float>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float?>>)), ane => ane.ParamName == "selector");
@@ -3773,7 +4331,157 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync39()
+        public void SumAsync22()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float?>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float?>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float?>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync23()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<double>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double?>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<double>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync24()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double?>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double?>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<double?>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync25()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<decimal>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal?>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<decimal>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync26()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal?>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal?>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<decimal?>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync27()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(float)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(float));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync28()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<float>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync29()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(double)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(double));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync30()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<double>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync31()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(decimal)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(decimal));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync32()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<decimal>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync33()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int?>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<int>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync34()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int?>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int?>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int?>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync35()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<long>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long?>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(Nullable<long>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync36()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long?>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long?>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long?>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync37()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>)), ane => ane.ParamName == "selector");
@@ -3783,12 +4491,32 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync40()
+        public void SumAsync38()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>)), ane => ane.ParamName == "selector");
 
             var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync39()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(long)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(long));
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync40()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long>));
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -3815,6 +4543,16 @@ namespace Tests
         [Fact]
         public void SumAsync43()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<float?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<float?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<float?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync44()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<double>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double?>>), CancellationToken.None), ane => ane.ParamName == "selector");
 
@@ -3823,7 +4561,7 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync44()
+        public void SumAsync45()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double?>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3833,7 +4571,17 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync45()
+        public void SumAsync46()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<double?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<double?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<double?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync47()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal?>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3843,7 +4591,7 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync46()
+        public void SumAsync48()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal?>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3853,27 +4601,17 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync47()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(long), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(long), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void SumAsync48()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long>), CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long>>>), CancellationToken.None), ane => ane.ParamName == "selector");
-
-            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long>), CancellationToken.None);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
         public void SumAsync49()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<decimal?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<decimal?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<decimal?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync50()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(float), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, float>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3883,7 +4621,7 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync50()
+        public void SumAsync51()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<float>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<float>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3893,7 +4631,17 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync51()
+        public void SumAsync52()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<float>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<float>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<float>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync53()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(double), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, double>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3903,7 +4651,7 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync52()
+        public void SumAsync54()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<double>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<double>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3913,7 +4661,17 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync53()
+        public void SumAsync55()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<double>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<double>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<double>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync56()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(decimal), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, decimal>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3923,7 +4681,7 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync54()
+        public void SumAsync57()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<decimal>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3933,7 +4691,17 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync55()
+        public void SumAsync58()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<decimal>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<decimal>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<decimal>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync59()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<int>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int?>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3943,7 +4711,7 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync56()
+        public void SumAsync60()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int?>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3953,7 +4721,17 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync57()
+        public void SumAsync61()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync62()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(Nullable<long>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long?>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3963,7 +4741,7 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync58()
+        public void SumAsync63()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long?>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3973,7 +4751,17 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync59()
+        public void SumAsync64()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<long?>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<long?>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<long?>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync65()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), CancellationToken.None), ane => ane.ParamName == "selector");
@@ -3983,12 +4771,52 @@ namespace Tests
         }
 
         [Fact]
-        public void SumAsync60()
+        public void SumAsync66()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "selector");
 
             var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync67()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync68()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(long), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, long>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(long), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync69()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<long>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<long>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<long>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void SumAsync70()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<long>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<long>>>), CancellationToken.None), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.SumAsync<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<long>), CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -4047,10 +4875,32 @@ namespace Tests
         [Fact]
         public void TakeWhile4()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.TakeWhile<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<bool>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.TakeWhile<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<bool>>>)), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.TakeWhile<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<bool>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void TakeWhile5()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.TakeWhile<int>(default(IAsyncQueryable<int>), (int arg0, int arg1) => default(ValueTask<bool>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.TakeWhile<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, ValueTask<bool>>>)), ane => ane.ParamName == "predicate");
 
             var res = AsyncQueryable.TakeWhile<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, int arg1) => default(ValueTask<bool>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void TakeWhile6()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.TakeWhile<int>(default(IAsyncQueryable<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<bool>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.TakeWhile<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, CancellationToken, ValueTask<bool>>>)), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.TakeWhile<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<bool>));
             var task = res.ForEachAsync(_ => { });
             AssertEx.SucceedOrFailProper(() => task.Wait());
         }
@@ -4076,6 +4926,15 @@ namespace Tests
         [Fact]
         public void ThenBy3()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenBy<int, int>(default(IOrderedAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenBy<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), default(Expression<Func<int, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "keySelector");
+
+            var res = AsyncQueryable.ThenBy<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), (int arg0, CancellationToken arg1) => default(ValueTask<int>));
+        }
+
+        [Fact]
+        public void ThenBy4()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenBy<int, int>(default(IOrderedAsyncQueryable<int>), (int arg0) => default(int), Comparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenBy<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), default(Expression<Func<int, int>>), Comparer<int>.Default), ane => ane.ParamName == "keySelector");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenBy<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), (int arg0) => default(int), default(IComparer<int>)), ane => ane.ParamName == "comparer");
@@ -4084,13 +4943,23 @@ namespace Tests
         }
 
         [Fact]
-        public void ThenBy4()
+        public void ThenBy5()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenBy<int, int>(default(IOrderedAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), Comparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenBy<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), default(Expression<Func<int, ValueTask<int>>>), Comparer<int>.Default), ane => ane.ParamName == "keySelector");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenBy<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), (int arg0) => default(ValueTask<int>), default(IComparer<int>)), ane => ane.ParamName == "comparer");
 
             var res = AsyncQueryable.ThenBy<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), (int arg0) => default(ValueTask<int>), Comparer<int>.Default);
+        }
+
+        [Fact]
+        public void ThenBy6()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenBy<int, int>(default(IOrderedAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), Comparer<int>.Default), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenBy<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), Comparer<int>.Default), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenBy<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(IComparer<int>)), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.ThenBy<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), (int arg0, CancellationToken arg1) => default(ValueTask<int>), Comparer<int>.Default);
         }
 
         [Fact]
@@ -4114,6 +4983,15 @@ namespace Tests
         [Fact]
         public void ThenByDescending3()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenByDescending<int, int>(default(IOrderedAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenByDescending<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), default(Expression<Func<int, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "keySelector");
+
+            var res = AsyncQueryable.ThenByDescending<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), (int arg0, CancellationToken arg1) => default(ValueTask<int>));
+        }
+
+        [Fact]
+        public void ThenByDescending4()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenByDescending<int, int>(default(IOrderedAsyncQueryable<int>), (int arg0) => default(int), Comparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenByDescending<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), default(Expression<Func<int, int>>), Comparer<int>.Default), ane => ane.ParamName == "keySelector");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenByDescending<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), (int arg0) => default(int), default(IComparer<int>)), ane => ane.ParamName == "comparer");
@@ -4122,13 +5000,23 @@ namespace Tests
         }
 
         [Fact]
-        public void ThenByDescending4()
+        public void ThenByDescending5()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenByDescending<int, int>(default(IOrderedAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), Comparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenByDescending<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), default(Expression<Func<int, ValueTask<int>>>), Comparer<int>.Default), ane => ane.ParamName == "keySelector");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenByDescending<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), (int arg0) => default(ValueTask<int>), default(IComparer<int>)), ane => ane.ParamName == "comparer");
 
             var res = AsyncQueryable.ThenByDescending<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), (int arg0) => default(ValueTask<int>), Comparer<int>.Default);
+        }
+
+        [Fact]
+        public void ThenByDescending6()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenByDescending<int, int>(default(IOrderedAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), Comparer<int>.Default), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenByDescending<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), Comparer<int>.Default), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ThenByDescending<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(IComparer<int>)), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.ThenByDescending<int, int>(new int[0].ToAsyncEnumerable().AsAsyncQueryable().OrderBy(x => x), (int arg0, CancellationToken arg1) => default(ValueTask<int>), Comparer<int>.Default);
         }
 
         [Fact]
@@ -4192,6 +5080,16 @@ namespace Tests
         [Fact]
         public void ToDictionaryAsync5()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "keySelector");
+
+            var res = AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void ToDictionaryAsync6()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
@@ -4201,24 +5099,13 @@ namespace Tests
         }
 
         [Fact]
-        public void ToDictionaryAsync6()
+        public void ToDictionaryAsync7()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
 
             var res = AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default);
-            AssertEx.SucceedOrFailProper(() => res.Wait());
-        }
-
-        [Fact]
-        public void ToDictionaryAsync7()
-        {
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "source");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "keySelector");
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int), default(IEqualityComparer<int>), CancellationToken.None), ane => ane.ParamName == "comparer");
-
-            var res = AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int), EqualityComparer<int>.Default, CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -4236,6 +5123,28 @@ namespace Tests
         [Fact]
         public void ToDictionaryAsync9()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(IEqualityComparer<int>), CancellationToken.None), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void ToDictionaryAsync10()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int), default(IEqualityComparer<int>), CancellationToken.None), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.ToDictionaryAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int), EqualityComparer<int>.Default, CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void ToDictionaryAsync11()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0) => default(int)), ane => ane.ParamName == "keySelector");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int), default(Expression<Func<int, int>>)), ane => ane.ParamName == "elementSelector");
@@ -4245,7 +5154,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToDictionaryAsync10()
+        public void ToDictionaryAsync12()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "keySelector");
@@ -4256,7 +5165,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToDictionaryAsync11()
+        public void ToDictionaryAsync13()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "keySelector");
@@ -4267,7 +5176,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToDictionaryAsync12()
+        public void ToDictionaryAsync14()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "keySelector");
@@ -4278,7 +5187,18 @@ namespace Tests
         }
 
         [Fact]
-        public void ToDictionaryAsync13()
+        public void ToDictionaryAsync15()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "elementSelector");
+
+            var res = AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void ToDictionaryAsync16()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
@@ -4290,7 +5210,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToDictionaryAsync14()
+        public void ToDictionaryAsync17()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
@@ -4302,7 +5222,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToDictionaryAsync15()
+        public void ToDictionaryAsync18()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0) => default(int), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0) => default(int), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "keySelector");
@@ -4314,7 +5234,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToDictionaryAsync16()
+        public void ToDictionaryAsync19()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "keySelector");
@@ -4322,6 +5242,18 @@ namespace Tests
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), default(IEqualityComparer<int>), CancellationToken.None), ane => ane.ParamName == "comparer");
 
             var res = AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void ToDictionaryAsync20()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "elementSelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(IEqualityComparer<int>), CancellationToken.None), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.ToDictionaryAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -4424,6 +5356,16 @@ namespace Tests
         [Fact]
         public void ToLookupAsync5()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "keySelector");
+
+            var res = AsyncQueryable.ToLookupAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void ToLookupAsync6()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(int), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
@@ -4433,7 +5375,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookupAsync6()
+        public void ToLookupAsync7()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
@@ -4444,7 +5386,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookupAsync7()
+        public void ToLookupAsync8()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "keySelector");
@@ -4455,7 +5397,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookupAsync8()
+        public void ToLookupAsync9()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "keySelector");
@@ -4466,7 +5408,18 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookupAsync9()
+        public void ToLookupAsync10()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(IEqualityComparer<int>), CancellationToken.None), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.ToLookupAsync<int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void ToLookupAsync11()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0) => default(int)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0) => default(int)), ane => ane.ParamName == "keySelector");
@@ -4477,7 +5430,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookupAsync10()
+        public void ToLookupAsync12()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>)), ane => ane.ParamName == "keySelector");
@@ -4488,7 +5441,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookupAsync11()
+        public void ToLookupAsync13()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0) => default(int), CancellationToken.None), ane => ane.ParamName == "keySelector");
@@ -4499,7 +5452,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookupAsync12()
+        public void ToLookupAsync14()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "keySelector");
@@ -4510,7 +5463,18 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookupAsync13()
+        public void ToLookupAsync15()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), CancellationToken.None), ane => ane.ParamName == "elementSelector");
+
+            var res = AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void ToLookupAsync16()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0) => default(int), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
@@ -4522,7 +5486,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookupAsync14()
+        public void ToLookupAsync17()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "keySelector");
@@ -4534,7 +5498,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookupAsync15()
+        public void ToLookupAsync18()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int), (int arg0) => default(int), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int>>), (int arg0) => default(int), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "keySelector");
@@ -4546,7 +5510,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToLookupAsync16()
+        public void ToLookupAsync19()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, ValueTask<int>>>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "keySelector");
@@ -4554,6 +5518,18 @@ namespace Tests
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), default(IEqualityComparer<int>), CancellationToken.None), ane => ane.ParamName == "comparer");
 
             var res = AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0) => default(ValueTask<int>), (int arg0) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void ToLookupAsync20()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "keySelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(Expression<Func<int, CancellationToken, ValueTask<int>>>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "elementSelector");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), default(IEqualityComparer<int>), CancellationToken.None), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.ToLookupAsync<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<int>), (int arg0, CancellationToken arg1) => default(ValueTask<int>), EqualityComparer<int>.Default, CancellationToken.None);
             AssertEx.SucceedOrFailProper(() => res.Wait());
         }
 
@@ -4616,10 +5592,32 @@ namespace Tests
         [Fact]
         public void Where4()
         {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Where<int>(default(IAsyncQueryable<int>), (int arg0, CancellationToken arg1) => default(ValueTask<bool>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Where<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, CancellationToken, ValueTask<bool>>>)), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.Where<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, CancellationToken arg1) => default(ValueTask<bool>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void Where5()
+        {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Where<int>(default(IAsyncQueryable<int>), (int arg0, int arg1) => default(ValueTask<bool>)), ane => ane.ParamName == "source");
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Where<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, ValueTask<bool>>>)), ane => ane.ParamName == "predicate");
 
             var res = AsyncQueryable.Where<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, int arg1) => default(ValueTask<bool>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void Where6()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Where<int>(default(IAsyncQueryable<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<bool>)), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Where<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(Expression<Func<int, int, CancellationToken, ValueTask<bool>>>)), ane => ane.ParamName == "predicate");
+
+            var res = AsyncQueryable.Where<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<bool>));
             var task = res.ForEachAsync(_ => { });
             AssertEx.SucceedOrFailProper(() => task.Wait());
         }
@@ -4644,6 +5642,18 @@ namespace Tests
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Zip<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), default(Expression<Func<int, int, ValueTask<int>>>)), ane => ane.ParamName == "selector");
 
             var res = AsyncQueryable.Zip<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, int arg1) => default(ValueTask<int>));
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void Zip3()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Zip<int, int, int>(default(IAsyncQueryable<int>), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "first");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Zip<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(IAsyncEnumerable<int>), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>)), ane => ane.ParamName == "second");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.Zip<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), default(Expression<Func<int, int, CancellationToken, ValueTask<int>>>)), ane => ane.ParamName == "selector");
+
+            var res = AsyncQueryable.Zip<int, int, int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), new int[] { default(int) }.ToAsyncEnumerable(), (int arg0, int arg1, CancellationToken arg2) => default(ValueTask<int>));
             var task = res.ForEachAsync(_ => { });
             AssertEx.SucceedOrFailProper(() => task.Wait());
         }
