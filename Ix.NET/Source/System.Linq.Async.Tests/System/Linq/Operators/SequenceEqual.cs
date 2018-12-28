@@ -172,7 +172,15 @@ namespace Tests
         public async Task SequenceEqual16Async()
         {
             var xs = new[] { 1, 2, -3, 4 }.ToAsyncEnumerable();
-            var ys = new[] { 1, -2, 3, 4 }.ToAsyncEnumerable();
+            var ys = new[] { 1, -2, 3, 4 }.ToAsyncEnumerable(); // NB: Implements IList<T>, resulting in optimized code path.
+            await Assert.ThrowsAsync<NotImplementedException>(() => xs.SequenceEqualAsync(ys, new EqEx()));
+        }
+
+        [Fact]
+        public async Task SequenceEqual17Async()
+        {
+            var xs = new[] { 1, 2, -3, 4 }.Select(x => x * 2).ToAsyncEnumerable();
+            var ys = new[] { 1, -2, 3, 4 }.Select(x => x * 2).ToAsyncEnumerable();
             var res = xs.SequenceEqualAsync(ys, new EqEx());
             await AssertThrowsAsync<NotImplementedException>(res);
         }
