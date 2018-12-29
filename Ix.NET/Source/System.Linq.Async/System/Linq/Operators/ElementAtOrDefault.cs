@@ -30,7 +30,7 @@ namespace System.Linq
         {
             if (source is IAsyncPartition<TSource> p)
             {
-                Maybe<TSource> first = await p.TryGetElementAsync(index, cancellationToken).ConfigureAwait(false);
+                Maybe<TSource> first = await p.TryGetElementAtAsync(index, cancellationToken).ConfigureAwait(false);
 
                 if (first.HasValue)
                 {

@@ -93,7 +93,7 @@ namespace System.Linq
                 return new ValueTask<List<int>>(res);
             }
 
-            public ValueTask<Maybe<int>> TryGetElementAsync(int index, CancellationToken cancellationToken)
+            public ValueTask<Maybe<int>> TryGetElementAtAsync(int index, CancellationToken cancellationToken)
             {
                 if ((uint)index < (uint)(_end - _start))
                 {

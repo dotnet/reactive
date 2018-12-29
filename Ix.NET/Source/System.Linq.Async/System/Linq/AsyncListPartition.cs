@@ -97,7 +97,7 @@ namespace System.Linq
             }
         }
 
-        public ValueTask<Maybe<TSource>> TryGetElementAsync(int index, CancellationToken cancellationToken)
+        public ValueTask<Maybe<TSource>> TryGetElementAtAsync(int index, CancellationToken cancellationToken)
         {
             if ((uint)index <= (uint)(_maxIndexInclusive - _minIndexInclusive) && index < _source.Count - _minIndexInclusive)
             {

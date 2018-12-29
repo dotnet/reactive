@@ -219,7 +219,7 @@ namespace System.Linq
             return new AsyncEnumerablePartition<TSource>(_source, _minIndexInclusive, maxIndex);
         }
 
-        public async ValueTask<Maybe<TSource>> TryGetElementAsync(int index, CancellationToken cancellationToken)
+        public async ValueTask<Maybe<TSource>> TryGetElementAtAsync(int index, CancellationToken cancellationToken)
         {
             // If the index is negative or >= our max count, return early.
             if (index >= 0 && (!HasLimit || index < Limit))

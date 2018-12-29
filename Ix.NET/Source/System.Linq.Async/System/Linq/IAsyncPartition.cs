@@ -32,7 +32,7 @@ namespace System.Linq
         /// <param name="index">The 0-based index to access.</param>
         /// <param name="cancellationToken">Token to observe for cancellation requests.</param>
         /// <returns>The element if found, otherwise, the default value of <see cref="Maybe{TElement}"/>.</returns>
-        ValueTask<Maybe<TElement>> TryGetElementAsync(int index, CancellationToken cancellationToken);
+        ValueTask<Maybe<TElement>> TryGetElementAtAsync(int index, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the first item in this sequence.

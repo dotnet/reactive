@@ -34,7 +34,7 @@ namespace System.Linq
 
             public ValueTask<List<TValue>> ToListAsync(CancellationToken cancellationToken) => new ValueTask<List<TValue>>(new List<TValue>());
 
-            public ValueTask<Maybe<TValue>> TryGetElementAsync(int index, CancellationToken cancellationToken) => new ValueTask<Maybe<TValue>>(new Maybe<TValue>());
+            public ValueTask<Maybe<TValue>> TryGetElementAtAsync(int index, CancellationToken cancellationToken) => new ValueTask<Maybe<TValue>>(new Maybe<TValue>());
 
             public ValueTask<Maybe<TValue>> TryGetFirstAsync(CancellationToken cancellationToken) => new ValueTask<Maybe<TValue>>(new Maybe<TValue>());
 
