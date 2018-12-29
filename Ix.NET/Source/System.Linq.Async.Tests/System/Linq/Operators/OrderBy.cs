@@ -211,5 +211,52 @@ namespace Tests
 
             Assert.True(ress.SequenceEqual(resa.ToEnumerable()));
         }
+
+        [Fact]
+        public async Task OrderBy_Optimize_ToArray()
+        {
+            foreach (var seed in new[] { 1905, 1948, 1983 })
+            {
+                var rand = GetRandom(seed, 10_000);
+                var randAsync = rand.ToAsyncEnumerable();
+
+                var res = rand.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
+                var resAsync = randAsync.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
+
+                var lst = res.ToArray();
+                var lstAsync = await resAsync.ToArrayAsync();
+
+                Assert.True(lst.SequenceEqual(lstAsync));
+            }
+        }
+
+        [Fact]
+        public async Task OrderBy_Optimize_ToList()
+        {
+            foreach (var seed in new[] { 1905, 1948, 1983 })
+            {
+                var rand = GetRandom(seed, 10_000);
+                var randAsync = rand.ToAsyncEnumerable();
+
+                var res = rand.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
+                var resAsync = randAsync.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
+
+                var lst = res.ToList();
+                var lstAsync = await resAsync.ToListAsync();
+
+                Assert.True(lst.SequenceEqual(lstAsync));
+            }
+        }
+
+        private static IEnumerable<int> GetRandom(int seed, int count)
+        {
+            var rand = new Random(seed);
+
+            while (count > 0)
+            {
+                yield return rand.Next();
+                count--;
+            }
+        }
     }
 }
