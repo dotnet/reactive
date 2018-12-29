@@ -98,6 +98,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
+            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<int>(x)));
         }
 
         [Fact]
@@ -107,6 +108,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
+            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<int?>(x)));
         }
 
         [Fact]
@@ -116,6 +118,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
+            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<long>(x)));
         }
 
         [Fact]
@@ -125,6 +128,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
+            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<long?>(x)));
         }
 
         [Fact]
@@ -134,6 +138,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
+            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<double>(x)));
         }
 
         [Fact]
@@ -143,6 +148,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
+            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<double?>(x)));
         }
 
         [Fact]
@@ -152,6 +158,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
+            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<float>(x)));
         }
 
         [Fact]
@@ -161,6 +168,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
+            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<float?>(x)));
         }
 
         [Fact]
@@ -170,6 +178,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
+            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<decimal>(x)));
         }
 
         [Fact]
@@ -179,6 +188,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
+            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<decimal?>(x)));
         }
 
         [Fact]
@@ -188,6 +198,17 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
+            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<DateTime>(x)));
+        }
+
+        [Fact]
+        public async Task Min12Async()
+        {
+            var xs = new[] { "foo", "bar", "qux", "baz", "fred", "wilma" };
+            var ys = xs.ToAsyncEnumerable();
+            Assert.Equal(xs.Min(), await ys.MinAsync());
+            Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
+            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<string>(x)));
         }
     }
 }
