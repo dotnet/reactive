@@ -16,6 +16,8 @@ namespace Tests
         [Fact]
         public async Task Sum_Null()
         {
+            // Sum(IAE<P>)
+
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int>)));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int?>)));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<long>)));
@@ -26,6 +28,21 @@ namespace Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<float?>)));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<decimal>)));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<decimal?>)));
+
+            // Sum(IAE<P>, CT)
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int?>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<long>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<long?>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<double>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<double?>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<float>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<float?>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<decimal>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<decimal?>), CancellationToken.None));
+
+            // Sum<T>(IAE<T>, Func<T, P>)
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int>), x => x));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int?>), x => x));
@@ -49,16 +66,7 @@ namespace Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, decimal>)));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, decimal?>)));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int>), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int?>), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<long>), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<long?>), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<double>), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<double?>), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<float>), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<float?>), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<decimal>), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<decimal?>), CancellationToken.None));
+            // Sum<T>(IAE<T>, Func<T, P>, CT)
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int>), x => x, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int?>), x => x, CancellationToken.None));
@@ -81,6 +89,80 @@ namespace Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, float?>), CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, decimal>), CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, decimal?>), CancellationToken.None));
+
+            // Sum<T>(IAE<T>, Func<T, VT<P>>)
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int>), x => new ValueTask<int>(x)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int?>), x => new ValueTask<int?>(x)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<long>), x => new ValueTask<long>(x)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<long?>), x => new ValueTask<long?>(x)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<double>), x => new ValueTask<double>(x)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<double?>), x => new ValueTask<double?>(x)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<float>), x => new ValueTask<float>(x)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<float?>), x => new ValueTask<float?>(x)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<decimal>), x => new ValueTask<decimal>(x)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<decimal?>), x => new ValueTask<decimal?>(x)));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<int>>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<int?>>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<long>>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<long?>>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<double>>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<double?>>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<float>>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<float?>>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<decimal>>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<decimal?>>)));
+
+            // Sum<T>(IAE<T>, Func<T, VT<P>>, CT)
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int>), x => new ValueTask<int>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int?>), x => new ValueTask<int?>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<long>), x => new ValueTask<long>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<long?>), x => new ValueTask<long?>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<double>), x => new ValueTask<double>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<double?>), x => new ValueTask<double?>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<float>), x => new ValueTask<float>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<float?>), x => new ValueTask<float?>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<decimal>), x => new ValueTask<decimal>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<decimal?>), x => new ValueTask<decimal?>(x), CancellationToken.None));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<int>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<int?>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<long>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<long?>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<double>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<double?>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<float>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<float?>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<decimal>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<decimal?>>), CancellationToken.None));
+
+#if !NO_DEEP_CANCELLATION
+            // Sum<T>(IAE<T>, Func<T, CT, VT<P>>, CT)
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int>), (x, ct) => new ValueTask<int>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<int?>), (x, ct) => new ValueTask<int?>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<long>), (x, ct) => new ValueTask<long>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<long?>), (x, ct) => new ValueTask<long?>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<double>), (x, ct) => new ValueTask<double>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<double?>), (x, ct) => new ValueTask<double?>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<float>), (x, ct) => new ValueTask<float>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<float?>), (x, ct) => new ValueTask<float?>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<decimal>), (x, ct) => new ValueTask<decimal>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(default(IAsyncEnumerable<decimal?>), (x, ct) => new ValueTask<decimal?>(x), CancellationToken.None));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<int>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<int?>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<long>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<long?>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<double>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<double?>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<float>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<float?>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<decimal>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SumAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<decimal?>>), CancellationToken.None));
+#endif
         }
 
         [Fact]
@@ -90,6 +172,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Sum(), await ys.SumAsync());
             Assert.Equal(xs.Sum(), await ys.SumAsync(x => x));
+            Assert.Equal(xs.Sum(), await ys.SumAsync(x => new ValueTask<int>(x)));
         }
 
         [Fact]
@@ -99,6 +182,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Sum(), await ys.SumAsync());
             Assert.Equal(xs.Sum(), await ys.SumAsync(x => x));
+            Assert.Equal(xs.Sum(), await ys.SumAsync(x => new ValueTask<int?>(x)));
         }
 
         [Fact]
@@ -108,6 +192,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Sum(), await ys.SumAsync());
             Assert.Equal(xs.Sum(), await ys.SumAsync(x => x));
+            Assert.Equal(xs.Sum(), await ys.SumAsync(x => new ValueTask<long>(x)));
         }
 
         [Fact]
@@ -117,6 +202,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Sum(), await ys.SumAsync());
             Assert.Equal(xs.Sum(), await ys.SumAsync(x => x));
+            Assert.Equal(xs.Sum(), await ys.SumAsync(x => new ValueTask<long?>(x)));
         }
 
         [Fact]
@@ -126,6 +212,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Sum(), await ys.SumAsync());
             Assert.Equal(xs.Sum(), await ys.SumAsync(x => x));
+            Assert.Equal(xs.Sum(), await ys.SumAsync(x => new ValueTask<double>(x)));
         }
 
         [Fact]
@@ -135,6 +222,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Sum(), await ys.SumAsync());
             Assert.Equal(xs.Sum(), await ys.SumAsync(x => x));
+            Assert.Equal(xs.Sum(), await ys.SumAsync(x => new ValueTask<double?>(x)));
         }
 
         [Fact]
@@ -144,6 +232,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Sum(), await ys.SumAsync());
             Assert.Equal(xs.Sum(), await ys.SumAsync(x => x));
+            Assert.Equal(xs.Sum(), await ys.SumAsync(x => new ValueTask<float>(x)));
         }
 
         [Fact]
@@ -153,6 +242,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Sum(), await ys.SumAsync());
             Assert.Equal(xs.Sum(), await ys.SumAsync(x => x));
+            Assert.Equal(xs.Sum(), await ys.SumAsync(x => new ValueTask<float?>(x)));
         }
 
         [Fact]
@@ -162,6 +252,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Sum(), await ys.SumAsync());
             Assert.Equal(xs.Sum(), await ys.SumAsync(x => x));
+            Assert.Equal(xs.Sum(), await ys.SumAsync(x => new ValueTask<decimal>(x)));
         }
 
         [Fact]
@@ -171,6 +262,7 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Sum(), await ys.SumAsync());
             Assert.Equal(xs.Sum(), await ys.SumAsync(x => x));
+            Assert.Equal(xs.Sum(), await ys.SumAsync(x => new ValueTask<decimal?>(x)));
         }
     }
 }
