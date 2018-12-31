@@ -21,18 +21,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2);
             var syncRes = xs.OrderBy(x => x % 2);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -44,18 +50,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2));
             var syncRes = xs.OrderBy(x => x % 2);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -67,18 +79,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2));
             var syncRes = xs.OrderBy(x => x % 2);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -90,18 +108,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2);
             var syncRes = xs.OrderByDescending(x => x % 2);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -113,18 +137,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2));
             var syncRes = xs.OrderByDescending(x => x % 2);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -136,18 +166,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2));
             var syncRes = xs.OrderByDescending(x => x % 2);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -159,18 +195,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -182,18 +224,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -205,18 +253,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -228,18 +282,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -251,18 +311,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -274,18 +340,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -297,18 +369,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -320,18 +398,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -343,18 +427,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -366,18 +456,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -389,18 +485,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -412,18 +514,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -435,18 +543,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -458,18 +572,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -481,18 +601,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -504,18 +630,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -527,18 +659,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -550,18 +688,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -573,18 +717,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -596,18 +746,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -619,18 +775,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -642,18 +804,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -665,18 +833,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -688,18 +862,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -711,18 +891,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -734,18 +920,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -757,18 +949,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -780,18 +978,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -803,18 +1007,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -826,18 +1036,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -849,18 +1065,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -872,18 +1094,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -895,18 +1123,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -918,18 +1152,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -941,18 +1181,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -964,18 +1210,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -987,18 +1239,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1010,18 +1268,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1033,18 +1297,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1056,18 +1326,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1079,18 +1355,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1102,18 +1384,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1125,18 +1413,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1148,18 +1442,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1171,18 +1471,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1194,18 +1500,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1217,18 +1529,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1240,18 +1558,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1263,18 +1587,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1286,18 +1616,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1309,18 +1645,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1332,18 +1674,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1355,18 +1703,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1378,18 +1732,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1401,18 +1761,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1424,18 +1790,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1447,18 +1819,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1470,18 +1848,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1493,18 +1877,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1516,18 +1906,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1539,18 +1935,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1562,18 +1964,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1585,18 +1993,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1608,18 +2022,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1631,18 +2051,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1654,18 +2080,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1677,18 +2109,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1700,18 +2138,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1723,18 +2167,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1746,18 +2196,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1769,18 +2225,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1792,18 +2254,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1815,18 +2283,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1838,18 +2312,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1861,18 +2341,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1884,18 +2370,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1907,18 +2399,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1930,18 +2428,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1953,18 +2457,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1976,18 +2486,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -1999,18 +2515,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2022,18 +2544,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2045,18 +2573,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2068,18 +2602,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2091,18 +2631,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2114,18 +2660,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2137,18 +2689,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2160,18 +2718,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2183,18 +2747,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2206,18 +2776,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2229,18 +2805,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2252,18 +2834,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2275,18 +2863,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2298,18 +2892,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2321,18 +2921,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2344,18 +2950,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2367,18 +2979,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2390,18 +3008,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2413,18 +3037,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2436,18 +3066,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2459,18 +3095,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2482,18 +3124,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2505,18 +3153,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2528,18 +3182,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2551,18 +3211,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2574,18 +3240,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2597,18 +3269,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2620,18 +3298,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2643,18 +3327,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2666,18 +3356,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2689,18 +3385,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2712,18 +3414,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2735,18 +3443,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2758,18 +3472,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2781,18 +3501,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2804,18 +3530,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2827,18 +3559,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2850,18 +3588,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2873,18 +3617,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2896,18 +3646,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2919,18 +3675,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2942,18 +3704,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2965,18 +3733,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -2988,18 +3762,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3011,18 +3791,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3034,18 +3820,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3057,18 +3849,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3080,18 +3878,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3103,18 +3907,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3126,18 +3936,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3149,18 +3965,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3172,18 +3994,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3195,18 +4023,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3218,18 +4052,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3241,18 +4081,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3264,18 +4110,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3287,18 +4139,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3310,18 +4168,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3333,18 +4197,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3356,18 +4226,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3379,18 +4255,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3402,18 +4284,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3425,18 +4313,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3448,18 +4342,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3471,18 +4371,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3494,18 +4400,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3517,18 +4429,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3540,18 +4458,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3563,18 +4487,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3586,18 +4516,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3609,18 +4545,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3632,18 +4574,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3655,18 +4603,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3678,18 +4632,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3701,18 +4661,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3724,18 +4690,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3747,18 +4719,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3770,18 +4748,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3793,18 +4777,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3816,18 +4806,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3839,18 +4835,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3862,18 +4864,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3885,18 +4893,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3908,18 +4922,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3931,18 +4951,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3954,18 +4980,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -3977,18 +5009,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4000,18 +5038,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4023,18 +5067,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4046,18 +5096,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4069,18 +5125,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4092,18 +5154,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4115,18 +5183,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4138,18 +5212,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4161,18 +5241,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4184,18 +5270,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4207,18 +5299,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4230,18 +5328,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4253,18 +5357,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4276,18 +5386,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4299,18 +5415,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4322,18 +5444,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4345,18 +5473,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4368,18 +5502,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4391,18 +5531,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4414,18 +5560,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4437,18 +5589,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4460,18 +5618,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4483,18 +5647,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4506,18 +5676,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4529,18 +5705,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4552,18 +5734,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4575,18 +5763,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4598,18 +5792,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4621,18 +5821,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4644,18 +5850,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4667,18 +5879,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4690,18 +5908,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4713,18 +5937,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4736,18 +5966,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4759,18 +5995,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4782,18 +6024,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4805,18 +6053,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4828,18 +6082,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4851,18 +6111,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4874,18 +6140,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4897,18 +6169,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4920,18 +6198,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4943,18 +6227,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4966,18 +6256,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -4989,18 +6285,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5012,18 +6314,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5035,18 +6343,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5058,18 +6372,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5081,18 +6401,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5104,18 +6430,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5127,18 +6459,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5150,18 +6488,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5173,18 +6517,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5196,18 +6546,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5219,18 +6575,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5242,18 +6604,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5265,18 +6633,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5288,18 +6662,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5311,18 +6691,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5334,18 +6720,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5357,18 +6749,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5380,18 +6778,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5403,18 +6807,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5426,18 +6836,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5449,18 +6865,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5472,18 +6894,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5495,18 +6923,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5518,18 +6952,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5541,18 +6981,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5564,18 +7010,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5587,18 +7039,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5610,18 +7068,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5633,18 +7097,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5656,18 +7126,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5679,18 +7155,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5702,18 +7184,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5725,18 +7213,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5748,18 +7242,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5771,18 +7271,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5794,18 +7300,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5817,18 +7329,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5840,18 +7358,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5863,18 +7387,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5886,18 +7416,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5909,18 +7445,24 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
         [Fact]
@@ -5932,19 +7474,44 @@ namespace Tests
             var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
+            await AssertSorted(asyncRes, syncRes);
+
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
+
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
+            {
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
+            }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
+        }
+
+
+        private async Task AssertSorted<T>(IAsyncEnumerable<T> asyncRes, IEnumerable<T> syncRes)
+        {
+            Assert.True(await syncRes.ToAsyncEnumerable().SequenceEqualAsync(asyncRes));
             Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
             Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            int syncCount = syncRes.Count();
+            int asyncCount = await asyncRes.CountAsync();
+            Assert.Equal(syncCount, asyncCount);
 
             Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
             Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
 
-            for (var i = 0; i < 100; i++)
+            for (var i = 0; i < syncCount; i++)
             {
                 Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
             }
         }
-
     }
 }

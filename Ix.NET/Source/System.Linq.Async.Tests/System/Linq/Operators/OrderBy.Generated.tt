@@ -111,23 +111,48 @@ for (var i = 1; i <= 3; i++)
             var asyncRes = xs.ToAsyncEnumerable()<#=asyncCall#>;
             var syncRes = xs<#=syncCall#>;
 
-            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
-            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+            await AssertSorted(asyncRes, syncRes);
 
-            Assert.Equal(syncRes.Count(), await asyncRes.CountAsync());
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
 
-            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
-            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
-
-            for (var i = 0; i < 100; i++)
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
             {
-                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
             }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
         }
 
 <#
     }
 }
 #>
+
+        private async Task AssertSorted<T>(IAsyncEnumerable<T> asyncRes, IEnumerable<T> syncRes)
+        {
+            Assert.True(await syncRes.ToAsyncEnumerable().SequenceEqualAsync(asyncRes));
+            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
+            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+
+            int syncCount = syncRes.Count();
+            int asyncCount = await asyncRes.CountAsync();
+            Assert.Equal(syncCount, asyncCount);
+
+            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
+            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
+
+            for (var i = 0; i < syncCount; i++)
+            {
+                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+            }
+        }
     }
 }
