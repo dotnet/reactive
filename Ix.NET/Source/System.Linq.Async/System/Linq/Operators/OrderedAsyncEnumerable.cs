@@ -434,7 +434,7 @@ namespace System.Linq
             Debug.Assert(keySelector != null);
 
             _keySelector = keySelector;
-            _comparer = comparer;
+            _comparer = comparer ?? Comparer<TKey>.Default;
             _descending = descending;
             _parent = parent;
         }
@@ -479,7 +479,7 @@ namespace System.Linq
             Debug.Assert(keySelector != null);
 
             _keySelector = keySelector;
-            _comparer = comparer;
+            _comparer = comparer ?? Comparer<TKey>.Default;
             _descending = descending;
             _parent = parent;
         }
@@ -525,7 +525,7 @@ namespace System.Linq
             Debug.Assert(keySelector != null);
 
             _keySelector = keySelector;
-            _comparer = comparer;
+            _comparer = comparer ?? Comparer<TKey>.Default;
             _descending = descending;
             _parent = parent;
         }
@@ -623,7 +623,7 @@ namespace System.Linq
 
         public AsyncEnumerableSorterBase(IComparer<TKey> comparer, bool descending, AsyncEnumerableSorter<TElement> next)
         {
-            _comparer = comparer ?? Comparer<TKey>.Default;
+            _comparer = comparer;
             _descending = descending;
             _next = next;
         }
