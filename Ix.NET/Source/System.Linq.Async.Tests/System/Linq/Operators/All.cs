@@ -20,6 +20,12 @@ namespace Tests
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => true, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, bool>), CancellationToken.None));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => new ValueTask<bool>(true)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, ValueTask<bool>>)));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, ValueTask<bool>>), CancellationToken.None));
         }
 
         [Fact]
@@ -49,6 +55,36 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AllAsync(new Func<int, bool>(x => { throw ex; }));
+            await AssertThrowsAsync(res, ex);
+        }
+
+        [Fact]
+        public async Task All5Async()
+        {
+            var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().AllAsync(x => new ValueTask<bool>(x % 2 == 0));
+            Assert.False(await res);
+        }
+
+        [Fact]
+        public async Task All6Async()
+        {
+            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AllAsync(x => new ValueTask<bool>(x % 2 == 0));
+            Assert.True(await res);
+        }
+
+        [Fact]
+        public async Task All7Async()
+        {
+            var ex = new Exception("Bang!");
+            var res = Throw<int>(ex).AllAsync(x => new ValueTask<bool>(x % 2 == 0));
+            await AssertThrowsAsync(res, ex);
+        }
+
+        [Fact]
+        public async Task All8Async()
+        {
+            var ex = new Exception("Bang!");
+            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AllAsync(new Func<int, ValueTask<bool>>(x => { throw ex; }));
             await AssertThrowsAsync(res, ex);
         }
     }

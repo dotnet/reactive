@@ -16,12 +16,25 @@ namespace Tests
         public async Task SingleOrDefault_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefaultAsync<int>(default));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefaultAsync<int>(default, CancellationToken.None));
+
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefaultAsync<int>(default, x => true));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefaultAsync(Return42, default(Func<int, bool>)));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefaultAsync<int>(default, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefaultAsync<int>(default, x => true, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefaultAsync(Return42, default(Func<int, bool>), CancellationToken.None));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefaultAsync<int>(default, x => new ValueTask<bool>(true)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefaultAsync(Return42, default(Func<int, ValueTask<bool>>)));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefaultAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefaultAsync(Return42, default(Func<int, ValueTask<bool>>), CancellationToken.None));
+
+#if !NO_DEEP_CANCELLATION
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefaultAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefaultAsync(Return42, default(Func<int, CancellationToken, ValueTask<bool>>), CancellationToken.None));
+#endif
         }
 
         [Fact]

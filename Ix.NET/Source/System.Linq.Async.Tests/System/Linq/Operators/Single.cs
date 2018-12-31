@@ -16,12 +16,25 @@ namespace Tests
         public async Task Single_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, CancellationToken.None));
+
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => true));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, bool>)));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => true, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, bool>), CancellationToken.None));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => new ValueTask<bool>(true)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, ValueTask<bool>>)));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, ValueTask<bool>>), CancellationToken.None));
+
+#if !NO_DEEP_CANCELLATION
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, CancellationToken, ValueTask<bool>>), CancellationToken.None));
+#endif
         }
 
         [Fact]
