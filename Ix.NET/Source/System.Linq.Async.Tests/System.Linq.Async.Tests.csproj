@@ -25,6 +25,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>MinMax.Generated.tt</DependentUpon>
     </None>
+    <None Include="System\Linq\Operators\OrderBy.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OrderBy.Generated.tt</DependentUpon>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -48,6 +53,10 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MinMax.Generated.cs</LastGenOutput>
     </None>
+    <None Update="System\Linq\Operators\OrderBy.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>OrderBy.Generated.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -64,6 +73,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>MinMax.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Linq\Operators\OrderBy.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OrderBy.Generated.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

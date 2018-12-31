@@ -30,6 +30,18 @@ namespace System.Linq
             return new OrderedAsyncEnumerableWithTask<TSource, TKey>(source, keySelector, comparer: null, descending: false, parent: null);
         }
 
+#if !NO_DEEP_CANCELLATION
+        public static IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (keySelector == null)
+                throw Error.ArgumentNull(nameof(keySelector));
+
+            return new OrderedAsyncEnumerableWithTaskAndCancellation<TSource, TKey>(source, keySelector, comparer: null, descending: false, parent: null);
+        }
+#endif
+
         public static IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)

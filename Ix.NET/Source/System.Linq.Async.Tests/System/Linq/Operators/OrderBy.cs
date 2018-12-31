@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Tests
 {
-    public class OrderBy : AsyncEnumerableTests
+    public partial class OrderBy : AsyncEnumerableTests
     {
         [Fact]
         public void OrderBy_Null()
