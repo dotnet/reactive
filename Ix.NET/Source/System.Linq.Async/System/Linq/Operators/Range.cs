@@ -16,7 +16,7 @@ namespace System.Linq
             if (count < 0)
                 throw Error.ArgumentOutOfRange(nameof(count));
 
-            long end = (long)start + count - 1L;
+            var end = (long)start + count - 1L;
             if (count < 0 || end > int.MaxValue)
                 throw Error.ArgumentOutOfRange(nameof(count));
 
@@ -45,7 +45,7 @@ namespace System.Linq
 
             public IAsyncPartition<int> Skip(int count)
             {
-                int n = _end - _start;
+                var n = _end - _start;
 
                 if (count >= n)
                 {
@@ -57,7 +57,7 @@ namespace System.Linq
 
             public IAsyncPartition<int> Take(int count)
             {
-                int n = _end - _start;
+                var n = _end - _start;
 
                 if (count >= n)
                 {
@@ -71,7 +71,7 @@ namespace System.Linq
             {
                 var res = new int[_end - _start];
 
-                int value = _start;
+                var value = _start;
 
                 for (var i = 0; i < res.Length; i++)
                 {

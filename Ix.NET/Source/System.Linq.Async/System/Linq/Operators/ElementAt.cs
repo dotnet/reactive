@@ -30,7 +30,7 @@ namespace System.Linq
         {
             if (source is IAsyncPartition<TSource> p)
             {
-                Maybe<TSource> first = await p.TryGetElementAtAsync(index, cancellationToken).ConfigureAwait(false);
+                var first = await p.TryGetElementAtAsync(index, cancellationToken).ConfigureAwait(false);
 
                 if (first.HasValue)
                 {
@@ -46,7 +46,7 @@ namespace System.Linq
 
                 if (index >= 0)
                 {
-                    IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+                    var e = source.GetAsyncEnumerator(cancellationToken);
 
                     try
                     {

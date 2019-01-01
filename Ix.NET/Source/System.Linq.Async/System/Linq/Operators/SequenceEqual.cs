@@ -84,11 +84,11 @@ namespace System.Linq
 
             async Task<bool> Core()
             {
-                IAsyncEnumerator<TSource> e1 = first.GetAsyncEnumerator(cancellationToken);
+                var e1 = first.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
-                    IAsyncEnumerator<TSource> e2 = second.GetAsyncEnumerator(cancellationToken);
+                    var e2 = second.GetAsyncEnumerator(cancellationToken);
 
                     try
                     {

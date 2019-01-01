@@ -159,7 +159,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource item = _enumerator.Current;
+                            var item = _enumerator.Current;
                             var comparerEquals = false;
 
                             if (_hasCurrentValue)
@@ -230,8 +230,8 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource item = _enumerator.Current;
-                            TKey key = _keySelector(item);
+                            var item = _enumerator.Current;
+                            var key = _keySelector(item);
                             var comparerEquals = false;
 
                             if (_hasCurrentKey)
@@ -302,8 +302,8 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource item = _enumerator.Current;
-                            TKey key = await _keySelector(item).ConfigureAwait(false);
+                            var item = _enumerator.Current;
+                            var key = await _keySelector(item).ConfigureAwait(false);
                             var comparerEquals = false;
 
                             if (_hasCurrentKey)
@@ -375,8 +375,8 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource item = _enumerator.Current;
-                            TKey key = await _keySelector(item, _cancellationToken).ConfigureAwait(false);
+                            var item = _enumerator.Current;
+                            var key = await _keySelector(item, _cancellationToken).ConfigureAwait(false);
                             var comparerEquals = false;
 
                             if (_hasCurrentKey)

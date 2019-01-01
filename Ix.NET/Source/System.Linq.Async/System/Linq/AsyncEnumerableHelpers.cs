@@ -13,7 +13,7 @@ namespace System.Collections.Generic
     {
         internal static async ValueTask<T[]> ToArray<T>(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
         {
-            ArrayWithLength<T> result = await ToArrayWithLength(source, cancellationToken).ConfigureAwait(false);
+            var result = await ToArrayWithLength(source, cancellationToken).ConfigureAwait(false);
             Array.Resize(ref result.Array, result.Length);
             return result.Array;
         }
@@ -23,13 +23,11 @@ namespace System.Collections.Generic
             cancellationToken.ThrowIfCancellationRequested();
 
             var result = new ArrayWithLength<T>();
-
             // Check for short circuit optimizations. This one is very unlikely
             // but could be here as a group
             if (source is ICollection<T> ic)
             {
-                int count = ic.Count;
-
+                var count = ic.Count;
                 if (count != 0)
                 {
                     // Allocate an array of the desired size, then copy the elements into it. Note that this has the same 
@@ -46,17 +44,15 @@ namespace System.Collections.Generic
             }
             else
             {
-                IAsyncEnumerator<T> en = source.GetAsyncEnumerator(cancellationToken);
+                var en = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
                     if (await en.MoveNextAsync().ConfigureAwait(false))
                     {
                         const int DefaultCapacity = 4;
-
                         var arr = new T[DefaultCapacity];
                         arr[0] = en.Current;
-
                         var count = 1;
 
                         while (await en.MoveNextAsync().ConfigureAwait(false))
@@ -80,8 +76,7 @@ namespace System.Collections.Generic
                                 // larger than that.  For that case, we then ensure that the newLength is large enough to hold 
                                 // the desired capacity.  This does mean that in the very rare case where we've grown to such a 
                                 // large size, each new element added after MaxArrayLength will end up doing a resize.
-                                int newLength = count << 1;
-
+                                var newLength = count << 1;
                                 if ((uint)newLength > MaxArrayLength)
                                 {
                                     newLength = MaxArrayLength <= count ? count + 1 : MaxArrayLength;
@@ -115,7 +110,7 @@ namespace System.Collections.Generic
 
         internal static async Task<Set<T>> ToSet<T>(IAsyncEnumerable<T> source, IEqualityComparer<T> comparer, CancellationToken cancellationToken)
         {
-            IAsyncEnumerator<T> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {

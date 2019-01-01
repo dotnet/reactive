@@ -118,7 +118,7 @@ namespace System.Linq
                         // skip elements as requested
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource element = _enumerator.Current;
+                            var element = _enumerator.Current;
                             if (!_predicate(element))
                             {
                                 _doMoveNext = false;
@@ -196,7 +196,7 @@ namespace System.Linq
                         // skip elements as requested
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource element = _enumerator.Current;
+                            var element = _enumerator.Current;
 
                             checked
                             {
@@ -278,7 +278,7 @@ namespace System.Linq
                         // skip elements as requested
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource element = _enumerator.Current;
+                            var element = _enumerator.Current;
                             if (!await _predicate(element).ConfigureAwait(false))
                             {
                                 _doMoveNext = false;
@@ -355,7 +355,7 @@ namespace System.Linq
                         // skip elements as requested
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource element = _enumerator.Current;
+                            var element = _enumerator.Current;
                             if (!await _predicate(element, _cancellationToken).ConfigureAwait(false))
                             {
                                 _doMoveNext = false;
@@ -434,7 +434,7 @@ namespace System.Linq
                         // skip elements as requested
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource element = _enumerator.Current;
+                            var element = _enumerator.Current;
 
                             checked
                             {
@@ -519,7 +519,7 @@ namespace System.Linq
                         // skip elements as requested
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource element = _enumerator.Current;
+                            var element = _enumerator.Current;
 
                             checked
                             {

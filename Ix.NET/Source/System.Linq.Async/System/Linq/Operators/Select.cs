@@ -222,7 +222,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource item = _enumerator.Current;
+                            var item = _enumerator.Current;
 
                             checked
                             {
@@ -281,9 +281,9 @@ namespace System.Linq
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                int count = 0;
+                var count = 0;
 
-                foreach (TSource item in _source)
+                foreach (var item in _source)
                 {
                     _selector(item);
 
@@ -305,7 +305,7 @@ namespace System.Linq
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                int n = _source.Count;
+                var n = _source.Count;
 
                 var res = new TResult[n];
 
@@ -321,7 +321,7 @@ namespace System.Linq
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                int n = _source.Count;
+                var n = _source.Count;
 
                 var res = new List<TResult>(n);
 
@@ -526,7 +526,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource item = _enumerator.Current;
+                            var item = _enumerator.Current;
 
                             checked
                             {
@@ -591,7 +591,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource item = _enumerator.Current;
+                            var item = _enumerator.Current;
 
                             checked
                             {
@@ -660,9 +660,9 @@ namespace System.Linq
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    int count = 0;
+                    var count = 0;
 
-                    foreach (TSource item in _source)
+                    foreach (var item in _source)
                     {
                         await _selector(item).ConfigureAwait(false);
 
@@ -685,7 +685,7 @@ namespace System.Linq
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                int n = _source.Count;
+                var n = _source.Count;
 
                 var res = new TResult[n];
 
@@ -701,7 +701,7 @@ namespace System.Linq
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                int n = _source.Count;
+                var n = _source.Count;
 
                 var res = new List<TResult>(n);
 
@@ -782,9 +782,9 @@ namespace System.Linq
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    int count = 0;
+                    var count = 0;
 
-                    foreach (TSource item in _source)
+                    foreach (var item in _source)
                     {
                         await _selector(item, cancellationToken).ConfigureAwait(false);
 
@@ -807,7 +807,7 @@ namespace System.Linq
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                int n = _source.Count;
+                var n = _source.Count;
 
                 var res = new TResult[n];
 
@@ -823,7 +823,7 @@ namespace System.Linq
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                int n = _source.Count;
+                var n = _source.Count;
 
                 var res = new List<TResult>(n);
 

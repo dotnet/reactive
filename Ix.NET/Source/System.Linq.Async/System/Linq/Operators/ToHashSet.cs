@@ -44,7 +44,7 @@ namespace System.Linq
 
         private static async Task<HashSet<TSource>> ToHashSetCore<TSource>(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {

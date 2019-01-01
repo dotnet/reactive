@@ -240,7 +240,7 @@ namespace System.Linq
 
         private static async Task<Dictionary<TKey, TElement>> ToDictionaryCore<TSource, TKey, TElement>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -248,10 +248,10 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TSource x = e.Current;
+                    var x = e.Current;
 
-                    TKey key = keySelector(x);
-                    TElement value = elementSelector(x);
+                    var key = keySelector(x);
+                    var value = elementSelector(x);
 
                     d.Add(key, value);
                 }
@@ -266,7 +266,7 @@ namespace System.Linq
 
         private static async Task<Dictionary<TKey, TElement>> ToDictionaryCore<TSource, TKey, TElement>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -274,10 +274,10 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TSource x = e.Current;
+                    var x = e.Current;
 
-                    TKey key = await keySelector(x).ConfigureAwait(false);
-                    TElement value = await elementSelector(x).ConfigureAwait(false);
+                    var key = await keySelector(x).ConfigureAwait(false);
+                    var value = await elementSelector(x).ConfigureAwait(false);
 
                     d.Add(key, value);
                 }
@@ -293,7 +293,7 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<Dictionary<TKey, TElement>> ToDictionaryCore<TSource, TKey, TElement>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -301,10 +301,10 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TSource x = e.Current;
+                    var x = e.Current;
 
-                    TKey key = await keySelector(x, cancellationToken).ConfigureAwait(false);
-                    TElement value = await elementSelector(x, cancellationToken).ConfigureAwait(false);
+                    var key = await keySelector(x, cancellationToken).ConfigureAwait(false);
+                    var value = await elementSelector(x, cancellationToken).ConfigureAwait(false);
 
                     d.Add(key, value);
                 }

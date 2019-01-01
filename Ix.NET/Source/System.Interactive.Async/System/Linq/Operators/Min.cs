@@ -33,18 +33,18 @@ namespace System.Linq
                 comparer = Comparer<TSource>.Default;
             }
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                     throw Error.NoElements();
 
-                TSource min = e.Current;
+                var min = e.Current;
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TSource cur = e.Current;
+                    var cur = e.Current;
 
                     if (comparer.Compare(cur, min) < 0)
                     {

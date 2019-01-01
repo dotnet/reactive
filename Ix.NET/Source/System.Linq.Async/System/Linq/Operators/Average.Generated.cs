@@ -689,5 +689,6 @@ namespace System.Linq
             return AverageCore(source, selector, cancellationToken);
         }
 #endif
+
     }
 }

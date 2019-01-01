@@ -81,7 +81,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            TSource item = _enumerator.Current;
+                            var item = _enumerator.Current;
                             _queue.Enqueue(item);
 
                             if (_queue.Count > _count)

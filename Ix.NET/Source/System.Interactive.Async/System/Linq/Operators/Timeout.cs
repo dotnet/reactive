@@ -73,7 +73,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        ValueTask<bool> moveNext = _enumerator.MoveNextAsync();
+                        var moveNext = _enumerator.MoveNextAsync();
 
                         if (!moveNext.IsCompleted)
                         {
@@ -81,9 +81,9 @@ namespace System.Linq
                             {
                                 var delay = Task.Delay(_timeout, delayCts.Token);
 
-                                Task<bool> next = moveNext.AsTask();
+                                var next = moveNext.AsTask();
 
-                                Task winner = await Task.WhenAny(next, delay).ConfigureAwait(false);
+                                var winner = await Task.WhenAny(next, delay).ConfigureAwait(false);
 
                                 if (winner == delay)
                                 {

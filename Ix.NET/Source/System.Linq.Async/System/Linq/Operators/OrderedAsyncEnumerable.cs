@@ -49,7 +49,7 @@ namespace System.Linq
                 case AsyncIteratorState.Allocated:
                     _buffer = await _source.ToArrayAsync(_cancellationToken).ConfigureAwait(false); // TODO: Use buffer.
 
-                    AsyncEnumerableSorter<TElement> sorter = GetAsyncEnumerableSorter(_cancellationToken);
+                    var sorter = GetAsyncEnumerableSorter(_cancellationToken);
                     _indexes = await sorter.Sort(_buffer, _buffer.Length).ConfigureAwait(false);
                     _index = 0;
 
@@ -650,9 +650,9 @@ namespace System.Linq
 
             do
             {
-                int i = left;
-                int j = right;
-                int x = map[i + ((j - i) >> 1)];
+                var i = left;
+                var j = right;
+                var x = map[i + ((j - i) >> 1)];
 
                 do
                 {
@@ -673,7 +673,7 @@ namespace System.Linq
 
                     if (i < j)
                     {
-                        int temp = map[i];
+                        var temp = map[i];
                         map[i] = map[j];
                         map[j] = temp;
                     }
@@ -774,12 +774,12 @@ namespace System.Linq
 
         protected override int QuickSelect(int[] map, int right, int idx)
         {
-            int left = 0;
+            var left = 0;
             do
             {
-                int i = left;
-                int j = right;
-                int x = map[i + ((j - i) >> 1)];
+                var i = left;
+                var j = right;
+                var x = map[i + ((j - i) >> 1)];
 
                 do
                 {
@@ -800,7 +800,7 @@ namespace System.Linq
 
                     if (i < j)
                     {
-                        int temp = map[i];
+                        var temp = map[i];
                         map[i] = map[j];
                         map[j] = temp;
                     }
@@ -845,8 +845,8 @@ namespace System.Linq
 
         protected override int Min(int[] map, int count)
         {
-            int index = 0;
-            for (int i = 1; i < count; i++)
+            var index = 0;
+            for (var i = 1; i < count; i++)
             {
                 if (CompareKeys(map[i], map[index]) < 0)
                 {

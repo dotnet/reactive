@@ -150,23 +150,23 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                     throw Error.NoElements();
 
-                TSource current = e.Current;
-                TKey resKey = keySelector(current);
+                var current = e.Current;
+                var resKey = keySelector(current);
                 result.Add(current);
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TSource cur = e.Current;
-                    TKey key = keySelector(cur);
+                    var cur = e.Current;
+                    var key = keySelector(cur);
 
-                    int cmp = compare(key, resKey);
+                    var cmp = compare(key, resKey);
 
                     if (cmp == 0)
                     {
@@ -191,23 +191,23 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                     throw Error.NoElements();
 
-                TSource current = e.Current;
-                TKey resKey = await keySelector(current).ConfigureAwait(false);
+                var current = e.Current;
+                var resKey = await keySelector(current).ConfigureAwait(false);
                 result.Add(current);
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TSource cur = e.Current;
-                    TKey key = await keySelector(cur).ConfigureAwait(false);
+                    var cur = e.Current;
+                    var key = await keySelector(cur).ConfigureAwait(false);
 
-                    int cmp = compare(key, resKey);
+                    var cmp = compare(key, resKey);
 
                     if (cmp == 0)
                     {
@@ -233,23 +233,23 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 if (!await e.MoveNextAsync().ConfigureAwait(false))
                     throw Error.NoElements();
 
-                TSource current = e.Current;
-                TKey resKey = await keySelector(current, cancellationToken).ConfigureAwait(false);
+                var current = e.Current;
+                var resKey = await keySelector(current, cancellationToken).ConfigureAwait(false);
                 result.Add(current);
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TSource cur = e.Current;
-                    TKey key = await keySelector(cur, cancellationToken).ConfigureAwait(false);
+                    var cur = e.Current;
+                    var key = await keySelector(cur, cancellationToken).ConfigureAwait(false);
 
-                    int cmp = compare(key, resKey);
+                    var cmp = compare(key, resKey);
 
                     if (cmp == 0)
                     {

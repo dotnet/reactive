@@ -28,7 +28,7 @@ namespace System.Linq
             public IDisposable Subscribe(IObserver<T> observer)
             {
                 var ctd = new CancellationTokenDisposable();
-                IAsyncEnumerator<T> e = _source.GetAsyncEnumerator(ctd.Token);
+                var e = _source.GetAsyncEnumerator(ctd.Token);
 
                 async void Core()
                 {

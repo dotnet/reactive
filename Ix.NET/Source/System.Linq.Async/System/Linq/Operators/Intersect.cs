@@ -93,7 +93,7 @@ namespace System.Linq
 
                             if (moveNext)
                             {
-                                TSource item = _firstEnumerator.Current;
+                                var item = _firstEnumerator.Current;
                                 if (_set.Remove(item))
                                 {
                                     _current = item;

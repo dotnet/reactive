@@ -91,7 +91,7 @@ namespace System.Linq
                 throw Error.MoreThanOneElement();
             }
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -100,7 +100,7 @@ namespace System.Linq
                     throw Error.NoElements();
                 }
 
-                TSource result = e.Current;
+                var result = e.Current;
                 if (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     throw Error.MoreThanOneElement();
@@ -116,13 +116,13 @@ namespace System.Linq
 
         private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TSource result = e.Current;
+                    var result = e.Current;
 
                     if (predicate(result))
                     {
@@ -148,13 +148,13 @@ namespace System.Linq
 
         private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TSource result = e.Current;
+                    var result = e.Current;
 
                     if (await predicate(result).ConfigureAwait(false))
                     {
@@ -181,13 +181,13 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TSource result = e.Current;
+                    var result = e.Current;
 
                     if (await predicate(result, cancellationToken).ConfigureAwait(false))
                     {

@@ -15,7 +15,7 @@ namespace System.Linq
     /// </summary>
     internal class AsyncEnumerableRewriter : ExpressionVisitor
     {
-        private static volatile ILookup<string, MethodInfo> s_methods;
+        private static volatile ILookup<string, MethodInfo> _methods;
 
         protected override Expression VisitConstant(ConstantExpression node)
         {
@@ -34,7 +34,7 @@ namespace System.Linq
             //
             if (enumerableQuery.Enumerable != null)
             {
-                Type publicType = GetPublicType(enumerableQuery.Enumerable.GetType());
+                var publicType = GetPublicType(enumerableQuery.Enumerable.GetType());
                 return Expression.Constant(enumerableQuery.Enumerable, publicType);
             }
 
@@ -46,8 +46,8 @@ namespace System.Linq
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
-            Expression obj = Visit(node.Object);
-            ReadOnlyCollection<Expression> args = Visit(node.Arguments);
+            var obj = Visit(node.Object);
+            var args = Visit(node.Arguments);
 
             //
             // Nothing changed during the visit; just some unrelated method call that can
@@ -58,7 +58,7 @@ namespace System.Linq
                 return node;
             }
 
-            Type[] typeArgs = node.Method.IsGenericMethod ? node.Method.GetGenericArguments() : null;
+            var typeArgs = node.Method.IsGenericMethod ? node.Method.GetGenericArguments() : null;
 
             //
             // Check whether the method is compatible with the recursively rewritten instance
@@ -115,11 +115,11 @@ namespace System.Linq
                 return type;
             }
 
-            foreach (Type ifType in type.GetInterfaces())
+            foreach (var ifType in type.GetInterfaces())
             {
                 if (ifType.IsGenericType())
                 {
-                    Type def = ifType.GetGenericTypeDefinition();
+                    var def = ifType.GetGenericTypeDefinition();
                     if (def == typeof(IAsyncEnumerable<>) || def == typeof(IAsyncGrouping<,>))
                     {
                         return ifType;
@@ -143,7 +143,7 @@ namespace System.Linq
             //
             // Number of parameters should match the number of arguments to bind.
             //
-            ParameterInfo[] parameters = method.GetParameters();
+            var parameters = method.GetParameters();
             if (parameters.Length != args.Count)
             {
                 return false;
@@ -198,7 +198,7 @@ namespace System.Linq
             //
             for (var i = 0; i < args.Count; i++)
             {
-                Type type = parameters[i].ParameterType;
+                var type = parameters[i].ParameterType;
 
                 //
                 // Hardening against reflection quirks.
@@ -218,7 +218,7 @@ namespace System.Linq
                     type = type.GetElementType();
                 }
 
-                Expression expression = args[i];
+                var expression = args[i];
 
                 //
                 // If the expression is assignable to the parameter, all is good. If not,
@@ -255,7 +255,7 @@ namespace System.Linq
             //
             // Get all of the method parameters. No fix-up needed if empty.
             //
-            ParameterInfo[] parameters = method.GetParameters();
+            var parameters = method.GetParameters();
             if (parameters.Length != 0)
             {
                 var list = default(List<Expression>);
@@ -266,8 +266,8 @@ namespace System.Linq
                 //
                 for (var i = 0; i < parameters.Length; i++)
                 {
-                    Expression expression = argList[i];
-                    ParameterInfo parameterInfo = parameters[i];
+                    var expression = argList[i];
+                    var parameterInfo = parameters[i];
 
                     //
                     // Perform the fix-up if needed and check the outcome. If a
@@ -305,7 +305,7 @@ namespace System.Linq
 
         private static Expression FixupQuotedExpression(Type type, Expression expression)
         {
-            Expression res = expression;
+            var res = expression;
 
             //
             // Keep unquoting until assignability checks pass.
@@ -322,13 +322,13 @@ namespace System.Linq
                     //
                     if (!type.IsAssignableFrom(res.Type) && type.IsArray && res.NodeType == ExpressionType.NewArrayInit)
                     {
-                        Type unquotedType = StripExpression(res.Type);
+                        var unquotedType = StripExpression(res.Type);
                         if (type.IsAssignableFrom(unquotedType))
                         {
                             var newArrayExpression = (NewArrayExpression)res;
 
                             var count = newArrayExpression.Expressions.Count;
-                            Type elementType = type.GetElementType();
+                            var elementType = type.GetElementType();
                             var list = new List<Expression>(count);
 
                             for (var i = 0; i < count; i++)
@@ -357,12 +357,12 @@ namespace System.Linq
             //
             // Array of quotes need to be stripped, so extract the element type.
             //
-            Type elemType = type.IsArray ? type.GetElementType() : type;
+            var elemType = type.IsArray ? type.GetElementType() : type;
 
             //
             // Try to find Expression<T> and obtain T.
             //
-            Type genType = FindGenericType(typeof(Expression<>), elemType);
+            var genType = FindGenericType(typeof(Expression<>), elemType);
             if (genType != null)
             {
                 elemType = genType.GetGenericArguments()[0];
@@ -393,15 +393,15 @@ namespace System.Linq
             //
             // Ensure the cached lookup table for AsyncEnumerable methods is initialized.
             //
-            if (s_methods == null)
+            if (_methods == null)
             {
-                s_methods = typeof(AsyncEnumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).ToLookup(m => m.Name);
+                _methods = typeof(AsyncEnumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).ToLookup(m => m.Name);
             }
 
             //
             // Find a match based on the method name and the argument types.
             //
-            MethodInfo method = s_methods[name].FirstOrDefault(m => ArgsMatch(m, args, typeArgs));
+            var method = _methods[name].FirstOrDefault(m => ArgsMatch(m, args, typeArgs));
             if (method == null)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not find method with name '{0}' on type '{1}'.", name, typeof(Enumerable)));
@@ -423,12 +423,12 @@ namespace System.Linq
             //
             // Support the enumerable methods to be defined on another type.
             //
-            Type targetType = type.GetTypeInfo().GetCustomAttribute<LocalQueryMethodImplementationTypeAttribute>()?.TargetType ?? type;
+            var targetType = type.GetTypeInfo().GetCustomAttribute<LocalQueryMethodImplementationTypeAttribute>()?.TargetType ?? type;
 
             //
             // Get all the candidates based on name and fail if none are found.
             //
-            MethodInfo[] methods = targetType.GetMethods(flags).Where(m => m.Name == name).ToArray();
+            var methods = targetType.GetMethods(flags).Where(m => m.Name == name).ToArray();
             if (methods.Length == 0)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not find method with name '{0}' on type '{1}'.", name, type));
@@ -437,7 +437,7 @@ namespace System.Linq
             //
             // Find a match based on arguments and fail if no match is found.
             //
-            MethodInfo method = methods.FirstOrDefault(m => ArgsMatch(m, args, typeArgs));
+            var method = methods.FirstOrDefault(m => ArgsMatch(m, args, typeArgs));
             if (method == null)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not find a matching method with name '{0}' on type '{1}'.", name, type));
@@ -471,9 +471,9 @@ namespace System.Linq
                 //
                 if (definition.IsInterface())
                 {
-                    foreach (Type ifType in type.GetInterfaces())
+                    foreach (var ifType in type.GetInterfaces())
                     {
-                        Type res = FindGenericType(definition, ifType);
+                        var res = FindGenericType(definition, ifType);
                         if (res != null)
                         {
                             return res;

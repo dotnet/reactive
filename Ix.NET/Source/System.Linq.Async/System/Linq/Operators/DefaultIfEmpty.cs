@@ -95,13 +95,13 @@ namespace System.Linq
 
             public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                TSource[] array = await _source.ToArrayAsync(cancellationToken).ConfigureAwait(false);
+                var array = await _source.ToArrayAsync(cancellationToken).ConfigureAwait(false);
                 return array.Length == 0 ? new[] { _defaultValue } : array;
             }
 
             public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                List<TSource> list = await _source.ToListAsync(cancellationToken).ConfigureAwait(false);
+                var list = await _source.ToListAsync(cancellationToken).ConfigureAwait(false);
                 if (list.Count == 0)
                 {
                     list.Add(_defaultValue);

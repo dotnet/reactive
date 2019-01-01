@@ -30,8 +30,7 @@ namespace System.Linq.Internal
         {
             get
             {
-                Grouping<TKey, TElement> grouping = GetGrouping(key, create: false);
-
+                var grouping = GetGrouping(key, create: false);
                 if (grouping != null)
                 {
                     return grouping;
@@ -45,14 +44,19 @@ namespace System.Linq.Internal
             }
         }
 
-        public bool Contains(TKey key) => GetGrouping(key, create: false) != null;
+        public bool Contains(TKey key)
+        {
+            return GetGrouping(key, create: false) != null;
+        }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         public IEnumerator<IGrouping<TKey, TElement>> GetEnumerator()
         {
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             if (g != null)
             {
                 do
@@ -65,8 +69,7 @@ namespace System.Linq.Internal
 
         public IEnumerable<TResult> ApplyResultSelector<TResult>(Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector)
         {
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             if (g != null)
             {
                 do
@@ -74,7 +77,7 @@ namespace System.Linq.Internal
                     g = g._next;
                     g.Trim();
 
-                    TResult result = resultSelector(g._key, g._elements.ToAsyncEnumerable());
+                    var result = resultSelector(g._key, g._elements.ToAsyncEnumerable());
                     yield return result;
                 } while (g != _lastGrouping);
             }
@@ -88,16 +91,16 @@ namespace System.Linq.Internal
 
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-            IAsyncEnumerator<TSource> enu = source.GetAsyncEnumerator(cancellationToken);
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TKey key = keySelector(enu.Current);
-                    Grouping<TKey, TElement> group = lookup.GetGrouping(key, create: true);
+                    var key = keySelector(enu.Current);
+                    var group = lookup.GetGrouping(key, create: true);
 
-                    TElement element = elementSelector(enu.Current);
+                    var element = elementSelector(enu.Current);
                     group.Add(element);
                 }
             }
@@ -116,13 +119,13 @@ namespace System.Linq.Internal
 
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-            IAsyncEnumerator<TElement> enu = source.GetAsyncEnumerator(cancellationToken);
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TKey key = keySelector(enu.Current);
+                    var key = keySelector(enu.Current);
                     lookup.GetGrouping(key, create: true).Add(enu.Current);
                 }
             }
@@ -138,14 +141,13 @@ namespace System.Linq.Internal
         {
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-            IAsyncEnumerator<TElement> enu = source.GetAsyncEnumerator(cancellationToken);
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TKey key = keySelector(enu.Current);
-
+                    var key = keySelector(enu.Current);
                     if (key != null)
                     {
                         lookup.GetGrouping(key, create: true).Add(enu.Current);
@@ -162,9 +164,8 @@ namespace System.Linq.Internal
 
         internal Grouping<TKey, TElement> GetGrouping(TKey key, bool create)
         {
-            int hashCode = InternalGetHashCode(key);
-
-            for (Grouping<TKey, TElement> g = _groupings[hashCode % _groupings.Length]; g != null; g = g._hashNext)
+            var hashCode = InternalGetHashCode(key);
+            for (var g = _groupings[hashCode % _groupings.Length]; g != null; g = g._hashNext)
             {
                 if (g._hashCode == hashCode && _comparer.Equals(g._key, key))
                 {
@@ -179,8 +180,7 @@ namespace System.Linq.Internal
                     Resize();
                 }
 
-                int index = hashCode % _groupings.Length;
-
+                var index = hashCode % _groupings.Length;
                 var g = new Grouping<TKey, TElement>
                 {
                     _key = key,
@@ -188,9 +188,7 @@ namespace System.Linq.Internal
                     _elements = new TElement[1],
                     _hashNext = _groupings[index]
                 };
-
                 _groupings[index] = g;
-
                 if (_lastGrouping == null)
                 {
                     g._next = g;
@@ -203,7 +201,6 @@ namespace System.Linq.Internal
 
                 _lastGrouping = g;
                 Count++;
-
                 return g;
             }
 
@@ -220,16 +217,13 @@ namespace System.Linq.Internal
         {
             var array = new TResult[Count];
             var index = 0;
-
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             if (g != null)
             {
                 do
                 {
                     g = g._next;
                     g.Trim();
-
                     array[index] = resultSelector(g._key, g._elements.ToAsyncEnumerable());
                     ++index;
                 } while (g != _lastGrouping);
@@ -241,9 +235,7 @@ namespace System.Linq.Internal
         internal List<TResult> ToList<TResult>(Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector)
         {
             var list = new List<TResult>(Count);
-
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             if (g != null)
             {
                 do
@@ -251,7 +243,7 @@ namespace System.Linq.Internal
                     g = g._next;
                     g.Trim();
 
-                    TResult result = resultSelector(g._key, g._elements.ToAsyncEnumerable());
+                    var result = resultSelector(g._key, g._elements.ToAsyncEnumerable());
                     list.Add(result);
                 } while (g != _lastGrouping);
             }
@@ -261,16 +253,13 @@ namespace System.Linq.Internal
 
         private void Resize()
         {
-            int newSize = checked((Count * 2) + 1);
+            var newSize = checked((Count * 2) + 1);
             var newGroupings = new Grouping<TKey, TElement>[newSize];
-
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             do
             {
                 g = g._next;
-
-                int index = g._hashCode % newSize;
+                var index = g._hashCode % newSize;
                 g._hashNext = newGroupings[index];
                 newGroupings[index] = g;
             } while (g != _lastGrouping);
@@ -278,7 +267,10 @@ namespace System.Linq.Internal
             _groupings = newGroupings;
         }
 
-        public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(Count);
+        public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+        {
+            return new ValueTask<int>(Count);
+        }
 
         IAsyncEnumerator<IAsyncGrouping<TKey, TElement>> IAsyncEnumerable<IAsyncGrouping<TKey, TElement>>.GetAsyncEnumerator(CancellationToken cancellationToken)
         {
@@ -292,9 +284,7 @@ namespace System.Linq.Internal
             cancellationToken.ThrowIfCancellationRequested();
 
             var list = new List<IAsyncGrouping<TKey, TElement>>(Count);
-
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             if (g != null)
             {
                 do
@@ -314,9 +304,7 @@ namespace System.Linq.Internal
 
             var array = new IAsyncGrouping<TKey, TElement>[Count];
             var index = 0;
-
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             if (g != null)
             {
                 do
@@ -350,8 +338,7 @@ namespace System.Linq.Internal
         {
             get
             {
-                Grouping<TKey, TElement> grouping = GetGrouping(key, create: false);
-
+                var grouping = GetGrouping(key, create: false);
                 if (grouping != null)
                 {
                     return grouping;
@@ -365,14 +352,19 @@ namespace System.Linq.Internal
             }
         }
 
-        public bool Contains(TKey key) => GetGrouping(key, create: false) != null;
+        public bool Contains(TKey key)
+        {
+            return GetGrouping(key, create: false) != null;
+        }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         public IEnumerator<IGrouping<TKey, TElement>> GetEnumerator()
         {
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             if (g != null)
             {
                 do
@@ -391,16 +383,16 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            IAsyncEnumerator<TSource> enu = source.GetAsyncEnumerator(cancellationToken);
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TKey key = await keySelector(enu.Current).ConfigureAwait(false);
-                    Grouping<TKey, TElement> group = lookup.GetGrouping(key, create: true);
+                    var key = await keySelector(enu.Current).ConfigureAwait(false);
+                    var group = lookup.GetGrouping(key, create: true);
 
-                    TElement element = await elementSelector(enu.Current).ConfigureAwait(false);
+                    var element = await elementSelector(enu.Current).ConfigureAwait(false);
                     group.Add(element);
                 }
             }
@@ -421,16 +413,16 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            IAsyncEnumerator<TSource> enu = source.GetAsyncEnumerator(cancellationToken);
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TKey key = await keySelector(enu.Current, cancellationToken).ConfigureAwait(false);
-                    Grouping<TKey, TElement> group = lookup.GetGrouping(key, create: true);
+                    var key = await keySelector(enu.Current, cancellationToken).ConfigureAwait(false);
+                    var group = lookup.GetGrouping(key, create: true);
 
-                    TElement element = await elementSelector(enu.Current, cancellationToken).ConfigureAwait(false);
+                    var element = await elementSelector(enu.Current, cancellationToken).ConfigureAwait(false);
                     group.Add(element);
                 }
             }
@@ -450,13 +442,13 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            IAsyncEnumerator<TElement> enu = source.GetAsyncEnumerator(cancellationToken);
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TKey key = await keySelector(enu.Current).ConfigureAwait(false);
+                    var key = await keySelector(enu.Current).ConfigureAwait(false);
                     lookup.GetGrouping(key, create: true).Add(enu.Current);
                 }
             }
@@ -476,13 +468,13 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            IAsyncEnumerator<TElement> enu = source.GetAsyncEnumerator(cancellationToken);
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TKey key = await keySelector(enu.Current, cancellationToken).ConfigureAwait(false);
+                    var key = await keySelector(enu.Current, cancellationToken).ConfigureAwait(false);
                     lookup.GetGrouping(key, create: true).Add(enu.Current);
                 }
             }
@@ -499,14 +491,13 @@ namespace System.Linq.Internal
         {
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            IAsyncEnumerator<TElement> enu = source.GetAsyncEnumerator(cancellationToken);
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TKey key = await keySelector(enu.Current).ConfigureAwait(false);
-
+                    var key = await keySelector(enu.Current).ConfigureAwait(false);
                     if (key != null)
                     {
                         lookup.GetGrouping(key, create: true).Add(enu.Current);
@@ -526,14 +517,13 @@ namespace System.Linq.Internal
         {
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            IAsyncEnumerator<TElement> enu = source.GetAsyncEnumerator(cancellationToken);
+            var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    TKey key = await keySelector(enu.Current, cancellationToken).ConfigureAwait(false);
-
+                    var key = await keySelector(enu.Current, cancellationToken).ConfigureAwait(false);
                     if (key != null)
                     {
                         lookup.GetGrouping(key, create: true).Add(enu.Current);
@@ -551,9 +541,8 @@ namespace System.Linq.Internal
 
         internal Grouping<TKey, TElement> GetGrouping(TKey key, bool create)
         {
-            int hashCode = InternalGetHashCode(key);
-
-            for (Grouping<TKey, TElement> g = _groupings[hashCode % _groupings.Length]; g != null; g = g._hashNext)
+            var hashCode = InternalGetHashCode(key);
+            for (var g = _groupings[hashCode % _groupings.Length]; g != null; g = g._hashNext)
             {
                 if (g._hashCode == hashCode && _comparer.Equals(g._key, key))
                 {
@@ -568,8 +557,7 @@ namespace System.Linq.Internal
                     Resize();
                 }
 
-                int index = hashCode % _groupings.Length;
-
+                var index = hashCode % _groupings.Length;
                 var g = new Grouping<TKey, TElement>
                 {
                     _key = key,
@@ -577,9 +565,7 @@ namespace System.Linq.Internal
                     _elements = new TElement[1],
                     _hashNext = _groupings[index]
                 };
-
                 _groupings[index] = g;
-
                 if (_lastGrouping == null)
                 {
                     g._next = g;
@@ -608,16 +594,13 @@ namespace System.Linq.Internal
         {
             var array = new TResult[Count];
             var index = 0;
-
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             if (g != null)
             {
                 do
                 {
                     g = g._next;
                     g.Trim();
-
                     array[index] = await resultSelector(g._key, g._elements.ToAsyncEnumerable()).ConfigureAwait(false);
                     ++index;
                 } while (g != _lastGrouping);
@@ -633,16 +616,13 @@ namespace System.Linq.Internal
 
             var array = new TResult[Count];
             var index = 0;
-
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             if (g != null)
             {
                 do
                 {
                     g = g._next;
                     g.Trim();
-
                     array[index] = await resultSelector(g._key, g._elements.ToAsyncEnumerable(), cancellationToken).ConfigureAwait(false);
                     ++index;
                 } while (g != _lastGrouping);
@@ -655,9 +635,7 @@ namespace System.Linq.Internal
         internal async Task<List<TResult>> ToList<TResult>(Func<TKey, IAsyncEnumerable<TElement>, ValueTask<TResult>> resultSelector)
         {
             var list = new List<TResult>(Count);
-
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             if (g != null)
             {
                 do
@@ -665,7 +643,7 @@ namespace System.Linq.Internal
                     g = g._next;
                     g.Trim();
 
-                    TResult result = await resultSelector(g._key, g._elements.ToAsyncEnumerable()).ConfigureAwait(false);
+                    var result = await resultSelector(g._key, g._elements.ToAsyncEnumerable()).ConfigureAwait(false);
                     list.Add(result);
                 } while (g != _lastGrouping);
             }
@@ -679,7 +657,7 @@ namespace System.Linq.Internal
             cancellationToken.ThrowIfCancellationRequested();
 
             var list = new List<TResult>(Count);
-            Grouping<TKey, TElement> g = _lastGrouping;
+            var g = _lastGrouping;
             if (g != null)
             {
                 do
@@ -687,7 +665,7 @@ namespace System.Linq.Internal
                     g = g._next;
                     g.Trim();
 
-                    TResult result = await resultSelector(g._key, g._elements.ToAsyncEnumerable(), cancellationToken).ConfigureAwait(false);
+                    var result = await resultSelector(g._key, g._elements.ToAsyncEnumerable(), cancellationToken).ConfigureAwait(false);
                     list.Add(result);
                 } while (g != _lastGrouping);
             }
@@ -698,16 +676,13 @@ namespace System.Linq.Internal
 
         private void Resize()
         {
-            int newSize = checked((Count * 2) + 1);
+            var newSize = checked((Count * 2) + 1);
             var newGroupings = new Grouping<TKey, TElement>[newSize];
-
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             do
             {
                 g = g._next;
-
-                int index = g._hashCode % newSize;
+                var index = g._hashCode % newSize;
                 g._hashNext = newGroupings[index];
                 newGroupings[index] = g;
             } while (g != _lastGrouping);
@@ -732,9 +707,7 @@ namespace System.Linq.Internal
             cancellationToken.ThrowIfCancellationRequested();
 
             var list = new List<IAsyncGrouping<TKey, TElement>>(Count);
-
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             if (g != null)
             {
                 do
@@ -754,9 +727,7 @@ namespace System.Linq.Internal
 
             var array = new IAsyncGrouping<TKey, TElement>[Count];
             var index = 0;
-
-            Grouping<TKey, TElement> g = _lastGrouping;
-
+            var g = _lastGrouping;
             if (g != null)
             {
                 do

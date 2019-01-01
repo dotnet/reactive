@@ -14,7 +14,7 @@ namespace System.Linq
         {
             int value;
 
-            IAsyncEnumerator<int> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -24,11 +24,9 @@ namespace System.Linq
                 }
 
                 value = e.Current;
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    int x = e.Current;
-
+                    var x = e.Current;
                     if (x > value)
                     {
                         value = x;
@@ -47,7 +45,7 @@ namespace System.Linq
         {
             int? value = null;
 
-            IAsyncEnumerator<int?> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -62,8 +60,7 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                int valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 if (valueVal >= 0)
                 {
                     // We can fast-path this case where we know HasValue will
@@ -74,9 +71,8 @@ namespace System.Linq
                     // uses, it's only been done in this direction for int? and long?.
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        int? cur = e.Current;
-                        int x = cur.GetValueOrDefault();
-
+                        var cur = e.Current;
+                        var x = cur.GetValueOrDefault();
                         if (x > valueVal)
                         {
                             valueVal = x;
@@ -88,8 +84,8 @@ namespace System.Linq
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        int? cur = e.Current;
-                        int x = cur.GetValueOrDefault();
+                        var cur = e.Current;
+                        var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                         // unless nulls either never happen or always happen.
@@ -113,7 +109,7 @@ namespace System.Linq
         {
             long value;
 
-            IAsyncEnumerator<long> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -123,11 +119,9 @@ namespace System.Linq
                 }
 
                 value = e.Current;
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    long x = e.Current;
-
+                    var x = e.Current;
                     if (x > value)
                     {
                         value = x;
@@ -146,7 +140,7 @@ namespace System.Linq
         {
             long? value = null;
 
-            IAsyncEnumerator<long?> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -161,15 +155,13 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                long valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 if (valueVal >= 0)
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        long? cur = e.Current;
-                        long x = cur.GetValueOrDefault();
-
+                        var cur = e.Current;
+                        var x = cur.GetValueOrDefault();
                         if (x > valueVal)
                         {
                             valueVal = x;
@@ -181,8 +173,8 @@ namespace System.Linq
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        long? cur = e.Current;
-                        long x = cur.GetValueOrDefault();
+                        var cur = e.Current;
+                        var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                         // unless nulls either never happen or always happen.
@@ -206,7 +198,7 @@ namespace System.Linq
         {
             double value;
 
-            IAsyncEnumerator<double> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -233,8 +225,7 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    double x = e.Current;
-
+                    var x = e.Current;
                     if (x > value)
                     {
                         value = x;
@@ -253,7 +244,7 @@ namespace System.Linq
         {
             double? value = null;
 
-            IAsyncEnumerator<double?> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -268,8 +259,7 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                double valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 while (double.IsNaN(valueVal))
                 {
                     if (!await e.MoveNextAsync().ConfigureAwait(false))
@@ -277,8 +267,7 @@ namespace System.Linq
                         return value;
                     }
 
-                    double? cur = e.Current;
-
+                    var cur = e.Current;
                     if (cur.HasValue)
                     {
                         valueVal = (value = cur).GetValueOrDefault();
@@ -287,8 +276,8 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    double? cur = e.Current;
-                    double x = cur.GetValueOrDefault();
+                    var cur = e.Current;
+                    var x = cur.GetValueOrDefault();
 
                     // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                     // unless nulls either never happen or always happen.
@@ -311,7 +300,7 @@ namespace System.Linq
         {
             float value;
 
-            IAsyncEnumerator<float> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -321,7 +310,6 @@ namespace System.Linq
                 }
 
                 value = e.Current;
-
                 while (float.IsNaN(value))
                 {
                     if (!await e.MoveNextAsync().ConfigureAwait(false))
@@ -334,8 +322,7 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    float x = e.Current;
-
+                    var x = e.Current;
                     if (x > value)
                     {
                         value = x;
@@ -354,7 +341,7 @@ namespace System.Linq
         {
             float? value = null;
 
-            IAsyncEnumerator<float?> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -369,8 +356,7 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                float valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 while (float.IsNaN(valueVal))
                 {
                     if (!await e.MoveNextAsync().ConfigureAwait(false))
@@ -378,8 +364,7 @@ namespace System.Linq
                         return value;
                     }
 
-                    float? cur = e.Current;
-
+                    var cur = e.Current;
                     if (cur.HasValue)
                     {
                         valueVal = (value = cur).GetValueOrDefault();
@@ -388,8 +373,8 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    float? cur = e.Current;
-                    float x = cur.GetValueOrDefault();
+                    var cur = e.Current;
+                    var x = cur.GetValueOrDefault();
 
                     // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                     // unless nulls either never happen or always happen.
@@ -412,7 +397,7 @@ namespace System.Linq
         {
             decimal value;
 
-            IAsyncEnumerator<decimal> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -422,11 +407,9 @@ namespace System.Linq
                 }
 
                 value = e.Current;
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    decimal x = e.Current;
-
+                    var x = e.Current;
                     if (x > value)
                     {
                         value = x;
@@ -445,7 +428,7 @@ namespace System.Linq
         {
             decimal? value = null;
 
-            IAsyncEnumerator<decimal?> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -460,13 +443,11 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                decimal valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    decimal? cur = e.Current;
-                    decimal x = cur.GetValueOrDefault();
-
+                    var cur = e.Current;
+                    var x = cur.GetValueOrDefault();
                     if (cur.HasValue && x > valueVal)
                     {
                         valueVal = x;
@@ -486,7 +467,7 @@ namespace System.Linq
         {
             int value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -496,11 +477,9 @@ namespace System.Linq
                 }
 
                 value = selector(e.Current);
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    int x = selector(e.Current);
-
+                    var x = selector(e.Current);
                     if (x > value)
                     {
                         value = x;
@@ -519,7 +498,7 @@ namespace System.Linq
         {
             int? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -534,8 +513,7 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                int valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 if (valueVal >= 0)
                 {
                     // We can fast-path this case where we know HasValue will
@@ -546,9 +524,8 @@ namespace System.Linq
                     // uses, it's only been done in this direction for int? and long?.
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        int? cur = selector(e.Current);
-                        int x = cur.GetValueOrDefault();
-
+                        var cur = selector(e.Current);
+                        var x = cur.GetValueOrDefault();
                         if (x > valueVal)
                         {
                             valueVal = x;
@@ -560,8 +537,8 @@ namespace System.Linq
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        int? cur = selector(e.Current);
-                        int x = cur.GetValueOrDefault();
+                        var cur = selector(e.Current);
+                        var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                         // unless nulls either never happen or always happen.
@@ -585,7 +562,7 @@ namespace System.Linq
         {
             long value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -595,11 +572,9 @@ namespace System.Linq
                 }
 
                 value = selector(e.Current);
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    long x = selector(e.Current);
-
+                    var x = selector(e.Current);
                     if (x > value)
                     {
                         value = x;
@@ -618,7 +593,7 @@ namespace System.Linq
         {
             long? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -633,15 +608,13 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                long valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 if (valueVal >= 0)
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        long? cur = selector(e.Current);
-                        long x = cur.GetValueOrDefault();
-
+                        var cur = selector(e.Current);
+                        var x = cur.GetValueOrDefault();
                         if (x > valueVal)
                         {
                             valueVal = x;
@@ -653,8 +626,8 @@ namespace System.Linq
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        long? cur = selector(e.Current);
-                        long x = cur.GetValueOrDefault();
+                        var cur = selector(e.Current);
+                        var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                         // unless nulls either never happen or always happen.
@@ -678,7 +651,7 @@ namespace System.Linq
         {
             float value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -688,7 +661,6 @@ namespace System.Linq
                 }
 
                 value = selector(e.Current);
-
                 while (float.IsNaN(value))
                 {
                     if (!await e.MoveNextAsync().ConfigureAwait(false))
@@ -701,8 +673,7 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    float x = selector(e.Current);
-
+                    var x = selector(e.Current);
                     if (x > value)
                     {
                         value = x;
@@ -721,7 +692,7 @@ namespace System.Linq
         {
             float? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -736,8 +707,7 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                float valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 while (float.IsNaN(valueVal))
                 {
                     if (!await e.MoveNextAsync().ConfigureAwait(false))
@@ -745,8 +715,7 @@ namespace System.Linq
                         return value;
                     }
 
-                    float? cur = selector(e.Current);
-
+                    var cur = selector(e.Current);
                     if (cur.HasValue)
                     {
                         valueVal = (value = cur).GetValueOrDefault();
@@ -755,8 +724,8 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    float? cur = selector(e.Current);
-                    float x = cur.GetValueOrDefault();
+                    var cur = selector(e.Current);
+                    var x = cur.GetValueOrDefault();
 
                     // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                     // unless nulls either never happen or always happen.
@@ -779,7 +748,7 @@ namespace System.Linq
         {
             double value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -806,8 +775,7 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    double x = selector(e.Current);
-
+                    var x = selector(e.Current);
                     if (x > value)
                     {
                         value = x;
@@ -826,7 +794,7 @@ namespace System.Linq
         {
             double? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -841,8 +809,7 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                double valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 while (double.IsNaN(valueVal))
                 {
                     if (!await e.MoveNextAsync().ConfigureAwait(false))
@@ -850,8 +817,7 @@ namespace System.Linq
                         return value;
                     }
 
-                    double? cur = selector(e.Current);
-
+                    var cur = selector(e.Current);
                     if (cur.HasValue)
                     {
                         valueVal = (value = cur).GetValueOrDefault();
@@ -860,8 +826,8 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    double? cur = selector(e.Current);
-                    double x = cur.GetValueOrDefault();
+                    var cur = selector(e.Current);
+                    var x = cur.GetValueOrDefault();
 
                     // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                     // unless nulls either never happen or always happen.
@@ -884,7 +850,7 @@ namespace System.Linq
         {
             decimal value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -894,11 +860,9 @@ namespace System.Linq
                 }
 
                 value = selector(e.Current);
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    decimal x = selector(e.Current);
-
+                    var x = selector(e.Current);
                     if (x > value)
                     {
                         value = x;
@@ -917,7 +881,7 @@ namespace System.Linq
         {
             decimal? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -932,13 +896,11 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                decimal valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    decimal? cur = selector(e.Current);
-                    decimal x = cur.GetValueOrDefault();
-
+                    var cur = selector(e.Current);
+                    var x = cur.GetValueOrDefault();
                     if (cur.HasValue && x > valueVal)
                     {
                         valueVal = x;
@@ -958,7 +920,7 @@ namespace System.Linq
         {
             int value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -968,11 +930,9 @@ namespace System.Linq
                 }
 
                 value = await selector(e.Current).ConfigureAwait(false);
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    int x = await selector(e.Current).ConfigureAwait(false);
-
+                    var x = await selector(e.Current).ConfigureAwait(false);
                     if (x > value)
                     {
                         value = x;
@@ -991,7 +951,7 @@ namespace System.Linq
         {
             int? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1006,8 +966,7 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                int valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 if (valueVal >= 0)
                 {
                     // We can fast-path this case where we know HasValue will
@@ -1018,9 +977,8 @@ namespace System.Linq
                     // uses, it's only been done in this direction for int? and long?.
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        int? cur = await selector(e.Current).ConfigureAwait(false);
-                        int x = cur.GetValueOrDefault();
-
+                        var cur = await selector(e.Current).ConfigureAwait(false);
+                        var x = cur.GetValueOrDefault();
                         if (x > valueVal)
                         {
                             valueVal = x;
@@ -1032,8 +990,8 @@ namespace System.Linq
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        int? cur = await selector(e.Current).ConfigureAwait(false);
-                        int x = cur.GetValueOrDefault();
+                        var cur = await selector(e.Current).ConfigureAwait(false);
+                        var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                         // unless nulls either never happen or always happen.
@@ -1057,7 +1015,7 @@ namespace System.Linq
         {
             long value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1067,11 +1025,9 @@ namespace System.Linq
                 }
 
                 value = await selector(e.Current).ConfigureAwait(false);
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    long x = await selector(e.Current).ConfigureAwait(false);
-
+                    var x = await selector(e.Current).ConfigureAwait(false);
                     if (x > value)
                     {
                         value = x;
@@ -1090,7 +1046,7 @@ namespace System.Linq
         {
             long? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1105,15 +1061,13 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                long valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 if (valueVal >= 0)
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        long? cur = await selector(e.Current).ConfigureAwait(false);
-                        long x = cur.GetValueOrDefault();
-
+                        var cur = await selector(e.Current).ConfigureAwait(false);
+                        var x = cur.GetValueOrDefault();
                         if (x > valueVal)
                         {
                             valueVal = x;
@@ -1125,8 +1079,8 @@ namespace System.Linq
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        long? cur = await selector(e.Current).ConfigureAwait(false);
-                        long x = cur.GetValueOrDefault();
+                        var cur = await selector(e.Current).ConfigureAwait(false);
+                        var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                         // unless nulls either never happen or always happen.
@@ -1150,7 +1104,7 @@ namespace System.Linq
         {
             float value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1160,7 +1114,6 @@ namespace System.Linq
                 }
 
                 value = await selector(e.Current).ConfigureAwait(false);
-
                 while (float.IsNaN(value))
                 {
                     if (!await e.MoveNextAsync().ConfigureAwait(false))
@@ -1173,8 +1126,7 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    float x = await selector(e.Current).ConfigureAwait(false);
-
+                    var x = await selector(e.Current).ConfigureAwait(false);
                     if (x > value)
                     {
                         value = x;
@@ -1193,7 +1145,7 @@ namespace System.Linq
         {
             float? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1208,8 +1160,7 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                float valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 while (float.IsNaN(valueVal))
                 {
                     if (!await e.MoveNextAsync().ConfigureAwait(false))
@@ -1217,8 +1168,7 @@ namespace System.Linq
                         return value;
                     }
 
-                    float? cur = await selector(e.Current).ConfigureAwait(false);
-
+                    var cur = await selector(e.Current).ConfigureAwait(false);
                     if (cur.HasValue)
                     {
                         valueVal = (value = cur).GetValueOrDefault();
@@ -1227,8 +1177,8 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    float? cur = await selector(e.Current).ConfigureAwait(false);
-                    float x = cur.GetValueOrDefault();
+                    var cur = await selector(e.Current).ConfigureAwait(false);
+                    var x = cur.GetValueOrDefault();
 
                     // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                     // unless nulls either never happen or always happen.
@@ -1251,7 +1201,7 @@ namespace System.Linq
         {
             double value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1278,8 +1228,7 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    double x = await selector(e.Current).ConfigureAwait(false);
-
+                    var x = await selector(e.Current).ConfigureAwait(false);
                     if (x > value)
                     {
                         value = x;
@@ -1298,7 +1247,7 @@ namespace System.Linq
         {
             double? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1313,8 +1262,7 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                double valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 while (double.IsNaN(valueVal))
                 {
                     if (!await e.MoveNextAsync().ConfigureAwait(false))
@@ -1322,8 +1270,7 @@ namespace System.Linq
                         return value;
                     }
 
-                    double? cur = await selector(e.Current).ConfigureAwait(false);
-
+                    var cur = await selector(e.Current).ConfigureAwait(false);
                     if (cur.HasValue)
                     {
                         valueVal = (value = cur).GetValueOrDefault();
@@ -1332,8 +1279,8 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    double? cur = await selector(e.Current).ConfigureAwait(false);
-                    double x = cur.GetValueOrDefault();
+                    var cur = await selector(e.Current).ConfigureAwait(false);
+                    var x = cur.GetValueOrDefault();
 
                     // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                     // unless nulls either never happen or always happen.
@@ -1356,7 +1303,7 @@ namespace System.Linq
         {
             decimal value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1366,11 +1313,9 @@ namespace System.Linq
                 }
 
                 value = await selector(e.Current).ConfigureAwait(false);
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    decimal x = await selector(e.Current).ConfigureAwait(false);
-
+                    var x = await selector(e.Current).ConfigureAwait(false);
                     if (x > value)
                     {
                         value = x;
@@ -1389,7 +1334,7 @@ namespace System.Linq
         {
             decimal? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1404,13 +1349,11 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                decimal valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    decimal? cur = await selector(e.Current).ConfigureAwait(false);
-                    decimal x = cur.GetValueOrDefault();
-
+                    var cur = await selector(e.Current).ConfigureAwait(false);
+                    var x = cur.GetValueOrDefault();
                     if (cur.HasValue && x > valueVal)
                     {
                         valueVal = x;
@@ -1431,7 +1374,7 @@ namespace System.Linq
         {
             int value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1441,11 +1384,9 @@ namespace System.Linq
                 }
 
                 value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    int x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-
+                    var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     if (x > value)
                     {
                         value = x;
@@ -1464,7 +1405,7 @@ namespace System.Linq
         {
             int? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1479,8 +1420,7 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                int valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 if (valueVal >= 0)
                 {
                     // We can fast-path this case where we know HasValue will
@@ -1491,9 +1431,8 @@ namespace System.Linq
                     // uses, it's only been done in this direction for int? and long?.
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        int? cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-                        int x = cur.GetValueOrDefault();
-
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var x = cur.GetValueOrDefault();
                         if (x > valueVal)
                         {
                             valueVal = x;
@@ -1505,8 +1444,8 @@ namespace System.Linq
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        int? cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-                        int x = cur.GetValueOrDefault();
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                         // unless nulls either never happen or always happen.
@@ -1530,7 +1469,7 @@ namespace System.Linq
         {
             long value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1540,11 +1479,9 @@ namespace System.Linq
                 }
 
                 value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    long x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-
+                    var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     if (x > value)
                     {
                         value = x;
@@ -1563,7 +1500,7 @@ namespace System.Linq
         {
             long? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1578,15 +1515,13 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                long valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 if (valueVal >= 0)
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        long? cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-                        long x = cur.GetValueOrDefault();
-
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var x = cur.GetValueOrDefault();
                         if (x > valueVal)
                         {
                             valueVal = x;
@@ -1598,8 +1533,8 @@ namespace System.Linq
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        long? cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-                        long x = cur.GetValueOrDefault();
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                         // unless nulls either never happen or always happen.
@@ -1623,7 +1558,7 @@ namespace System.Linq
         {
             float value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1633,7 +1568,6 @@ namespace System.Linq
                 }
 
                 value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-
                 while (float.IsNaN(value))
                 {
                     if (!await e.MoveNextAsync().ConfigureAwait(false))
@@ -1646,8 +1580,7 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    float x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-
+                    var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     if (x > value)
                     {
                         value = x;
@@ -1666,7 +1599,7 @@ namespace System.Linq
         {
             float? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1681,8 +1614,7 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                float valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 while (float.IsNaN(valueVal))
                 {
                     if (!await e.MoveNextAsync().ConfigureAwait(false))
@@ -1690,8 +1622,7 @@ namespace System.Linq
                         return value;
                     }
 
-                    float? cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-
+                    var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     if (cur.HasValue)
                     {
                         valueVal = (value = cur).GetValueOrDefault();
@@ -1700,8 +1631,8 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    float? cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-                    float x = cur.GetValueOrDefault();
+                    var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    var x = cur.GetValueOrDefault();
 
                     // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                     // unless nulls either never happen or always happen.
@@ -1724,7 +1655,7 @@ namespace System.Linq
         {
             double value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1751,8 +1682,7 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    double x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-
+                    var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     if (x > value)
                     {
                         value = x;
@@ -1771,7 +1701,7 @@ namespace System.Linq
         {
             double? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1786,8 +1716,7 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                double valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 while (double.IsNaN(valueVal))
                 {
                     if (!await e.MoveNextAsync().ConfigureAwait(false))
@@ -1795,8 +1724,7 @@ namespace System.Linq
                         return value;
                     }
 
-                    double? cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-
+                    var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     if (cur.HasValue)
                     {
                         valueVal = (value = cur).GetValueOrDefault();
@@ -1805,8 +1733,8 @@ namespace System.Linq
 
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    double? cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-                    double x = cur.GetValueOrDefault();
+                    var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    var x = cur.GetValueOrDefault();
 
                     // Do not replace & with &&. The branch prediction cost outweighs the extra operation
                     // unless nulls either never happen or always happen.
@@ -1829,7 +1757,7 @@ namespace System.Linq
         {
             decimal value;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1839,11 +1767,9 @@ namespace System.Linq
                 }
 
                 value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    decimal x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-
+                    var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     if (x > value)
                     {
                         value = x;
@@ -1862,7 +1788,7 @@ namespace System.Linq
         {
             decimal? value = null;
 
-            IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+            var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
@@ -1877,13 +1803,11 @@ namespace System.Linq
                 }
                 while (!value.HasValue);
 
-                decimal valueVal = value.GetValueOrDefault();
-
+                var valueVal = value.GetValueOrDefault();
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
-                    decimal? cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-                    decimal x = cur.GetValueOrDefault();
-
+                    var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                    var x = cur.GetValueOrDefault();
                     if (cur.HasValue && x > valueVal)
                     {
                         valueVal = x;

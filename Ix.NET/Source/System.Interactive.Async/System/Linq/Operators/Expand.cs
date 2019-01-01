@@ -97,7 +97,7 @@ namespace System.Linq
                             {
                                 if (_queue.Count > 0)
                                 {
-                                    IAsyncEnumerable<TSource> src = _queue.Dequeue();
+                                    var src = _queue.Dequeue();
 
                                     if (_enumerator != null)
                                     {
@@ -114,8 +114,8 @@ namespace System.Linq
 
                             if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
-                                TSource item = _enumerator.Current;
-                                IAsyncEnumerable<TSource> next = _selector(item);
+                                var item = _enumerator.Current;
+                                var next = _selector(item);
                                 _queue.Enqueue(next);
                                 _current = item;
                                 return true;
@@ -187,7 +187,7 @@ namespace System.Linq
                             {
                                 if (_queue.Count > 0)
                                 {
-                                    IAsyncEnumerable<TSource> src = _queue.Dequeue();
+                                    var src = _queue.Dequeue();
 
                                     if (_enumerator != null)
                                     {
@@ -204,8 +204,8 @@ namespace System.Linq
 
                             if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
-                                TSource item = _enumerator.Current;
-                                IAsyncEnumerable<TSource> next = await _selector(item).ConfigureAwait(false);
+                                var item = _enumerator.Current;
+                                var next = await _selector(item).ConfigureAwait(false);
                                 _queue.Enqueue(next);
                                 _current = item;
                                 return true;
@@ -278,7 +278,7 @@ namespace System.Linq
                             {
                                 if (_queue.Count > 0)
                                 {
-                                    IAsyncEnumerable<TSource> src = _queue.Dequeue();
+                                    var src = _queue.Dequeue();
 
                                     if (_enumerator != null)
                                     {
@@ -295,8 +295,8 @@ namespace System.Linq
 
                             if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
-                                TSource item = _enumerator.Current;
-                                IAsyncEnumerable<TSource> next = await _selector(item, _cancellationToken).ConfigureAwait(false);
+                                var item = _enumerator.Current;
+                                var next = await _selector(item, _cancellationToken).ConfigureAwait(false);
                                 _queue.Enqueue(next);
                                 _current = item;
                                 return true;

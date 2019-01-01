@@ -80,21 +80,21 @@ namespace System.Linq
 
         private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            Maybe<TSource> first = await TryGetFirst(source, cancellationToken).ConfigureAwait(false);
+            var first = await TryGetFirst(source, cancellationToken).ConfigureAwait(false);
 
             return first.HasValue ? first.Value : throw Error.NoElements();
         }
 
         private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            Maybe<TSource> first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
+            var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
             return first.HasValue ? first.Value : throw Error.NoElements();
         }
 
         private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            Maybe<TSource> first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
+            var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
             return first.HasValue ? first.Value : throw Error.NoElements();
         }
@@ -103,7 +103,7 @@ namespace System.Linq
 
         private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            Maybe<TSource> first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
+            var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
             return first.HasValue ? first.Value : throw Error.NoElements();
         }

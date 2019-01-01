@@ -12,11 +12,11 @@ namespace System.Linq
     {
         private static async Task<TSource> MaxCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            Comparer<TSource> comparer = Comparer<TSource>.Default;
+            var comparer = Comparer<TSource>.Default;
             var value = default(TSource);
             if (value == null)
             {
-                IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+                var e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -33,7 +33,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        TSource x = e.Current;
+                        var x = e.Current;
                         if (x != null && comparer.Compare(x, value) > 0)
                         {
                             value = x;
@@ -47,7 +47,7 @@ namespace System.Linq
             }
             else
             {
-                IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+                var e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -59,7 +59,7 @@ namespace System.Linq
                     value = e.Current;
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        TSource x = e.Current;
+                        var x = e.Current;
                         if (comparer.Compare(x, value) > 0)
                         {
                             value = x;
@@ -77,11 +77,11 @@ namespace System.Linq
 
         private static async Task<TResult> MaxCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken)
         {
-            Comparer<TResult> comparer = Comparer<TResult>.Default;
+            var comparer = Comparer<TResult>.Default;
             var value = default(TResult);
             if (value == null)
             {
-                IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+                var e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -98,7 +98,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        TResult x = selector(e.Current);
+                        var x = selector(e.Current);
                         if (x != null && comparer.Compare(x, value) > 0)
                         {
                             value = x;
@@ -112,7 +112,7 @@ namespace System.Linq
             }
             else
             {
-                IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+                var e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -124,7 +124,7 @@ namespace System.Linq
                     value = selector(e.Current);
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        TResult x = selector(e.Current);
+                        var x = selector(e.Current);
                         if (comparer.Compare(x, value) > 0)
                         {
                             value = x;
@@ -142,11 +142,11 @@ namespace System.Linq
 
         private static async Task<TResult> MaxCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken)
         {
-            Comparer<TResult> comparer = Comparer<TResult>.Default;
+            var comparer = Comparer<TResult>.Default;
             var value = default(TResult);
             if (value == null)
             {
-                IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+                var e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -163,7 +163,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        TResult x = await selector(e.Current).ConfigureAwait(false);
+                        var x = await selector(e.Current).ConfigureAwait(false);
                         if (x != null && comparer.Compare(x, value) > 0)
                         {
                             value = x;
@@ -177,7 +177,7 @@ namespace System.Linq
             }
             else
             {
-                IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+                var e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -189,7 +189,7 @@ namespace System.Linq
                     value = await selector(e.Current).ConfigureAwait(false);
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        TResult x = await selector(e.Current).ConfigureAwait(false);
+                        var x = await selector(e.Current).ConfigureAwait(false);
                         if (comparer.Compare(x, value) > 0)
                         {
                             value = x;
@@ -208,11 +208,11 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<TResult> MaxCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken)
         {
-            Comparer<TResult> comparer = Comparer<TResult>.Default;
+            var comparer = Comparer<TResult>.Default;
             var value = default(TResult);
             if (value == null)
             {
-                IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+                var e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -229,7 +229,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        TResult x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (x != null && comparer.Compare(x, value) > 0)
                         {
                             value = x;
@@ -243,7 +243,7 @@ namespace System.Linq
             }
             else
             {
-                IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(cancellationToken);
+                var e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
@@ -255,7 +255,7 @@ namespace System.Linq
                     value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        TResult x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (comparer.Compare(x, value) > 0)
                         {
                             value = x;

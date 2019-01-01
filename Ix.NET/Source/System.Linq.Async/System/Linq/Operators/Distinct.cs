@@ -45,13 +45,13 @@ namespace System.Linq
 
             public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                Set<TSource> s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s.ToArray();
             }
 
             public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                Set<TSource> s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s.ToList();
             }
 
@@ -66,7 +66,7 @@ namespace System.Linq
 
                 async ValueTask<int> Core()
                 {
-                    Set<TSource> s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
+                    var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                     return s.Count;
                 }
             }
@@ -100,7 +100,7 @@ namespace System.Linq
                             return false;
                         }
 
-                        TSource element = _enumerator.Current;
+                        var element = _enumerator.Current;
                         _set = new Set<TSource>(_comparer);
                         _set.Add(element);
                         _current = element;

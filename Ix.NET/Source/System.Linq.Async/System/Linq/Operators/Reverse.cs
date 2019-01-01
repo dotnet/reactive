@@ -36,13 +36,13 @@ namespace System.Linq
 
             public async ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                TSource[] array = await _source.ToArrayAsync(cancellationToken).ConfigureAwait(false);
+                var array = await _source.ToArrayAsync(cancellationToken).ConfigureAwait(false);
 
                 // Array.Reverse() involves boxing for non-primitive value types, but
                 // checking that has its own cost, so just use this approach for all types.
                 for (int i = 0, j = array.Length - 1; i < j; ++i, --j)
                 {
-                    TSource temp = array[i];
+                    var temp = array[i];
                     array[i] = array[j];
                     array[j] = temp;
                 }
@@ -52,7 +52,7 @@ namespace System.Linq
 
             public async ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                List<TSource> list = await _source.ToListAsync(cancellationToken).ConfigureAwait(false);
+                var list = await _source.ToListAsync(cancellationToken).ConfigureAwait(false);
 
                 list.Reverse();
                 return list;

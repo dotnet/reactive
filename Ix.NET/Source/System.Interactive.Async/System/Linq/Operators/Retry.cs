@@ -30,7 +30,7 @@ namespace System.Linq
         {
             while (true)
             {
-                foreach (TSource item in source)
+                foreach (var item in source)
                 {
                     yield return item;
                 }
@@ -41,7 +41,7 @@ namespace System.Linq
         {
             for (var i = 0; i < count; i++)
             {
-                foreach (TSource item in source)
+                foreach (var item in source)
                 {
                     yield return item;
                 }

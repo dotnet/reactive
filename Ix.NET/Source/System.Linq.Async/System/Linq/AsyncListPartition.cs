@@ -27,7 +27,6 @@ namespace System.Linq
             Debug.Assert(source != null);
             Debug.Assert(minIndexInclusive >= 0);
             Debug.Assert(minIndexInclusive <= maxIndexInclusive);
-
             _source = source;
             _minIndexInclusive = minIndexInclusive;
             _maxIndexInclusive = maxIndexInclusive;
@@ -71,8 +70,7 @@ namespace System.Linq
 
         public IAsyncPartition<TSource> Skip(int count)
         {
-            int minIndex = _minIndexInclusive + count;
-
+            var minIndex = _minIndexInclusive + count;
             if ((uint)minIndex > (uint)_maxIndexInclusive)
             {
                 return AsyncEnumerable.EmptyAsyncIterator<TSource>.Instance;
@@ -85,8 +83,7 @@ namespace System.Linq
 
         public IAsyncPartition<TSource> Take(int count)
         {
-            int maxIndex = _minIndexInclusive + count - 1;
-
+            var maxIndex = _minIndexInclusive + count - 1;
             if ((uint)maxIndex >= (uint)_maxIndexInclusive)
             {
                 return this;
@@ -101,7 +98,7 @@ namespace System.Linq
         {
             if ((uint)index <= (uint)(_maxIndexInclusive - _minIndexInclusive) && index < _source.Count - _minIndexInclusive)
             {
-                TSource res = _source[_minIndexInclusive + index];
+                var res = _source[_minIndexInclusive + index];
                 return new ValueTask<Maybe<TSource>>(new Maybe<TSource>(res));
             }
 
@@ -112,7 +109,7 @@ namespace System.Linq
         {
             if (_source.Count > _minIndexInclusive)
             {
-                TSource res = _source[_minIndexInclusive];
+                var res = _source[_minIndexInclusive];
                 return new ValueTask<Maybe<TSource>>(new Maybe<TSource>(res));
             }
 
@@ -121,11 +118,10 @@ namespace System.Linq
 
         public ValueTask<Maybe<TSource>> TryGetLastAsync(CancellationToken cancellationToken)
         {
-            int lastIndex = _source.Count - 1;
-
+            var lastIndex = _source.Count - 1;
             if (lastIndex >= _minIndexInclusive)
             {
-                TSource res = _source[Math.Min(lastIndex, _maxIndexInclusive)];
+                var res = _source[Math.Min(lastIndex, _maxIndexInclusive)];
                 return new ValueTask<Maybe<TSource>>(new Maybe<TSource>(res));
             }
 
@@ -136,8 +132,7 @@ namespace System.Linq
         {
             get
             {
-                int count = _source.Count;
-
+                var count = _source.Count;
                 if (count <= _minIndexInclusive)
                 {
                     return 0;
@@ -149,8 +144,7 @@ namespace System.Linq
 
         public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
         {
-            int count = Count;
-
+            var count = Count;
             if (count == 0)
             {
                 return new ValueTask<TSource[]>(
@@ -163,7 +157,6 @@ namespace System.Linq
             }
 
             var array = new TSource[count];
-
             for (int i = 0, curIdx = _minIndexInclusive; i != array.Length; ++i, ++curIdx)
             {
                 array[i] = _source[curIdx];
@@ -174,17 +167,15 @@ namespace System.Linq
 
         public ValueTask<List<TSource>> ToListAsync(CancellationToken cancellationToken)
         {
-            int count = Count;
-
+            var count = Count;
             if (count == 0)
             {
                 return new ValueTask<List<TSource>>(new List<TSource>());
             }
 
             var list = new List<TSource>(count);
-            int end = _minIndexInclusive + count;
-
-            for (int i = _minIndexInclusive; i != end; ++i)
+            var end = _minIndexInclusive + count;
+            for (var i = _minIndexInclusive; i != end; ++i)
             {
                 list.Add(_source[i]);
             }
@@ -192,6 +183,9 @@ namespace System.Linq
             return new ValueTask<List<TSource>>(list);
         }
 
-        public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(Count);
+        public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+        {
+            return new ValueTask<int>(Count);
+        }
     }
 }

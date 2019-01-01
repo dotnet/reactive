@@ -61,7 +61,7 @@ namespace System.Linq
 
                 public ValueTask<bool> MoveNextAsync()
                 {
-                    ValueTask<bool> result = _moveNextThrows;
+                    var result = _moveNextThrows;
                     _moveNextThrows = new ValueTask<bool>(false);
                     return result;
                 }
