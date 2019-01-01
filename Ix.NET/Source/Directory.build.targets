@@ -11,6 +11,10 @@
     <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY;NO_TASK_FROMEXCEPTION</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(BuildForCSharp8)' == 'true'">
+    <DefineConstants>$(DefineConstants);CSHARP8</DefineConstants>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
   </PropertyGroup>

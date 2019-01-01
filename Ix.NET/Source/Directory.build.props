@@ -17,6 +17,7 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <LangVersion>latest</LangVersion>
+    <BuildForCSharp8 Condition="'$(BuildForCSharp8)' == ''">true</BuildForCSharp8>
   </PropertyGroup>
 
   <!-- Hack needed to make code coverage work. See https://github.com/Microsoft/vstest/issues/1748. -->
