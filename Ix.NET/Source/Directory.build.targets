@@ -10,9 +10,6 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
     <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY;NO_TASK_FROMEXCEPTION</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug_CSharp8' OR '$(Configuration)' == 'Release_CSharp8'">
-    <DefineConstants>$(DefineConstants);CSHARP8</DefineConstants>
-  </PropertyGroup>
 
   <PropertyGroup>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>

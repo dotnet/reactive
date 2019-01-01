@@ -5,7 +5,6 @@
     <AssemblyTitle>Interactive Extensions - Async Library</AssemblyTitle>
     <TargetFrameworks>net45;net46;netstandard1.4;netstandard2.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable;Asynchronous</PackageTags>
-    <Configurations>Debug;Release;Debug_CSharp8;Release_CSharp8</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

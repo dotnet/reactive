@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
-    <Configurations>Debug;Release;Debug_CSharp8;Release_CSharp8</Configurations>
   </PropertyGroup>
 
 
