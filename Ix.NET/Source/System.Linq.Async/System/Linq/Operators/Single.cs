@@ -15,11 +15,11 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<TSource> Core()
+            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
-                if (source is IList<TSource> list)
+                if (_source is IList<TSource> list)
                 {
                     switch (list.Count)
                     {
@@ -30,7 +30,7 @@ namespace System.Linq
                     throw Error.MoreThanOneElement();
                 }
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -61,11 +61,11 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return Core();
+            return Core(source, predicate, cancellationToken);
 
-            async Task<TSource> Core()
+            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -73,11 +73,11 @@ namespace System.Linq
                     {
                         var result = e.Current;
 
-                        if (predicate(result))
+                        if (_predicate(result))
                         {
                             while (await e.MoveNextAsync().ConfigureAwait(false))
                             {
-                                if (predicate(e.Current))
+                                if (_predicate(e.Current))
                                 {
                                     throw Error.MoreThanOneElement();
                                 }
@@ -103,11 +103,11 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return Core();
+            return Core(source, predicate, cancellationToken);
 
-            async Task<TSource> Core()
+            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -115,11 +115,11 @@ namespace System.Linq
                     {
                         var result = e.Current;
 
-                        if (await predicate(result).ConfigureAwait(false))
+                        if (await _predicate(result).ConfigureAwait(false))
                         {
                             while (await e.MoveNextAsync().ConfigureAwait(false))
                             {
-                                if (await predicate(e.Current).ConfigureAwait(false))
+                                if (await _predicate(e.Current).ConfigureAwait(false))
                                 {
                                     throw Error.MoreThanOneElement();
                                 }
@@ -146,11 +146,11 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return Core();
+            return Core(source, predicate, cancellationToken);
 
-            async Task<TSource> Core()
+            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -158,11 +158,11 @@ namespace System.Linq
                     {
                         var result = e.Current;
 
-                        if (await predicate(result, cancellationToken).ConfigureAwait(false))
+                        if (await _predicate(result, _cancellationToken).ConfigureAwait(false))
                         {
                             while (await e.MoveNextAsync().ConfigureAwait(false))
                             {
-                                if (await predicate(e.Current, cancellationToken).ConfigureAwait(false))
+                                if (await _predicate(e.Current, _cancellationToken).ConfigureAwait(false))
                                 {
                                     throw Error.MoreThanOneElement();
                                 }

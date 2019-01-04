@@ -17,11 +17,11 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source);
 
-            IEnumerable<TSource> Core()
+            IEnumerable<TSource> Core(IAsyncEnumerable<TSource> _source)
             {
-                var e = source.GetAsyncEnumerator(default);
+                var e = _source.GetAsyncEnumerator(default);
 
                 try
                 {

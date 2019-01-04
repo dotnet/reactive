@@ -15,13 +15,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, index, cancellationToken);
 
-            async Task<TSource> Core()
+            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, int _index, CancellationToken _cancellationToken)
             {
-                if (source is IAsyncPartition<TSource> p)
+                if (_source is IAsyncPartition<TSource> p)
                 {
-                    var first = await p.TryGetElementAtAsync(index, cancellationToken).ConfigureAwait(false);
+                    var first = await p.TryGetElementAtAsync(_index, _cancellationToken).ConfigureAwait(false);
 
                     if (first.HasValue)
                     {
@@ -30,25 +30,25 @@ namespace System.Linq
                 }
                 else
                 {
-                    if (source is IList<TSource> list)
+                    if (_source is IList<TSource> list)
                     {
-                        return list[index];
+                        return list[_index];
                     }
 
-                    if (index >= 0)
+                    if (_index >= 0)
                     {
-                        var e = source.GetAsyncEnumerator(cancellationToken);
+                        var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                         try
                         {
                             while (await e.MoveNextAsync().ConfigureAwait(false))
                             {
-                                if (index == 0)
+                                if (_index == 0)
                                 {
                                     return e.Current;
                                 }
 
-                                index--;
+                                _index--;
                             }
                         }
                         finally
@@ -57,6 +57,9 @@ namespace System.Linq
                         }
                     }
                 }
+
+                // NB: Even though index is captured, no closure is created.
+                //     The nameof expression is lowered to a literal prior to creating closures.
 
                 throw Error.ArgumentOutOfRange(nameof(index));
             }

@@ -60,21 +60,21 @@ namespace System.Linq
                 }
             }
 
-            return Core();
+            return Core(first, second, comparer, cancellationToken);
 
-            async Task<bool> Core()
+            async Task<bool> Core(IAsyncEnumerable<TSource> _first, IAsyncEnumerable<TSource> _second, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
             {
-                var e1 = first.GetAsyncEnumerator(cancellationToken);
+                var e1 = _first.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
-                    var e2 = second.GetAsyncEnumerator(cancellationToken);
+                    var e2 = _second.GetAsyncEnumerator(_cancellationToken);
 
                     try
                     {
                         while (await e1.MoveNextAsync().ConfigureAwait(false))
                         {
-                            if (!(await e2.MoveNextAsync().ConfigureAwait(false) && comparer.Equals(e1.Current, e2.Current)))
+                            if (!(await e2.MoveNextAsync().ConfigureAwait(false) && _comparer.Equals(e1.Current, e2.Current)))
                             {
                                 return false;
                             }

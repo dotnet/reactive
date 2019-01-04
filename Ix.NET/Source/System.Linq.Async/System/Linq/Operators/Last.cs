@@ -15,11 +15,11 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<TSource> Core()
+            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
-                var last = await TryGetLast(source, cancellationToken).ConfigureAwait(false);
+                var last = await TryGetLast(_source, _cancellationToken).ConfigureAwait(false);
 
                 return last.HasValue ? last.Value : throw Error.NoElements();
             }
@@ -32,11 +32,11 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return Core();
+            return Core(source, predicate, cancellationToken);
 
-            async Task<TSource> Core()
+            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
             {
-                var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
+                var last = await TryGetLast(_source, _predicate, _cancellationToken).ConfigureAwait(false);
 
                 return last.HasValue ? last.Value : throw Error.NoElements();
             }
@@ -49,11 +49,11 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return Core();
+            return Core(source, predicate, cancellationToken);
 
-            async Task<TSource> Core()
+            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
-                var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
+                var last = await TryGetLast(_source, _predicate, _cancellationToken).ConfigureAwait(false);
 
                 return last.HasValue ? last.Value : throw Error.NoElements();
             }
@@ -67,11 +67,11 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return Core();
+            return Core(source, predicate, cancellationToken);
 
-            async Task<TSource> Core()
+            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
-                var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
+                var last = await TryGetLast(_source, _predicate, _cancellationToken).ConfigureAwait(false);
 
                 return last.HasValue ? last.Value : throw Error.NoElements();
             }

@@ -15,13 +15,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<long> Core()
+            async Task<long> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
                 var count = 0L;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -49,19 +49,19 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return Core();
+            return Core(source, predicate, cancellationToken);
 
-            async Task<long> Core()
+            async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
             {
                 var count = 0L;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (predicate(e.Current))
+                        if (_predicate(e.Current))
                         {
                             checked
                             {
@@ -86,19 +86,19 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return Core();
+            return Core(source, predicate, cancellationToken);
 
-            async Task<long> Core()
+            async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
                 var count = 0L;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (await predicate(e.Current).ConfigureAwait(false))
+                        if (await _predicate(e.Current).ConfigureAwait(false))
                         {
                             checked
                             {
@@ -124,19 +124,19 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return Core();
+            return Core(source, predicate, cancellationToken);
 
-            async Task<long> Core()
+            async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
                 var count = 0L;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (await predicate(e.Current, cancellationToken).ConfigureAwait(false))
+                        if (await _predicate(e.Current, _cancellationToken).ConfigureAwait(false))
                         {
                             checked
                             {

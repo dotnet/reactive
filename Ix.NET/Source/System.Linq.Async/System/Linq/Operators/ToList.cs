@@ -18,13 +18,13 @@ namespace System.Linq
             if (source is IAsyncIListProvider<TSource> listProvider)
                 return listProvider.ToListAsync(cancellationToken).AsTask();
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<List<TSource>> Core()
+            async Task<List<TSource>> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
                 var list = new List<TSource>();
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {

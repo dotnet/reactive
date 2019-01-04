@@ -15,16 +15,17 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            var comparer = Comparer<TSource>.Default;
             if (default(TSource) == null)
             {
-                return Core();
+                return Core(source, cancellationToken);
 
-                async Task<TSource> Core()
+                async Task<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
                 {
+                    var comparer = Comparer<TSource>.Default;
+
                     var value = default(TSource);
 
-                    var e = source.GetAsyncEnumerator(cancellationToken);
+                    var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
                     {
@@ -58,13 +59,15 @@ namespace System.Linq
             }
             else
             {
-                return Core();
+                return Core(source, cancellationToken);
 
-                async Task<TSource> Core()
+                async Task<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
                 {
+                    var comparer = Comparer<TSource>.Default;
+
                     var value = default(TSource);
 
-                    var e = source.GetAsyncEnumerator(cancellationToken);
+                    var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
                     {
@@ -100,16 +103,17 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            var comparer = Comparer<TResult>.Default;
             if (default(TResult) == null)
             {
-                return Core();
+                return Core(source, selector, cancellationToken);
 
-                async Task<TResult> Core()
+                async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TResult> _selector, CancellationToken _cancellationToken)
                 {
+                    var comparer = Comparer<TResult>.Default;
+
                     var value = default(TResult);
 
-                    var e = source.GetAsyncEnumerator(cancellationToken);
+                    var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
                     {
@@ -120,13 +124,13 @@ namespace System.Linq
                                 return value;
                             }
 
-                            value = selector(e.Current);
+                            value = _selector(e.Current);
                         }
                         while (value == null);
 
                         while (await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var x = selector(e.Current);
+                            var x = _selector(e.Current);
                             if (x != null && comparer.Compare(x, value) < 0)
                             {
                                 value = x;
@@ -143,13 +147,15 @@ namespace System.Linq
             }
             else
             {
-                return Core();
+                return Core(source, selector, cancellationToken);
 
-                async Task<TResult> Core()
+                async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TResult> _selector, CancellationToken _cancellationToken)
                 {
+                    var comparer = Comparer<TResult>.Default;
+
                     var value = default(TResult);
 
-                    var e = source.GetAsyncEnumerator(cancellationToken);
+                    var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
                     {
@@ -158,10 +164,10 @@ namespace System.Linq
                             throw Error.NoElements();
                         }
 
-                        value = selector(e.Current);
+                        value = _selector(e.Current);
                         while (await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var x = selector(e.Current);
+                            var x = _selector(e.Current);
                             if (comparer.Compare(x, value) < 0)
                             {
                                 value = x;
@@ -185,16 +191,17 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            var comparer = Comparer<TResult>.Default;
             if (default(TResult) == null)
             {
-                return Core();
+                return Core(source, selector, cancellationToken);
 
-                async Task<TResult> Core()
+                async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
                 {
+                    var comparer = Comparer<TResult>.Default;
+
                     var value = default(TResult);
 
-                    var e = source.GetAsyncEnumerator(cancellationToken);
+                    var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
                     {
@@ -205,13 +212,13 @@ namespace System.Linq
                                 return value;
                             }
 
-                            value = await selector(e.Current).ConfigureAwait(false);
+                            value = await _selector(e.Current).ConfigureAwait(false);
                         }
                         while (value == null);
 
                         while (await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var x = await selector(e.Current).ConfigureAwait(false);
+                            var x = await _selector(e.Current).ConfigureAwait(false);
                             if (x != null && comparer.Compare(x, value) < 0)
                             {
                                 value = x;
@@ -228,13 +235,15 @@ namespace System.Linq
             }
             else
             {
-                return Core();
+                return Core(source, selector, cancellationToken);
 
-                async Task<TResult> Core()
+                async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
                 {
+                    var comparer = Comparer<TResult>.Default;
+
                     var value = default(TResult);
 
-                    var e = source.GetAsyncEnumerator(cancellationToken);
+                    var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
                     {
@@ -243,10 +252,10 @@ namespace System.Linq
                             throw Error.NoElements();
                         }
 
-                        value = await selector(e.Current).ConfigureAwait(false);
+                        value = await _selector(e.Current).ConfigureAwait(false);
                         while (await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var x = await selector(e.Current).ConfigureAwait(false);
+                            var x = await _selector(e.Current).ConfigureAwait(false);
                             if (comparer.Compare(x, value) < 0)
                             {
                                 value = x;
@@ -271,16 +280,17 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            var comparer = Comparer<TResult>.Default;
             if (default(TResult) == null)
             {
-                return Core();
+                return Core(source, selector, cancellationToken);
 
-                async Task<TResult> Core()
+                async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
                 {
+                    var comparer = Comparer<TResult>.Default;
+
                     var value = default(TResult);
 
-                    var e = source.GetAsyncEnumerator(cancellationToken);
+                    var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
                     {
@@ -291,13 +301,13 @@ namespace System.Linq
                                 return value;
                             }
 
-                            value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                            value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
                         }
                         while (value == null);
 
                         while (await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                            var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
                             if (x != null && comparer.Compare(x, value) < 0)
                             {
                                 value = x;
@@ -314,13 +324,15 @@ namespace System.Linq
             }
             else
             {
-                return Core();
+                return Core(source, selector, cancellationToken);
 
-                async Task<TResult> Core()
+                async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
                 {
+                    var comparer = Comparer<TResult>.Default;
+
                     var value = default(TResult);
 
-                    var e = source.GetAsyncEnumerator(cancellationToken);
+                    var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
                     {
@@ -329,10 +341,10 @@ namespace System.Linq
                             throw Error.NoElements();
                         }
 
-                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
                         while (await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                            var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
                             if (comparer.Compare(x, value) < 0)
                             {
                                 value = x;

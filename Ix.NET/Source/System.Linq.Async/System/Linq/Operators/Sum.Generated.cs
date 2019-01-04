@@ -15,13 +15,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<int> Core()
+            async Task<int> Core(IAsyncEnumerable<int> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -49,19 +49,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<int> Core()
+            async Task<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = selector(e.Current);
+                        var value = _selector(e.Current);
 
                         checked
                         {
@@ -85,19 +85,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<int> Core()
+            async Task<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current).ConfigureAwait(false);
+                        var value = await _selector(e.Current).ConfigureAwait(false);
 
                         checked
                         {
@@ -122,19 +122,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<int> Core()
+            async Task<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
 
                         checked
                         {
@@ -157,13 +157,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<long> Core()
+            async Task<long> Core(IAsyncEnumerable<long> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -191,19 +191,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<long> Core()
+            async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = selector(e.Current);
+                        var value = _selector(e.Current);
 
                         checked
                         {
@@ -227,19 +227,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<long> Core()
+            async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current).ConfigureAwait(false);
+                        var value = await _selector(e.Current).ConfigureAwait(false);
 
                         checked
                         {
@@ -264,19 +264,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<long> Core()
+            async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
 
                         checked
                         {
@@ -299,13 +299,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<float> Core()
+            async Task<float> Core(IAsyncEnumerable<float> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -330,19 +330,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<float> Core()
+            async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = selector(e.Current);
+                        var value = _selector(e.Current);
 
                         sum += value;
                     }
@@ -363,19 +363,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<float> Core()
+            async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current).ConfigureAwait(false);
+                        var value = await _selector(e.Current).ConfigureAwait(false);
 
                         sum += value;
                     }
@@ -397,19 +397,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<float> Core()
+            async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
 
                         sum += value;
                     }
@@ -429,13 +429,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<double> Core()
+            async Task<double> Core(IAsyncEnumerable<double> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -460,19 +460,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<double> Core()
+            async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = selector(e.Current);
+                        var value = _selector(e.Current);
 
                         sum += value;
                     }
@@ -493,19 +493,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<double> Core()
+            async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current).ConfigureAwait(false);
+                        var value = await _selector(e.Current).ConfigureAwait(false);
 
                         sum += value;
                     }
@@ -527,19 +527,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<double> Core()
+            async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
 
                         sum += value;
                     }
@@ -559,13 +559,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<decimal> Core()
+            async Task<decimal> Core(IAsyncEnumerable<decimal> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -590,19 +590,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<decimal> Core()
+            async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = selector(e.Current);
+                        var value = _selector(e.Current);
 
                         sum += value;
                     }
@@ -623,19 +623,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<decimal> Core()
+            async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current).ConfigureAwait(false);
+                        var value = await _selector(e.Current).ConfigureAwait(false);
 
                         sum += value;
                     }
@@ -657,19 +657,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<decimal> Core()
+            async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
 
                         sum += value;
                     }
@@ -689,13 +689,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<int?> Core()
+            async Task<int?> Core(IAsyncEnumerable<int?> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -723,19 +723,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<int?> Core()
+            async Task<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int?> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = selector(e.Current);
+                        var value = _selector(e.Current);
 
                         checked
                         {
@@ -759,19 +759,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<int?> Core()
+            async Task<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current).ConfigureAwait(false);
+                        var value = await _selector(e.Current).ConfigureAwait(false);
 
                         checked
                         {
@@ -796,19 +796,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<int?> Core()
+            async Task<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
 
                         checked
                         {
@@ -831,13 +831,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<long?> Core()
+            async Task<long?> Core(IAsyncEnumerable<long?> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -865,19 +865,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<long?> Core()
+            async Task<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long?> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = selector(e.Current);
+                        var value = _selector(e.Current);
 
                         checked
                         {
@@ -901,19 +901,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<long?> Core()
+            async Task<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current).ConfigureAwait(false);
+                        var value = await _selector(e.Current).ConfigureAwait(false);
 
                         checked
                         {
@@ -938,19 +938,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<long?> Core()
+            async Task<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
 
                         checked
                         {
@@ -973,13 +973,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<float?> Core()
+            async Task<float?> Core(IAsyncEnumerable<float?> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -1004,19 +1004,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<float?> Core()
+            async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float?> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = selector(e.Current);
+                        var value = _selector(e.Current);
 
                         sum += value.GetValueOrDefault();
                     }
@@ -1037,19 +1037,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<float?> Core()
+            async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current).ConfigureAwait(false);
+                        var value = await _selector(e.Current).ConfigureAwait(false);
 
                         sum += value.GetValueOrDefault();
                     }
@@ -1071,19 +1071,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<float?> Core()
+            async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
 
                         sum += value.GetValueOrDefault();
                     }
@@ -1103,13 +1103,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<double?> Core()
+            async Task<double?> Core(IAsyncEnumerable<double?> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -1134,19 +1134,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<double?> Core()
+            async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double?> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = selector(e.Current);
+                        var value = _selector(e.Current);
 
                         sum += value.GetValueOrDefault();
                     }
@@ -1167,19 +1167,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<double?> Core()
+            async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current).ConfigureAwait(false);
+                        var value = await _selector(e.Current).ConfigureAwait(false);
 
                         sum += value.GetValueOrDefault();
                     }
@@ -1201,19 +1201,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<double?> Core()
+            async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
 
                         sum += value.GetValueOrDefault();
                     }
@@ -1233,13 +1233,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<decimal?> Core()
+            async Task<decimal?> Core(IAsyncEnumerable<decimal?> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -1264,19 +1264,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<decimal?> Core()
+            async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal?> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = selector(e.Current);
+                        var value = _selector(e.Current);
 
                         sum += value.GetValueOrDefault();
                     }
@@ -1297,19 +1297,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<decimal?> Core()
+            async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current).ConfigureAwait(false);
+                        var value = await _selector(e.Current).ConfigureAwait(false);
 
                         sum += value.GetValueOrDefault();
                     }
@@ -1331,19 +1331,19 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return Core();
+            return Core(source, selector, cancellationToken);
 
-            async Task<decimal?> Core()
+            async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        var value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
 
                         sum += value.GetValueOrDefault();
                     }

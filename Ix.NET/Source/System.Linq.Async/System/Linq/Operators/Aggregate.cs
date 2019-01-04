@@ -17,11 +17,11 @@ namespace System.Linq
             if (accumulator == null)
                 throw Error.ArgumentNull(nameof(accumulator));
 
-            return Core();
+            return Core(source, accumulator, cancellationToken);
 
-            async Task<TSource> Core()
+            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, TSource> _accumulator, CancellationToken _cancellationToken)
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -34,7 +34,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        acc = accumulator(acc, e.Current);
+                        acc = _accumulator(acc, e.Current);
                     }
 
                     return acc;
@@ -53,11 +53,11 @@ namespace System.Linq
             if (accumulator == null)
                 throw Error.ArgumentNull(nameof(accumulator));
 
-            return Core();
+            return Core(source, accumulator, cancellationToken);
 
-            async Task<TSource> Core()
+            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, ValueTask<TSource>> _accumulator, CancellationToken _cancellationToken)
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -70,7 +70,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        acc = await accumulator(acc, e.Current).ConfigureAwait(false);
+                        acc = await _accumulator(acc, e.Current).ConfigureAwait(false);
                     }
 
                     return acc;
@@ -90,11 +90,11 @@ namespace System.Linq
             if (accumulator == null)
                 throw Error.ArgumentNull(nameof(accumulator));
 
-            return Core();
+            return Core(source, accumulator, cancellationToken);
 
-            async Task<TSource> Core()
+            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, CancellationToken, ValueTask<TSource>> _accumulator, CancellationToken _cancellationToken)
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -107,7 +107,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        acc = await accumulator(acc, e.Current, cancellationToken).ConfigureAwait(false);
+                        acc = await _accumulator(acc, e.Current, _cancellationToken).ConfigureAwait(false);
                     }
 
                     return acc;
@@ -127,19 +127,19 @@ namespace System.Linq
             if (accumulator == null)
                 throw Error.ArgumentNull(nameof(accumulator));
 
-            return Core();
+            return Core(source, seed, accumulator, cancellationToken);
 
-            async Task<TAccumulate> Core()
+            async Task<TAccumulate> Core(IAsyncEnumerable<TSource> _source, TAccumulate _seed, Func<TAccumulate, TSource, TAccumulate> _accumulator, CancellationToken _cancellationToken)
             {
-                var acc = seed;
+                var acc = _seed;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        acc = accumulator(acc, e.Current);
+                        acc = _accumulator(acc, e.Current);
                     }
                 }
                 finally
@@ -158,19 +158,19 @@ namespace System.Linq
             if (accumulator == null)
                 throw Error.ArgumentNull(nameof(accumulator));
 
-            return Core();
+            return Core(source, seed, accumulator, cancellationToken);
 
-            async Task<TAccumulate> Core()
+            async Task<TAccumulate> Core(IAsyncEnumerable<TSource> _source, TAccumulate _seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> _accumulator, CancellationToken _cancellationToken)
             {
-                var acc = seed;
+                var acc = _seed;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        acc = await accumulator(acc, e.Current).ConfigureAwait(false);
+                        acc = await _accumulator(acc, e.Current).ConfigureAwait(false);
                     }
                 }
                 finally
@@ -190,19 +190,19 @@ namespace System.Linq
             if (accumulator == null)
                 throw Error.ArgumentNull(nameof(accumulator));
 
-            return Core();
+            return Core(source, seed, accumulator, cancellationToken);
 
-            async Task<TAccumulate> Core()
+            async Task<TAccumulate> Core(IAsyncEnumerable<TSource> _source, TAccumulate _seed, Func<TAccumulate, TSource, CancellationToken, ValueTask<TAccumulate>> _accumulator, CancellationToken _cancellationToken)
             {
-                var acc = seed;
+                var acc = _seed;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        acc = await accumulator(acc, e.Current, cancellationToken).ConfigureAwait(false);
+                        acc = await _accumulator(acc, e.Current, _cancellationToken).ConfigureAwait(false);
                     }
                 }
                 finally
@@ -224,19 +224,19 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-            return Core();
+            return Core(source, seed, accumulator, resultSelector, cancellationToken);
 
-            async Task<TResult> Core()
+            async Task<TResult> Core(IAsyncEnumerable<TSource> _source, TAccumulate _seed, Func<TAccumulate, TSource, TAccumulate> _accumulator, Func<TAccumulate, TResult> _resultSelector, CancellationToken _cancellationToken)
             {
-                var acc = seed;
+                var acc = _seed;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        acc = accumulator(acc, e.Current);
+                        acc = _accumulator(acc, e.Current);
                     }
                 }
                 finally
@@ -244,7 +244,7 @@ namespace System.Linq
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
 
-                return resultSelector(acc);
+                return _resultSelector(acc);
             }
         }
 
@@ -257,19 +257,19 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-            return Core();
+            return Core(source, seed, accumulator, resultSelector, cancellationToken);
 
-            async Task<TResult> Core()
+            async Task<TResult> Core(IAsyncEnumerable<TSource> _source, TAccumulate _seed, Func<TAccumulate, TSource, ValueTask<TAccumulate>> _accumulator, Func<TAccumulate, ValueTask<TResult>> _resultSelector, CancellationToken _cancellationToken)
             {
-                var acc = seed;
+                var acc = _seed;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        acc = await accumulator(acc, e.Current).ConfigureAwait(false);
+                        acc = await _accumulator(acc, e.Current).ConfigureAwait(false);
                     }
                 }
                 finally
@@ -277,7 +277,7 @@ namespace System.Linq
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
 
-                return await resultSelector(acc).ConfigureAwait(false);
+                return await _resultSelector(acc).ConfigureAwait(false);
             }
         }
 
@@ -291,19 +291,19 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-            return Core();
+            return Core(source, seed, accumulator, resultSelector, cancellationToken);
 
-            async Task<TResult> Core()
+            async Task<TResult> Core(IAsyncEnumerable<TSource> _source, TAccumulate _seed, Func<TAccumulate, TSource, CancellationToken, ValueTask<TAccumulate>> _accumulator, Func<TAccumulate, CancellationToken, ValueTask<TResult>> _resultSelector, CancellationToken _cancellationToken)
             {
-                var acc = seed;
+                var acc = _seed;
 
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        acc = await accumulator(acc, e.Current, cancellationToken).ConfigureAwait(false);
+                        acc = await _accumulator(acc, e.Current, _cancellationToken).ConfigureAwait(false);
                     }
                 }
                 finally
@@ -311,7 +311,7 @@ namespace System.Linq
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
 
-                return await resultSelector(acc, cancellationToken).ConfigureAwait(false);
+                return await _resultSelector(acc, _cancellationToken).ConfigureAwait(false);
             }
         }
 #endif
