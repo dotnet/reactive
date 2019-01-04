@@ -93,23 +93,6 @@ namespace System.Linq
         }
 #endif
 
-        private static Func<TSource, bool> CombinePredicates<TSource>(Func<TSource, bool> predicate1, Func<TSource, bool> predicate2)
-        {
-            return x => predicate1(x) && predicate2(x);
-        }
-
-        private static Func<TSource, ValueTask<bool>> CombinePredicates<TSource>(Func<TSource, ValueTask<bool>> predicate1, Func<TSource, ValueTask<bool>> predicate2)
-        {
-            return async x => await predicate1(x).ConfigureAwait(false) && await predicate2(x).ConfigureAwait(false);
-        }
-
-#if !NO_DEEP_CANCELLATION
-        private static Func<TSource, CancellationToken, ValueTask<bool>> CombinePredicates<TSource>(Func<TSource, CancellationToken, ValueTask<bool>> predicate1, Func<TSource, CancellationToken, ValueTask<bool>> predicate2)
-        {
-            return async (x, ct) => await predicate1(x, ct).ConfigureAwait(false) && await predicate2(x, ct).ConfigureAwait(false);
-        }
-#endif
-
         internal sealed class WhereEnumerableAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, bool> _predicate;
