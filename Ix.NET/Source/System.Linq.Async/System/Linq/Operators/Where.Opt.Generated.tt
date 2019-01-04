@@ -1,0 +1,168 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
+
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+int maxCombine = 4;
+#>
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace System.Linq
+{
+    public static partial class AsyncEnumerable
+    {
+<#
+for (var i = 2; i <= maxCombine; i++)
+{
+    var applyAll = string.Join(" && ", Enumerable.Range(1, i).Select(j => "_predicate" + j + "(x)"));
+    var allPreds = string.Join(", ", Enumerable.Range(1, i).Select(j => "Func<TSource, bool> predicate" + j));
+#>
+        private sealed class CombinedPredicates<#=i#><TSource> : ICombinedPredicates<TSource>
+        {
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+            private readonly Func<TSource, bool> _predicate<#=j#>;
+<#
+}
+#>
+
+            public CombinedPredicates<#=i#>(<#=allPreds#>)
+            {
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                _predicate<#=j#> = predicate<#=j#>;
+<#
+}
+#>
+            }
+
+            public ICombinedPredicates<TSource> And(Func<TSource, bool> predicate) =>
+                new CombinedPredicates<#=i == maxCombine ? "N" : (i + 1).ToString()#><TSource>(
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                    _predicate<#=j#>,
+<#
+}
+#>
+                    predicate
+                );
+
+            public bool Invoke(TSource x) => <#=applyAll#>;
+        }
+
+<#
+}
+#>
+<#
+for (var i = 2; i <= maxCombine; i++)
+{
+    var applyAll = string.Join(" && ", Enumerable.Range(1, i).Select(j => "await _predicate" + j + "(x).ConfigureAwait(false)"));
+    var allPreds = string.Join(", ", Enumerable.Range(1, i).Select(j => "Func<TSource, ValueTask<bool>> predicate" + j));
+#>
+        private sealed class CombinedAsyncPredicates<#=i#><TSource> : ICombinedAsyncPredicates<TSource>
+        {
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+            private readonly Func<TSource, ValueTask<bool>> _predicate<#=j#>;
+<#
+}
+#>
+
+            public CombinedAsyncPredicates<#=i#>(<#=allPreds#>)
+            {
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                _predicate<#=j#> = predicate<#=j#>;
+<#
+}
+#>
+            }
+
+            public ICombinedAsyncPredicates<TSource> And(Func<TSource, ValueTask<bool>> predicate) =>
+                new CombinedAsyncPredicates<#=i == maxCombine ? "N" : (i + 1).ToString()#><TSource>(
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                    _predicate<#=j#>,
+<#
+}
+#>
+                    predicate
+                );
+
+            public async ValueTask<bool> Invoke(TSource x) => <#=applyAll#>;
+        }
+
+<#
+}
+#>
+#if !NO_DEEP_CANCELLATION
+<#
+for (var i = 2; i <= maxCombine; i++)
+{
+    var applyAll = string.Join(" && ", Enumerable.Range(1, i).Select(j => "await _predicate" + j + "(x, ct).ConfigureAwait(false)"));
+    var allPreds = string.Join(", ", Enumerable.Range(1, i).Select(j => "Func<TSource, CancellationToken, ValueTask<bool>> predicate" + j));
+#>
+        private sealed class CombinedAsyncPredicatesWithCancellation<#=i#><TSource> : ICombinedAsyncPredicatesWithCancellation<TSource>
+        {
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+            private readonly Func<TSource, CancellationToken, ValueTask<bool>> _predicate<#=j#>;
+<#
+}
+#>
+
+            public CombinedAsyncPredicatesWithCancellation<#=i#>(<#=allPreds#>)
+            {
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                _predicate<#=j#> = predicate<#=j#>;
+<#
+}
+#>
+            }
+
+            public ICombinedAsyncPredicatesWithCancellation<TSource> And(Func<TSource, CancellationToken, ValueTask<bool>> predicate) =>
+                new CombinedAsyncPredicatesWithCancellation<#=i == maxCombine ? "N" : (i + 1).ToString()#><TSource>(
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                    _predicate<#=j#>,
+<#
+}
+#>
+                    predicate
+                );
+
+            public async ValueTask<bool> Invoke(TSource x, CancellationToken ct) => <#=applyAll#>;
+        }
+
+<#
+}
+#>
+#endif
+    }
+}
