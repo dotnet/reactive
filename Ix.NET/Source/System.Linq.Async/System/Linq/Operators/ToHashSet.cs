@@ -28,23 +28,23 @@ namespace System.Linq
 
         private static async Task<HashSet<TSource>> ToHashSetCore<TSource>(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
+            var set = new HashSet<TSource>(comparer);
+
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                var set = new HashSet<TSource>(comparer);
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     set.Add(e.Current);
                 }
-
-                return set;
             }
             finally
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+
+            return set;
         }
     }
 }

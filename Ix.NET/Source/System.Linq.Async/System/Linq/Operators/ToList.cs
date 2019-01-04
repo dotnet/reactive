@@ -22,23 +22,23 @@ namespace System.Linq
 
             async Task<List<TSource>> Core()
             {
+                var list = new List<TSource>();
+
                 var e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
                 {
-                    var list = new List<TSource>();
-
                     while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
                         list.Add(e.Current);
                     }
-
-                    return list;
                 }
                 finally
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+
+                return list;
             }
         }
     }

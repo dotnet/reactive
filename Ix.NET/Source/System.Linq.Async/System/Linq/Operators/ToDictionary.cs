@@ -205,12 +205,12 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<Dictionary<TKey, TElement>> ToDictionaryCore<TSource, TKey, TElement>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
+            var d = new Dictionary<TKey, TElement>(comparer);
+
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                var d = new Dictionary<TKey, TElement>(comparer);
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     var x = e.Current;
@@ -220,13 +220,13 @@ namespace System.Linq
 
                     d.Add(key, value);
                 }
-
-                return d;
             }
             finally
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+
+            return d;
         }
 #endif
     }
