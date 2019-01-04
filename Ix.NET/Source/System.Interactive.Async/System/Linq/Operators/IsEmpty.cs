@@ -10,25 +10,17 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
-        public static Task<bool> IsEmptyAsync<TSource>(this IAsyncEnumerable<TSource> source)
+        public static Task<bool> IsEmptyAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return IsEmptyCore(source, CancellationToken.None);
-        }
+            return Core();
 
-        public static Task<bool> IsEmptyAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return IsEmptyCore(source, cancellationToken);
-        }
-
-        private static async Task<bool> IsEmptyCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
-        {
-            return !await source.AnyAsync(cancellationToken).ConfigureAwait(false);
+            async Task<bool> Core()
+            {
+                return !await source.AnyAsync(cancellationToken).ConfigureAwait(false);
+            }
         }
     }
 }

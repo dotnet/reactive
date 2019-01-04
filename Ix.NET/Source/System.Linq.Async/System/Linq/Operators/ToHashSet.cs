@@ -10,15 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<HashSet<TSource>> ToHashSetAsync<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return ToHashSetCore(source, comparer: null, CancellationToken.None);
-        }
-
-        public static Task<HashSet<TSource>> ToHashSetAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        public static Task<HashSet<TSource>> ToHashSetAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -26,15 +18,7 @@ namespace System.Linq
             return ToHashSetCore(source, comparer: null, cancellationToken);
         }
 
-        public static Task<HashSet<TSource>> ToHashSetAsync<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return ToHashSetCore(source, comparer, CancellationToken.None);
-        }
-
-        public static Task<HashSet<TSource>> ToHashSetAsync<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
+        public static Task<HashSet<TSource>> ToHashSetAsync<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

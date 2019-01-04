@@ -145,17 +145,25 @@ foreach (var m in typeof(AsyncEnumerable).GetMethods()
     }
 
     var isParams = false;
+    var lastParameterDefault = false;
     var parCount = m.GetParameters().Length;
 
     if (parCount != 0)
     {
-        if (m.GetParameters().Last().IsDefined(typeof(ParamArrayAttribute), true))
+        var lastParam = m.GetParameters().Last();
+
+        if (lastParam.IsDefined(typeof(ParamArrayAttribute), true))
         {
             isParams = true;
         }
+
+        if (lastParam.ParameterType == typeof(CancellationToken))
+        {
+            lastParameterDefault = true;
+        }
     }
 
-    var pars = string.Join(", ", m.GetParameters().Select((p, i) => (i == parCount - 1 && isParams ? "params " : "") + toQuoted(p.ParameterType, i) + " " + p.Name));
+    var pars = string.Join(", ", m.GetParameters().Select((p, i) => (i == parCount - 1 && isParams ? "params " : "") + toQuoted(p.ParameterType, i) + " " + p.Name + (i == parCount - 1 && lastParameterDefault ? " = default" : "")));
     var quotedPars = string.Join(", ", m.GetParameters().Select((p, i) => "default(" + toQuoted(p.ParameterType, i) + ")"));
 
     if (m.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), true))

@@ -10,53 +10,45 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
-        public static Task<TSource> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer)
+        public static Task<TSource> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return MaxCore(source, comparer, CancellationToken.None);
-        }
+            return Core();
 
-        public static Task<TSource> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            
-            return MaxCore(source, comparer, cancellationToken);
-        }
-
-        private static async Task<TSource> MaxCore<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
-        {
-            if (comparer == null)
+            async Task<TSource> Core()
             {
-                comparer = Comparer<TSource>.Default;
-            }
-
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    throw Error.NoElements();
-
-                var max = e.Current;
-
-                while (await e.MoveNextAsync().ConfigureAwait(false))
+                if (comparer == null)
                 {
-                    var cur = e.Current;
-
-                    if (comparer.Compare(cur, max) > 0)
-                    {
-                        max = cur;
-                    }
+                    comparer = Comparer<TSource>.Default;
                 }
 
-                return max;
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
+                {
+                    if (!await e.MoveNextAsync().ConfigureAwait(false))
+                        throw Error.NoElements();
+
+                    var max = e.Current;
+
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var cur = e.Current;
+
+                        if (comparer.Compare(cur, max) > 0)
+                        {
+                            max = cur;
+                        }
+                    }
+
+                    return max;
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
             }
         }
     }

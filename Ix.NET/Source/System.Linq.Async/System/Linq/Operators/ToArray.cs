@@ -10,15 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<TSource[]> ToArrayAsync<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return ToArrayAsync(source, CancellationToken.None);
-        }
-
-        public static Task<TSource[]> ToArrayAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        public static Task<TSource[]> ToArrayAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

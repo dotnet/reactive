@@ -11,15 +11,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return CountCore(source, CancellationToken.None);
-        }
-
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -27,17 +19,7 @@ namespace System.Linq
             return CountCore(source, cancellationToken);
         }
 
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (predicate == null)
-                throw Error.ArgumentNull(nameof(predicate));
-
-            return CountCore(source, predicate, CancellationToken.None);
-        }
-
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -47,17 +29,7 @@ namespace System.Linq
             return CountCore(source, predicate, cancellationToken);
         }
 
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (predicate == null)
-                throw Error.ArgumentNull(nameof(predicate));
-
-            return CountCore(source, predicate, CancellationToken.None);
-        }
-
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -68,7 +40,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

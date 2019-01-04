@@ -22,15 +22,7 @@ foreach (var m in new[] { "Max", "Min" })
     foreach (var t in new[] { "int", "int?", "long", "long?", "float", "float?", "double", "double?", "decimal", "decimal?" })
     {
 #>
-        public static Task<<#=t#>> <#=m#>Async(this IAsyncEnumerable<<#=t#>> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return <#=m#>Core(source, CancellationToken.None);
-        }
-
-        public static Task<<#=t#>> <#=m#>Async(this IAsyncEnumerable<<#=t#>> source, CancellationToken cancellationToken)
+        public static Task<<#=t#>> <#=m#>Async(this IAsyncEnumerable<<#=t#>> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -38,17 +30,7 @@ foreach (var m in new[] { "Max", "Min" })
             return <#=m#>Core(source, cancellationToken);
         }
 
-        public static Task<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=t#>> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return <#=m#>Core(source, selector, CancellationToken.None);
-        }
-
-        public static Task<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=t#>> selector, CancellationToken cancellationToken)
+        public static Task<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=t#>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -58,17 +40,7 @@ foreach (var m in new[] { "Max", "Min" })
             return <#=m#>Core(source, selector, cancellationToken);
         }
 
-        public static Task<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=t#>>> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return <#=m#>Core(source, selector, CancellationToken.None);
-        }
-
-        public static Task<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=t#>>> selector, CancellationToken cancellationToken)
+        public static Task<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=t#>>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -79,7 +51,7 @@ foreach (var m in new[] { "Max", "Min" })
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<<#=t#>>> selector, CancellationToken cancellationToken)
+        public static Task<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<<#=t#>>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

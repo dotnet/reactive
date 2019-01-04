@@ -10,15 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<int> SumAsync(this IAsyncEnumerable<int> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return SumCore(source, CancellationToken.None);
-        }
-
-        public static Task<int> SumAsync(this IAsyncEnumerable<int> source, CancellationToken cancellationToken)
+        public static Task<int> SumAsync(this IAsyncEnumerable<int> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -26,17 +18,7 @@ namespace System.Linq
             return SumCore(source, cancellationToken);
         }
 
-        public static Task<int> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<int> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken)
+        public static Task<int> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -46,17 +28,7 @@ namespace System.Linq
             return SumCore(source, selector, cancellationToken);
         }
 
-        public static Task<int> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<int> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken)
+        public static Task<int> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -67,7 +39,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<int> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken)
+        public static Task<int> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -182,15 +154,7 @@ namespace System.Linq
         }
 #endif
 
-        public static Task<long> SumAsync(this IAsyncEnumerable<long> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return SumCore(source, CancellationToken.None);
-        }
-
-        public static Task<long> SumAsync(this IAsyncEnumerable<long> source, CancellationToken cancellationToken)
+        public static Task<long> SumAsync(this IAsyncEnumerable<long> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -198,17 +162,7 @@ namespace System.Linq
             return SumCore(source, cancellationToken);
         }
 
-        public static Task<long> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<long> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken)
+        public static Task<long> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -218,17 +172,7 @@ namespace System.Linq
             return SumCore(source, selector, cancellationToken);
         }
 
-        public static Task<long> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<long> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken)
+        public static Task<long> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -239,7 +183,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<long> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken)
+        public static Task<long> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -354,15 +298,7 @@ namespace System.Linq
         }
 #endif
 
-        public static Task<float> SumAsync(this IAsyncEnumerable<float> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return SumCore(source, CancellationToken.None);
-        }
-
-        public static Task<float> SumAsync(this IAsyncEnumerable<float> source, CancellationToken cancellationToken)
+        public static Task<float> SumAsync(this IAsyncEnumerable<float> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -370,17 +306,7 @@ namespace System.Linq
             return SumCore(source, cancellationToken);
         }
 
-        public static Task<float> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<float> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken)
+        public static Task<float> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -390,17 +316,7 @@ namespace System.Linq
             return SumCore(source, selector, cancellationToken);
         }
 
-        public static Task<float> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<float> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken)
+        public static Task<float> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -411,7 +327,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<float> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken)
+        public static Task<float> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -514,15 +430,7 @@ namespace System.Linq
         }
 #endif
 
-        public static Task<double> SumAsync(this IAsyncEnumerable<double> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return SumCore(source, CancellationToken.None);
-        }
-
-        public static Task<double> SumAsync(this IAsyncEnumerable<double> source, CancellationToken cancellationToken)
+        public static Task<double> SumAsync(this IAsyncEnumerable<double> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -530,17 +438,7 @@ namespace System.Linq
             return SumCore(source, cancellationToken);
         }
 
-        public static Task<double> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<double> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken)
+        public static Task<double> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -550,17 +448,7 @@ namespace System.Linq
             return SumCore(source, selector, cancellationToken);
         }
 
-        public static Task<double> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<double> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken)
+        public static Task<double> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -571,7 +459,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<double> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken)
+        public static Task<double> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -674,15 +562,7 @@ namespace System.Linq
         }
 #endif
 
-        public static Task<decimal> SumAsync(this IAsyncEnumerable<decimal> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return SumCore(source, CancellationToken.None);
-        }
-
-        public static Task<decimal> SumAsync(this IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
+        public static Task<decimal> SumAsync(this IAsyncEnumerable<decimal> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -690,17 +570,7 @@ namespace System.Linq
             return SumCore(source, cancellationToken);
         }
 
-        public static Task<decimal> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<decimal> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken)
+        public static Task<decimal> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -710,17 +580,7 @@ namespace System.Linq
             return SumCore(source, selector, cancellationToken);
         }
 
-        public static Task<decimal> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<decimal> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken)
+        public static Task<decimal> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -731,7 +591,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<decimal> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken)
+        public static Task<decimal> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -834,15 +694,7 @@ namespace System.Linq
         }
 #endif
 
-        public static Task<int?> SumAsync(this IAsyncEnumerable<int?> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return SumCore(source, CancellationToken.None);
-        }
-
-        public static Task<int?> SumAsync(this IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
+        public static Task<int?> SumAsync(this IAsyncEnumerable<int?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -850,17 +702,7 @@ namespace System.Linq
             return SumCore(source, cancellationToken);
         }
 
-        public static Task<int?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<int?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken)
+        public static Task<int?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -870,17 +712,7 @@ namespace System.Linq
             return SumCore(source, selector, cancellationToken);
         }
 
-        public static Task<int?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<int?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken)
+        public static Task<int?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -891,7 +723,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<int?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken)
+        public static Task<int?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1006,15 +838,7 @@ namespace System.Linq
         }
 #endif
 
-        public static Task<long?> SumAsync(this IAsyncEnumerable<long?> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return SumCore(source, CancellationToken.None);
-        }
-
-        public static Task<long?> SumAsync(this IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
+        public static Task<long?> SumAsync(this IAsyncEnumerable<long?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1022,17 +846,7 @@ namespace System.Linq
             return SumCore(source, cancellationToken);
         }
 
-        public static Task<long?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<long?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken)
+        public static Task<long?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1042,17 +856,7 @@ namespace System.Linq
             return SumCore(source, selector, cancellationToken);
         }
 
-        public static Task<long?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<long?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken)
+        public static Task<long?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1063,7 +867,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<long?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken)
+        public static Task<long?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1178,15 +982,7 @@ namespace System.Linq
         }
 #endif
 
-        public static Task<float?> SumAsync(this IAsyncEnumerable<float?> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return SumCore(source, CancellationToken.None);
-        }
-
-        public static Task<float?> SumAsync(this IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
+        public static Task<float?> SumAsync(this IAsyncEnumerable<float?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1194,17 +990,7 @@ namespace System.Linq
             return SumCore(source, cancellationToken);
         }
 
-        public static Task<float?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<float?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken)
+        public static Task<float?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1214,17 +1000,7 @@ namespace System.Linq
             return SumCore(source, selector, cancellationToken);
         }
 
-        public static Task<float?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<float?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken)
+        public static Task<float?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1235,7 +1011,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<float?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken)
+        public static Task<float?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1338,15 +1114,7 @@ namespace System.Linq
         }
 #endif
 
-        public static Task<double?> SumAsync(this IAsyncEnumerable<double?> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return SumCore(source, CancellationToken.None);
-        }
-
-        public static Task<double?> SumAsync(this IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
+        public static Task<double?> SumAsync(this IAsyncEnumerable<double?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1354,17 +1122,7 @@ namespace System.Linq
             return SumCore(source, cancellationToken);
         }
 
-        public static Task<double?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<double?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken)
+        public static Task<double?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1374,17 +1132,7 @@ namespace System.Linq
             return SumCore(source, selector, cancellationToken);
         }
 
-        public static Task<double?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<double?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken)
+        public static Task<double?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1395,7 +1143,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<double?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken)
+        public static Task<double?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1498,15 +1246,7 @@ namespace System.Linq
         }
 #endif
 
-        public static Task<decimal?> SumAsync(this IAsyncEnumerable<decimal?> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return SumCore(source, CancellationToken.None);
-        }
-
-        public static Task<decimal?> SumAsync(this IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
+        public static Task<decimal?> SumAsync(this IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1514,17 +1254,7 @@ namespace System.Linq
             return SumCore(source, cancellationToken);
         }
 
-        public static Task<decimal?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<decimal?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken)
+        public static Task<decimal?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1534,17 +1264,7 @@ namespace System.Linq
             return SumCore(source, selector, cancellationToken);
         }
 
-        public static Task<decimal?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return SumCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<decimal?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
+        public static Task<decimal?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -1555,7 +1275,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<decimal?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
+        public static Task<decimal?> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

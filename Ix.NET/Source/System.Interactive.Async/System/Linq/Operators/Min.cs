@@ -10,53 +10,45 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
-        public static Task<TSource> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer)
+        public static Task<TSource> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return MinCore(source, comparer, CancellationToken.None);
-        }
+            return Core();
 
-        public static Task<TSource> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return MinCore(source, comparer, cancellationToken);
-        }
-
-        private static async Task<TSource> MinCore<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
-        {
-            if (comparer == null)
+            async Task<TSource> Core()
             {
-                comparer = Comparer<TSource>.Default;
-            }
-
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    throw Error.NoElements();
-
-                var min = e.Current;
-
-                while (await e.MoveNextAsync().ConfigureAwait(false))
+                if (comparer == null)
                 {
-                    var cur = e.Current;
-
-                    if (comparer.Compare(cur, min) < 0)
-                    {
-                        min = cur;
-                    }
+                    comparer = Comparer<TSource>.Default;
                 }
 
-                return min;
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
+                {
+                    if (!await e.MoveNextAsync().ConfigureAwait(false))
+                        throw Error.NoElements();
+
+                    var min = e.Current;
+
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var cur = e.Current;
+
+                        if (comparer.Compare(cur, min) < 0)
+                        {
+                            min = cur;
+                        }
+                    }
+
+                    return min;
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
             }
         }
     }

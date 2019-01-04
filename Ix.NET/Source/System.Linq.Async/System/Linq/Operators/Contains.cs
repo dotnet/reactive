@@ -10,15 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return ContainsCore(source, value, CancellationToken.None);
-        }
-
-        public static Task<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken)
+        public static Task<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -26,15 +18,7 @@ namespace System.Linq
             return ContainsCore(source, value, cancellationToken);
         }
 
-        public static Task<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return ContainsCore(source, value, comparer, CancellationToken.None);
-        }
-
-        public static Task<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
+        public static Task<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

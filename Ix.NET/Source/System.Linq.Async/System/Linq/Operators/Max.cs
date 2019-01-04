@@ -10,15 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<TSource> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return MaxCore(source, CancellationToken.None);
-        }
-
-        public static Task<TSource> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        public static Task<TSource> MaxAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -26,17 +18,7 @@ namespace System.Linq
             return MaxCore(source, cancellationToken);
         }
 
-        public static Task<TResult> MaxAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return MaxCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<TResult> MaxAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken)
+        public static Task<TResult> MaxAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -46,17 +28,7 @@ namespace System.Linq
             return MaxCore(source, selector, cancellationToken);
         }
 
-        public static Task<TResult> MaxAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
-
-            return MaxCore(source, selector, CancellationToken.None);
-        }
-
-        public static Task<TResult> MaxAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken)
+        public static Task<TResult> MaxAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -67,7 +39,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<TResult> MaxAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken)
+        public static Task<TResult> MaxAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

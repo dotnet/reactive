@@ -10,67 +10,59 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<TSource> ElementAtOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, int index)
+        public static Task<TSource> ElementAtOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return ElementAtOrDefaultCore(source, index, CancellationToken.None);
-        }
+            return Core();
 
-        public static Task<TSource> ElementAtOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return ElementAtOrDefaultCore(source, index, cancellationToken);
-        }
-
-        private static async Task<TSource> ElementAtOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
-        {
-            if (source is IAsyncPartition<TSource> p)
+            async Task<TSource> Core()
             {
-                var first = await p.TryGetElementAtAsync(index, cancellationToken).ConfigureAwait(false);
-
-                if (first.HasValue)
+                if (source is IAsyncPartition<TSource> p)
                 {
-                    return first.Value;
-                }
-            }
+                    var first = await p.TryGetElementAtAsync(index, cancellationToken).ConfigureAwait(false);
 
-            if (index >= 0)
-            {
-                if (source is IList<TSource> list)
-                {
-                    if (index < list.Count)
+                    if (first.HasValue)
                     {
-                        return list[index];
+                        return first.Value;
                     }
                 }
-                else
+
+                if (index >= 0)
                 {
-                    var e = source.GetAsyncEnumerator(cancellationToken);
-
-                    try
+                    if (source is IList<TSource> list)
                     {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        if (index < list.Count)
                         {
-                            if (index == 0)
-                            {
-                                return e.Current;
-                            }
-
-                            index--;
+                            return list[index];
                         }
                     }
-                    finally
+                    else
                     {
-                        await e.DisposeAsync().ConfigureAwait(false);
+                        var e = source.GetAsyncEnumerator(cancellationToken);
+
+                        try
+                        {
+                            while (await e.MoveNextAsync().ConfigureAwait(false))
+                            {
+                                if (index == 0)
+                                {
+                                    return e.Current;
+                                }
+
+                                index--;
+                            }
+                        }
+                        finally
+                        {
+                            await e.DisposeAsync().ConfigureAwait(false);
+                        }
                     }
                 }
-            }
 
-            return default;
+                return default;
+            }
         }
     }
 }
