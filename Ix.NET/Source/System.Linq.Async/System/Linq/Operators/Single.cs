@@ -15,7 +15,43 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return SingleCore(source, cancellationToken);
+            return Core();
+
+            async Task<TSource> Core()
+            {
+                if (source is IList<TSource> list)
+                {
+                    switch (list.Count)
+                    {
+                        case 0: throw Error.NoElements();
+                        case 1: return list[0];
+                    }
+
+                    throw Error.MoreThanOneElement();
+                }
+
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
+                {
+                    if (!await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        throw Error.NoElements();
+                    }
+
+                    var result = e.Current;
+                    if (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        throw Error.MoreThanOneElement();
+                    }
+
+                    return result;
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+            }
         }
 
         public static Task<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken = default)
@@ -25,7 +61,39 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return SingleCore(source, predicate, cancellationToken);
+            return Core();
+
+            async Task<TSource> Core()
+            {
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
+                {
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var result = e.Current;
+
+                        if (predicate(result))
+                        {
+                            while (await e.MoveNextAsync().ConfigureAwait(false))
+                            {
+                                if (predicate(e.Current))
+                                {
+                                    throw Error.MoreThanOneElement();
+                                }
+                            }
+
+                            return result;
+                        }
+                    }
+
+                    throw Error.NoElements();
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+            }
         }
 
         public static Task<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
@@ -35,7 +103,39 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return SingleCore(source, predicate, cancellationToken);
+            return Core();
+
+            async Task<TSource> Core()
+            {
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
+                {
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var result = e.Current;
+
+                        if (await predicate(result).ConfigureAwait(false))
+                        {
+                            while (await e.MoveNextAsync().ConfigureAwait(false))
+                            {
+                                if (await predicate(e.Current).ConfigureAwait(false))
+                                {
+                                    throw Error.MoreThanOneElement();
+                                }
+                            }
+
+                            return result;
+                        }
+                    }
+
+                    throw Error.NoElements();
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+            }
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -46,140 +146,38 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return SingleCore(source, predicate, cancellationToken);
-        }
-#endif
+            return Core();
 
-        private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
-        {
-            if (source is IList<TSource> list)
+            async Task<TSource> Core()
             {
-                switch (list.Count)
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
                 {
-                    case 0: throw Error.NoElements();
-                    case 1: return list[0];
-                }
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var result = e.Current;
 
-                throw Error.MoreThanOneElement();
-            }
+                        if (await predicate(result, cancellationToken).ConfigureAwait(false))
+                        {
+                            while (await e.MoveNextAsync().ConfigureAwait(false))
+                            {
+                                if (await predicate(e.Current, cancellationToken).ConfigureAwait(false))
+                                {
+                                    throw Error.MoreThanOneElement();
+                                }
+                            }
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+                            return result;
+                        }
+                    }
 
-            try
-            {
-                if (!await e.MoveNextAsync().ConfigureAwait(false))
-                {
                     throw Error.NoElements();
                 }
-
-                var result = e.Current;
-                if (await e.MoveNextAsync().ConfigureAwait(false))
+                finally
                 {
-                    throw Error.MoreThanOneElement();
+                    await e.DisposeAsync().ConfigureAwait(false);
                 }
-
-                return result;
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
-        }
-
-        private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
-        {
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var result = e.Current;
-
-                    if (predicate(result))
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            if (predicate(e.Current))
-                            {
-                                throw Error.MoreThanOneElement();
-                            }
-                        }
-
-                        return result;
-                    }
-                }
-
-                throw Error.NoElements();
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
-        }
-
-        private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
-        {
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var result = e.Current;
-
-                    if (await predicate(result).ConfigureAwait(false))
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            if (await predicate(e.Current).ConfigureAwait(false))
-                            {
-                                throw Error.MoreThanOneElement();
-                            }
-                        }
-
-                        return result;
-                    }
-                }
-
-                throw Error.NoElements();
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
-        }
-
-#if !NO_DEEP_CANCELLATION
-        private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
-        {
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var result = e.Current;
-
-                    if (await predicate(result, cancellationToken).ConfigureAwait(false))
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            if (await predicate(e.Current, cancellationToken).ConfigureAwait(false))
-                            {
-                                throw Error.MoreThanOneElement();
-                            }
-                        }
-
-                        return result;
-                    }
-                }
-
-                throw Error.NoElements();
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
             }
         }
 #endif

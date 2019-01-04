@@ -15,7 +15,14 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return FirstCore(source, cancellationToken);
+            return Core();
+
+            async Task<TSource> Core()
+            {
+                var first = await TryGetFirst(source, cancellationToken).ConfigureAwait(false);
+
+                return first.HasValue ? first.Value : throw Error.NoElements();
+            }
         }
 
         public static Task<TSource> FirstAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken = default)
@@ -25,7 +32,14 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return FirstCore(source, predicate, cancellationToken);
+            return Core();
+
+            async Task<TSource> Core()
+            {
+                var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
+
+                return first.HasValue ? first.Value : throw Error.NoElements();
+            }
         }
 
         public static Task<TSource> FirstAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
@@ -35,7 +49,14 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return FirstCore(source, predicate, cancellationToken);
+            return Core();
+
+            async Task<TSource> Core()
+            {
+                var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
+
+                return first.HasValue ? first.Value : throw Error.NoElements();
+            }
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -46,38 +67,14 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return FirstCore(source, predicate, cancellationToken);
-        }
-#endif
+            return Core();
 
-        private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
-        {
-            var first = await TryGetFirst(source, cancellationToken).ConfigureAwait(false);
+            async Task<TSource> Core()
+            {
+                var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
-            return first.HasValue ? first.Value : throw Error.NoElements();
-        }
-
-        private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
-        {
-            var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
-
-            return first.HasValue ? first.Value : throw Error.NoElements();
-        }
-
-        private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
-        {
-            var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
-
-            return first.HasValue ? first.Value : throw Error.NoElements();
-        }
-
-#if !NO_DEEP_CANCELLATION
-
-        private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
-        {
-            var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
-
-            return first.HasValue ? first.Value : throw Error.NoElements();
+                return first.HasValue ? first.Value : throw Error.NoElements();
+            }
         }
 #endif
     }

@@ -15,11 +15,6 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return ToListCore(source, cancellationToken);
-        }
-
-        private static Task<List<TSource>> ToListCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
-        {
             if (source is IAsyncIListProvider<TSource> listProvider)
                 return listProvider.ToListAsync(cancellationToken).AsTask();
 

@@ -17,7 +17,27 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return AllCore(source, predicate, cancellationToken);
+            return Core();
+
+            async Task<bool> Core()
+            {
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
+                {
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        if (!predicate(e.Current))
+                            return false;
+                    }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+
+                return true;
+            }
         }
 
         public static Task<bool> AllAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
@@ -27,7 +47,27 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return AllCore(source, predicate, cancellationToken);
+            return Core();
+
+            async Task<bool> Core()
+            {
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
+                {
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        if (!await predicate(e.Current).ConfigureAwait(false))
+                            return false;
+                    }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+
+                return true;
+            }
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -38,69 +78,27 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-            return AllCore(source, predicate, cancellationToken);
-        }
-#endif
+            return Core();
 
-        private static async Task<bool> AllCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
-        {
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
+            async Task<bool> Core()
             {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
                 {
-                    if (!predicate(e.Current))
-                        return false;
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        if (!await predicate(e.Current, cancellationToken).ConfigureAwait(false))
+                            return false;
+                    }
                 }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
-
-            return true;
-        }
-
-        private static async Task<bool> AllCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
-        {
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
+                finally
                 {
-                    if (!await predicate(e.Current).ConfigureAwait(false))
-                        return false;
+                    await e.DisposeAsync().ConfigureAwait(false);
                 }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
 
-            return true;
-        }
-
-#if !NO_DEEP_CANCELLATION
-        private static async Task<bool> AllCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
-        {
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    if (!await predicate(e.Current, cancellationToken).ConfigureAwait(false))
-                        return false;
-                }
+                return true;
             }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
-
-            return true;
         }
 #endif
     }

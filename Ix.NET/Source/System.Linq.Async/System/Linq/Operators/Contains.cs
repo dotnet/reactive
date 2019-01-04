@@ -15,7 +15,12 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return ContainsCore(source, value, cancellationToken);
+            if (source is ICollection<TSource> collection)
+            {
+                return Task.FromResult(collection.Contains(value));
+            }
+
+            return ContainsCore(source, value, comparer: null, cancellationToken);
         }
 
         public static Task<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
@@ -24,16 +29,6 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(source));
 
             return ContainsCore(source, value, comparer, cancellationToken);
-        }
-
-        private static Task<bool> ContainsCore<TSource>(IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken)
-        {
-            if (source is ICollection<TSource> collection)
-            {
-                return Task.FromResult(collection.Contains(value));
-            }
-
-            return ContainsCore(source, value, comparer: null, cancellationToken);
         }
 
         private static async Task<bool> ContainsCore<TSource>(IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)

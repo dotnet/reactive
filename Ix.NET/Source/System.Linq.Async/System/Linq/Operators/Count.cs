@@ -16,43 +16,6 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return CountCore(source, cancellationToken);
-        }
-
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken = default)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (predicate == null)
-                throw Error.ArgumentNull(nameof(predicate));
-
-            return CountCore(source, predicate, cancellationToken);
-        }
-
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (predicate == null)
-                throw Error.ArgumentNull(nameof(predicate));
-
-            return CountCore(source, predicate, cancellationToken);
-        }
-
-#if !NO_DEEP_CANCELLATION
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (predicate == null)
-                throw Error.ArgumentNull(nameof(predicate));
-
-            return CountCore(source, predicate, cancellationToken);
-        }
-#endif
-
-        private static Task<int> CountCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
-        {
             switch (source)
             {
                 case ICollection<TSource> collection:
@@ -90,86 +53,116 @@ namespace System.Linq
             }
         }
 
-        private static async Task<int> CountCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken = default)
         {
-            var count = 0;
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            return Core();
 
-            try
+            async Task<int> Core()
             {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
+                var count = 0;
+
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
                 {
-                    if (predicate(e.Current))
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        checked
+                        if (predicate(e.Current))
                         {
-                            count++;
+                            checked
+                            {
+                                count++;
+                            }
                         }
                     }
                 }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
 
-            return count;
+                return count;
+            }
         }
 
-        private static async Task<int> CountCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
-            var count = 0;
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            return Core();
 
-            try
+            async Task<int> Core()
             {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
+                var count = 0;
+
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
                 {
-                    if (await predicate(e.Current).ConfigureAwait(false))
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        checked
+                        if (await predicate(e.Current).ConfigureAwait(false))
                         {
-                            count++;
+                            checked
+                            {
+                                count++;
+                            }
                         }
                     }
                 }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
 
-            return count;
+                return count;
+            }
         }
 
 #if !NO_DEEP_CANCELLATION
-        private static async Task<int> CountCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
-            var count = 0;
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (predicate == null)
+                throw Error.ArgumentNull(nameof(predicate));
 
-            var e = source.GetAsyncEnumerator(cancellationToken);
+            return Core();
 
-            try
+            async Task<int> Core()
             {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
+                var count = 0;
+
+                var e = source.GetAsyncEnumerator(cancellationToken);
+
+                try
                 {
-                    if (await predicate(e.Current, cancellationToken).ConfigureAwait(false))
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
                     {
-                        checked
+                        if (await predicate(e.Current, cancellationToken).ConfigureAwait(false))
                         {
-                            count++;
+                            checked
+                            {
+                                count++;
+                            }
                         }
                     }
                 }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
 
-            return count;
+                return count;
+            }
         }
 #endif
     }
