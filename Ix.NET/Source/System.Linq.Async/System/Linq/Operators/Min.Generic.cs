@@ -10,265 +10,325 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        private static async Task<TSource> MinCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        private static Task<TSource> MinCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             var comparer = Comparer<TSource>.Default;
-            var value = default(TSource);
-            if (value == null)
+            if (default(TSource) == null)
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                return Core();
 
-                try
+                async Task<TSource> Core()
                 {
-                    do
+                    var value = default(TSource);
+
+                    var e = source.GetAsyncEnumerator(cancellationToken);
+
+                    try
+                    {
+                        do
+                        {
+                            if (!await e.MoveNextAsync().ConfigureAwait(false))
+                            {
+                                return value;
+                            }
+
+                            value = e.Current;
+                        }
+                        while (default(TSource) == null);
+
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var x = e.Current;
+                            if (x != null && comparer.Compare(x, value) < 0)
+                            {
+                                value = x;
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
+
+                    return value;
+                }
+            }
+            else
+            {
+                return Core();
+
+                async Task<TSource> Core()
+                {
+                    var value = default(TSource);
+
+                    var e = source.GetAsyncEnumerator(cancellationToken);
+
+                    try
                     {
                         if (!await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            return value;
+                            throw Error.NoElements();
                         }
 
                         value = e.Current;
-                    }
-                    while (value == null);
-
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var x = e.Current;
-                        if (x != null && comparer.Compare(x, value) < 0)
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            value = x;
+                            var x = e.Current;
+                            if (comparer.Compare(x, value) < 0)
+                            {
+                                value = x;
+                            }
                         }
                     }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
+
+                    return value;
                 }
-                finally
+            }
+        }
+
+        private static Task<TResult> MinCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken)
+        {
+            var comparer = Comparer<TResult>.Default;
+            if (default(TResult) == null)
+            {
+                return Core();
+
+                async Task<TResult> Core()
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    var value = default(TResult);
+
+                    var e = source.GetAsyncEnumerator(cancellationToken);
+
+                    try
+                    {
+                        do
+                        {
+                            if (!await e.MoveNextAsync().ConfigureAwait(false))
+                            {
+                                return value;
+                            }
+
+                            value = selector(e.Current);
+                        }
+                        while (default(TSource) == null);
+
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var x = selector(e.Current);
+                            if (x != null && comparer.Compare(x, value) < 0)
+                            {
+                                value = x;
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
+
+                    return value;
                 }
             }
             else
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                return Core();
 
-                try
+                async Task<TResult> Core()
                 {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
+                    var value = default(TResult);
 
-                    value = e.Current;
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var x = e.Current;
-                        if (comparer.Compare(x, value) < 0)
-                        {
-                            value = x;
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-            }
+                    var e = source.GetAsyncEnumerator(cancellationToken);
 
-            return value;
-        }
-
-        private static async Task<TResult> MinCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken)
-        {
-            var comparer = Comparer<TResult>.Default;
-            var value = default(TResult);
-            if (value == null)
-            {
-                var e = source.GetAsyncEnumerator(cancellationToken);
-
-                try
-                {
-                    do
+                    try
                     {
                         if (!await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            return value;
+                            throw Error.NoElements();
                         }
 
                         value = selector(e.Current);
-                    }
-                    while (value == null);
-
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var x = selector(e.Current);
-                        if (x != null && comparer.Compare(x, value) < 0)
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            value = x;
+                            var x = selector(e.Current);
+                            if (comparer.Compare(x, value) < 0)
+                            {
+                                value = x;
+                            }
                         }
                     }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
+
+                    return value;
                 }
-                finally
+            }
+        }
+
+        private static Task<TResult> MinCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken)
+        {
+            var comparer = Comparer<TResult>.Default;
+            if (default(TResult) == null)
+            {
+                return Core();
+
+                async Task<TResult> Core()
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    var value = default(TResult);
+
+                    var e = source.GetAsyncEnumerator(cancellationToken);
+
+                    try
+                    {
+                        do
+                        {
+                            if (!await e.MoveNextAsync().ConfigureAwait(false))
+                            {
+                                return value;
+                            }
+
+                            value = await selector(e.Current).ConfigureAwait(false);
+                        }
+                        while (default(TSource) == null);
+
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var x = await selector(e.Current).ConfigureAwait(false);
+                            if (x != null && comparer.Compare(x, value) < 0)
+                            {
+                                value = x;
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
+
+                    return value;
                 }
             }
             else
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                return Core();
 
-                try
+                async Task<TResult> Core()
                 {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
+                    var value = default(TResult);
 
-                    value = selector(e.Current);
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var x = selector(e.Current);
-                        if (comparer.Compare(x, value) < 0)
-                        {
-                            value = x;
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-            }
+                    var e = source.GetAsyncEnumerator(cancellationToken);
 
-            return value;
-        }
-
-        private static async Task<TResult> MinCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken)
-        {
-            var comparer = Comparer<TResult>.Default;
-            var value = default(TResult);
-            if (value == null)
-            {
-                var e = source.GetAsyncEnumerator(cancellationToken);
-
-                try
-                {
-                    do
+                    try
                     {
                         if (!await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            return value;
+                            throw Error.NoElements();
                         }
 
                         value = await selector(e.Current).ConfigureAwait(false);
-                    }
-                    while (value == null);
-
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var x = await selector(e.Current).ConfigureAwait(false);
-                        if (x != null && comparer.Compare(x, value) < 0)
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            value = x;
+                            var x = await selector(e.Current).ConfigureAwait(false);
+                            if (comparer.Compare(x, value) < 0)
+                            {
+                                value = x;
+                            }
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-            }
-            else
-            {
-                var e = source.GetAsyncEnumerator(cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
+                    finally
                     {
-                        throw Error.NoElements();
+                        await e.DisposeAsync().ConfigureAwait(false);
                     }
 
-                    value = await selector(e.Current).ConfigureAwait(false);
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var x = await selector(e.Current).ConfigureAwait(false);
-                        if (comparer.Compare(x, value) < 0)
-                        {
-                            value = x;
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    return value;
                 }
             }
-
-            return value;
         }
 
 #if !NO_DEEP_CANCELLATION
-        private static async Task<TResult> MinCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken)
+        private static Task<TResult> MinCore<TSource, TResult>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken)
         {
             var comparer = Comparer<TResult>.Default;
-            var value = default(TResult);
-            if (value == null)
+            if (default(TResult) == null)
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                return Core();
 
-                try
+                async Task<TResult> Core()
                 {
-                    do
-                    {
-                        if (!await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            return value;
-                        }
+                    var value = default(TResult);
 
-                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-                    }
-                    while (value == null);
+                    var e = source.GetAsyncEnumerator(cancellationToken);
 
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    try
                     {
-                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-                        if (x != null && comparer.Compare(x, value) < 0)
+                        do
                         {
-                            value = x;
+                            if (!await e.MoveNextAsync().ConfigureAwait(false))
+                            {
+                                return value;
+                            }
+
+                            value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        }
+                        while (default(TSource) == null);
+
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                            if (x != null && comparer.Compare(x, value) < 0)
+                            {
+                                value = x;
+                            }
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
+
+                    return value;
                 }
             }
             else
             {
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                return Core();
 
-                try
+                async Task<TResult> Core()
                 {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
+                    var value = default(TResult);
 
-                    value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    var e = source.GetAsyncEnumerator(cancellationToken);
+
+                    try
                     {
-                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
-                        if (comparer.Compare(x, value) < 0)
+                        if (!await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            value = x;
+                            throw Error.NoElements();
+                        }
+
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
+                            if (comparer.Compare(x, value) < 0)
+                            {
+                                value = x;
+                            }
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
+
+                    return value;
                 }
             }
-
-            return value;
         }
 #endif
     }
