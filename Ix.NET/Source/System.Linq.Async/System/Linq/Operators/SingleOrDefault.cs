@@ -172,13 +172,13 @@ namespace System.Linq
                             return result;
                         }
                     }
-
-                    return default;
                 }
                 finally
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+
+                return default;
             }
         }
 #endif
