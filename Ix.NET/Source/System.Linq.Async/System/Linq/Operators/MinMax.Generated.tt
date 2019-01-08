@@ -19,49 +19,564 @@ namespace System.Linq
 <#
 foreach (var m in new[] { "Max", "Min" })
 {
+    var comparison = m == "Max" ? ">" : "<";
+
     foreach (var t in new[] { "int", "int?", "long", "long?", "float", "float?", "double", "double?", "decimal", "decimal?" })
     {
+        var isFloatingPoint = t.StartsWith("float") || t.StartsWith("double");
+        var isInteger = t.StartsWith("int") || t.StartsWith("long");
+        var isNullable = t.EndsWith("?");
+        var shortCircuit = t.StartsWith("decimal");
 #>
         public static Task<<#=t#>> <#=m#>Async(this IAsyncEnumerable<<#=t#>> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return <#=m#>Core(source, cancellationToken);
-        }
+            return Core(source, cancellationToken);
 
-        public static Task<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=t#>> selector, CancellationToken cancellationToken = default)
+            async Task<<#=t#>> Core(IAsyncEnumerable<<#=t#>> _source, CancellationToken _cancellationToken)
+            {
+<#
+        if (!isNullable)
         {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
+#>
+                <#=t#> value;
 
-            return <#=m#>Core(source, selector, cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
+
+                try
+                {
+                    if (!await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        throw Error.NoElements();
+                    }
+
+                    value = e.Current;
+
+<#
+            if (isFloatingPoint && m == "Max")
+            {
+#>
+                    // NaN is ordered less than all other values. We need to do explicit checks
+                    // to ensure this, but once we've found a value that is not NaN we need no
+                    // longer worry about it, so first loop until such a value is found (or not,
+                    // as the case may be).
+
+                    while (<#=t#>.IsNaN(value))
+                    {
+                        if (!await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            return value;
+                        }
+
+                        value = e.Current;
+                    }
+
+<#
+            }
+#>
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var x = e.Current;
+                        if (x <#=comparison#> value)
+                        {
+                            value = x;
+                        }
+<#
+            if (isFloatingPoint && m == "Min")
+            {
+#>
+                        else
+                        {
+                            // Normally NaN < anything is false, as is anything < NaN
+                            // However, this leads to some irksome outcomes in Min and Max.
+                            // If we use those semantics then Min(NaN, 5.0) is NaN, but
+                            // Min(5.0, NaN) is 5.0!  To fix this, we impose a total
+                            // ordering where NaN is smaller than every value, including
+                            // negative infinity.
+                            // Not testing for NaN therefore isn't an option, but since we
+                            // can't find a smaller value, we can short-circuit.
+
+                            if (<#=t#>.IsNaN(x))
+                            {
+                                return x;
+                            }
+                        }
+<#
+            }
+#>
+                    }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+
+                return value;
+<#
         }
-
-        public static Task<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=t#>>> selector, CancellationToken cancellationToken = default)
+        else
         {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
+#>
+                <#=t#> value = null;
 
-            return <#=m#>Core(source, selector, cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
+
+                try
+                {
+                    // Start off knowing that we've a non-null value (or exit here, knowing we don't)
+                    // so we don't have to keep testing for nullity.
+                    do
+                    {
+                        if (!await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            return value;
+                        }
+
+                        value = e.Current;
+                    }
+                    while (!value.HasValue);
+
+                    // Keep hold of the wrapped value, and do comparisons on that, rather than
+                    // using the lifted operation each time.
+                    var valueVal = value.GetValueOrDefault();
+
+<#
+            if (isInteger && m == "Max")
+            {
+#>
+                    if (valueVal >= 0)
+                    {
+                        // We can fast-path this case where we know HasValue will
+                        // never affect the outcome, without constantly checking
+                        // if we're in such a state. Similar fast-paths could
+                        // be done for other cases, but as all-positive or mostly-
+                        // positive integer values are quite common in real-world
+                        // uses, it's only been done for int? and long?.
+
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var cur = e.Current;
+                            var x = cur.GetValueOrDefault();
+
+                            if (x <#=comparison#> valueVal)
+                            {
+                                valueVal = x;
+                                value = cur;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var cur = e.Current;
+                            var x = cur.GetValueOrDefault();
+
+                            // Do not replace & with &&. The branch prediction cost outweighs the extra operation
+                            // unless nulls either never happen or always happen.
+                            if (cur.HasValue & x <#=comparison#> valueVal)
+                            {
+                                valueVal = x;
+                                value = cur;
+                            }
+                        }
+                    }
+<#
+            }
+            else if (isFloatingPoint && m == "Min")
+            {
+#>
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var cur = e.Current;
+                        if (cur.HasValue)
+                        {
+                            var x = cur.GetValueOrDefault();
+                            if (x <#=comparison#> valueVal)
+                            {
+                                valueVal = x;
+                                value = cur;
+                            }
+                            else
+                            {
+                                // Normally NaN < anything is false, as is anything < NaN
+                                // However, this leads to some irksome outcomes in Min and Max.
+                                // If we use those semantics then Min(NaN, 5.0) is NaN, but
+                                // Min(5.0, NaN) is 5.0!  To fix this, we impose a total
+                                // ordering where NaN is smaller than every value, including
+                                // negative infinity.
+                                // Not testing for NaN therefore isn't an option, but since we
+                                // can't find a smaller value, we can short-circuit.
+
+                                if (<#=t.TrimEnd('?')#>.IsNaN(x))
+                                {
+                                    return cur;
+                                }
+                            }
+                        }
+                    }
+<#
+            }
+            else
+            {
+                if (isFloatingPoint && m == "Max")
+                {
+#>
+                    // NaN is ordered less than all other values. We need to do explicit checks
+                    // to ensure this, but once we've found a value that is not NaN we need no
+                    // longer worry about it, so first loop until such a value is found (or not,
+                    // as the case may be).
+
+                    while (<#=t.TrimEnd('?')#>.IsNaN(valueVal))
+                    {
+                        if (!await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            return value;
+                        }
+
+                        var cur = e.Current;
+
+                        if (cur.HasValue)
+                        {
+                            valueVal = (value = cur).GetValueOrDefault();
+                        }
+                    }
+
+<#
+                }
+#>
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var cur = e.Current;
+                        var x = cur.GetValueOrDefault();
+
+<#
+                if (shortCircuit)
+                {
+#>
+                        if (cur.HasValue && x <#=comparison#> valueVal)
+<#
+                }
+                else
+                {
+#>
+                        // Do not replace & with &&. The branch prediction cost outweighs the extra operation
+                        // unless nulls either never happen or always happen.
+                        if (cur.HasValue & x <#=comparison#> valueVal)
+<#
+                }
+#>
+                        {
+                            valueVal = x;
+                            value = cur;
+                        }
+                    }
+<#
+            }
+#>
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+
+                return value;
+<#
+        }
+#>
+            }
         }
 
+<#
+foreach (var overload in new[] {
+    new { selector = "Func<TSource, " + t + ">", invoke = "_selector(e.Current)" },
+    new { selector = "Func<TSource, ValueTask<" + t + ">>", invoke = "await _selector(e.Current).ConfigureAwait(false)" },
+    new { selector = "Func<TSource, CancellationToken, ValueTask<" + t + ">>", invoke = "await _selector(e.Current, _cancellationToken).ConfigureAwait(false)" },
+})
+{
+    var isDeepCancellation = overload.selector.Contains("CancellationToken");
+
+    if (isDeepCancellation)
+    {
+#>
 #if !NO_DEEP_CANCELLATION
-        public static Task<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<<#=t#>>> selector, CancellationToken cancellationToken = default)
+<#
+    }
+#>
+        public static Task<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, <#=overload.selector#> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            return <#=m#>Core(source, selector, cancellationToken);
-        }
-#endif
+            return Core(source, selector, cancellationToken);
 
+            async Task<<#=t#>> Core(IAsyncEnumerable<TSource> _source, <#=overload.selector#> _selector, CancellationToken _cancellationToken)
+            {
+<#
+        if (!isNullable)
+        {
+#>
+                <#=t#> value;
+
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
+
+                try
+                {
+                    if (!await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        throw Error.NoElements();
+                    }
+
+                    value = <#=overload.invoke#>;
+
+<#
+            if (isFloatingPoint && m == "Max")
+            {
+#>
+                    // NaN is ordered less than all other values. We need to do explicit checks
+                    // to ensure this, but once we've found a value that is not NaN we need no
+                    // longer worry about it, so first loop until such a value is found (or not,
+                    // as the case may be).
+
+                    while (<#=t#>.IsNaN(value))
+                    {
+                        if (!await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            return value;
+                        }
+
+                        value = <#=overload.invoke#>;
+                    }
+
+<#
+            }
+#>
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var x = <#=overload.invoke#>;
+                        if (x <#=comparison#> value)
+                        {
+                            value = x;
+                        }
+<#
+            if (isFloatingPoint && m == "Min")
+            {
+#>
+                        else
+                        {
+                            // Normally NaN < anything is false, as is anything < NaN
+                            // However, this leads to some irksome outcomes in Min and Max.
+                            // If we use those semantics then Min(NaN, 5.0) is NaN, but
+                            // Min(5.0, NaN) is 5.0!  To fix this, we impose a total
+                            // ordering where NaN is smaller than every value, including
+                            // negative infinity.
+                            // Not testing for NaN therefore isn't an option, but since we
+                            // can't find a smaller value, we can short-circuit.
+
+                            if (<#=t#>.IsNaN(x))
+                            {
+                                return x;
+                            }
+                        }
+<#
+            }
+#>
+                    }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+
+                return value;
+<#
+        }
+        else
+        {
+#>
+                <#=t#> value = null;
+
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
+
+                try
+                {
+                    // Start off knowing that we've a non-null value (or exit here, knowing we don't)
+                    // so we don't have to keep testing for nullity.
+                    do
+                    {
+                        if (!await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            return value;
+                        }
+
+                        value = <#=overload.invoke#>;
+                    }
+                    while (!value.HasValue);
+
+                    // Keep hold of the wrapped value, and do comparisons on that, rather than
+                    // using the lifted operation each time.
+                    var valueVal = value.GetValueOrDefault();
+
+<#
+            if (isInteger && m == "Max")
+            {
+#>
+                    if (valueVal >= 0)
+                    {
+                        // We can fast-path this case where we know HasValue will
+                        // never affect the outcome, without constantly checking
+                        // if we're in such a state. Similar fast-paths could
+                        // be done for other cases, but as all-positive or mostly-
+                        // positive integer values are quite common in real-world
+                        // uses, it's only been done for int? and long?.
+
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var cur = <#=overload.invoke#>;
+                            var x = cur.GetValueOrDefault();
+
+                            if (x <#=comparison#> valueVal)
+                            {
+                                valueVal = x;
+                                value = cur;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var cur = <#=overload.invoke#>;
+                            var x = cur.GetValueOrDefault();
+
+                            // Do not replace & with &&. The branch prediction cost outweighs the extra operation
+                            // unless nulls either never happen or always happen.
+                            if (cur.HasValue & x <#=comparison#> valueVal)
+                            {
+                                valueVal = x;
+                                value = cur;
+                            }
+                        }
+                    }
+<#
+            }
+            else if (isFloatingPoint && m == "Min")
+            {
+#>
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var cur = <#=overload.invoke#>;
+                        if (cur.HasValue)
+                        {
+                            var x = cur.GetValueOrDefault();
+                            if (x <#=comparison#> valueVal)
+                            {
+                                valueVal = x;
+                                value = cur;
+                            }
+                            else
+                            {
+                                // Normally NaN < anything is false, as is anything < NaN
+                                // However, this leads to some irksome outcomes in Min and Max.
+                                // If we use those semantics then Min(NaN, 5.0) is NaN, but
+                                // Min(5.0, NaN) is 5.0!  To fix this, we impose a total
+                                // ordering where NaN is smaller than every value, including
+                                // negative infinity.
+                                // Not testing for NaN therefore isn't an option, but since we
+                                // can't find a smaller value, we can short-circuit.
+
+                                if (<#=t.TrimEnd('?')#>.IsNaN(x))
+                                {
+                                    return cur;
+                                }
+                            }
+                        }
+                    }
+<#
+            }
+            else
+            {
+                if (isFloatingPoint && m == "Max")
+                {
+#>
+                    // NaN is ordered less than all other values. We need to do explicit checks
+                    // to ensure this, but once we've found a value that is not NaN we need no
+                    // longer worry about it, so first loop until such a value is found (or not,
+                    // as the case may be).
+
+                    while (<#=t.TrimEnd('?')#>.IsNaN(valueVal))
+                    {
+                        if (!await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            return value;
+                        }
+
+                        var cur = <#=overload.invoke#>;
+
+                        if (cur.HasValue)
+                        {
+                            valueVal = (value = cur).GetValueOrDefault();
+                        }
+                    }
+
+<#
+                }
+#>
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var cur = <#=overload.invoke#>;
+                        var x = cur.GetValueOrDefault();
+
+<#
+                if (shortCircuit)
+                {
+#>
+                        if (cur.HasValue && x <#=comparison#> valueVal)
+<#
+                }
+                else
+                {
+#>
+                        // Do not replace & with &&. The branch prediction cost outweighs the extra operation
+                        // unless nulls either never happen or always happen.
+                        if (cur.HasValue & x <#=comparison#> valueVal)
+<#
+                }
+#>
+                        {
+                            valueVal = x;
+                            value = cur;
+                        }
+                    }
+<#
+            }
+#>
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+
+                return value;
+<#
+        }
+#>
+            }
+        }
+
+<#
+    if (isDeepCancellation)
+    {
+#>
+#endif
+<#
+    }
+}
+#>
 <#
     }
 }
