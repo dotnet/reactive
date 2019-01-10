@@ -84,9 +84,9 @@ namespace System.Linq
 
         public async ValueTask<TElement[]> ToArrayAsync(CancellationToken cancellationToken)
         {
-            AsyncEnumerableHelpers.ArrayWithLength<TElement> elements = await AsyncEnumerableHelpers.ToArrayWithLength(_source, cancellationToken).ConfigureAwait(false);
+            var elements = await AsyncEnumerableHelpers.ToArrayWithLength(_source, cancellationToken).ConfigureAwait(false);
 
-            int count = elements.Length;
+            var count = elements.Length;
 
             if (count == 0)
             {
@@ -97,13 +97,13 @@ namespace System.Linq
 #endif
             }
 
-            TElement[] array = elements.Array;
+            var array = elements.Array;
 
-            int[] map = await SortedMap(array, count, cancellationToken).ConfigureAwait(false);
+            var map = await SortedMap(array, count, cancellationToken).ConfigureAwait(false);
 
             var result = new TElement[count];
 
-            for (int i = 0; i < result.Length; i++)
+            for (var i = 0; i < result.Length; i++)
             {
                 result[i] = array[map[i]];
             }
@@ -113,9 +113,9 @@ namespace System.Linq
 
         internal async ValueTask<TElement[]> ToArrayAsync(int minIndexInclusive, int maxIndexInclusive, CancellationToken cancellationToken)
         {
-            AsyncEnumerableHelpers.ArrayWithLength<TElement> elements = await AsyncEnumerableHelpers.ToArrayWithLength(_source, cancellationToken).ConfigureAwait(false);
+            var elements = await AsyncEnumerableHelpers.ToArrayWithLength(_source, cancellationToken).ConfigureAwait(false);
 
-            int count = elements.Length;
+            var count = elements.Length;
 
             if (count <= minIndexInclusive)
             {
@@ -131,22 +131,22 @@ namespace System.Linq
                 maxIndexInclusive = count - 1;
             }
 
-            TElement[] array = elements.Array;
+            var array = elements.Array;
 
             if (minIndexInclusive == maxIndexInclusive)
             {
-                AsyncEnumerableSorter<TElement> sorter = GetAsyncEnumerableSorter(cancellationToken);
+                var sorter = GetAsyncEnumerableSorter(cancellationToken);
 
-                TElement element = await sorter.ElementAt(array, count, minIndexInclusive).ConfigureAwait(false);
+                var element = await sorter.ElementAt(array, count, minIndexInclusive).ConfigureAwait(false);
 
                 return new TElement[] { element };
             }
 
-            int[] map = await SortedMap(array, count, minIndexInclusive, maxIndexInclusive, cancellationToken).ConfigureAwait(false);
+            var map = await SortedMap(array, count, minIndexInclusive, maxIndexInclusive, cancellationToken).ConfigureAwait(false);
 
             var result = new TElement[maxIndexInclusive - minIndexInclusive + 1];
 
-            for (int i = 0; minIndexInclusive <= maxIndexInclusive; i++)
+            for (var i = 0; minIndexInclusive <= maxIndexInclusive; i++)
             {
                 result[i] = array[map[minIndexInclusive++]];
             }
@@ -156,22 +156,22 @@ namespace System.Linq
 
         public async ValueTask<List<TElement>> ToListAsync(CancellationToken cancellationToken)
         {
-            AsyncEnumerableHelpers.ArrayWithLength<TElement> elements = await AsyncEnumerableHelpers.ToArrayWithLength(_source, cancellationToken).ConfigureAwait(false);
+            var elements = await AsyncEnumerableHelpers.ToArrayWithLength(_source, cancellationToken).ConfigureAwait(false);
 
-            int count = elements.Length;
+            var count = elements.Length;
 
             if (count == 0)
             {
                 return new List<TElement>(capacity: 0);
             }
 
-            TElement[] array = elements.Array;
+            var array = elements.Array;
 
-            int[] map = await SortedMap(array, count, cancellationToken).ConfigureAwait(false);
+            var map = await SortedMap(array, count, cancellationToken).ConfigureAwait(false);
 
             var result = new List<TElement>(count);
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 result.Add(array[map[i]]);
             }
@@ -181,9 +181,9 @@ namespace System.Linq
 
         internal async ValueTask<List<TElement>> ToListAsync(int minIndexInclusive, int maxIndexInclusive, CancellationToken cancellationToken)
         {
-            AsyncEnumerableHelpers.ArrayWithLength<TElement> elements = await AsyncEnumerableHelpers.ToArrayWithLength(_source, cancellationToken).ConfigureAwait(false);
+            var elements = await AsyncEnumerableHelpers.ToArrayWithLength(_source, cancellationToken).ConfigureAwait(false);
 
-            int count = elements.Length;
+            var count = elements.Length;
 
             if (count <= minIndexInclusive)
             {
@@ -195,18 +195,18 @@ namespace System.Linq
                 maxIndexInclusive = count - 1;
             }
 
-            TElement[] array = elements.Array;
+            var array = elements.Array;
 
             if (minIndexInclusive == maxIndexInclusive)
             {
-                AsyncEnumerableSorter<TElement> sorter = GetAsyncEnumerableSorter(cancellationToken);
+                var sorter = GetAsyncEnumerableSorter(cancellationToken);
 
-                TElement element = await sorter.ElementAt(array, count, minIndexInclusive).ConfigureAwait(false);
+                var element = await sorter.ElementAt(array, count, minIndexInclusive).ConfigureAwait(false);
 
                 return new List<TElement>(1) { element };
             }
 
-            int[] map = await SortedMap(array, count, minIndexInclusive, maxIndexInclusive, cancellationToken).ConfigureAwait(false);
+            var map = await SortedMap(array, count, minIndexInclusive, maxIndexInclusive, cancellationToken).ConfigureAwait(false);
 
             var list = new List<TElement>(maxIndexInclusive - minIndexInclusive + 1);
 
@@ -222,7 +222,7 @@ namespace System.Linq
         {
             if (_source is IAsyncIListProvider<TElement> listProv)
             {
-                int count = await listProv.GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
+                var count = await listProv.GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
             }
 
             return !onlyIfCheap || _source is ICollection<TElement> || _source is ICollection ? await _source.CountAsync(cancellationToken).ConfigureAwait(false) : -1;
@@ -230,7 +230,7 @@ namespace System.Linq
 
         internal async ValueTask<int> GetCountAsync(int minIndexInclusive, int maxIndexInclusive, bool onlyIfCheap, CancellationToken cancellationToken)
         {
-            int count = await GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
+            var count = await GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
 
             if (count <= 0)
             {
@@ -247,14 +247,14 @@ namespace System.Linq
 
         private ValueTask<int[]> SortedMap(TElement[] elements, int count, CancellationToken cancellationToken)
         {
-            AsyncEnumerableSorter<TElement> sorter = GetAsyncEnumerableSorter(cancellationToken);
+            var sorter = GetAsyncEnumerableSorter(cancellationToken);
 
             return sorter.Sort(elements, count);
         }
 
         private ValueTask<int[]> SortedMap(TElement[] elements, int count, int minIndexInclusive, int maxIndexInclusive, CancellationToken cancellationToken)
         {
-            AsyncEnumerableSorter<TElement> sorter = GetAsyncEnumerableSorter(cancellationToken);
+            var sorter = GetAsyncEnumerableSorter(cancellationToken);
 
             return sorter.Sort(elements, count, minIndexInclusive, maxIndexInclusive);
         }
@@ -273,15 +273,15 @@ namespace System.Linq
                     return new Maybe<TElement>();
                 }
 
-                TElement value = e.Current;
+                var value = e.Current;
 
-                AsyncCachingComparer<TElement> comparer = GetComparer();
+                var comparer = GetComparer();
 
                 await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
 
                 while (await e.MoveNextAsync())
                 {
-                    TElement x = e.Current;
+                    var x = e.Current;
 
                     if (await comparer.Compare(x, cacheLower: true, cancellationToken).ConfigureAwait(false) < 0)
                     {
@@ -336,15 +336,15 @@ namespace System.Linq
                     return new Maybe<TElement>();
                 }
 
-                TElement value = e.Current;
+                var value = e.Current;
 
-                AsyncCachingComparer<TElement> comparer = GetComparer();
+                var comparer = GetComparer();
 
                 await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
 
                 while (await e.MoveNextAsync())
                 {
-                    TElement current = e.Current;
+                    var current = e.Current;
 
                     if (await comparer.Compare(current, cacheLower: false, cancellationToken).ConfigureAwait(false) >= 0)
                     {
@@ -391,22 +391,22 @@ namespace System.Linq
 
         internal async ValueTask<Maybe<TElement>> TryGetLastAsync(int minIndexInclusive, int maxIndexInclusive, CancellationToken cancellationToken)
         {
-            AsyncEnumerableHelpers.ArrayWithLength<TElement> elements = await AsyncEnumerableHelpers.ToArrayWithLength(_source, cancellationToken).ConfigureAwait(false);
+            var elements = await AsyncEnumerableHelpers.ToArrayWithLength(_source, cancellationToken).ConfigureAwait(false);
 
-            int count = elements.Length;
+            var count = elements.Length;
 
             if (minIndexInclusive >= count)
             {
                 return new Maybe<TElement>();
             }
 
-            TElement[] array = elements.Array;
+            var array = elements.Array;
 
             TElement last;
 
             if (maxIndexInclusive < count - 1)
             {
-                AsyncEnumerableSorter<TElement> sorter = GetAsyncEnumerableSorter(cancellationToken);
+                var sorter = GetAsyncEnumerableSorter(cancellationToken);
 
                 last = await sorter.ElementAt(array, count, maxIndexInclusive).ConfigureAwait(false);
             }
@@ -420,15 +420,15 @@ namespace System.Linq
 
         private async ValueTask<TElement> Last(TElement[] items, int count, CancellationToken cancellationToken)
         {
-            TElement value = items[0];
+            var value = items[0];
 
-            AsyncCachingComparer<TElement> comparer = GetComparer();
+            var comparer = GetComparer();
 
             await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
 
-            for (int i = 1; i != count; ++i)
+            for (var i = 1; i != count; ++i)
             {
-                TElement x = items[i];
+                var x = items[i];
 
                 if (await comparer.Compare(x, cacheLower: false, cancellationToken).ConfigureAwait(false) >= 0)
                 {
@@ -456,15 +456,15 @@ namespace System.Linq
 
                 async ValueTask<Maybe<TElement>> Core()
                 {
-                    AsyncEnumerableHelpers.ArrayWithLength<TElement> elements = await AsyncEnumerableHelpers.ToArrayWithLength(_source, cancellationToken).ConfigureAwait(false);
+                    var elements = await AsyncEnumerableHelpers.ToArrayWithLength(_source, cancellationToken).ConfigureAwait(false);
 
-                    int count = elements.Length;
+                    var count = elements.Length;
 
                     if (index < count)
                     {
-                        AsyncEnumerableSorter<TElement> sorter = GetAsyncEnumerableSorter(cancellationToken);
+                        var sorter = GetAsyncEnumerableSorter(cancellationToken);
 
-                        TElement element = await sorter.ElementAt(elements.Array, count, index).ConfigureAwait(false);
+                        var element = await sorter.ElementAt(elements.Array, count, index).ConfigureAwait(false);
 
                         return new Maybe<TElement>(element);
                     }
@@ -622,7 +622,7 @@ namespace System.Linq
 
         public async ValueTask<int[]> Sort(TElement[] elements, int count)
         {
-            int[] map = await ComputeMap(elements, count).ConfigureAwait(false);
+            var map = await ComputeMap(elements, count).ConfigureAwait(false);
 
             QuickSort(map, 0, count - 1);
 
@@ -631,7 +631,7 @@ namespace System.Linq
 
         public async ValueTask<int[]> Sort(TElement[] elements, int count, int minIndexInclusive, int maxIndexInclusive)
         {
-            int[] map = await ComputeMap(elements, count).ConfigureAwait(false);
+            var map = await ComputeMap(elements, count).ConfigureAwait(false);
 
             PartialQuickSort(map, 0, count - 1, minIndexInclusive, maxIndexInclusive);
 
@@ -640,7 +640,7 @@ namespace System.Linq
 
         public async ValueTask<TElement> ElementAt(TElement[] elements, int count, int index)
         {
-            int[] map = await ComputeMap(elements, count).ConfigureAwait(false);
+            var map = await ComputeMap(elements, count).ConfigureAwait(false);
 
             return index == 0 ?
                 elements[Min(map, count)] :
@@ -686,7 +686,7 @@ namespace System.Linq
 
         internal sealed override int CompareAnyKeys(int index1, int index2)
         {
-            int c = _comparer.Compare(_keys[index1], _keys[index2]);
+            var c = _comparer.Compare(_keys[index1], _keys[index2]);
 
             if (c == 0)
             {
@@ -765,9 +765,9 @@ namespace System.Linq
         {
             do
             {
-                int i = left;
-                int j = right;
-                int x = map[i + ((j - i) >> 1)];
+                var i = left;
+                var j = right;
+                var x = map[i + ((j - i) >> 1)];
                 do
                 {
                     while (i < map.Length && CompareKeys(x, map[i]) > 0)
@@ -787,7 +787,7 @@ namespace System.Linq
 
                     if (i < j)
                     {
-                        int temp = map[i];
+                        var temp = map[i];
                         map[i] = map[j];
                         map[j] = temp;
                     }
@@ -1015,7 +1015,7 @@ namespace System.Linq
 
         public IAsyncPartition<TElement> Skip(int count)
         {
-            int minIndex = unchecked(_minIndexInclusive + count);
+            var minIndex = unchecked(_minIndexInclusive + count);
 
             if (unchecked((uint)minIndex > (uint)_maxIndexInclusive))
             {
@@ -1027,7 +1027,7 @@ namespace System.Linq
 
         public IAsyncPartition<TElement> Take(int count)
         {
-            int maxIndex = unchecked(_minIndexInclusive + count - 1);
+            var maxIndex = unchecked(_minIndexInclusive + count - 1);
 
             if (unchecked((uint)maxIndex >= (uint)_maxIndexInclusive))
             {
@@ -1076,7 +1076,7 @@ namespace System.Linq
                     _minIndexIterator = _minIndexInclusive;
                     _maxIndexIterator = _maxIndexInclusive;
 
-                    int count = _buffer.Length;
+                    var count = _buffer.Length;
 
                     if (count > _minIndexIterator)
                     {
@@ -1085,7 +1085,7 @@ namespace System.Linq
                             _maxIndexIterator = count - 1;
                         }
 
-                        AsyncEnumerableSorter<TElement> sorter = _source.GetAsyncEnumerableSorter(_cancellationToken);
+                        var sorter = _source.GetAsyncEnumerableSorter(_cancellationToken);
 
                         if (_minIndexIterator == _maxIndexIterator)
                         {
@@ -1155,9 +1155,9 @@ namespace System.Linq
 
         internal override ValueTask<int> Compare(TElement element, bool cacheLower, CancellationToken cancellationToken)
         {
-            TKey newKey = _keySelector(element);
+            var newKey = _keySelector(element);
 
-            int cmp = _descending ? _comparer.Compare(_lastKey, newKey) : _comparer.Compare(newKey, _lastKey);
+            var cmp = _descending ? _comparer.Compare(_lastKey, newKey) : _comparer.Compare(newKey, _lastKey);
 
             if (cacheLower == cmp < 0)
             {
@@ -1187,9 +1187,9 @@ namespace System.Linq
 
         internal override async ValueTask<int> Compare(TElement element, bool cacheLower, CancellationToken cancellationToken)
         {
-            TKey newKey = _keySelector(element);
+            var newKey = _keySelector(element);
 
-            int cmp = _descending ? _comparer.Compare(_lastKey, newKey) : _comparer.Compare(newKey, _lastKey);
+            var cmp = _descending ? _comparer.Compare(_lastKey, newKey) : _comparer.Compare(newKey, _lastKey);
 
             if (cmp == 0)
             {
@@ -1230,9 +1230,9 @@ namespace System.Linq
 
         internal override async ValueTask<int> Compare(TElement element, bool cacheLower, CancellationToken cancellationToken)
         {
-            TKey newKey = await _keySelector(element).ConfigureAwait(false);
+            var newKey = await _keySelector(element).ConfigureAwait(false);
 
-            int cmp = _descending ? _comparer.Compare(_lastKey, newKey) : _comparer.Compare(newKey, _lastKey);
+            var cmp = _descending ? _comparer.Compare(_lastKey, newKey) : _comparer.Compare(newKey, _lastKey);
 
             if (cacheLower == cmp < 0)
             {
@@ -1260,9 +1260,9 @@ namespace System.Linq
 
         internal override async ValueTask<int> Compare(TElement element, bool cacheLower, CancellationToken cancellationToken)
         {
-            TKey newKey = await _keySelector(element).ConfigureAwait(false);
+            var newKey = await _keySelector(element).ConfigureAwait(false);
 
-            int cmp = _descending ? _comparer.Compare(_lastKey, newKey) : _comparer.Compare(newKey, _lastKey);
+            var cmp = _descending ? _comparer.Compare(_lastKey, newKey) : _comparer.Compare(newKey, _lastKey);
 
             if (cmp == 0)
             {
@@ -1304,9 +1304,9 @@ namespace System.Linq
 
         internal override async ValueTask<int> Compare(TElement element, bool cacheLower, CancellationToken cancellationToken)
         {
-            TKey newKey = await _keySelector(element, cancellationToken).ConfigureAwait(false);
+            var newKey = await _keySelector(element, cancellationToken).ConfigureAwait(false);
 
-            int cmp = _descending ? _comparer.Compare(_lastKey, newKey) : _comparer.Compare(newKey, _lastKey);
+            var cmp = _descending ? _comparer.Compare(_lastKey, newKey) : _comparer.Compare(newKey, _lastKey);
 
             if (cacheLower == cmp < 0)
             {
@@ -1334,9 +1334,9 @@ namespace System.Linq
 
         internal override async ValueTask<int> Compare(TElement element, bool cacheLower, CancellationToken cancellationToken)
         {
-            TKey newKey = await _keySelector(element, cancellationToken).ConfigureAwait(false);
+            var newKey = await _keySelector(element, cancellationToken).ConfigureAwait(false);
 
-            int cmp = _descending ? _comparer.Compare(_lastKey, newKey) : _comparer.Compare(newKey, _lastKey);
+            var cmp = _descending ? _comparer.Compare(_lastKey, newKey) : _comparer.Compare(newKey, _lastKey);
 
             if (cmp == 0)
             {
