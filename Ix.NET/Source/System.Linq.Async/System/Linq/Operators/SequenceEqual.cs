@@ -10,15 +10,8 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken = default)
-        {
-            if (first == null)
-                throw Error.ArgumentNull(nameof(first));
-            if (second == null)
-                throw Error.ArgumentNull(nameof(second));
-
-            return SequenceEqualCore(first, second, comparer: null, cancellationToken);
-        }
+        public static Task<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken = default) =>
+            SequenceEqual(first, second, comparer: null, cancellationToken);
 
         public static Task<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
@@ -27,11 +20,6 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
-            return SequenceEqualCore(first, second, comparer, cancellationToken);
-        }
-
-        private static Task<bool> SequenceEqualCore<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
-        {
             if (comparer == null)
             {
                 comparer = EqualityComparer<TSource>.Default;
