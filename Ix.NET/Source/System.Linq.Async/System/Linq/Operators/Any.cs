@@ -19,6 +19,12 @@ namespace System.Linq
 
             async Task<bool> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    return await e.MoveNextAsync();
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -29,6 +35,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
             }
         }
 
@@ -43,6 +50,15 @@ namespace System.Linq
 
             async Task<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
             {
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    if (_predicate(item))
+                    {
+                        return true;
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -57,6 +73,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return false;
             }
@@ -73,6 +90,15 @@ namespace System.Linq
 
             async Task<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    if (await _predicate(item).ConfigureAwait(false))
+                    {
+                        return true;
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -87,6 +113,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return false;
             }
@@ -104,6 +131,15 @@ namespace System.Linq
 
             async Task<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    if (await _predicate(item, _cancellationToken).ConfigureAwait(false))
+                    {
+                        return true;
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -118,6 +154,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return false;
             }
