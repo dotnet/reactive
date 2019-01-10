@@ -4,22 +4,14 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static IAsyncEnumerable<TSource> Except<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
-        {
-            if (first == null)
-                throw Error.ArgumentNull(nameof(first));
-            if (second == null)
-                throw Error.ArgumentNull(nameof(second));
-
-            return new ExceptAsyncIterator<TSource>(first, second, comparer: null);
-        }
+        public static IAsyncEnumerable<TSource> Except<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second) =>
+            Except(first, second, comparer: null);
 
         public static IAsyncEnumerable<TSource> Except<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {

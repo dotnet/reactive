@@ -11,15 +11,8 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
-        {
-            if (first == null)
-                throw Error.ArgumentNull(nameof(first));
-            if (second == null)
-                throw Error.ArgumentNull(nameof(second));
-
-            return UnionCore(first, second, comparer: null);
-        }
+        public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second) =>
+            Union(first, second, comparer: null);
 
         public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
@@ -28,11 +21,6 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
-            return UnionCore(first, second, comparer);
-        }
-
-        private static IAsyncEnumerable<TSource> UnionCore<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
-        {
             return first is UnionAsyncIterator<TSource> union && AreEqualityComparersEqual(comparer, union._comparer) ? union.Union(second) : new UnionAsyncIterator2<TSource>(first, second, comparer);
         }
 
