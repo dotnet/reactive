@@ -33,6 +33,31 @@ namespace System.Linq
 
         private static async Task<bool> ContainsCore<TSource>(IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            //
+            // See https://github.com/dotnet/corefx/pull/25097 for the optimization here.
+            //
+            if (comparer == null)
+            {
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    if (EqualityComparer<TSource>.Default.Equals(item, value))
+                    {
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    if (comparer.Equals(item, value))
+                    {
+                        return true;
+                    }
+                }
+            }
+#else
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -65,6 +90,7 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return false;
         }
