@@ -10,48 +10,43 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<HashSet<TSource>> ToHashSetAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return ToHashSetCore(source, comparer: null, cancellationToken);
-        }
+        public static Task<HashSet<TSource>> ToHashSetAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default) =>
+            ToHashSetAsync(source, comparer: null, cancellationToken);
 
         public static Task<HashSet<TSource>> ToHashSetAsync<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return ToHashSetCore(source, comparer, cancellationToken);
-        }
+            return Core(source, comparer, cancellationToken);
 
-        private static async Task<HashSet<TSource>> ToHashSetCore<TSource>(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
-        {
-            var set = new HashSet<TSource>(comparer);
+            async Task<HashSet<TSource>> Core(IAsyncEnumerable<TSource> _source, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
+            {
+                var set = new HashSet<TSource>(_comparer);
 
 #if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
-            await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
-            {
-                set.Add(item);
-            }
-#else
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
-                    set.Add(e.Current);
+                    set.Add(item);
                 }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
+#else
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
+
+                try
+                {
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        set.Add(e.Current);
+                    }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
 #endif
 
-            return set;
+                return set;
+            }
         }
     }
 }
