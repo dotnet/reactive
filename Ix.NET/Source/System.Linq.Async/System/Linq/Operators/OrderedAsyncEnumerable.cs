@@ -265,6 +265,33 @@ namespace System.Linq
 
         public async ValueTask<Maybe<TElement>> TryGetFirstAsync(CancellationToken cancellationToken)
         {
+#if CSHARP8
+            await using (IAsyncEnumerator<TElement> e = _source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            {
+                if (!await e.MoveNextAsync())
+                {
+                    return new Maybe<TElement>();
+                }
+
+                TElement value = e.Current;
+
+                AsyncCachingComparer<TElement> comparer = GetComparer();
+
+                await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
+
+                while (await e.MoveNextAsync())
+                {
+                    TElement x = e.Current;
+
+                    if (await comparer.Compare(x, cacheLower: true, cancellationToken).ConfigureAwait(false) < 0)
+                    {
+                        value = x;
+                    }
+                }
+
+                return new Maybe<TElement>(value);
+            }
+#else
             IAsyncEnumerator<TElement> e = _source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -296,10 +323,38 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
         }
 
         public async ValueTask<Maybe<TElement>> TryGetLastAsync(CancellationToken cancellationToken)
         {
+#if CSHARP8
+            await using (IAsyncEnumerator<TElement> e = _source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            {
+                if (!await e.MoveNextAsync())
+                {
+                    return new Maybe<TElement>();
+                }
+
+                TElement value = e.Current;
+
+                AsyncCachingComparer<TElement> comparer = GetComparer();
+
+                await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
+
+                while (await e.MoveNextAsync())
+                {
+                    TElement current = e.Current;
+
+                    if (await comparer.Compare(current, cacheLower: false, cancellationToken).ConfigureAwait(false) >= 0)
+                    {
+                        value = current;
+                    }
+                }
+
+                return new Maybe<TElement>(value);
+            }
+#else
             IAsyncEnumerator<TElement> e = _source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -331,6 +386,7 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
         }
 
         internal async ValueTask<Maybe<TElement>> TryGetLastAsync(int minIndexInclusive, int maxIndexInclusive, CancellationToken cancellationToken)
