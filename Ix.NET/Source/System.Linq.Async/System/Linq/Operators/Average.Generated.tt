@@ -58,6 +58,34 @@ foreach (var o in os)
 if (isNullable)
 {
 #>
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    while (await e.MoveNextAsync())
+                    {
+                        var v = e.Current;
+                        if (v.HasValue)
+                        {
+                            <#=o.sum#> sum = v.GetValueOrDefault();
+                            long count = 1;
+                            checked
+                            {
+                                while (await e.MoveNextAsync())
+                                {
+                                    v = e.Current;
+                                    if (v.HasValue)
+                                    {
+                                        sum += v.GetValueOrDefault();
+                                        ++count;
+                                    }
+                                }
+                            }
+
+                            return <#=res#>;
+                        }
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -90,6 +118,7 @@ if (isNullable)
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return null;
 <#
@@ -97,6 +126,28 @@ if (isNullable)
 else
 {
 #>
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        throw Error.NoElements();
+                    }
+
+                    <#=o.sum#> sum = e.Current;
+                    long count = 1;
+                    checked
+                    {
+                        while (await e.MoveNextAsync())
+                        {
+                            sum += e.Current;
+                            ++count;
+                        }
+                    }
+
+                    return <#=res#>;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -123,6 +174,7 @@ else
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 <#
 }
 #>
@@ -144,6 +196,34 @@ else
 if (isNullable)
 {
 #>
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    while (await e.MoveNextAsync())
+                    {
+                        var v = _selector(e.Current);
+                        if (v.HasValue)
+                        {
+                            <#=o.sum#> sum = v.GetValueOrDefault();
+                            long count = 1;
+                            checked
+                            {
+                                while (await e.MoveNextAsync())
+                                {
+                                    v = _selector(e.Current);
+                                    if (v.HasValue)
+                                    {
+                                        sum += v.GetValueOrDefault();
+                                        ++count;
+                                    }
+                                }
+                            }
+
+                            return <#=res#>;
+                        }
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -176,6 +256,7 @@ if (isNullable)
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return null;
 <#
@@ -183,6 +264,28 @@ if (isNullable)
 else
 {
 #>
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        throw Error.NoElements();
+                    }
+
+                    <#=o.sum#> sum = _selector(e.Current);
+                    long count = 1;
+                    checked
+                    {
+                        while (await e.MoveNextAsync())
+                        {
+                            sum += _selector(e.Current);
+                            ++count;
+                        }
+                    }
+
+                    return <#=res#>;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -209,6 +312,7 @@ else
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 <#
 }
 #>
@@ -230,6 +334,34 @@ else
 if (isNullable)
 {
 #>
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    while (await e.MoveNextAsync())
+                    {
+                        var v = await _selector(e.Current).ConfigureAwait(false);
+                        if (v.HasValue)
+                        {
+                            <#=o.sum#> sum = v.GetValueOrDefault();
+                            long count = 1;
+                            checked
+                            {
+                                while (await e.MoveNextAsync())
+                                {
+                                    v = await _selector(e.Current).ConfigureAwait(false);
+                                    if (v.HasValue)
+                                    {
+                                        sum += v.GetValueOrDefault();
+                                        ++count;
+                                    }
+                                }
+                            }
+
+                            return <#=res#>;
+                        }
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -262,6 +394,7 @@ if (isNullable)
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return null;
 <#
@@ -269,6 +402,28 @@ if (isNullable)
 else
 {
 #>
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        throw Error.NoElements();
+                    }
+
+                    <#=o.sum#> sum = await _selector(e.Current).ConfigureAwait(false);
+                    long count = 1;
+                    checked
+                    {
+                        while (await e.MoveNextAsync())
+                        {
+                            sum += await _selector(e.Current).ConfigureAwait(false);
+                            ++count;
+                        }
+                    }
+
+                    return <#=res#>;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -295,6 +450,7 @@ else
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 <#
 }
 #>
@@ -317,6 +473,34 @@ else
 if (isNullable)
 {
 #>
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    while (await e.MoveNextAsync())
+                    {
+                        var v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        if (v.HasValue)
+                        {
+                            <#=o.sum#> sum = v.GetValueOrDefault();
+                            long count = 1;
+                            checked
+                            {
+                                while (await e.MoveNextAsync())
+                                {
+                                    v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                                    if (v.HasValue)
+                                    {
+                                        sum += v.GetValueOrDefault();
+                                        ++count;
+                                    }
+                                }
+                            }
+
+                            return <#=res#>;
+                        }
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -349,6 +533,7 @@ if (isNullable)
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return null;
 <#
@@ -356,6 +541,28 @@ if (isNullable)
 else
 {
 #>
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        throw Error.NoElements();
+                    }
+
+                    <#=o.sum#> sum = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                    long count = 1;
+                    checked
+                    {
+                        while (await e.MoveNextAsync())
+                        {
+                            sum += await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                            ++count;
+                        }
+                    }
+
+                    return <#=res#>;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -382,6 +589,7 @@ else
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 <#
 }
 #>
