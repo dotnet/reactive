@@ -21,6 +21,15 @@ namespace System.Linq
             {
                 var sum = 0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (int value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        sum += value;
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -37,6 +46,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -55,6 +65,17 @@ namespace System.Linq
             {
                 var sum = 0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = _selector(item);
+
+                    checked
+                    {
+                        sum += value;
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -73,6 +94,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -91,6 +113,17 @@ namespace System.Linq
             {
                 var sum = 0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item).ConfigureAwait(false);
+
+                    checked
+                    {
+                        sum += value;
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -109,6 +142,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -128,6 +162,17 @@ namespace System.Linq
             {
                 var sum = 0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+
+                    checked
+                    {
+                        sum += value;
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -146,6 +191,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -163,6 +209,15 @@ namespace System.Linq
             {
                 var sum = 0L;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (long value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        sum += value;
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -179,6 +234,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -197,6 +253,17 @@ namespace System.Linq
             {
                 var sum = 0L;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = _selector(item);
+
+                    checked
+                    {
+                        sum += value;
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -215,6 +282,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -233,6 +301,17 @@ namespace System.Linq
             {
                 var sum = 0L;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item).ConfigureAwait(false);
+
+                    checked
+                    {
+                        sum += value;
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -251,6 +330,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -270,6 +350,17 @@ namespace System.Linq
             {
                 var sum = 0L;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+
+                    checked
+                    {
+                        sum += value;
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -288,6 +379,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -305,6 +397,12 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (float value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    sum += value;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -318,6 +416,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -336,6 +435,14 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = _selector(item);
+
+                    sum += value;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -351,6 +458,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -369,6 +477,14 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item).ConfigureAwait(false);
+
+                    sum += value;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -384,6 +500,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -403,6 +520,14 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+
+                    sum += value;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -418,6 +543,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -435,6 +561,12 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (double value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    sum += value;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -448,6 +580,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -466,6 +599,14 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = _selector(item);
+
+                    sum += value;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -481,6 +622,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -499,6 +641,14 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item).ConfigureAwait(false);
+
+                    sum += value;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -514,6 +664,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -533,6 +684,14 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+
+                    sum += value;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -548,6 +707,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -565,6 +725,12 @@ namespace System.Linq
             {
                 var sum = 0m;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (decimal value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    sum += value;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -578,6 +744,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -596,6 +763,14 @@ namespace System.Linq
             {
                 var sum = 0m;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = _selector(item);
+
+                    sum += value;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -611,6 +786,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -629,6 +805,14 @@ namespace System.Linq
             {
                 var sum = 0m;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item).ConfigureAwait(false);
+
+                    sum += value;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -644,6 +828,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -663,6 +848,14 @@ namespace System.Linq
             {
                 var sum = 0m;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+
+                    sum += value;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -678,6 +871,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -695,6 +889,15 @@ namespace System.Linq
             {
                 var sum = 0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (int? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        sum += value.GetValueOrDefault();
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -711,6 +914,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -729,6 +933,17 @@ namespace System.Linq
             {
                 var sum = 0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = _selector(item);
+
+                    checked
+                    {
+                        sum += value.GetValueOrDefault();
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -747,6 +962,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -765,6 +981,17 @@ namespace System.Linq
             {
                 var sum = 0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item).ConfigureAwait(false);
+
+                    checked
+                    {
+                        sum += value.GetValueOrDefault();
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -783,6 +1010,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -802,6 +1030,17 @@ namespace System.Linq
             {
                 var sum = 0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+
+                    checked
+                    {
+                        sum += value.GetValueOrDefault();
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -820,6 +1059,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -837,6 +1077,15 @@ namespace System.Linq
             {
                 var sum = 0L;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (long? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        sum += value.GetValueOrDefault();
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -853,6 +1102,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -871,6 +1121,17 @@ namespace System.Linq
             {
                 var sum = 0L;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = _selector(item);
+
+                    checked
+                    {
+                        sum += value.GetValueOrDefault();
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -889,6 +1150,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -907,6 +1169,17 @@ namespace System.Linq
             {
                 var sum = 0L;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item).ConfigureAwait(false);
+
+                    checked
+                    {
+                        sum += value.GetValueOrDefault();
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -925,6 +1198,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -944,6 +1218,17 @@ namespace System.Linq
             {
                 var sum = 0L;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+
+                    checked
+                    {
+                        sum += value.GetValueOrDefault();
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -962,6 +1247,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -979,6 +1265,12 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (float? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    sum += value.GetValueOrDefault();
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -992,6 +1284,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -1010,6 +1303,14 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = _selector(item);
+
+                    sum += value.GetValueOrDefault();
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -1025,6 +1326,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -1043,6 +1345,14 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item).ConfigureAwait(false);
+
+                    sum += value.GetValueOrDefault();
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -1058,6 +1368,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -1077,6 +1388,14 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+
+                    sum += value.GetValueOrDefault();
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -1092,6 +1411,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -1109,6 +1429,12 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (double? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    sum += value.GetValueOrDefault();
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -1122,6 +1448,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -1140,6 +1467,14 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = _selector(item);
+
+                    sum += value.GetValueOrDefault();
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -1155,6 +1490,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -1173,6 +1509,14 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item).ConfigureAwait(false);
+
+                    sum += value.GetValueOrDefault();
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -1188,6 +1532,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -1207,6 +1552,14 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+
+                    sum += value.GetValueOrDefault();
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -1222,6 +1575,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -1239,6 +1593,12 @@ namespace System.Linq
             {
                 var sum = 0m;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (decimal? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    sum += value.GetValueOrDefault();
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -1252,6 +1612,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -1270,6 +1631,14 @@ namespace System.Linq
             {
                 var sum = 0m;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = _selector(item);
+
+                    sum += value.GetValueOrDefault();
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -1285,6 +1654,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -1303,6 +1673,14 @@ namespace System.Linq
             {
                 var sum = 0m;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item).ConfigureAwait(false);
+
+                    sum += value.GetValueOrDefault();
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -1318,6 +1696,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
@@ -1337,6 +1716,14 @@ namespace System.Linq
             {
                 var sum = 0m;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+
+                    sum += value.GetValueOrDefault();
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -1352,6 +1739,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return sum;
             }
