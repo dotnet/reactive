@@ -40,6 +40,17 @@ namespace System.Linq
                     }
                     else
                     {
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                        await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                        {
+                            if (_index == 0)
+                            {
+                                return item;
+                            }
+
+                            _index--;
+                        }
+#else
                         var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                         try
@@ -58,6 +69,7 @@ namespace System.Linq
                         {
                             await e.DisposeAsync().ConfigureAwait(false);
                         }
+#endif
                     }
                 }
 
