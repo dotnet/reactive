@@ -30,6 +30,24 @@ namespace System.Linq
                     throw Error.MoreThanOneElement();
                 }
 
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        throw Error.NoElements();
+                    }
+
+                    var result = e.Current;
+
+                    if (await e.MoveNextAsync())
+                    {
+                        throw Error.MoreThanOneElement();
+                    }
+
+                    return result;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -51,6 +69,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
             }
         }
 
@@ -65,6 +84,28 @@ namespace System.Linq
 
             async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
             {
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    while (await e.MoveNextAsync())
+                    {
+                        var result = e.Current;
+
+                        if (_predicate(result))
+                        {
+                            while (await e.MoveNextAsync())
+                            {
+                                if (_predicate(e.Current))
+                                {
+                                    throw Error.MoreThanOneElement();
+                                }
+                            }
+
+                            return result;
+                        }
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -86,13 +127,14 @@ namespace System.Linq
                             return result;
                         }
                     }
-
-                    throw Error.NoElements();
                 }
                 finally
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
+
+                throw Error.NoElements();
             }
         }
 
@@ -107,6 +149,28 @@ namespace System.Linq
 
             async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    while (await e.MoveNextAsync())
+                    {
+                        var result = e.Current;
+
+                        if (await _predicate(result).ConfigureAwait(false))
+                        {
+                            while (await e.MoveNextAsync())
+                            {
+                                if (await _predicate(e.Current).ConfigureAwait(false))
+                                {
+                                    throw Error.MoreThanOneElement();
+                                }
+                            }
+
+                            return result;
+                        }
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -128,13 +192,14 @@ namespace System.Linq
                             return result;
                         }
                     }
-
-                    throw Error.NoElements();
                 }
                 finally
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
+
+                throw Error.NoElements();
             }
         }
 
@@ -150,6 +215,28 @@ namespace System.Linq
 
             async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    while (await e.MoveNextAsync())
+                    {
+                        var result = e.Current;
+
+                        if (await _predicate(result, _cancellationToken).ConfigureAwait(false))
+                        {
+                            while (await e.MoveNextAsync())
+                            {
+                                if (await _predicate(e.Current, _cancellationToken).ConfigureAwait(false))
+                                {
+                                    throw Error.MoreThanOneElement();
+                                }
+                            }
+
+                            return result;
+                        }
+                    }
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -171,13 +258,14 @@ namespace System.Linq
                             return result;
                         }
                     }
-
-                    throw Error.NoElements();
                 }
                 finally
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
+
+                throw Error.NoElements();
             }
         }
 #endif
