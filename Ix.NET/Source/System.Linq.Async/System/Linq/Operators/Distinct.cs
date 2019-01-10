@@ -11,13 +11,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            return new DistinctAsyncIterator<TSource>(source, comparer: null);
-        }
+        public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source) => Distinct(source, comparer: null);
 
         public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
