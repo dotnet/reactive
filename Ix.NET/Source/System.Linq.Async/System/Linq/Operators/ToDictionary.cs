@@ -152,12 +152,21 @@ namespace System.Linq
 
         private static async Task<Dictionary<TKey, TElement>> ToDictionaryCore<TSource, TKey, TElement>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
+            var d = new Dictionary<TKey, TElement>(comparer);
+
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                var key = keySelector(item);
+                var value = elementSelector(item);
+
+                d.Add(key, value);
+            }
+#else
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                var d = new Dictionary<TKey, TElement>(comparer);
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     var x = e.Current;
@@ -167,23 +176,33 @@ namespace System.Linq
 
                     d.Add(key, value);
                 }
-
-                return d;
             }
             finally
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
+
+            return d;
         }
 
         private static async Task<Dictionary<TKey, TElement>> ToDictionaryCore<TSource, TKey, TElement>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
+            var d = new Dictionary<TKey, TElement>(comparer);
+
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                var key = await keySelector(item).ConfigureAwait(false);
+                var value = await elementSelector(item).ConfigureAwait(false);
+
+                d.Add(key, value);
+            }
+#else
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
             {
-                var d = new Dictionary<TKey, TElement>(comparer);
-
                 while (await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     var x = e.Current;
@@ -193,13 +212,14 @@ namespace System.Linq
 
                     d.Add(key, value);
                 }
-
-                return d;
             }
             finally
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
+
+            return d;
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -207,6 +227,15 @@ namespace System.Linq
         {
             var d = new Dictionary<TKey, TElement>(comparer);
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
+                var value = await elementSelector(item, cancellationToken).ConfigureAwait(false);
+
+                d.Add(key, value);
+            }
+#else
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -225,6 +254,7 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return d;
         }
