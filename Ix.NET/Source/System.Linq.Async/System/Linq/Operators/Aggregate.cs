@@ -21,6 +21,24 @@ namespace System.Linq
 
             async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, TSource> _accumulator, CancellationToken _cancellationToken)
             {
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        throw Error.NoElements();
+                    }
+
+                    var acc = e.Current;
+
+                    while (await e.MoveNextAsync())
+                    {
+                        acc = _accumulator(acc, e.Current);
+                    }
+
+                    return acc;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -43,6 +61,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
             }
         }
 
@@ -57,6 +76,24 @@ namespace System.Linq
 
             async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, ValueTask<TSource>> _accumulator, CancellationToken _cancellationToken)
             {
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        throw Error.NoElements();
+                    }
+
+                    var acc = e.Current;
+
+                    while (await e.MoveNextAsync())
+                    {
+                        acc = await _accumulator(acc, e.Current).ConfigureAwait(false);
+                    }
+
+                    return acc;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -79,6 +116,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
             }
         }
 
@@ -94,6 +132,24 @@ namespace System.Linq
 
             async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, CancellationToken, ValueTask<TSource>> _accumulator, CancellationToken _cancellationToken)
             {
+#if CSHARP8
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        throw Error.NoElements();
+                    }
+
+                    var acc = e.Current;
+
+                    while (await e.MoveNextAsync())
+                    {
+                        acc = await _accumulator(acc, e.Current, _cancellationToken).ConfigureAwait(false);
+                    }
+
+                    return acc;
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -116,6 +172,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
             }
         }
 #endif
@@ -133,6 +190,12 @@ namespace System.Linq
             {
                 var acc = _seed;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    acc = _accumulator(acc, item);
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -146,6 +209,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return acc;
             }
@@ -164,6 +228,12 @@ namespace System.Linq
             {
                 var acc = _seed;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    acc = await _accumulator(acc, item).ConfigureAwait(false);
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -177,6 +247,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return acc;
             }
@@ -196,6 +267,12 @@ namespace System.Linq
             {
                 var acc = _seed;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    acc = await _accumulator(acc, item, _cancellationToken).ConfigureAwait(false);
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -209,6 +286,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return acc;
             }
@@ -230,6 +308,12 @@ namespace System.Linq
             {
                 var acc = _seed;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    acc = _accumulator(acc, item);
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -243,6 +327,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return _resultSelector(acc);
             }
@@ -263,6 +348,12 @@ namespace System.Linq
             {
                 var acc = _seed;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    acc = await _accumulator(acc, item).ConfigureAwait(false);
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -276,6 +367,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return await _resultSelector(acc).ConfigureAwait(false);
             }
@@ -297,6 +389,12 @@ namespace System.Linq
             {
                 var acc = _seed;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                {
+                    acc = await _accumulator(acc, item, _cancellationToken).ConfigureAwait(false);
+                }
+#else
                 var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -310,6 +408,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
 
                 return await _resultSelector(acc, _cancellationToken).ConfigureAwait(false);
             }
