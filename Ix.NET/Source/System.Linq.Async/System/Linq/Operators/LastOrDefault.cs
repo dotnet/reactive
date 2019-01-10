@@ -101,6 +101,13 @@ namespace System.Linq
                     var last = default(TSource);
                     var hasLast = false;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                    await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                    {
+                        hasLast = true;
+                        last = item;
+                    }
+#else
                     var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
@@ -115,6 +122,7 @@ namespace System.Linq
                     {
                         await e.DisposeAsync().ConfigureAwait(false);
                     }
+#endif
 
                     return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
                 }
@@ -128,6 +136,16 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                if (predicate(item))
+                {
+                    hasLast = true;
+                    last = item;
+                }
+            }
+#else
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -147,13 +165,9 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
-            if (hasLast)
-            {
-                return new Maybe<TSource>(last);
-            }
-
-            return new Maybe<TSource>();
+            return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
         }
 
         private static async Task<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
@@ -161,6 +175,16 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                if (await predicate(item).ConfigureAwait(false))
+                {
+                    hasLast = true;
+                    last = item;
+                }
+            }
+#else
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -180,13 +204,9 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
-            if (hasLast)
-            {
-                return new Maybe<TSource>(last);
-            }
-
-            return new Maybe<TSource>();
+            return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -195,6 +215,16 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                if (await predicate(item, cancellationToken).ConfigureAwait(false))
+                {
+                    hasLast = true;
+                    last = item;
+                }
+            }
+#else
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -214,13 +244,9 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
-            if (hasLast)
-            {
-                return new Maybe<TSource>(last);
-            }
-
-            return new Maybe<TSource>();
+            return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
         }
 #endif
     }
