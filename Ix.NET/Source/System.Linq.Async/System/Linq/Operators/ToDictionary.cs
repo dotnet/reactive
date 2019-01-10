@@ -10,37 +10,8 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken = default)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (keySelector == null)
-                throw Error.ArgumentNull(nameof(keySelector));
-
-            return ToDictionaryCore(source, keySelector, x => x, comparer: null, cancellationToken);
-        }
-
-        public static Task<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (keySelector == null)
-                throw Error.ArgumentNull(nameof(keySelector));
-
-            return ToDictionaryCore<TSource, TKey, TSource>(source, keySelector, x => new ValueTask<TSource>(x), comparer: null, cancellationToken);
-        }
-
-#if !NO_DEEP_CANCELLATION
-        public static Task<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (keySelector == null)
-                throw Error.ArgumentNull(nameof(keySelector));
-
-            return ToDictionaryCore<TSource, TKey, TSource>(source, x => keySelector(x, cancellationToken), x => new ValueTask<TSource>(x), comparer: null, cancellationToken);
-        }
-#endif
+        public static Task<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken = default) =>
+            ToDictionaryAsync<TSource, TKey>(source, keySelector, comparer: null, cancellationToken);
 
         public static Task<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
         {
@@ -51,6 +22,9 @@ namespace System.Linq
 
             return ToDictionaryCore(source, keySelector, x => x, comparer, cancellationToken);
         }
+
+        public static Task<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default) =>
+            ToDictionaryAsync<TSource, TKey>(source, keySelector, comparer: null, cancellationToken);
 
         public static Task<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
         {
@@ -63,6 +37,9 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
+        public static Task<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default) =>
+            ToDictionaryAsync<TSource, TKey>(source, keySelector, comparer: null, cancellationToken);
+
         public static Task<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -74,43 +51,8 @@ namespace System.Linq
         }
 #endif
 
-        public static Task<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, CancellationToken cancellationToken = default)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (keySelector == null)
-                throw Error.ArgumentNull(nameof(keySelector));
-            if (elementSelector == null)
-                throw Error.ArgumentNull(nameof(elementSelector));
-
-            return ToDictionaryCore<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null, cancellationToken);
-        }
-
-        public static Task<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (keySelector == null)
-                throw Error.ArgumentNull(nameof(keySelector));
-            if (elementSelector == null)
-                throw Error.ArgumentNull(nameof(elementSelector));
-
-            return ToDictionaryCore<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null, cancellationToken);
-        }
-
-#if !NO_DEEP_CANCELLATION
-        public static Task<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-            if (keySelector == null)
-                throw Error.ArgumentNull(nameof(keySelector));
-            if (elementSelector == null)
-                throw Error.ArgumentNull(nameof(elementSelector));
-
-            return ToDictionaryCore<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null, cancellationToken);
-        }
-#endif
+        public static Task<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, CancellationToken cancellationToken = default) =>
+            ToDictionaryAsync<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null, cancellationToken);
 
         public static Task<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
         {
@@ -123,6 +65,9 @@ namespace System.Linq
 
             return ToDictionaryCore(source, keySelector, elementSelector, comparer, cancellationToken);
         }
+
+        public static Task<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default) =>
+            ToDictionaryAsync<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null, cancellationToken);
 
         public static Task<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
         {
@@ -137,6 +82,9 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
+        public static Task<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default) =>
+            ToDictionaryAsync(source, keySelector, elementSelector, comparer: null, cancellationToken);
+
         public static Task<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
