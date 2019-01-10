@@ -10,89 +10,90 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken = default)
-        {
-            if (source == null)
-                throw Error.ArgumentNull(nameof(source));
-
-            if (source is ICollection<TSource> collection)
-            {
-                return Task.FromResult(collection.Contains(value));
-            }
-
-            return ContainsCore(source, value, comparer: null, cancellationToken);
-        }
+        public static Task<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken = default) =>
+            source is ICollection<TSource> collection ? Task.FromResult(collection.Contains(value)) :
+            ContainsAsync(source, value, comparer: null, cancellationToken);
 
         public static Task<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return ContainsCore(source, value, comparer, cancellationToken);
-        }
-
-        private static async Task<bool> ContainsCore<TSource>(IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
-        {
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
             //
             // See https://github.com/dotnet/corefx/pull/25097 for the optimization here.
             //
             if (comparer == null)
             {
-                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                return Core(source, value, cancellationToken);
+
+                async Task<bool> Core<TSource>(IAsyncEnumerable<TSource> _source, TSource _value, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
                 {
-                    if (EqualityComparer<TSource>.Default.Equals(item, value))
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                    await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
-                        return true;
+                        if (EqualityComparer<TSource>.Default.Equals(item, _value))
+                        {
+                            return true;
+                        }
                     }
+#else
+                    var e = _source.GetAsyncEnumerator(_cancellationToken);
+
+                    try
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            if (EqualityComparer<TSource>.Default.Equals(e.Current, _value))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
+#endif
+
+                    return false;
                 }
             }
             else
             {
-                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
-                {
-                    if (comparer.Equals(item, value))
-                    {
-                        return true;
-                    }
-                }
-            }
-#else
-            var e = source.GetAsyncEnumerator(cancellationToken);
+                return Core(source, value, comparer, cancellationToken);
 
-            try
-            {
-                //
-                // See https://github.com/dotnet/corefx/pull/25097 for the optimization here.
-                //
-                if (comparer == null)
+                async Task<bool> Core<TSource>(IAsyncEnumerable<TSource> _source, TSource _value, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
                 {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                    await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
-                        if (EqualityComparer<TSource>.Default.Equals(e.Current, value))
+                        if (_comparer.Equals(item, _value))
                         {
                             return true;
                         }
                     }
-                }
-                else
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
+#else
+                    var e = _source.GetAsyncEnumerator(_cancellationToken);
+
+                    try
                     {
-                        if (comparer.Equals(e.Current, value))
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
                         {
-                            return true;
+                            if (_comparer.Equals(e.Current, _value))
+                            {
+                                return true;
+                            }
                         }
                     }
-                }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
 #endif
 
-            return false;
+                    return false;
+                }
+            }
         }
     }
 }
