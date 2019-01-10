@@ -91,6 +91,16 @@ namespace System.Linq.Internal
 
             var lookup = new Lookup<TKey, TElement>(comparer);
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                var key = keySelector(item);
+                var group = lookup.GetGrouping(key, create: true);
+
+                var element = elementSelector(item);
+                group.Add(element);
+            }
+#else
             var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -110,6 +120,7 @@ namespace System.Linq.Internal
             {
                 await enu.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return lookup;
         }
@@ -121,6 +132,13 @@ namespace System.Linq.Internal
 
             var lookup = new Lookup<TKey, TElement>(comparer);
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                var key = keySelector(item);
+                lookup.GetGrouping(key, create: true).Add(item);
+            }
+#else
             var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -137,6 +155,7 @@ namespace System.Linq.Internal
             {
                 await enu.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return lookup;
         }
@@ -145,6 +164,16 @@ namespace System.Linq.Internal
         {
             var lookup = new Lookup<TKey, TElement>(comparer);
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                var key = keySelector(item);
+                if (key != null)
+                {
+                    lookup.GetGrouping(key, create: true).Add(item);
+                }
+            }
+#else
             var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -164,6 +193,7 @@ namespace System.Linq.Internal
             {
                 await enu.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return lookup;
         }
@@ -389,6 +419,16 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                var key = await keySelector(item).ConfigureAwait(false);
+                var group = lookup.GetGrouping(key, create: true);
+
+                var element = await elementSelector(item).ConfigureAwait(false);
+                group.Add(element);
+            }
+#else
             var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -408,6 +448,7 @@ namespace System.Linq.Internal
             {
                 await enu.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return lookup;
         }
@@ -421,6 +462,16 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
+                var group = lookup.GetGrouping(key, create: true);
+
+                var element = await elementSelector(item, cancellationToken).ConfigureAwait(false);
+                group.Add(element);
+            }
+#else
             var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -440,6 +491,7 @@ namespace System.Linq.Internal
             {
                 await enu.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return lookup;
         }
@@ -452,6 +504,13 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                var key = await keySelector(item).ConfigureAwait(false);
+                lookup.GetGrouping(key, create: true).Add(item);
+            }
+#else
             var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -468,6 +527,7 @@ namespace System.Linq.Internal
             {
                 await enu.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return lookup;
         }
@@ -480,6 +540,13 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
+                lookup.GetGrouping(key, create: true).Add(item);
+            }
+#else
             var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -496,6 +563,7 @@ namespace System.Linq.Internal
             {
                 await enu.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return lookup;
         }
@@ -505,6 +573,16 @@ namespace System.Linq.Internal
         {
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                var key = await keySelector(item).ConfigureAwait(false);
+                if (key != null)
+                {
+                    lookup.GetGrouping(key, create: true).Add(item);
+                }
+            }
+#else
             var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -524,6 +602,7 @@ namespace System.Linq.Internal
             {
                 await enu.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return lookup;
         }
@@ -533,6 +612,16 @@ namespace System.Linq.Internal
         {
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+            await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
+                if (key != null)
+                {
+                    lookup.GetGrouping(key, create: true).Add(item);
+                }
+            }
+#else
             var enu = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -552,6 +641,7 @@ namespace System.Linq.Internal
             {
                 await enu.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return lookup;
         }
