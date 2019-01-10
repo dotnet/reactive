@@ -12,7 +12,7 @@ namespace System.Linq
     public static partial class AsyncEnumerable
     {
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector) =>
-            GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer: null);
+            new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer: null);
 
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer) =>
             new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer);
