@@ -24,6 +24,27 @@ namespace System.Linq
                     comparer = Comparer<TSource>.Default;
                 }
 
+#if CSHARP8
+                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                        throw Error.NoElements();
+
+                    var max = e.Current;
+
+                    while (await e.MoveNextAsync())
+                    {
+                        var cur = e.Current;
+
+                        if (comparer.Compare(cur, max) > 0)
+                        {
+                            max = cur;
+                        }
+                    }
+
+                    return max;
+                }
+#else
                 var e = source.GetAsyncEnumerator(cancellationToken);
 
                 try
@@ -49,6 +70,7 @@ namespace System.Linq
                 {
                     await e.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
             }
         }
     }

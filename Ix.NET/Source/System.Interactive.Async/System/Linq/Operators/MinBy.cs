@@ -110,6 +110,35 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
+#if CSHARP8
+            await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            {
+                if (!await e.MoveNextAsync())
+                    throw Error.NoElements();
+
+                var current = e.Current;
+                var resKey = keySelector(current);
+                result.Add(current);
+
+                while (await e.MoveNextAsync())
+                {
+                    var cur = e.Current;
+                    var key = keySelector(cur);
+
+                    var cmp = compare(key, resKey);
+
+                    if (cmp == 0)
+                    {
+                        result.Add(cur);
+                    }
+                    else if (cmp > 0)
+                    {
+                        result = new List<TSource> { cur };
+                        resKey = key;
+                    }
+                }
+            }
+#else
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -143,6 +172,7 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return result;
         }
@@ -151,6 +181,35 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
+#if CSHARP8
+            await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            {
+                if (!await e.MoveNextAsync())
+                    throw Error.NoElements();
+
+                var current = e.Current;
+                var resKey = await keySelector(current).ConfigureAwait(false);
+                result.Add(current);
+
+                while (await e.MoveNextAsync())
+                {
+                    var cur = e.Current;
+                    var key = await keySelector(cur).ConfigureAwait(false);
+
+                    var cmp = compare(key, resKey);
+
+                    if (cmp == 0)
+                    {
+                        result.Add(cur);
+                    }
+                    else if (cmp > 0)
+                    {
+                        result = new List<TSource> { cur };
+                        resKey = key;
+                    }
+                }
+            }
+#else
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -184,6 +243,7 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return result;
         }
@@ -193,6 +253,35 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
+#if CSHARP8
+            await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            {
+                if (!await e.MoveNextAsync())
+                    throw Error.NoElements();
+
+                var current = e.Current;
+                var resKey = await keySelector(current, cancellationToken).ConfigureAwait(false);
+                result.Add(current);
+
+                while (await e.MoveNextAsync())
+                {
+                    var cur = e.Current;
+                    var key = await keySelector(cur, cancellationToken).ConfigureAwait(false);
+
+                    var cmp = compare(key, resKey);
+
+                    if (cmp == 0)
+                    {
+                        result.Add(cur);
+                    }
+                    else if (cmp > 0)
+                    {
+                        result = new List<TSource> { cur };
+                        resKey = key;
+                    }
+                }
+            }
+#else
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -226,6 +315,7 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return result;
         }
