@@ -97,10 +97,12 @@ namespace System.Linq.Internal
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var key = keySelector(enu.Current);
+                    var item = enu.Current;
+
+                    var key = keySelector(item);
                     var group = lookup.GetGrouping(key, create: true);
 
-                    var element = elementSelector(enu.Current);
+                    var element = elementSelector(item);
                     group.Add(element);
                 }
             }
@@ -125,8 +127,10 @@ namespace System.Linq.Internal
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var key = keySelector(enu.Current);
-                    lookup.GetGrouping(key, create: true).Add(enu.Current);
+                    var item = enu.Current;
+
+                    var key = keySelector(item);
+                    lookup.GetGrouping(key, create: true).Add(item);
                 }
             }
             finally
@@ -147,10 +151,12 @@ namespace System.Linq.Internal
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var key = keySelector(enu.Current);
+                    var item = enu.Current;
+
+                    var key = keySelector(item);
                     if (key != null)
                     {
-                        lookup.GetGrouping(key, create: true).Add(enu.Current);
+                        lookup.GetGrouping(key, create: true).Add(item);
                     }
                 }
             }
@@ -389,10 +395,12 @@ namespace System.Linq.Internal
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var key = await keySelector(enu.Current).ConfigureAwait(false);
+                    var item = enu.Current;
+
+                    var key = await keySelector(item).ConfigureAwait(false);
                     var group = lookup.GetGrouping(key, create: true);
 
-                    var element = await elementSelector(enu.Current).ConfigureAwait(false);
+                    var element = await elementSelector(item).ConfigureAwait(false);
                     group.Add(element);
                 }
             }
@@ -419,10 +427,12 @@ namespace System.Linq.Internal
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var key = await keySelector(enu.Current, cancellationToken).ConfigureAwait(false);
+                    var item = enu.Current;
+
+                    var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
                     var group = lookup.GetGrouping(key, create: true);
 
-                    var element = await elementSelector(enu.Current, cancellationToken).ConfigureAwait(false);
+                    var element = await elementSelector(item, cancellationToken).ConfigureAwait(false);
                     group.Add(element);
                 }
             }
@@ -448,8 +458,10 @@ namespace System.Linq.Internal
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var key = await keySelector(enu.Current).ConfigureAwait(false);
-                    lookup.GetGrouping(key, create: true).Add(enu.Current);
+                    var item = enu.Current;
+
+                    var key = await keySelector(item).ConfigureAwait(false);
+                    lookup.GetGrouping(key, create: true).Add(item);
                 }
             }
             finally
@@ -474,8 +486,10 @@ namespace System.Linq.Internal
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var key = await keySelector(enu.Current, cancellationToken).ConfigureAwait(false);
-                    lookup.GetGrouping(key, create: true).Add(enu.Current);
+                    var item = enu.Current;
+
+                    var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
+                    lookup.GetGrouping(key, create: true).Add(item);
                 }
             }
             finally
@@ -497,10 +511,12 @@ namespace System.Linq.Internal
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var key = await keySelector(enu.Current).ConfigureAwait(false);
+                    var item = enu.Current;
+
+                    var key = await keySelector(item).ConfigureAwait(false);
                     if (key != null)
                     {
-                        lookup.GetGrouping(key, create: true).Add(enu.Current);
+                        lookup.GetGrouping(key, create: true).Add(item);
                     }
                 }
             }
@@ -523,10 +539,12 @@ namespace System.Linq.Internal
             {
                 while (await enu.MoveNextAsync().ConfigureAwait(false))
                 {
-                    var key = await keySelector(enu.Current, cancellationToken).ConfigureAwait(false);
+                    var item = enu.Current;
+
+                    var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
                     if (key != null)
                     {
-                        lookup.GetGrouping(key, create: true).Add(enu.Current);
+                        lookup.GetGrouping(key, create: true).Add(item);
                     }
                 }
             }
