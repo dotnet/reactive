@@ -97,6 +97,15 @@ namespace System.Linq
 
                 async ValueTask<Maybe<TSource>> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
                 {
+#if CSHARP8
+                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    {
+                        if (await e.MoveNextAsync())
+                        {
+                            return new Maybe<TSource>(e.Current);
+                        }
+                    }
+#else
                     var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
@@ -110,6 +119,7 @@ namespace System.Linq
                     {
                         await e.DisposeAsync().ConfigureAwait(false);
                     }
+#endif
 
                     return new Maybe<TSource>();
                 }
@@ -120,6 +130,20 @@ namespace System.Linq
 
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
+#if CSHARP8
+            await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            {
+                while (await e.MoveNextAsync())
+                {
+                    var value = e.Current;
+
+                    if (predicate(value))
+                    {
+                        return new Maybe<TSource>(value);
+                    }
+                }
+            }
+#else
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -138,12 +162,27 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return new Maybe<TSource>();
         }
 
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
+#if CSHARP8
+            await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            {
+                while (await e.MoveNextAsync())
+                {
+                    var value = e.Current;
+
+                    if (await predicate(value).ConfigureAwait(false))
+                    {
+                        return new Maybe<TSource>(value);
+                    }
+                }
+            }
+#else
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -162,6 +201,7 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return new Maybe<TSource>();
         }
@@ -169,6 +209,20 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
+#if CSHARP8
+            await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            {
+                while (await e.MoveNextAsync())
+                {
+                    var value = e.Current;
+
+                    if (await predicate(value, cancellationToken).ConfigureAwait(false))
+                    {
+                        return new Maybe<TSource>(value);
+                    }
+                }
+            }
+#else
             var e = source.GetAsyncEnumerator(cancellationToken);
 
             try
@@ -187,6 +241,7 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
+#endif
 
             return new Maybe<TSource>();
         }
