@@ -174,6 +174,12 @@ namespace System.Linq
                         return set;
                     }
 
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                    await foreach (TSource item in enumerable.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        set.Add(item);
+                    }
+#else
                     var e = enumerable.GetAsyncEnumerator(cancellationToken);
 
                     try
@@ -187,6 +193,7 @@ namespace System.Linq
                     {
                         await e.DisposeAsync().ConfigureAwait(false);
                     }
+#endif
                 }
             }
 
