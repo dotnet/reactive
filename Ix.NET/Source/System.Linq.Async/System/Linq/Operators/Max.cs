@@ -25,6 +25,31 @@ namespace System.Linq
 
                     var value = default(TSource);
 
+#if CSHARP8
+                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    {
+                        do
+                        {
+                            if (!await e.MoveNextAsync())
+                            {
+                                return value;
+                            }
+
+                            value = e.Current;
+                        }
+                        while (value == null);
+
+                        while (await e.MoveNextAsync())
+                        {
+                            var x = e.Current;
+
+                            if (x != null && comparer.Compare(x, value) > 0)
+                            {
+                                value = x;
+                            }
+                        }
+                    }
+#else
                     var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
@@ -53,6 +78,7 @@ namespace System.Linq
                     {
                         await e.DisposeAsync().ConfigureAwait(false);
                     }
+#endif
 
                     return value;
                 }
@@ -67,6 +93,26 @@ namespace System.Linq
 
                     var value = default(TSource);
 
+#if CSHARP8
+                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    {
+                        if (!await e.MoveNextAsync())
+                        {
+                            throw Error.NoElements();
+                        }
+
+                        value = e.Current;
+
+                        while (await e.MoveNextAsync())
+                        {
+                            var x = e.Current;
+                            if (comparer.Compare(x, value) > 0)
+                            {
+                                value = x;
+                            }
+                        }
+                    }
+#else
                     var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
@@ -90,6 +136,7 @@ namespace System.Linq
                     {
                         await e.DisposeAsync().ConfigureAwait(false);
                     }
+#endif
 
                     return value;
                 }
@@ -113,6 +160,31 @@ namespace System.Linq
 
                     var value = default(TResult);
 
+#if CSHARP8
+                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    {
+                        do
+                        {
+                            if (!await e.MoveNextAsync())
+                            {
+                                return value;
+                            }
+
+                            value = _selector(e.Current);
+                        }
+                        while (value == null);
+
+                        while (await e.MoveNextAsync())
+                        {
+                            var x = _selector(e.Current);
+
+                            if (x != null && comparer.Compare(x, value) > 0)
+                            {
+                                value = x;
+                            }
+                        }
+                    }
+#else
                     var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
@@ -141,6 +213,7 @@ namespace System.Linq
                     {
                         await e.DisposeAsync().ConfigureAwait(false);
                     }
+#endif
 
                     return value;
                 }
@@ -155,6 +228,26 @@ namespace System.Linq
 
                     var value = default(TResult);
 
+#if CSHARP8
+                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    {
+                        if (!await e.MoveNextAsync())
+                        {
+                            throw Error.NoElements();
+                        }
+
+                        value = _selector(e.Current);
+
+                        while (await e.MoveNextAsync())
+                        {
+                            var x = _selector(e.Current);
+                            if (comparer.Compare(x, value) > 0)
+                            {
+                                value = x;
+                            }
+                        }
+                    }
+#else
                     var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
@@ -178,6 +271,7 @@ namespace System.Linq
                     {
                         await e.DisposeAsync().ConfigureAwait(false);
                     }
+#endif
 
                     return value;
                 }
@@ -201,6 +295,31 @@ namespace System.Linq
 
                     var value = default(TResult);
 
+#if CSHARP8
+                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    {
+                        do
+                        {
+                            if (!await e.MoveNextAsync())
+                            {
+                                return value;
+                            }
+
+                            value = await _selector(e.Current).ConfigureAwait(false);
+                        }
+                        while (value == null);
+
+                        while (await e.MoveNextAsync())
+                        {
+                            var x = await _selector(e.Current).ConfigureAwait(false);
+
+                            if (x != null && comparer.Compare(x, value) > 0)
+                            {
+                                value = x;
+                            }
+                        }
+                    }
+#else
                     var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
@@ -229,6 +348,7 @@ namespace System.Linq
                     {
                         await e.DisposeAsync().ConfigureAwait(false);
                     }
+#endif
 
                     return value;
                 }
@@ -243,6 +363,27 @@ namespace System.Linq
 
                     var value = default(TResult);
 
+#if CSHARP8
+                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    {
+                        if (!await e.MoveNextAsync())
+                        {
+                            throw Error.NoElements();
+                        }
+
+                        value = await _selector(e.Current).ConfigureAwait(false);
+
+                        while (await e.MoveNextAsync())
+                        {
+                            var x = await _selector(e.Current).ConfigureAwait(false);
+
+                            if (comparer.Compare(x, value) > 0)
+                            {
+                                value = x;
+                            }
+                        }
+                    }
+#else
                     var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
@@ -266,6 +407,7 @@ namespace System.Linq
                     {
                         await e.DisposeAsync().ConfigureAwait(false);
                     }
+#endif
 
                     return value;
                 }
@@ -290,6 +432,31 @@ namespace System.Linq
 
                     var value = default(TResult);
 
+#if CSHARP8
+                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    {
+                        do
+                        {
+                            if (!await e.MoveNextAsync())
+                            {
+                                return value;
+                            }
+
+                            value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        }
+                        while (value == null);
+
+                        while (await e.MoveNextAsync())
+                        {
+                            var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+
+                            if (x != null && comparer.Compare(x, value) > 0)
+                            {
+                                value = x;
+                            }
+                        }
+                    }
+#else
                     var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
@@ -318,6 +485,7 @@ namespace System.Linq
                     {
                         await e.DisposeAsync().ConfigureAwait(false);
                     }
+#endif
 
                     return value;
                 }
@@ -332,6 +500,27 @@ namespace System.Linq
 
                     var value = default(TResult);
 
+#if CSHARP8
+                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    {
+                        if (!await e.MoveNextAsync())
+                        {
+                            throw Error.NoElements();
+                        }
+
+                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+
+                        while (await e.MoveNextAsync())
+                        {
+                            var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+
+                            if (comparer.Compare(x, value) > 0)
+                            {
+                                value = x;
+                            }
+                        }
+                    }
+#else
                     var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                     try
@@ -355,6 +544,7 @@ namespace System.Linq
                     {
                         await e.DisposeAsync().ConfigureAwait(false);
                     }
+#endif
 
                     return value;
                 }
