@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,9 +21,7 @@ namespace System.Linq
 
         protected OrderedAsyncEnumerable(IAsyncEnumerable<TElement> source)
         {
-            Debug.Assert(source != null);
-
-            _source = source;
+            _source = source ?? throw Error.ArgumentNull(nameof(source));
         }
 
         IOrderedAsyncEnumerable<TElement> IOrderedAsyncEnumerable<TElement>.CreateOrderedEnumerable<TKey>(Func<TElement, TKey> keySelector, IComparer<TKey> comparer, bool descending)
@@ -487,9 +484,7 @@ namespace System.Linq
         public OrderedAsyncEnumerable(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IComparer<TKey> comparer, bool descending, OrderedAsyncEnumerable<TElement> parent)
             : base(source)
         {
-            Debug.Assert(keySelector != null);
-
-            _keySelector = keySelector;
+            _keySelector = keySelector ?? throw Error.ArgumentNull(nameof(keySelector));
             _comparer = comparer ?? Comparer<TKey>.Default;
             _descending = descending;
             _parent = parent;
@@ -532,9 +527,7 @@ namespace System.Linq
         public OrderedAsyncEnumerableWithTask(IAsyncEnumerable<TElement> source, Func<TElement, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending, OrderedAsyncEnumerable<TElement> parent)
             : base(source)
         {
-            Debug.Assert(keySelector != null);
-
-            _keySelector = keySelector;
+            _keySelector = keySelector ?? throw Error.ArgumentNull(nameof(keySelector));
             _comparer = comparer ?? Comparer<TKey>.Default;
             _descending = descending;
             _parent = parent;
@@ -578,9 +571,7 @@ namespace System.Linq
         public OrderedAsyncEnumerableWithTaskAndCancellation(IAsyncEnumerable<TElement> source, Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending, OrderedAsyncEnumerable<TElement> parent)
             : base(source)
         {
-            Debug.Assert(keySelector != null);
-
-            _keySelector = keySelector;
+            _keySelector = keySelector ?? throw Error.ArgumentNull(nameof(keySelector));
             _comparer = comparer ?? Comparer<TKey>.Default;
             _descending = descending;
             _parent = parent;
