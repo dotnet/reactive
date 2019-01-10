@@ -64,6 +64,23 @@ namespace System.Linq
 
             async Task<bool> Core(IAsyncEnumerable<TSource> _first, IAsyncEnumerable<TSource> _second, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
             {
+#if CSHARP8
+                await using (var e1 = _first.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    await using (var e2 = _second.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    {
+                        while (await e1.MoveNextAsync())
+                        {
+                            if (!(await e2.MoveNextAsync() && _comparer.Equals(e1.Current, e2.Current)))
+                            {
+                                return false;
+                            }
+                        }
+
+                        return !await e2.MoveNextAsync();
+                    }
+                }
+#else
                 var e1 = _first.GetAsyncEnumerator(_cancellationToken);
 
                 try
@@ -91,6 +108,7 @@ namespace System.Linq
                 {
                     await e1.DisposeAsync().ConfigureAwait(false);
                 }
+#endif
             }
         }
     }
