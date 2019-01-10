@@ -11,7 +11,7 @@ namespace System.Linq
     public static partial class AsyncEnumerable
     {
         public static Task<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken = default) =>
-            SequenceEqual(first, second, comparer: null, cancellationToken);
+            SequenceEqualAsync(first, second, comparer: null, cancellationToken);
 
         public static Task<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
