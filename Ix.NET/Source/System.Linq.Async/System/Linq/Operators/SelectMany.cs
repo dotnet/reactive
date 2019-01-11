@@ -50,7 +50,31 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                int index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    var inner = selector(element, index);
+
+                    await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return subElement;
+                    }
+                }
+            }
+#else
             return new SelectManyWithIndexAsyncIterator<TSource, TResult>(source, selector);
+#endif
         }
 
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TResult>>> selector)
@@ -60,7 +84,31 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                int index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    var inner = selector(element, index);
+
+                    await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return subElement;
+                    }
+                }
+            }
+#else
             return new SelectManyWithIndexAsyncIteratorWithTask<TSource, TResult>(source, selector);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -71,7 +119,31 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                int index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    var inner = await selector(element, index, cancellationToken).ConfigureAwait(false);
+
+                    await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return subElement;
+                    }
+                }
+            }
+#else
             return new SelectManyWithIndexAsyncIteratorWithTaskAndCancellation<TSource, TResult>(source, selector);
+#endif
         }
 #endif
 
@@ -84,7 +156,24 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    var inner = selector(element);
+
+                    await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return resultSelector(element, subElement);
+                    }
+                }
+            }
+#else
             return new SelectManyAsyncIterator<TSource, TCollection, TResult>(source, selector, resultSelector);
+#endif
         }
 
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>> selector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
@@ -96,7 +185,24 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    var inner = await selector(element).ConfigureAwait(false);
+
+                    await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return await resultSelector(element, subElement).ConfigureAwait(false);
+                    }
+                }
+            }
+#else
             return new SelectManyAsyncIteratorWithTask<TSource, TCollection, TResult>(source, selector, resultSelector);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -109,7 +215,24 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    var inner = await selector(element, cancellationToken).ConfigureAwait(false);
+
+                    await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return await resultSelector(element, subElement, cancellationToken).ConfigureAwait(false);
+                    }
+                }
+            }
+#else
             return new SelectManyAsyncIteratorWithTaskAndCancellation<TSource, TCollection, TResult>(source, selector, resultSelector);
+#endif
         }
 #endif
 
@@ -122,7 +245,31 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                int index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    var inner = selector(element, index);
+
+                    await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return resultSelector(element, subElement);
+                    }
+                }
+            }
+#else
             return new SelectManyWithIndexAsyncIterator<TSource, TCollection, TResult>(source, selector, resultSelector);
+#endif
         }
 
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>> selector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
@@ -134,7 +281,31 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                int index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    var inner = await selector(element, index).ConfigureAwait(false);
+
+                    await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return await resultSelector(element, subElement).ConfigureAwait(false);
+                    }
+                }
+            }
+#else
             return new SelectManyWithIndexAsyncIteratorWithTask<TSource, TCollection, TResult>(source, selector, resultSelector);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -147,7 +318,31 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                int index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    var inner = await selector(element, index, cancellationToken).ConfigureAwait(false);
+
+                    await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return await resultSelector(element, subElement, cancellationToken).ConfigureAwait(false);
+                    }
+                }
+            }
+#else
             return new SelectManyWithIndexAsyncIteratorWithTaskAndCancellation<TSource, TCollection, TResult>(source, selector, resultSelector);
+#endif
         }
 #endif
 
@@ -426,6 +621,7 @@ namespace System.Linq
         }
 #endif
 
+#if !(CSHARP8 && USE_ASYNC_ITERATOR)
         private sealed class SelectManyAsyncIterator<TSource, TCollection, TResult> : AsyncIterator<TResult>
         {
             private const int State_Source = 1;
@@ -1336,6 +1532,7 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
 #endif
     }
 }
