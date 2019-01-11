@@ -18,7 +18,34 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    while (await e.MoveNextAsync())
+                    {
+                        var element = e.Current;
+
+                        if (!predicate(element))
+                        {
+                            yield return element;
+
+                            while (await e.MoveNextAsync())
+                            {
+                                yield return e.Current;
+                            }
+
+                            yield break;
+                        }
+                    }
+                }
+            }
+#else
             return new SkipWhileAsyncIterator<TSource>(source, predicate);
+#endif
         }
 
         public static IAsyncEnumerable<TSource> SkipWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate)
@@ -28,7 +55,41 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    var index = -1;
+
+                    while (await e.MoveNextAsync())
+                    {
+                        checked
+                        {
+                            index++;
+                        }
+
+                        var element = e.Current;
+
+                        if (!predicate(element, index))
+                        {
+                            yield return element;
+
+                            while (await e.MoveNextAsync())
+                            {
+                                yield return e.Current;
+                            }
+
+                            yield break;
+                        }
+                    }
+                }
+            }
+#else
             return new SkipWhileWithIndexAsyncIterator<TSource>(source, predicate);
+#endif
         }
 
         public static IAsyncEnumerable<TSource> SkipWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
@@ -38,7 +99,34 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    while (await e.MoveNextAsync())
+                    {
+                        var element = e.Current;
+
+                        if (!await predicate(element).ConfigureAwait(false))
+                        {
+                            yield return element;
+
+                            while (await e.MoveNextAsync())
+                            {
+                                yield return e.Current;
+                            }
+
+                            yield break;
+                        }
+                    }
+                }
+            }
+#else
             return new SkipWhileAsyncIteratorWithTask<TSource>(source, predicate);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -49,7 +137,34 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    while (await e.MoveNextAsync())
+                    {
+                        var element = e.Current;
+
+                        if (!await predicate(element, cancellationToken).ConfigureAwait(false))
+                        {
+                            yield return element;
+
+                            while (await e.MoveNextAsync())
+                            {
+                                yield return e.Current;
+                            }
+
+                            yield break;
+                        }
+                    }
+                }
+            }
+#else
             return new SkipWhileAsyncIteratorWithTaskAndCancellation<TSource>(source, predicate);
+#endif
         }
 #endif
 
@@ -60,7 +175,41 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    var index = -1;
+
+                    while (await e.MoveNextAsync())
+                    {
+                        checked
+                        {
+                            index++;
+                        }
+
+                        var element = e.Current;
+
+                        if (!await predicate(element, index).ConfigureAwait(false))
+                        {
+                            yield return element;
+
+                            while (await e.MoveNextAsync())
+                            {
+                                yield return e.Current;
+                            }
+
+                            yield break;
+                        }
+                    }
+                }
+            }
+#else
             return new SkipWhileWithIndexAsyncIteratorWithTask<TSource>(source, predicate);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -71,10 +220,45 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    var index = -1;
+
+                    while (await e.MoveNextAsync())
+                    {
+                        checked
+                        {
+                            index++;
+                        }
+
+                        var element = e.Current;
+
+                        if (!await predicate(element, index, cancellationToken).ConfigureAwait(false))
+                        {
+                            yield return element;
+
+                            while (await e.MoveNextAsync())
+                            {
+                                yield return e.Current;
+                            }
+
+                            yield break;
+                        }
+                    }
+                }
+            }
+#else
             return new SkipWhileWithIndexAsyncIteratorWithTaskAndCancellation<TSource>(source, predicate);
+#endif
         }
 #endif
 
+#if !(CSHARP8 && USE_ASYNC_ITERATOR)
         private sealed class SkipWhileAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, bool> _predicate;
@@ -557,6 +741,7 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
 #endif
     }
 }
