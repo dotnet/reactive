@@ -18,7 +18,24 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    if (!predicate(element))
+                    {
+                        break;
+                    }
+
+                    yield return element;
+                }
+            }
+#else
             return new TakeWhileAsyncIterator<TSource>(source, predicate);
+#endif
         }
 
         public static IAsyncEnumerable<TSource> TakeWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate)
@@ -28,7 +45,31 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                var index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    if (!predicate(element, index))
+                    {
+                        break;
+                    }
+
+                    yield return element;
+                }
+            }
+#else
             return new TakeWhileWithIndexAsyncIterator<TSource>(source, predicate);
+#endif
         }
 
         public static IAsyncEnumerable<TSource> TakeWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
@@ -38,7 +79,24 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await predicate(element).ConfigureAwait(false))
+                    {
+                        break;
+                    }
+
+                    yield return element;
+                }
+            }
+#else
             return new TakeWhileAsyncIteratorWithTask<TSource>(source, predicate);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -49,7 +107,24 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await predicate(element, cancellationToken).ConfigureAwait(false))
+                    {
+                        break;
+                    }
+
+                    yield return element;
+                }
+            }
+#else
             return new TakeWhileAsyncIteratorWithTaskAndCancellation<TSource>(source, predicate);
+#endif
         }
 #endif
 
@@ -60,7 +135,31 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                var index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    if (!await predicate(element, index).ConfigureAwait(false))
+                    {
+                        break;
+                    }
+
+                    yield return element;
+                }
+            }
+#else
             return new TakeWhileWithIndexAsyncIteratorWithTask<TSource>(source, predicate);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -71,10 +170,35 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                var index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    if (!await predicate(element, index, cancellationToken).ConfigureAwait(false))
+                    {
+                        break;
+                    }
+
+                    yield return element;
+                }
+            }
+#else
             return new TakeWhileWithIndexAsyncIteratorWithTaskAndCancellation<TSource>(source, predicate);
+#endif
         }
 #endif
 
+#if !(CSHARP8 && USE_ASYNC_ITERATOR)
         private sealed class TakeWhileAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, bool> _predicate;
@@ -477,6 +601,7 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
 #endif
     }
 }
