@@ -23,7 +23,7 @@ namespace System.Linq
 #if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR
             return Create(Core);
 
-            async IAsyncEnumerable<TSource> Core(CancellationToken cancellationToken)
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
                 var set = new Set<TSource>(comparer);
 
