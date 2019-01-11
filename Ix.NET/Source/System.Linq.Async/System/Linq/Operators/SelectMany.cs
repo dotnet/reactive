@@ -147,12 +147,12 @@ namespace System.Linq
         }
 #endif
 
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TCollection>> selector, Func<TSource, TCollection, TResult> resultSelector)
+        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
+            if (collectionSelector == null)
+                throw Error.ArgumentNull(nameof(collectionSelector));
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
@@ -163,7 +163,7 @@ namespace System.Linq
             {
                 await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var inner = selector(element);
+                    var inner = collectionSelector(element);
 
                     await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
@@ -172,16 +172,16 @@ namespace System.Linq
                 }
             }
 #else
-            return new SelectManyAsyncIterator<TSource, TCollection, TResult>(source, selector, resultSelector);
+            return new SelectManyAsyncIterator<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
 #endif
         }
 
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>> selector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
+        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
+            if (collectionSelector == null)
+                throw Error.ArgumentNull(nameof(collectionSelector));
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
@@ -192,7 +192,7 @@ namespace System.Linq
             {
                 await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var inner = await selector(element).ConfigureAwait(false);
+                    var inner = await collectionSelector(element).ConfigureAwait(false);
 
                     await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
@@ -201,17 +201,17 @@ namespace System.Linq
                 }
             }
 #else
-            return new SelectManyAsyncIteratorWithTask<TSource, TCollection, TResult>(source, selector, resultSelector);
+            return new SelectManyAsyncIteratorWithTask<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
 #endif
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>> selector, Func<TSource, TCollection, CancellationToken, ValueTask<TResult>> resultSelector)
+        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, CancellationToken, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
+            if (collectionSelector == null)
+                throw Error.ArgumentNull(nameof(collectionSelector));
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
@@ -222,7 +222,7 @@ namespace System.Linq
             {
                 await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var inner = await selector(element, cancellationToken).ConfigureAwait(false);
+                    var inner = await collectionSelector(element, cancellationToken).ConfigureAwait(false);
 
                     await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
@@ -231,17 +231,17 @@ namespace System.Linq
                 }
             }
 #else
-            return new SelectManyAsyncIteratorWithTaskAndCancellation<TSource, TCollection, TResult>(source, selector, resultSelector);
+            return new SelectManyAsyncIteratorWithTaskAndCancellation<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
 #endif
         }
 #endif
 
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, IAsyncEnumerable<TCollection>> selector, Func<TSource, TCollection, TResult> resultSelector)
+        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, IAsyncEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
+            if (collectionSelector == null)
+                throw Error.ArgumentNull(nameof(collectionSelector));
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
@@ -259,7 +259,7 @@ namespace System.Linq
                         index++;
                     }
 
-                    var inner = selector(element, index);
+                    var inner = collectionSelector(element, index);
 
                     await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
@@ -268,16 +268,16 @@ namespace System.Linq
                 }
             }
 #else
-            return new SelectManyWithIndexAsyncIterator<TSource, TCollection, TResult>(source, selector, resultSelector);
+            return new SelectManyWithIndexAsyncIterator<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
 #endif
         }
 
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>> selector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
+        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
+            if (collectionSelector == null)
+                throw Error.ArgumentNull(nameof(collectionSelector));
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
@@ -295,7 +295,7 @@ namespace System.Linq
                         index++;
                     }
 
-                    var inner = await selector(element, index).ConfigureAwait(false);
+                    var inner = await collectionSelector(element, index).ConfigureAwait(false);
 
                     await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
@@ -304,17 +304,17 @@ namespace System.Linq
                 }
             }
 #else
-            return new SelectManyWithIndexAsyncIteratorWithTask<TSource, TCollection, TResult>(source, selector, resultSelector);
+            return new SelectManyWithIndexAsyncIteratorWithTask<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
 #endif
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>> selector, Func<TSource, TCollection, CancellationToken, ValueTask<TResult>> resultSelector)
+        public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>> collectionSelector, Func<TSource, TCollection, CancellationToken, ValueTask<TResult>> resultSelector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
-            if (selector == null)
-                throw Error.ArgumentNull(nameof(selector));
+            if (collectionSelector == null)
+                throw Error.ArgumentNull(nameof(collectionSelector));
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
@@ -332,7 +332,7 @@ namespace System.Linq
                         index++;
                     }
 
-                    var inner = await selector(element, index, cancellationToken).ConfigureAwait(false);
+                    var inner = await collectionSelector(element, index, cancellationToken).ConfigureAwait(false);
 
                     await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
@@ -341,7 +341,7 @@ namespace System.Linq
                 }
             }
 #else
-            return new SelectManyWithIndexAsyncIteratorWithTaskAndCancellation<TSource, TCollection, TResult>(source, selector, resultSelector);
+            return new SelectManyWithIndexAsyncIteratorWithTaskAndCancellation<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
 #endif
         }
 #endif

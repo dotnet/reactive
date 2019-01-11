@@ -3478,99 +3478,99 @@ namespace System.Linq
 #endif
         }
 
-        public static IAsyncQueryable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>>> selector, Expression<Func<TSource, TCollection, CancellationToken, ValueTask<TResult>>> resultSelector)
+        public static IAsyncQueryable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>>> collectionSelector, Expression<Func<TSource, TCollection, CancellationToken, ValueTask<TResult>>> resultSelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+            if (collectionSelector == null)
+                throw new ArgumentNullException(nameof(collectionSelector));
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.CreateQuery<TResult>(Expression.Call(InfoOf(() => AsyncQueryable.SelectMany<TSource, TCollection, TResult>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>>>), default(Expression<Func<TSource, TCollection, CancellationToken, ValueTask<TResult>>>))), source.Expression, selector, resultSelector));
+            return source.Provider.CreateQuery<TResult>(Expression.Call(InfoOf(() => AsyncQueryable.SelectMany<TSource, TCollection, TResult>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>>>), default(Expression<Func<TSource, TCollection, CancellationToken, ValueTask<TResult>>>))), source.Expression, collectionSelector, resultSelector));
 #else
-            return source.Provider.CreateQuery<TResult>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)), source.Expression, selector, resultSelector));
+            return source.Provider.CreateQuery<TResult>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)), source.Expression, collectionSelector, resultSelector));
 #endif
         }
 
-        public static IAsyncQueryable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, IAsyncEnumerable<TCollection>>> selector, Expression<Func<TSource, TCollection, TResult>> resultSelector)
+        public static IAsyncQueryable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, IAsyncEnumerable<TCollection>>> collectionSelector, Expression<Func<TSource, TCollection, TResult>> resultSelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+            if (collectionSelector == null)
+                throw new ArgumentNullException(nameof(collectionSelector));
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.CreateQuery<TResult>(Expression.Call(InfoOf(() => AsyncQueryable.SelectMany<TSource, TCollection, TResult>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, IAsyncEnumerable<TCollection>>>), default(Expression<Func<TSource, TCollection, TResult>>))), source.Expression, selector, resultSelector));
+            return source.Provider.CreateQuery<TResult>(Expression.Call(InfoOf(() => AsyncQueryable.SelectMany<TSource, TCollection, TResult>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, IAsyncEnumerable<TCollection>>>), default(Expression<Func<TSource, TCollection, TResult>>))), source.Expression, collectionSelector, resultSelector));
 #else
-            return source.Provider.CreateQuery<TResult>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)), source.Expression, selector, resultSelector));
+            return source.Provider.CreateQuery<TResult>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)), source.Expression, collectionSelector, resultSelector));
 #endif
         }
 
-        public static IAsyncQueryable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, int, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>>> selector, Expression<Func<TSource, TCollection, CancellationToken, ValueTask<TResult>>> resultSelector)
+        public static IAsyncQueryable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, int, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>>> collectionSelector, Expression<Func<TSource, TCollection, CancellationToken, ValueTask<TResult>>> resultSelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+            if (collectionSelector == null)
+                throw new ArgumentNullException(nameof(collectionSelector));
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.CreateQuery<TResult>(Expression.Call(InfoOf(() => AsyncQueryable.SelectMany<TSource, TCollection, TResult>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, int, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>>>), default(Expression<Func<TSource, TCollection, CancellationToken, ValueTask<TResult>>>))), source.Expression, selector, resultSelector));
+            return source.Provider.CreateQuery<TResult>(Expression.Call(InfoOf(() => AsyncQueryable.SelectMany<TSource, TCollection, TResult>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, int, CancellationToken, ValueTask<IAsyncEnumerable<TCollection>>>>), default(Expression<Func<TSource, TCollection, CancellationToken, ValueTask<TResult>>>))), source.Expression, collectionSelector, resultSelector));
 #else
-            return source.Provider.CreateQuery<TResult>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)), source.Expression, selector, resultSelector));
+            return source.Provider.CreateQuery<TResult>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)), source.Expression, collectionSelector, resultSelector));
 #endif
         }
 
-        public static IAsyncQueryable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, int, IAsyncEnumerable<TCollection>>> selector, Expression<Func<TSource, TCollection, TResult>> resultSelector)
+        public static IAsyncQueryable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, int, IAsyncEnumerable<TCollection>>> collectionSelector, Expression<Func<TSource, TCollection, TResult>> resultSelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+            if (collectionSelector == null)
+                throw new ArgumentNullException(nameof(collectionSelector));
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.CreateQuery<TResult>(Expression.Call(InfoOf(() => AsyncQueryable.SelectMany<TSource, TCollection, TResult>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, int, IAsyncEnumerable<TCollection>>>), default(Expression<Func<TSource, TCollection, TResult>>))), source.Expression, selector, resultSelector));
+            return source.Provider.CreateQuery<TResult>(Expression.Call(InfoOf(() => AsyncQueryable.SelectMany<TSource, TCollection, TResult>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, int, IAsyncEnumerable<TCollection>>>), default(Expression<Func<TSource, TCollection, TResult>>))), source.Expression, collectionSelector, resultSelector));
 #else
-            return source.Provider.CreateQuery<TResult>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)), source.Expression, selector, resultSelector));
+            return source.Provider.CreateQuery<TResult>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)), source.Expression, collectionSelector, resultSelector));
 #endif
         }
 
-        public static IAsyncQueryable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>>> selector, Expression<Func<TSource, TCollection, ValueTask<TResult>>> resultSelector)
+        public static IAsyncQueryable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>>> collectionSelector, Expression<Func<TSource, TCollection, ValueTask<TResult>>> resultSelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+            if (collectionSelector == null)
+                throw new ArgumentNullException(nameof(collectionSelector));
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.CreateQuery<TResult>(Expression.Call(InfoOf(() => AsyncQueryable.SelectMany<TSource, TCollection, TResult>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>>>), default(Expression<Func<TSource, TCollection, ValueTask<TResult>>>))), source.Expression, selector, resultSelector));
+            return source.Provider.CreateQuery<TResult>(Expression.Call(InfoOf(() => AsyncQueryable.SelectMany<TSource, TCollection, TResult>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, int, ValueTask<IAsyncEnumerable<TCollection>>>>), default(Expression<Func<TSource, TCollection, ValueTask<TResult>>>))), source.Expression, collectionSelector, resultSelector));
 #else
-            return source.Provider.CreateQuery<TResult>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)), source.Expression, selector, resultSelector));
+            return source.Provider.CreateQuery<TResult>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)), source.Expression, collectionSelector, resultSelector));
 #endif
         }
 
-        public static IAsyncQueryable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>>> selector, Expression<Func<TSource, TCollection, ValueTask<TResult>>> resultSelector)
+        public static IAsyncQueryable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>>> collectionSelector, Expression<Func<TSource, TCollection, ValueTask<TResult>>> resultSelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+            if (collectionSelector == null)
+                throw new ArgumentNullException(nameof(collectionSelector));
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
 #if CRIPPLED_REFLECTION
-            return source.Provider.CreateQuery<TResult>(Expression.Call(InfoOf(() => AsyncQueryable.SelectMany<TSource, TCollection, TResult>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>>>), default(Expression<Func<TSource, TCollection, ValueTask<TResult>>>))), source.Expression, selector, resultSelector));
+            return source.Provider.CreateQuery<TResult>(Expression.Call(InfoOf(() => AsyncQueryable.SelectMany<TSource, TCollection, TResult>(default(IAsyncQueryable<TSource>), default(Expression<Func<TSource, ValueTask<IAsyncEnumerable<TCollection>>>>), default(Expression<Func<TSource, TCollection, ValueTask<TResult>>>))), source.Expression, collectionSelector, resultSelector));
 #else
-            return source.Provider.CreateQuery<TResult>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)), source.Expression, selector, resultSelector));
+            return source.Provider.CreateQuery<TResult>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)), source.Expression, collectionSelector, resultSelector));
 #endif
         }
 
