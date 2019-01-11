@@ -34,7 +34,29 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                var index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    if (predicate(element, index))
+                    {
+                        yield return element;
+                    }
+                }
+            }
+#else
             return new WhereEnumerableWithIndexAsyncIterator<TSource>(source, predicate);
+#endif
         }
 
         public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
@@ -78,7 +100,29 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                var index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    if (await predicate(element, index).ConfigureAwait(false))
+                    {
+                        yield return element;
+                    }
+                }
+            }
+#else
             return new WhereEnumerableWithIndexAsyncIteratorWithTask<TSource>(source, predicate);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -89,7 +133,29 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                var index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    if (await predicate(element, index, cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return element;
+                    }
+                }
+            }
+#else
             return new WhereEnumerableWithIndexAsyncIteratorWithTaskAndCancellation<TSource>(source, predicate);
+#endif
         }
 #endif
 
@@ -162,6 +228,7 @@ namespace System.Linq
             }
         }
 
+#if !(CSHARP8 && USE_ASYNC_ITERATOR)
         private sealed class WhereEnumerableWithIndexAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, int, bool> _predicate;
@@ -229,6 +296,7 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
 
         internal sealed class WhereEnumerableAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
@@ -360,6 +428,7 @@ namespace System.Linq
         }
 #endif
 
+#if !(CSHARP8 && USE_ASYNC_ITERATOR)
         private sealed class WhereEnumerableWithIndexAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, int, ValueTask<bool>> _predicate;
@@ -496,6 +565,7 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
 #endif
 
         private sealed class WhereSelectEnumerableAsyncIterator<TSource, TResult> : AsyncIterator<TResult>
