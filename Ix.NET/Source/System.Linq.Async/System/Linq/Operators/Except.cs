@@ -20,9 +20,32 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR
+            return Create(Core);
+
+            async IAsyncEnumerable<TSource> Core(CancellationToken cancellationToken)
+            {
+                var set = new Set<TSource>(comparer);
+
+                await foreach (var element in second.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    set.Add(element);
+                }
+
+                await foreach (var element in first.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    if (set.Add(element))
+                    {
+                        yield return element;
+                    }
+                }
+            }
+#else
             return new ExceptAsyncIterator<TSource>(first, second, comparer);
+#endif
         }
 
+#if !(CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR)
         private sealed class ExceptAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly IEqualityComparer<TSource> _comparer;
@@ -100,5 +123,6 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
     }
 }
