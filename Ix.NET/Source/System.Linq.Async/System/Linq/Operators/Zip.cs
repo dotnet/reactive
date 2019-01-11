@@ -20,7 +20,25 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                await using (var e1 = first.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    await using (var e2 = second.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                    {
+                        while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
+                        {
+                            yield return selector(e1.Current, e2.Current);
+                        }
+                    }
+                }
+            }
+#else
             return new ZipAsyncIterator<TFirst, TSecond, TResult>(first, second, selector);
+#endif
         }
 
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, ValueTask<TResult>> selector)
@@ -32,7 +50,25 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                await using (var e1 = first.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    await using (var e2 = second.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                    {
+                        while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
+                        {
+                            yield return await selector(e1.Current, e2.Current).ConfigureAwait(false);
+                        }
+                    }
+                }
+            }
+#else
             return new ZipAsyncIteratorWithTask<TFirst, TSecond, TResult>(first, second, selector);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -45,10 +81,29 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                await using (var e1 = first.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    await using (var e2 = second.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                    {
+                        while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
+                        {
+                            yield return await selector(e1.Current, e2.Current, cancellationToken).ConfigureAwait(false);
+                        }
+                    }
+                }
+            }
+#else
             return new ZipAsyncIteratorWithTaskAndCancellation<TFirst, TSecond, TResult>(first, second, selector);
+#endif
         }
 #endif
 
+#if !(CSHARP8 && USE_ASYNC_ITERATOR)
         private sealed class ZipAsyncIterator<TFirst, TSecond, TResult> : AsyncIterator<TResult>
         {
             private readonly IAsyncEnumerable<TFirst> _first;
@@ -265,6 +320,7 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
 #endif
     }
 }
