@@ -27,9 +27,40 @@ namespace System.Linq
                 count = 0;
             }
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                var queue = new Queue<TSource>();
+
+                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    while (await e.MoveNextAsync())
+                    {
+                        if (queue.Count == count)
+                        {
+                            do
+                            {
+                                yield return queue.Dequeue();
+                                queue.Enqueue(e.Current);
+                            }
+                            while (await e.MoveNextAsync());
+                            break;
+                        }
+                        else
+                        {
+                            queue.Enqueue(e.Current);
+                        }
+                    }
+                }
+            }
+#else
             return new SkipLastAsyncIterator<TSource>(source, count);
+#endif
         }
 
+#if !(CSHARP8 && USE_ASYNC_ITERATOR)
         private sealed class SkipLastAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly int _count;
@@ -97,5 +128,6 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
     }
 }
