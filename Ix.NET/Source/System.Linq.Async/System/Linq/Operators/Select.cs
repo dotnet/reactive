@@ -36,7 +36,26 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                var index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    yield return selector(element, index);
+                }
+            }
+#else
             return new SelectEnumerableWithIndexAsyncIterator<TSource, TResult>(source, selector);
+#endif
         }
 
         public static IAsyncEnumerable<TResult> Select<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
@@ -84,7 +103,26 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                var index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    yield return await selector(element, index).ConfigureAwait(false);
+                }
+            }
+#else
             return new SelectEnumerableWithIndexAsyncIteratorWithTask<TSource, TResult>(source, selector);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -95,7 +133,26 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                var index = -1;
+
+                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    checked
+                    {
+                        index++;
+                    }
+
+                    yield return await selector(element, index, cancellationToken).ConfigureAwait(false);
+                }
+            }
+#else
             return new SelectEnumerableWithIndexAsyncIteratorWithTaskAndCancellation<TSource, TResult>(source, selector);
+#endif
         }
 #endif
 
@@ -160,6 +217,7 @@ namespace System.Linq
             }
         }
 
+#if !(CSHARP8 && USE_ASYNC_ITERATOR)
         private sealed class SelectEnumerableWithIndexAsyncIterator<TSource, TResult> : AsyncIterator<TResult>
         {
             private readonly Func<TSource, int, TResult> _selector;
@@ -223,6 +281,7 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
 
         internal sealed class SelectIListIterator<TSource, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
@@ -464,6 +523,7 @@ namespace System.Linq
         }
 #endif
 
+#if !(CSHARP8 && USE_ASYNC_ITERATOR)
         private sealed class SelectEnumerableWithIndexAsyncIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>
         {
             private readonly Func<TSource, int, ValueTask<TResult>> _selector;
@@ -592,6 +652,7 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
 #endif
 
         // NB: LINQ to Objects implements IPartition<TResult> for this. However, it seems incorrect to do so in a trivial
