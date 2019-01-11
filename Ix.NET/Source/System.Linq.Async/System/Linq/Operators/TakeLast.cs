@@ -20,9 +20,55 @@ namespace System.Linq
                 return Empty<TSource>();
             }
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                Queue<TSource> queue;
+
+                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        yield break;
+                    }
+
+                    queue = new Queue<TSource>();
+                    queue.Enqueue(e.Current);
+
+                    while (await e.MoveNextAsync())
+                    {
+                        if (queue.Count < count)
+                        {
+                            queue.Enqueue(e.Current);
+                        }
+                        else
+                        {
+                            do
+                            {
+                                queue.Dequeue();
+                                queue.Enqueue(e.Current);
+                            }
+                            while (await e.MoveNextAsync());
+                            break;
+                        }
+                    }
+                }
+
+                Debug.Assert(queue.Count <= count);
+                do
+                {
+                    yield return queue.Dequeue();
+                }
+                while (queue.Count > 0);
+            }
+#else
             return new TakeLastAsyncIterator<TSource>(source, count);
+#endif
         }
 
+#if !(CSHARP8 && USE_ASYNC_ITERATOR)
         private sealed class TakeLastAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly int _count;
@@ -115,5 +161,6 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
     }
 }
