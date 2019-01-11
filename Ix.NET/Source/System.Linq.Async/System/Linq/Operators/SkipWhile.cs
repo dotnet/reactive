@@ -258,7 +258,7 @@ namespace System.Linq
         }
 #endif
 
-#if !(CSHARP8 && USE_ASYNC_ITERATOR)
+#if !(CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR)
         private sealed class SkipWhileAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, bool> _predicate;

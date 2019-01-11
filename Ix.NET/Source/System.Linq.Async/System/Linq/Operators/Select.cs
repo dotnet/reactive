@@ -217,7 +217,7 @@ namespace System.Linq
             }
         }
 
-#if !(CSHARP8 && USE_ASYNC_ITERATOR)
+#if !(CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR)
         private sealed class SelectEnumerableWithIndexAsyncIterator<TSource, TResult> : AsyncIterator<TResult>
         {
             private readonly Func<TSource, int, TResult> _selector;
@@ -523,7 +523,7 @@ namespace System.Linq
         }
 #endif
 
-#if !(CSHARP8 && USE_ASYNC_ITERATOR)
+#if !(CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR)
         private sealed class SelectEnumerableWithIndexAsyncIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>
         {
             private readonly Func<TSource, int, ValueTask<TResult>> _selector;
