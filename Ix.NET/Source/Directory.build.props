@@ -7,7 +7,7 @@
     <Authors>.NET Foundation and Contributors</Authors>
     <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</PackageIconUrl>
     <PackageProjectUrl>https://github.com/dotnet/reactive</PackageProjectUrl>
-    <PackageLicenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>    
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)ReactiveX.snk</AssemblyOriginatorKeyFile>
