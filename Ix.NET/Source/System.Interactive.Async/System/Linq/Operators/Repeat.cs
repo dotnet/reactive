@@ -13,7 +13,23 @@ namespace System.Linq
     {
         public static IAsyncEnumerable<TResult> Repeat<TResult>(TResult element)
         {
+#if USE_ASYNC_ITERATOR
+            return AsyncEnumerable.Create(Core);
+
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                while (true)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    yield return element;
+                }
+            }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+#else
             return new RepeatElementAsyncIterator<TResult>(element);
+#endif
         }
 
         public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source)
@@ -21,7 +37,22 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
+#if USE_ASYNC_ITERATOR
+            return AsyncEnumerable.Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                while (true)
+                {
+                    await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return item;
+                    }
+                }
+            }
+#else
             return new RepeatSequenceAsyncIterator<TSource>(source, -1);
+#endif
         }
 
         public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source, int count)
@@ -31,9 +62,25 @@ namespace System.Linq
             if (count < 0)
                 throw Error.ArgumentOutOfRange(nameof(count));
 
+#if USE_ASYNC_ITERATOR
+            return AsyncEnumerable.Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                for (var i = 0; i < count; i++)
+                {
+                    await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return item;
+                    }
+                }
+            }
+#else
             return new RepeatSequenceAsyncIterator<TSource>(source, count);
+#endif
         }
 
+#if !USE_ASYNC_ITERATOR
         private sealed class RepeatElementAsyncIterator<TResult> : AsyncIterator<TResult>
         {
             private readonly TResult _element;
@@ -124,5 +171,6 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
     }
 }
