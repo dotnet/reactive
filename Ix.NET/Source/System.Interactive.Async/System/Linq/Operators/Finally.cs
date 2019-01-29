@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -17,7 +18,26 @@ namespace System.Linq
             if (finallyAction == null)
                 throw Error.ArgumentNull(nameof(finallyAction));
 
+#if USE_ASYNC_ITERATOR
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                try
+                {
+                    await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return item;
+                    }
+                }
+                finally
+                {
+                    finallyAction();
+                }
+            }
+#else
             return new FinallyAsyncIterator<TSource>(source, finallyAction);
+#endif
         }
 
         public static IAsyncEnumerable<TSource> Finally<TSource>(this IAsyncEnumerable<TSource> source, Func<Task> finallyAction)
@@ -27,11 +47,31 @@ namespace System.Linq
             if (finallyAction == null)
                 throw Error.ArgumentNull(nameof(finallyAction));
 
+#if USE_ASYNC_ITERATOR
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                try
+                {
+                    await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return item;
+                    }
+                }
+                finally
+                {
+                    await finallyAction().ConfigureAwait(false);
+                }
+            }
+#else
             return new FinallyAsyncIteratorWithTask<TSource>(source, finallyAction);
+#endif
         }
 
         // REVIEW: No cancellation support for finally action.
 
+#if !USE_ASYNC_ITERATOR
         private sealed class FinallyAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly Action _finallyAction;
@@ -148,4 +188,5 @@ namespace System.Linq
             }
         }
     }
+#endif
 }
