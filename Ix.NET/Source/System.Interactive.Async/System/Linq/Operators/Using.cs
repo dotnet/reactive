@@ -20,7 +20,22 @@ namespace System.Linq
             if (enumerableFactory == null)
                 throw Error.ArgumentNull(nameof(enumerableFactory));
 
+#if USE_ASYNC_ITERATOR
+            return AsyncEnumerable.Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                using (TResource resource = resourceFactory())
+                {
+                    await foreach (TSource item in enumerableFactory(resource).WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return item;
+                    }
+                }
+            }
+#else
             return new UsingAsyncIterator<TSource, TResource>(resourceFactory, enumerableFactory);
+#endif
         }
 
         public static IAsyncEnumerable<TSource> Using<TSource, TResource>(Func<Task<TResource>> resourceFactory, Func<TResource, ValueTask<IAsyncEnumerable<TSource>>> enumerableFactory) where TResource : IDisposable
@@ -30,7 +45,22 @@ namespace System.Linq
             if (enumerableFactory == null)
                 throw Error.ArgumentNull(nameof(enumerableFactory));
 
+#if USE_ASYNC_ITERATOR
+            return AsyncEnumerable.Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                using (TResource resource = await resourceFactory().ConfigureAwait(false))
+                {
+                    await foreach (TSource item in (await enumerableFactory(resource).ConfigureAwait(false)).WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return item;
+                    }
+                }
+            }
+#else
             return new UsingAsyncIteratorWithTask<TSource, TResource>(resourceFactory, enumerableFactory);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -41,10 +71,26 @@ namespace System.Linq
             if (enumerableFactory == null)
                 throw Error.ArgumentNull(nameof(enumerableFactory));
 
+#if USE_ASYNC_ITERATOR
+            return AsyncEnumerable.Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                using (TResource resource = await resourceFactory(cancellationToken).ConfigureAwait(false))
+                {
+                    await foreach (TSource item in (await enumerableFactory(resource, cancellationToken).ConfigureAwait(false)).WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return item;
+                    }
+                }
+            }
+#else
             return new UsingAsyncIteratorWithTaskAndCancellation<TSource, TResource>(resourceFactory, enumerableFactory);
+#endif
         }
 #endif
 
+#if !USE_ASYNC_ITERATOR
         private sealed class UsingAsyncIterator<TSource, TResource> : AsyncIterator<TSource> where TResource : IDisposable
         {
             private readonly Func<TResource, IAsyncEnumerable<TSource>> _enumerableFactory;
@@ -247,6 +293,7 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
 #endif
     }
 }
