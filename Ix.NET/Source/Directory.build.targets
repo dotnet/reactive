@@ -12,7 +12,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <!-- TODO: Enable USE_ASYNC_ITERATOR -->
+    <!--
+    TODO: Enable USE_ASYNC_ITERATOR. Current errors due to missing members in target frameworks:
+          error CS0518: Predefined type 'System.Runtime.CompilerServices.AsyncIteratorMethodBuilder' is not defined or imported
+          error CS0656: Missing compiler required member 'System.Threading.Tasks.Sources.ManualResetValueTaskSourceCore`1.*
+    -->
     <DefineConstants>$(DefineConstants);USE_AWAIT_FOREACH;USE_AWAIT_USING</DefineConstants>
   </PropertyGroup>
 
