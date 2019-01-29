@@ -20,11 +20,28 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
+#if USE_ASYNC_ITERATOR
+            return Create(Core);
+
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                for (TState state = initialState; condition(state); state = iterate(state))
+                {
+                    // REVIEW: Check for cancellation?
+
+                    yield return resultSelector(state);
+                }
+            }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+#else
             return new GenerateAsyncIterator<TState, TResult>(initialState, condition, iterate, resultSelector);
+#endif
         }
 
         // REVIEW: Add async variant?
 
+#if !USE_ASYNC_ITERATOR
         private sealed class GenerateAsyncIterator<TState, TResult> : AsyncIterator<TResult>
         {
             private readonly Func<TState, bool> _condition;
@@ -93,4 +110,5 @@ namespace System.Linq
             }
         }
     }
+#endif
 }
