@@ -21,7 +21,7 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(resultSelector));
 
 #if USE_ASYNC_ITERATOR
-            return Create(Core);
+            return AsyncEnumerable.Create(Core);
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -109,6 +109,6 @@ namespace System.Linq
                 return false;
             }
         }
-    }
 #endif
+    }
 }

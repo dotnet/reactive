@@ -26,7 +26,7 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(handler));
 
 #if USE_ASYNC_ITERATOR
-            return Create(Core);
+            return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
@@ -84,7 +84,7 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(handler));
 
 #if USE_ASYNC_ITERATOR
-            return Create(Core);
+            return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
@@ -143,7 +143,7 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(handler));
 
 #if USE_ASYNC_ITERATOR
-            return Create(Core);
+            return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
@@ -222,7 +222,7 @@ namespace System.Linq
         private static IAsyncEnumerable<TSource> CatchCore<TSource>(IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
 #if USE_ASYNC_ITERATOR
-            return Create(Core);
+            return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
@@ -641,6 +641,6 @@ namespace System.Linq
                 return false;
             }
         }
-    }
 #endif
+    }
 }

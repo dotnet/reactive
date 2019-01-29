@@ -17,13 +17,15 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(source));
 
 #if USE_ASYNC_ITERATOR
-            return Create(Core);
+            return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
                 await foreach (var _ in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                 }
+
+                yield break;
             }
 #else
             return new IgnoreElementsAsyncIterator<TSource>(source);
@@ -80,6 +82,6 @@ namespace System.Linq
                 return false;
             }
         }
-    }
 #endif
+    }
 }

@@ -19,7 +19,7 @@ namespace System.Linq
                 throw Error.ArgumentOutOfRange(nameof(count));
 
 #if USE_ASYNC_ITERATOR
-            return Create(Core);
+            return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<IList<TSource>> Core(CancellationToken cancellationToken)
             {
@@ -57,7 +57,7 @@ namespace System.Linq
                 throw Error.ArgumentOutOfRange(nameof(skip));
 
 #if USE_ASYNC_ITERATOR
-            return Create(Core);
+            return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<IList<TSource>> Core(CancellationToken cancellationToken)
             {
@@ -196,6 +196,6 @@ namespace System.Linq
                 return false;
             }
         }
-    }
 #endif
+    }
 }
