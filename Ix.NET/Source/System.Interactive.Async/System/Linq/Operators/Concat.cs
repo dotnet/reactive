@@ -16,7 +16,22 @@ namespace System.Linq
             if (sources == null)
                 throw Error.ArgumentNull(nameof(sources));
 
+#if USE_ASYNC_ITERATOR
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await foreach (IAsyncEnumerable<TSource> source in sources.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return item;
+                    }
+                }
+            }
+#else
             return new ConcatAsyncEnumerableAsyncIterator<TSource>(sources);
+#endif
         }
 
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
@@ -24,7 +39,22 @@ namespace System.Linq
             if (sources == null)
                 throw Error.ArgumentNull(nameof(sources));
 
+#if USE_ASYNC_ITERATOR
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                foreach (IAsyncEnumerable<TSource> source in sources)
+                {
+                    await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return item;
+                    }
+                }
+            }
+#else
             return ConcatCore(sources);
+#endif
         }
 
         public static IAsyncEnumerable<TSource> Concat<TSource>(params IAsyncEnumerable<TSource>[] sources)
@@ -32,9 +62,25 @@ namespace System.Linq
             if (sources == null)
                 throw Error.ArgumentNull(nameof(sources));
 
+#if USE_ASYNC_ITERATOR
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                foreach (IAsyncEnumerable<TSource> source in sources)
+                {
+                    await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    {
+                        yield return item;
+                    }
+                }
+            }
+#else
             return ConcatCore(sources);
+#endif
         }
 
+#if !USE_ASYNC_ITERATOR
         private static IAsyncEnumerable<TSource> ConcatCore<TSource>(IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             return new ConcatEnumerableAsyncIterator<TSource>(sources);
@@ -218,4 +264,5 @@ namespace System.Linq
             }
         }
     }
+#endif
 }
