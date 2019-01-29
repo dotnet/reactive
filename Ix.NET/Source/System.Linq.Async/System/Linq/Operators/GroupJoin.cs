@@ -41,7 +41,7 @@ namespace System.Linq
                         {
                             var item = e.Current;
                             var outerKey = outerKeySelector(item);
-                            yield return resultSelector(item, lookup[outerKey]);
+                            yield return resultSelector(item, lookup[outerKey].ToAsyncEnumerable());
                         }
                         while (await e.MoveNextAsync());
                     }
@@ -83,7 +83,7 @@ namespace System.Linq
                         {
                             var item = e.Current;
                             var outerKey = await outerKeySelector(item).ConfigureAwait(false);
-                            yield return await resultSelector(item, lookup[outerKey]).ConfigureAwait(false);
+                            yield return await resultSelector(item, lookup[outerKey].ToAsyncEnumerable()).ConfigureAwait(false);
                         }
                         while (await e.MoveNextAsync());
                     }
@@ -126,7 +126,7 @@ namespace System.Linq
                         {
                             var item = e.Current;
                             var outerKey = await outerKeySelector(item, cancellationToken).ConfigureAwait(false);
-                            yield return await resultSelector(item, lookup[outerKey], cancellationToken).ConfigureAwait(false);
+                            yield return await resultSelector(item, lookup[outerKey].ToAsyncEnumerable(), cancellationToken).ConfigureAwait(false);
                         }
                         while (await e.MoveNextAsync());
                     }

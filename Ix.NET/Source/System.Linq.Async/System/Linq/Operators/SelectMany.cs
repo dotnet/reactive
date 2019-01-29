@@ -98,7 +98,7 @@ namespace System.Linq
                         index++;
                     }
 
-                    var inner = selector(element, index);
+                    var inner = await selector(element, index).ConfigureAwait(false);
 
                     await foreach (var subElement in inner.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
