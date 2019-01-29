@@ -26,7 +26,30 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                await using (var e = outer.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    if (await e.MoveNextAsync())
+                    {
+                        var lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+
+                        do
+                        {
+                            var item = e.Current;
+                            var outerKey = outerKeySelector(item);
+                            yield return resultSelector(item, lookup[outerKey]);
+                        }
+                        while (await e.MoveNextAsync());
+                    }
+                }
+            }
+#else
             return new GroupJoinAsyncEnumerable<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
+#endif
         }
 
         public static IAsyncEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> resultSelector) =>
@@ -45,7 +68,30 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                await using (var e = outer.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    if (await e.MoveNextAsync())
+                    {
+                        var lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+
+                        do
+                        {
+                            var item = e.Current;
+                            var outerKey = await outerKeySelector(item).ConfigureAwait(false);
+                            yield return await resultSelector(item, lookup[outerKey]).ConfigureAwait(false);
+                        }
+                        while (await e.MoveNextAsync());
+                    }
+                }
+            }
+#else
             return new GroupJoinAsyncEnumerableWithTask<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -65,10 +111,34 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
+#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                await using (var e = outer.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    if (await e.MoveNextAsync())
+                    {
+                        var lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+
+                        do
+                        {
+                            var item = e.Current;
+                            var outerKey = await outerKeySelector(item, cancellationToken).ConfigureAwait(false);
+                            yield return await resultSelector(item, lookup[outerKey], cancellationToken).ConfigureAwait(false);
+                        }
+                        while (await e.MoveNextAsync());
+                    }
+                }
+            }
+#else
             return new GroupJoinAsyncEnumerableWithTaskAndCancellation<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
+#endif
         }
 #endif
 
+#if !(CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR)
         private sealed class GroupJoinAsyncEnumerable<TOuter, TInner, TKey, TResult> : IAsyncEnumerable<TResult>
         {
             private readonly IEqualityComparer<TKey> _comparer;
@@ -363,6 +433,7 @@ namespace System.Linq
                 public ValueTask DisposeAsync() => _outer.DisposeAsync();
             }
         }
+#endif
 #endif
     }
 }
