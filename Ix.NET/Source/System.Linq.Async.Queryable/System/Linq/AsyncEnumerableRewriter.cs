@@ -69,7 +69,7 @@ namespace System.Linq
                 return Expression.Call(obj, node.Method, args);
             }
 
-            var method = default(MethodInfo);
+            MethodInfo method;
 
             //
             // Find a corresponding method in the non-expression world, e.g. rewriting from

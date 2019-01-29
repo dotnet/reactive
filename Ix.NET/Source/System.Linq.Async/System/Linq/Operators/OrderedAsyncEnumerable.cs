@@ -220,6 +220,8 @@ namespace System.Linq
             if (_source is IAsyncIListProvider<TElement> listProv)
             {
                 var count = await listProv.GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
+
+                return count;
             }
 
             return !onlyIfCheap || _source is ICollection<TElement> || _source is ICollection ? await _source.CountAsync(cancellationToken).ConfigureAwait(false) : -1;
