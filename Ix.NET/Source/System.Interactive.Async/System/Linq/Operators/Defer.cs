@@ -16,7 +16,19 @@ namespace System.Linq
             if (factory == null)
                 throw Error.ArgumentNull(nameof(factory));
 
+#if USE_ASYNC_ITERATOR
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await foreach (TSource item in factory().WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    yield return item;
+                }
+            }
+#else
             return new DeferIterator<TSource>(factory);
+#endif
         }
 
         public static IAsyncEnumerable<TSource> Defer<TSource>(Func<Task<IAsyncEnumerable<TSource>>> factory)
@@ -24,7 +36,19 @@ namespace System.Linq
             if (factory == null)
                 throw Error.ArgumentNull(nameof(factory));
 
+#if USE_ASYNC_ITERATOR
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await foreach (TSource item in (await factory().ConfigureAwait(false)).WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    yield return item;
+                }
+            }
+#else
             return new AsyncDeferIterator<TSource>(factory);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -33,10 +57,23 @@ namespace System.Linq
             if (factory == null)
                 throw Error.ArgumentNull(nameof(factory));
 
+#if USE_ASYNC_ITERATOR
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await foreach (TSource item in (await factory(cancellationToken).ConfigureAwait(false)).WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    yield return item;
+                }
+            }
+#else
             return new AsyncDeferIteratorWithCancellation<TSource>(factory);
+#endif
         }
 #endif
 
+#if !USE_ASYNC_ITERATOR
         private sealed class DeferIterator<T> : AsyncIteratorBase<T>
         {
             private readonly Func<IAsyncEnumerable<T>> _factory;
@@ -209,4 +246,5 @@ namespace System.Linq
         }
 #endif
     }
+#endif
 }
