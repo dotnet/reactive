@@ -9,71 +9,34 @@ namespace System.Threading.Tasks
 {
     public static class AsyncEnumerableExtensions
     {
-        public static ConfiguredAsyncEnumerable<T> ConfigureAwait<T>(this IAsyncEnumerable<T> enumerable, bool continueOnCapturedContext)
-        {
-            if (enumerable == null)
-                throw Error.ArgumentNull(nameof(enumerable));
+#if !BCL_HAS_CONFIGUREAWAIT // https://github.com/dotnet/coreclr/pull/21939
 
-            return new ConfiguredAsyncEnumerable<T>(enumerable, continueOnCapturedContext);
-        }
+        /// <summary>Configures how awaits on the tasks returned from an async iteration will be performed.</summary>
+        /// <typeparam name="T">The type of the objects being iterated.</typeparam>
+        /// <param name="source">The source enumerable being iterated.</param>
+        /// <param name="continueOnCapturedContext">Whether to capture and marshal back to the current context.</param>
+        /// <returns>The configured enumerable.</returns>
+        public static ConfiguredCancelableAsyncEnumerable<T> ConfigureAwait<T>(
+            this IAsyncEnumerable<T> source, bool continueOnCapturedContext) =>
+            new ConfiguredCancelableAsyncEnumerable<T>(source, continueOnCapturedContext, cancellationToken: default);
 
-        public static ConfiguredAsyncEnumerable<T>.ConfiguredAsyncEnumerator ConfigureAwait<T>(this IAsyncEnumerator<T> enumerator, bool continueOnCapturedContext)
+        /// <summary>Sets the <see cref="CancellationToken"/> to be passed to <see cref="IAsyncEnumerable{T}.GetAsyncEnumerator(CancellationToken)"/> when iterating.</summary>
+        /// <typeparam name="T">The type of the objects being iterated.</typeparam>
+        /// <param name="source">The source enumerable being iterated.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
+        /// <returns>The configured enumerable.</returns>
+        public static ConfiguredCancelableAsyncEnumerable<T> WithCancellation<T>(
+            this IAsyncEnumerable<T> source, CancellationToken cancellationToken) =>
+            new ConfiguredCancelableAsyncEnumerable<T>(source, continueOnCapturedContext: true, cancellationToken);
+
+#endif
+
+        public static ConfiguredCancelableAsyncEnumerable<T>.Enumerator ConfigureAwait<T>(this IAsyncEnumerator<T> enumerator, bool continueOnCapturedContext)
         {
             if (enumerator == null)
                 throw Error.ArgumentNull(nameof(enumerator));
 
-            return new ConfiguredAsyncEnumerable<T>.ConfiguredAsyncEnumerator(enumerator, continueOnCapturedContext);
-        }
-
-        // REVIEW: Explicit implementation of the interfaces allows for composition with other "modifier operators" such as WithCancellation.
-        //         We expect that the "await foreach" statement will bind to the public struct methods, thus avoiding boxing.
-
-        public readonly struct ConfiguredAsyncEnumerable<T> : IAsyncEnumerable<T>
-        {
-            private readonly IAsyncEnumerable<T> _enumerable;
-            private readonly bool _continueOnCapturedContext;
-
-            internal ConfiguredAsyncEnumerable(IAsyncEnumerable<T> enumerable, bool continueOnCapturedContext)
-            {
-                _enumerable = enumerable;
-                _continueOnCapturedContext = continueOnCapturedContext;
-            }
-
-            public ConfiguredAsyncEnumerator GetAsyncEnumerator(CancellationToken cancellationToken)
-            {
-                cancellationToken.ThrowIfCancellationRequested(); // NB: [LDM-2018-11-28] Equivalent to async iterator behavior.
-
-                return new ConfiguredAsyncEnumerator(_enumerable.GetAsyncEnumerator(cancellationToken), _continueOnCapturedContext);
-            }
-
-            IAsyncEnumerator<T> IAsyncEnumerable<T>.GetAsyncEnumerator(CancellationToken cancellationToken) =>
-                GetAsyncEnumerator(cancellationToken);
-
-            public readonly struct ConfiguredAsyncEnumerator : IAsyncEnumerator<T>
-            {
-                private readonly IAsyncEnumerator<T> _enumerator;
-                private readonly bool _continueOnCapturedContext;
-
-                internal ConfiguredAsyncEnumerator(IAsyncEnumerator<T> enumerator, bool continueOnCapturedContext)
-                {
-                    _enumerator = enumerator;
-                    _continueOnCapturedContext = continueOnCapturedContext;
-                }
-
-                public ConfiguredValueTaskAwaitable<bool> MoveNextAsync() =>
-                    _enumerator.MoveNextAsync().ConfigureAwait(_continueOnCapturedContext);
-
-                public T Current => _enumerator.Current;
-
-                public ConfiguredValueTaskAwaitable DisposeAsync() =>
-                    _enumerator.DisposeAsync().ConfigureAwait(_continueOnCapturedContext);
-
-                async ValueTask<bool> IAsyncEnumerator<T>.MoveNextAsync() =>
-                    await _enumerator.MoveNextAsync().ConfigureAwait(_continueOnCapturedContext);
-
-                async ValueTask IAsyncDisposable.DisposeAsync() =>
-                    await _enumerator.DisposeAsync().ConfigureAwait(_continueOnCapturedContext);
-            }
+            return new ConfiguredCancelableAsyncEnumerable<T>.Enumerator(enumerator, continueOnCapturedContext);
         }
     }
 }
