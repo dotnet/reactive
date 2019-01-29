@@ -15,17 +15,17 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, comparer, cancellationToken);
 
-            async Task<TSource> Core()
+            static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, IComparer<TSource> _comparer, CancellationToken _cancellationToken)
             {
-                if (comparer == null)
+                if (_comparer == null)
                 {
-                    comparer = Comparer<TSource>.Default;
+                    _comparer = Comparer<TSource>.Default;
                 }
 
 #if USE_AWAIT_USING
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
                         throw Error.NoElements();
@@ -36,7 +36,7 @@ namespace System.Linq
                     {
                         var cur = e.Current;
 
-                        if (comparer.Compare(cur, min) < 0)
+                        if (_comparer.Compare(cur, min) < 0)
                         {
                             min = cur;
                         }
@@ -45,7 +45,7 @@ namespace System.Linq
                     return min;
                 }
 #else
-                var e = source.GetAsyncEnumerator(cancellationToken);
+                var e = _source.GetAsyncEnumerator(_cancellationToken);
 
                 try
                 {
@@ -58,7 +58,7 @@ namespace System.Linq
                     {
                         var cur = e.Current;
 
-                        if (comparer.Compare(cur, min) < 0)
+                        if (_comparer.Compare(cur, min) < 0)
                         {
                             min = cur;
                         }

@@ -15,11 +15,11 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            return Core();
+            return Core(source, cancellationToken);
 
-            async Task<bool> Core()
+            static async Task<bool> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
-                return !await source.AnyAsync(cancellationToken).ConfigureAwait(false);
+                return !await _source.AnyAsync(_cancellationToken).ConfigureAwait(false);
             }
         }
     }
