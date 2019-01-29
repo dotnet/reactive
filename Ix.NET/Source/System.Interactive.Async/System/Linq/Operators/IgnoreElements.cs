@@ -16,9 +16,21 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
+#if USE_ASYNC_ITERATOR
+            return Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await foreach (var _ in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                }
+            }
+#else
             return new IgnoreElementsAsyncIterator<TSource>(source);
+#endif
         }
 
+#if !USE_ASYNC_ITERATOR
         private sealed class IgnoreElementsAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly IAsyncEnumerable<TSource> _source;
@@ -69,4 +81,5 @@ namespace System.Linq
             }
         }
     }
+#endif
 }
