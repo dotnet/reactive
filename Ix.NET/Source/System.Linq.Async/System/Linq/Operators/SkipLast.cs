@@ -27,7 +27,7 @@ namespace System.Linq
                 count = 0;
             }
 
-#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+#if CSHARP8 && USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -60,7 +60,7 @@ namespace System.Linq
 #endif
         }
 
-#if !(CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR)
+#if !(CSHARP8 && USE_ASYNC_ITERATOR)
         private sealed class SkipLastAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly int _count;

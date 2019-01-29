@@ -34,7 +34,7 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+#if CSHARP8 && USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -100,7 +100,7 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+#if CSHARP8 && USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -133,7 +133,7 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR // https://github.com/dotnet/roslyn/pull/31114
+#if CSHARP8 && USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -228,7 +228,7 @@ namespace System.Linq
             }
         }
 
-#if !(CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR)
+#if !(CSHARP8 && USE_ASYNC_ITERATOR)
         private sealed class WhereEnumerableWithIndexAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, int, bool> _predicate;
@@ -428,7 +428,7 @@ namespace System.Linq
         }
 #endif
 
-#if !(CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR)
+#if !(CSHARP8 && USE_ASYNC_ITERATOR)
         private sealed class WhereEnumerableWithIndexAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, int, ValueTask<bool>> _predicate;
