@@ -20,7 +20,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<List<TSource>> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+            static async Task<List<TSource>> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
                 var list = new List<TSource>();
 

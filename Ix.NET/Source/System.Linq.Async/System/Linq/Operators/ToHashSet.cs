@@ -20,7 +20,7 @@ namespace System.Linq
 
             return Core(source, comparer, cancellationToken);
 
-            async Task<HashSet<TSource>> Core(IAsyncEnumerable<TSource> _source, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
+            static async Task<HashSet<TSource>> Core(IAsyncEnumerable<TSource> _source, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
             {
                 var set = new HashSet<TSource>(_comparer);
 

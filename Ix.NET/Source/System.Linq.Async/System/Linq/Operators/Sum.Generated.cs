@@ -17,7 +17,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<int> Core(IAsyncEnumerable<int> _source, CancellationToken _cancellationToken)
+            static async Task<int> Core(IAsyncEnumerable<int> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
@@ -61,7 +61,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int> _selector, CancellationToken _cancellationToken)
+            static async Task<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
@@ -109,7 +109,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int>> _selector, CancellationToken _cancellationToken)
+            static async Task<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
@@ -158,7 +158,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int>> _selector, CancellationToken _cancellationToken)
+            static async Task<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
@@ -205,7 +205,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<long> Core(IAsyncEnumerable<long> _source, CancellationToken _cancellationToken)
+            static async Task<long> Core(IAsyncEnumerable<long> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
@@ -249,7 +249,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long> _selector, CancellationToken _cancellationToken)
+            static async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
@@ -297,7 +297,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long>> _selector, CancellationToken _cancellationToken)
+            static async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
@@ -346,7 +346,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long>> _selector, CancellationToken _cancellationToken)
+            static async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
@@ -393,7 +393,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<float> Core(IAsyncEnumerable<float> _source, CancellationToken _cancellationToken)
+            static async Task<float> Core(IAsyncEnumerable<float> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
@@ -431,7 +431,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float> _selector, CancellationToken _cancellationToken)
+            static async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
@@ -473,7 +473,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float>> _selector, CancellationToken _cancellationToken)
+            static async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
@@ -516,7 +516,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float>> _selector, CancellationToken _cancellationToken)
+            static async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
@@ -557,7 +557,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<double> Core(IAsyncEnumerable<double> _source, CancellationToken _cancellationToken)
+            static async Task<double> Core(IAsyncEnumerable<double> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
@@ -595,7 +595,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double> _selector, CancellationToken _cancellationToken)
+            static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
@@ -637,7 +637,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double>> _selector, CancellationToken _cancellationToken)
+            static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
@@ -680,7 +680,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double>> _selector, CancellationToken _cancellationToken)
+            static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
@@ -721,7 +721,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<decimal> Core(IAsyncEnumerable<decimal> _source, CancellationToken _cancellationToken)
+            static async Task<decimal> Core(IAsyncEnumerable<decimal> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
@@ -759,7 +759,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal> _selector, CancellationToken _cancellationToken)
+            static async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
@@ -801,7 +801,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
+            static async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
@@ -844,7 +844,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
+            static async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
@@ -885,7 +885,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<int?> Core(IAsyncEnumerable<int?> _source, CancellationToken _cancellationToken)
+            static async Task<int?> Core(IAsyncEnumerable<int?> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
@@ -929,7 +929,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int?> _selector, CancellationToken _cancellationToken)
+            static async Task<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int?> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
@@ -977,7 +977,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
+            static async Task<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
@@ -1026,7 +1026,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
+            static async Task<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0;
 
@@ -1073,7 +1073,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<long?> Core(IAsyncEnumerable<long?> _source, CancellationToken _cancellationToken)
+            static async Task<long?> Core(IAsyncEnumerable<long?> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
@@ -1117,7 +1117,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long?> _selector, CancellationToken _cancellationToken)
+            static async Task<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long?> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
@@ -1165,7 +1165,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
+            static async Task<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
@@ -1214,7 +1214,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
+            static async Task<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0L;
 
@@ -1261,7 +1261,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<float?> Core(IAsyncEnumerable<float?> _source, CancellationToken _cancellationToken)
+            static async Task<float?> Core(IAsyncEnumerable<float?> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
@@ -1299,7 +1299,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float?> _selector, CancellationToken _cancellationToken)
+            static async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float?> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
@@ -1341,7 +1341,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
+            static async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
@@ -1384,7 +1384,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
+            static async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0f;
 
@@ -1425,7 +1425,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<double?> Core(IAsyncEnumerable<double?> _source, CancellationToken _cancellationToken)
+            static async Task<double?> Core(IAsyncEnumerable<double?> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
@@ -1463,7 +1463,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double?> _selector, CancellationToken _cancellationToken)
+            static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double?> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
@@ -1505,7 +1505,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
+            static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
@@ -1548,7 +1548,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
+            static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0.0;
 
@@ -1589,7 +1589,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<decimal?> Core(IAsyncEnumerable<decimal?> _source, CancellationToken _cancellationToken)
+            static async Task<decimal?> Core(IAsyncEnumerable<decimal?> _source, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
@@ -1627,7 +1627,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal?> _selector, CancellationToken _cancellationToken)
+            static async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal?> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
@@ -1669,7 +1669,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
+            static async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 
@@ -1712,7 +1712,7 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
+            static async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
             {
                 var sum = 0m;
 

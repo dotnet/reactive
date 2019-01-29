@@ -50,7 +50,7 @@ namespace System.Linq
 
             return Core(first, second, comparer, cancellationToken);
 
-            async Task<bool> Core(IAsyncEnumerable<TSource> _first, IAsyncEnumerable<TSource> _second, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
+            static async Task<bool> Core(IAsyncEnumerable<TSource> _first, IAsyncEnumerable<TSource> _second, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
             {
 #if CSHARP8
                 await using (var e1 = _first.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))

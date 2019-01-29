@@ -35,7 +35,7 @@ foreach (var m in new[] { "Max", "Min" })
 
             return Core(source, cancellationToken);
 
-            async Task<<#=t#>> Core(IAsyncEnumerable<<#=t#>> _source, CancellationToken _cancellationToken)
+            static async Task<<#=t#>> Core(IAsyncEnumerable<<#=t#>> _source, CancellationToken _cancellationToken)
             {
 <#
         if (!isNullable)
@@ -537,7 +537,7 @@ foreach (var overload in new[] {
 
             return Core(source, selector, cancellationToken);
 
-            async Task<<#=t#>> Core(IAsyncEnumerable<TSource> _source, <#=overload.selector#> _selector, CancellationToken _cancellationToken)
+            static async Task<<#=t#>> Core(IAsyncEnumerable<TSource> _source, <#=overload.selector#> _selector, CancellationToken _cancellationToken)
             {
 <#
         if (!isNullable)

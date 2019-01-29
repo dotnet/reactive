@@ -26,7 +26,7 @@ namespace System.Linq
             {
                 return Core(source, value, cancellationToken);
 
-                async Task<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, CancellationToken _cancellationToken)
+                static async Task<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, CancellationToken _cancellationToken)
                 {
 #if CSHARP8
                     await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
@@ -62,7 +62,7 @@ namespace System.Linq
             {
                 return Core(source, value, comparer, cancellationToken);
 
-                async Task<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
+                static async Task<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
                 {
 #if CSHARP8
                     await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))

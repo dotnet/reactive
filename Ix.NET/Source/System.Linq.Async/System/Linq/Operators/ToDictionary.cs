@@ -22,12 +22,12 @@ namespace System.Linq
 
             return Core(source, keySelector, comparer, cancellationToken);
 
-            async Task<Dictionary<TKey, TSource>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TKey> _keySelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
+            static async Task<Dictionary<TKey, TSource>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TKey> _keySelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
             {
                 var d = new Dictionary<TKey, TSource>(_comparer);
 
 #if CSHARP8
-                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = _keySelector(item);
 
@@ -69,7 +69,7 @@ namespace System.Linq
 
             return Core(source, keySelector, comparer, cancellationToken);
 
-            async Task<Dictionary<TKey, TSource>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TKey>> _keySelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
+            static async Task<Dictionary<TKey, TSource>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TKey>> _keySelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
             {
                 var d = new Dictionary<TKey, TSource>(_comparer);
 
@@ -117,7 +117,7 @@ namespace System.Linq
 
             return Core(source, keySelector, comparer, cancellationToken);
 
-            async Task<Dictionary<TKey, TSource>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TKey>> _keySelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
+            static async Task<Dictionary<TKey, TSource>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TKey>> _keySelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
             {
                 var d = new Dictionary<TKey, TSource>(_comparer);
 
@@ -167,7 +167,7 @@ namespace System.Linq
 
             return Core(source, keySelector, elementSelector, comparer, cancellationToken);
 
-            async Task<Dictionary<TKey, TElement>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TKey> _keySelector, Func<TSource, TElement> _elementSelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
+            static async Task<Dictionary<TKey, TElement>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TKey> _keySelector, Func<TSource, TElement> _elementSelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
             {
                 var d = new Dictionary<TKey, TElement>(_comparer);
 
@@ -218,7 +218,7 @@ namespace System.Linq
 
             return Core(source, keySelector, elementSelector, comparer, cancellationToken);
 
-            async Task<Dictionary<TKey, TElement>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TKey>> _keySelector, Func<TSource, ValueTask<TElement>> _elementSelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
+            static async Task<Dictionary<TKey, TElement>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TKey>> _keySelector, Func<TSource, ValueTask<TElement>> _elementSelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
             {
                 var d = new Dictionary<TKey, TElement>(_comparer);
 
@@ -270,7 +270,7 @@ namespace System.Linq
 
             return Core(source, keySelector, elementSelector, comparer, cancellationToken);
 
-            async Task<Dictionary<TKey, TElement>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TKey>> _keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> _elementSelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
+            static async Task<Dictionary<TKey, TElement>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TKey>> _keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> _elementSelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
             {
                 var d = new Dictionary<TKey, TElement>(_comparer);
 

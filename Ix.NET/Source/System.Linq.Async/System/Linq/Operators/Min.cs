@@ -19,7 +19,7 @@ namespace System.Linq
             {
                 return Core(source, cancellationToken);
 
-                async Task<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+                static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TSource>.Default;
 
@@ -87,7 +87,7 @@ namespace System.Linq
             {
                 return Core(source, cancellationToken);
 
-                async Task<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+                static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TSource>.Default;
 
@@ -155,7 +155,7 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TResult> _selector, CancellationToken _cancellationToken)
+                static async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TResult> _selector, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
@@ -223,7 +223,7 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TResult> _selector, CancellationToken _cancellationToken)
+                static async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TResult> _selector, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
@@ -291,7 +291,7 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
+                static async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
@@ -359,7 +359,7 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
+                static async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
@@ -428,7 +428,7 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
+                static async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
@@ -496,7 +496,7 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
+                static async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 

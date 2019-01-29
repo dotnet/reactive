@@ -26,7 +26,7 @@ namespace System.Linq
 
             return Core(source, action, cancellationToken);
 
-            async Task Core(IAsyncEnumerable<TSource> _source, Action<TSource> _action, CancellationToken _cancellationToken)
+            static async Task Core(IAsyncEnumerable<TSource> _source, Action<TSource> _action, CancellationToken _cancellationToken)
             {
 #if CSHARP8
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
@@ -60,7 +60,7 @@ namespace System.Linq
 
             return Core(source, action, cancellationToken);
 
-            async Task Core(IAsyncEnumerable<TSource> _source, Action<TSource, int> _action, CancellationToken _cancellationToken)
+            static async Task Core(IAsyncEnumerable<TSource> _source, Action<TSource, int> _action, CancellationToken _cancellationToken)
             {
                 var index = 0;
 
@@ -96,7 +96,7 @@ namespace System.Linq
 
             return Core(source, action, cancellationToken);
 
-            async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, Task> _action, CancellationToken _cancellationToken)
+            static async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, Task> _action, CancellationToken _cancellationToken)
             {
 #if CSHARP8
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
@@ -125,7 +125,7 @@ namespace System.Linq
         {
             return Core(source, action, cancellationToken);
 
-            async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, Task> _action, CancellationToken _cancellationToken)
+            static async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, Task> _action, CancellationToken _cancellationToken)
             {
 #if CSHARP8
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
@@ -159,7 +159,7 @@ namespace System.Linq
 
             return Core(source, action, cancellationToken);
 
-            async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, int, Task> _action, CancellationToken _cancellationToken)
+            static async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, int, Task> _action, CancellationToken _cancellationToken)
             {
                 var index = 0;
 
@@ -195,7 +195,7 @@ namespace System.Linq
 
             return Core(source, action, cancellationToken);
 
-            async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, int, CancellationToken, Task> _action, CancellationToken _cancellationToken)
+            static async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, int, CancellationToken, Task> _action, CancellationToken _cancellationToken)
             {
                 var index = 0;
 

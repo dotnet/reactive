@@ -17,7 +17,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<long> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+            static async Task<long> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
                 var count = 0L;
 
@@ -61,7 +61,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
+            static async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
             {
                 var count = 0L;
 
@@ -111,7 +111,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
                 var count = 0L;
 
@@ -162,7 +162,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async Task<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
                 var count = 0L;
 

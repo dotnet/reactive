@@ -17,7 +17,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+            static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
                 var first = await TryGetFirst(_source, _cancellationToken).ConfigureAwait(false);
 
@@ -34,7 +34,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
+            static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
             {
                 var first = await TryGetFirst(_source, _predicate, _cancellationToken).ConfigureAwait(false);
 
@@ -51,7 +51,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
                 var first = await TryGetFirst(_source, _predicate, _cancellationToken).ConfigureAwait(false);
 
@@ -69,7 +69,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
                 var first = await TryGetFirst(_source, _predicate, _cancellationToken).ConfigureAwait(false);
 

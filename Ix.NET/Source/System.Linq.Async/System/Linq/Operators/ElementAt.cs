@@ -17,7 +17,7 @@ namespace System.Linq
 
             return Core(source, index, cancellationToken);
 
-            async Task<TSource> Core(IAsyncEnumerable<TSource> _source, int _index, CancellationToken _cancellationToken)
+            static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, int _index, CancellationToken _cancellationToken)
             {
                 if (_source is IAsyncPartition<TSource> p)
                 {

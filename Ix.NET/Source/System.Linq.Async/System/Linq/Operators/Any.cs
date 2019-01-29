@@ -17,7 +17,7 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async Task<bool> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+            static async Task<bool> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
 #if CSHARP8
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
@@ -48,7 +48,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            async Task<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
+            static async Task<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
             {
 #if CSHARP8
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
@@ -88,7 +88,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            async Task<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async Task<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
 #if CSHARP8
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
@@ -129,7 +129,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            async Task<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async Task<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
 #if CSHARP8
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
