@@ -46,7 +46,7 @@ foreach (var o in os)
             {
                 var sum = <#=o.zero#>;
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
                 await foreach (<#=o.type#> value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
 <#
@@ -116,7 +116,7 @@ else
             {
                 var sum = <#=o.zero#>;
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -190,7 +190,7 @@ else
             {
                 var sum = <#=o.zero#>;
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -265,7 +265,7 @@ else
             {
                 var sum = <#=o.zero#>;
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
