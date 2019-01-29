@@ -101,7 +101,7 @@ namespace System.Linq
                     var last = default(TSource);
                     var hasLast = false;
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
                     await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         hasLast = true;
@@ -136,7 +136,7 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
             await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 if (predicate(item))
@@ -175,7 +175,7 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
             await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 if (await predicate(item).ConfigureAwait(false))
@@ -215,7 +215,7 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
             await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 if (await predicate(item, cancellationToken).ConfigureAwait(false))

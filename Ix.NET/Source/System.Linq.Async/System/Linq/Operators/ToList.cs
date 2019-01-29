@@ -24,7 +24,7 @@ namespace System.Linq
             {
                 var list = new List<TSource>();
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     list.Add(item);

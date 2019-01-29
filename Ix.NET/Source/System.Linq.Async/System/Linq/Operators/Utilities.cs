@@ -38,7 +38,7 @@ namespace System.Linq
                 }
             }
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
             await foreach (var item in collection.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 list.Add(item);

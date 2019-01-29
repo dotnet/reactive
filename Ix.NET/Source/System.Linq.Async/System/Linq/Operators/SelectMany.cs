@@ -402,7 +402,7 @@ namespace System.Linq
                 {
                     var count = 0;
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
                     await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         checked
@@ -446,7 +446,7 @@ namespace System.Linq
             {
                 var list = new List<TResult>();
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
                 await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     var items = _selector(element);
@@ -578,7 +578,7 @@ namespace System.Linq
                 {
                     var count = 0;
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
                     await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         var items = await _selector(element).ConfigureAwait(false);
@@ -626,7 +626,7 @@ namespace System.Linq
             {
                 var list = new List<TResult>();
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
                 await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     var items = await _selector(element).ConfigureAwait(false);
@@ -759,7 +759,7 @@ namespace System.Linq
                 {
                     var count = 0;
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
                     await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         var items = await _selector(element, _cancellationToken).ConfigureAwait(false);
@@ -807,7 +807,7 @@ namespace System.Linq
             {
                 var list = new List<TResult>();
 
-#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+#if CSHARP8
                 await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     var items = await _selector(element, cancellationToken).ConfigureAwait(false);
