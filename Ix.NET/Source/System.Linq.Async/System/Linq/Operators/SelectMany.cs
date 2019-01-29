@@ -346,7 +346,7 @@ namespace System.Linq
         }
 #endif
 
-        private sealed class SelectManyAsyncIterator<TSource, TResult> : AsyncIterator<TResult>
+        private sealed class SelectManyAsyncIterator<TSource, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private const int State_Source = 1;
             private const int State_Result = 2;
@@ -387,6 +387,91 @@ namespace System.Linq
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            {
+                if (onlyIfCheap)
+                {
+                    return new ValueTask<int>(-1);
+                }
+
+                return Core(cancellationToken);
+
+                async ValueTask<int> Core(CancellationToken _cancellationToken)
+                {
+                    var count = 0;
+
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                    await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                    {
+                        checked
+                        {
+                            count += await _selector(element).CountAsync().ConfigureAwait(false);
+                        }
+                    }
+#else
+                    var e = _source.GetAsyncEnumerator(_cancellationToken);
+
+                    try
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            checked
+                            {
+                                count += await _selector(e.Current).CountAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
+#endif
+
+                    return count;
+                }
+            }
+
+            public async ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                // REVIEW: Substitute for SparseArrayBuilder<T> logic once we have access to that.
+
+                var list = await ToListAsync(cancellationToken).ConfigureAwait(false);
+
+                return list.ToArray();
+            }
+
+            public async ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            {
+                var list = new List<TResult>();
+
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    var items = _selector(element);
+
+                    await list.AddRangeAsync(items, cancellationToken).ConfigureAwait(false);
+                }
+#else
+                var e = _source.GetAsyncEnumerator(cancellationToken);
+
+                try
+                {
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var items = _selector(e.Current);
+
+                        await list.AddRangeAsync(items, cancellationToken).ConfigureAwait(false);
+                    }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+#endif
+
+                return list;
             }
 
             protected override async ValueTask<bool> MoveNextCore()
@@ -437,7 +522,7 @@ namespace System.Linq
             }
         }
 
-        private sealed class SelectManyAsyncIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>
+        private sealed class SelectManyAsyncIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private const int State_Source = 1;
             private const int State_Result = 2;
@@ -478,6 +563,95 @@ namespace System.Linq
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            {
+                if (onlyIfCheap)
+                {
+                    return new ValueTask<int>(-1);
+                }
+
+                return Core(cancellationToken);
+
+                async ValueTask<int> Core(CancellationToken _cancellationToken)
+                {
+                    var count = 0;
+
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                    await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                    {
+                        var items = await _selector(element).ConfigureAwait(false);
+
+                        checked
+                        {
+                            count += await items.CountAsync().ConfigureAwait(false);
+                        }
+                    }
+#else
+                    var e = _source.GetAsyncEnumerator(_cancellationToken);
+
+                    try
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var items = await _selector(e.Current).ConfigureAwait(false);
+
+                            checked
+                            {
+                                count += await items.CountAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
+#endif
+
+                    return count;
+                }
+            }
+
+            public async ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                // REVIEW: Substitute for SparseArrayBuilder<T> logic once we have access to that.
+
+                var list = await ToListAsync(cancellationToken).ConfigureAwait(false);
+
+                return list.ToArray();
+            }
+
+            public async ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            {
+                var list = new List<TResult>();
+
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    var items = await _selector(element).ConfigureAwait(false);
+
+                    await list.AddRangeAsync(items, cancellationToken).ConfigureAwait(false);
+                }
+#else
+                var e = _source.GetAsyncEnumerator(cancellationToken);
+
+                try
+                {
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var items = await _selector(e.Current).ConfigureAwait(false);
+
+                        await list.AddRangeAsync(items, cancellationToken).ConfigureAwait(false);
+                    }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+#endif
+
+                return list;
             }
 
             protected override async ValueTask<bool> MoveNextCore()
@@ -529,7 +703,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        private sealed class SelectManyAsyncIteratorWithTaskAndCancellation<TSource, TResult> : AsyncIterator<TResult>
+        private sealed class SelectManyAsyncIteratorWithTaskAndCancellation<TSource, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private const int State_Source = 1;
             private const int State_Result = 2;
@@ -570,6 +744,95 @@ namespace System.Linq
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            {
+                if (onlyIfCheap)
+                {
+                    return new ValueTask<int>(-1);
+                }
+
+                return Core(cancellationToken);
+
+                async ValueTask<int> Core(CancellationToken _cancellationToken)
+                {
+                    var count = 0;
+
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                    await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                    {
+                        var items = await _selector(element, _cancellationToken).ConfigureAwait(false);
+
+                        checked
+                        {
+                            count += await items.CountAsync().ConfigureAwait(false);
+                        }
+                    }
+#else
+                    var e = _source.GetAsyncEnumerator(_cancellationToken);
+
+                    try
+                    {
+                        while (await e.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            var items = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+
+                            checked
+                            {
+                                count += await items.CountAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
+                    }
+#endif
+
+                    return count;
+                }
+            }
+
+            public async ValueTask<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                // REVIEW: Substitute for SparseArrayBuilder<T> logic once we have access to that.
+
+                var list = await ToListAsync(cancellationToken).ConfigureAwait(false);
+
+                return list.ToArray();
+            }
+
+            public async ValueTask<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            {
+                var list = new List<TResult>();
+
+#if CSHARP8 && AETOR_HAS_CT // CS0656 Missing compiler required member 'System.Collections.Generic.IAsyncEnumerable`1.GetAsyncEnumerator'
+                await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    var items = await _selector(element, cancellationToken).ConfigureAwait(false);
+
+                    await list.AddRangeAsync(items, cancellationToken).ConfigureAwait(false);
+                }
+#else
+                var e = _source.GetAsyncEnumerator(cancellationToken);
+
+                try
+                {
+                    while (await e.MoveNextAsync().ConfigureAwait(false))
+                    {
+                        var items = await _selector(e.Current, cancellationToken).ConfigureAwait(false);
+
+                        await list.AddRangeAsync(items, cancellationToken).ConfigureAwait(false);
+                    }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+#endif
+
+                return list;
             }
 
             protected override async ValueTask<bool> MoveNextCore()
@@ -621,7 +884,7 @@ namespace System.Linq
         }
 #endif
 
-#if !(CSHARP8 && USE_ASYNC_ITERATOR)
+#if !(CSHARP8 && USE_ASYNC_ITERATOR && ASYNC_ITERATOR_CAN_RETURN_AETOR)
         private sealed class SelectManyAsyncIterator<TSource, TCollection, TResult> : AsyncIterator<TResult>
         {
             private const int State_Source = 1;
