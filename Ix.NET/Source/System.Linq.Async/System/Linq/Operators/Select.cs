@@ -36,7 +36,7 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -103,7 +103,7 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -133,7 +133,7 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -217,7 +217,7 @@ namespace System.Linq
             }
         }
 
-#if !(CSHARP8 && USE_ASYNC_ITERATOR)
+#if !USE_ASYNC_ITERATOR
         private sealed class SelectEnumerableWithIndexAsyncIterator<TSource, TResult> : AsyncIterator<TResult>
         {
             private readonly Func<TSource, int, TResult> _selector;
@@ -523,7 +523,7 @@ namespace System.Linq
         }
 #endif
 
-#if !(CSHARP8 && USE_ASYNC_ITERATOR)
+#if !USE_ASYNC_ITERATOR
         private sealed class SelectEnumerableWithIndexAsyncIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>
         {
             private readonly Func<TSource, int, ValueTask<TResult>> _selector;

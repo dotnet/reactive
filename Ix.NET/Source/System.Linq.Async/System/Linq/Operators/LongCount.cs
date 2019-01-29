@@ -21,7 +21,7 @@ namespace System.Linq
             {
                 var count = 0L;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
@@ -65,7 +65,7 @@ namespace System.Linq
             {
                 var count = 0L;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     if (_predicate(item))
@@ -115,7 +115,7 @@ namespace System.Linq
             {
                 var count = 0L;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     if (await _predicate(item).ConfigureAwait(false))
@@ -166,7 +166,7 @@ namespace System.Linq
             {
                 var count = 0L;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     if (await _predicate(item, _cancellationToken).ConfigureAwait(false))

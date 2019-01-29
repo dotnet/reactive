@@ -21,7 +21,7 @@ namespace System.Linq
 
             static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, TSource> _accumulator, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -76,7 +76,7 @@ namespace System.Linq
 
             static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, ValueTask<TSource>> _accumulator, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -132,7 +132,7 @@ namespace System.Linq
 
             static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, CancellationToken, ValueTask<TSource>> _accumulator, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -190,7 +190,7 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     acc = _accumulator(acc, item);
@@ -228,7 +228,7 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     acc = await _accumulator(acc, item).ConfigureAwait(false);
@@ -267,7 +267,7 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     acc = await _accumulator(acc, item, _cancellationToken).ConfigureAwait(false);
@@ -308,7 +308,7 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     acc = _accumulator(acc, item);
@@ -348,7 +348,7 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     acc = await _accumulator(acc, item).ConfigureAwait(false);
@@ -389,7 +389,7 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     acc = await _accumulator(acc, item, _cancellationToken).ConfigureAwait(false);

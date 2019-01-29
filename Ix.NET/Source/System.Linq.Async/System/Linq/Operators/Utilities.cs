@@ -38,7 +38,7 @@ namespace System.Linq
                 }
             }
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
             await foreach (var item in collection.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 list.Add(item);

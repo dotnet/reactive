@@ -52,7 +52,7 @@ namespace System.Linq
 
             static async Task<bool> Core(IAsyncEnumerable<TSource> _first, IAsyncEnumerable<TSource> _second, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e1 = _first.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     await using (var e2 = _second.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))

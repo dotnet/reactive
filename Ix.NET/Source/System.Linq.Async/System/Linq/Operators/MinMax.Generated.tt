@@ -43,7 +43,7 @@ foreach (var m in new[] { "Max", "Min" })
 #>
                 <#=t#> value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -187,7 +187,7 @@ foreach (var m in new[] { "Max", "Min" })
 #>
                 <#=t#> value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -545,7 +545,7 @@ foreach (var overload in new[] {
 #>
                 <#=t#> value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -689,7 +689,7 @@ foreach (var overload in new[] {
 #>
                 <#=t#> value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)

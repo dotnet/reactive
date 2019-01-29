@@ -264,7 +264,7 @@ namespace System.Linq
 
         public async ValueTask<Maybe<TElement>> TryGetFirstAsync(CancellationToken cancellationToken)
         {
-#if CSHARP8
+#if USE_AWAIT_USING
             await using (var e = _source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
             {
                 if (!await e.MoveNextAsync())
@@ -327,7 +327,7 @@ namespace System.Linq
 
         public async ValueTask<Maybe<TElement>> TryGetLastAsync(CancellationToken cancellationToken)
         {
-#if CSHARP8
+#if USE_AWAIT_USING
             await using (var e = _source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
             {
                 if (!await e.MoveNextAsync())

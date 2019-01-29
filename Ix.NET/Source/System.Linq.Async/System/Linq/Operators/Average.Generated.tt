@@ -58,7 +58,7 @@ foreach (var o in os)
 if (isNullable)
 {
 #>
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -126,7 +126,7 @@ if (isNullable)
 else
 {
 #>
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -196,7 +196,7 @@ else
 if (isNullable)
 {
 #>
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -264,7 +264,7 @@ if (isNullable)
 else
 {
 #>
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -334,7 +334,7 @@ else
 if (isNullable)
 {
 #>
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -402,7 +402,7 @@ if (isNullable)
 else
 {
 #>
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -473,7 +473,7 @@ else
 if (isNullable)
 {
 #>
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -541,7 +541,7 @@ if (isNullable)
 else
 {
 #>
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())

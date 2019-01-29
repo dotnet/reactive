@@ -25,7 +25,7 @@ namespace System.Linq
 
                     var value = default(TSource);
 
-#if CSHARP8
+#if USE_AWAIT_USING
                     await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                     {
                         do
@@ -93,7 +93,7 @@ namespace System.Linq
 
                     var value = default(TSource);
 
-#if CSHARP8
+#if USE_AWAIT_USING
                     await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                     {
                         if (!await e.MoveNextAsync())
@@ -160,7 +160,7 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-#if CSHARP8
+#if USE_AWAIT_USING
                     await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                     {
                         do
@@ -228,7 +228,7 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-#if CSHARP8
+#if USE_AWAIT_USING
                     await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                     {
                         if (!await e.MoveNextAsync())
@@ -295,7 +295,7 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-#if CSHARP8
+#if USE_AWAIT_USING
                     await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                     {
                         do
@@ -363,7 +363,7 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-#if CSHARP8
+#if USE_AWAIT_USING
                     await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                     {
                         if (!await e.MoveNextAsync())
@@ -432,7 +432,7 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-#if CSHARP8
+#if USE_AWAIT_USING
                     await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                     {
                         do
@@ -500,7 +500,7 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-#if CSHARP8
+#if USE_AWAIT_USING
                     await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                     {
                         if (!await e.MoveNextAsync())

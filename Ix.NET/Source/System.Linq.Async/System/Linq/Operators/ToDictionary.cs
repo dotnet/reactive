@@ -26,7 +26,7 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TSource>(_comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = _keySelector(item);
@@ -73,7 +73,7 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TSource>(_comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = await _keySelector(item).ConfigureAwait(false);
@@ -121,7 +121,7 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TSource>(_comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = await _keySelector(item, _cancellationToken).ConfigureAwait(false);
@@ -171,7 +171,7 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TElement>(_comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = _keySelector(item);
@@ -222,7 +222,7 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TElement>(_comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = await _keySelector(item).ConfigureAwait(false);
@@ -274,7 +274,7 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TElement>(_comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = await _keySelector(item, _cancellationToken).ConfigureAwait(false);

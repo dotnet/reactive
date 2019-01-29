@@ -40,7 +40,7 @@ namespace System.Linq
                     }
                     else
                     {
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                         await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                         {
                             if (_index == 0)

@@ -21,7 +21,7 @@ namespace System.Linq
             {
                 int value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -84,7 +84,7 @@ namespace System.Linq
             {
                 int value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -147,7 +147,7 @@ namespace System.Linq
             {
                 int value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -211,7 +211,7 @@ namespace System.Linq
             {
                 int value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -273,7 +273,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -414,7 +414,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -555,7 +555,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -697,7 +697,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -837,7 +837,7 @@ namespace System.Linq
             {
                 long value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -900,7 +900,7 @@ namespace System.Linq
             {
                 long value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -963,7 +963,7 @@ namespace System.Linq
             {
                 long value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -1027,7 +1027,7 @@ namespace System.Linq
             {
                 long value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -1089,7 +1089,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -1230,7 +1230,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -1371,7 +1371,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -1513,7 +1513,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -1653,7 +1653,7 @@ namespace System.Linq
             {
                 float value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -1746,7 +1746,7 @@ namespace System.Linq
             {
                 float value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -1839,7 +1839,7 @@ namespace System.Linq
             {
                 float value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -1933,7 +1933,7 @@ namespace System.Linq
             {
                 float value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -2025,7 +2025,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -2158,7 +2158,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -2291,7 +2291,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -2425,7 +2425,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -2557,7 +2557,7 @@ namespace System.Linq
             {
                 double value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -2650,7 +2650,7 @@ namespace System.Linq
             {
                 double value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -2743,7 +2743,7 @@ namespace System.Linq
             {
                 double value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -2837,7 +2837,7 @@ namespace System.Linq
             {
                 double value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -2929,7 +2929,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -3062,7 +3062,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -3195,7 +3195,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -3329,7 +3329,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -3461,7 +3461,7 @@ namespace System.Linq
             {
                 decimal value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -3524,7 +3524,7 @@ namespace System.Linq
             {
                 decimal value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -3587,7 +3587,7 @@ namespace System.Linq
             {
                 decimal value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -3651,7 +3651,7 @@ namespace System.Linq
             {
                 decimal value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -3713,7 +3713,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -3802,7 +3802,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -3891,7 +3891,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -3981,7 +3981,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -4069,7 +4069,7 @@ namespace System.Linq
             {
                 int value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -4132,7 +4132,7 @@ namespace System.Linq
             {
                 int value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -4195,7 +4195,7 @@ namespace System.Linq
             {
                 int value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -4259,7 +4259,7 @@ namespace System.Linq
             {
                 int value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -4321,7 +4321,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -4414,7 +4414,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -4507,7 +4507,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -4601,7 +4601,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -4693,7 +4693,7 @@ namespace System.Linq
             {
                 long value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -4756,7 +4756,7 @@ namespace System.Linq
             {
                 long value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -4819,7 +4819,7 @@ namespace System.Linq
             {
                 long value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -4883,7 +4883,7 @@ namespace System.Linq
             {
                 long value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -4945,7 +4945,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -5038,7 +5038,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -5131,7 +5131,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -5225,7 +5225,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -5317,7 +5317,7 @@ namespace System.Linq
             {
                 float value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -5412,7 +5412,7 @@ namespace System.Linq
             {
                 float value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -5507,7 +5507,7 @@ namespace System.Linq
             {
                 float value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -5603,7 +5603,7 @@ namespace System.Linq
             {
                 float value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -5697,7 +5697,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -5822,7 +5822,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -5947,7 +5947,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -6073,7 +6073,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -6197,7 +6197,7 @@ namespace System.Linq
             {
                 double value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -6292,7 +6292,7 @@ namespace System.Linq
             {
                 double value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -6387,7 +6387,7 @@ namespace System.Linq
             {
                 double value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -6483,7 +6483,7 @@ namespace System.Linq
             {
                 double value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -6577,7 +6577,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -6702,7 +6702,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -6827,7 +6827,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -6953,7 +6953,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -7077,7 +7077,7 @@ namespace System.Linq
             {
                 decimal value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -7140,7 +7140,7 @@ namespace System.Linq
             {
                 decimal value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -7203,7 +7203,7 @@ namespace System.Linq
             {
                 decimal value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -7267,7 +7267,7 @@ namespace System.Linq
             {
                 decimal value;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -7329,7 +7329,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -7418,7 +7418,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -7507,7 +7507,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
@@ -7597,7 +7597,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)

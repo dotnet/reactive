@@ -16,18 +16,13 @@
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <LangVersion>latest</LangVersion>
-    <BuildForCSharp8 Condition="'$(BuildForCSharp8)' == ''">true</BuildForCSharp8>
+    <!-- While in beta, we need to set 8.0 manually (rather than latest). -->
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <!-- Hack needed to make code coverage work. See https://github.com/Microsoft/vstest/issues/1748. -->
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <DebugType>full</DebugType>
-  </PropertyGroup>
-
-  <!-- While in beta, we need to set 8.0 manually (rather than latest). -->
-  <PropertyGroup Condition="'$(BuildForCSharp8)' == 'true'">
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

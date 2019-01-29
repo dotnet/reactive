@@ -24,7 +24,7 @@ namespace System.Linq
                     comparer = Comparer<TSource>.Default;
                 }
 
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())

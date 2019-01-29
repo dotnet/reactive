@@ -84,7 +84,7 @@ namespace System.Linq
                         break;
                     }
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                     await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         list.Add(item);

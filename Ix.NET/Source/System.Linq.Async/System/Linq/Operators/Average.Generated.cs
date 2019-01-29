@@ -19,7 +19,7 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<int> _source, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -82,7 +82,7 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -145,7 +145,7 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -209,7 +209,7 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -271,7 +271,7 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<long> _source, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -334,7 +334,7 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -397,7 +397,7 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -461,7 +461,7 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -523,7 +523,7 @@ namespace System.Linq
 
             static async Task<float> Core(IAsyncEnumerable<float> _source, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -586,7 +586,7 @@ namespace System.Linq
 
             static async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -649,7 +649,7 @@ namespace System.Linq
 
             static async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -713,7 +713,7 @@ namespace System.Linq
 
             static async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -775,7 +775,7 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<double> _source, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -838,7 +838,7 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -901,7 +901,7 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -965,7 +965,7 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -1027,7 +1027,7 @@ namespace System.Linq
 
             static async Task<decimal> Core(IAsyncEnumerable<decimal> _source, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -1090,7 +1090,7 @@ namespace System.Linq
 
             static async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -1153,7 +1153,7 @@ namespace System.Linq
 
             static async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -1217,7 +1217,7 @@ namespace System.Linq
 
             static async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     if (!await e.MoveNextAsync())
@@ -1279,7 +1279,7 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<int?> _source, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -1356,7 +1356,7 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int?> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -1433,7 +1433,7 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -1511,7 +1511,7 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -1587,7 +1587,7 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<long?> _source, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -1664,7 +1664,7 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long?> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -1741,7 +1741,7 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -1819,7 +1819,7 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -1895,7 +1895,7 @@ namespace System.Linq
 
             static async Task<float?> Core(IAsyncEnumerable<float?> _source, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -1972,7 +1972,7 @@ namespace System.Linq
 
             static async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float?> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -2049,7 +2049,7 @@ namespace System.Linq
 
             static async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -2127,7 +2127,7 @@ namespace System.Linq
 
             static async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -2203,7 +2203,7 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<double?> _source, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -2280,7 +2280,7 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double?> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -2357,7 +2357,7 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -2435,7 +2435,7 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -2511,7 +2511,7 @@ namespace System.Linq
 
             static async Task<decimal?> Core(IAsyncEnumerable<decimal?> _source, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -2588,7 +2588,7 @@ namespace System.Linq
 
             static async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal?> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -2665,7 +2665,7 @@ namespace System.Linq
 
             static async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())
@@ -2743,7 +2743,7 @@ namespace System.Linq
 
             static async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     while (await e.MoveNextAsync())

@@ -24,7 +24,7 @@ namespace System.Linq
             {
                 var set = new HashSet<TSource>(_comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     set.Add(item);

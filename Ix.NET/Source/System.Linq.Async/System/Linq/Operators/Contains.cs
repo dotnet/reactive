@@ -28,7 +28,7 @@ namespace System.Linq
 
                 static async Task<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, CancellationToken _cancellationToken)
                 {
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                     await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         if (EqualityComparer<TSource>.Default.Equals(item, _value))
@@ -64,7 +64,7 @@ namespace System.Linq
 
                 static async Task<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
                 {
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                     await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         if (_comparer.Equals(item, _value))

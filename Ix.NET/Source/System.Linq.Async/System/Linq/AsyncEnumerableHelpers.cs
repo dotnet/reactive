@@ -44,7 +44,7 @@ namespace System.Collections.Generic
             }
             else
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var en = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
                 {
                     if (await en.MoveNextAsync())
@@ -162,7 +162,7 @@ namespace System.Collections.Generic
         {
             var set = new Set<T>(comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
             await foreach (T item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 set.Add(item);

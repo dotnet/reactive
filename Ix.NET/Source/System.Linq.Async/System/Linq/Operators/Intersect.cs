@@ -21,7 +21,7 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -46,7 +46,7 @@ namespace System.Linq
 #endif
         }
 
-#if !(CSHARP8 && USE_ASYNC_ITERATOR)
+#if !USE_ASYNC_ITERATOR
         private sealed class IntersectAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly IEqualityComparer<TSource> _comparer;

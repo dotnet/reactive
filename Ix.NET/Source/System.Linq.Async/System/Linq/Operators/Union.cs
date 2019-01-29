@@ -162,7 +162,7 @@ namespace System.Linq
                         return set;
                     }
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                     await foreach (TSource item in enumerable.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         set.Add(item);

@@ -24,7 +24,7 @@ namespace System.Linq
             {
                 var list = new List<TSource>();
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     list.Add(item);

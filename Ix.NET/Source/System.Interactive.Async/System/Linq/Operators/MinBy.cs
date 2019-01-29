@@ -110,7 +110,7 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-#if CSHARP8
+#if USE_AWAIT_USING
             await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
             {
                 if (!await e.MoveNextAsync())
@@ -181,7 +181,7 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-#if CSHARP8
+#if USE_AWAIT_USING
             await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
             {
                 if (!await e.MoveNextAsync())
@@ -253,7 +253,7 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-#if CSHARP8
+#if USE_AWAIT_USING
             await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
             {
                 if (!await e.MoveNextAsync())

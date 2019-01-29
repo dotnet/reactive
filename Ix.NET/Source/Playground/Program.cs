@@ -78,8 +78,8 @@ namespace Playground
             var xs = new List<int> { 1, 2, 3 };
             var ys = xs.ToAsyncEnumerable().Where(x => x % 2 == 0);
 
-#if CSHARP8
-            foreach await (var y in ys)
+#if USE_AWAIT_FOREACH
+            await foreach (var y in ys)
             {
                 Console.WriteLine(y);
             }
@@ -108,8 +108,8 @@ namespace Playground
             var xs = new List<int> { 1, 2, 3 }.AsQueryable();
             var ys = xs.ToAsyncEnumerable().Where(x => x % 2 == 0);
 
-#if CSHARP8
-            foreach await (var y in ys)
+#if USE_AWAIT_FOREACH
+            await foreach (var y in ys)
             {
                 Console.WriteLine(y);
             }
@@ -138,8 +138,8 @@ namespace Playground
             var xs = new List<int> { 1, 2, 3 };
             var ys = xs.ToAsyncEnumerable().Distinct(x => x % 2);
 
-#if CSHARP8
-            foreach await (var y in ys)
+#if USE_AWAIT_FOREACH
+            await foreach (var y in ys)
             {
                 Console.WriteLine(y);
             }
@@ -157,8 +157,8 @@ namespace Playground
             var xs = new List<int> { 1, 2, 3 }.AsQueryable();
             var ys = xs.ToAsyncEnumerable().Distinct(x => x % 2);
 
-#if CSHARP8
-            foreach await (var y in ys)
+#if USE_AWAIT_FOREACH
+            await foreach (var y in ys)
             {
                 Console.WriteLine(y);
             }

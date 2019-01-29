@@ -19,7 +19,7 @@ namespace System.Linq
 
             static async Task<bool> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_USING
                 await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                 {
                     return await e.MoveNextAsync();
@@ -50,7 +50,7 @@ namespace System.Linq
 
             static async Task<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     if (_predicate(item))
@@ -90,7 +90,7 @@ namespace System.Linq
 
             static async Task<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     if (await _predicate(item).ConfigureAwait(false))
@@ -131,7 +131,7 @@ namespace System.Linq
 
             static async Task<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     if (await _predicate(item, _cancellationToken).ConfigureAwait(false))

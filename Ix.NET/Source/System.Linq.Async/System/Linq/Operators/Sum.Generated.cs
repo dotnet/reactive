@@ -21,7 +21,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (int value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
@@ -65,7 +65,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -113,7 +113,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -162,7 +162,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -209,7 +209,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (long value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
@@ -253,7 +253,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -301,7 +301,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -350,7 +350,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -397,7 +397,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (float value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value;
@@ -435,7 +435,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -477,7 +477,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -520,7 +520,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -561,7 +561,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (double value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value;
@@ -599,7 +599,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -641,7 +641,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -684,7 +684,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -725,7 +725,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (decimal value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value;
@@ -763,7 +763,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -805,7 +805,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -848,7 +848,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -889,7 +889,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (int? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
@@ -933,7 +933,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -981,7 +981,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -1030,7 +1030,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -1077,7 +1077,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (long? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
@@ -1121,7 +1121,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -1169,7 +1169,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -1218,7 +1218,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -1265,7 +1265,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (float? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value.GetValueOrDefault();
@@ -1303,7 +1303,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -1345,7 +1345,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -1388,7 +1388,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -1429,7 +1429,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (double? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value.GetValueOrDefault();
@@ -1467,7 +1467,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -1509,7 +1509,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -1552,7 +1552,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -1593,7 +1593,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (decimal? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value.GetValueOrDefault();
@@ -1631,7 +1631,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -1673,7 +1673,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -1716,7 +1716,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);

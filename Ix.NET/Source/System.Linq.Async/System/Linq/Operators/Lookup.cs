@@ -91,7 +91,7 @@ namespace System.Linq.Internal
 
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
             await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = keySelector(item);
@@ -132,7 +132,7 @@ namespace System.Linq.Internal
 
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
             await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = keySelector(item);
@@ -164,7 +164,7 @@ namespace System.Linq.Internal
         {
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
             await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = keySelector(item);
@@ -419,7 +419,7 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
             await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item).ConfigureAwait(false);
@@ -462,7 +462,7 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
             await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
@@ -504,7 +504,7 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
             await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item).ConfigureAwait(false);
@@ -540,7 +540,7 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
             await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
@@ -573,7 +573,7 @@ namespace System.Linq.Internal
         {
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
             await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item).ConfigureAwait(false);
@@ -612,7 +612,7 @@ namespace System.Linq.Internal
         {
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
             await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item, cancellationToken).ConfigureAwait(false);

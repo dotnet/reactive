@@ -11,8 +11,9 @@
     <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY;NO_TASK_FROMEXCEPTION</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(BuildForCSharp8)' == 'true'">
-    <DefineConstants>$(DefineConstants);CSHARP8</DefineConstants>
+  <PropertyGroup>
+    <!-- TODO: Enable USE_ASYNC_ITERATOR -->
+    <DefineConstants>$(DefineConstants);USE_AWAIT_FOREACH;USE_AWAIT_USING</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup>

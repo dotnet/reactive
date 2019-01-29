@@ -18,7 +18,7 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -55,7 +55,7 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -99,7 +99,7 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -137,7 +137,7 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -175,7 +175,7 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -220,7 +220,7 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -258,7 +258,7 @@ namespace System.Linq
         }
 #endif
 
-#if !(CSHARP8 && USE_ASYNC_ITERATOR)
+#if !USE_ASYNC_ITERATOR
         private sealed class SkipWhileAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly Func<TSource, bool> _predicate;

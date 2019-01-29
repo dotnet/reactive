@@ -50,7 +50,7 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -84,7 +84,7 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -119,7 +119,7 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -156,7 +156,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -185,7 +185,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -215,7 +215,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -245,7 +245,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -281,7 +281,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -318,7 +318,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -402,7 +402,7 @@ namespace System.Linq
                 {
                     var count = 0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                     await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         checked
@@ -446,7 +446,7 @@ namespace System.Linq
             {
                 var list = new List<TResult>();
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     var items = _selector(element);
@@ -578,7 +578,7 @@ namespace System.Linq
                 {
                     var count = 0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                     await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         var items = await _selector(element).ConfigureAwait(false);
@@ -626,7 +626,7 @@ namespace System.Linq
             {
                 var list = new List<TResult>();
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     var items = await _selector(element).ConfigureAwait(false);
@@ -759,7 +759,7 @@ namespace System.Linq
                 {
                     var count = 0;
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                     await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         var items = await _selector(element, _cancellationToken).ConfigureAwait(false);
@@ -807,7 +807,7 @@ namespace System.Linq
             {
                 var list = new List<TResult>();
 
-#if CSHARP8
+#if USE_AWAIT_FOREACH
                 await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     var items = await _selector(element, cancellationToken).ConfigureAwait(false);
@@ -884,7 +884,7 @@ namespace System.Linq
         }
 #endif
 
-#if !(CSHARP8 && USE_ASYNC_ITERATOR)
+#if !USE_ASYNC_ITERATOR
         private sealed class SelectManyAsyncIterator<TSource, TCollection, TResult> : AsyncIterator<TResult>
         {
             private const int State_Source = 1;

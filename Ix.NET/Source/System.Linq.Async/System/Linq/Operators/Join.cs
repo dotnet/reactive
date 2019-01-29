@@ -27,7 +27,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -85,7 +85,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -144,7 +144,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
-#if CSHARP8 && USE_ASYNC_ITERATOR
+#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -187,7 +187,7 @@ namespace System.Linq
         }
 #endif
 
-#if !(CSHARP8 && USE_ASYNC_ITERATOR)
+#if !USE_ASYNC_ITERATOR
         private sealed class JoinAsyncIterator<TOuter, TInner, TKey, TResult> : AsyncIterator<TResult>
         {
             private readonly IAsyncEnumerable<TOuter> _outer;

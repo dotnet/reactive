@@ -97,7 +97,7 @@ namespace System.Linq
 
                 static async ValueTask<Maybe<TSource>> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
                 {
-#if CSHARP8
+#if USE_AWAIT_USING
                     await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
                     {
                         if (await e.MoveNextAsync())
@@ -130,7 +130,7 @@ namespace System.Linq
 
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-#if CSHARP8
+#if USE_AWAIT_USING
             await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
             {
                 while (await e.MoveNextAsync())
@@ -169,7 +169,7 @@ namespace System.Linq
 
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-#if CSHARP8
+#if USE_AWAIT_USING
             await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
             {
                 while (await e.MoveNextAsync())
@@ -209,7 +209,7 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-#if CSHARP8
+#if USE_AWAIT_USING
             await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
             {
                 while (await e.MoveNextAsync())
