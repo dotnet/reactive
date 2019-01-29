@@ -93,26 +93,183 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource>(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
+#if USE_ASYNC_ITERATOR
+            if (comparer == null)
+            {
+                comparer = EqualityComparer<TSource>.Default;
+            }
+
+            return AsyncEnumerable.Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        yield break;
+                    }
+
+                    TSource latest = e.Current;
+
+                    yield return latest;
+
+                    while (await e.MoveNextAsync())
+                    {
+                        TSource item = e.Current;
+
+                        if (!comparer.Equals(latest, item))
+                        {
+                            latest = item;
+
+                            yield return latest;
+                        }
+                    }
+                }
+            }
+#else
             return new DistinctUntilChangedAsyncIterator<TSource>(source, comparer);
+#endif
         }
 
         private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
+#if USE_ASYNC_ITERATOR
+            if (comparer == null)
+            {
+                comparer = EqualityComparer<TKey>.Default;
+            }
+
+            return AsyncEnumerable.Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        yield break;
+                    }
+
+                    TSource item = e.Current;
+
+                    TKey latestKey = keySelector(item);
+
+                    yield return item;
+
+                    while (await e.MoveNextAsync())
+                    {
+                        item = e.Current;
+
+                        TKey currentKey = keySelector(item);
+
+                        if (!comparer.Equals(latestKey, currentKey))
+                        {
+                            latestKey = currentKey;
+
+                            yield return item;
+                        }
+                    }
+                }
+            }
+#else
             return new DistinctUntilChangedAsyncIterator<TSource, TKey>(source, keySelector, comparer);
+#endif
         }
 
         private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
+#if USE_ASYNC_ITERATOR
+            if (comparer == null)
+            {
+                comparer = EqualityComparer<TKey>.Default;
+            }
+
+            return AsyncEnumerable.Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        yield break;
+                    }
+
+                    TSource item = e.Current;
+
+                    TKey latestKey = await keySelector(item).ConfigureAwait(false);
+
+                    yield return item;
+
+                    while (await e.MoveNextAsync())
+                    {
+                        item = e.Current;
+
+                        TKey currentKey = await keySelector(item).ConfigureAwait(false);
+
+                        if (!comparer.Equals(latestKey, currentKey))
+                        {
+                            latestKey = currentKey;
+
+                            yield return item;
+                        }
+                    }
+                }
+            }
+#else
             return new DistinctUntilChangedAsyncIteratorWithTask<TSource, TKey>(source, keySelector, comparer);
+#endif
         }
 
 #if !NO_DEEP_CANCELLATION
         private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
+#if USE_ASYNC_ITERATOR
+            if (comparer == null)
+            {
+                comparer = EqualityComparer<TKey>.Default;
+            }
+
+            return AsyncEnumerable.Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            {
+                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                {
+                    if (!await e.MoveNextAsync())
+                    {
+                        yield break;
+                    }
+
+                    TSource item = e.Current;
+
+                    TKey latestKey = await keySelector(item, cancellationToken).ConfigureAwait(false);
+
+                    yield return item;
+
+                    while (await e.MoveNextAsync())
+                    {
+                        item = e.Current;
+
+                        TKey currentKey = await keySelector(item, cancellationToken).ConfigureAwait(false);
+
+                        if (!comparer.Equals(latestKey, currentKey))
+                        {
+                            latestKey = currentKey;
+
+                            yield return item;
+                        }
+                    }
+                }
+            }
+#else
             return new DistinctUntilChangedAsyncIteratorWithTaskAndCancellation<TSource, TKey>(source, keySelector, comparer);
+#endif
         }
 #endif
 
+#if !USE_ASYNC_ITERATOR
         private sealed class DistinctUntilChangedAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly IEqualityComparer<TSource> _comparer;
@@ -400,6 +557,7 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
 #endif
     }
 }
