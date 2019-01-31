@@ -8,6 +8,9 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
+        // REVIEW: This is really an n-ary Prepend. Should we add n-ary overloads of Append and Prepend as well?
+        //         If so, likely in Ix rather than System.Linq.Async.
+
         public static IAsyncEnumerable<TSource> StartWith<TSource>(this IAsyncEnumerable<TSource> source, params TSource[] values)
         {
             if (source == null)
