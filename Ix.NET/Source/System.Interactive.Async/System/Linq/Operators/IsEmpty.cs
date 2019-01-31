@@ -19,7 +19,10 @@ namespace System.Linq
 
             static async Task<bool> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
-                return !await _source.AnyAsync(_cancellationToken).ConfigureAwait(false);
+                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                {
+                    return !await e.MoveNextAsync();
+                }
             }
         }
     }
