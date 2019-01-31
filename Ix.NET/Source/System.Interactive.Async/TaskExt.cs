@@ -6,6 +6,6 @@ namespace System.Threading.Tasks
 {
     internal static class TaskExt
     {
-        public static readonly ValueTask<bool> Never = new ValueTask<bool>(new TaskCompletionSource<bool>().Task);
+        public static readonly Task<bool> Never = new TaskCompletionSource<bool>().Task;
     }
 }
