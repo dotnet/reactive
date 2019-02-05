@@ -6,90 +6,60 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Select<TSource, TResult>
     {
-        internal sealed class Selector : Producer<TResult, Selector._>
+        internal sealed class Selector : Pipe<TSource, TResult>
         {
-            private readonly IObservable<TSource> _source;
             private readonly Func<TSource, TResult> _selector;
 
-            public Selector(IObservable<TSource> source, Func<TSource, TResult> selector)
+            public Selector(IObservable<TSource> source, Func<TSource, TResult> selector) : base(source)
             {
-                _source = source;
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(_selector, observer);
-
-            protected override void Run(_ sink) => sink.Run(_source);
-
-            internal sealed class _ : Sink<TSource, TResult>
+            protected override Pipe<TSource, TResult> Clone() => new Selector(_source, _selector);
+            
+            public override void OnNext(TSource value)
             {
-                private readonly Func<TSource, TResult> _selector;
-
-                public _(Func<TSource, TResult> selector, IObserver<TResult> observer)
-                    : base(observer)
+                var result = default(TResult);
+                try
                 {
-                    _selector = selector;
+                    result = _selector(value);
+                }
+                catch (Exception exception)
+                {
+                    ForwardOnError(exception);
+                    return;
                 }
 
-                public override void OnNext(TSource value)
-                {
-                    var result = default(TResult);
-                    try
-                    {
-                        result = _selector(value);
-                    }
-                    catch (Exception exception)
-                    {
-                        ForwardOnError(exception);
-                        return;
-                    }
-
-                    ForwardOnNext(result);
-                }
+                ForwardOnNext(result);
             }
         }
 
-        internal sealed class SelectorIndexed : Producer<TResult, SelectorIndexed._>
+        internal sealed class SelectorIndexed : Pipe<TSource, TResult>
         {
-            private readonly IObservable<TSource> _source;
             private readonly Func<TSource, int, TResult> _selector;
+            private int _index;
 
-            public SelectorIndexed(IObservable<TSource> source, Func<TSource, int, TResult> selector)
+            public SelectorIndexed(IObservable<TSource> source, Func<TSource, int, TResult> selector) : base(source)
             {
-                _source = source;
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(_selector, observer);
+            protected override Pipe<TSource, TResult> Clone() => new SelectorIndexed(_source, _selector);
 
-            protected override void Run(_ sink) => sink.Run(_source);
-
-            internal sealed class _ : Sink<TSource, TResult>
+            public override void OnNext(TSource value)
             {
-                private readonly Func<TSource, int, TResult> _selector;
-                private int _index;
-
-                public _(Func<TSource, int, TResult> selector, IObserver<TResult> observer)
-                    : base(observer)
+                var result = default(TResult);
+                try
                 {
-                    _selector = selector;
+                    result = _selector(value, checked(_index++));
+                }
+                catch (Exception exception)
+                {
+                    ForwardOnError(exception);
+                    return;
                 }
 
-                public override void OnNext(TSource value)
-                {
-                    var result = default(TResult);
-                    try
-                    {
-                        result = _selector(value, checked(_index++));
-                    }
-                    catch (Exception exception)
-                    {
-                        ForwardOnError(exception);
-                        return;
-                    }
-
-                    ForwardOnNext(result);
-                }
+                ForwardOnNext(result);
             }
         }
     }

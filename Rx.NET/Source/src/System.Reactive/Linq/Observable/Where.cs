@@ -6,99 +6,69 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Where<TSource>
     {
-        internal sealed class Predicate : Producer<TSource, Predicate._>
+        internal sealed class Predicate : Pipe<TSource, TSource>
         {
-            private readonly IObservable<TSource> _source;
             private readonly Func<TSource, bool> _predicate;
 
-            public Predicate(IObservable<TSource> source, Func<TSource, bool> predicate)
+            public Predicate(IObservable<TSource> source, Func<TSource, bool> predicate) : base(source)
             {
-                _source = source;
                 _predicate = predicate;
             }
+
+            protected override Pipe<TSource, TSource> Clone() => new Predicate(_source, _predicate);
 
             public IObservable<TSource> Combine(Func<TSource, bool> predicate)
             {
                 return new Predicate(_source, x => _predicate(x) && predicate(x));
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(_predicate, observer);
-
-            protected override void Run(_ sink) => sink.Run(_source);
-
-            internal sealed class _ : IdentitySink<TSource>
+            public override void OnNext(TSource value)
             {
-                private readonly Func<TSource, bool> _predicate;
-
-                public _(Func<TSource, bool> predicate, IObserver<TSource> observer)
-                    : base(observer)
+                var shouldRun = false;
+                try
                 {
-                    _predicate = predicate;
+                    shouldRun = _predicate(value);
+                }
+                catch (Exception exception)
+                {
+                    ForwardOnError(exception);
+                    return;
                 }
 
-                public override void OnNext(TSource value)
+                if (shouldRun)
                 {
-                    var shouldRun = false;
-                    try
-                    {
-                        shouldRun = _predicate(value);
-                    }
-                    catch (Exception exception)
-                    {
-                        ForwardOnError(exception);
-                        return;
-                    }
-
-                    if (shouldRun)
-                    {
-                        ForwardOnNext(value);
-                    }
+                    ForwardOnNext(value);
                 }
             }
         }
 
-        internal sealed class PredicateIndexed : Producer<TSource, PredicateIndexed._>
+        internal sealed class PredicateIndexed : Pipe<TSource, TSource>
         {
-            private readonly IObservable<TSource> _source;
             private readonly Func<TSource, int, bool> _predicate;
+            private int _index;
 
-            public PredicateIndexed(IObservable<TSource> source, Func<TSource, int, bool> predicate)
+            public PredicateIndexed(IObservable<TSource> source, Func<TSource, int, bool> predicate) : base(source)
             {
-                _source = source;
                 _predicate = predicate;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(_predicate, observer);
-
-            protected override void Run(_ sink) => sink.Run(_source);
-
-            internal sealed class _ : IdentitySink<TSource>
+            protected override Pipe<TSource, TSource> Clone() => new PredicateIndexed(_source, _predicate);
+            
+            public override void OnNext(TSource value)
             {
-                private readonly Func<TSource, int, bool> _predicate;
-                private int _index;
-
-                public _(Func<TSource, int, bool> predicate, IObserver<TSource> observer)
-                    : base(observer)
+                var shouldRun = false;
+                try
                 {
-                    _predicate = predicate;
+                    shouldRun = _predicate(value, checked(_index++));
+                }
+                catch (Exception exception)
+                {
+                    ForwardOnError(exception);
                 }
 
-                public override void OnNext(TSource value)
+                if (shouldRun)
                 {
-                    var shouldRun = false;
-                    try
-                    {
-                        shouldRun = _predicate(value, checked(_index++));
-                    }
-                    catch (Exception exception)
-                    {
-                        ForwardOnError(exception);
-                    }
-
-                    if (shouldRun)
-                    {
-                        ForwardOnNext(value);
-                    }
+                    ForwardOnNext(value);
                 }
             }
         }

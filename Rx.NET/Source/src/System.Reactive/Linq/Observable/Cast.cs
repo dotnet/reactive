@@ -4,41 +4,28 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Cast<TSource, TResult> : Producer<TResult, Cast<TSource, TResult>._> /* Could optimize further by deriving from Select<TResult> and providing Combine<TResult2>. We're not doing this (yet) for debuggability. */
+    internal sealed class Cast<TSource, TResult> : Pipe<TSource, TResult> /* Could optimize further by deriving from Select<TResult> and providing Combine<TResult2>. We're not doing this (yet) for debuggability. */
     {
-        private readonly IObservable<TSource> _source;
-
-        public Cast(IObservable<TSource> source)
+        public Cast(IObservable<TSource> source) : base(source)
         {
-            _source = source;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer) => new _(observer);
-
-        protected override void Run(_ sink) => sink.Run(_source);
-
-        internal sealed class _ : Sink<TSource, TResult>
+        protected override Pipe<TSource, TResult> Clone() => new Cast<TSource, TResult>(_source);
+        
+        public override void OnNext(TSource value)
         {
-            public _(IObserver<TResult> observer)
-                : base(observer)
+            var result = default(TResult);
+            try
             {
+                result = (TResult)(object)value;
+            }
+            catch (Exception exception)
+            {
+                ForwardOnError(exception);
+                return;
             }
 
-            public override void OnNext(TSource value)
-            {
-                var result = default(TResult);
-                try
-                {
-                    result = (TResult)(object)value;
-                }
-                catch (Exception exception)
-                {
-                    ForwardOnError(exception);
-                    return;
-                }
-
-                ForwardOnNext(result);
-            }
+            ForwardOnNext(result);
         }
     }
 }

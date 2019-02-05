@@ -10,151 +10,123 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Buffer<TSource>
     {
-        internal sealed class CountExact : Producer<IList<TSource>, CountExact.ExactSink>
+        internal sealed class CountExact : Pipe<TSource, IList<TSource>>
         {
-            private readonly IObservable<TSource> _source;
             private readonly int _count;
 
-            public CountExact(IObservable<TSource> source, int count)
+            private int _index;
+            private IList<TSource> _buffer;
+
+            public CountExact(IObservable<TSource> source, int count) : base(source)
             {
-                _source = source;
                 _count = count;
             }
 
-            protected override ExactSink CreateSink(IObserver<IList<TSource>> observer) => new ExactSink(observer, _count);
-
-            protected override void Run(ExactSink sink) => sink.Run(_source);
-
-            internal sealed class ExactSink : Sink<TSource, IList<TSource>>
+            protected override Pipe<TSource, IList<TSource>> Clone() => new CountExact(_source, _count);
+            
+            public override void OnNext(TSource value)
             {
-                private readonly int _count;
-                private int _index;
-                private IList<TSource> _buffer;
-
-                internal ExactSink(IObserver<IList<TSource>> observer, int count) : base(observer)
+                var buffer = _buffer;
+                if (buffer == null)
                 {
-                    _count = count;
+                    buffer = new List<TSource>();
+                    _buffer = buffer;
                 }
 
-                public override void OnNext(TSource value)
-                {
-                    var buffer = _buffer;
-                    if (buffer == null)
-                    {
-                        buffer = new List<TSource>();
-                        _buffer = buffer;
-                    }
+                buffer.Add(value);
 
-                    buffer.Add(value);
-
-                    var idx = _index + 1;
-                    if (idx == _count)
-                    {
-                        _buffer = null;
-                        _index = 0;
-                        ForwardOnNext(buffer);
-                    }
-                    else
-                    {
-                        _index = idx;
-                    }
-                }
-
-                public override void OnError(Exception error)
+                var idx = _index + 1;
+                if (idx == _count)
                 {
                     _buffer = null;
-                    ForwardOnError(error);
+                    _index = 0;
+                    ForwardOnNext(buffer);
                 }
-
-                public override void OnCompleted()
+                else
                 {
-                    var buffer = _buffer;
-                    _buffer = null;
-
-                    if (buffer != null)
-                    {
-                        ForwardOnNext(buffer);
-                    }
-                    ForwardOnCompleted();
+                    _index = idx;
                 }
+            }
+
+            public override void OnError(Exception error)
+            {
+                _buffer = null;
+                ForwardOnError(error);
+            }
+
+            public override void OnCompleted()
+            {
+                var buffer = _buffer;
+                _buffer = null;
+
+                if (buffer != null)
+                {
+                    ForwardOnNext(buffer);
+                }
+                ForwardOnCompleted();
             }
         }
 
-        internal sealed class CountSkip : Producer<IList<TSource>, CountSkip.SkipSink>
+        internal sealed class CountSkip : Pipe<TSource, IList<TSource>>
         {
-            private readonly IObservable<TSource> _source;
             private readonly int _count;
             private readonly int _skip;
 
-            public CountSkip(IObservable<TSource> source, int count, int skip)
+            private int _index;
+            private IList<TSource> _buffer;
+
+            public CountSkip(IObservable<TSource> source, int count, int skip) : base(source)
             {
-                _source = source;
                 _count = count;
                 _skip = skip;
             }
 
-            protected override SkipSink CreateSink(IObserver<IList<TSource>> observer) => new SkipSink(observer, _count, _skip);
+            protected override Pipe<TSource, IList<TSource>> Clone() => new CountSkip(_source, _count, _skip);
 
-            protected override void Run(SkipSink sink) => sink.Run(_source);
-
-            internal sealed class SkipSink : Sink<TSource, IList<TSource>>
+            public override void OnNext(TSource value)
             {
-                private readonly int _count;
-                private readonly int _skip;
-                private int _index;
-                private IList<TSource> _buffer;
-
-                internal SkipSink(IObserver<IList<TSource>> observer, int count, int skip) : base(observer)
+                var idx = _index;
+                var buffer = _buffer;
+                if (idx == 0)
                 {
-                    _count = count;
-                    _skip = skip;
+                    buffer = new List<TSource>();
+                    _buffer = buffer;
                 }
 
-                public override void OnNext(TSource value)
-                {
-                    var idx = _index;
-                    var buffer = _buffer;
-                    if (idx == 0)
-                    {
-                        buffer = new List<TSource>();
-                        _buffer = buffer;
-                    }
+                buffer?.Add(value);
 
-                    buffer?.Add(value);
-
-                    if (++idx == _count)
-                    {
-                        _buffer = null;
-                        ForwardOnNext(buffer);
-                    }
-
-                    if (idx == _skip)
-                    {
-                        _index = 0;
-                    }
-                    else
-                    {
-                        _index = idx;
-                    }
-                }
-
-                public override void OnError(Exception error)
+                if (++idx == _count)
                 {
                     _buffer = null;
-                    ForwardOnError(error);
+                    ForwardOnNext(buffer);
                 }
 
-                public override void OnCompleted()
+                if (idx == _skip)
                 {
-                    var buffer = _buffer;
-                    _buffer = null;
-
-                    if (buffer != null)
-                    {
-                        ForwardOnNext(buffer);
-                    }
-                    ForwardOnCompleted();
+                    _index = 0;
                 }
+                else
+                {
+                    _index = idx;
+                }
+            }
+
+            public override void OnError(Exception error)
+            {
+                _buffer = null;
+                ForwardOnError(error);
+            }
+
+            public override void OnCompleted()
+            {
+                var buffer = _buffer;
+                _buffer = null;
+
+                if (buffer != null)
+                {
+                    ForwardOnNext(buffer);
+                }
+                ForwardOnCompleted();
             }
         }
 
