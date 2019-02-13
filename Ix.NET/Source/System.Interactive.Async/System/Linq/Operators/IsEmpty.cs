@@ -19,7 +19,7 @@ namespace System.Linq
 
             static async Task<bool> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {

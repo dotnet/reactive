@@ -264,7 +264,7 @@ namespace System.Linq
 
         public async ValueTask<Maybe<TElement>> TryGetFirstAsync(CancellationToken cancellationToken)
         {
-            var e = _source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+            var e = _source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
             try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
             {
@@ -299,7 +299,7 @@ namespace System.Linq
 
         public async ValueTask<Maybe<TElement>> TryGetLastAsync(CancellationToken cancellationToken)
         {
-            var e = _source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+            var e = _source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
             try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
             {

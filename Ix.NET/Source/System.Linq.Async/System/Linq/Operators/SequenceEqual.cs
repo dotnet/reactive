@@ -52,11 +52,11 @@ namespace System.Linq
 
             static async Task<bool> Core(IAsyncEnumerable<TSource> _first, IAsyncEnumerable<TSource> _second, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
             {
-                var e1 = _first.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e1 = _first.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
-                    var e2 = _second.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                    var e2 = _second.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                     try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {

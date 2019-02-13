@@ -44,7 +44,7 @@ namespace System.Collections.Generic
             }
             else
             {
-                var en = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+                var en = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {

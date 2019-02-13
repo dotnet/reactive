@@ -24,7 +24,7 @@ namespace System.Linq
                     _comparer = Comparer<TSource>.Default;
                 }
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {

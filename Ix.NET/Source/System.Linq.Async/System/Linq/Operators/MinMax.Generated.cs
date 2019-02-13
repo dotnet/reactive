@@ -21,7 +21,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -63,7 +63,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -105,7 +105,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -148,7 +148,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -189,7 +189,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -270,7 +270,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -351,7 +351,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -433,7 +433,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -513,7 +513,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -555,7 +555,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -597,7 +597,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -640,7 +640,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -681,7 +681,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -762,7 +762,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -843,7 +843,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -925,7 +925,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1005,7 +1005,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1062,7 +1062,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1119,7 +1119,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1177,7 +1177,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1233,7 +1233,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1310,7 +1310,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1387,7 +1387,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1465,7 +1465,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1541,7 +1541,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1598,7 +1598,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1655,7 +1655,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1713,7 +1713,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1769,7 +1769,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1846,7 +1846,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -1923,7 +1923,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2001,7 +2001,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2077,7 +2077,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2119,7 +2119,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2161,7 +2161,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2204,7 +2204,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2245,7 +2245,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2300,7 +2300,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2355,7 +2355,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2411,7 +2411,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2465,7 +2465,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2507,7 +2507,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2549,7 +2549,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2592,7 +2592,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2633,7 +2633,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2690,7 +2690,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2747,7 +2747,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2805,7 +2805,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2861,7 +2861,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2903,7 +2903,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2945,7 +2945,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -2988,7 +2988,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3029,7 +3029,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3086,7 +3086,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3143,7 +3143,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3201,7 +3201,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3257,7 +3257,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3315,7 +3315,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3373,7 +3373,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3432,7 +3432,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3489,7 +3489,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3562,7 +3562,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3635,7 +3635,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3709,7 +3709,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3781,7 +3781,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3839,7 +3839,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3897,7 +3897,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -3956,7 +3956,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -4013,7 +4013,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -4086,7 +4086,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -4159,7 +4159,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -4233,7 +4233,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -4305,7 +4305,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -4347,7 +4347,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -4389,7 +4389,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -4432,7 +4432,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -4473,7 +4473,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -4528,7 +4528,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -4583,7 +4583,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -4639,7 +4639,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {

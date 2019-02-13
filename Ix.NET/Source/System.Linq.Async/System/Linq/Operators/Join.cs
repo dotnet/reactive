@@ -32,7 +32,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                var e = outer.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+                var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -96,7 +96,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                var e = outer.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+                var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -161,7 +161,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                var e = outer.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+                var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {

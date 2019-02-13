@@ -21,7 +21,7 @@ namespace System.Linq
 
             static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, TSource> _accumulator, CancellationToken _cancellationToken)
             {
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -57,7 +57,7 @@ namespace System.Linq
 
             static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, ValueTask<TSource>> _accumulator, CancellationToken _cancellationToken)
             {
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
@@ -94,7 +94,7 @@ namespace System.Linq
 
             static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, CancellationToken, ValueTask<TSource>> _accumulator, CancellationToken _cancellationToken)
             {
-                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                 try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {

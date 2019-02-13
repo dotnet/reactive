@@ -97,7 +97,7 @@ namespace System.Linq
 
                 static async ValueTask<Maybe<TSource>> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
                 {
-                    var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+                    var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
                     try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
@@ -120,7 +120,7 @@ namespace System.Linq
 
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+            var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
             try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
             {
@@ -144,7 +144,7 @@ namespace System.Linq
 
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+            var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
             try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
             {
@@ -169,7 +169,7 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+            var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
             try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
             {
