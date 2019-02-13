@@ -47,7 +47,7 @@ foreach (var t in types)
         public async Task AverageAsync_<#=t.Name#>_Empty()
         {
             var ys = new <#=cs#>[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync().AsTask());
         }
 
         [Fact]
@@ -62,7 +62,7 @@ foreach (var t in types)
         public async Task AverageAsync_Selector_<#=t.Name#>_Empty()
         {
             var ys = new <#=cs#>[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => x));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => x).AsTask());
         }
 
         [Fact]
@@ -77,7 +77,7 @@ foreach (var t in types)
         public async Task AverageAsync_AsyncSelector_<#=t.Name#>_Empty()
         {
             var ys = new <#=cs#>[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => new ValueTask<<#=cs#>>(x)));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => new ValueTask<<#=cs#>>(x)).AsTask());
         }
 
         [Fact]
@@ -93,7 +93,7 @@ foreach (var t in types)
         public async Task AverageAsync_AsyncSelectorWithCancellation_<#=t.Name#>_Empty()
         {
             var ys = new <#=cs#>[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync((x, ct) => new ValueTask<<#=cs#>>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync((x, ct) => new ValueTask<<#=cs#>>(x), CancellationToken.None).AsTask());
         }
 
         [Fact]

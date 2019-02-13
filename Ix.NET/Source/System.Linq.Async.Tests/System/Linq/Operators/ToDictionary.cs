@@ -16,33 +16,33 @@ namespace Tests
         [Fact]
         public async Task ToDictionary_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int>(default, x => 0));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync(Return42, default(Func<int, int>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int>(default, x => 0).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync(Return42, default(Func<int, int>)).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int>(default, x => 0, EqualityComparer<int>.Default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync(Return42, default(Func<int, int>), EqualityComparer<int>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int>(default, x => 0, EqualityComparer<int>.Default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync(Return42, default(Func<int, int>), EqualityComparer<int>.Default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(default, x => 0, x => 0));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(Return42, default, x => 0));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(Return42, x => 0, default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(default, x => 0, x => 0).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(Return42, default, x => 0).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(Return42, x => 0, default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(default, x => 0, x => 0, EqualityComparer<int>.Default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync(Return42, default, x => 0, EqualityComparer<int>.Default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(Return42, x => 0, default, EqualityComparer<int>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(default, x => 0, x => 0, EqualityComparer<int>.Default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync(Return42, default, x => 0, EqualityComparer<int>.Default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(Return42, x => 0, default, EqualityComparer<int>.Default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int>(default, x => 0, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync(Return42, default(Func<int, int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int>(default, x => 0, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync(Return42, default(Func<int, int>), CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int>(default, x => 0, EqualityComparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync(Return42, default(Func<int, int>), EqualityComparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int>(default, x => 0, EqualityComparer<int>.Default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync(Return42, default(Func<int, int>), EqualityComparer<int>.Default, CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(default, x => 0, x => 0, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(Return42, default, x => 0, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(Return42, x => 0, default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(default, x => 0, x => 0, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(Return42, default, x => 0, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(Return42, x => 0, default, CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(default, x => 0, x => 0, EqualityComparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync(Return42, default, x => 0, EqualityComparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(Return42, x => 0, default, EqualityComparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(default, x => 0, x => 0, EqualityComparer<int>.Default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync(Return42, default, x => 0, EqualityComparer<int>.Default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionaryAsync<int, int, int>(Return42, x => 0, default, EqualityComparer<int>.Default, CancellationToken.None).AsTask());
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace Tests
         public async Task ToDictionary2Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            await AssertThrowsAsync<ArgumentException>(xs.ToDictionaryAsync(x => x % 2));
+            await AssertThrowsAsync<ArgumentException>(xs.ToDictionaryAsync(x => x % 2).AsTask());
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace Tests
         public async Task ToDictionary4Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            await AssertThrowsAsync<ArgumentException>(xs.ToDictionaryAsync(x => x % 2, x => x + 1));
+            await AssertThrowsAsync<ArgumentException>(xs.ToDictionaryAsync(x => x % 2, x => x + 1).AsTask());
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace Tests
         public async Task ToDictionary6Async()
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
-            await AssertThrowsAsync<ArgumentException>(xs.ToDictionaryAsync(x => x % 2, new Eq()));
+            await AssertThrowsAsync<ArgumentException>(xs.ToDictionaryAsync(x => x % 2, new Eq()).AsTask());
         }
 
         [Fact]

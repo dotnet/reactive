@@ -16,10 +16,10 @@ namespace Tests
         [Fact]
         public async Task ToHashSet_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSetAsync<int>(default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSetAsync<int>(default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSetAsync<int>(default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSetAsync<int>(default, CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSetAsync(default, EqualityComparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSetAsync(default, EqualityComparer<int>.Default, CancellationToken.None).AsTask());
         }
 
         [Fact]

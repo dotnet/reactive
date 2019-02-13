@@ -56,26 +56,26 @@ foreach (var op in new[] { "Min", "Max" })
         [Fact]
         public async Task <#=op#>_Empty_<#=t.Name#>()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new <#=cs#>[0].ToAsyncEnumerable().<#=op#>Async(CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new <#=cs#>[0].ToAsyncEnumerable().<#=op#>Async(CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task <#=op#>_Selector_Empty_<#=t.Name#>()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().<#=op#>Async(_ => default(<#=cs#>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().<#=op#>Async(_ => default(<#=cs#>), CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task <#=op#>_AsyncSelector_Empty_<#=t.Name#>()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().<#=op#>Async(_ => default(ValueTask<<#=cs#>>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().<#=op#>Async(_ => default(ValueTask<<#=cs#>>), CancellationToken.None).AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
         public async Task <#=op#>_AsyncSelectorWithCancellation_Empty_<#=t.Name#>()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().<#=op#>Async((x, ct) => default(ValueTask<<#=cs#>>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().<#=op#>Async((x, ct) => default(ValueTask<<#=cs#>>), CancellationToken.None).AsTask());
         }
 #endif
 

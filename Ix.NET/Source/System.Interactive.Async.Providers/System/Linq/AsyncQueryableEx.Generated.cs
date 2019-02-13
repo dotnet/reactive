@@ -598,7 +598,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<bool> IsEmptyAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default)
+        public static ValueTask<bool> IsEmptyAsync<TSource>(this IAsyncQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -610,7 +610,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<TSource> MaxAsync<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource> MaxAsync<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -622,7 +622,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -636,7 +636,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -650,7 +650,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -664,7 +664,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -678,7 +678,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -692,7 +692,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -718,7 +718,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<TSource> MinAsync<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource> MinAsync<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -730,7 +730,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -744,7 +744,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -758,7 +758,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -772,7 +772,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -786,7 +786,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -800,7 +800,7 @@ namespace System.Linq
 #endif
         }
 
-        public static Task<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

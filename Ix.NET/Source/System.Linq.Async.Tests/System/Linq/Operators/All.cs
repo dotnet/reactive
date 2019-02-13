@@ -15,17 +15,17 @@ namespace Tests
         [Fact]
         public async Task All_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, bool>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => true).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, bool>)).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, bool>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => true, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, bool>), CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => new ValueTask<bool>(true)));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, ValueTask<bool>>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => new ValueTask<bool>(true)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, ValueTask<bool>>)).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, ValueTask<bool>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, ValueTask<bool>>), CancellationToken.None).AsTask());
         }
 
         [Fact]

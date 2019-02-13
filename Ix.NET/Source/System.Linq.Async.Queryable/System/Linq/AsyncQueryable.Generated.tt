@@ -188,7 +188,7 @@ foreach (var m in typeof(AsyncEnumerable).GetMethods()
     {
         var td = m.ReturnType.GetGenericTypeDefinition();
 
-        if (td == typeof(Task<>))
+        if (td.Name.EndsWith("Task`1")) // NB: Covers Task and ValueTask
         {
             factory = "ExecuteAsync<" + toQuotedImpl(m.ReturnType.GetGenericArguments()[0], -1, false) + ">";
 

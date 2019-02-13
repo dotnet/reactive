@@ -17,7 +17,7 @@ namespace Tests
         public async Task AverageAsync_Int32_Empty()
         {
             var ys = new int[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync().AsTask());
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace Tests
         public async Task AverageAsync_Selector_Int32_Empty()
         {
             var ys = new int[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => x));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => x).AsTask());
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace Tests
         public async Task AverageAsync_AsyncSelector_Int32_Empty()
         {
             var ys = new int[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => new ValueTask<int>(x)));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => new ValueTask<int>(x)).AsTask());
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace Tests
         public async Task AverageAsync_AsyncSelectorWithCancellation_Int32_Empty()
         {
             var ys = new int[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync((x, ct) => new ValueTask<int>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync((x, ct) => new ValueTask<int>(x), CancellationToken.None).AsTask());
         }
 
         [Fact]
@@ -141,7 +141,7 @@ namespace Tests
         public async Task AverageAsync_Int64_Empty()
         {
             var ys = new long[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync().AsTask());
         }
 
         [Fact]
@@ -156,7 +156,7 @@ namespace Tests
         public async Task AverageAsync_Selector_Int64_Empty()
         {
             var ys = new long[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => x));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => x).AsTask());
         }
 
         [Fact]
@@ -171,7 +171,7 @@ namespace Tests
         public async Task AverageAsync_AsyncSelector_Int64_Empty()
         {
             var ys = new long[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => new ValueTask<long>(x)));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => new ValueTask<long>(x)).AsTask());
         }
 
         [Fact]
@@ -187,7 +187,7 @@ namespace Tests
         public async Task AverageAsync_AsyncSelectorWithCancellation_Int64_Empty()
         {
             var ys = new long[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync((x, ct) => new ValueTask<long>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync((x, ct) => new ValueTask<long>(x), CancellationToken.None).AsTask());
         }
 
         [Fact]
@@ -265,7 +265,7 @@ namespace Tests
         public async Task AverageAsync_Single_Empty()
         {
             var ys = new float[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync().AsTask());
         }
 
         [Fact]
@@ -280,7 +280,7 @@ namespace Tests
         public async Task AverageAsync_Selector_Single_Empty()
         {
             var ys = new float[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => x));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => x).AsTask());
         }
 
         [Fact]
@@ -295,7 +295,7 @@ namespace Tests
         public async Task AverageAsync_AsyncSelector_Single_Empty()
         {
             var ys = new float[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => new ValueTask<float>(x)));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => new ValueTask<float>(x)).AsTask());
         }
 
         [Fact]
@@ -311,7 +311,7 @@ namespace Tests
         public async Task AverageAsync_AsyncSelectorWithCancellation_Single_Empty()
         {
             var ys = new float[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync((x, ct) => new ValueTask<float>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync((x, ct) => new ValueTask<float>(x), CancellationToken.None).AsTask());
         }
 
         [Fact]
@@ -389,7 +389,7 @@ namespace Tests
         public async Task AverageAsync_Double_Empty()
         {
             var ys = new double[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync().AsTask());
         }
 
         [Fact]
@@ -404,7 +404,7 @@ namespace Tests
         public async Task AverageAsync_Selector_Double_Empty()
         {
             var ys = new double[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => x));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => x).AsTask());
         }
 
         [Fact]
@@ -419,7 +419,7 @@ namespace Tests
         public async Task AverageAsync_AsyncSelector_Double_Empty()
         {
             var ys = new double[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => new ValueTask<double>(x)));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => new ValueTask<double>(x)).AsTask());
         }
 
         [Fact]
@@ -435,7 +435,7 @@ namespace Tests
         public async Task AverageAsync_AsyncSelectorWithCancellation_Double_Empty()
         {
             var ys = new double[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync((x, ct) => new ValueTask<double>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync((x, ct) => new ValueTask<double>(x), CancellationToken.None).AsTask());
         }
 
         [Fact]
@@ -513,7 +513,7 @@ namespace Tests
         public async Task AverageAsync_Decimal_Empty()
         {
             var ys = new decimal[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync().AsTask());
         }
 
         [Fact]
@@ -528,7 +528,7 @@ namespace Tests
         public async Task AverageAsync_Selector_Decimal_Empty()
         {
             var ys = new decimal[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => x));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => x).AsTask());
         }
 
         [Fact]
@@ -543,7 +543,7 @@ namespace Tests
         public async Task AverageAsync_AsyncSelector_Decimal_Empty()
         {
             var ys = new decimal[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => new ValueTask<decimal>(x)));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => new ValueTask<decimal>(x)).AsTask());
         }
 
         [Fact]
@@ -559,7 +559,7 @@ namespace Tests
         public async Task AverageAsync_AsyncSelectorWithCancellation_Decimal_Empty()
         {
             var ys = new decimal[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync((x, ct) => new ValueTask<decimal>(x), CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync((x, ct) => new ValueTask<decimal>(x), CancellationToken.None).AsTask());
         }
 
         [Fact]

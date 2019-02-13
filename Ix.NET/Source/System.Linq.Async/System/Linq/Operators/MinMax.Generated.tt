@@ -28,14 +28,14 @@ foreach (var m in new[] { "Max", "Min" })
         var isNullable = t.EndsWith("?");
         var shortCircuit = t.StartsWith("decimal");
 #>
-        public static Task<<#=t#>> <#=m#>Async(this IAsyncEnumerable<<#=t#>> source, CancellationToken cancellationToken = default)
+        public static ValueTask<<#=t#>> <#=m#>Async(this IAsyncEnumerable<<#=t#>> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
             return Core(source, cancellationToken);
 
-            static async Task<<#=t#>> Core(IAsyncEnumerable<<#=t#>> _source, CancellationToken _cancellationToken)
+            static async ValueTask<<#=t#>> Core(IAsyncEnumerable<<#=t#>> _source, CancellationToken _cancellationToken)
             {
 <#
         if (!isNullable)
@@ -305,7 +305,7 @@ foreach (var overload in new[] {
 <#
     }
 #>
-        public static Task<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, <#=overload.selector#> selector, CancellationToken cancellationToken = default)
+        public static ValueTask<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, <#=overload.selector#> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -314,7 +314,7 @@ foreach (var overload in new[] {
 
             return Core(source, selector, cancellationToken);
 
-            static async Task<<#=t#>> Core(IAsyncEnumerable<TSource> _source, <#=overload.selector#> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<<#=t#>> Core(IAsyncEnumerable<TSource> _source, <#=overload.selector#> _selector, CancellationToken _cancellationToken)
             {
 <#
         if (!isNullable)

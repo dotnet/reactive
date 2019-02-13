@@ -28,6 +28,6 @@ namespace System.Linq
         /// <param name="expression">The expression tree to evaluate.</param>
         /// <param name="token">Cancellation token used to cancel the evaluation.</param>
         /// <returns>Task representing the result of evaluating the specified expression tree.</returns>
-        Task<TResult> ExecuteAsync<TResult>(Expression expression, CancellationToken token);
+        ValueTask<TResult> ExecuteAsync<TResult>(Expression expression, CancellationToken token);
     }
 }

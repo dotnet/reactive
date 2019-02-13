@@ -16,26 +16,26 @@ namespace Tests
         [Fact]
         public async Task Min_Empty_Int32()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new int[0].ToAsyncEnumerable().MinAsync(CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new int[0].ToAsyncEnumerable().MinAsync(CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Min_Selector_Empty_Int32()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(int), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(int), CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Min_AsyncSelector_Empty_Int32()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(ValueTask<int>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(ValueTask<int>), CancellationToken.None).AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
         public async Task Min_AsyncSelectorWithCancellation_Empty_Int32()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync((x, ct) => default(ValueTask<int>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync((x, ct) => default(ValueTask<int>), CancellationToken.None).AsTask());
         }
 #endif
 
@@ -980,26 +980,26 @@ namespace Tests
         [Fact]
         public async Task Min_Empty_Int64()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new long[0].ToAsyncEnumerable().MinAsync(CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new long[0].ToAsyncEnumerable().MinAsync(CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Min_Selector_Empty_Int64()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(long), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(long), CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Min_AsyncSelector_Empty_Int64()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(ValueTask<long>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(ValueTask<long>), CancellationToken.None).AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
         public async Task Min_AsyncSelectorWithCancellation_Empty_Int64()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync((x, ct) => default(ValueTask<long>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync((x, ct) => default(ValueTask<long>), CancellationToken.None).AsTask());
         }
 #endif
 
@@ -1944,26 +1944,26 @@ namespace Tests
         [Fact]
         public async Task Min_Empty_Single()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new float[0].ToAsyncEnumerable().MinAsync(CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new float[0].ToAsyncEnumerable().MinAsync(CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Min_Selector_Empty_Single()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(float), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(float), CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Min_AsyncSelector_Empty_Single()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(ValueTask<float>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(ValueTask<float>), CancellationToken.None).AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
         public async Task Min_AsyncSelectorWithCancellation_Empty_Single()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync((x, ct) => default(ValueTask<float>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync((x, ct) => default(ValueTask<float>), CancellationToken.None).AsTask());
         }
 #endif
 
@@ -2908,26 +2908,26 @@ namespace Tests
         [Fact]
         public async Task Min_Empty_Double()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new double[0].ToAsyncEnumerable().MinAsync(CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new double[0].ToAsyncEnumerable().MinAsync(CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Min_Selector_Empty_Double()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(double), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(double), CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Min_AsyncSelector_Empty_Double()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(ValueTask<double>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(ValueTask<double>), CancellationToken.None).AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
         public async Task Min_AsyncSelectorWithCancellation_Empty_Double()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync((x, ct) => default(ValueTask<double>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync((x, ct) => default(ValueTask<double>), CancellationToken.None).AsTask());
         }
 #endif
 
@@ -3872,26 +3872,26 @@ namespace Tests
         [Fact]
         public async Task Min_Empty_Decimal()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new decimal[0].ToAsyncEnumerable().MinAsync(CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new decimal[0].ToAsyncEnumerable().MinAsync(CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Min_Selector_Empty_Decimal()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(decimal), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(decimal), CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Min_AsyncSelector_Empty_Decimal()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(ValueTask<decimal>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync(_ => default(ValueTask<decimal>), CancellationToken.None).AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
         public async Task Min_AsyncSelectorWithCancellation_Empty_Decimal()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync((x, ct) => default(ValueTask<decimal>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MinAsync((x, ct) => default(ValueTask<decimal>), CancellationToken.None).AsTask());
         }
 #endif
 
@@ -4836,26 +4836,26 @@ namespace Tests
         [Fact]
         public async Task Max_Empty_Int32()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new int[0].ToAsyncEnumerable().MaxAsync(CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new int[0].ToAsyncEnumerable().MaxAsync(CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Max_Selector_Empty_Int32()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(int), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(int), CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Max_AsyncSelector_Empty_Int32()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(ValueTask<int>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(ValueTask<int>), CancellationToken.None).AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
         public async Task Max_AsyncSelectorWithCancellation_Empty_Int32()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync((x, ct) => default(ValueTask<int>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync((x, ct) => default(ValueTask<int>), CancellationToken.None).AsTask());
         }
 #endif
 
@@ -5800,26 +5800,26 @@ namespace Tests
         [Fact]
         public async Task Max_Empty_Int64()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new long[0].ToAsyncEnumerable().MaxAsync(CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new long[0].ToAsyncEnumerable().MaxAsync(CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Max_Selector_Empty_Int64()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(long), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(long), CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Max_AsyncSelector_Empty_Int64()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(ValueTask<long>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(ValueTask<long>), CancellationToken.None).AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
         public async Task Max_AsyncSelectorWithCancellation_Empty_Int64()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync((x, ct) => default(ValueTask<long>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync((x, ct) => default(ValueTask<long>), CancellationToken.None).AsTask());
         }
 #endif
 
@@ -6764,26 +6764,26 @@ namespace Tests
         [Fact]
         public async Task Max_Empty_Single()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new float[0].ToAsyncEnumerable().MaxAsync(CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new float[0].ToAsyncEnumerable().MaxAsync(CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Max_Selector_Empty_Single()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(float), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(float), CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Max_AsyncSelector_Empty_Single()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(ValueTask<float>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(ValueTask<float>), CancellationToken.None).AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
         public async Task Max_AsyncSelectorWithCancellation_Empty_Single()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync((x, ct) => default(ValueTask<float>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync((x, ct) => default(ValueTask<float>), CancellationToken.None).AsTask());
         }
 #endif
 
@@ -7728,26 +7728,26 @@ namespace Tests
         [Fact]
         public async Task Max_Empty_Double()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new double[0].ToAsyncEnumerable().MaxAsync(CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new double[0].ToAsyncEnumerable().MaxAsync(CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Max_Selector_Empty_Double()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(double), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(double), CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Max_AsyncSelector_Empty_Double()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(ValueTask<double>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(ValueTask<double>), CancellationToken.None).AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
         public async Task Max_AsyncSelectorWithCancellation_Empty_Double()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync((x, ct) => default(ValueTask<double>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync((x, ct) => default(ValueTask<double>), CancellationToken.None).AsTask());
         }
 #endif
 
@@ -8692,26 +8692,26 @@ namespace Tests
         [Fact]
         public async Task Max_Empty_Decimal()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new decimal[0].ToAsyncEnumerable().MaxAsync(CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new decimal[0].ToAsyncEnumerable().MaxAsync(CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Max_Selector_Empty_Decimal()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(decimal), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(decimal), CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task Max_AsyncSelector_Empty_Decimal()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(ValueTask<decimal>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync(_ => default(ValueTask<decimal>), CancellationToken.None).AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
         public async Task Max_AsyncSelectorWithCancellation_Empty_Decimal()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync((x, ct) => default(ValueTask<decimal>), CancellationToken.None));
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().MaxAsync((x, ct) => default(ValueTask<decimal>), CancellationToken.None).AsTask());
         }
 #endif
 

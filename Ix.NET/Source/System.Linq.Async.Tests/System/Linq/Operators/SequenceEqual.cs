@@ -16,17 +16,17 @@ namespace Tests
         [Fact]
         public async Task SequenceEqual_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(default, Return42));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(Return42, default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(default, Return42).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(Return42, default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(default, Return42, new Eq()));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(Return42, default, new Eq()));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(default, Return42, new Eq()).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(Return42, default, new Eq()).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(default, Return42, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(Return42, default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(default, Return42, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(Return42, default, CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(default, Return42, new Eq(), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(Return42, default, new Eq(), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(default, Return42, new Eq(), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(Return42, default, new Eq(), CancellationToken.None).AsTask());
         }
 
         [Fact]
@@ -173,7 +173,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, -3, 4 }.ToAsyncEnumerable();
             var ys = new[] { 1, -2, 3, 4 }.ToAsyncEnumerable(); // NB: Implements IList<T>, resulting in optimized code path.
-            await Assert.ThrowsAsync<NotImplementedException>(() => xs.SequenceEqualAsync(ys, new EqEx()));
+            await Assert.ThrowsAsync<NotImplementedException>(() => xs.SequenceEqualAsync(ys, new EqEx()).AsTask());
         }
 
         [Fact]
@@ -182,7 +182,7 @@ namespace Tests
             var xs = new[] { 1, 2, -3, 4 }.Select(x => x * 2).ToAsyncEnumerable();
             var ys = new[] { 1, -2, 3, 4 }.Select(x => x * 2).ToAsyncEnumerable();
             var res = xs.SequenceEqualAsync(ys, new EqEx());
-            await AssertThrowsAsync<NotImplementedException>(res);
+            await AssertThrowsAsync<NotImplementedException>(res.AsTask());
         }
 
         private sealed class EqEx : IEqualityComparer<int>

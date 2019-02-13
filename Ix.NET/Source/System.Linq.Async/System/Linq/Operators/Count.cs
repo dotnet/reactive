@@ -11,7 +11,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
+        public static ValueTask<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -19,16 +19,16 @@ namespace System.Linq
             switch (source)
             {
                 case ICollection<TSource> collection:
-                    return Task.FromResult(collection.Count);
+                    return new ValueTask<int>(collection.Count);
                 case IAsyncIListProvider<TSource> listProv:
-                    return listProv.GetCountAsync(onlyIfCheap: false, cancellationToken).AsTask();
+                    return listProv.GetCountAsync(onlyIfCheap: false, cancellationToken);
                 case ICollection collection:
-                    return Task.FromResult(collection.Count);
+                    return new ValueTask<int>(collection.Count);
             }
 
             return Core(source, cancellationToken);
 
-            static async Task<int> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
                 var count = 0;
 
@@ -44,7 +44,7 @@ namespace System.Linq
             }
         }
 
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken = default)
+        public static ValueTask<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -53,7 +53,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async Task<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
             {
                 var count = 0;
 
@@ -72,7 +72,7 @@ namespace System.Linq
             }
         }
 
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+        public static ValueTask<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -81,7 +81,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async Task<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
                 var count = 0;
 
@@ -101,7 +101,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
+        public static ValueTask<int> CountAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -110,7 +110,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async Task<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
                 var count = 0;
 

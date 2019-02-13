@@ -10,14 +10,14 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
-        public static Task<bool> IsEmptyAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
+        public static ValueTask<bool> IsEmptyAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
             return Core(source, cancellationToken);
 
-            static async Task<bool> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
                 var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 

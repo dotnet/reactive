@@ -15,25 +15,25 @@ namespace Tests
         [Fact]
         public async Task Single_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, bool>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => true).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, bool>)).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, bool>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => true, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, bool>), CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => new ValueTask<bool>(true)));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, ValueTask<bool>>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => new ValueTask<bool>(true)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, ValueTask<bool>>)).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, ValueTask<bool>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, ValueTask<bool>>), CancellationToken.None).AsTask());
 
 #if !NO_DEEP_CANCELLATION
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, CancellationToken, ValueTask<bool>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, CancellationToken, ValueTask<bool>>), CancellationToken.None).AsTask());
 #endif
         }
 
@@ -41,21 +41,21 @@ namespace Tests
         public async Task Single1Async()
         {
             var res = AsyncEnumerable.Empty<int>().SingleAsync();
-            await AssertThrowsAsync<InvalidOperationException>(res);
+            await AssertThrowsAsync<InvalidOperationException>(res.AsTask());
         }
 
         [Fact]
         public async Task Single2Async()
         {
             var res = AsyncEnumerable.Empty<int>().SingleAsync(x => true);
-            await AssertThrowsAsync<InvalidOperationException>(res);
+            await AssertThrowsAsync<InvalidOperationException>(res.AsTask());
         }
 
         [Fact]
         public async Task Single3Async()
         {
             var res = Return42.SingleAsync(x => x % 2 != 0);
-            await AssertThrowsAsync<InvalidOperationException>(res);
+            await AssertThrowsAsync<InvalidOperationException>(res.AsTask());
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace Tests
         public async Task Single8Async()
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().SingleAsync();
-            await AssertThrowsAsync<InvalidOperationException>(res);
+            await AssertThrowsAsync<InvalidOperationException>(res.AsTask());
         }
 
         [Fact]
@@ -106,14 +106,14 @@ namespace Tests
         public async Task Single10Async()
         {
             var res = new[] { 42, 23, 45, 90 }.ToAsyncEnumerable().SingleAsync(x => x % 2 != 0);
-            await AssertThrowsAsync<InvalidOperationException>(res);
+            await AssertThrowsAsync<InvalidOperationException>(res.AsTask());
         }
 
         [Fact]
         public async Task Single11Async()
         {
             var res = new int[0].ToAsyncEnumerable().SingleAsync();
-            await AssertThrowsAsync<InvalidOperationException>(res);
+            await AssertThrowsAsync<InvalidOperationException>(res.AsTask());
         }
     }
 }

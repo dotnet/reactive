@@ -15,18 +15,18 @@ namespace Tests
         [Fact]
         public async Task ElementAt_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtAsync<int>(default, 0));
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAtAsync(Return42, -1));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtAsync<int>(default, 0).AsTask());
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAtAsync(Return42, -1).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtAsync<int>(default, 0, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAtAsync(Return42, -1, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtAsync<int>(default, 0, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAtAsync(Return42, -1, CancellationToken.None).AsTask());
         }
 
         [Fact]
         public async Task ElementAt1Async()
         {
             var res = AsyncEnumerable.Empty<int>().ElementAtAsync(0);
-            await AssertThrowsAsync<ArgumentOutOfRangeException>(res);
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(res.AsTask());
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace Tests
         public async Task ElementAt3Async()
         {
             var res = Return42.ElementAtAsync(1);
-            await AssertThrowsAsync<ArgumentOutOfRangeException>(res);
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(res.AsTask());
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace Tests
         public async Task ElementAt5Async()
         {
             var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAtAsync(7);
-            await AssertThrowsAsync<ArgumentOutOfRangeException>(res);
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(res.AsTask());
         }
 
         [Fact]

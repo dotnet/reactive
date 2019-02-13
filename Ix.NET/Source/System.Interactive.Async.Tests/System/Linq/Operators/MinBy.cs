@@ -16,17 +16,17 @@ namespace Tests
         [Fact]
         public async Task MinBy_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(default(IAsyncEnumerable<int>), x => x));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(Return42, default(Func<int, int>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(default(IAsyncEnumerable<int>), x => x).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(Return42, default(Func<int, int>)).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(default(IAsyncEnumerable<int>), x => x, Comparer<int>.Default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(Return42, default(Func<int, int>), Comparer<int>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(default(IAsyncEnumerable<int>), x => x, Comparer<int>.Default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(Return42, default(Func<int, int>), Comparer<int>.Default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(default(IAsyncEnumerable<int>), x => x, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(Return42, default(Func<int, int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(default(IAsyncEnumerable<int>), x => x, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(Return42, default(Func<int, int>), CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(default(IAsyncEnumerable<int>), x => x, Comparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(Return42, default(Func<int, int>), Comparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(default(IAsyncEnumerable<int>), x => x, Comparer<int>.Default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.MinByAsync(Return42, default(Func<int, int>), Comparer<int>.Default, CancellationToken.None).AsTask());
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace Tests
         {
             var xs = new int[0].ToAsyncEnumerable().MinByAsync(x => x / 2);
 
-            await AssertThrowsAsync<InvalidOperationException>(xs);
+            await AssertThrowsAsync<InvalidOperationException>(xs.AsTask());
         }
 
         [Fact]

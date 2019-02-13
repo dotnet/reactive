@@ -10,11 +10,11 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken = default) =>
-            source is ICollection<TSource> collection ? Task.FromResult(collection.Contains(value)) :
+        public static ValueTask<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken = default) =>
+            source is ICollection<TSource> collection ? new ValueTask<bool>(collection.Contains(value)) :
             ContainsAsync(source, value, comparer: null, cancellationToken);
 
-        public static Task<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -26,7 +26,7 @@ namespace System.Linq
             {
                 return Core(source, value, cancellationToken);
 
-                static async Task<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, CancellationToken _cancellationToken)
+                static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, CancellationToken _cancellationToken)
                 {
                     await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
@@ -43,7 +43,7 @@ namespace System.Linq
             {
                 return Core(source, value, comparer, cancellationToken);
 
-                static async Task<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
+                static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
                 {
                     await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {

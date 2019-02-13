@@ -10,10 +10,10 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken = default) =>
+        public static ValueTask<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken = default) =>
             SequenceEqualAsync(first, second, comparer: null, cancellationToken);
 
-        public static Task<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
         {
             if (first == null)
                 throw Error.ArgumentNull(nameof(first));
@@ -29,7 +29,7 @@ namespace System.Linq
             {
                 if (firstCol.Count != secondCol.Count)
                 {
-                    return Task.FromResult(false);
+                    return new ValueTask<bool>(false);
                 }
 
                 if (firstCol is IList<TSource> firstList && secondCol is IList<TSource> secondList)
@@ -40,17 +40,17 @@ namespace System.Linq
                     {
                         if (!comparer.Equals(firstList[i], secondList[i]))
                         {
-                            return Task.FromResult(false);
+                            return new ValueTask<bool>(false);
                         }
                     }
 
-                    return Task.FromResult(true);
+                    return new ValueTask<bool>(true);
                 }
             }
 
             return Core(first, second, comparer, cancellationToken);
 
-            static async Task<bool> Core(IAsyncEnumerable<TSource> _first, IAsyncEnumerable<TSource> _second, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
+            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _first, IAsyncEnumerable<TSource> _second, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
             {
                 var e1 = _first.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 

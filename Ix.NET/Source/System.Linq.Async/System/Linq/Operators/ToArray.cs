@@ -10,15 +10,15 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<TSource[]> ToArrayAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource[]> ToArrayAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
             if (source is IAsyncIListProvider<TSource> arrayProvider)
-                return arrayProvider.ToArrayAsync(cancellationToken).AsTask();
+                return arrayProvider.ToArrayAsync(cancellationToken);
 
-            return AsyncEnumerableHelpers.ToArray(source, cancellationToken).AsTask();
+            return AsyncEnumerableHelpers.ToArray(source, cancellationToken);
         }
     }
 }

@@ -73,7 +73,7 @@ namespace System.Linq
                     }
                 }
 
-                return new ValueTask<int>(_source.CountAsync(cancellationToken));
+                return _source.CountAsync(cancellationToken);
             }
 
             public override AsyncIteratorBase<TSource> Clone()

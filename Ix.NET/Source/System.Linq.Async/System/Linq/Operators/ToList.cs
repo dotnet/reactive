@@ -10,17 +10,17 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<List<TSource>> ToListAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
+        public static ValueTask<List<TSource>> ToListAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
             if (source is IAsyncIListProvider<TSource> listProvider)
-                return listProvider.ToListAsync(cancellationToken).AsTask();
+                return listProvider.ToListAsync(cancellationToken);
 
             return Core(source, cancellationToken);
 
-            static async Task<List<TSource>> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+            static async ValueTask<List<TSource>> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
                 var list = new List<TSource>();
 

@@ -15,7 +15,7 @@ namespace System.Linq
     internal class AsyncEnumerableExecutor<T>
     {
         private readonly Expression _expression;
-        private Func<CancellationToken, Task<T>> _func;
+        private Func<CancellationToken, ValueTask<T>> _func;
 
         /// <summary>
         /// Creates a new execution helper instance for the specified expression tree representing a computation over asynchronous enumerable sequences.
@@ -31,11 +31,11 @@ namespace System.Linq
         /// </summary>
         /// <param name="token">Token to cancel the evaluation.</param>
         /// <returns>Task representing the evaluation of the expression tree.</returns>
-        internal Task<T> ExecuteAsync(CancellationToken token)
+        internal ValueTask<T> ExecuteAsync(CancellationToken token)
         {
             if (_func == null)
             {
-                var expression = Expression.Lambda<Func<CancellationToken, Task<T>>>(new AsyncEnumerableRewriter().Visit(_expression), Expression.Parameter(typeof(CancellationToken)));
+                var expression = Expression.Lambda<Func<CancellationToken, ValueTask<T>>>(new AsyncEnumerableRewriter().Visit(_expression), Expression.Parameter(typeof(CancellationToken)));
                 _func = expression.Compile();
             }
 

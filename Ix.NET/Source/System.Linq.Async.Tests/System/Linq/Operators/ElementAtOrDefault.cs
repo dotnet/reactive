@@ -15,8 +15,8 @@ namespace Tests
         [Fact]
         public async Task ElementAtOrDefault_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefaultAsync<int>(default, 0));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefaultAsync<int>(default, 0, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefaultAsync<int>(default, 0).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefaultAsync<int>(default, 0, CancellationToken.None).AsTask());
         }
 
         [Fact]

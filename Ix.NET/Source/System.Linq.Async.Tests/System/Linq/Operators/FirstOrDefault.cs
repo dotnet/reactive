@@ -15,25 +15,25 @@ namespace Tests
         [Fact]
         public async Task FirstOrDefault_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default, CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default, x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync(Return42, default(Func<int, bool>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default, x => true).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync(Return42, default(Func<int, bool>)).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default, x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync(Return42, default(Func<int, bool>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default, x => true, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync(Return42, default(Func<int, bool>), CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default, x => new ValueTask<bool>(true)));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync(Return42, default(Func<int, ValueTask<bool>>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default, x => new ValueTask<bool>(true)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync(Return42, default(Func<int, ValueTask<bool>>)).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync(Return42, default(Func<int, ValueTask<bool>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync(Return42, default(Func<int, ValueTask<bool>>), CancellationToken.None).AsTask());
 
 #if !NO_DEEP_CANCELLATION
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync(Return42, default(Func<int, CancellationToken, ValueTask<bool>>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefaultAsync(Return42, default(Func<int, CancellationToken, ValueTask<bool>>), CancellationToken.None).AsTask());
 #endif
         }
 
@@ -170,7 +170,7 @@ namespace Tests
         public async Task FirstOrDefaultAsync_Predicate_PredicateThrows()
         {
             var res = new[] { 0, 1, 2 }.ToAsyncEnumerable().FirstOrDefaultAsync(x => 1 / x > 0);
-            await AssertThrowsAsync<DivideByZeroException>(res);
+            await AssertThrowsAsync<DivideByZeroException>(res.AsTask());
         }
 
         [Fact]
@@ -248,7 +248,7 @@ namespace Tests
         public async Task FirstOrDefaultAsync_AsyncPredicate_AsyncPredicateThrows()
         {
             var res = new[] { 0, 1, 2 }.ToAsyncEnumerable().FirstOrDefaultAsync(x => new ValueTask<bool>(1 / x > 0));
-            await AssertThrowsAsync<DivideByZeroException>(res);
+            await AssertThrowsAsync<DivideByZeroException>(res.AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -327,7 +327,7 @@ namespace Tests
         public async Task FirstOrDefaultAsync_AsyncPredicateWithCancellation_AsyncPredicateWithCancellationThrows()
         {
             var res = new[] { 0, 1, 2 }.ToAsyncEnumerable().FirstOrDefaultAsync((x, ct) => new ValueTask<bool>(1 / x > 0), CancellationToken.None);
-            await AssertThrowsAsync<DivideByZeroException>(res);
+            await AssertThrowsAsync<DivideByZeroException>(res.AsTask());
         }
 #endif
     }

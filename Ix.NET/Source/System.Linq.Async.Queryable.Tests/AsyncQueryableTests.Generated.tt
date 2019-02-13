@@ -184,7 +184,7 @@ foreach (var m in typeof(AsyncEnumerable).GetMethods()
     {
         var td = m.ReturnType.GetGenericTypeDefinition();
 
-        if (td == typeof(Task<>))
+        if (td.Name.EndsWith("Task`1")) // NB: Covers Task and ValueTask
         {
             factory = "ExecuteAsync<" + toQuotedImpl(m.ReturnType.GetGenericArguments()[0], -1, false) + ">";
 
@@ -452,7 +452,7 @@ if (indexes.Count != 0)
 
     if (!failing.Contains(tm.Name))
     {
-        if (tmRet == typeof(Task<>))
+        if (tmRet.Name.EndsWith("Task`1")) // NB: Covers Task and ValueTask
         {
 #>
             AssertEx.SucceedOrFailProper(() => res.Wait());

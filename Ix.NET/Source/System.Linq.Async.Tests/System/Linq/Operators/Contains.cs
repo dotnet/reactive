@@ -16,11 +16,11 @@ namespace Tests
         [Fact]
         public async Task Contains_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42, EqualityComparer<int>.Default));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42, EqualityComparer<int>.Default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42, EqualityComparer<int>.Default, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42, EqualityComparer<int>.Default, CancellationToken.None).AsTask());
         }
 
         [Fact]

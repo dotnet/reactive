@@ -10,7 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<TSource> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -19,7 +19,7 @@ namespace System.Linq
             {
                 return Core(source, cancellationToken);
 
-                static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+                static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TSource>.Default;
 
@@ -62,7 +62,7 @@ namespace System.Linq
             {
                 return Core(source, cancellationToken);
 
-                static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+                static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TSource>.Default;
 
@@ -99,7 +99,7 @@ namespace System.Linq
             }
         }
 
-        public static Task<TResult> MinAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken = default)
+        public static ValueTask<TResult> MinAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -110,7 +110,7 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                static async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TResult> _selector, CancellationToken _cancellationToken)
+                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TResult> _selector, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
@@ -153,7 +153,7 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                static async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TResult> _selector, CancellationToken _cancellationToken)
+                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TResult> _selector, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
@@ -190,7 +190,7 @@ namespace System.Linq
             }
         }
 
-        public static Task<TResult> MinAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken = default)
+        public static ValueTask<TResult> MinAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -201,7 +201,7 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                static async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
+                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
@@ -244,7 +244,7 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                static async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
+                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
@@ -282,7 +282,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static Task<TResult> MinAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken = default)
+        public static ValueTask<TResult> MinAsync<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -293,7 +293,7 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                static async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
+                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
@@ -336,7 +336,7 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                static async Task<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
+                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
