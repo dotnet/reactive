@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace System.Threading.Tasks
 {
@@ -31,6 +32,59 @@ namespace System.Threading.Tasks
 
 #endif
 
+        //
+        // REVIEW: `await using (var e = xs.GetAsyncEnumerator().ConfigureAwait(false)) { ... }` leads to the following error when using BCL types.
+        //
+        //         error CS8410: 'ConfiguredCancelableAsyncEnumerable<TSource>.Enumerator': type used in an async using statement must be implicitly convertible to 'System.IAsyncDisposable'
+        //
+        //         See https://github.com/dotnet/csharplang/blob/master/meetings/2019/LDM-2019-01-16.md#pattern-based-disposal-in-await-foreach for the issues with
+        //         `await foreach` (but not `await using`). This should be reviewed with the LDM. Also see https://github.com/dotnet/csharplang/issues/1623.
+        //
+#if BCL_HAS_CONFIGUREAWAIT && AWAIT_USING_REQUIRES_IASYNCDISPOSABLE
+        public static ConfiguredAsyncEnumerator<T> ConfigureAwait<T>(this IAsyncEnumerator<T> enumerator, bool continueOnCapturedContext)
+        {
+            if (enumerator == null)
+                throw Error.ArgumentNull(nameof(enumerator));
+
+            return new ConfiguredAsyncEnumerator<T>(enumerator, continueOnCapturedContext);
+        }
+
+        /// <summary>Provides an awaitable async enumerator that enables cancelable iteration and configured awaits.</summary>
+        [StructLayout(LayoutKind.Auto)]
+        public readonly struct ConfiguredAsyncEnumerator<T> : IAsyncDisposable
+        {
+            private readonly IAsyncEnumerator<T> _enumerator;
+            private readonly bool _continueOnCapturedContext;
+
+            internal ConfiguredAsyncEnumerator(IAsyncEnumerator<T> enumerator, bool continueOnCapturedContext)
+            {
+                _enumerator = enumerator;
+                _continueOnCapturedContext = continueOnCapturedContext;
+            }
+
+            /// <summary>Advances the enumerator asynchronously to the next element of the collection.</summary>
+            /// <returns>
+            /// A <see cref="ConfiguredValueTaskAwaitable{Boolean}"/> that will complete with a result of <c>true</c>
+            /// if the enumerator was successfully advanced to the next element, or <c>false</c> if the enumerator has
+            /// passed the end of the collection.
+            /// </returns>
+            public ConfiguredValueTaskAwaitable<bool> MoveNextAsync() =>
+                _enumerator.MoveNextAsync().ConfigureAwait(_continueOnCapturedContext);
+
+            /// <summary>Gets the element in the collection at the current position of the enumerator.</summary>
+            public T Current => _enumerator.Current;
+
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or
+            /// resetting unmanaged resources asynchronously.
+            /// </summary>
+            public ConfiguredValueTaskAwaitable DisposeAsync() =>
+                _enumerator.DisposeAsync().ConfigureAwait(_continueOnCapturedContext);
+
+            async ValueTask IAsyncDisposable.DisposeAsync() =>
+                await _enumerator.DisposeAsync().ConfigureAwait(_continueOnCapturedContext);
+        }
+#else
         public static ConfiguredCancelableAsyncEnumerable<T>.Enumerator ConfigureAwait<T>(this IAsyncEnumerator<T> enumerator, bool continueOnCapturedContext)
         {
             if (enumerator == null)
@@ -38,5 +92,6 @@ namespace System.Threading.Tasks
 
             return new ConfiguredCancelableAsyncEnumerable<T>.Enumerator(enumerator, continueOnCapturedContext);
         }
+#endif
     }
 }
