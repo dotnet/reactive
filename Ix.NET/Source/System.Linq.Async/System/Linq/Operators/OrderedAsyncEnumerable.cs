@@ -264,38 +264,11 @@ namespace System.Linq
 
         public async ValueTask<Maybe<TElement>> TryGetFirstAsync(CancellationToken cancellationToken)
         {
-#if USE_AWAIT_USING
-            await using (var e = _source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            var e = _source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+            try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
             {
                 if (!await e.MoveNextAsync())
-                {
-                    return new Maybe<TElement>();
-                }
-
-                var value = e.Current;
-
-                var comparer = GetComparer();
-
-                await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
-
-                while (await e.MoveNextAsync())
-                {
-                    var x = e.Current;
-
-                    if (await comparer.Compare(x, cacheLower: true, cancellationToken).ConfigureAwait(false) < 0)
-                    {
-                        value = x;
-                    }
-                }
-
-                return new Maybe<TElement>(value);
-            }
-#else
-            IAsyncEnumerator<TElement> e = _source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     return new Maybe<TElement>();
                 }
@@ -306,7 +279,7 @@ namespace System.Linq
 
                 await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
 
-                while (await e.MoveNextAsync().ConfigureAwait(false))
+                while (await e.MoveNextAsync())
                 {
                     TElement x = e.Current;
 
@@ -320,45 +293,17 @@ namespace System.Linq
             }
             finally
             {
-                await e.DisposeAsync().ConfigureAwait(false);
+                await e.DisposeAsync();
             }
-#endif
         }
 
         public async ValueTask<Maybe<TElement>> TryGetLastAsync(CancellationToken cancellationToken)
         {
-#if USE_AWAIT_USING
-            await using (var e = _source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            var e = _source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+            try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
             {
                 if (!await e.MoveNextAsync())
-                {
-                    return new Maybe<TElement>();
-                }
-
-                var value = e.Current;
-
-                var comparer = GetComparer();
-
-                await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
-
-                while (await e.MoveNextAsync())
-                {
-                    var current = e.Current;
-
-                    if (await comparer.Compare(current, cacheLower: false, cancellationToken).ConfigureAwait(false) >= 0)
-                    {
-                        value = current;
-                    }
-                }
-
-                return new Maybe<TElement>(value);
-            }
-#else
-            IAsyncEnumerator<TElement> e = _source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                if (!await e.MoveNextAsync().ConfigureAwait(false))
                 {
                     return new Maybe<TElement>();
                 }
@@ -369,7 +314,7 @@ namespace System.Linq
 
                 await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
 
-                while (await e.MoveNextAsync().ConfigureAwait(false))
+                while (await e.MoveNextAsync())
                 {
                     TElement current = e.Current;
 
@@ -383,9 +328,8 @@ namespace System.Linq
             }
             finally
             {
-                await e.DisposeAsync().ConfigureAwait(false);
+                await e.DisposeAsync();
             }
-#endif
         }
 
         internal async ValueTask<Maybe<TElement>> TryGetLastAsync(int minIndexInclusive, int maxIndexInclusive, CancellationToken cancellationToken)

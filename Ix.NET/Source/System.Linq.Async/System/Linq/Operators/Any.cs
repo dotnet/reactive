@@ -19,23 +19,16 @@ namespace System.Linq
 
             static async Task<bool> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     return await e.MoveNextAsync();
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    return await e.MoveNextAsync().ConfigureAwait(false);
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 

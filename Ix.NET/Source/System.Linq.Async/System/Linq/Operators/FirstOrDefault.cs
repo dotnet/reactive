@@ -97,29 +97,19 @@ namespace System.Linq
 
                 static async ValueTask<Maybe<TSource>> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
                 {
-#if USE_AWAIT_USING
-                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         if (await e.MoveNextAsync())
                         {
                             return new Maybe<TSource>(e.Current);
                         }
                     }
-#else
-                    var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        if (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            return new Maybe<TSource>(e.Current);
-                        }
-                    }
                     finally
                     {
-                        await e.DisposeAsync().ConfigureAwait(false);
+                        await e.DisposeAsync();
                     }
-#endif
 
                     return new Maybe<TSource>();
                 }
@@ -130,8 +120,9 @@ namespace System.Linq
 
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-#if USE_AWAIT_USING
-            await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+            try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
             {
                 while (await e.MoveNextAsync())
                 {
@@ -143,34 +134,19 @@ namespace System.Linq
                     }
                 }
             }
-#else
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var value = e.Current;
-
-                    if (predicate(value))
-                    {
-                        return new Maybe<TSource>(value);
-                    }
-                }
-            }
             finally
             {
-                await e.DisposeAsync().ConfigureAwait(false);
+                await e.DisposeAsync();
             }
-#endif
 
             return new Maybe<TSource>();
         }
 
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-#if USE_AWAIT_USING
-            await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+            try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
             {
                 while (await e.MoveNextAsync())
                 {
@@ -182,26 +158,10 @@ namespace System.Linq
                     }
                 }
             }
-#else
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var value = e.Current;
-
-                    if (await predicate(value).ConfigureAwait(false))
-                    {
-                        return new Maybe<TSource>(value);
-                    }
-                }
-            }
             finally
             {
-                await e.DisposeAsync().ConfigureAwait(false);
+                await e.DisposeAsync();
             }
-#endif
 
             return new Maybe<TSource>();
         }
@@ -209,8 +169,9 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static async Task<Maybe<TSource>> TryGetFirst<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-#if USE_AWAIT_USING
-            await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+            try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
             {
                 while (await e.MoveNextAsync())
                 {
@@ -222,26 +183,10 @@ namespace System.Linq
                     }
                 }
             }
-#else
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var value = e.Current;
-
-                    if (await predicate(value, cancellationToken).ConfigureAwait(false))
-                    {
-                        return new Maybe<TSource>(value);
-                    }
-                }
-            }
             finally
             {
-                await e.DisposeAsync().ConfigureAwait(false);
+                await e.DisposeAsync();
             }
-#endif
 
             return new Maybe<TSource>();
         }

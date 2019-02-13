@@ -25,8 +25,9 @@ namespace System.Linq
 
                     var value = default(TSource);
 
-#if USE_AWAIT_USING
-                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         do
                         {
@@ -49,36 +50,10 @@ namespace System.Linq
                             }
                         }
                     }
-#else
-                    var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        do
-                        {
-                            if (!await e.MoveNextAsync().ConfigureAwait(false))
-                            {
-                                return value;
-                            }
-
-                            value = e.Current;
-                        }
-                        while (value == null);
-
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var x = e.Current;
-                            if (x != null && comparer.Compare(x, value) < 0)
-                            {
-                                value = x;
-                            }
-                        }
-                    }
                     finally
                     {
-                        await e.DisposeAsync().ConfigureAwait(false);
+                        await e.DisposeAsync();
                     }
-#endif
 
                     return value;
                 }
@@ -93,8 +68,9 @@ namespace System.Linq
 
                     var value = default(TSource);
 
-#if USE_AWAIT_USING
-                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         if (!await e.MoveNextAsync())
                         {
@@ -113,31 +89,10 @@ namespace System.Linq
                             }
                         }
                     }
-#else
-                    var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        if (!await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            throw Error.NoElements();
-                        }
-
-                        value = e.Current;
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var x = e.Current;
-                            if (comparer.Compare(x, value) < 0)
-                            {
-                                value = x;
-                            }
-                        }
-                    }
                     finally
                     {
-                        await e.DisposeAsync().ConfigureAwait(false);
+                        await e.DisposeAsync();
                     }
-#endif
 
                     return value;
                 }
@@ -161,8 +116,9 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-#if USE_AWAIT_USING
-                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         do
                         {
@@ -185,36 +141,10 @@ namespace System.Linq
                             }
                         }
                     }
-#else
-                    var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        do
-                        {
-                            if (!await e.MoveNextAsync().ConfigureAwait(false))
-                            {
-                                return value;
-                            }
-
-                            value = _selector(e.Current);
-                        }
-                        while (value == null);
-
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var x = _selector(e.Current);
-                            if (x != null && comparer.Compare(x, value) < 0)
-                            {
-                                value = x;
-                            }
-                        }
-                    }
                     finally
                     {
-                        await e.DisposeAsync().ConfigureAwait(false);
+                        await e.DisposeAsync();
                     }
-#endif
 
                     return value;
                 }
@@ -229,8 +159,9 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-#if USE_AWAIT_USING
-                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         if (!await e.MoveNextAsync())
                         {
@@ -249,31 +180,10 @@ namespace System.Linq
                             }
                         }
                     }
-#else
-                    var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        if (!await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            throw Error.NoElements();
-                        }
-
-                        value = _selector(e.Current);
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var x = _selector(e.Current);
-                            if (comparer.Compare(x, value) < 0)
-                            {
-                                value = x;
-                            }
-                        }
-                    }
                     finally
                     {
-                        await e.DisposeAsync().ConfigureAwait(false);
+                        await e.DisposeAsync();
                     }
-#endif
 
                     return value;
                 }
@@ -297,8 +207,9 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-#if USE_AWAIT_USING
-                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         do
                         {
@@ -321,36 +232,10 @@ namespace System.Linq
                             }
                         }
                     }
-#else
-                    var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        do
-                        {
-                            if (!await e.MoveNextAsync().ConfigureAwait(false))
-                            {
-                                return value;
-                            }
-
-                            value = await _selector(e.Current).ConfigureAwait(false);
-                        }
-                        while (value == null);
-
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var x = await _selector(e.Current).ConfigureAwait(false);
-                            if (x != null && comparer.Compare(x, value) < 0)
-                            {
-                                value = x;
-                            }
-                        }
-                    }
                     finally
                     {
-                        await e.DisposeAsync().ConfigureAwait(false);
+                        await e.DisposeAsync();
                     }
-#endif
 
                     return value;
                 }
@@ -365,8 +250,9 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-#if USE_AWAIT_USING
-                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         if (!await e.MoveNextAsync())
                         {
@@ -385,31 +271,10 @@ namespace System.Linq
                             }
                         }
                     }
-#else
-                    var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        if (!await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            throw Error.NoElements();
-                        }
-
-                        value = await _selector(e.Current).ConfigureAwait(false);
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var x = await _selector(e.Current).ConfigureAwait(false);
-                            if (comparer.Compare(x, value) < 0)
-                            {
-                                value = x;
-                            }
-                        }
-                    }
                     finally
                     {
-                        await e.DisposeAsync().ConfigureAwait(false);
+                        await e.DisposeAsync();
                     }
-#endif
 
                     return value;
                 }
@@ -434,8 +299,9 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-#if USE_AWAIT_USING
-                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         do
                         {
@@ -458,36 +324,10 @@ namespace System.Linq
                             }
                         }
                     }
-#else
-                    var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        do
-                        {
-                            if (!await e.MoveNextAsync().ConfigureAwait(false))
-                            {
-                                return value;
-                            }
-
-                            value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                        }
-                        while (value == null);
-
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                            if (x != null && comparer.Compare(x, value) < 0)
-                            {
-                                value = x;
-                            }
-                        }
-                    }
                     finally
                     {
-                        await e.DisposeAsync().ConfigureAwait(false);
+                        await e.DisposeAsync();
                     }
-#endif
 
                     return value;
                 }
@@ -502,8 +342,9 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-#if USE_AWAIT_USING
-                    await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         if (!await e.MoveNextAsync())
                         {
@@ -520,31 +361,10 @@ namespace System.Linq
                             }
                         }
                     }
-#else
-                    var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        if (!await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            throw Error.NoElements();
-                        }
-
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                            if (comparer.Compare(x, value) < 0)
-                            {
-                                value = x;
-                            }
-                        }
-                    }
                     finally
                     {
-                        await e.DisposeAsync().ConfigureAwait(false);
+                        await e.DisposeAsync();
                     }
-#endif
 
                     return value;
                 }

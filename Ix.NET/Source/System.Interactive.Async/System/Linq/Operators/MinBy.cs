@@ -110,8 +110,9 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-#if USE_AWAIT_USING
-            await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+            try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
             {
                 if (!await e.MoveNextAsync())
                     throw Error.NoElements();
@@ -138,41 +139,10 @@ namespace System.Linq
                     }
                 }
             }
-#else
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    throw Error.NoElements();
-
-                var current = e.Current;
-                var resKey = keySelector(current);
-                result.Add(current);
-
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var cur = e.Current;
-                    var key = keySelector(cur);
-
-                    var cmp = compare(key, resKey);
-
-                    if (cmp == 0)
-                    {
-                        result.Add(cur);
-                    }
-                    else if (cmp > 0)
-                    {
-                        result = new List<TSource> { cur };
-                        resKey = key;
-                    }
-                }
-            }
             finally
             {
-                await e.DisposeAsync().ConfigureAwait(false);
+                await e.DisposeAsync();
             }
-#endif
 
             return result;
         }
@@ -181,8 +151,9 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-#if USE_AWAIT_USING
-            await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+            try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
             {
                 if (!await e.MoveNextAsync())
                     throw Error.NoElements();
@@ -209,41 +180,10 @@ namespace System.Linq
                     }
                 }
             }
-#else
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    throw Error.NoElements();
-
-                var current = e.Current;
-                var resKey = await keySelector(current).ConfigureAwait(false);
-                result.Add(current);
-
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var cur = e.Current;
-                    var key = await keySelector(cur).ConfigureAwait(false);
-
-                    var cmp = compare(key, resKey);
-
-                    if (cmp == 0)
-                    {
-                        result.Add(cur);
-                    }
-                    else if (cmp > 0)
-                    {
-                        result = new List<TSource> { cur };
-                        resKey = key;
-                    }
-                }
-            }
             finally
             {
-                await e.DisposeAsync().ConfigureAwait(false);
+                await e.DisposeAsync();
             }
-#endif
 
             return result;
         }
@@ -253,8 +193,9 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-#if USE_AWAIT_USING
-            await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+            var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+            try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
             {
                 if (!await e.MoveNextAsync())
                     throw Error.NoElements();
@@ -281,41 +222,10 @@ namespace System.Linq
                     }
                 }
             }
-#else
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    throw Error.NoElements();
-
-                var current = e.Current;
-                var resKey = await keySelector(current, cancellationToken).ConfigureAwait(false);
-                result.Add(current);
-
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var cur = e.Current;
-                    var key = await keySelector(cur, cancellationToken).ConfigureAwait(false);
-
-                    var cmp = compare(key, resKey);
-
-                    if (cmp == 0)
-                    {
-                        result.Add(cur);
-                    }
-                    else if (cmp > 0)
-                    {
-                        result = new List<TSource> { cur };
-                        resKey = key;
-                    }
-                }
-            }
             finally
             {
-                await e.DisposeAsync().ConfigureAwait(false);
+                await e.DisposeAsync();
             }
-#endif
 
             return result;
         }

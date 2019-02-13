@@ -24,8 +24,9 @@ namespace System.Linq
                     _comparer = Comparer<TSource>.Default;
                 }
 
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                         throw Error.NoElements();
@@ -44,33 +45,10 @@ namespace System.Linq
 
                     return max;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                        throw Error.NoElements();
-
-                    var max = e.Current;
-
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var cur = e.Current;
-
-                        if (_comparer.Compare(cur, max) > 0)
-                        {
-                            max = cur;
-                        }
-                    }
-
-                    return max;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
     }

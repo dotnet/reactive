@@ -21,8 +21,9 @@ namespace System.Linq
 
             static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, TSource> _accumulator, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -38,30 +39,10 @@ namespace System.Linq
 
                     return acc;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    var acc = e.Current;
-
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        acc = _accumulator(acc, e.Current);
-                    }
-
-                    return acc;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -76,8 +57,9 @@ namespace System.Linq
 
             static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, ValueTask<TSource>> _accumulator, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -93,30 +75,10 @@ namespace System.Linq
 
                     return acc;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    var acc = e.Current;
-
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        acc = await _accumulator(acc, e.Current).ConfigureAwait(false);
-                    }
-
-                    return acc;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -132,8 +94,9 @@ namespace System.Linq
 
             static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, CancellationToken, ValueTask<TSource>> _accumulator, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -149,30 +112,10 @@ namespace System.Linq
 
                     return acc;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    var acc = e.Current;
-
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        acc = await _accumulator(acc, e.Current, _cancellationToken).ConfigureAwait(false);
-                    }
-
-                    return acc;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 #endif

@@ -35,7 +35,9 @@ namespace System.Linq
             {
                 var queue = new Queue<TSource>();
 
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -54,6 +56,10 @@ namespace System.Linq
                             queue.Enqueue(e.Current);
                         }
                     }
+                }
+                finally
+                {
+                    await e.DisposeAsync();
                 }
             }
 #else

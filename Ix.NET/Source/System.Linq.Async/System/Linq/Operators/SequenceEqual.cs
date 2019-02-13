@@ -52,10 +52,13 @@ namespace System.Linq
 
             static async Task<bool> Core(IAsyncEnumerable<TSource> _first, IAsyncEnumerable<TSource> _second, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e1 = _first.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e1 = _first.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
-                    await using (var e2 = _second.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                    var e2 = _second.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         while (await e1.MoveNextAsync())
                         {
@@ -67,36 +70,15 @@ namespace System.Linq
 
                         return !await e2.MoveNextAsync();
                     }
-                }
-#else
-                var e1 = _first.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    var e2 = _second.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        while (await e1.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            if (!(await e2.MoveNextAsync().ConfigureAwait(false) && _comparer.Equals(e1.Current, e2.Current)))
-                            {
-                                return false;
-                            }
-                        }
-
-                        return !await e2.MoveNextAsync().ConfigureAwait(false);
-                    }
                     finally
                     {
-                        await e2.DisposeAsync().ConfigureAwait(false);
+                        await e2.DisposeAsync();
                     }
                 }
                 finally
                 {
-                    await e1.DisposeAsync().ConfigureAwait(false);
+                    await e1.DisposeAsync();
                 }
-#endif
             }
         }
     }

@@ -30,8 +30,9 @@ namespace System.Linq
                     throw Error.MoreThanOneElement();
                 }
 
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -47,29 +48,10 @@ namespace System.Linq
 
                     return result;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    var result = e.Current;
-                    if (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.MoreThanOneElement();
-                    }
-
-                    return result;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -84,8 +66,9 @@ namespace System.Linq
 
             static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -105,34 +88,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var result = e.Current;
-
-                        if (_predicate(result))
-                        {
-                            while (await e.MoveNextAsync().ConfigureAwait(false))
-                            {
-                                if (_predicate(e.Current))
-                                {
-                                    throw Error.MoreThanOneElement();
-                                }
-                            }
-
-                            return result;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 throw Error.NoElements();
             }
@@ -149,8 +108,9 @@ namespace System.Linq
 
             static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -170,34 +130,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var result = e.Current;
-
-                        if (await _predicate(result).ConfigureAwait(false))
-                        {
-                            while (await e.MoveNextAsync().ConfigureAwait(false))
-                            {
-                                if (await _predicate(e.Current).ConfigureAwait(false))
-                                {
-                                    throw Error.MoreThanOneElement();
-                                }
-                            }
-
-                            return result;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 throw Error.NoElements();
             }
@@ -215,8 +151,9 @@ namespace System.Linq
 
             static async Task<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -236,34 +173,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var result = e.Current;
-
-                        if (await _predicate(result, _cancellationToken).ConfigureAwait(false))
-                        {
-                            while (await e.MoveNextAsync().ConfigureAwait(false))
-                            {
-                                if (await _predicate(e.Current, _cancellationToken).ConfigureAwait(false))
-                                {
-                                    throw Error.MoreThanOneElement();
-                                }
-                            }
-
-                            return result;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 throw Error.NoElements();
             }

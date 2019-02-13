@@ -95,19 +95,23 @@ namespace System.Linq
 
                 try
                 {
-                    await using (var e = winner.ConfigureAwait(false))
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         if (!await moveNextWinner.ConfigureAwait(false))
                         {
                             yield break;
                         }
 
-                        yield return e.Current;
+                        yield return winner.Current;
 
-                        while (await e.MoveNextAsync())
+                        while (await winner.MoveNextAsync().ConfigureAwait(false))
                         {
-                            yield return e.Current;
+                            yield return winner.Current;
                         }
+                    }
+                    finally
+                    {
+                        await winner.DisposeAsync().ConfigureAwait(false);
                     }
                 }
                 finally
@@ -204,19 +208,23 @@ namespace System.Linq
 
                 try
                 {
-                    await using (var e = winner.ConfigureAwait(false))
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         if (!await moveNextWinner.ConfigureAwait(false))
                         {
                             yield break;
                         }
 
-                        yield return e.Current;
+                        yield return winner.Current;
 
-                        while (await e.MoveNextAsync())
+                        while (await winner.MoveNextAsync().ConfigureAwait(false))
                         {
-                            yield return e.Current;
+                            yield return winner.Current;
                         }
+                    }
+                    finally
+                    {
+                        await winner.DisposeAsync().ConfigureAwait(false);
                     }
                 }
                 finally
@@ -246,12 +254,16 @@ namespace System.Linq
         {
             if (enumerator != null)
             {
-                await using (enumerator.ConfigureAwait(false))
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (moveNextAsync != null)
                     {
                         await moveNextAsync.ConfigureAwait(false);
                     }
+                }
+                finally
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                 }
             }
         }

@@ -25,15 +25,27 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e1 = first.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e1 = first.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
-                    await using (var e2 = second.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                    var e2 = second.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
                         {
                             yield return selector(e1.Current, e2.Current);
                         }
                     }
+                    finally
+                    {
+                        await e2.DisposeAsync();
+                    }
+                }
+                finally
+                {
+                    await e1.DisposeAsync();
                 }
             }
 #else
@@ -55,15 +67,27 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e1 = first.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e1 = first.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
-                    await using (var e2 = second.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                    var e2 = second.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
                         {
                             yield return await selector(e1.Current, e2.Current).ConfigureAwait(false);
                         }
                     }
+                    finally
+                    {
+                        await e2.DisposeAsync();
+                    }
+                }
+                finally
+                {
+                    await e1.DisposeAsync();
                 }
             }
 #else
@@ -86,15 +110,27 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e1 = first.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e1 = first.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
-                    await using (var e2 = second.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                    var e2 = second.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
                         {
                             yield return await selector(e1.Current, e2.Current, cancellationToken).ConfigureAwait(false);
                         }
                     }
+                    finally
+                    {
+                        await e2.DisposeAsync();
+                    }
+                }
+                finally
+                {
+                    await e1.DisposeAsync();
                 }
             }
 #else

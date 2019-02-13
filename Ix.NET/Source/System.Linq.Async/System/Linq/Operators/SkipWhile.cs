@@ -23,7 +23,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -41,6 +43,10 @@ namespace System.Linq
                             yield break;
                         }
                     }
+                }
+                finally
+                {
+                    await e.DisposeAsync();
                 }
             }
 #else
@@ -60,7 +66,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     var index = -1;
 
@@ -86,6 +94,10 @@ namespace System.Linq
                         }
                     }
                 }
+                finally
+                {
+                    await e.DisposeAsync();
+                }
             }
 #else
             return new SkipWhileWithIndexAsyncIterator<TSource>(source, predicate);
@@ -104,7 +116,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -122,6 +136,10 @@ namespace System.Linq
                             yield break;
                         }
                     }
+                }
+                finally
+                {
+                    await e.DisposeAsync();
                 }
             }
 #else
@@ -142,7 +160,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -160,6 +180,10 @@ namespace System.Linq
                             yield break;
                         }
                     }
+                }
+                finally
+                {
+                    await e.DisposeAsync();
                 }
             }
 #else
@@ -180,7 +204,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     var index = -1;
 
@@ -206,6 +232,10 @@ namespace System.Linq
                         }
                     }
                 }
+                finally
+                {
+                    await e.DisposeAsync();
+                }
             }
 #else
             return new SkipWhileWithIndexAsyncIteratorWithTask<TSource>(source, predicate);
@@ -225,7 +255,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     var index = -1;
 
@@ -250,6 +282,10 @@ namespace System.Linq
                             yield break;
                         }
                     }
+                }
+                finally
+                {
+                    await e.DisposeAsync();
                 }
             }
 #else

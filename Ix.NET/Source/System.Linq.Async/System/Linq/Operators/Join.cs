@@ -32,7 +32,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e = outer.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = outer.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (await e.MoveNextAsync())
                     {
@@ -63,6 +65,10 @@ namespace System.Linq
                         }
                     }
                 }
+                finally
+                {
+                    await e.DisposeAsync();
+                }
             }
 #else
             return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
@@ -90,7 +96,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e = outer.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = outer.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (await e.MoveNextAsync())
                     {
@@ -121,6 +129,10 @@ namespace System.Linq
                         }
                     }
                 }
+                finally
+                {
+                    await e.DisposeAsync();
+                }
             }
 #else
             return new JoinAsyncIteratorWithTask<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
@@ -149,7 +161,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e = outer.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = outer.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (await e.MoveNextAsync())
                     {
@@ -179,6 +193,10 @@ namespace System.Linq
                             while (await e.MoveNextAsync());
                         }
                     }
+                }
+                finally
+                {
+                    await e.DisposeAsync();
                 }
             }
 #else

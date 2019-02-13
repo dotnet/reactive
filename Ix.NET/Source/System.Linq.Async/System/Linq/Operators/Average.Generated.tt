@@ -58,8 +58,9 @@ foreach (var o in os)
 if (isNullable)
 {
 #>
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -85,40 +86,10 @@ if (isNullable)
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = e.Current;
-                        if (v.HasValue)
-                        {
-                            <#=o.sum#> sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = e.Current;
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return <#=res#>;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
 <#
@@ -126,8 +97,9 @@ if (isNullable)
 else
 {
 #>
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -147,34 +119,10 @@ else
 
                     return <#=res#>;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    <#=o.sum#> sum = e.Current;
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += e.Current;
-                            ++count;
-                        }
-                    }
-
-                    return <#=res#>;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 <#
 }
 #>
@@ -196,8 +144,9 @@ else
 if (isNullable)
 {
 #>
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -223,40 +172,10 @@ if (isNullable)
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = _selector(e.Current);
-                        if (v.HasValue)
-                        {
-                            <#=o.sum#> sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = _selector(e.Current);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return <#=res#>;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
 <#
@@ -264,8 +183,9 @@ if (isNullable)
 else
 {
 #>
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -285,34 +205,10 @@ else
 
                     return <#=res#>;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    <#=o.sum#> sum = _selector(e.Current);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += _selector(e.Current);
-                            ++count;
-                        }
-                    }
-
-                    return <#=res#>;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 <#
 }
 #>
@@ -334,8 +230,9 @@ else
 if (isNullable)
 {
 #>
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -361,40 +258,10 @@ if (isNullable)
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = await _selector(e.Current).ConfigureAwait(false);
-                        if (v.HasValue)
-                        {
-                            <#=o.sum#> sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = await _selector(e.Current).ConfigureAwait(false);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return <#=res#>;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
 <#
@@ -402,8 +269,9 @@ if (isNullable)
 else
 {
 #>
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -423,34 +291,10 @@ else
 
                     return <#=res#>;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    <#=o.sum#> sum = await _selector(e.Current).ConfigureAwait(false);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += await _selector(e.Current).ConfigureAwait(false);
-                            ++count;
-                        }
-                    }
-
-                    return <#=res#>;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 <#
 }
 #>
@@ -473,8 +317,9 @@ else
 if (isNullable)
 {
 #>
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -500,40 +345,10 @@ if (isNullable)
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                        if (v.HasValue)
-                        {
-                            <#=o.sum#> sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return <#=res#>;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
 <#
@@ -541,8 +356,9 @@ if (isNullable)
 else
 {
 #>
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -562,34 +378,10 @@ else
 
                     return <#=res#>;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    <#=o.sum#> sum = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                            ++count;
-                        }
-                    }
-
-                    return <#=res#>;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 <#
 }
 #>

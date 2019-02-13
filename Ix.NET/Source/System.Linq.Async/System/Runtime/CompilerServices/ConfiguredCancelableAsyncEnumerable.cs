@@ -47,7 +47,7 @@ namespace System.Runtime.CompilerServices
 
         /// <summary>Provides an awaitable async enumerator that enables cancelable iteration and configured awaits.</summary>
         [StructLayout(LayoutKind.Auto)]
-        public readonly struct Enumerator : IAsyncDisposable // Workaround for https://github.com/dotnet/csharplang/blob/master/meetings/2019/LDM-2019-01-16.md
+        public readonly struct Enumerator
         {
             private readonly IAsyncEnumerator<T> _enumerator;
             private readonly bool _continueOnCapturedContext;
@@ -76,9 +76,6 @@ namespace System.Runtime.CompilerServices
             /// </summary>
             public ConfiguredValueTaskAwaitable DisposeAsync() =>
                 _enumerator.DisposeAsync().ConfigureAwait(_continueOnCapturedContext);
-
-            async ValueTask IAsyncDisposable.DisposeAsync() =>
-                await _enumerator.DisposeAsync().ConfigureAwait(_continueOnCapturedContext);
         }
     }
 }

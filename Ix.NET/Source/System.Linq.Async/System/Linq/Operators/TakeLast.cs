@@ -28,7 +28,9 @@ namespace System.Linq
             {
                 Queue<TSource> queue;
 
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -55,6 +57,10 @@ namespace System.Linq
                             break;
                         }
                     }
+                }
+                finally
+                {
+                    await e.DisposeAsync();
                 }
 
                 Debug.Assert(queue.Count <= count);

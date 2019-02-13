@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DefineConstants>$(DefineConstants);USE_AWAIT_FOREACH;USE_AWAIT_USING</DefineConstants>
+    <DefineConstants>$(DefineConstants);USE_AWAIT_FOREACH</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup>

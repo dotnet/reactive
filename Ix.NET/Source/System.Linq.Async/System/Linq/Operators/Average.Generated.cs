@@ -19,8 +19,9 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<int> _source, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -40,34 +41,10 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    long sum = e.Current;
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += e.Current;
-                            ++count;
-                        }
-                    }
-
-                    return (double)sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -82,8 +59,9 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -103,34 +81,10 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    long sum = _selector(e.Current);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += _selector(e.Current);
-                            ++count;
-                        }
-                    }
-
-                    return (double)sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -145,8 +99,9 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -166,34 +121,10 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    long sum = await _selector(e.Current).ConfigureAwait(false);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += await _selector(e.Current).ConfigureAwait(false);
-                            ++count;
-                        }
-                    }
-
-                    return (double)sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -209,8 +140,9 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -230,34 +162,10 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    long sum = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                            ++count;
-                        }
-                    }
-
-                    return (double)sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 #endif
@@ -271,8 +179,9 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<long> _source, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -292,34 +201,10 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    long sum = e.Current;
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += e.Current;
-                            ++count;
-                        }
-                    }
-
-                    return (double)sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -334,8 +219,9 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -355,34 +241,10 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    long sum = _selector(e.Current);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += _selector(e.Current);
-                            ++count;
-                        }
-                    }
-
-                    return (double)sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -397,8 +259,9 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -418,34 +281,10 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    long sum = await _selector(e.Current).ConfigureAwait(false);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += await _selector(e.Current).ConfigureAwait(false);
-                            ++count;
-                        }
-                    }
-
-                    return (double)sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -461,8 +300,9 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -482,34 +322,10 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    long sum = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                            ++count;
-                        }
-                    }
-
-                    return (double)sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 #endif
@@ -523,8 +339,9 @@ namespace System.Linq
 
             static async Task<float> Core(IAsyncEnumerable<float> _source, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -544,34 +361,10 @@ namespace System.Linq
 
                     return (float)(sum / count);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    double sum = e.Current;
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += e.Current;
-                            ++count;
-                        }
-                    }
-
-                    return (float)(sum / count);
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -586,8 +379,9 @@ namespace System.Linq
 
             static async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -607,34 +401,10 @@ namespace System.Linq
 
                     return (float)(sum / count);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    double sum = _selector(e.Current);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += _selector(e.Current);
-                            ++count;
-                        }
-                    }
-
-                    return (float)(sum / count);
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -649,8 +419,9 @@ namespace System.Linq
 
             static async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -670,34 +441,10 @@ namespace System.Linq
 
                     return (float)(sum / count);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    double sum = await _selector(e.Current).ConfigureAwait(false);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += await _selector(e.Current).ConfigureAwait(false);
-                            ++count;
-                        }
-                    }
-
-                    return (float)(sum / count);
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -713,8 +460,9 @@ namespace System.Linq
 
             static async Task<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -734,34 +482,10 @@ namespace System.Linq
 
                     return (float)(sum / count);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    double sum = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                            ++count;
-                        }
-                    }
-
-                    return (float)(sum / count);
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 #endif
@@ -775,8 +499,9 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<double> _source, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -796,34 +521,10 @@ namespace System.Linq
 
                     return sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    double sum = e.Current;
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += e.Current;
-                            ++count;
-                        }
-                    }
-
-                    return sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -838,8 +539,9 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -859,34 +561,10 @@ namespace System.Linq
 
                     return sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    double sum = _selector(e.Current);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += _selector(e.Current);
-                            ++count;
-                        }
-                    }
-
-                    return sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -901,8 +579,9 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -922,34 +601,10 @@ namespace System.Linq
 
                     return sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    double sum = await _selector(e.Current).ConfigureAwait(false);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += await _selector(e.Current).ConfigureAwait(false);
-                            ++count;
-                        }
-                    }
-
-                    return sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -965,8 +620,9 @@ namespace System.Linq
 
             static async Task<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -986,34 +642,10 @@ namespace System.Linq
 
                     return sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    double sum = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                            ++count;
-                        }
-                    }
-
-                    return sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 #endif
@@ -1027,8 +659,9 @@ namespace System.Linq
 
             static async Task<decimal> Core(IAsyncEnumerable<decimal> _source, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1048,34 +681,10 @@ namespace System.Linq
 
                     return sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    decimal sum = e.Current;
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += e.Current;
-                            ++count;
-                        }
-                    }
-
-                    return sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -1090,8 +699,9 @@ namespace System.Linq
 
             static async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1111,34 +721,10 @@ namespace System.Linq
 
                     return sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    decimal sum = _selector(e.Current);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += _selector(e.Current);
-                            ++count;
-                        }
-                    }
-
-                    return sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -1153,8 +739,9 @@ namespace System.Linq
 
             static async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1174,34 +761,10 @@ namespace System.Linq
 
                     return sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    decimal sum = await _selector(e.Current).ConfigureAwait(false);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += await _selector(e.Current).ConfigureAwait(false);
-                            ++count;
-                        }
-                    }
-
-                    return sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 
@@ -1217,8 +780,9 @@ namespace System.Linq
 
             static async Task<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1238,34 +802,10 @@ namespace System.Linq
 
                     return sum / count;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    if (!await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    decimal sum = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                    long count = 1;
-                    checked
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            sum += await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                            ++count;
-                        }
-                    }
-
-                    return sum / count;
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
             }
         }
 #endif
@@ -1279,8 +819,9 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<int?> _source, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1306,40 +847,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = e.Current;
-                        if (v.HasValue)
-                        {
-                            long sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = e.Current;
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return (double)sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -1356,8 +867,9 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int?> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1383,40 +895,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = _selector(e.Current);
-                        if (v.HasValue)
-                        {
-                            long sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = _selector(e.Current);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return (double)sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -1433,8 +915,9 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1460,40 +943,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = await _selector(e.Current).ConfigureAwait(false);
-                        if (v.HasValue)
-                        {
-                            long sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = await _selector(e.Current).ConfigureAwait(false);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return (double)sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -1511,8 +964,9 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1538,40 +992,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                        if (v.HasValue)
-                        {
-                            long sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return (double)sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -1587,8 +1011,9 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<long?> _source, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1614,40 +1039,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = e.Current;
-                        if (v.HasValue)
-                        {
-                            long sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = e.Current;
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return (double)sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -1664,8 +1059,9 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long?> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1691,40 +1087,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = _selector(e.Current);
-                        if (v.HasValue)
-                        {
-                            long sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = _selector(e.Current);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return (double)sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -1741,8 +1107,9 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1768,40 +1135,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = await _selector(e.Current).ConfigureAwait(false);
-                        if (v.HasValue)
-                        {
-                            long sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = await _selector(e.Current).ConfigureAwait(false);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return (double)sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -1819,8 +1156,9 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1846,40 +1184,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                        if (v.HasValue)
-                        {
-                            long sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return (double)sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -1895,8 +1203,9 @@ namespace System.Linq
 
             static async Task<float?> Core(IAsyncEnumerable<float?> _source, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1922,40 +1231,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = e.Current;
-                        if (v.HasValue)
-                        {
-                            double sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = e.Current;
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return (float)(sum / count);
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -1972,8 +1251,9 @@ namespace System.Linq
 
             static async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float?> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1999,40 +1279,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = _selector(e.Current);
-                        if (v.HasValue)
-                        {
-                            double sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = _selector(e.Current);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return (float)(sum / count);
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -2049,8 +1299,9 @@ namespace System.Linq
 
             static async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -2076,40 +1327,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = await _selector(e.Current).ConfigureAwait(false);
-                        if (v.HasValue)
-                        {
-                            double sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = await _selector(e.Current).ConfigureAwait(false);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return (float)(sum / count);
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -2127,8 +1348,9 @@ namespace System.Linq
 
             static async Task<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -2154,40 +1376,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                        if (v.HasValue)
-                        {
-                            double sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return (float)(sum / count);
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -2203,8 +1395,9 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<double?> _source, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -2230,40 +1423,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = e.Current;
-                        if (v.HasValue)
-                        {
-                            double sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = e.Current;
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -2280,8 +1443,9 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double?> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -2307,40 +1471,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = _selector(e.Current);
-                        if (v.HasValue)
-                        {
-                            double sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = _selector(e.Current);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -2357,8 +1491,9 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -2384,40 +1519,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = await _selector(e.Current).ConfigureAwait(false);
-                        if (v.HasValue)
-                        {
-                            double sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = await _selector(e.Current).ConfigureAwait(false);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -2435,8 +1540,9 @@ namespace System.Linq
 
             static async Task<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -2462,40 +1568,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                        if (v.HasValue)
-                        {
-                            double sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -2511,8 +1587,9 @@ namespace System.Linq
 
             static async Task<decimal?> Core(IAsyncEnumerable<decimal?> _source, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -2538,40 +1615,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = e.Current;
-                        if (v.HasValue)
-                        {
-                            decimal sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = e.Current;
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -2588,8 +1635,9 @@ namespace System.Linq
 
             static async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal?> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -2615,40 +1663,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = _selector(e.Current);
-                        if (v.HasValue)
-                        {
-                            decimal sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = _selector(e.Current);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -2665,8 +1683,9 @@ namespace System.Linq
 
             static async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -2692,40 +1711,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = await _selector(e.Current).ConfigureAwait(false);
-                        if (v.HasValue)
-                        {
-                            decimal sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = await _selector(e.Current).ConfigureAwait(false);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }
@@ -2743,8 +1732,9 @@ namespace System.Linq
 
             static async Task<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_USING
-                await using (var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false))
+                var e = _source.GetAsyncEnumerator(_cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -2770,40 +1760,10 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                        if (v.HasValue)
-                        {
-                            decimal sum = v.GetValueOrDefault();
-                            long count = 1;
-                            checked
-                            {
-                                while (await e.MoveNextAsync().ConfigureAwait(false))
-                                {
-                                    v = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-                                    if (v.HasValue)
-                                    {
-                                        sum += v.GetValueOrDefault();
-                                        ++count;
-                                    }
-                                }
-                            }
-
-                            return sum / count;
-                        }
-                    }
-                }
                 finally
                 {
-                    await e.DisposeAsync().ConfigureAwait(false);
+                    await e.DisposeAsync();
                 }
-#endif
 
                 return null;
             }

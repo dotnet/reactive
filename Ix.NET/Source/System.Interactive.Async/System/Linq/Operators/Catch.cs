@@ -39,7 +39,9 @@ namespace System.Linq
 
                 var err = default(IAsyncEnumerable<TSource>);
 
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (true)
                     {
@@ -60,6 +62,10 @@ namespace System.Linq
 
                         yield return c;
                     }
+                }
+                finally
+                {
+                    await e.DisposeAsync();
                 }
 
                 if (err != null)
@@ -97,7 +103,9 @@ namespace System.Linq
 
                 var err = default(IAsyncEnumerable<TSource>);
 
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (true)
                     {
@@ -118,6 +126,10 @@ namespace System.Linq
 
                         yield return c;
                     }
+                }
+                finally
+                {
+                    await e.DisposeAsync();
                 }
 
                 if (err != null)
@@ -156,7 +168,9 @@ namespace System.Linq
 
                 var err = default(IAsyncEnumerable<TSource>);
 
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (true)
                     {
@@ -177,6 +191,10 @@ namespace System.Linq
 
                         yield return c;
                     }
+                }
+                finally
+                {
+                    await e.DisposeAsync();
                 }
 
                 if (err != null)
@@ -230,7 +248,9 @@ namespace System.Linq
 
                 foreach (var source in sources)
                 {
-                    await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                    var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                     {
                         error = null;
 
@@ -256,6 +276,10 @@ namespace System.Linq
 
                         if (error == null)
                             break;
+                    }
+                    finally
+                    {
+                        await e.DisposeAsync();
                     }
                 }
 

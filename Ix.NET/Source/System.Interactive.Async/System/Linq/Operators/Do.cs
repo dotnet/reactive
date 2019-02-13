@@ -176,7 +176,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (true)
                     {
@@ -208,6 +210,10 @@ namespace System.Linq
 
                     onCompleted?.Invoke();
                 }
+                finally
+                {
+                    await e.DisposeAsync();
+                }
             }
 #else
             return new DoAsyncIterator<TSource>(source, onNext, onError, onCompleted);
@@ -221,7 +227,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (true)
                     {
@@ -256,6 +264,10 @@ namespace System.Linq
                         await onCompleted().ConfigureAwait(false);
                     }
                 }
+                finally
+                {
+                    await e.DisposeAsync();
+                }
             }
 #else
             return new DoAsyncIteratorWithTask<TSource>(source, onNext, onError, onCompleted);
@@ -270,7 +282,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false))
+                var e = source.GetAsyncEnumerator(cancellationToken).ConfigureAwait(false);
+
+                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
                 {
                     while (true)
                     {
@@ -304,6 +318,10 @@ namespace System.Linq
                     {
                         await onCompleted(cancellationToken).ConfigureAwait(false);
                     }
+                }
+                finally
+                {
+                    await e.DisposeAsync();
                 }
             }
 #else
