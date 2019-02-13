@@ -103,7 +103,7 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(expression));
             }
 
-            if (!typeof(Task<TResult>).IsAssignableFrom(expression.Type))
+            if (!typeof(ValueTask<TResult>).IsAssignableFrom(expression.Type))
             {
                 throw new ArgumentException("The specified expression is not assignable to the result type.", nameof(expression));
             }
