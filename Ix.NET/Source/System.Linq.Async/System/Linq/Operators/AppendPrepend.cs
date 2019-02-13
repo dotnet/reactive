@@ -206,28 +206,11 @@ namespace System.Linq
                 }
                 else
                 {
-#if USE_AWAIT_FOREACH
                     await foreach (TSource item in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         array[index] = item;
                         ++index;
                     }
-#else
-                    var en = _source.GetAsyncEnumerator(cancellationToken);
-
-                    try
-                    {
-                        while (await en.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            array[index] = en.Current;
-                            ++index;
-                        }
-                    }
-                    finally
-                    {
-                        await en.DisposeAsync().ConfigureAwait(false);
-                    }
-#endif
                 }
 
                 if (_appending)
@@ -251,26 +234,10 @@ namespace System.Linq
                     list.Add(_item);
                 }
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     list.Add(item);
                 }
-#else
-                var en = _source.GetAsyncEnumerator(cancellationToken);
-
-                try
-                {
-                    while (await en.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        list.Add(en.Current);
-                    }
-                }
-                finally
-                {
-                    await en.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 if (_appending)
                 {
@@ -428,28 +395,11 @@ namespace System.Linq
                 }
                 else
                 {
-#if USE_AWAIT_FOREACH
                     await foreach (TSource item in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         array[index] = item;
                         ++index;
                     }
-#else
-                    var en = _source.GetAsyncEnumerator(cancellationToken);
-
-                    try
-                    {
-                        while (await en.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            array[index] = en.Current;
-                            ++index;
-                        }
-                    }
-                    finally
-                    {
-                        await en.DisposeAsync().ConfigureAwait(false);
-                    }
-#endif
                 }
 
                 index = array.Length;
@@ -471,26 +421,10 @@ namespace System.Linq
                     list.Add(n.Item);
                 }
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     list.Add(item);
                 }
-#else
-                var en = _source.GetAsyncEnumerator(cancellationToken);
-
-                try
-                {
-                    while (await en.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        list.Add(en.Current);
-                    }
-                }
-                finally
-                {
-                    await en.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 if (_appended != null)
                 {

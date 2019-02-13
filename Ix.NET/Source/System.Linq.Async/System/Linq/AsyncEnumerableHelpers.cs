@@ -112,26 +112,10 @@ namespace System.Collections.Generic
         {
             var set = new Set<T>(comparer);
 
-#if USE_AWAIT_FOREACH
             await foreach (T item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 set.Add(item);
             }
-#else
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    set.Add(e.Current);
-                }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
 
             return set;
         }

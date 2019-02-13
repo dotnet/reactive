@@ -21,7 +21,6 @@ namespace System.Linq
             {
                 var count = 0L;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
@@ -29,24 +28,6 @@ namespace System.Linq
                         count++;
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        checked
-                        {
-                            count++;
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return count;
             }
@@ -65,7 +46,6 @@ namespace System.Linq
             {
                 var count = 0L;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     if (_predicate(item))
@@ -76,27 +56,6 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        if (_predicate(e.Current))
-                        {
-                            checked
-                            {
-                                count++;
-                            }
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return count;
             }
@@ -115,7 +74,6 @@ namespace System.Linq
             {
                 var count = 0L;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     if (await _predicate(item).ConfigureAwait(false))
@@ -126,27 +84,6 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        if (await _predicate(e.Current).ConfigureAwait(false))
-                        {
-                            checked
-                            {
-                                count++;
-                            }
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return count;
             }
@@ -166,7 +103,6 @@ namespace System.Linq
             {
                 var count = 0L;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     if (await _predicate(item, _cancellationToken).ConfigureAwait(false))
@@ -177,27 +113,6 @@ namespace System.Linq
                         }
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        if (await _predicate(e.Current, _cancellationToken).ConfigureAwait(false))
-                        {
-                            checked
-                            {
-                                count++;
-                            }
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return count;
             }

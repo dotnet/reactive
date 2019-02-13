@@ -26,32 +26,12 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TSource>(_comparer);
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = _keySelector(item);
 
                     d.Add(key, item);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var item = e.Current;
-
-                        var key = _keySelector(item);
-
-                        d.Add(key, item);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return d;
             }
@@ -73,32 +53,12 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TSource>(_comparer);
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = await _keySelector(item).ConfigureAwait(false);
 
                     d.Add(key, item);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var item = e.Current;
-
-                        var key = await _keySelector(item).ConfigureAwait(false);
-
-                        d.Add(key, item);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return d;
             }
@@ -121,32 +81,12 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TSource>(_comparer);
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = await _keySelector(item, _cancellationToken).ConfigureAwait(false);
 
                     d.Add(key, item);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var item = e.Current;
-
-                        var key = await _keySelector(item, _cancellationToken).ConfigureAwait(false);
-
-                        d.Add(key, item);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return d;
             }
@@ -171,7 +111,6 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TElement>(_comparer);
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = _keySelector(item);
@@ -179,26 +118,6 @@ namespace System.Linq
 
                     d.Add(key, value);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var item = e.Current;
-
-                        var key = _keySelector(item);
-                        var value = _elementSelector(item);
-
-                        d.Add(key, value);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return d;
             }
@@ -222,7 +141,6 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TElement>(_comparer);
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = await _keySelector(item).ConfigureAwait(false);
@@ -230,26 +148,6 @@ namespace System.Linq
 
                     d.Add(key, value);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var item = e.Current;
-
-                        var key = await _keySelector(item).ConfigureAwait(false);
-                        var value = await _elementSelector(item).ConfigureAwait(false);
-
-                        d.Add(key, value);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return d;
             }
@@ -274,7 +172,6 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TElement>(_comparer);
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = await _keySelector(item, _cancellationToken).ConfigureAwait(false);
@@ -282,26 +179,6 @@ namespace System.Linq
 
                     d.Add(key, value);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var item = e.Current;
-
-                        var key = await _keySelector(item, _cancellationToken).ConfigureAwait(false);
-                        var value = await _elementSelector(item, _cancellationToken).ConfigureAwait(false);
-
-                        d.Add(key, value);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return d;
             }

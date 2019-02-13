@@ -162,26 +162,10 @@ namespace System.Linq
                         return set;
                     }
 
-#if USE_AWAIT_FOREACH
                     await foreach (TSource item in enumerable.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         set.Add(item);
                     }
-#else
-                    var e = enumerable.GetAsyncEnumerator(cancellationToken);
-
-                    try
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            set.Add(e.Current);
-                        }
-                    }
-                    finally
-                    {
-                        await e.DisposeAsync().ConfigureAwait(false);
-                    }
-#endif
                 }
             }
 

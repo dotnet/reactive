@@ -133,26 +133,10 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     acc = _accumulator(acc, item);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        acc = _accumulator(acc, e.Current);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return acc;
             }
@@ -171,26 +155,10 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     acc = await _accumulator(acc, item).ConfigureAwait(false);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        acc = await _accumulator(acc, e.Current).ConfigureAwait(false);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return acc;
             }
@@ -210,26 +178,10 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     acc = await _accumulator(acc, item, _cancellationToken).ConfigureAwait(false);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        acc = await _accumulator(acc, e.Current, _cancellationToken).ConfigureAwait(false);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return acc;
             }
@@ -251,26 +203,10 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     acc = _accumulator(acc, item);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        acc = _accumulator(acc, e.Current);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return _resultSelector(acc);
             }
@@ -291,26 +227,10 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     acc = await _accumulator(acc, item).ConfigureAwait(false);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        acc = await _accumulator(acc, e.Current).ConfigureAwait(false);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return await _resultSelector(acc).ConfigureAwait(false);
             }
@@ -332,26 +252,10 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     acc = await _accumulator(acc, item, _cancellationToken).ConfigureAwait(false);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        acc = await _accumulator(acc, e.Current, _cancellationToken).ConfigureAwait(false);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return await _resultSelector(acc, _cancellationToken).ConfigureAwait(false);
             }

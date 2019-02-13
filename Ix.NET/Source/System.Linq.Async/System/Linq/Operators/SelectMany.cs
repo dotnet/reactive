@@ -402,7 +402,6 @@ namespace System.Linq
                 {
                     var count = 0;
 
-#if USE_AWAIT_FOREACH
                     await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         checked
@@ -410,24 +409,6 @@ namespace System.Linq
                             count += await _selector(element).CountAsync().ConfigureAwait(false);
                         }
                     }
-#else
-                    var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            checked
-                            {
-                                count += await _selector(e.Current).CountAsync().ConfigureAwait(false);
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        await e.DisposeAsync().ConfigureAwait(false);
-                    }
-#endif
 
                     return count;
                 }
@@ -446,30 +427,12 @@ namespace System.Linq
             {
                 var list = new List<TResult>();
 
-#if USE_AWAIT_FOREACH
                 await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     var items = _selector(element);
 
                     await list.AddRangeAsync(items, cancellationToken).ConfigureAwait(false);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var items = _selector(e.Current);
-
-                        await list.AddRangeAsync(items, cancellationToken).ConfigureAwait(false);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return list;
             }
@@ -578,7 +541,6 @@ namespace System.Linq
                 {
                     var count = 0;
 
-#if USE_AWAIT_FOREACH
                     await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         var items = await _selector(element).ConfigureAwait(false);
@@ -588,26 +550,6 @@ namespace System.Linq
                             count += await items.CountAsync().ConfigureAwait(false);
                         }
                     }
-#else
-                    var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var items = await _selector(e.Current).ConfigureAwait(false);
-
-                            checked
-                            {
-                                count += await items.CountAsync().ConfigureAwait(false);
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        await e.DisposeAsync().ConfigureAwait(false);
-                    }
-#endif
 
                     return count;
                 }
@@ -626,30 +568,12 @@ namespace System.Linq
             {
                 var list = new List<TResult>();
 
-#if USE_AWAIT_FOREACH
                 await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     var items = await _selector(element).ConfigureAwait(false);
 
                     await list.AddRangeAsync(items, cancellationToken).ConfigureAwait(false);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var items = await _selector(e.Current).ConfigureAwait(false);
-
-                        await list.AddRangeAsync(items, cancellationToken).ConfigureAwait(false);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return list;
             }
@@ -759,7 +683,6 @@ namespace System.Linq
                 {
                     var count = 0;
 
-#if USE_AWAIT_FOREACH
                     await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         var items = await _selector(element, _cancellationToken).ConfigureAwait(false);
@@ -769,26 +692,6 @@ namespace System.Linq
                             count += await items.CountAsync().ConfigureAwait(false);
                         }
                     }
-#else
-                    var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var items = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-
-                            checked
-                            {
-                                count += await items.CountAsync().ConfigureAwait(false);
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        await e.DisposeAsync().ConfigureAwait(false);
-                    }
-#endif
 
                     return count;
                 }
@@ -807,30 +710,12 @@ namespace System.Linq
             {
                 var list = new List<TResult>();
 
-#if USE_AWAIT_FOREACH
                 await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     var items = await _selector(element, cancellationToken).ConfigureAwait(false);
 
                     await list.AddRangeAsync(items, cancellationToken).ConfigureAwait(false);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var items = await _selector(e.Current, cancellationToken).ConfigureAwait(false);
-
-                        await list.AddRangeAsync(items, cancellationToken).ConfigureAwait(false);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return list;
             }

@@ -21,7 +21,6 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (int value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
@@ -29,24 +28,6 @@ namespace System.Linq
                         sum += value;
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        checked
-                        {
-                            sum += e.Current;
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -65,7 +46,6 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -75,26 +55,6 @@ namespace System.Linq
                         sum += value;
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = _selector(e.Current);
-
-                        checked
-                        {
-                            sum += value;
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -113,7 +73,6 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -123,26 +82,6 @@ namespace System.Linq
                         sum += value;
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current).ConfigureAwait(false);
-
-                        checked
-                        {
-                            sum += value;
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -162,7 +101,6 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -172,26 +110,6 @@ namespace System.Linq
                         sum += value;
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-
-                        checked
-                        {
-                            sum += value;
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -209,7 +127,6 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if USE_AWAIT_FOREACH
                 await foreach (long value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
@@ -217,24 +134,6 @@ namespace System.Linq
                         sum += value;
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        checked
-                        {
-                            sum += e.Current;
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -253,7 +152,6 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -263,26 +161,6 @@ namespace System.Linq
                         sum += value;
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = _selector(e.Current);
-
-                        checked
-                        {
-                            sum += value;
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -301,7 +179,6 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -311,26 +188,6 @@ namespace System.Linq
                         sum += value;
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current).ConfigureAwait(false);
-
-                        checked
-                        {
-                            sum += value;
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -350,7 +207,6 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -360,26 +216,6 @@ namespace System.Linq
                         sum += value;
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-
-                        checked
-                        {
-                            sum += value;
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -397,26 +233,10 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if USE_AWAIT_FOREACH
                 await foreach (float value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        sum += e.Current;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -435,30 +255,12 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
                     sum += value;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = _selector(e.Current);
-
-                        sum += value;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -477,30 +279,12 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
                     sum += value;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current).ConfigureAwait(false);
-
-                        sum += value;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -520,30 +304,12 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
                     sum += value;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-
-                        sum += value;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -561,26 +327,10 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (double value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        sum += e.Current;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -599,30 +349,12 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
                     sum += value;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = _selector(e.Current);
-
-                        sum += value;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -641,30 +373,12 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
                     sum += value;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current).ConfigureAwait(false);
-
-                        sum += value;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -684,30 +398,12 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
                     sum += value;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-
-                        sum += value;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -725,26 +421,10 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if USE_AWAIT_FOREACH
                 await foreach (decimal value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        sum += e.Current;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -763,30 +443,12 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
                     sum += value;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = _selector(e.Current);
-
-                        sum += value;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -805,30 +467,12 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
                     sum += value;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current).ConfigureAwait(false);
-
-                        sum += value;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -848,30 +492,12 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
                     sum += value;
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-
-                        sum += value;
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -889,7 +515,6 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (int? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
@@ -897,24 +522,6 @@ namespace System.Linq
                         sum += value.GetValueOrDefault();
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        checked
-                        {
-                            sum += e.Current.GetValueOrDefault();
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -933,7 +540,6 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -943,26 +549,6 @@ namespace System.Linq
                         sum += value.GetValueOrDefault();
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = _selector(e.Current);
-
-                        checked
-                        {
-                            sum += value.GetValueOrDefault();
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -981,7 +567,6 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -991,26 +576,6 @@ namespace System.Linq
                         sum += value.GetValueOrDefault();
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current).ConfigureAwait(false);
-
-                        checked
-                        {
-                            sum += value.GetValueOrDefault();
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1030,7 +595,6 @@ namespace System.Linq
             {
                 var sum = 0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -1040,26 +604,6 @@ namespace System.Linq
                         sum += value.GetValueOrDefault();
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-
-                        checked
-                        {
-                            sum += value.GetValueOrDefault();
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1077,7 +621,6 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if USE_AWAIT_FOREACH
                 await foreach (long? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
@@ -1085,24 +628,6 @@ namespace System.Linq
                         sum += value.GetValueOrDefault();
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        checked
-                        {
-                            sum += e.Current.GetValueOrDefault();
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1121,7 +646,6 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -1131,26 +655,6 @@ namespace System.Linq
                         sum += value.GetValueOrDefault();
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = _selector(e.Current);
-
-                        checked
-                        {
-                            sum += value.GetValueOrDefault();
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1169,7 +673,6 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -1179,26 +682,6 @@ namespace System.Linq
                         sum += value.GetValueOrDefault();
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current).ConfigureAwait(false);
-
-                        checked
-                        {
-                            sum += value.GetValueOrDefault();
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1218,7 +701,6 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -1228,26 +710,6 @@ namespace System.Linq
                         sum += value.GetValueOrDefault();
                     }
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-
-                        checked
-                        {
-                            sum += value.GetValueOrDefault();
-                        }
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1265,26 +727,10 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if USE_AWAIT_FOREACH
                 await foreach (float? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value.GetValueOrDefault();
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        sum += e.Current.GetValueOrDefault();
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1303,30 +749,12 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
                     sum += value.GetValueOrDefault();
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = _selector(e.Current);
-
-                        sum += value.GetValueOrDefault();
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1345,30 +773,12 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current).ConfigureAwait(false);
-
-                        sum += value.GetValueOrDefault();
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1388,30 +798,12 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-
-                        sum += value.GetValueOrDefault();
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1429,26 +821,10 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (double? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value.GetValueOrDefault();
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        sum += e.Current.GetValueOrDefault();
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1467,30 +843,12 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
                     sum += value.GetValueOrDefault();
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = _selector(e.Current);
-
-                        sum += value.GetValueOrDefault();
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1509,30 +867,12 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current).ConfigureAwait(false);
-
-                        sum += value.GetValueOrDefault();
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1552,30 +892,12 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-
-                        sum += value.GetValueOrDefault();
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1593,26 +915,10 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if USE_AWAIT_FOREACH
                 await foreach (decimal? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value.GetValueOrDefault();
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        sum += e.Current.GetValueOrDefault();
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1631,30 +937,12 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
                     sum += value.GetValueOrDefault();
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = _selector(e.Current);
-
-                        sum += value.GetValueOrDefault();
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1673,30 +961,12 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current).ConfigureAwait(false);
-
-                        sum += value.GetValueOrDefault();
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -1716,30 +986,12 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-
-                        sum += value.GetValueOrDefault();
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }

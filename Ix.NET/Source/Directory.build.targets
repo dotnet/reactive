@@ -20,10 +20,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DefineConstants>$(DefineConstants);USE_AWAIT_FOREACH</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
   </PropertyGroup>
 

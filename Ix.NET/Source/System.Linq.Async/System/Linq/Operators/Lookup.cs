@@ -91,7 +91,6 @@ namespace System.Linq.Internal
 
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-#if USE_AWAIT_FOREACH
             await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = keySelector(item);
@@ -100,27 +99,6 @@ namespace System.Linq.Internal
                 var element = elementSelector(item);
                 group.Add(element);
             }
-#else
-            var enu = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await enu.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var item = enu.Current;
-
-                    var key = keySelector(item);
-                    var group = lookup.GetGrouping(key, create: true);
-
-                    var element = elementSelector(item);
-                    group.Add(element);
-                }
-            }
-            finally
-            {
-                await enu.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
 
             return lookup;
         }
@@ -132,30 +110,11 @@ namespace System.Linq.Internal
 
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-#if USE_AWAIT_FOREACH
             await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = keySelector(item);
                 lookup.GetGrouping(key, create: true).Add(item);
             }
-#else
-            var enu = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await enu.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var item = enu.Current;
-
-                    var key = keySelector(item);
-                    lookup.GetGrouping(key, create: true).Add(item);
-                }
-            }
-            finally
-            {
-                await enu.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
 
             return lookup;
         }
@@ -164,7 +123,6 @@ namespace System.Linq.Internal
         {
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-#if USE_AWAIT_FOREACH
             await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = keySelector(item);
@@ -173,27 +131,6 @@ namespace System.Linq.Internal
                     lookup.GetGrouping(key, create: true).Add(item);
                 }
             }
-#else
-            var enu = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await enu.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var item = enu.Current;
-
-                    var key = keySelector(item);
-                    if (key != null)
-                    {
-                        lookup.GetGrouping(key, create: true).Add(item);
-                    }
-                }
-            }
-            finally
-            {
-                await enu.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
 
             return lookup;
         }
@@ -419,7 +356,6 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-#if USE_AWAIT_FOREACH
             await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item).ConfigureAwait(false);
@@ -428,27 +364,6 @@ namespace System.Linq.Internal
                 var element = await elementSelector(item).ConfigureAwait(false);
                 group.Add(element);
             }
-#else
-            var enu = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await enu.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var item = enu.Current;
-
-                    var key = await keySelector(item).ConfigureAwait(false);
-                    var group = lookup.GetGrouping(key, create: true);
-
-                    var element = await elementSelector(item).ConfigureAwait(false);
-                    group.Add(element);
-                }
-            }
-            finally
-            {
-                await enu.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
 
             return lookup;
         }
@@ -462,7 +377,6 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-#if USE_AWAIT_FOREACH
             await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
@@ -471,27 +385,6 @@ namespace System.Linq.Internal
                 var element = await elementSelector(item, cancellationToken).ConfigureAwait(false);
                 group.Add(element);
             }
-#else
-            var enu = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await enu.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var item = enu.Current;
-
-                    var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
-                    var group = lookup.GetGrouping(key, create: true);
-
-                    var element = await elementSelector(item, cancellationToken).ConfigureAwait(false);
-                    group.Add(element);
-                }
-            }
-            finally
-            {
-                await enu.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
 
             return lookup;
         }
@@ -504,30 +397,11 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-#if USE_AWAIT_FOREACH
             await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item).ConfigureAwait(false);
                 lookup.GetGrouping(key, create: true).Add(item);
             }
-#else
-            var enu = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await enu.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var item = enu.Current;
-
-                    var key = await keySelector(item).ConfigureAwait(false);
-                    lookup.GetGrouping(key, create: true).Add(item);
-                }
-            }
-            finally
-            {
-                await enu.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
 
             return lookup;
         }
@@ -540,30 +414,11 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-#if USE_AWAIT_FOREACH
             await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
                 lookup.GetGrouping(key, create: true).Add(item);
             }
-#else
-            var enu = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await enu.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var item = enu.Current;
-
-                    var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
-                    lookup.GetGrouping(key, create: true).Add(item);
-                }
-            }
-            finally
-            {
-                await enu.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
 
             return lookup;
         }
@@ -573,7 +428,6 @@ namespace System.Linq.Internal
         {
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-#if USE_AWAIT_FOREACH
             await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item).ConfigureAwait(false);
@@ -582,27 +436,6 @@ namespace System.Linq.Internal
                     lookup.GetGrouping(key, create: true).Add(item);
                 }
             }
-#else
-            var enu = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await enu.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var item = enu.Current;
-
-                    var key = await keySelector(item).ConfigureAwait(false);
-                    if (key != null)
-                    {
-                        lookup.GetGrouping(key, create: true).Add(item);
-                    }
-                }
-            }
-            finally
-            {
-                await enu.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
 
             return lookup;
         }
@@ -612,7 +445,6 @@ namespace System.Linq.Internal
         {
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-#if USE_AWAIT_FOREACH
             await foreach (TElement item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
@@ -621,27 +453,6 @@ namespace System.Linq.Internal
                     lookup.GetGrouping(key, create: true).Add(item);
                 }
             }
-#else
-            var enu = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await enu.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var item = enu.Current;
-
-                    var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
-                    if (key != null)
-                    {
-                        lookup.GetGrouping(key, create: true).Add(item);
-                    }
-                }
-            }
-            finally
-            {
-                await enu.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
 
             return lookup;
         }

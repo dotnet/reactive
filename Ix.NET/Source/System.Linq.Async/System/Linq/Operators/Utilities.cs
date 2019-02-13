@@ -38,26 +38,10 @@ namespace System.Linq
                 }
             }
 
-#if USE_AWAIT_FOREACH
             await foreach (var item in collection.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 list.Add(item);
             }
-#else
-            var e = collection.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    list.Add(e.Current);
-                }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
         }
     }
 }

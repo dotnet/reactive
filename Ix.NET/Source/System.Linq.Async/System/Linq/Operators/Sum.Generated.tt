@@ -46,7 +46,6 @@ foreach (var o in os)
             {
                 var sum = <#=o.zero#>;
 
-#if USE_AWAIT_FOREACH
                 await foreach (<#=o.type#> value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
 <#
@@ -67,37 +66,6 @@ else
 }
 #>
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-<#
-if (o.@checked)
-{
-#>
-                        checked
-                        {
-                            sum += e.Current<#=n#>;
-                        }
-<#
-}
-else
-{
-#>
-                        sum += e.Current<#=n#>;
-<#
-}
-#>
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -116,7 +84,6 @@ else
             {
                 var sum = <#=o.zero#>;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
@@ -139,39 +106,6 @@ else
 }
 #>
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = _selector(e.Current);
-
-<#
-if (o.@checked)
-{
-#>
-                        checked
-                        {
-                            sum += value<#=n#>;
-                        }
-<#
-}
-else
-{
-#>
-                        sum += value<#=n#>;
-<#
-}
-#>
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -190,7 +124,6 @@ else
             {
                 var sum = <#=o.zero#>;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
@@ -213,39 +146,6 @@ else
 }
 #>
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current).ConfigureAwait(false);
-
-<#
-if (o.@checked)
-{
-#>
-                        checked
-                        {
-                            sum += value<#=n#>;
-                        }
-<#
-}
-else
-{
-#>
-                        sum += value<#=n#>;
-<#
-}
-#>
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }
@@ -265,7 +165,6 @@ else
             {
                 var sum = <#=o.zero#>;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
@@ -288,39 +187,6 @@ else
 }
 #>
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        var value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
-
-<#
-if (o.@checked)
-{
-#>
-                        checked
-                        {
-                            sum += value<#=n#>;
-                        }
-<#
-}
-else
-{
-#>
-                        sum += value<#=n#>;
-<#
-}
-#>
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
 
                 return sum;
             }

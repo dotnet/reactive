@@ -101,28 +101,11 @@ namespace System.Linq
                     var last = default(TSource);
                     var hasLast = false;
 
-#if USE_AWAIT_FOREACH
                     await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         hasLast = true;
                         last = item;
                     }
-#else
-                    var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                    try
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            hasLast = true;
-                            last = e.Current;
-                        }
-                    }
-                    finally
-                    {
-                        await e.DisposeAsync().ConfigureAwait(false);
-                    }
-#endif
 
                     return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
                 }
@@ -136,7 +119,6 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-#if USE_AWAIT_FOREACH
             await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 if (predicate(item))
@@ -145,27 +127,6 @@ namespace System.Linq
                     last = item;
                 }
             }
-#else
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var value = e.Current;
-
-                    if (predicate(value))
-                    {
-                        hasLast = true;
-                        last = value;
-                    }
-                }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
 
             return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
         }
@@ -175,7 +136,6 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-#if USE_AWAIT_FOREACH
             await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 if (await predicate(item).ConfigureAwait(false))
@@ -184,27 +144,6 @@ namespace System.Linq
                     last = item;
                 }
             }
-#else
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var value = e.Current;
-
-                    if (await predicate(value).ConfigureAwait(false))
-                    {
-                        hasLast = true;
-                        last = value;
-                    }
-                }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
 
             return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
         }
@@ -215,7 +154,6 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-#if USE_AWAIT_FOREACH
             await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 if (await predicate(item, cancellationToken).ConfigureAwait(false))
@@ -224,27 +162,6 @@ namespace System.Linq
                     last = item;
                 }
             }
-#else
-            var e = source.GetAsyncEnumerator(cancellationToken);
-
-            try
-            {
-                while (await e.MoveNextAsync().ConfigureAwait(false))
-                {
-                    var value = e.Current;
-
-                    if (await predicate(value, cancellationToken).ConfigureAwait(false))
-                    {
-                        hasLast = true;
-                        last = value;
-                    }
-                }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
-#endif
 
             return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
         }

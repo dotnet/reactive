@@ -84,26 +84,10 @@ namespace System.Linq
                         break;
                     }
 
-#if USE_AWAIT_FOREACH
                     await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         list.Add(item);
                     }
-#else
-                    var e = source.GetAsyncEnumerator(cancellationToken);
-
-                    try
-                    {
-                        while (await e.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            list.Add(e.Current);
-                        }
-                    }
-                    finally
-                    {
-                        await e.DisposeAsync().ConfigureAwait(false);
-                    }
-#endif
                 }
 
                 return list;

@@ -40,7 +40,6 @@ namespace System.Linq
                     }
                     else
                     {
-#if USE_AWAIT_FOREACH
                         await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                         {
                             if (_index == 0)
@@ -50,26 +49,6 @@ namespace System.Linq
 
                             _index--;
                         }
-#else
-                        var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                        try
-                        {
-                            while (await e.MoveNextAsync().ConfigureAwait(false))
-                            {
-                                if (_index == 0)
-                                {
-                                    return e.Current;
-                                }
-
-                                _index--;
-                            }
-                        }
-                        finally
-                        {
-                            await e.DisposeAsync().ConfigureAwait(false);
-                        }
-#endif
                     }
                 }
 

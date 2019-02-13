@@ -28,26 +28,10 @@ namespace System.Linq
 
             static async Task Core(IAsyncEnumerable<TSource> _source, Action<TSource> _action, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     _action(item);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        _action(e.Current);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
             }
         }
 
@@ -64,26 +48,10 @@ namespace System.Linq
             {
                 var index = 0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     _action(item, checked(index++));
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        _action(e.Current, checked(index++));
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
             }
         }
 
@@ -98,26 +66,10 @@ namespace System.Linq
 
             static async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, Task> _action, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     await _action(item).ConfigureAwait(false);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        await _action(e.Current).ConfigureAwait(false);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
             }
         }
 
@@ -127,26 +79,10 @@ namespace System.Linq
 
             static async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, Task> _action, CancellationToken _cancellationToken)
             {
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     await _action(item, _cancellationToken).ConfigureAwait(false);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        await _action(e.Current, _cancellationToken).ConfigureAwait(false);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
             }
         }
 
@@ -163,26 +99,10 @@ namespace System.Linq
             {
                 var index = 0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     await _action(item, checked(index++)).ConfigureAwait(false);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        await _action(e.Current, checked(index++)).ConfigureAwait(false);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
             }
         }
 
@@ -199,26 +119,10 @@ namespace System.Linq
             {
                 var index = 0;
 
-#if USE_AWAIT_FOREACH
                 await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     await _action(item, checked(index++), _cancellationToken).ConfigureAwait(false);
                 }
-#else
-                var e = _source.GetAsyncEnumerator(_cancellationToken);
-
-                try
-                {
-                    while (await e.MoveNextAsync().ConfigureAwait(false))
-                    {
-                        await _action(e.Current, checked(index++), _cancellationToken).ConfigureAwait(false);
-                    }
-                }
-                finally
-                {
-                    await e.DisposeAsync().ConfigureAwait(false);
-                }
-#endif
             }
         }
     }
