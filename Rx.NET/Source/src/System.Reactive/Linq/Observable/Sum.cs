@@ -4,408 +4,279 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class SumDouble : Producer<double, SumDouble._>
+    internal sealed class SumDouble : Pipe<double>
     {
-        private readonly IObservable<double> _source;
+        private double _sum;
 
-        public SumDouble(IObservable<double> source)
+        public SumDouble(IObservable<double> source) : base(source)
         {
-            _source = source;
         }
 
-        protected override _ CreateSink(IObserver<double> observer) => new _(observer);
+        protected override Pipe<double, double> Clone() => new SumDouble(_source);
 
-        protected override void Run(_ sink) => sink.Run(_source);
-
-        internal sealed class _ : IdentitySink<double>
+        public override void OnNext(double value)
         {
-            private double _sum;
+            _sum += value;
+        }
 
-            public _(IObserver<double> observer)
-                : base(observer)
-            {
-            }
-
-            public override void OnNext(double value)
-            {
-                _sum += value;
-            }
-
-            public override void OnCompleted()
-            {
-                ForwardOnNext(_sum);
-                ForwardOnCompleted();
-            }
+        public override void OnCompleted()
+        {
+            ForwardOnNext(_sum);
+            ForwardOnCompleted();
         }
     }
 
-    internal sealed class SumSingle : Producer<float, SumSingle._>
+    internal sealed class SumSingle : Pipe<float>
     {
-        private readonly IObservable<float> _source;
+        private double _sum; // This is what LINQ to Objects does (accumulates into double that is)!
 
-        public SumSingle(IObservable<float> source)
+        public SumSingle(IObservable<float> source) : base(source)
         {
-            _source = source;
         }
 
-        protected override _ CreateSink(IObserver<float> observer) => new _(observer);
+        protected override Pipe<float, float> Clone() => new SumSingle(_source);
 
-        protected override void Run(_ sink) => sink.Run(_source);
-
-        internal sealed class _ : IdentitySink<float>
+        public override void OnNext(float value)
         {
-            private double _sum; // This is what LINQ to Objects does (accumulates into double that is)!
+            _sum += value; // This is what LINQ to Objects does!
+        }
 
-            public _(IObserver<float> observer)
-                : base(observer)
-            {
-            }
-
-            public override void OnNext(float value)
-            {
-                _sum += value; // This is what LINQ to Objects does!
-            }
-
-            public override void OnCompleted()
-            {
-                ForwardOnNext((float)_sum); // This is what LINQ to Objects does!
-                ForwardOnCompleted();
-            }
+        public override void OnCompleted()
+        {
+            ForwardOnNext((float)_sum); // This is what LINQ to Objects does!
+            ForwardOnCompleted();
         }
     }
 
-    internal sealed class SumDecimal : Producer<decimal, SumDecimal._>
+    internal sealed class SumDecimal : Pipe<decimal>
     {
-        private readonly IObservable<decimal> _source;
+        private decimal _sum;
 
-        public SumDecimal(IObservable<decimal> source)
+        public SumDecimal(IObservable<decimal> source) : base(source)
         {
-            _source = source;
         }
 
-        protected override _ CreateSink(IObserver<decimal> observer) => new _(observer);
+        protected override Pipe<decimal, decimal> Clone() => new SumDecimal(_source);
 
-        protected override void Run(_ sink) => sink.Run(_source);
-
-        internal sealed class _ : IdentitySink<decimal>
+        public override void OnNext(decimal value)
         {
-            private decimal _sum;
+            _sum += value;
+        }
 
-            public _(IObserver<decimal> observer)
-                : base(observer)
-            {
-            }
-
-            public override void OnNext(decimal value)
-            {
-                _sum += value;
-            }
-
-            public override void OnCompleted()
-            {
-                ForwardOnNext(_sum);
-                ForwardOnCompleted();
-            }
+        public override void OnCompleted()
+        {
+            ForwardOnNext(_sum);
+            ForwardOnCompleted();
         }
     }
 
-    internal sealed class SumInt32 : Producer<int, SumInt32._>
+    internal sealed class SumInt32 : Pipe<int>
     {
-        private readonly IObservable<int> _source;
+        private int _sum;
 
-        public SumInt32(IObservable<int> source)
+        public SumInt32(IObservable<int> source) : base(source)
         {
-            _source = source;
         }
 
-        protected override _ CreateSink(IObserver<int> observer) => new _(observer);
+        protected override Pipe<int, int> Clone() => new SumInt32(_source);
 
-        protected override void Run(_ sink) => sink.Run(_source);
-
-        internal sealed class _ : IdentitySink<int>
+        public override void OnNext(int value)
         {
-            private int _sum;
-
-            public _(IObserver<int> observer)
-                : base(observer)
+            try
             {
-            }
-
-            public override void OnNext(int value)
-            {
-                try
+                checked
                 {
-                    checked
+                    _sum += value;
+                }
+            }
+            catch (Exception exception)
+            {
+                ForwardOnError(exception);
+            }
+        }
+
+        public override void OnCompleted()
+        {
+            ForwardOnNext(_sum);
+            ForwardOnCompleted();
+        }
+    }
+
+    internal sealed class SumInt64 : Pipe<long>
+    {
+        private long _sum;
+
+        public SumInt64(IObservable<long> source) : base(source)
+        {
+        }
+
+        protected override Pipe<long, long> Clone() => new SumInt64(_source);
+
+        public override void OnNext(long value)
+        {
+            try
+            {
+                checked
+                {
+                    _sum += value;
+                }
+            }
+            catch (Exception exception)
+            {
+                ForwardOnError(exception);
+            }
+        }
+
+        public override void OnCompleted()
+        {
+            ForwardOnNext(_sum);
+            ForwardOnCompleted();
+        }
+    }
+
+    internal sealed class SumDoubleNullable : Pipe<double?>
+    {
+        private double _sum;
+
+        public SumDoubleNullable(IObservable<double?> source) : base(source)
+        {
+        }
+
+        protected override Pipe<double?, double?> Clone() => new SumDoubleNullable(_source);
+
+        public override void OnNext(double? value)
+        {
+            if (value != null)
+            {
+                _sum += value.Value;
+            }
+        }
+
+        public override void OnCompleted()
+        {
+            ForwardOnNext(_sum);
+            ForwardOnCompleted();
+        }
+        
+    }
+
+    internal sealed class SumSingleNullable : Pipe<float?>
+    {
+        private double _sum; // This is what LINQ to Objects does (accumulates into double that is)!
+
+        public SumSingleNullable(IObservable<float?> source) : base(source)
+        {
+        }
+
+        protected override Pipe<float?, float?> Clone() => new SumSingleNullable(_source);
+
+        public override void OnNext(float? value)
+        {
+            if (value != null)
+            {
+                _sum += value.Value; // This is what LINQ to Objects does!
+            }
+        }
+
+        public override void OnCompleted()
+        {
+            ForwardOnNext((float)_sum); // This is what LINQ to Objects does!
+            ForwardOnCompleted();
+        }
+    }
+
+    internal sealed class SumDecimalNullable : Pipe<decimal?>
+    {
+        private decimal _sum;
+
+        public SumDecimalNullable(IObservable<decimal?> source) : base(source)
+        {
+        }
+
+        protected override Pipe<decimal?, decimal?> Clone() => new SumDecimalNullable(_source);
+
+        public override void OnNext(decimal? value)
+        {
+            if (value != null)
+            {
+                _sum += value.Value;
+            }
+        }
+
+        public override void OnCompleted()
+        {
+            ForwardOnNext(_sum);
+            ForwardOnCompleted();
+        }
+    }
+
+    internal sealed class SumInt32Nullable : Pipe<int?>
+    {
+        private int _sum;
+
+        public SumInt32Nullable(IObservable<int?> source) : base(source)
+        {
+        }
+
+        protected override Pipe<int?, int?> Clone() => new SumInt32Nullable(_source);
+
+        public override void OnNext(int? value)
+        {
+            try
+            {
+                checked
+                {
+                    if (value != null)
                     {
-                        _sum += value;
+                        _sum += value.Value;
                     }
                 }
-                catch (Exception exception)
-                {
-                    ForwardOnError(exception);
-                }
             }
-
-            public override void OnCompleted()
+            catch (Exception exception)
             {
-                ForwardOnNext(_sum);
-                ForwardOnCompleted();
+                ForwardOnError(exception);
             }
+        }
+
+        public override void OnCompleted()
+        {
+            ForwardOnNext(_sum);
+            ForwardOnCompleted();
         }
     }
 
-    internal sealed class SumInt64 : Producer<long, SumInt64._>
+    internal sealed class SumInt64Nullable : Pipe<long?>
     {
-        private readonly IObservable<long> _source;
+        private long _sum;
 
-        public SumInt64(IObservable<long> source)
+        public SumInt64Nullable(IObservable<long?> source) : base(source)
         {
-            _source = source;
         }
 
-        protected override _ CreateSink(IObserver<long> observer) => new _(observer);
-
-        protected override void Run(_ sink) => sink.Run(_source);
-
-        internal sealed class _ : IdentitySink<long>
+        protected override Pipe<long?, long?> Clone() => new SumInt64Nullable(_source);
+        
+        public override void OnNext(long? value)
         {
-            private long _sum;
-
-            public _(IObserver<long> observer)
-                : base(observer)
+            try
             {
-            }
-
-            public override void OnNext(long value)
-            {
-                try
+                checked
                 {
-                    checked
+                    if (value != null)
                     {
-                        _sum += value;
+                        _sum += value.Value;
                     }
                 }
-                catch (Exception exception)
-                {
-                    ForwardOnError(exception);
-                }
             }
-
-            public override void OnCompleted()
+            catch (Exception exception)
             {
-                ForwardOnNext(_sum);
-                ForwardOnCompleted();
+                ForwardOnError(exception);
             }
         }
-    }
 
-    internal sealed class SumDoubleNullable : Producer<double?, SumDoubleNullable._>
-    {
-        private readonly IObservable<double?> _source;
-
-        public SumDoubleNullable(IObservable<double?> source)
+        public override void OnCompleted()
         {
-            _source = source;
-        }
-
-        protected override _ CreateSink(IObserver<double?> observer) => new _(observer);
-
-        protected override void Run(_ sink) => sink.Run(_source);
-
-        internal sealed class _ : IdentitySink<double?>
-        {
-            private double _sum;
-
-            public _(IObserver<double?> observer)
-                : base(observer)
-            {
-            }
-
-            public override void OnNext(double? value)
-            {
-                if (value != null)
-                {
-                    _sum += value.Value;
-                }
-            }
-
-            public override void OnCompleted()
-            {
-                ForwardOnNext(_sum);
-                ForwardOnCompleted();
-            }
-        }
-    }
-
-    internal sealed class SumSingleNullable : Producer<float?, SumSingleNullable._>
-    {
-        private readonly IObservable<float?> _source;
-
-        public SumSingleNullable(IObservable<float?> source)
-        {
-            _source = source;
-        }
-
-        protected override _ CreateSink(IObserver<float?> observer) => new _(observer);
-
-        protected override void Run(_ sink) => sink.Run(_source);
-
-        internal sealed class _ : IdentitySink<float?>
-        {
-            private double _sum; // This is what LINQ to Objects does (accumulates into double that is)!
-
-            public _(IObserver<float?> observer)
-                : base(observer)
-            {
-            }
-
-            public override void OnNext(float? value)
-            {
-                if (value != null)
-                {
-                    _sum += value.Value; // This is what LINQ to Objects does!
-                }
-            }
-
-            public override void OnCompleted()
-            {
-                ForwardOnNext((float)_sum); // This is what LINQ to Objects does!
-                ForwardOnCompleted();
-            }
-        }
-    }
-
-    internal sealed class SumDecimalNullable : Producer<decimal?, SumDecimalNullable._>
-    {
-        private readonly IObservable<decimal?> _source;
-
-        public SumDecimalNullable(IObservable<decimal?> source)
-        {
-            _source = source;
-        }
-
-        protected override _ CreateSink(IObserver<decimal?> observer) => new _(observer);
-
-        protected override void Run(_ sink) => sink.Run(_source);
-
-        internal sealed class _ : IdentitySink<decimal?>
-        {
-            private decimal _sum;
-
-            public _(IObserver<decimal?> observer)
-                : base(observer)
-            {
-            }
-
-            public override void OnNext(decimal? value)
-            {
-                if (value != null)
-                {
-                    _sum += value.Value;
-                }
-            }
-
-            public override void OnCompleted()
-            {
-                ForwardOnNext(_sum);
-                ForwardOnCompleted();
-            }
-        }
-    }
-
-    internal sealed class SumInt32Nullable : Producer<int?, SumInt32Nullable._>
-    {
-        private readonly IObservable<int?> _source;
-
-        public SumInt32Nullable(IObservable<int?> source)
-        {
-            _source = source;
-        }
-
-        protected override _ CreateSink(IObserver<int?> observer) => new _(observer);
-
-        protected override void Run(_ sink) => sink.Run(_source);
-
-        internal sealed class _ : IdentitySink<int?>
-        {
-            private int _sum;
-
-            public _(IObserver<int?> observer)
-                : base(observer)
-            {
-            }
-
-            public override void OnNext(int? value)
-            {
-                try
-                {
-                    checked
-                    {
-                        if (value != null)
-                        {
-                            _sum += value.Value;
-                        }
-                    }
-                }
-                catch (Exception exception)
-                {
-                    ForwardOnError(exception);
-                }
-            }
-
-            public override void OnCompleted()
-            {
-                ForwardOnNext(_sum);
-                ForwardOnCompleted();
-            }
-        }
-    }
-
-    internal sealed class SumInt64Nullable : Producer<long?, SumInt64Nullable._>
-    {
-        private readonly IObservable<long?> _source;
-
-        public SumInt64Nullable(IObservable<long?> source)
-        {
-            _source = source;
-        }
-
-        protected override _ CreateSink(IObserver<long?> observer) => new _(observer);
-
-        protected override void Run(_ sink) => sink.Run(_source);
-
-        internal sealed class _ : IdentitySink<long?>
-        {
-            private long _sum;
-
-            public _(IObserver<long?> observer)
-                : base(observer)
-            {
-            }
-
-            public override void OnNext(long? value)
-            {
-                try
-                {
-                    checked
-                    {
-                        if (value != null)
-                        {
-                            _sum += value.Value;
-                        }
-                    }
-                }
-                catch (Exception exception)
-                {
-                    ForwardOnError(exception);
-                }
-            }
-
-            public override void OnCompleted()
-            {
-                ForwardOnNext(_sum);
-                ForwardOnCompleted();
-            }
+            ForwardOnNext(_sum);
+            ForwardOnCompleted();
         }
     }
 }

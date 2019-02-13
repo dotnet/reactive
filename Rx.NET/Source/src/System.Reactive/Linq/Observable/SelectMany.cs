@@ -339,175 +339,143 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class EnumerableSelector : Producer<TResult, EnumerableSelector._>
+        internal sealed class EnumerableSelector : Pipe<TSource, TResult>
         {
-            private readonly IObservable<TSource> _source;
             private readonly Func<TSource, IEnumerable<TCollection>> _collectionSelector;
             private readonly Func<TSource, TCollection, TResult> _resultSelector;
 
             public EnumerableSelector(IObservable<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+                : base(source)
             {
-                _source = source;
                 _collectionSelector = collectionSelector;
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override Pipe<TSource, TResult> Clone() => new EnumerableSelector(_source, _collectionSelector, _resultSelector);
 
-            protected override void Run(_ sink) => sink.Run(_source);
-
-            internal sealed class _ : Sink<TSource, TResult>
+            public override void OnNext(TSource value)
             {
-                private readonly Func<TSource, IEnumerable<TCollection>> _collectionSelector;
-                private readonly Func<TSource, TCollection, TResult> _resultSelector;
-
-                public _(EnumerableSelector parent, IObserver<TResult> observer)
-                    : base(observer)
+                var xs = default(IEnumerable<TCollection>);
+                try
                 {
-                    _collectionSelector = parent._collectionSelector;
-                    _resultSelector = parent._resultSelector;
+                    xs = _collectionSelector(value);
+                }
+                catch (Exception exception)
+                {
+                    ForwardOnError(exception);
+                    return;
                 }
 
-                public override void OnNext(TSource value)
+                var e = default(IEnumerator<TCollection>);
+                try
                 {
-                    var xs = default(IEnumerable<TCollection>);
-                    try
-                    {
-                        xs = _collectionSelector(value);
-                    }
-                    catch (Exception exception)
-                    {
-                        ForwardOnError(exception);
-                        return;
-                    }
+                    e = xs.GetEnumerator();
+                }
+                catch (Exception exception)
+                {
+                    ForwardOnError(exception);
+                    return;
+                }
 
-                    var e = default(IEnumerator<TCollection>);
-                    try
-                    {
-                        e = xs.GetEnumerator();
-                    }
-                    catch (Exception exception)
-                    {
-                        ForwardOnError(exception);
-                        return;
-                    }
+                using (e)
+                {
+                    var hasNext = true;
 
-                    using (e)
+                    while (hasNext)
                     {
-                        var hasNext = true;
+                        var current = default(TResult);
 
-                        while (hasNext)
+                        try
                         {
-                            var current = default(TResult);
-
-                            try
-                            {
-                                hasNext = e.MoveNext();
-                                if (hasNext)
-                                {
-                                    current = _resultSelector(value, e.Current);
-                                }
-                            }
-                            catch (Exception exception)
-                            {
-                                ForwardOnError(exception);
-                                return;
-                            }
-
+                            hasNext = e.MoveNext();
                             if (hasNext)
                             {
-                                ForwardOnNext(current);
+                                current = _resultSelector(value, e.Current);
                             }
+                        }
+                        catch (Exception exception)
+                        {
+                            ForwardOnError(exception);
+                            return;
+                        }
+
+                        if (hasNext)
+                        {
+                            ForwardOnNext(current);
                         }
                     }
                 }
             }
         }
 
-        internal sealed class EnumerableSelectorIndexed : Producer<TResult, EnumerableSelectorIndexed._>
+        internal sealed class EnumerableSelectorIndexed : Pipe<TSource, TResult>
         {
-            private readonly IObservable<TSource> _source;
             private readonly Func<TSource, int, IEnumerable<TCollection>> _collectionSelector;
             private readonly Func<TSource, int, TCollection, int, TResult> _resultSelector;
 
+            private int _index;
+
             public EnumerableSelectorIndexed(IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
+                : base(source)
             {
-                _source = source;
                 _collectionSelector = collectionSelector;
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
+            protected override Pipe<TSource, TResult> Clone() => new EnumerableSelectorIndexed(_source, _collectionSelector, _resultSelector);
 
-            protected override void Run(_ sink) => sink.Run(_source);
-
-            internal sealed class _ : Sink<TSource, TResult>
+            public override void OnNext(TSource value)
             {
-                private readonly Func<TSource, int, IEnumerable<TCollection>> _collectionSelector;
-                private readonly Func<TSource, int, TCollection, int, TResult> _resultSelector;
+                var index = checked(_index++);
 
-                public _(EnumerableSelectorIndexed parent, IObserver<TResult> observer)
-                    : base(observer)
+                var xs = default(IEnumerable<TCollection>);
+                try
                 {
-                    _collectionSelector = parent._collectionSelector;
-                    _resultSelector = parent._resultSelector;
+                    xs = _collectionSelector(value, index);
+                }
+                catch (Exception exception)
+                {
+                    ForwardOnError(exception);
+                    return;
                 }
 
-                private int _index;
-
-                public override void OnNext(TSource value)
+                var e = default(IEnumerator<TCollection>);
+                try
                 {
-                    var index = checked(_index++);
+                    e = xs.GetEnumerator();
+                }
+                catch (Exception exception)
+                {
+                    ForwardOnError(exception);
+                    return;
+                }
 
-                    var xs = default(IEnumerable<TCollection>);
-                    try
-                    {
-                        xs = _collectionSelector(value, index);
-                    }
-                    catch (Exception exception)
-                    {
-                        ForwardOnError(exception);
-                        return;
-                    }
+                using (e)
+                {
+                    var eIndex = 0;
+                    var hasNext = true;
 
-                    var e = default(IEnumerator<TCollection>);
-                    try
+                    while (hasNext)
                     {
-                        e = xs.GetEnumerator();
-                    }
-                    catch (Exception exception)
-                    {
-                        ForwardOnError(exception);
-                        return;
-                    }
+                        var current = default(TResult);
 
-                    using (e)
-                    {
-                        var eIndex = 0;
-                        var hasNext = true;
-
-                        while (hasNext)
+                        try
                         {
-                            var current = default(TResult);
-
-                            try
-                            {
-                                hasNext = e.MoveNext();
-                                if (hasNext)
-                                {
-                                    current = _resultSelector(value, index, e.Current, checked(eIndex++));
-                                }
-                            }
-                            catch (Exception exception)
-                            {
-                                ForwardOnError(exception);
-                                return;
-                            }
-
+                            hasNext = e.MoveNext();
                             if (hasNext)
                             {
-                                ForwardOnNext(current);
+                                current = _resultSelector(value, index, e.Current, checked(eIndex++));
                             }
+                        }
+                        catch (Exception exception)
+                        {
+                            ForwardOnError(exception);
+                            return;
+                        }
+
+                        if (hasNext)
+                        {
+                            ForwardOnNext(current);
                         }
                     }
                 }

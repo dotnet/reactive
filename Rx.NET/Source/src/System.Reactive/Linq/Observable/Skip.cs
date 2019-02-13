@@ -9,16 +9,19 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Skip<TSource>
     {
-        internal sealed class Count : Producer<TSource, Count._>
+        internal sealed class Count : Pipe<TSource>
         {
-            private readonly IObservable<TSource> _source;
             private readonly int _count;
 
-            public Count(IObservable<TSource> source, int count)
+            private int _remaining;
+
+            public Count(IObservable<TSource> source, int count) : base(source)
             {
-                _source = source;
                 _count = count;
+                _remaining = count;
             }
+
+            protected override Pipe<TSource, TSource> Clone() => new Count(_source, _count);
 
             public IObservable<TSource> Combine(int count)
             {
@@ -32,30 +35,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 return new Count(_source, _count + count);
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer) => new _(_count, observer);
-
-            protected override void Run(_ sink) => sink.Run(_source);
-
-            internal sealed class _ : IdentitySink<TSource>
+            public override void OnNext(TSource value)
             {
-                private int _remaining;
-
-                public _(int count, IObserver<TSource> observer)
-                    : base(observer)
+                if (_remaining <= 0)
                 {
-                    _remaining = count;
+                    ForwardOnNext(value);
                 }
-
-                public override void OnNext(TSource value)
+                else
                 {
-                    if (_remaining <= 0)
-                    {
-                        ForwardOnNext(value);
-                    }
-                    else
-                    {
-                        _remaining--;
-                    }
+                    _remaining--;
                 }
             }
         }

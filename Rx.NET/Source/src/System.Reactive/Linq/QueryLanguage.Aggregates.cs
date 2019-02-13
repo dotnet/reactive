@@ -286,13 +286,23 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Max<TSource>(IObservable<TSource> source)
         {
-            // BREAKING CHANGE v2 > v1.x - Behavior for reference types
+            if (default(TSource) == null)
+            {
+                // BREAKING CHANGE v2 > v1.x - Behavior for reference types
+                return new MaxNullable<TSource>(source, Comparer<TSource>.Default);
+            }
+
             return new Max<TSource>(source, Comparer<TSource>.Default);
         }
 
         public virtual IObservable<TSource> Max<TSource>(IObservable<TSource> source, IComparer<TSource> comparer)
         {
-            // BREAKING CHANGE v2 > v1.x - Behavior for reference types
+            if (default(TSource) == null)
+            {
+                // BREAKING CHANGE v2 > v1.x - Behavior for reference types
+                return new MaxNullable<TSource>(source, comparer);
+            }
+
             return new Max<TSource>(source, comparer);
         }
 
