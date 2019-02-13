@@ -59,7 +59,7 @@ namespace System.Linq
 #if USE_ASYNC_ITERATOR
             return AsyncEnumerable.Create(Core);
 
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            async IAsyncEnumerator<TAccumulate> Core(CancellationToken cancellationToken)
             {
                 TAccumulate res = seed;
 
@@ -155,7 +155,7 @@ namespace System.Linq
 #if USE_ASYNC_ITERATOR
             return AsyncEnumerable.Create(Core);
 
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            async IAsyncEnumerator<TAccumulate> Core(CancellationToken cancellationToken)
             {
                 TAccumulate res = seed;
 
@@ -182,7 +182,7 @@ namespace System.Linq
 #if USE_ASYNC_ITERATOR
             return AsyncEnumerable.Create(Core);
 
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+            async IAsyncEnumerator<TAccumulate> Core(CancellationToken cancellationToken)
             {
                 TAccumulate res = seed;
 
