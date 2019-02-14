@@ -184,7 +184,7 @@ namespace System.Linq
                 {
                     for (var i = 0; i < count; i++)
                     {
-                        IAsyncEnumerator<TSource> enumerator = sources[i].GetAsyncEnumerator(cancellationToken);
+                        var enumerator = sources[i].GetAsyncEnumerator(cancellationToken);
                         enumerators[i] = enumerator;
 
                         // REVIEW: This follows the lead of the original implementation where we kick off MoveNextAsync
@@ -196,7 +196,7 @@ namespace System.Linq
                         moveNextTasks[i] = enumerator.MoveNextAsync().AsTask();
                     }
 
-                    int active = count;
+                    var active = count;
 
                     while (active > 0)
                     {
@@ -211,9 +211,9 @@ namespace System.Linq
                         //         the use of IndexOf may pick an element closer to the start of the array because of
                         //         reference equality checks and aliasing effects. See GetTaskForResult in the BCL.
 
-                        int index = Array.IndexOf(moveNextTasks, moveNextTask);
+                        var index = Array.IndexOf(moveNextTasks, moveNextTask);
 
-                        IAsyncEnumerator<TSource> enumerator = enumerators[index];
+                        var enumerator = enumerators[index];
 
                         if (!await moveNextTask.ConfigureAwait(false))
                         {
@@ -229,7 +229,7 @@ namespace System.Linq
                         }
                         else
                         {
-                            TSource item = enumerator.Current;
+                            var item = enumerator.Current;
 
                             moveNextTasks[index] = enumerator.MoveNextAsync().AsTask();
 
@@ -252,8 +252,8 @@ namespace System.Linq
 
                     for (var i = count - 1; i >= 0; i--)
                     {
-                        Task<bool> moveNextTask = moveNextTasks[i];
-                        IAsyncEnumerator<TSource> enumerator = enumerators[i];
+                        var moveNextTask = moveNextTasks[i];
+                        var enumerator = enumerators[i];
 
                         try
                         {

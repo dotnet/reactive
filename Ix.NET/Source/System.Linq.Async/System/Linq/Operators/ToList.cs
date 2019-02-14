@@ -24,7 +24,7 @@ namespace System.Linq
             {
                 var list = new List<TSource>();
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     list.Add(item);
                 }

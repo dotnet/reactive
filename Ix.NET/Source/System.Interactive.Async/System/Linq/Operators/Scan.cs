@@ -36,7 +36,7 @@ namespace System.Linq
                         yield break;
                     }
 
-                    TSource res = e.Current;
+                    var res = e.Current;
 
                     while (await e.MoveNextAsync())
                     {
@@ -67,9 +67,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TAccumulate> Core(CancellationToken cancellationToken)
             {
-                TAccumulate res = seed;
+                var res = seed;
 
-                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     res = accumulator(res, item);
 
@@ -102,7 +102,7 @@ namespace System.Linq
                         yield break;
                     }
 
-                    TSource res = e.Current;
+                    var res = e.Current;
 
                     while (await e.MoveNextAsync())
                     {
@@ -143,7 +143,7 @@ namespace System.Linq
                         yield break;
                     }
 
-                    TSource res = e.Current;
+                    var res = e.Current;
 
                     while (await e.MoveNextAsync())
                     {
@@ -175,9 +175,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TAccumulate> Core(CancellationToken cancellationToken)
             {
-                TAccumulate res = seed;
+                var res = seed;
 
-                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     res = await accumulator(res, item).ConfigureAwait(false);
 
@@ -202,9 +202,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TAccumulate> Core(CancellationToken cancellationToken)
             {
-                TAccumulate res = seed;
+                var res = seed;
 
-                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     res = await accumulator(res, item, cancellationToken).ConfigureAwait(false);
 

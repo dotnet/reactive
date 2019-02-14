@@ -21,9 +21,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await foreach (IAsyncEnumerable<TSource> source in sources.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (var source in sources.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         yield return item;
                     }
@@ -44,9 +44,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                foreach (IAsyncEnumerable<TSource> source in sources)
+                foreach (var source in sources)
                 {
-                    await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         yield return item;
                     }
@@ -67,9 +67,9 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                foreach (IAsyncEnumerable<TSource> source in sources)
+                foreach (var source in sources)
                 {
-                    await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         yield return item;
                     }

@@ -84,7 +84,7 @@ namespace System.Linq
                         break;
                     }
 
-                    await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         list.Add(item);
                     }

@@ -112,7 +112,7 @@ namespace System.Collections.Generic
         {
             var set = new Set<T>(comparer);
 
-            await foreach (T item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 set.Add(item);
             }

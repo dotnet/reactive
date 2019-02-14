@@ -26,7 +26,7 @@ namespace System.Linq
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                for (TState state = initialState; condition(state); state = iterate(state))
+                for (var state = initialState; condition(state); state = iterate(state))
                 {
                     // REVIEW: Check for cancellation?
 

@@ -191,7 +191,7 @@ namespace System.Linq
 
                 var winnerIndex = Array.IndexOf(moveNexts, moveNextWinner);
 
-                IAsyncEnumerator<TSource> winner = enumerators[winnerIndex];
+                var winner = enumerators[winnerIndex];
 
                 var loserCleanupTasks = new List<Task>(n - 1);
 

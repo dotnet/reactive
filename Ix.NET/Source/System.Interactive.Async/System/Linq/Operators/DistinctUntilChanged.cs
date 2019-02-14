@@ -112,13 +112,13 @@ namespace System.Linq
                         yield break;
                     }
 
-                    TSource latest = e.Current;
+                    var latest = e.Current;
 
                     yield return latest;
 
                     while (await e.MoveNextAsync())
                     {
-                        TSource item = e.Current;
+                        var item = e.Current;
 
                         if (!comparer.Equals(latest, item))
                         {
@@ -159,9 +159,9 @@ namespace System.Linq
                         yield break;
                     }
 
-                    TSource item = e.Current;
+                    var item = e.Current;
 
-                    TKey latestKey = keySelector(item);
+                    var latestKey = keySelector(item);
 
                     yield return item;
 
@@ -169,7 +169,7 @@ namespace System.Linq
                     {
                         item = e.Current;
 
-                        TKey currentKey = keySelector(item);
+                        var currentKey = keySelector(item);
 
                         if (!comparer.Equals(latestKey, currentKey))
                         {
@@ -210,9 +210,9 @@ namespace System.Linq
                         yield break;
                     }
 
-                    TSource item = e.Current;
+                    var item = e.Current;
 
-                    TKey latestKey = await keySelector(item).ConfigureAwait(false);
+                    var latestKey = await keySelector(item).ConfigureAwait(false);
 
                     yield return item;
 
@@ -220,7 +220,7 @@ namespace System.Linq
                     {
                         item = e.Current;
 
-                        TKey currentKey = await keySelector(item).ConfigureAwait(false);
+                        var currentKey = await keySelector(item).ConfigureAwait(false);
 
                         if (!comparer.Equals(latestKey, currentKey))
                         {
@@ -262,9 +262,9 @@ namespace System.Linq
                         yield break;
                     }
 
-                    TSource item = e.Current;
+                    var item = e.Current;
 
-                    TKey latestKey = await keySelector(item, cancellationToken).ConfigureAwait(false);
+                    var latestKey = await keySelector(item, cancellationToken).ConfigureAwait(false);
 
                     yield return item;
 
@@ -272,7 +272,7 @@ namespace System.Linq
                     {
                         item = e.Current;
 
-                        TKey currentKey = await keySelector(item, cancellationToken).ConfigureAwait(false);
+                        var currentKey = await keySelector(item, cancellationToken).ConfigureAwait(false);
 
                         if (!comparer.Equals(latestKey, currentKey))
                         {

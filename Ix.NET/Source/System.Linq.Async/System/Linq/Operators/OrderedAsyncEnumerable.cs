@@ -273,15 +273,15 @@ namespace System.Linq
                     return new Maybe<TElement>();
                 }
 
-                TElement value = e.Current;
+                var value = e.Current;
 
-                AsyncCachingComparer<TElement> comparer = GetComparer();
+                var comparer = GetComparer();
 
                 await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
 
                 while (await e.MoveNextAsync())
                 {
-                    TElement x = e.Current;
+                    var x = e.Current;
 
                     if (await comparer.Compare(x, cacheLower: true, cancellationToken).ConfigureAwait(false) < 0)
                     {
@@ -308,15 +308,15 @@ namespace System.Linq
                     return new Maybe<TElement>();
                 }
 
-                TElement value = e.Current;
+                var value = e.Current;
 
-                AsyncCachingComparer<TElement> comparer = GetComparer();
+                var comparer = GetComparer();
 
                 await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
 
                 while (await e.MoveNextAsync())
                 {
-                    TElement current = e.Current;
+                    var current = e.Current;
 
                     if (await comparer.Compare(current, cacheLower: false, cancellationToken).ConfigureAwait(false) >= 0)
                     {

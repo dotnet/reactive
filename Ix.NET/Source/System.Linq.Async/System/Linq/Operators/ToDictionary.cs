@@ -26,7 +26,7 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TSource>(_comparer);
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = _keySelector(item);
 
@@ -53,7 +53,7 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TSource>(_comparer);
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = await _keySelector(item).ConfigureAwait(false);
 
@@ -81,7 +81,7 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TSource>(_comparer);
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = await _keySelector(item, _cancellationToken).ConfigureAwait(false);
 
@@ -111,7 +111,7 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TElement>(_comparer);
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = _keySelector(item);
                     var value = _elementSelector(item);
@@ -141,7 +141,7 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TElement>(_comparer);
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = await _keySelector(item).ConfigureAwait(false);
                     var value = await _elementSelector(item).ConfigureAwait(false);
@@ -172,7 +172,7 @@ namespace System.Linq
             {
                 var d = new Dictionary<TKey, TElement>(_comparer);
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var key = await _keySelector(item, _cancellationToken).ConfigureAwait(false);
                     var value = await _elementSelector(item, _cancellationToken).ConfigureAwait(false);

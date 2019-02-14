@@ -28,7 +28,7 @@ namespace System.Linq
 
             static async Task Core(IAsyncEnumerable<TSource> _source, Action<TSource> _action, CancellationToken _cancellationToken)
             {
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     _action(item);
                 }
@@ -48,7 +48,7 @@ namespace System.Linq
             {
                 var index = 0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     _action(item, checked(index++));
                 }
@@ -66,7 +66,7 @@ namespace System.Linq
 
             static async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, Task> _action, CancellationToken _cancellationToken)
             {
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     await _action(item).ConfigureAwait(false);
                 }
@@ -79,7 +79,7 @@ namespace System.Linq
 
             static async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, Task> _action, CancellationToken _cancellationToken)
             {
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     await _action(item, _cancellationToken).ConfigureAwait(false);
                 }
@@ -99,7 +99,7 @@ namespace System.Linq
             {
                 var index = 0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     await _action(item, checked(index++)).ConfigureAwait(false);
                 }
@@ -119,7 +119,7 @@ namespace System.Linq
             {
                 var index = 0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     await _action(item, checked(index++), _cancellationToken).ConfigureAwait(false);
                 }

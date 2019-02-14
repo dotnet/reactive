@@ -34,9 +34,9 @@ namespace System.Linq
 
                 if (firstCol is IList<TSource> firstList && secondCol is IList<TSource> secondList)
                 {
-                    int count = firstCol.Count;
+                    var count = firstCol.Count;
 
-                    for (int i = 0; i < count; i++)
+                    for (var i = 0; i < count; i++)
                     {
                         if (!comparer.Equals(firstList[i], secondList[i]))
                         {

@@ -37,7 +37,7 @@ namespace System.Linq
 
                     if (_index >= 0)
                     {
-                        await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                        await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                         {
                             if (_index == 0)
                             {
