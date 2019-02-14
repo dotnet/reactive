@@ -30,7 +30,7 @@ namespace System.Linq
 
                 var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
-                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
+                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
                 {
                     if (!await e.MoveNextAsync())
                     {

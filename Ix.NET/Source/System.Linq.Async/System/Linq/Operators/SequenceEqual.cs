@@ -54,11 +54,11 @@ namespace System.Linq
             {
                 var e1 = _first.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
-                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
+                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
                 {
                     var e2 = _second.GetConfiguredAsyncEnumerator(_cancellationToken, false);
 
-                    try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
+                    try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
                     {
                         while (await e1.MoveNextAsync())
                         {
