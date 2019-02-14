@@ -29,7 +29,7 @@
   
   <!-- UWP -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">      
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="System.ComponentModel" Version="4.0.1" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.0.11" />
     <PackageReference Include="System.Linq.Queryable" Version="4.0.1" />    
@@ -46,7 +46,7 @@
   
   <!-- Desktop -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net46'">
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" />

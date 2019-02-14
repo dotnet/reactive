@@ -32,7 +32,7 @@ jobs:
   steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '3.0.100-preview-009812'
+      version: '3.0.100-preview-010184'
 
   - task: DotNetCoreCLI@2  
     inputs:
@@ -114,7 +114,7 @@ jobs:
   steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '2.2.100'
+      version: '2.2.103'
 
   - task: DotNetCoreCLI@2  
     inputs:
@@ -128,7 +128,7 @@ jobs:
 
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '3.0.100-preview-009812'
+      version: '3.0.100-preview-010184'
 
   - task: DownloadBuildArtifacts@0
     displayName: 'Download Build Artifacts'

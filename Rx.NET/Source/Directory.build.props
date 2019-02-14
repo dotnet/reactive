@@ -22,6 +22,7 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <LangVersion>latest</LangVersion>
+    <ExtrasUwpMetaPackageVersion>6.1.9</ExtrasUwpMetaPackageVersion>
   </PropertyGroup>
 
 </Project>
