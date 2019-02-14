@@ -81,10 +81,11 @@
 
 
   <ItemGroup>
-    <None Include="bin\$(Configuration)\netcoreapp3.0\*.xml" PackagePath="buildTransitive\netcoreapp3.0" Pack="true" />
-    <None Include="bin\$(Configuration)\netcoreapp3.0\*.dll" PackagePath="buildTransitive\netcoreapp3.0" Pack="true" />
+    <None Include="bin\$(Configuration)\netcoreapp3.0\*.xml" PackagePath="payload\netcoreapp3.0" Pack="true" />
+    <None Include="bin\$(Configuration)\netcoreapp3.0\*.dll" PackagePath="payload\netcoreapp3.0" Pack="true" />
     <None Include="build\_._" PackagePath="lib\netcoreapp3.0" Pack="true" />
     <None Include="build\System.Reactive.targets" PackagePath="buildTransitive\netcoreapp3.0" Pack="true" />
+    <None Include="build\System.Reactive.targets" PackagePath="build\netcoreapp3.0" Pack="true" />
   </ItemGroup>
   
 </Project>

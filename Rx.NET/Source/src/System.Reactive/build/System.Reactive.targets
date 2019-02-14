@@ -4,7 +4,7 @@
     <UseWindowsRxVersion Condition="'$(UseWindowsVersion)' == '' " >false</UseWindowsRxVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Condition="'$(UseWindowsRxVersion)' == 'true' "  Include="$(MSBuildThisFileDirectory)System.Reactive.dll" />
+    <Reference Condition="'$(UseWindowsRxVersion)' == 'true' "  Include="$(MSBuildThisFileDirectory)..\..\payload\netcoreapp3.0\System.Reactive.dll" />
     <Reference Condition="'$(UseWindowsRxVersion)' != 'true' "  Include="$(MSBuildThisFileDirectory)..\..\lib\netstandard2.0\System.Reactive.dll" />
   </ItemGroup>
 </Project>
