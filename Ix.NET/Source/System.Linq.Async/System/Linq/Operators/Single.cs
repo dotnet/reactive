@@ -30,9 +30,7 @@ namespace System.Linq
                     throw Error.MoreThanOneElement();
                 }
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -48,10 +46,6 @@ namespace System.Linq
 
                     return result;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -66,9 +60,7 @@ namespace System.Linq
 
             static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -88,10 +80,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 throw Error.NoElements();
             }
@@ -108,9 +96,7 @@ namespace System.Linq
 
             static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -130,10 +116,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 throw Error.NoElements();
             }
@@ -151,9 +133,7 @@ namespace System.Linq
 
             static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -172,10 +152,6 @@ namespace System.Linq
                             return result;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 throw Error.NoElements();

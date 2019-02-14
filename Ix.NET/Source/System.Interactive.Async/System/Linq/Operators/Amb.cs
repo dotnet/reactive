@@ -95,7 +95,7 @@ namespace System.Linq
 
                 try
                 {
-                    try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                    await using (winner.ConfigureAwait(false))
                     {
                         if (!await moveNextWinner.ConfigureAwait(false))
                         {
@@ -108,10 +108,6 @@ namespace System.Linq
                         {
                             yield return winner.Current;
                         }
-                    }
-                    finally
-                    {
-                        await winner.DisposeAsync().ConfigureAwait(false);
                     }
                 }
                 finally
@@ -208,7 +204,7 @@ namespace System.Linq
 
                 try
                 {
-                    try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                    await using (winner.ConfigureAwait(false))
                     {
                         if (!await moveNextWinner.ConfigureAwait(false))
                         {
@@ -221,10 +217,6 @@ namespace System.Linq
                         {
                             yield return winner.Current;
                         }
-                    }
-                    finally
-                    {
-                        await winner.DisposeAsync().ConfigureAwait(false);
                     }
                 }
                 finally
@@ -254,16 +246,12 @@ namespace System.Linq
         {
             if (enumerator != null)
             {
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (enumerator.ConfigureAwait(false))
                 {
                     if (moveNextAsync != null)
                     {
                         await moveNextAsync.ConfigureAwait(false);
                     }
-                }
-                finally
-                {
-                    await enumerator.DisposeAsync().ConfigureAwait(false);
                 }
             }
         }

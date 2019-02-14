@@ -21,9 +21,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -40,10 +38,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -63,9 +57,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -82,10 +74,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -105,9 +93,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -124,10 +110,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -148,9 +130,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -167,10 +147,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -189,9 +165,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -248,10 +222,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -270,9 +240,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -329,10 +297,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -351,9 +315,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -409,10 +371,6 @@ namespace System.Linq
                             }
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -433,9 +391,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -492,10 +448,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -513,9 +465,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -532,10 +482,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -555,9 +501,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -574,10 +518,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -597,9 +537,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -616,10 +554,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -640,9 +574,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -659,10 +591,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -681,9 +609,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -740,10 +666,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -762,9 +684,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -821,10 +741,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -843,9 +759,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -901,10 +815,6 @@ namespace System.Linq
                             }
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -925,9 +835,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -984,10 +892,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -1005,9 +909,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1040,10 +942,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -1062,9 +960,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1097,10 +993,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -1119,9 +1011,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1153,10 +1043,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -1177,9 +1063,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1212,10 +1096,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -1233,9 +1113,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1288,10 +1166,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -1310,9 +1184,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1365,10 +1237,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -1387,9 +1255,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1441,10 +1307,6 @@ namespace System.Linq
                             value = cur;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -1465,9 +1327,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1520,10 +1380,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -1541,9 +1397,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1576,10 +1430,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -1598,9 +1448,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1633,10 +1481,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -1655,9 +1499,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1689,10 +1531,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -1713,9 +1551,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1748,10 +1584,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -1769,9 +1601,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1824,10 +1654,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -1846,9 +1672,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1901,10 +1725,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -1923,9 +1743,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1977,10 +1795,6 @@ namespace System.Linq
                             value = cur;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2001,9 +1815,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2056,10 +1868,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -2077,9 +1885,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2096,10 +1902,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2119,9 +1921,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2138,10 +1938,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2161,9 +1957,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2180,10 +1974,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2204,9 +1994,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2223,10 +2011,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2245,9 +2029,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2278,10 +2060,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -2300,9 +2078,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2333,10 +2109,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -2355,9 +2127,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2387,10 +2157,6 @@ namespace System.Linq
                             value = cur;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2411,9 +2177,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2444,10 +2208,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -2465,9 +2225,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2484,10 +2242,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2507,9 +2261,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2526,10 +2278,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2549,9 +2297,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2568,10 +2314,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2592,9 +2334,7 @@ namespace System.Linq
             {
                 int value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2611,10 +2351,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2633,9 +2369,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2668,10 +2402,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -2690,9 +2420,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2725,10 +2453,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -2747,9 +2471,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2781,10 +2503,6 @@ namespace System.Linq
                             value = cur;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2805,9 +2523,7 @@ namespace System.Linq
             {
                 int? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2840,10 +2556,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -2861,9 +2573,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2880,10 +2590,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2903,9 +2609,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2922,10 +2626,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2945,9 +2645,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2964,10 +2662,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -2988,9 +2682,7 @@ namespace System.Linq
             {
                 long value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -3007,10 +2699,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -3029,9 +2717,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3064,10 +2750,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -3086,9 +2768,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3121,10 +2801,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -3143,9 +2819,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3177,10 +2851,6 @@ namespace System.Linq
                             value = cur;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -3201,9 +2871,7 @@ namespace System.Linq
             {
                 long? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3236,10 +2904,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -3257,9 +2921,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -3293,10 +2955,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -3315,9 +2973,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -3351,10 +3007,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -3373,9 +3025,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -3408,10 +3058,6 @@ namespace System.Linq
                             }
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -3432,9 +3078,7 @@ namespace System.Linq
             {
                 float value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -3468,10 +3112,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -3489,9 +3129,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3540,10 +3178,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -3562,9 +3196,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3613,10 +3245,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -3635,9 +3263,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3685,10 +3311,6 @@ namespace System.Linq
                             }
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -3709,9 +3331,7 @@ namespace System.Linq
             {
                 float? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3760,10 +3380,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -3781,9 +3397,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -3817,10 +3431,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -3839,9 +3449,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -3875,10 +3483,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -3897,9 +3501,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -3932,10 +3534,6 @@ namespace System.Linq
                             }
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -3956,9 +3554,7 @@ namespace System.Linq
             {
                 double value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -3992,10 +3588,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -4013,9 +3605,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -4064,10 +3654,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -4086,9 +3672,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -4137,10 +3721,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -4159,9 +3739,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -4209,10 +3787,6 @@ namespace System.Linq
                             }
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -4233,9 +3807,7 @@ namespace System.Linq
             {
                 double? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -4284,10 +3856,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -4305,9 +3873,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -4324,10 +3890,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -4347,9 +3909,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -4366,10 +3926,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -4389,9 +3945,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -4408,10 +3962,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -4432,9 +3982,7 @@ namespace System.Linq
             {
                 decimal value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -4451,10 +3999,6 @@ namespace System.Linq
                             value = x;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;
@@ -4473,9 +4017,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -4506,10 +4048,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -4528,9 +4066,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -4561,10 +4097,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -4583,9 +4115,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -4616,10 +4146,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
             }
@@ -4639,9 +4165,7 @@ namespace System.Linq
             {
                 decimal? value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -4671,10 +4195,6 @@ namespace System.Linq
                             value = cur;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;

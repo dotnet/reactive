@@ -24,9 +24,7 @@ namespace System.Linq
                     _comparer = Comparer<TSource>.Default;
                 }
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                         throw Error.NoElements();
@@ -44,10 +42,6 @@ namespace System.Linq
                     }
 
                     return min;
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
         }

@@ -44,9 +44,7 @@ namespace System.Collections.Generic
             }
             else
             {
-                var en = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var en = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (await en.MoveNextAsync())
                     {
@@ -92,10 +90,6 @@ namespace System.Collections.Generic
                         result.Array = arr;
                         return result;
                     }
-                }
-                finally
-                {
-                    await en.DisposeAsync();
                 }
             }
 

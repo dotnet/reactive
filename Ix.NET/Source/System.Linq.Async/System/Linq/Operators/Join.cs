@@ -32,9 +32,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (await e.MoveNextAsync())
                     {
@@ -65,10 +63,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
 #else
             return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
@@ -96,9 +90,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (await e.MoveNextAsync())
                     {
@@ -129,10 +121,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
 #else
             return new JoinAsyncIteratorWithTask<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
@@ -161,9 +149,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (await e.MoveNextAsync())
                     {
@@ -193,10 +179,6 @@ namespace System.Linq
                             while (await e.MoveNextAsync());
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
 #else

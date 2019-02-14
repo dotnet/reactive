@@ -25,9 +25,7 @@ namespace System.Linq
 
                     var value = default(TSource);
 
-                    var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                    try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                     {
                         do
                         {
@@ -50,10 +48,6 @@ namespace System.Linq
                             }
                         }
                     }
-                    finally
-                    {
-                        await e.DisposeAsync();
-                    }
 
                     return value;
                 }
@@ -68,9 +62,7 @@ namespace System.Linq
 
                     var value = default(TSource);
 
-                    var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                    try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                     {
                         if (!await e.MoveNextAsync())
                         {
@@ -88,10 +80,6 @@ namespace System.Linq
                                 value = x;
                             }
                         }
-                    }
-                    finally
-                    {
-                        await e.DisposeAsync();
                     }
 
                     return value;
@@ -116,9 +104,7 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-                    var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                    try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                     {
                         do
                         {
@@ -141,10 +127,6 @@ namespace System.Linq
                             }
                         }
                     }
-                    finally
-                    {
-                        await e.DisposeAsync();
-                    }
 
                     return value;
                 }
@@ -159,9 +141,7 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-                    var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                    try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                     {
                         if (!await e.MoveNextAsync())
                         {
@@ -179,10 +159,6 @@ namespace System.Linq
                                 value = x;
                             }
                         }
-                    }
-                    finally
-                    {
-                        await e.DisposeAsync();
                     }
 
                     return value;
@@ -207,9 +183,7 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-                    var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                    try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                     {
                         do
                         {
@@ -232,10 +206,6 @@ namespace System.Linq
                             }
                         }
                     }
-                    finally
-                    {
-                        await e.DisposeAsync();
-                    }
 
                     return value;
                 }
@@ -250,9 +220,7 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-                    var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                    try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                     {
                         if (!await e.MoveNextAsync())
                         {
@@ -270,10 +238,6 @@ namespace System.Linq
                                 value = x;
                             }
                         }
-                    }
-                    finally
-                    {
-                        await e.DisposeAsync();
                     }
 
                     return value;
@@ -299,9 +263,7 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-                    var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                    try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                     {
                         do
                         {
@@ -324,10 +286,6 @@ namespace System.Linq
                             }
                         }
                     }
-                    finally
-                    {
-                        await e.DisposeAsync();
-                    }
 
                     return value;
                 }
@@ -342,9 +300,7 @@ namespace System.Linq
 
                     var value = default(TResult);
 
-                    var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                    try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                     {
                         if (!await e.MoveNextAsync())
                         {
@@ -360,10 +316,6 @@ namespace System.Linq
                                 value = x;
                             }
                         }
-                    }
-                    finally
-                    {
-                        await e.DisposeAsync();
                     }
 
                     return value;

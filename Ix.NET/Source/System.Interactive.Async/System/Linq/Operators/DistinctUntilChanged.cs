@@ -103,9 +103,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -128,10 +126,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
 #else
             return new DistinctUntilChangedAsyncIterator<TSource>(source, comparer);
@@ -150,9 +144,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -179,10 +171,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
 #else
             return new DistinctUntilChangedAsyncIterator<TSource, TKey>(source, keySelector, comparer);
@@ -201,9 +189,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -230,10 +216,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
 #else
             return new DistinctUntilChangedAsyncIteratorWithTask<TSource, TKey>(source, keySelector, comparer);
@@ -253,9 +235,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -281,10 +261,6 @@ namespace System.Linq
                             yield return item;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
 #else

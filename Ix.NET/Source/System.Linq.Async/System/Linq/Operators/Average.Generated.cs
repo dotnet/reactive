@@ -19,9 +19,7 @@ namespace System.Linq
 
             static async ValueTask<double> Core(IAsyncEnumerable<int> _source, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -41,10 +39,6 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -59,9 +53,7 @@ namespace System.Linq
 
             static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -81,10 +73,6 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -99,9 +87,7 @@ namespace System.Linq
 
             static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -120,10 +106,6 @@ namespace System.Linq
                     }
 
                     return (double)sum / count;
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
         }
@@ -140,9 +122,7 @@ namespace System.Linq
 
             static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -162,10 +142,6 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 #endif
@@ -179,9 +155,7 @@ namespace System.Linq
 
             static async ValueTask<double> Core(IAsyncEnumerable<long> _source, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -201,10 +175,6 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -219,9 +189,7 @@ namespace System.Linq
 
             static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -241,10 +209,6 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -259,9 +223,7 @@ namespace System.Linq
 
             static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -281,10 +243,6 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -300,9 +258,7 @@ namespace System.Linq
 
             static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -322,10 +278,6 @@ namespace System.Linq
 
                     return (double)sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 #endif
@@ -339,9 +291,7 @@ namespace System.Linq
 
             static async ValueTask<float> Core(IAsyncEnumerable<float> _source, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -361,10 +311,6 @@ namespace System.Linq
 
                     return (float)(sum / count);
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -379,9 +325,7 @@ namespace System.Linq
 
             static async ValueTask<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -401,10 +345,6 @@ namespace System.Linq
 
                     return (float)(sum / count);
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -419,9 +359,7 @@ namespace System.Linq
 
             static async ValueTask<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -440,10 +378,6 @@ namespace System.Linq
                     }
 
                     return (float)(sum / count);
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
         }
@@ -460,9 +394,7 @@ namespace System.Linq
 
             static async ValueTask<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -482,10 +414,6 @@ namespace System.Linq
 
                     return (float)(sum / count);
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 #endif
@@ -499,9 +427,7 @@ namespace System.Linq
 
             static async ValueTask<double> Core(IAsyncEnumerable<double> _source, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -521,10 +447,6 @@ namespace System.Linq
 
                     return sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -539,9 +461,7 @@ namespace System.Linq
 
             static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -561,10 +481,6 @@ namespace System.Linq
 
                     return sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -579,9 +495,7 @@ namespace System.Linq
 
             static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -601,10 +515,6 @@ namespace System.Linq
 
                     return sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -620,9 +530,7 @@ namespace System.Linq
 
             static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -642,10 +550,6 @@ namespace System.Linq
 
                     return sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 #endif
@@ -659,9 +563,7 @@ namespace System.Linq
 
             static async ValueTask<decimal> Core(IAsyncEnumerable<decimal> _source, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -681,10 +583,6 @@ namespace System.Linq
 
                     return sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -699,9 +597,7 @@ namespace System.Linq
 
             static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -721,10 +617,6 @@ namespace System.Linq
 
                     return sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -739,9 +631,7 @@ namespace System.Linq
 
             static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -761,10 +651,6 @@ namespace System.Linq
 
                     return sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -780,9 +666,7 @@ namespace System.Linq
 
             static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -802,10 +686,6 @@ namespace System.Linq
 
                     return sum / count;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 #endif
@@ -819,9 +699,7 @@ namespace System.Linq
 
             static async ValueTask<double?> Core(IAsyncEnumerable<int?> _source, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -847,10 +725,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -867,9 +741,7 @@ namespace System.Linq
 
             static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int?> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -895,10 +767,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -915,9 +783,7 @@ namespace System.Linq
 
             static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -942,10 +808,6 @@ namespace System.Linq
                             return (double)sum / count;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return null;
@@ -964,9 +826,7 @@ namespace System.Linq
 
             static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -992,10 +852,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -1011,9 +867,7 @@ namespace System.Linq
 
             static async ValueTask<double?> Core(IAsyncEnumerable<long?> _source, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1039,10 +893,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -1059,9 +909,7 @@ namespace System.Linq
 
             static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long?> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1087,10 +935,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -1107,9 +951,7 @@ namespace System.Linq
 
             static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1134,10 +976,6 @@ namespace System.Linq
                             return (double)sum / count;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return null;
@@ -1156,9 +994,7 @@ namespace System.Linq
 
             static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1184,10 +1020,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -1203,9 +1035,7 @@ namespace System.Linq
 
             static async ValueTask<float?> Core(IAsyncEnumerable<float?> _source, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1231,10 +1061,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -1251,9 +1077,7 @@ namespace System.Linq
 
             static async ValueTask<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float?> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1279,10 +1103,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -1299,9 +1119,7 @@ namespace System.Linq
 
             static async ValueTask<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1326,10 +1144,6 @@ namespace System.Linq
                             return (float)(sum / count);
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return null;
@@ -1348,9 +1162,7 @@ namespace System.Linq
 
             static async ValueTask<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1376,10 +1188,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -1395,9 +1203,7 @@ namespace System.Linq
 
             static async ValueTask<double?> Core(IAsyncEnumerable<double?> _source, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1423,10 +1229,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -1443,9 +1245,7 @@ namespace System.Linq
 
             static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double?> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1471,10 +1271,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -1491,9 +1287,7 @@ namespace System.Linq
 
             static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1518,10 +1312,6 @@ namespace System.Linq
                             return sum / count;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return null;
@@ -1540,9 +1330,7 @@ namespace System.Linq
 
             static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1568,10 +1356,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -1587,9 +1371,7 @@ namespace System.Linq
 
             static async ValueTask<decimal?> Core(IAsyncEnumerable<decimal?> _source, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1615,10 +1397,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -1635,9 +1413,7 @@ namespace System.Linq
 
             static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal?> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1663,10 +1439,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -1683,9 +1455,7 @@ namespace System.Linq
 
             static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1711,10 +1481,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return null;
             }
@@ -1732,9 +1498,7 @@ namespace System.Linq
 
             static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -1759,10 +1523,6 @@ namespace System.Linq
                             return sum / count;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return null;

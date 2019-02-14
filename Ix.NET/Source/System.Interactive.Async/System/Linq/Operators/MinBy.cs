@@ -110,9 +110,7 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-            var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-            try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+            await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
             {
                 if (!await e.MoveNextAsync())
                     throw Error.NoElements();
@@ -139,10 +137,6 @@ namespace System.Linq
                     }
                 }
             }
-            finally
-            {
-                await e.DisposeAsync();
-            }
 
             return result;
         }
@@ -151,9 +145,7 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-            var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-            try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+            await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
             {
                 if (!await e.MoveNextAsync())
                     throw Error.NoElements();
@@ -180,10 +172,6 @@ namespace System.Linq
                     }
                 }
             }
-            finally
-            {
-                await e.DisposeAsync();
-            }
 
             return result;
         }
@@ -193,9 +181,7 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-            var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-            try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+            await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
             {
                 if (!await e.MoveNextAsync())
                     throw Error.NoElements();
@@ -221,10 +207,6 @@ namespace System.Linq
                         resKey = key;
                     }
                 }
-            }
-            finally
-            {
-                await e.DisposeAsync();
             }
 
             return result;

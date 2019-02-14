@@ -176,9 +176,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     while (true)
                     {
@@ -210,10 +208,6 @@ namespace System.Linq
 
                     onCompleted?.Invoke();
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
 #else
             return new DoAsyncIterator<TSource>(source, onNext, onError, onCompleted);
@@ -227,9 +221,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     while (true)
                     {
@@ -264,10 +256,6 @@ namespace System.Linq
                         await onCompleted().ConfigureAwait(false);
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
 #else
             return new DoAsyncIteratorWithTask<TSource>(source, onNext, onError, onCompleted);
@@ -282,9 +270,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     while (true)
                     {
@@ -318,10 +304,6 @@ namespace System.Linq
                     {
                         await onCompleted(cancellationToken).ConfigureAwait(false);
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
 #else

@@ -264,9 +264,7 @@ namespace System.Linq
 
         public async ValueTask<Maybe<TElement>> TryGetFirstAsync(CancellationToken cancellationToken)
         {
-            var e = _source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-            try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+            await using (var e = _source.GetConfiguredAsyncEnumerator(cancellationToken, false))
             {
                 if (!await e.MoveNextAsync())
                 {
@@ -291,17 +289,11 @@ namespace System.Linq
 
                 return new Maybe<TElement>(value);
             }
-            finally
-            {
-                await e.DisposeAsync();
-            }
         }
 
         public async ValueTask<Maybe<TElement>> TryGetLastAsync(CancellationToken cancellationToken)
         {
-            var e = _source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-            try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+            await using (var e = _source.GetConfiguredAsyncEnumerator(cancellationToken, false))
             {
                 if (!await e.MoveNextAsync())
                 {
@@ -325,10 +317,6 @@ namespace System.Linq
                 }
 
                 return new Maybe<TElement>(value);
-            }
-            finally
-            {
-                await e.DisposeAsync();
             }
         }
 

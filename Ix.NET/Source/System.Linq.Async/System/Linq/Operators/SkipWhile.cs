@@ -23,9 +23,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -43,10 +41,6 @@ namespace System.Linq
                             yield break;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
 #else
@@ -66,9 +60,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     var index = -1;
 
@@ -94,10 +86,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
 #else
             return new SkipWhileWithIndexAsyncIterator<TSource>(source, predicate);
@@ -116,9 +104,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -136,10 +122,6 @@ namespace System.Linq
                             yield break;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
 #else
@@ -160,9 +142,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -180,10 +160,6 @@ namespace System.Linq
                             yield break;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
 #else
@@ -204,9 +180,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     var index = -1;
 
@@ -232,10 +206,6 @@ namespace System.Linq
                         }
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
 #else
             return new SkipWhileWithIndexAsyncIteratorWithTask<TSource>(source, predicate);
@@ -255,9 +225,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     var index = -1;
 
@@ -282,10 +250,6 @@ namespace System.Linq
                             yield break;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
 #else

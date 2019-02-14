@@ -39,9 +39,7 @@ namespace System.Linq
 
                 var err = default(IAsyncEnumerable<TSource>);
 
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     while (true)
                     {
@@ -62,10 +60,6 @@ namespace System.Linq
 
                         yield return c;
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 if (err != null)
@@ -103,9 +97,7 @@ namespace System.Linq
 
                 var err = default(IAsyncEnumerable<TSource>);
 
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     while (true)
                     {
@@ -126,10 +118,6 @@ namespace System.Linq
 
                         yield return c;
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 if (err != null)
@@ -168,9 +156,7 @@ namespace System.Linq
 
                 var err = default(IAsyncEnumerable<TSource>);
 
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     while (true)
                     {
@@ -191,10 +177,6 @@ namespace System.Linq
 
                         yield return c;
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 if (err != null)
@@ -248,9 +230,7 @@ namespace System.Linq
 
                 foreach (var source in sources)
                 {
-                    var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                    try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                    await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
                         error = null;
 
@@ -276,10 +256,6 @@ namespace System.Linq
 
                         if (error == null)
                             break;
-                    }
-                    finally
-                    {
-                        await e.DisposeAsync();
                     }
                 }
 

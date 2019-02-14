@@ -52,13 +52,9 @@ namespace System.Linq
 
             static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _first, IAsyncEnumerable<TSource> _second, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
             {
-                var e1 = _first.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e1 = _first.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
-                    var e2 = _second.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                    try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                    await using (var e2 = _second.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                     {
                         while (await e1.MoveNextAsync())
                         {
@@ -70,14 +66,6 @@ namespace System.Linq
 
                         return !await e2.MoveNextAsync();
                     }
-                    finally
-                    {
-                        await e2.DisposeAsync();
-                    }
-                }
-                finally
-                {
-                    await e1.DisposeAsync();
                 }
             }
         }

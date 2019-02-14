@@ -19,15 +19,9 @@ namespace System.Linq
 
             static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     return await e.MoveNextAsync();
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
         }

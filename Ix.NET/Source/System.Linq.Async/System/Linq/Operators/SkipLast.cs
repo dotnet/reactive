@@ -35,9 +35,7 @@ namespace System.Linq
             {
                 var queue = new Queue<TSource>();
 
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
@@ -56,10 +54,6 @@ namespace System.Linq
                             queue.Enqueue(e.Current);
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
 #else

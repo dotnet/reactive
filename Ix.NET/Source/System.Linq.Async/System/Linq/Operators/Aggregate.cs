@@ -21,9 +21,7 @@ namespace System.Linq
 
             static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, TSource> _accumulator, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -39,10 +37,6 @@ namespace System.Linq
 
                     return acc;
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
             }
         }
 
@@ -57,9 +51,7 @@ namespace System.Linq
 
             static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, ValueTask<TSource>> _accumulator, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -74,10 +66,6 @@ namespace System.Linq
                     }
 
                     return acc;
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
         }
@@ -94,9 +82,7 @@ namespace System.Linq
 
             static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TSource, CancellationToken, ValueTask<TSource>> _accumulator, CancellationToken _cancellationToken)
             {
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -111,10 +97,6 @@ namespace System.Linq
                     }
 
                     return acc;
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
         }

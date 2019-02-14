@@ -43,9 +43,7 @@ foreach (var m in new[] { "Max", "Min" })
 #>
                 <#=t#> value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -108,10 +106,6 @@ foreach (var m in new[] { "Max", "Min" })
 #>
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
 <#
@@ -121,9 +115,7 @@ foreach (var m in new[] { "Max", "Min" })
 #>
                 <#=t#> value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -277,10 +269,6 @@ foreach (var m in new[] { "Max", "Min" })
             }
 #>
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
 <#
@@ -322,9 +310,7 @@ foreach (var overload in new[] {
 #>
                 <#=t#> value;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -387,10 +373,6 @@ foreach (var overload in new[] {
 #>
                     }
                 }
-                finally
-                {
-                    await e.DisposeAsync();
-                }
 
                 return value;
 <#
@@ -400,9 +382,7 @@ foreach (var overload in new[] {
 #>
                 <#=t#> value = null;
 
-                var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false);
-
-                try // REVIEW: Can use `await using` if we get pattern bind (HAS_AWAIT_USING_PATTERN_BIND)
+                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -555,10 +535,6 @@ foreach (var overload in new[] {
 <#
             }
 #>
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 return value;

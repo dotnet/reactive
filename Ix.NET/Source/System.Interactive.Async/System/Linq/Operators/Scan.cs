@@ -27,9 +27,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -44,10 +42,6 @@ namespace System.Linq
 
                         yield return res;
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
 #else
@@ -93,9 +87,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -110,10 +102,6 @@ namespace System.Linq
 
                         yield return res;
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
 #else
@@ -134,9 +122,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -151,10 +137,6 @@ namespace System.Linq
 
                         yield return res;
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
             }
 #else

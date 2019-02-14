@@ -28,9 +28,7 @@ namespace System.Linq
             {
                 Queue<TSource> queue;
 
-                var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
-
-                try // TODO: Switch to `await using` in preview 3 (https://github.com/dotnet/roslyn/pull/32731)
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -57,10 +55,6 @@ namespace System.Linq
                             break;
                         }
                     }
-                }
-                finally
-                {
-                    await e.DisposeAsync();
                 }
 
                 Debug.Assert(queue.Count <= count);
