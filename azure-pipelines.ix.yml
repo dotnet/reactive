@@ -55,12 +55,8 @@ steps:
   inputs:
     command: test
     projects: Ix.NET/Source/**/*.Tests.csproj
-    arguments: -c $(BuildConfiguration) --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Ix.NET/Source/CodeCoverage.runsettings
+    arguments: -c $(BuildConfiguration) --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Ix.NET/Source/CodeCoverage.runsettings /p:DebugType=Full
   displayName: Run Tests
-
-- task: whitesource.ws-bolt.bolt.wss.WhiteSource Bolt@18
-  displayName: 'WhiteSource Bolt'
-  enabled: false
 
 - task: PowerShell@2
   displayName: Authenticode Sign Packages
