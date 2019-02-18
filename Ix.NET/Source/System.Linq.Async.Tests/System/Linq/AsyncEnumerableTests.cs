@@ -62,7 +62,7 @@ namespace Tests
             var res1 = await enumerable.ToListAsync();
             var res2 = await enumerable.ToListAsync();
 
-            res1.ShouldAllBeEquivalentTo(res2);
+            res1.Should().AllBeEquivalentTo(res2);
         }
 
         protected static IAsyncEnumerable<TValue> Throw<TValue>(Exception exception)
