@@ -17,4 +17,8 @@ namespace System
     }
 }
 
+#else
+using System.Runtime.CompilerServices;
+
+[assembly: TypeForwardedTo(typeof(System.IAsyncDisposable))]
 #endif

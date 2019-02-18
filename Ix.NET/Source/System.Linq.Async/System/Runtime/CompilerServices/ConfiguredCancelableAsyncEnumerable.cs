@@ -80,4 +80,9 @@ namespace System.Runtime.CompilerServices
     }
 }
 
+#else
+using System.Runtime.CompilerServices;
+
+[assembly: TypeForwardedTo(typeof(ConfiguredCancelableAsyncEnumerable<>))]
+
 #endif

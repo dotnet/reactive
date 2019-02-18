@@ -26,4 +26,9 @@ namespace System.Collections.Generic
     }
 }
 
+#else
+using System.Runtime.CompilerServices;
+
+[assembly: TypeForwardedTo(typeof(System.Collections.Generic.IAsyncEnumerable<>))]
+
 #endif
