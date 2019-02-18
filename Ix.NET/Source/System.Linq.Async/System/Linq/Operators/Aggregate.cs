@@ -115,7 +115,7 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
                 {
                     acc = _accumulator(acc, item);
                 }
@@ -137,7 +137,7 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
                 {
                     acc = await _accumulator(acc, item).ConfigureAwait(false);
                 }
@@ -160,7 +160,7 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
                 {
                     acc = await _accumulator(acc, item, _cancellationToken).ConfigureAwait(false);
                 }
@@ -185,7 +185,7 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
                 {
                     acc = _accumulator(acc, item);
                 }
@@ -209,7 +209,7 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
                 {
                     acc = await _accumulator(acc, item).ConfigureAwait(false);
                 }
@@ -234,7 +234,7 @@ namespace System.Linq
             {
                 var acc = _seed;
 
-                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
                 {
                     acc = await _accumulator(acc, item, _cancellationToken).ConfigureAwait(false);
                 }

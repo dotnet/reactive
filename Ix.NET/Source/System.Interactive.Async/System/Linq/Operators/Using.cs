@@ -27,7 +27,7 @@ namespace System.Linq
             {
                 using (var resource = resourceFactory())
                 {
-                    await foreach (var item in enumerableFactory(resource).WithCancellation(cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(enumerableFactory(resource), cancellationToken).ConfigureAwait(false))
                     {
                         yield return item;
                     }
@@ -52,7 +52,7 @@ namespace System.Linq
             {
                 using (var resource = await resourceFactory().ConfigureAwait(false))
                 {
-                    await foreach (var item in (await enumerableFactory(resource).ConfigureAwait(false)).WithCancellation(cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation((await enumerableFactory(resource).ConfigureAwait(false)), cancellationToken).ConfigureAwait(false))
                     {
                         yield return item;
                     }
@@ -78,7 +78,7 @@ namespace System.Linq
             {
                 using (var resource = await resourceFactory(cancellationToken).ConfigureAwait(false))
                 {
-                    await foreach (var item in (await enumerableFactory(resource, cancellationToken).ConfigureAwait(false)).WithCancellation(cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation((await enumerableFactory(resource, cancellationToken).ConfigureAwait(false)), cancellationToken).ConfigureAwait(false))
                     {
                         yield return item;
                     }

@@ -162,7 +162,7 @@ namespace System.Linq
                         return set;
                     }
 
-                    await foreach (var item in enumerable.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(enumerable, cancellationToken).ConfigureAwait(false))
                     {
                         set.Add(item);
                     }

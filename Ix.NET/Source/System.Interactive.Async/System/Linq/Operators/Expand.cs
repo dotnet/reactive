@@ -29,7 +29,7 @@ namespace System.Linq
 
                 while (queue.Count > 0)
                 {
-                    await foreach (var item in queue.Dequeue().WithCancellation(cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(queue.Dequeue(), cancellationToken).ConfigureAwait(false))
                     {
                         queue.Enqueue(selector(item));
 
@@ -60,7 +60,7 @@ namespace System.Linq
 
                 while (queue.Count > 0)
                 {
-                    await foreach (var item in queue.Dequeue().WithCancellation(cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(queue.Dequeue(), cancellationToken).ConfigureAwait(false))
                     {
                         queue.Enqueue(await selector(item).ConfigureAwait(false));
 
@@ -92,7 +92,7 @@ namespace System.Linq
 
                 while (queue.Count > 0)
                 {
-                    await foreach (var item in queue.Dequeue().WithCancellation(cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(queue.Dequeue(), cancellationToken).ConfigureAwait(false))
                     {
                         queue.Enqueue(await selector(item, cancellationToken).ConfigureAwait(false));
 

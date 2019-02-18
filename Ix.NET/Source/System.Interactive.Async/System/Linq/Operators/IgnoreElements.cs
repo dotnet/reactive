@@ -21,7 +21,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await foreach (var _ in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (var _ in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
                 {
                 }
 

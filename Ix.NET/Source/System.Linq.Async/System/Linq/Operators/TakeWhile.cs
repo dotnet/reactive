@@ -23,7 +23,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (var element in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
                 {
                     if (!predicate(element))
                     {
@@ -52,7 +52,7 @@ namespace System.Linq
             {
                 var index = -1;
 
-                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (var element in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
                 {
                     checked
                     {
@@ -84,7 +84,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (var element in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
                 {
                     if (!await predicate(element).ConfigureAwait(false))
                     {
@@ -112,7 +112,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (var element in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
                 {
                     if (!await predicate(element, cancellationToken).ConfigureAwait(false))
                     {
@@ -142,7 +142,7 @@ namespace System.Linq
             {
                 var index = -1;
 
-                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (var element in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
                 {
                     checked
                     {
@@ -177,7 +177,7 @@ namespace System.Linq
             {
                 var index = -1;
 
-                await foreach (var element in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (var element in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
                 {
                     checked
                     {

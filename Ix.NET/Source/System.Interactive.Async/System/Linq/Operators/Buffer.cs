@@ -25,7 +25,7 @@ namespace System.Linq
             {
                 var buffer = new List<TSource>(count);
 
-                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
                 {
                     buffer.Add(item);
 
@@ -65,7 +65,7 @@ namespace System.Linq
 
                 var index = 0;
 
-                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
                 {
                     if (index++ % skip == 0)
                     {

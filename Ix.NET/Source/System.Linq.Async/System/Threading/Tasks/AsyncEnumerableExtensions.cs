@@ -28,12 +28,31 @@ namespace System.Threading.Tasks
         public static ConfiguredCancelableAsyncEnumerable<T> WithCancellation<T>(
             this IAsyncEnumerable<T> source, CancellationToken cancellationToken) =>
             new ConfiguredCancelableAsyncEnumerable<T>(source, continueOnCapturedContext: true, cancellationToken);
+#elif !REFERENCE_ASSEMBLY
+        // we need to carry an impl that delegates to the BCL version of these
 
+        /// <summary>Configures how awaits on the tasks returned from an async iteration will be performed.</summary>
+        /// <typeparam name="T">The type of the objects being iterated.</typeparam>
+        /// <param name="source">The source enumerable being iterated.</param>
+        /// <param name="continueOnCapturedContext">Whether to capture and marshal back to the current context.</param>
+        /// <returns>The configured enumerable.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ConfiguredCancelableAsyncEnumerable<T> ConfigureAwait<T>(
+            this IAsyncEnumerable<T> source, bool continueOnCapturedContext) => TaskExtensions.ConfigureAwait(source, continueOnCapturedContext);
+
+        /// <summary>Sets the <see cref="CancellationToken"/> to be passed to <see cref="IAsyncEnumerable{T}.GetAsyncEnumerator(CancellationToken)"/> when iterating.</summary>
+        /// <typeparam name="T">The type of the objects being iterated.</typeparam>
+        /// <param name="source">The source enumerable being iterated.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
+        /// <returns>The configured enumerable.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ConfiguredCancelableAsyncEnumerable<T> WithCancellation<T>(
+            this IAsyncEnumerable<T> source, CancellationToken cancellationToken) => TaskExtensions.WithCancellation(source, cancellationToken);
 #endif
 
         public static ConfiguredCancelableAsyncEnumerable<T>.Enumerator GetConfiguredAsyncEnumerator<T>(this IAsyncEnumerable<T> enumerable, CancellationToken cancellationToken, bool continueOnCapturedContext)
         {
-            return enumerable.ConfigureAwait(continueOnCapturedContext).WithCancellation(cancellationToken).GetAsyncEnumerator();
+            return ConfigureAwait(enumerable, continueOnCapturedContext).WithCancellation(cancellationToken).GetAsyncEnumerator();
         }
     }
 }

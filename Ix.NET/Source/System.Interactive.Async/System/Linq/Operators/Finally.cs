@@ -25,7 +25,7 @@ namespace System.Linq
             {
                 try
                 {
-                    await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
                     {
                         yield return item;
                     }
@@ -54,7 +54,7 @@ namespace System.Linq
             {
                 try
                 {
-                    await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
                     {
                         yield return item;
                     }

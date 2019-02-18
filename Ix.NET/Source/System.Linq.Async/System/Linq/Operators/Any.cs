@@ -37,7 +37,7 @@ namespace System.Linq
 
             static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
             {
-                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
                 {
                     if (_predicate(item))
                     {
@@ -60,7 +60,7 @@ namespace System.Linq
 
             static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
-                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
                 {
                     if (await _predicate(item).ConfigureAwait(false))
                     {
@@ -84,7 +84,7 @@ namespace System.Linq
 
             static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
             {
-                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
                 {
                     if (await _predicate(item, _cancellationToken).ConfigureAwait(false))
                     {

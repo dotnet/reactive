@@ -91,7 +91,7 @@ namespace System.Linq.Internal
 
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
             {
                 var key = keySelector(item);
                 var group = lookup.GetGrouping(key, create: true);
@@ -110,7 +110,7 @@ namespace System.Linq.Internal
 
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
             {
                 var key = keySelector(item);
                 lookup.GetGrouping(key, create: true).Add(item);
@@ -123,7 +123,7 @@ namespace System.Linq.Internal
         {
             var lookup = new Lookup<TKey, TElement>(comparer);
 
-            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
             {
                 var key = keySelector(item);
                 if (key != null)
@@ -356,7 +356,7 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item).ConfigureAwait(false);
                 var group = lookup.GetGrouping(key, create: true);
@@ -377,7 +377,7 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
                 var group = lookup.GetGrouping(key, create: true);
@@ -397,7 +397,7 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item).ConfigureAwait(false);
                 lookup.GetGrouping(key, create: true).Add(item);
@@ -414,7 +414,7 @@ namespace System.Linq.Internal
 
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
                 lookup.GetGrouping(key, create: true).Add(item);
@@ -428,7 +428,7 @@ namespace System.Linq.Internal
         {
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item).ConfigureAwait(false);
                 if (key != null)
@@ -445,7 +445,7 @@ namespace System.Linq.Internal
         {
             var lookup = new LookupWithTask<TKey, TElement>(comparer);
 
-            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
+            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
             {
                 var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
                 if (key != null)

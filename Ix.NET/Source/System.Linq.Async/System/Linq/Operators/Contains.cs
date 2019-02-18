@@ -28,7 +28,7 @@ namespace System.Linq
 
                 static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, CancellationToken _cancellationToken)
                 {
-                    await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
                     {
                         if (EqualityComparer<TSource>.Default.Equals(item, _value))
                         {
@@ -45,7 +45,7 @@ namespace System.Linq
 
                 static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
                 {
-                    await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
                     {
                         if (_comparer.Equals(item, _value))
                         {

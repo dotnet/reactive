@@ -38,7 +38,7 @@ namespace System.Linq
                 }
             }
 
-            await foreach (var item in collection.WithCancellation(cancellationToken).ConfigureAwait(false))
+            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(collection, cancellationToken).ConfigureAwait(false))
             {
                 list.Add(item);
             }
