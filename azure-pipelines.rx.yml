@@ -29,6 +29,10 @@ steps:
   displayName: Set Version
   condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
 
+- task: DotNetCoreInstaller@0
+  inputs:
+    version: '2.2.104'
+
 - task: MSBuild@1
   displayName: Build System.Reactive.sln
   inputs:
@@ -44,15 +48,6 @@ steps:
     command: custom
     arguments: pack Rx.NET/Source/facades/System.Reactive.Compatibility.nuspec -Version $(NBGV_NuGetPackageVersion) -MinClientVersion 2.12 -NoPackageAnalysis -outputdirectory $(Build.ArtifactStagingDirectory)\artifacts
   condition: eq(variables['system.pullrequest.isfork'], false)
-
-- task: MSBuild@1
-  displayName: Build for Test (ppdb) workaround
-  inputs:
-    solution: Rx.NET/Source/System.Reactive.sln    
-    msbuildArguments: /t:build /p:DebugType=portable
-    platform: $(BuildPlatform)
-    configuration: $(BuildConfiguration)
-    maximumCpuCount: true
 
 - task: DotNetCoreCLI@2
   inputs:
