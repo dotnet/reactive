@@ -4,12 +4,12 @@
     <Description>LINQ Standard Query Operators used to express queries over asynchronous enumerable sequences.</Description>
     <AssemblyTitle>System.Linq.Async</AssemblyTitle>
     <Authors>Microsoft</Authors>
-    <TargetFrameworks>netstandard1.0;netcoreapp2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard1.4;netcoreapp3.0</TargetFrameworks>
     <PackageTags>Enumerable;Asynchronous;LINQ</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.2" />
   </ItemGroup>
 
   <ItemGroup>
