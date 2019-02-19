@@ -28,7 +28,7 @@
     <CoverletOutputFormat>cobertura</CoverletOutputFormat>
     <Exclude>[xunit.*]*</Exclude>
     <CoverletOutput>$(MSBuildThisFileDirectory)coverlet/raw/$(AssemblyName)/$(TargetFramework)/</CoverletOutput>
-    <CollectCoverage Condition="'$(TF_BUILD)' == 'true' and '$(TargetFramework)' != 'net461' ">true</CollectCoverage>
+    <CollectCoverage Condition="'$(TF_BUILD)' == 'true'">true</CollectCoverage>
   </PropertyGroup>
 
 </Project>

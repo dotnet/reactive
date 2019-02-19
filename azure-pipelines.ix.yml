@@ -68,7 +68,7 @@ steps:
   inputs:
     command: test
     projects: Ix.NET/Source/**/*.Tests.csproj
-    arguments: -c $(BuildConfiguration)
+    arguments: -c $(BuildConfiguration) -- RunConfiguration.DisableAppDomain=true
   displayName: Run Tests
 
 - script: reportgenerator -reports:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/raw/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"HtmlInline_AzurePipelines;Cobertura"
