@@ -64,18 +64,17 @@ steps:
     arguments: install --tool-path . dotnet-reportgenerator-globaltool
   displayName: Install ReportGenerator tool
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: custom
-    custom: clean
-    projects: Ix.NET/Source/**/*.csproj
-  displayName: Clean for test
+- script: |
+    reg ADD "HKLM\SOFTWARE\Microsoft\StrongName\Verification\*,94bc3704cddfc263" /f 
+    reg ADD "HKLM\SOFTWARE\Wow6432Node\Microsoft\StrongName\Verification\*,94bc3704cddfc263" /f 
+    
+  displayName: Disable strong name verification
 
 - task: DotNetCoreCLI@2
   inputs:
     command: test
     projects: Ix.NET/Source/**/*.Tests.csproj
-    arguments: -c $(BuildConfiguration) /p:CollectCoverage=true /p:SignAssembly=false 
+    arguments: -c $(BuildConfiguration) /p:CollectCoverage=true 
   displayName: Run Tests
 
 - script: reportgenerator -reports:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/raw/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"HtmlInline_AzurePipelines;Cobertura"
