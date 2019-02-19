@@ -11,6 +11,13 @@ namespace System.Threading.Tasks
     {
 #if !BCL_HAS_CONFIGUREAWAIT // https://github.com/dotnet/coreclr/pull/21939
 
+        /// <summary>Configures how awaits on the tasks returned from an async disposable will be performed.</summary>
+        /// <param name="source">The source async disposable.</param>
+        /// <param name="continueOnCapturedContext">Whether to capture and marshal back to the current context.</param>
+        /// <returns>The configured async disposable.</returns>
+        public static ConfiguredAsyncDisposable ConfigureAwait(this IAsyncDisposable source, bool continueOnCapturedContext) =>
+            new ConfiguredAsyncDisposable(source, continueOnCapturedContext);
+
         /// <summary>Configures how awaits on the tasks returned from an async iteration will be performed.</summary>
         /// <typeparam name="T">The type of the objects being iterated.</typeparam>
         /// <param name="source">The source enumerable being iterated.</param>
@@ -28,8 +35,18 @@ namespace System.Threading.Tasks
         public static ConfiguredCancelableAsyncEnumerable<T> WithCancellation<T>(
             this IAsyncEnumerable<T> source, CancellationToken cancellationToken) =>
             new ConfiguredCancelableAsyncEnumerable<T>(source, continueOnCapturedContext: true, cancellationToken);
+
+
 #elif !REFERENCE_ASSEMBLY
         // we need to carry an impl that delegates to the BCL version of these
+
+        /// <summary>Configures how awaits on the tasks returned from an async disposable will be performed.</summary>
+        /// <param name="source">The source async disposable.</param>
+        /// <param name="continueOnCapturedContext">Whether to capture and marshal back to the current context.</param>
+        /// <returns>The configured async disposable.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ConfiguredAsyncDisposable ConfigureAwait(this IAsyncDisposable source, bool continueOnCapturedContext) =>
+            TaskExtensions.ConfigureAwait(source, continueOnCapturedContext);
 
         /// <summary>Configures how awaits on the tasks returned from an async iteration will be performed.</summary>
         /// <typeparam name="T">The type of the objects being iterated.</typeparam>
@@ -51,6 +68,15 @@ namespace System.Threading.Tasks
 
 #else
         // Reference assembly, these won't be emmited, but keep these internal so we can compile
+
+        /// <summary>Configures how awaits on the tasks returned from an async disposable will be performed.</summary>
+        /// <param name="source">The source async disposable.</param>
+        /// <param name="continueOnCapturedContext">Whether to capture and marshal back to the current context.</param>
+        /// <returns>The configured async disposable.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static ConfiguredAsyncDisposable ConfigureAwait(this IAsyncDisposable source, bool continueOnCapturedContext) =>
+            TaskExtensions.ConfigureAwait(source, continueOnCapturedContext);
+
         /// <summary>Configures how awaits on the tasks returned from an async iteration will be performed.</summary>
         /// <typeparam name="T">The type of the objects being iterated.</typeparam>
         /// <param name="source">The source enumerable being iterated.</param>
