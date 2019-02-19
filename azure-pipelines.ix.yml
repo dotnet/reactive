@@ -28,6 +28,12 @@ variables:
   BuildConfiguration: Release
   
 steps:
+- script: |
+    reg ADD "HKLM\SOFTWARE\Microsoft\StrongName\Verification\*,94bc3704cddfc263" /f 
+    reg ADD "HKLM\SOFTWARE\Wow6432Node\Microsoft\StrongName\Verification\*,94bc3704cddfc263" /f 
+    
+  displayName: Disable strong name verification
+
 - task: DotNetCoreInstaller@0
   inputs:
     version: '3.0.100-preview4-010374'
@@ -63,12 +69,6 @@ steps:
     custom: tool
     arguments: install --tool-path . dotnet-reportgenerator-globaltool
   displayName: Install ReportGenerator tool
-
-- script: |
-    reg ADD "HKLM\SOFTWARE\Microsoft\StrongName\Verification\*,94bc3704cddfc263" /f 
-    reg ADD "HKLM\SOFTWARE\Wow6432Node\Microsoft\StrongName\Verification\*,94bc3704cddfc263" /f 
-    
-  displayName: Disable strong name verification
 
 - task: DotNetCoreCLI@2
   inputs:
