@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.2" />
+    <PackageReference Condition="'$(TargetFramework)' == 'netstandard1.4' " Include="System.Reflection.TypeExtensions" Version="4.5.1" />
   </ItemGroup>
 
   <ItemGroup>
