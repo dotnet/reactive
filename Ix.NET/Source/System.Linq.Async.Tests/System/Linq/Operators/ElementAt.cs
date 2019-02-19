@@ -13,7 +13,7 @@ namespace Tests
     public class ElementAt : AsyncEnumerableTests
     {
         [Fact]
-        public async Task ElementAt_Null()
+        public async Task ElementAtAsync_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtAsync<int>(default, 0).AsTask());
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAtAsync(Return42, -1).AsTask());
@@ -23,42 +23,70 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ElementAt1Async()
+        public async Task ElementAtAsync_Empty_Index0()
         {
             var res = AsyncEnumerable.Empty<int>().ElementAtAsync(0);
             await AssertThrowsAsync<ArgumentOutOfRangeException>(res.AsTask());
         }
 
         [Fact]
-        public async Task ElementAt2Async()
+        public async Task ElementAtAsync_Single_Index0()
         {
             var res = Return42.ElementAtAsync(0);
             Assert.Equal(42, await res);
         }
 
         [Fact]
-        public async Task ElementAt3Async()
+        public async Task ElementAtAsync_Single_Index1()
         {
             var res = Return42.ElementAtAsync(1);
             await AssertThrowsAsync<ArgumentOutOfRangeException>(res.AsTask());
         }
 
         [Fact]
-        public async Task ElementAt4Async()
+        public async Task ElementAtAsync_Many_IList_InRange()
         {
             var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAtAsync(1);
             Assert.Equal(42, await res);
         }
 
         [Fact]
-        public async Task ElementAt5Async()
+        public async Task ElementAtAsync_Many_IList_OutOfRange()
         {
             var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().ElementAtAsync(7);
             await AssertThrowsAsync<ArgumentOutOfRangeException>(res.AsTask());
         }
 
         [Fact]
-        public async Task ElementAt6Async()
+        public async Task ElementAtAsync_Many_IPartition_InRange()
+        {
+            var res = new[] { -1, 1, 42, 3 }.ToAsyncEnumerable().Skip(1).ElementAtAsync(1);
+            Assert.Equal(42, await res);
+        }
+
+        [Fact]
+        public async Task ElementAtAsync_Many_IPartition_OutOfRange()
+        {
+            var res = new[] { -1, 1, 42, 3 }.ToAsyncEnumerable().Skip(1).ElementAtAsync(7);
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(res.AsTask());
+        }
+
+        [Fact]
+        public async Task ElementAtAsync_Many_InRange()
+        {
+            var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().Select(x => x).ElementAtAsync(1);
+            Assert.Equal(42, await res);
+        }
+
+        [Fact]
+        public async Task ElementAtAsync_Many_OutOfRange()
+        {
+            var res = new[] { 1, 42, 3 }.ToAsyncEnumerable().Select(x => x).ElementAtAsync(7);
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(res.AsTask());
+        }
+
+        [Fact]
+        public async Task ElementAtAsync_Throws_Source()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).ElementAtAsync(15);
