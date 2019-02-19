@@ -14,7 +14,7 @@ namespace Tests
     public class Contains : AsyncEnumerableTests
     {
         [Fact]
-        public async Task Contains_Null()
+        public async Task ContainsAsync_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42).AsTask());
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ContainsAsync(default, 42, EqualityComparer<int>.Default).AsTask());
@@ -24,7 +24,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Contains1Async()
+        public async Task ContainsAsync_Simple_ICollection_True()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
             var ys = xs.ContainsAsync(3);
@@ -32,7 +32,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Contains2Async()
+        public async Task ContainsAsync_Simple_ICollection_False()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
             var ys = xs.ContainsAsync(6);
@@ -40,7 +40,23 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Contains3Async()
+        public async Task ContainsAsync_Simple_True()
+        {
+            var xs = new[] { 1, 2, 3, 4, 5 }.Select(x => x).ToAsyncEnumerable();
+            var ys = xs.ContainsAsync(3);
+            Assert.True(await ys);
+        }
+
+        [Fact]
+        public async Task ContainsAsync_Simple_False()
+        {
+            var xs = new[] { 1, 2, 3, 4, 5 }.Select(x => x).ToAsyncEnumerable();
+            var ys = xs.ContainsAsync(6);
+            Assert.False(await ys);
+        }
+
+        [Fact]
+        public async Task ContainsAsync_Simple_Comparer_True()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
             var ys = xs.ContainsAsync(-3, new Eq());
@@ -48,7 +64,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Contains4Async()
+        public async Task ContainsAsync_Simple_Comparer_False()
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
             var ys = xs.ContainsAsync(-6, new Eq());
@@ -64,7 +80,7 @@ namespace Tests
 
             public int GetHashCode(int obj)
             {
-                return EqualityComparer<int>.Default.GetHashCode(Math.Abs(obj));
+                throw new NotImplementedException();
             }
         }
     }
