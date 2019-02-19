@@ -10,6 +10,9 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
     <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY;NO_TASK_FROMEXCEPTION</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
+    <DefineConstants>$(DefineConstants);USE_ASYNC_ITERATOR</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0' or '$(TargetFramework)' == 'netstandard2.1'">
     <!--
     NB: USE_ASYNC_ITERATOR relies on members in the framework only present in .NET Core 3.0 Preview 2 at the moment:

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;net46;netstandard1.4;netstandard2.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net45;net46;netstandard2.0;netcoreapp3.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,10 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.0' "
-                      Include="System.Threading.Tasks.Extensions" Version="4.5.2" />
-    <PackageReference Condition="'$(TargetFramework)' == 'netstandard1.4' "
-                      Include="System.Reflection.TypeExtensions" Version="4.5.1" />
+    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.0' " Include="System.Threading.Tasks.Extensions" Version="4.5.2" />
     <ReferenceAssemblyProjectReference Include="..\refs\System.Linq.Async.Ref\System.Linq.Async.Ref.csproj" />
   </ItemGroup>
 
