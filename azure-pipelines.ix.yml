@@ -66,6 +66,13 @@ steps:
 
 - task: DotNetCoreCLI@2
   inputs:
+    command: clean
+    projects: Ix.NET/Source/**/*.csproj
+    arguments: -c $(BuildConfiguration) 
+  displayName: Clean for test
+
+- task: DotNetCoreCLI@2
+  inputs:
     command: test
     projects: Ix.NET/Source/**/*.Tests.csproj
     arguments: -c $(BuildConfiguration) /p:CollectCoverage=true /p:SignAssembly=false 
