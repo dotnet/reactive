@@ -13,7 +13,7 @@
     <NoWarn>$(NoWarn);1701;1702;CS1591;NU5105</NoWarn>
     <DefaultLanguage>en-US</DefaultLanguage>
     <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
-    <DebugType>embedded</DebugType>
+    <DebugType Condition="'$(Configuration)' != 'Debug'">embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <!-- While in beta, we need to set 8.0 manually (rather than latest). -->
