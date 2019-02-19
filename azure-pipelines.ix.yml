@@ -57,12 +57,29 @@ steps:
     verbosityPack: Minimal
   displayName: Pack
 
+- task: DotNetCoreCLI@2  
+  inputs:
+    command: custom
+    custom: tool
+    arguments: install --tool-path . dotnet-reportgenerator-globaltool
+  displayName: Install ReportGenerator tool
+
 - task: DotNetCoreCLI@2
   inputs:
     command: test
     projects: Ix.NET/Source/**/*.Tests.csproj
-    arguments: -c $(BuildConfiguration) -s $(System.DefaultWorkingDirectory)/Ix.NET/Source/CodeCoverage.runsettings /p:DebugType=Full
+    arguments: -c $(BuildConfiguration) /p:CollectCoverage=true /p:SignAssembly=false 
   displayName: Run Tests
+
+- script: reportgenerator -reports:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/raw/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"HtmlInline_AzurePipelines;Cobertura"
+  displayName: Create reports
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml'
+    reportDirectory: '$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports'
 
 - task: PowerShell@2
   displayName: Authenticode Sign Packages
