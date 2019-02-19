@@ -37,56 +37,6 @@ namespace Tests
         }
 
         [Fact]
-        public async Task AggregateAsync_Async_Null()
-        {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int>(default, (x, y) => new ValueTask<int>(x + y)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, default(Func<int, int, ValueTask<int>>)).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int>(default, 0, (x, y) => new ValueTask<int>(x + y)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, ValueTask<int>>)).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(default, 0, (x, y) => new ValueTask<int>(x + y), z => new ValueTask<int>(z)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, ValueTask<int>>), z => new ValueTask<int>(z)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(Return42, 0, (x, y) => new ValueTask<int>(x + y), default).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int>(default, (x, y) => new ValueTask<int>(x + y), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, default(Func<int, int, ValueTask<int>>), CancellationToken.None).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int>(default, 0, (x, y) => new ValueTask<int>(x + y), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, ValueTask<int>>), CancellationToken.None).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(default, 0, (x, y) => new ValueTask<int>(x + y), z => new ValueTask<int>(z), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, ValueTask<int>>), z => new ValueTask<int>(z), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(Return42, 0, (x, y) => new ValueTask<int>(x + y), default, CancellationToken.None).AsTask());
-        }
-
-#if !NO_DEEP_CANCELLATION
-        [Fact]
-        public async Task AggregateAsync_AsyncCancel_Null()
-        {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int>(default, (x, y, ct) => new ValueTask<int>(x + y)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, default(Func<int, int, CancellationToken, ValueTask<int>>)).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int>(default, 0, (x, y, ct) => new ValueTask<int>(x + y)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, CancellationToken, ValueTask<int>>)).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(default, 0, (x, y, ct) => new ValueTask<int>(x + y), (z, ct) => new ValueTask<int>(z)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, CancellationToken, ValueTask<int>>), (z, ct) => new ValueTask<int>(z)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(Return42, 0, (x, y, ct) => new ValueTask<int>(x + y), default).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int>(default, (x, y, ct) => new ValueTask<int>(x + y), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, default(Func<int, int, CancellationToken, ValueTask<int>>), CancellationToken.None).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int>(default, 0, (x, y, ct) => new ValueTask<int>(x + y), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, CancellationToken, ValueTask<int>>), CancellationToken.None).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(default, 0, (x, y, ct) => new ValueTask<int>(x + y), (z, ct) => new ValueTask<int>(z), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, CancellationToken, ValueTask<int>>), (z, ct) => new ValueTask<int>(z), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(Return42, 0, (x, y, ct) => new ValueTask<int>(x + y), default, CancellationToken.None).AsTask());
-#endif
-        }
-
-        [Fact]
         public async Task AggregateAsync_Sync_Simple()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
@@ -195,6 +145,30 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.AggregateAsync<int, int, int>(1, (x, y) => x * y, x => { throw ex; });
             await AssertThrowsAsync(ys, ex);
+        }
+
+        [Fact]
+        public async Task AggregateAsync_Async_Null()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int>(default, (x, y) => new ValueTask<int>(x + y)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, default(Func<int, int, ValueTask<int>>)).AsTask());
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int>(default, 0, (x, y) => new ValueTask<int>(x + y)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, ValueTask<int>>)).AsTask());
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(default, 0, (x, y) => new ValueTask<int>(x + y), z => new ValueTask<int>(z)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, ValueTask<int>>), z => new ValueTask<int>(z)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(Return42, 0, (x, y) => new ValueTask<int>(x + y), default).AsTask());
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int>(default, (x, y) => new ValueTask<int>(x + y), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, default(Func<int, int, ValueTask<int>>), CancellationToken.None).AsTask());
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int>(default, 0, (x, y) => new ValueTask<int>(x + y), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, ValueTask<int>>), CancellationToken.None).AsTask());
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(default, 0, (x, y) => new ValueTask<int>(x + y), z => new ValueTask<int>(z), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, ValueTask<int>>), z => new ValueTask<int>(z), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(Return42, 0, (x, y) => new ValueTask<int>(x + y), default, CancellationToken.None).AsTask());
         }
 
         [Fact]
@@ -309,6 +283,30 @@ namespace Tests
         }
 
 #if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task AggregateAsync_AsyncCancel_Null()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int>(default, (x, y, ct) => new ValueTask<int>(x + y)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, default(Func<int, int, CancellationToken, ValueTask<int>>)).AsTask());
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int>(default, 0, (x, y, ct) => new ValueTask<int>(x + y)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, CancellationToken, ValueTask<int>>)).AsTask());
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(default, 0, (x, y, ct) => new ValueTask<int>(x + y), (z, ct) => new ValueTask<int>(z)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, CancellationToken, ValueTask<int>>), (z, ct) => new ValueTask<int>(z)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(Return42, 0, (x, y, ct) => new ValueTask<int>(x + y), default).AsTask());
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int>(default, (x, y, ct) => new ValueTask<int>(x + y), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, default(Func<int, int, CancellationToken, ValueTask<int>>), CancellationToken.None).AsTask());
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int>(default, 0, (x, y, ct) => new ValueTask<int>(x + y), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, CancellationToken, ValueTask<int>>), CancellationToken.None).AsTask());
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(default, 0, (x, y, ct) => new ValueTask<int>(x + y), (z, ct) => new ValueTask<int>(z), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync(Return42, 0, default(Func<int, int, CancellationToken, ValueTask<int>>), (z, ct) => new ValueTask<int>(z), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AggregateAsync<int, int, int>(Return42, 0, (x, y, ct) => new ValueTask<int>(x + y), default, CancellationToken.None).AsTask());
+        }
+
         [Fact]
         public async Task AggregateAsync_AsyncCancel_Simple()
         {
