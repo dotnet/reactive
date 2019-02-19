@@ -66,22 +66,9 @@ steps:
 
 - task: DotNetCoreCLI@2
   inputs:
-    command: custom
-    custom: clean
-    projects: Ix.NET/Source/**/*.csproj
-  displayName: Clean for tests
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: restore
-    projects: Ix.NET/Source/**/*.csproj 
-  displayName: Restore
-
-- task: DotNetCoreCLI@2
-  inputs:
     command: test
     projects: Ix.NET/Source/**/*.Tests.csproj
-    arguments: -c $(BuildConfiguration) /p:CollectCoverage=true /p:SignAssembly=false
+    arguments: -c $(BuildConfiguration)
   displayName: Run Tests
 
 - script: reportgenerator -reports:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/raw/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"HtmlInline_AzurePipelines;Cobertura"
