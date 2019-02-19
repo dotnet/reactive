@@ -3,12 +3,16 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        // NB: This is a non-standard LINQ operator, because we don't have a non-generic IAsyncEnumerable.
+        //     We're keeping it to enable `from T x in xs` binding in C#.
+
         public static IAsyncEnumerable<TResult> Cast<TResult>(this IAsyncEnumerable<object> source)
         {
             if (source == null)
@@ -19,9 +23,22 @@ namespace System.Linq
                 return typedSource;
             }
 
+#if USE_ASYNC_ITERATOR
+            return Create(Core);
+
+            async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+            {
+                await foreach (var obj in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
+                {
+                    yield return (TResult)obj;
+                }
+            }
+#else
             return new CastAsyncIterator<TResult>(source);
+#endif
         }
 
+#if !USE_ASYNC_ITERATOR
         private sealed class CastAsyncIterator<TResult> : AsyncIterator<TResult>
         {
             private readonly IAsyncEnumerable<object> _source;
@@ -71,5 +88,6 @@ namespace System.Linq
                 return false;
             }
         }
+#endif
     }
 }
