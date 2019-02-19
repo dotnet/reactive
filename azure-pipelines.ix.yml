@@ -28,12 +28,6 @@ variables:
   BuildConfiguration: Release
   
 steps:
-- script: |
-    reg ADD "HKLM\SOFTWARE\Microsoft\StrongName\Verification\*,94bc3704cddfc263" /f 
-    reg ADD "HKLM\SOFTWARE\Wow6432Node\Microsoft\StrongName\Verification\*,94bc3704cddfc263" /f 
-    
-  displayName: Disable strong name verification
-
 - task: DotNetCoreInstaller@0
   inputs:
     version: '3.0.100-preview4-010374'
@@ -72,9 +66,22 @@ steps:
 
 - task: DotNetCoreCLI@2
   inputs:
+    command: custom
+    custom: clean
+    projects: Ix.NET/Source/**/*.csproj
+  displayName: Clean for tests
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: restore
+    projects: Ix.NET/Source/**/*.csproj 
+  displayName: Restore
+
+- task: DotNetCoreCLI@2
+  inputs:
     command: test
     projects: Ix.NET/Source/**/*.Tests.csproj
-    arguments: -c $(BuildConfiguration) /p:CollectCoverage=true 
+    arguments: -c $(BuildConfiguration) /p:CollectCoverage=true /p:SignAssembly=false
   displayName: Run Tests
 
 - script: reportgenerator -reports:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/raw/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"HtmlInline_AzurePipelines;Cobertura"
