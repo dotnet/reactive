@@ -14,7 +14,7 @@ namespace Tests
     public class SequenceEqual : AsyncEnumerableTests
     {
         [Fact]
-        public async Task SequenceEqual_Null()
+        public async Task SequenceEqualAsync_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(default, Return42).AsTask());
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SequenceEqualAsync(Return42, default).AsTask());
@@ -30,7 +30,15 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SequenceEqual1Async()
+        public async Task SequenceEqualAsync_Same()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Select(x => x);
+            var res = xs.SequenceEqualAsync(xs);
+            Assert.True(await res);
+        }
+
+        [Fact]
+        public async Task SequenceEqualAsync_Same_IList()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var res = xs.SequenceEqualAsync(xs);
@@ -38,7 +46,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SequenceEqual2Async()
+        public async Task SequenceEqualAsync_Same_Empty()
         {
             var xs = AsyncEnumerable.Empty<int>();
             var res = xs.SequenceEqualAsync(xs);
@@ -46,7 +54,16 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SequenceEqual3Async()
+        public async Task SequenceEqualAsync_NotSame()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Select(x => x);
+            var ys = new[] { 1, 3, 2 }.ToAsyncEnumerable().Select(x => x);
+            var res = xs.SequenceEqualAsync(ys);
+            Assert.False(await res);
+        }
+
+        [Fact]
+        public async Task SequenceEqualAsync_NotSame_IList()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 1, 3, 2 }.ToAsyncEnumerable();
@@ -55,7 +72,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SequenceEqual4Async()
+        public async Task SequenceEqualAsync_NotSame_DifferentLength()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -64,16 +81,16 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SequenceEqual5Async()
+        public async Task SequenceEqualAsync_NotSame_DifferentLength_IList()
         {
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
-            var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Select(x => x);
+            var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Select(x => x);
             var res = xs.SequenceEqualAsync(ys);
             Assert.False(await res);
         }
 
         [Fact]
-        public async Task SequenceEqual6Async()
+        public async Task SequenceEqualAsync_Throws_Second()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
@@ -84,7 +101,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SequenceEqual7Async()
+        public async Task SequenceEqualAsync_Throws_First()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
@@ -95,15 +112,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SequenceEqual8Async()
-        {
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
-            var res = xs.SequenceEqualAsync(xs, new Eq());
-            Assert.True(await res);
-        }
-
-        [Fact]
-        public async Task SequenceEqual9Async()
+        public async Task SequenceEqualAsync_Comparer_Empty()
         {
             var xs = AsyncEnumerable.Empty<int>();
             var res = xs.SequenceEqualAsync(xs, new Eq());
@@ -111,7 +120,33 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SequenceEqual10Async()
+        public async Task SequenceEqualAsync_Comparer_Same1()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var res = xs.SequenceEqualAsync(xs, new Eq());
+            Assert.True(await res);
+        }
+
+        [Fact]
+        public async Task SequenceEqualAsync_Comparer_Same2()
+        {
+            var xs = new[] { 1, 2, -3, 4 }.ToAsyncEnumerable().Select(x => x);
+            var ys = new[] { 1, -2, 3, 4 }.ToAsyncEnumerable().Select(x => x);
+            var res = xs.SequenceEqualAsync(ys, new Eq());
+            Assert.True(await res);
+        }
+
+        [Fact]
+        public async Task SequenceEqualAsync_Comparer_NotSame()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Select(x => x);
+            var ys = new[] { 1, 3, 2 }.ToAsyncEnumerable().Select(x => x);
+            var res = xs.SequenceEqualAsync(ys, new Eq());
+            Assert.False(await res);
+        }
+
+        [Fact]
+        public async Task SequenceEqualAsync_Comparer_NotSame_IList()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 1, 3, 2 }.ToAsyncEnumerable();
@@ -120,16 +155,16 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SequenceEqual11Async()
+        public async Task SequenceEqualAsync_Comparer_NotSame_DifferentLength()
         {
-            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Select(x => x);
+            var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().Select(x => x);
             var res = xs.SequenceEqualAsync(ys, new Eq());
             Assert.False(await res);
         }
 
         [Fact]
-        public async Task SequenceEqual12Async()
+        public async Task SequenceEqualAsync_Comparer_NotSame_DifferentLength_IList()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
@@ -138,7 +173,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SequenceEqual13Async()
+        public async Task SequenceEqualAsync_Comparer_Throws_Second()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
@@ -149,7 +184,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SequenceEqual14Async()
+        public async Task SequenceEqualAsync_Comparer_Throws_First()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
@@ -160,7 +195,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SequenceEqual15Async()
+        public async Task SequenceEqualAsync_Comparer_Same_IList()
         {
             var xs = new[] { 1, 2, -3, 4 }.ToAsyncEnumerable();
             var ys = new[] { 1, -2, 3, 4 }.ToAsyncEnumerable();
@@ -169,15 +204,15 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SequenceEqual16Async()
+        public async Task SequenceEqualAsync_Comparer_Throws_Equals_IList()
         {
             var xs = new[] { 1, 2, -3, 4 }.ToAsyncEnumerable();
-            var ys = new[] { 1, -2, 3, 4 }.ToAsyncEnumerable(); // NB: Implements IList<T>, resulting in optimized code path.
+            var ys = new[] { 1, -2, 3, 4 }.ToAsyncEnumerable();
             await Assert.ThrowsAsync<NotImplementedException>(() => xs.SequenceEqualAsync(ys, new EqEx()).AsTask());
         }
 
         [Fact]
-        public async Task SequenceEqual17Async()
+        public async Task SequenceEqualAsync_Comparer_Throws_Equals()
         {
             var xs = new[] { 1, 2, -3, 4 }.Select(x => x * 2).ToAsyncEnumerable();
             var ys = new[] { 1, -2, 3, 4 }.Select(x => x * 2).ToAsyncEnumerable();
@@ -194,7 +229,7 @@ namespace Tests
 
             public int GetHashCode(int obj)
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
         }
 
