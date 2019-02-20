@@ -198,5 +198,95 @@ namespace Tests
             Assert.Empty(await ys.ToArrayAsync());
             Assert.Empty(await ys.ToListAsync());
         }
+
+        [Fact]
+        public async Task Skip_IAsyncPartition_IList_NonEmpty_Skip()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var ys = xs.Skip(2);
+
+            Assert.Equal(2, await ys.CountAsync());
+
+            Assert.Equal(3, await ys.FirstAsync());
+            Assert.Equal(4, await ys.LastAsync());
+
+            Assert.Equal(3, await ys.ElementAtAsync(0));
+            Assert.Equal(4, await ys.ElementAtAsync(1));
+
+            Assert.Equal(new[] { 3, 4 }, await ys.ToArrayAsync());
+            Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
+        }
+
+        [Fact]
+        public async Task Skip_IAsyncPartition_IList_NonEmpty_SkipSkip()
+        {
+            var xs = new[] { -2, -1, 0, 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var ys = xs.Skip(2).Skip(3);
+
+            Assert.Equal(2, await ys.CountAsync());
+
+            Assert.Equal(3, await ys.FirstAsync());
+            Assert.Equal(4, await ys.LastAsync());
+
+            Assert.Equal(3, await ys.ElementAtAsync(0));
+            Assert.Equal(4, await ys.ElementAtAsync(1));
+
+            Assert.Equal(new[] { 3, 4 }, await ys.ToArrayAsync());
+            Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
+        }
+
+        [Fact]
+        public async Task Skip_IAsyncPartition_IList_NonEmpty_SkipTake()
+        {
+            var xs = new[] { 2, 3, 4, 5 }.ToAsyncEnumerable();
+            var ys = xs.Skip(1).Take(2);
+
+            Assert.Equal(2, await ys.CountAsync());
+
+            Assert.Equal(3, await ys.FirstAsync());
+            Assert.Equal(4, await ys.LastAsync());
+
+            Assert.Equal(3, await ys.ElementAtAsync(0));
+            Assert.Equal(4, await ys.ElementAtAsync(1));
+
+            Assert.Equal(new[] { 3, 4 }, await ys.ToArrayAsync());
+            Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
+        }
+
+        [Fact]
+        public async Task Skip_IAsyncPartition_IList_Empty_Skip()
+        {
+            var xs = new int[0].ToAsyncEnumerable();
+            var ys = xs.Skip(2);
+
+            Assert.Equal(0, await ys.CountAsync());
+
+            await AssertThrowsAsync<InvalidOperationException>(ys.FirstAsync().AsTask());
+            await AssertThrowsAsync<InvalidOperationException>(ys.LastAsync().AsTask());
+
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(ys.ElementAtAsync(0).AsTask());
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(ys.ElementAtAsync(1).AsTask());
+
+            Assert.Empty(await ys.ToArrayAsync());
+            Assert.Empty(await ys.ToListAsync());
+        }
+
+        [Fact]
+        public async Task Skip_IAsyncPartition_IList_Empty_SkipSkip()
+        {
+            var xs = new[] { 1, 2 }.ToAsyncEnumerable();
+            var ys = xs.Skip(1).Skip(1);
+
+            Assert.Equal(0, await ys.CountAsync());
+
+            await AssertThrowsAsync<InvalidOperationException>(ys.FirstAsync().AsTask());
+            await AssertThrowsAsync<InvalidOperationException>(ys.LastAsync().AsTask());
+
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(ys.ElementAtAsync(0).AsTask());
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(ys.ElementAtAsync(1).AsTask());
+
+            Assert.Empty(await ys.ToArrayAsync());
+            Assert.Empty(await ys.ToListAsync());
+        }
     }
 }
