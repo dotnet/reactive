@@ -302,8 +302,9 @@ namespace System.Linq
                     var remaining = Limit - 1; // Max number of items left, not counting the current element.
                     var comparand = HasLimit ? 0 : int.MinValue; // If we don't have an upper bound, have the comparison always return true.
 
-                    var maxCapacity = HasLimit ? Limit : int.MaxValue;
-                    var builder = new List<TSource>(maxCapacity);
+                    // REVIEW: If this ends up in corefx, the code below can use LargeArrayBuilder<T>.
+
+                    var builder = HasLimit ? new List<TSource>(Limit) : new List<TSource>();
 
                     do
                     {
