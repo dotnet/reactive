@@ -14,7 +14,7 @@ namespace Tests
     public class Max : AsyncEnumerableTests
     {
         [Fact]
-        public async Task Max_Null()
+        public async Task MaxAsync_Null()
         {
             // Max(IAE<P>)
 
@@ -201,7 +201,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Max1Async()
+        public async Task MaxAsync_Int32()
         {
             var xs = new[] { 2, 7, 3 };
             var ys = xs.ToAsyncEnumerable();
@@ -211,7 +211,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Max2Async()
+        public async Task MaxAsync_Nullable_Int32()
         {
             var xs = new[] { 2, default(int?), 3, 1 };
             var ys = xs.ToAsyncEnumerable();
@@ -221,7 +221,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Max3Async()
+        public async Task MaxAsync_Int64()
         {
             var xs = new[] { 2L, 7L, 3L };
             var ys = xs.ToAsyncEnumerable();
@@ -231,7 +231,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Max4Async()
+        public async Task MaxAsync_Nullable_Int64()
         {
             var xs = new[] { 2L, default(long?), 3L, 1L };
             var ys = xs.ToAsyncEnumerable();
@@ -241,7 +241,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Max5Async()
+        public async Task MaxAsync_Double()
         {
             var xs = new[] { 2.0, 7.0, 3.0 };
             var ys = xs.ToAsyncEnumerable();
@@ -251,7 +251,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Max6Async()
+        public async Task MaxAsync_Nullable_Double()
         {
             var xs = new[] { 2.0, default(double?), 3.0, 1.0 };
             var ys = xs.ToAsyncEnumerable();
@@ -261,7 +261,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Max7Async()
+        public async Task MaxAsync_Single()
         {
             var xs = new[] { 2.0f, 7.0f, 3.0f };
             var ys = xs.ToAsyncEnumerable();
@@ -271,7 +271,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Max8Async()
+        public async Task MaxAsync_Nullable_Single()
         {
             var xs = new[] { 2.0f, default(float?), 3.0f, 1.0f };
             var ys = xs.ToAsyncEnumerable();
@@ -281,7 +281,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Max9Async()
+        public async Task MaxAsync_Decimal()
         {
             var xs = new[] { 2.0m, 7.0m, 3.0m };
             var ys = xs.ToAsyncEnumerable();
@@ -291,7 +291,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Max10Async()
+        public async Task MaxAsync_Nullable_Decimal()
         {
             var xs = new[] { 2.0m, default(decimal?), 3.0m, 1.0m };
             var ys = xs.ToAsyncEnumerable();
@@ -301,7 +301,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Max11Async()
+        public async Task MaxAsync_TSource_Value()
         {
             var xs = new[] { DateTime.Now.AddDays(1), DateTime.Now.Subtract(TimeSpan.FromDays(1)), DateTime.Now.AddDays(2), DateTime.Now };
             var ys = xs.ToAsyncEnumerable();
@@ -311,7 +311,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Max12Async()
+        public async Task MaxAsync_TSource_NonValue()
         {
             var xs = new[] { "foo", "bar", "qux", "baz", "fred", "wilma" };
             var ys = xs.ToAsyncEnumerable();

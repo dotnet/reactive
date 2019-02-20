@@ -14,7 +14,7 @@ namespace Tests
     public class Min : AsyncEnumerableTests
     {
         [Fact]
-        public async Task Min_Null()
+        public async Task MinAsync_Null()
         {
             // Min(IAE<P>)
 
@@ -201,7 +201,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Min1Async()
+        public async Task MinAsync_Int32()
         {
             var xs = new[] { 2, 1, 3 };
             var ys = xs.ToAsyncEnumerable();
@@ -211,7 +211,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Min2Async()
+        public async Task MinAsync_Nullable_Int32()
         {
             var xs = new[] { 2, default(int?), 3 };
             var ys = xs.ToAsyncEnumerable();
@@ -221,7 +221,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Min3Async()
+        public async Task MinAsync_Int64()
         {
             var xs = new[] { 2L, 1L, 3L };
             var ys = xs.ToAsyncEnumerable();
@@ -231,7 +231,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Min4Async()
+        public async Task MinAsync_Nullable_Int64()
         {
             var xs = new[] { 2L, default(long?), 3L };
             var ys = xs.ToAsyncEnumerable();
@@ -241,7 +241,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Min5Async()
+        public async Task MinAsync_Double()
         {
             var xs = new[] { 2.0, 1.0, 3.0 };
             var ys = xs.ToAsyncEnumerable();
@@ -251,7 +251,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Min6Async()
+        public async Task MinAsync_Nullable_Double()
         {
             var xs = new[] { 2.0, default(double?), 3.0 };
             var ys = xs.ToAsyncEnumerable();
@@ -261,7 +261,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Min7Async()
+        public async Task MinAsync_Single()
         {
             var xs = new[] { 2.0f, 1.0f, 3.0f };
             var ys = xs.ToAsyncEnumerable();
@@ -271,7 +271,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Min8Async()
+        public async Task MinAsync_Nullable_Single()
         {
             var xs = new[] { 2.0f, default(float?), 3.0f };
             var ys = xs.ToAsyncEnumerable();
@@ -281,7 +281,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Min9Async()
+        public async Task MinAsync_Decimal()
         {
             var xs = new[] { 2.0m, 1.0m, 3.0m };
             var ys = xs.ToAsyncEnumerable();
@@ -291,7 +291,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Min10Async()
+        public async Task MinAsync_Nullable_Decimal()
         {
             var xs = new[] { 2.0m, default(decimal?), 3.0m };
             var ys = xs.ToAsyncEnumerable();
@@ -301,7 +301,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Min11Async()
+        public async Task MinAsync_TSource_Value()
         {
             var xs = new[] { DateTime.Now.AddDays(1), DateTime.Now.Subtract(TimeSpan.FromDays(1)), DateTime.Now.AddDays(2), DateTime.Now };
             var ys = xs.ToAsyncEnumerable();
@@ -311,7 +311,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Min12Async()
+        public async Task MinAsync_TSource_NonValue()
         {
             var xs = new[] { "foo", "bar", "qux", "baz", "fred", "wilma" };
             var ys = xs.ToAsyncEnumerable();
