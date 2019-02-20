@@ -20,7 +20,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty1()
+        public async Task DefaultIfEmpty_Empty()
         {
             var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty();
 
@@ -30,7 +30,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty2()
+        public async Task DefaultIfEmpty_Value_Empty()
         {
             var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty(42);
 
@@ -40,7 +40,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty3()
+        public async Task DefaultIfEmpty_Single()
         {
             var xs = Return42.DefaultIfEmpty();
 
@@ -50,7 +50,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty4()
+        public async Task DefaultIfEmpty_Value_Single()
         {
             var xs = Return42.DefaultIfEmpty(24);
 
@@ -60,7 +60,20 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty5()
+        public async Task DefaultIfEmpty_Many()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Select(x => x).DefaultIfEmpty();
+
+            var e = xs.GetAsyncEnumerator();
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task DefaultIfEmpty_Many_IList()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty();
 
@@ -73,7 +86,20 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty6()
+        public async Task DefaultIfEmpty_Value_IList()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Select(x => x).DefaultIfEmpty(24);
+
+            var e = xs.GetAsyncEnumerator();
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task DefaultIfEmpty_Value_Many_IList()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty(24);
 
@@ -86,7 +112,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty7Async()
+        public async Task DefaultIfEmpty_Throws_Source()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex).DefaultIfEmpty();
@@ -96,7 +122,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty8Async()
+        public async Task DefaultIfEmpty_Value_Throws_Source()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex).DefaultIfEmpty(24);
@@ -106,7 +132,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty9()
+        public async Task DefaultIfEmpty_IAsyncIListProvider_ToArray_Empty()
         {
             var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty(42);
 
@@ -116,7 +142,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty10()
+        public async Task DefaultIfEmpty_Value_IAsyncIListProvider_ToArray_Empty()
         {
             var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty(42);
 
@@ -126,18 +152,9 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty11()
+        public async Task DefaultIfEmpty_IAsyncIListProvider_ToList()
         {
-            var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty(42);
-
-            Assert.Equal(1, await xs.CountAsync());
-        }
-
-
-        [Fact]
-        public async Task DefaultIfEmpty12()
-        {
-            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty(24);
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty();
 
             var res = new[] { 1, 2, 3, 4 };
 
@@ -145,7 +162,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty13()
+        public async Task DefaultIfEmpty_Value_IAsyncIListProvider_ToList()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty(24);
 
@@ -155,7 +172,31 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty14()
+        public async Task DefaultIfEmpty_IAsyncIListProvider_Count_Empty()
+        {
+            var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty(42);
+
+            Assert.Equal(1, await xs.CountAsync());
+        }
+
+        [Fact]
+        public async Task DefaultIfEmpty_Value_IAsyncIListProvider_Count()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Where(x => x > 0).DefaultIfEmpty(24);
+
+            Assert.Equal(4, await xs.CountAsync());
+        }
+
+        [Fact]
+        public async Task DefaultIfEmpty_Value_IAsyncIListProvider_Count_IAsyncIListProvider()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Select(x => x).DefaultIfEmpty(24);
+
+            Assert.Equal(4, await xs.CountAsync());
+        }
+
+        [Fact]
+        public async Task DefaultIfEmpty_Value_IAsyncIListProvider_Count_IList()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty(24);
 
@@ -163,7 +204,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty15()
+        public async Task DefaultIfEmpty_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty(24);
 
