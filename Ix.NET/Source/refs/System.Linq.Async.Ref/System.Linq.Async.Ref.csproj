@@ -4,12 +4,13 @@
     <Description>LINQ Standard Query Operators used to express queries over asynchronous enumerable sequences.</Description>
     <AssemblyTitle>System.Linq.Async</AssemblyTitle>
     <Authors>Microsoft</Authors>
-    <TargetFrameworks>net45;netstandard1.4;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard2.0;netcoreapp3.0</TargetFrameworks>
     <PackageTags>Enumerable;Asynchronous;LINQ</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.2" />
+    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.0' "
+                      Include="System.Threading.Tasks.Extensions" Version="4.5.2" />
   </ItemGroup>
 
   <ItemGroup>

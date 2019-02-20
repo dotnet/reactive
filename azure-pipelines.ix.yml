@@ -81,9 +81,15 @@ steps:
     summaryFileLocation: '$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml'
     reportDirectory: '$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports'
 
-- script: |
-    choco install codecov
-    codecov -f $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml --flag ixnet
+- task: DotNetCoreCLI@2  
+  inputs:
+    command: custom
+    custom: tool
+    arguments: install --tool-path . Codecov.Tool
+  displayName: Install Codecov tool
+  condition: and(succeeded(), not(eq(variables['CODECOV_TOKEN'], '')))
+
+- script: codecov -f $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml --flag ixnet
   env:
     CODECOV_TOKEN: $(CODECOV_TOKEN)
   displayName: Upload coverage to Codecov
