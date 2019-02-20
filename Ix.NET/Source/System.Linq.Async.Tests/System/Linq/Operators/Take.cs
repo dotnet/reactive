@@ -18,7 +18,17 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Take0Async()
+        public async Task Take_Simple_TakeNegative()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Where(x => true);
+            var ys = xs.Take(-2);
+
+            var e = ys.GetAsyncEnumerator();
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task Take_Simple_TakeNegative_IList()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Take(-2);
@@ -28,7 +38,19 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Take1Async()
+        public async Task Take_Simple_TakeSome()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Where(x => true);
+            var ys = xs.Take(2);
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task Take_Simple_TakeSome_IList()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Take(2);
@@ -40,7 +62,21 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Take2Async()
+        public async Task Take_Simple_TakeAll()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Where(x => true);
+            var ys = xs.Take(10);
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task Take_Simple_TakeAll_IList()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Take(10);
@@ -54,7 +90,17 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Take3Async()
+        public async Task Take_Simple_TakeZero()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Where(x => true);
+            var ys = xs.Take(0);
+
+            var e = ys.GetAsyncEnumerator();
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task Take_Simple_TakeZero_IList()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Take(0);
@@ -64,7 +110,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Take4Async()
+        public async Task Take_Throws_Source()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
@@ -75,12 +121,102 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Take5()
+        public async Task Take_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Take(2);
 
             await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public async Task Take_IAsyncPartition_NonEmpty_Take()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Where(x => true);
+            var ys = xs.Take(2);
+
+            Assert.Equal(2, await ys.CountAsync());
+
+            Assert.Equal(1, await ys.FirstAsync());
+            Assert.Equal(2, await ys.LastAsync());
+
+            Assert.Equal(1, await ys.ElementAtAsync(0));
+            Assert.Equal(2, await ys.ElementAtAsync(1));
+
+            Assert.Equal(new[] { 1, 2 }, await ys.ToArrayAsync());
+            Assert.Equal(new[] { 1, 2 }, await ys.ToListAsync());
+        }
+
+        [Fact]
+        public async Task Take_IAsyncPartition_NonEmpty_TakeTake()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().Where(x => true);
+            var ys = xs.Take(3).Take(2);
+
+            Assert.Equal(2, await ys.CountAsync());
+
+            Assert.Equal(1, await ys.FirstAsync());
+            Assert.Equal(2, await ys.LastAsync());
+
+            Assert.Equal(1, await ys.ElementAtAsync(0));
+            Assert.Equal(2, await ys.ElementAtAsync(1));
+
+            Assert.Equal(new[] { 1, 2 }, await ys.ToArrayAsync());
+            Assert.Equal(new[] { 1, 2 }, await ys.ToListAsync());
+        }
+
+        [Fact]
+        public async Task Take_IAsyncPartition_NonEmpty_TakeSkip()
+        {
+            var xs = new[] { 2, 3, 4, 5 }.ToAsyncEnumerable().Where(x => true);
+            var ys = xs.Take(3).Skip(1);
+
+            Assert.Equal(2, await ys.CountAsync());
+
+            Assert.Equal(3, await ys.FirstAsync());
+            Assert.Equal(4, await ys.LastAsync());
+
+            Assert.Equal(3, await ys.ElementAtAsync(0));
+            Assert.Equal(4, await ys.ElementAtAsync(1));
+
+            Assert.Equal(new[] { 3, 4 }, await ys.ToArrayAsync());
+            Assert.Equal(new[] { 3, 4 }, await ys.ToListAsync());
+        }
+
+        [Fact]
+        public async Task Take_IAsyncPartition_Empty_Take()
+        {
+            var xs = new int[0].ToAsyncEnumerable().Where(x => true);
+            var ys = xs.Take(2);
+
+            Assert.Equal(0, await ys.CountAsync());
+
+            await AssertThrowsAsync<InvalidOperationException>(ys.FirstAsync().AsTask());
+            await AssertThrowsAsync<InvalidOperationException>(ys.LastAsync().AsTask());
+
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(ys.ElementAtAsync(0).AsTask());
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(ys.ElementAtAsync(1).AsTask());
+
+            Assert.Empty(await ys.ToArrayAsync());
+            Assert.Empty(await ys.ToListAsync());
+        }
+
+        [Fact]
+        public async Task Take_IAsyncPartition_Empty_TakeSkip()
+        {
+            var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable().Where(x => true);
+            var ys = xs.Take(7).Skip(5);
+
+            Assert.Equal(0, await ys.CountAsync());
+
+            await AssertThrowsAsync<InvalidOperationException>(ys.FirstAsync().AsTask());
+            await AssertThrowsAsync<InvalidOperationException>(ys.LastAsync().AsTask());
+
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(ys.ElementAtAsync(0).AsTask());
+            await AssertThrowsAsync<ArgumentOutOfRangeException>(ys.ElementAtAsync(1).AsTask());
+
+            Assert.Empty(await ys.ToArrayAsync());
+            Assert.Empty(await ys.ToListAsync());
         }
     }
 }

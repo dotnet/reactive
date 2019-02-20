@@ -185,7 +185,7 @@ namespace Tests
         public async Task Skip_IAsyncPartition_Empty_SkipSkip()
         {
             var xs = new[] { 1, 2 }.ToAsyncEnumerable().Where(x => true);
-            var ys = xs.Skip(2);
+            var ys = xs.Skip(1).Skip(1);
 
             Assert.Equal(0, await ys.CountAsync());
 
