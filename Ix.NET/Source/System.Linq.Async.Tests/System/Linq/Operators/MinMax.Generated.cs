@@ -2906,6 +2906,1250 @@ namespace Tests
 #endif
 
         [Fact]
+        public async Task Min_Single_WithNaN_1()
+        {
+            var input = new float[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_1()
+        {
+            var input = new float[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_1()
+        {
+            var input = new float[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_1()
+        {
+            var input = new float[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new float?[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new float?[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new float?[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new float?[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new float?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new float?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new float?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new float?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
+        public async Task Min_Single_WithNaN_4()
+        {
+            var input = new float[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_4()
+        {
+            var input = new float[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_4()
+        {
+            var input = new float[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_4()
+        {
+            var input = new float[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new float?[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new float?[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new float?[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new float?[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new float?[] { -2, null, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new float?[] { -2, null, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new float?[] { -2, null, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new float?[] { -2, null, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
+        public async Task Min_Single_WithNaN_8()
+        {
+            var input = new float[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_8()
+        {
+            var input = new float[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_8()
+        {
+            var input = new float[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_8()
+        {
+            var input = new float[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new float?[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new float?[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new float?[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new float?[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new float?[] { -48, null, float.NaN, -46, null, float.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new float?[] { -48, null, float.NaN, -46, null, float.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new float?[] { -48, null, float.NaN, -46, null, float.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new float?[] { -48, null, float.NaN, -46, null, float.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
+        public async Task Min_Single_WithNaN_16()
+        {
+            var input = new float[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_16()
+        {
+            var input = new float[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_16()
+        {
+            var input = new float[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_16()
+        {
+            var input = new float[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new float?[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new float?[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new float?[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new float?[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Single_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new float?[] { 59, null, float.NaN, 98, null, float.NaN, -100, null, float.NaN, -86, null, float.NaN, 19, null, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Single_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new float?[] { 59, null, float.NaN, 98, null, float.NaN, -100, null, float.NaN, -86, null, float.NaN, 19, null, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Single_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new float?[] { 59, null, float.NaN, 98, null, float.NaN, -100, null, float.NaN, -86, null, float.NaN, 19, null, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new float?[] { 59, null, float.NaN, 98, null, float.NaN, -100, null, float.NaN, -86, null, float.NaN, 19, null, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
         public async Task Min_Empty_Double()
         {
             await AssertThrowsAsync<InvalidOperationException>(new double[0].ToAsyncEnumerable().MinAsync(CancellationToken.None).AsTask());
@@ -3869,6 +5113,1250 @@ namespace Tests
         }
 #endif
 
+        [Fact]
+        public async Task Min_Double_WithNaN_1()
+        {
+            var input = new double[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_1()
+        {
+            var input = new double[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_1()
+        {
+            var input = new double[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_1()
+        {
+            var input = new double[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new double?[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new double?[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new double?[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new double?[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 1);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new double?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new double?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new double?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new double?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
+        public async Task Min_Double_WithNaN_4()
+        {
+            var input = new double[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_4()
+        {
+            var input = new double[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_4()
+        {
+            var input = new double[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_4()
+        {
+            var input = new double[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new double?[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new double?[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new double?[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new double?[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 4);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new double?[] { -2, null, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new double?[] { -2, null, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new double?[] { -2, null, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new double?[] { -2, null, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
+        public async Task Min_Double_WithNaN_8()
+        {
+            var input = new double[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_8()
+        {
+            var input = new double[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_8()
+        {
+            var input = new double[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_8()
+        {
+            var input = new double[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new double?[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new double?[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new double?[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new double?[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 8);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new double?[] { -48, null, double.NaN, -46, null, double.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new double?[] { -48, null, double.NaN, -46, null, double.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new double?[] { -48, null, double.NaN, -46, null, double.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new double?[] { -48, null, double.NaN, -46, null, double.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
+        public async Task Min_Double_WithNaN_16()
+        {
+            var input = new double[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_16()
+        {
+            var input = new double[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_16()
+        {
+            var input = new double[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_16()
+        {
+            var input = new double[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new double?[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new double?[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new double?[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new double?[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 16);
+
+            var expected = input.Min();
+            var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Min_Double_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new double?[] { 59, null, double.NaN, 98, null, double.NaN, -100, null, double.NaN, -86, null, double.NaN, 19, null, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_Selector_Double_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new double?[] { 59, null, double.NaN, 98, null, double.NaN, -100, null, double.NaN, -86, null, double.NaN, 19, null, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Min_AsyncSelector_Double_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new double?[] { 59, null, double.NaN, 98, null, double.NaN, -100, null, double.NaN, -86, null, double.NaN, 19, null, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Min_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new double?[] { 59, null, double.NaN, 98, null, double.NaN, -100, null, double.NaN, -86, null, double.NaN, 19, null, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Min();
+                var actual = await input.ToAsyncEnumerable().MinAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
         [Fact]
         public async Task Min_Empty_Decimal()
         {
@@ -7726,6 +10214,1250 @@ namespace Tests
 #endif
 
         [Fact]
+        public async Task Max_Single_WithNaN_1()
+        {
+            var input = new float[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_1()
+        {
+            var input = new float[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_1()
+        {
+            var input = new float[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_1()
+        {
+            var input = new float[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new float?[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new float?[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new float?[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new float?[] { float.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new float?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new float?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new float?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new float?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
+        public async Task Max_Single_WithNaN_4()
+        {
+            var input = new float[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_4()
+        {
+            var input = new float[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_4()
+        {
+            var input = new float[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_4()
+        {
+            var input = new float[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new float?[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new float?[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new float?[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new float?[] { float.NaN, -78, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new float?[] { -2, null, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new float?[] { -2, null, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new float?[] { -2, null, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new float?[] { -2, null, float.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
+        public async Task Max_Single_WithNaN_8()
+        {
+            var input = new float[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_8()
+        {
+            var input = new float[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_8()
+        {
+            var input = new float[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_8()
+        {
+            var input = new float[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new float?[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new float?[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new float?[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new float?[] { float.NaN, -19, float.NaN, -46, float.NaN, -63, float.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new float?[] { -48, null, float.NaN, -46, null, float.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new float?[] { -48, null, float.NaN, -46, null, float.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new float?[] { -48, null, float.NaN, -46, null, float.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new float?[] { -48, null, float.NaN, -46, null, float.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
+        public async Task Max_Single_WithNaN_16()
+        {
+            var input = new float[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_16()
+        {
+            var input = new float[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_16()
+        {
+            var input = new float[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_16()
+        {
+            var input = new float[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(float.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new float?[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new float?[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new float?[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new float?[] { float.NaN, 98, float.NaN, 98, float.NaN, 63, float.NaN, 14, float.NaN, -86, float.NaN, -79, float.NaN, -84, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(float?), 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<float?>(float.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Single_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new float?[] { 59, null, float.NaN, 98, null, float.NaN, -100, null, float.NaN, -86, null, float.NaN, 19, null, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Single_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new float?[] { 59, null, float.NaN, 98, null, float.NaN, -100, null, float.NaN, -86, null, float.NaN, 19, null, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Single_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new float?[] { 59, null, float.NaN, 98, null, float.NaN, -100, null, float.NaN, -86, null, float.NaN, 19, null, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Single_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new float?[] { 59, null, float.NaN, 98, null, float.NaN, -100, null, float.NaN, -86, null, float.NaN, 19, null, float.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<float?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
         public async Task Max_Empty_Double()
         {
             await AssertThrowsAsync<InvalidOperationException>(new double[0].ToAsyncEnumerable().MaxAsync(CancellationToken.None).AsTask());
@@ -8689,6 +12421,1250 @@ namespace Tests
         }
 #endif
 
+        [Fact]
+        public async Task Max_Double_WithNaN_1()
+        {
+            var input = new double[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_1()
+        {
+            var input = new double[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_1()
+        {
+            var input = new double[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_1()
+        {
+            var input = new double[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_1_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new double?[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new double?[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new double?[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_1_NoNull()
+        {
+            var input = new double?[] { double.NaN }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_1_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_1_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 1);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new double?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new double?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new double?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_1_SomeNull()
+        {
+            var input = new double?[] { 33 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
+        public async Task Max_Double_WithNaN_4()
+        {
+            var input = new double[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_4()
+        {
+            var input = new double[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_4()
+        {
+            var input = new double[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_4()
+        {
+            var input = new double[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_4_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new double?[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new double?[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new double?[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_4_NoNull()
+        {
+            var input = new double?[] { double.NaN, -78, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_4_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_4_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 4);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new double?[] { -2, null, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new double?[] { -2, null, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new double?[] { -2, null, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_4_SomeNull()
+        {
+            var input = new double?[] { -2, null, double.NaN, -17 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
+        public async Task Max_Double_WithNaN_8()
+        {
+            var input = new double[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_8()
+        {
+            var input = new double[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_8()
+        {
+            var input = new double[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_8()
+        {
+            var input = new double[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_8_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new double?[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new double?[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new double?[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_8_NoNull()
+        {
+            var input = new double?[] { double.NaN, -19, double.NaN, -46, double.NaN, -63, double.NaN, -99 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_8_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_8_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 8);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new double?[] { -48, null, double.NaN, -46, null, double.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new double?[] { -48, null, double.NaN, -46, null, double.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new double?[] { -48, null, double.NaN, -46, null, double.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_8_SomeNull()
+        {
+            var input = new double?[] { -48, null, double.NaN, -46, null, double.NaN, -10, null }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+        [Fact]
+        public async Task Max_Double_WithNaN_16()
+        {
+            var input = new double[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_16()
+        {
+            var input = new double[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_16()
+        {
+            var input = new double[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_16()
+        {
+            var input = new double[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_16_AllNaN()
+        {
+            var input = Enumerable.Repeat(double.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new double?[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new double?[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new double?[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_16_NoNull()
+        {
+            var input = new double?[] { double.NaN, 98, double.NaN, 98, double.NaN, 63, double.NaN, 14, double.NaN, -86, double.NaN, -79, double.NaN, -84, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_16_AllNull()
+        {
+            var input = Enumerable.Repeat(default(double?), 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_16_AllNaN()
+        {
+            var input = Enumerable.Repeat<double?>(double.NaN, 16);
+
+            var expected = input.Max();
+            var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task Max_Double_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new double?[] { 59, null, double.NaN, 98, null, double.NaN, -100, null, double.NaN, -86, null, double.NaN, 19, null, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_Selector_Double_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new double?[] { 59, null, double.NaN, 98, null, double.NaN, -100, null, double.NaN, -86, null, double.NaN, 19, null, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task Max_AsyncSelector_Double_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new double?[] { 59, null, double.NaN, 98, null, double.NaN, -100, null, double.NaN, -86, null, double.NaN, 19, null, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync(x => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task Max_AsyncSelectorWithCancellation_Double_WithNaN_Nullable_16_SomeNull()
+        {
+            var input = new double?[] { 59, null, double.NaN, 98, null, double.NaN, -100, null, double.NaN, -86, null, double.NaN, 19, null, double.NaN, 41 }.AsEnumerable();
+
+            for (var i = 0; i < 4; i++)
+            {
+                var expected = input.Max();
+                var actual = await input.ToAsyncEnumerable().MaxAsync((x, ct) => new ValueTask<double?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
         [Fact]
         public async Task Max_Empty_Decimal()
         {

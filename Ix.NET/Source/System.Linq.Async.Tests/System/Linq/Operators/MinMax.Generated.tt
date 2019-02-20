@@ -342,11 +342,326 @@ foreach (var op in new[] { "Min", "Max" })
 <#
         }
 
-        foreach (var n in new[] { 1, 4, 8, 16 })
+        if (t == typeof(float) || t == typeof(double))
         {
-            var values = string.Join(", ", getRandom(n * 42, n, -100, 100));
+            foreach (var n in new[] { 1, 4, 8, 16 })
+            {
+                var values = string.Join(", ", getRandom(n * 42, n, -100, 100).Select((x, i) => i % 2 == 0 ? toCSharp(t) + ".NaN" : x.ToString()));
+                var valuesWithNull = string.Join(", ", getRandom(n * 42, n, -100, 100).Select((x, i) => i % 3 == 0 ? x.ToString() : (i % 3 == 1 ? "null" : toCSharp(t) + ".NaN")));
 #>
+        [Fact]
+        public async Task <#=op#>_<#=t.Name#>_WithNaN_<#=n#>()
+        {
+            var input = new <#=cs#>[] { <#=values#> }.AsEnumerable();
+
+            for (var i = 0; i < <#=ShuffleCount#>; i++)
+            {
+                var expected = input.<#=op#>();
+                var actual = await input.ToAsyncEnumerable().<#=op#>Async(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task <#=op#>_Selector_<#=t.Name#>_WithNaN_<#=n#>()
+        {
+            var input = new <#=cs#>[] { <#=values#> }.AsEnumerable();
+
+            for (var i = 0; i < <#=ShuffleCount#>; i++)
+            {
+                var expected = input.<#=op#>();
+                var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_WithNaN_<#=n#>()
+        {
+            var input = new <#=cs#>[] { <#=values#> }.AsEnumerable();
+
+            for (var i = 0; i < <#=ShuffleCount#>; i++)
+            {
+                var expected = input.<#=op#>();
+                var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_WithNaN_<#=n#>()
+        {
+            var input = new <#=cs#>[] { <#=values#> }.AsEnumerable();
+
+            for (var i = 0; i < <#=ShuffleCount#>; i++)
+            {
+                var expected = input.<#=op#>();
+                var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task <#=op#>_<#=t.Name#>_WithNaN_<#=n#>_AllNaN()
+        {
+            var input = Enumerable.Repeat(<#=toCSharp(t)#>.NaN, <#=n#>);
+
+            var expected = input.<#=op#>();
+            var actual = await input.ToAsyncEnumerable().<#=op#>Async(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task <#=op#>_Selector_<#=t.Name#>_WithNaN_<#=n#>_AllNaN()
+        {
+            var input = Enumerable.Repeat(<#=toCSharp(t)#>.NaN, <#=n#>);
+
+            var expected = input.<#=op#>();
+            var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_WithNaN_<#=n#>_AllNaN()
+        {
+            var input = Enumerable.Repeat(<#=toCSharp(t)#>.NaN, <#=n#>);
+
+            var expected = input.<#=op#>();
+            var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_WithNaN_<#=n#>_AllNaN()
+        {
+            var input = Enumerable.Repeat(<#=toCSharp(t)#>.NaN, <#=n#>);
+
+            var expected = input.<#=op#>();
+            var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task <#=op#>_<#=t.Name#>_WithNaN_Nullable_<#=n#>_NoNull()
+        {
+            var input = new <#=cs#>?[] { <#=values#> }.AsEnumerable();
+
+            for (var i = 0; i < <#=ShuffleCount#>; i++)
+            {
+                var expected = input.<#=op#>();
+                var actual = await input.ToAsyncEnumerable().<#=op#>Async(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task <#=op#>_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_NoNull()
+        {
+            var input = new <#=cs#>?[] { <#=values#> }.AsEnumerable();
+
+            for (var i = 0; i < <#=ShuffleCount#>; i++)
+            {
+                var expected = input.<#=op#>();
+                var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_NoNull()
+        {
+            var input = new <#=cs#>?[] { <#=values#> }.AsEnumerable();
+
+            for (var i = 0; i < <#=ShuffleCount#>; i++)
+            {
+                var expected = input.<#=op#>();
+                var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_WithNaN_Nullable_<#=n#>_NoNull()
+        {
+            var input = new <#=cs#>?[] { <#=values#> }.AsEnumerable();
+
+            for (var i = 0; i < <#=ShuffleCount#>; i++)
+            {
+                var expected = input.<#=op#>();
+                var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
+
+        [Fact]
+        public async Task <#=op#>_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNull()
+        {
+            var input = Enumerable.Repeat(default(<#=cs#>?), <#=n#>);
+
+            var expected = input.<#=op#>();
+            var actual = await input.ToAsyncEnumerable().<#=op#>Async(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task <#=op#>_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNull()
+        {
+            var input = Enumerable.Repeat(default(<#=cs#>?), <#=n#>);
+
+            var expected = input.<#=op#>();
+            var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNull()
+        {
+            var input = Enumerable.Repeat(default(<#=cs#>?), <#=n#>);
+
+            var expected = input.<#=op#>();
+            var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNull()
+        {
+            var input = Enumerable.Repeat(default(<#=cs#>?), <#=n#>);
+
+            var expected = input.<#=op#>();
+            var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task <#=op#>_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNaN()
+        {
+            var input = Enumerable.Repeat<<#=toCSharp(t)#>?>(<#=toCSharp(t)#>.NaN, <#=n#>);
+
+            var expected = input.<#=op#>();
+            var actual = await input.ToAsyncEnumerable().<#=op#>Async(CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task <#=op#>_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNaN()
+        {
+            var input = Enumerable.Repeat<<#=toCSharp(t)#>?>(<#=toCSharp(t)#>.NaN, <#=n#>);
+
+            var expected = input.<#=op#>();
+            var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => x, CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNaN()
+        {
+            var input = Enumerable.Repeat<<#=toCSharp(t)#>?>(<#=toCSharp(t)#>.NaN, <#=n#>);
+
+            var expected = input.<#=op#>();
+            var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNaN()
+        {
+            var input = Enumerable.Repeat<<#=toCSharp(t)#>?>(<#=toCSharp(t)#>.NaN, <#=n#>);
+
+            var expected = input.<#=op#>();
+            var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            Assert.Equal(expected, actual);
+        }
+#endif
+
+        [Fact]
+        public async Task <#=op#>_<#=t.Name#>_WithNaN_Nullable_<#=n#>_SomeNull()
+        {
+            var input = new <#=cs#>?[] { <#=valuesWithNull#> }.AsEnumerable();
+
+            for (var i = 0; i < <#=ShuffleCount#>; i++)
+            {
+                var expected = input.<#=op#>();
+                var actual = await input.ToAsyncEnumerable().<#=op#>Async(CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task <#=op#>_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_SomeNull()
+        {
+            var input = new <#=cs#>?[] { <#=valuesWithNull#> }.AsEnumerable();
+
+            for (var i = 0; i < <#=ShuffleCount#>; i++)
+            {
+                var expected = input.<#=op#>();
+                var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => x, CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+        [Fact]
+        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_SomeNull()
+        {
+            var input = new <#=cs#>?[] { <#=valuesWithNull#> }.AsEnumerable();
+
+            for (var i = 0; i < <#=ShuffleCount#>; i++)
+            {
+                var expected = input.<#=op#>();
+                var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_WithNaN_Nullable_<#=n#>_SomeNull()
+        {
+            var input = new <#=cs#>?[] { <#=valuesWithNull#> }.AsEnumerable();
+
+            for (var i = 0; i < <#=ShuffleCount#>; i++)
+            {
+                var expected = input.<#=op#>();
+                var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+                Assert.Equal(expected, actual);
+
+                input = Shuffle(input);
+            }
+        }
+#endif
 <#
+            }
         }
     }
 }
