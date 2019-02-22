@@ -22,7 +22,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Union1()
+        public async Task Union_Simple()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
@@ -38,7 +38,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Union2()
+        public async Task Union_EqualityComparer()
         {
             var xs = new[] { 1, 2, -3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, -1, 4 }.ToAsyncEnumerable();
@@ -54,7 +54,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Union3()
+        public async Task Union_UnionUnion()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
@@ -70,6 +70,96 @@ namespace Tests
             await HasNextAsync(e, 7);
             await HasNextAsync(e, 8);
             await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task Union_UnionUnionUnion()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
+            var zs = new[] { 5, 7, 8, 1 }.ToAsyncEnumerable();
+            var us = new[] { 2, 4, 6, 8 }.ToAsyncEnumerable();
+            var res = xs.Union(ys).Union(zs).Union(us);
+
+            var e = res.GetAsyncEnumerator();
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 7);
+            await HasNextAsync(e, 8);
+            await HasNextAsync(e, 6);
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task Union_UnionOfEmpty2()
+        {
+            var res = AsyncEnumerable.Empty<int>().Union(AsyncEnumerable.Empty<int>());
+
+            var e = res.GetAsyncEnumerator();
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task Union_UnionOfEmpty3()
+        {
+            var res = AsyncEnumerable.Empty<int>().Union(AsyncEnumerable.Empty<int>()).Union(AsyncEnumerable.Empty<int>());
+
+            var e = res.GetAsyncEnumerator();
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task Union_ManyUnionsWithEmpty()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
+            var zs = new[] { 5, 7, 8, 1 }.ToAsyncEnumerable();
+            var us = new[] { 2, 4, 6, 8 }.ToAsyncEnumerable();
+            var res = AsyncEnumerable.Empty<int>().Union(AsyncEnumerable.Empty<int>()).Union(xs).Union(ys).Union(zs).Union(us);
+
+            var e = res.GetAsyncEnumerator();
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 5);
+            await HasNextAsync(e, 4);
+            await HasNextAsync(e, 7);
+            await HasNextAsync(e, 8);
+            await HasNextAsync(e, 6);
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task Union_Count()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
+            var res = xs.Union(ys);
+
+            Assert.Equal(5, await res.CountAsync());
+        }
+
+        [Fact]
+        public async Task Union_ToArray()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
+            var res = xs.Union(ys);
+
+            Assert.Equal(new[] { 1, 2, 3, 4, 5 }, (await res.ToArrayAsync()).OrderBy(x => x));
+        }
+
+        [Fact]
+        public async Task Union_ToList()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
+            var res = xs.Union(ys);
+
+            Assert.Equal(new[] { 1, 2, 3, 4, 5 }, (await res.ToListAsync()).OrderBy(x => x));
         }
 
         private sealed class Eq : IEqualityComparer<int>
