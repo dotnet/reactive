@@ -255,6 +255,33 @@ namespace Tests
         }
 
         [Fact]
+        public async Task Select_Sync_IList_Count()
+        {
+            var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
+            var ys = xs.Select(x => x * 2);
+
+            Assert.Equal(5, await ys.CountAsync());
+        }
+
+        [Fact]
+        public async Task Select_Sync_IList_ToList()
+        {
+            var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
+            var ys = xs.Select(x => x * 2);
+
+            Assert.Equal(new[] { 2, 4, 6, 8, 10 }, await ys.ToListAsync());
+        }
+
+        [Fact]
+        public async Task Select_Sync_IList_ToArray()
+        {
+            var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
+            var ys = xs.Select(x => x * 2);
+
+            Assert.Equal(new[] { 2, 4, 6, 8, 10 }, await ys.ToArrayAsync());
+        }
+
+        [Fact]
         public void Select_Async_Null()
         {
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default, x => new ValueTask<int>(x)));
@@ -492,6 +519,33 @@ namespace Tests
             var ys = xs.Select((x, i) => new ValueTask<char>((char)('a' + i)));
 
             await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public async Task Select_Async_IList_Count()
+        {
+            var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
+            var ys = xs.Select(x => new ValueTask<int>(x * 2));
+
+            Assert.Equal(5, await ys.CountAsync());
+        }
+
+        [Fact]
+        public async Task Select_Async_IList_ToList()
+        {
+            var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
+            var ys = xs.Select(x => new ValueTask<int>(x * 2));
+
+            Assert.Equal(new[] { 2, 4, 6, 8, 10 }, await ys.ToListAsync());
+        }
+
+        [Fact]
+        public async Task Select_Async_IList_ToArray()
+        {
+            var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
+            var ys = xs.Select(x => new ValueTask<int>(x * 2));
+
+            Assert.Equal(new[] { 2, 4, 6, 8, 10 }, await ys.ToArrayAsync());
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -736,6 +790,33 @@ namespace Tests
             var ys = xs.Select((x, i, ct) => new ValueTask<char>((char)('a' + i)));
 
             await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public async Task Select_Async_Cancel_IList_Count()
+        {
+            var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
+            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<int>(x * 2));
+
+            Assert.Equal(5, await ys.CountAsync());
+        }
+
+        [Fact]
+        public async Task Select_Async_Cancel_IList_ToList()
+        {
+            var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
+            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<int>(x * 2));
+
+            Assert.Equal(new[] { 2, 4, 6, 8, 10 }, await ys.ToListAsync());
+        }
+
+        [Fact]
+        public async Task Select_Async_Cancel_IList_ToArray()
+        {
+            var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
+            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<int>(x * 2));
+
+            Assert.Equal(new[] { 2, 4, 6, 8, 10 }, await ys.ToArrayAsync());
         }
 
 #endif
