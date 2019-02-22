@@ -23,7 +23,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Intersect1()
+        public async Task Intersect_Simple()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
@@ -36,7 +36,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Intersect2()
+        public async Task Intersect_EqualityComparer()
         {
             var xs = new[] { 1, 2, -3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, -1, 4 }.ToAsyncEnumerable();
@@ -49,7 +49,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Intersect3()
+        public async Task Intersect_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();

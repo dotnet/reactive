@@ -23,7 +23,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Except1()
+        public async Task Except_Simple()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
@@ -35,7 +35,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Except2()
+        public async Task Except_EqualityComparer()
         {
             var xs = new[] { 1, 2, -3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, -1, 4 }.ToAsyncEnumerable();
@@ -47,7 +47,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Except3()
+        public async Task Except_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
