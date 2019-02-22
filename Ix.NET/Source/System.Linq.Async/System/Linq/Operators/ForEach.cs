@@ -73,8 +73,13 @@ namespace System.Linq
             }
         }
 
-        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> action, CancellationToken cancellationToken)
+        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> action, CancellationToken cancellationToken = default)
         {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (action == null)
+                throw Error.ArgumentNull(nameof(action));
+
             return Core(source, action, cancellationToken);
 
             static async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, Task> _action, CancellationToken _cancellationToken)
@@ -106,7 +111,7 @@ namespace System.Linq
             }
         }
 
-        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, Task> action, CancellationToken cancellationToken)
+        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, Task> action, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
