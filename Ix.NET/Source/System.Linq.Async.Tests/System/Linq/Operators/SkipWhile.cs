@@ -12,7 +12,7 @@ namespace Tests
     public class SkipWhile : AsyncEnumerableTests
     {
         [Fact]
-        public void SkipWhile_Null()
+        public void SkipWhile_Sync_Null()
         {
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(default, x => true));
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(default, (x, i) => true));
@@ -21,7 +21,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile1Async()
+        public async Task SkipWhile_Sync_Simple1()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => x < 3);
@@ -33,31 +33,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile2Async()
-        {
-            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile(x => false);
-
-            var e = ys.GetAsyncEnumerator();
-            await HasNextAsync(e, 1);
-            await HasNextAsync(e, 2);
-            await HasNextAsync(e, 3);
-            await HasNextAsync(e, 4);
-            await NoNextAsync(e);
-        }
-
-        [Fact]
-        public async Task SkipWhile3Async()
-        {
-            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile(x => true);
-
-            var e = ys.GetAsyncEnumerator();
-            await NoNextAsync(e);
-        }
-
-        [Fact]
-        public async Task SkipWhile4Async()
+        public async Task SkipWhile_Sync_Simple2()
         {
             var xs = new[] { 1, 2, 3, 4, 3, 2, 1 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => x < 3);
@@ -72,7 +48,31 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile5Async()
+        public async Task SkipWhile_Sync_False()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var ys = xs.SkipWhile(x => false);
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task SkipWhile_Sync_True()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var ys = xs.SkipWhile(x => true);
+
+            var e = ys.GetAsyncEnumerator();
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task SkipWhile_Sync_Throws_Predicate()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
@@ -83,7 +83,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile6Async()
+        public async Task SkipWhile_Sync_Indexed()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => i < 2);
@@ -95,7 +95,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile7Async()
+        public async Task SkipWhile_Sync_Indexed_False()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => false);
@@ -109,7 +109,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile8Async()
+        public async Task SkipWhile_Sync_Indexed_True()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => true);
@@ -119,7 +119,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile9Async()
+        public async Task SkipWhile_Sync_Indexed_Throws_Predicate()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
@@ -130,7 +130,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile10()
+        public async Task SkipWhile_Sync_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => x < 3);
@@ -139,7 +139,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile11()
+        public async Task SkipWhile_Sync_Indexed_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => false);

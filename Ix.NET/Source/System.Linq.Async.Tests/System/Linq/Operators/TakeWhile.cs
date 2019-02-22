@@ -12,7 +12,7 @@ namespace Tests
     public class TakeWhile : AsyncEnumerableTests
     {
         [Fact]
-        public void TakeWhile_Null()
+        public void TakeWhile_Sync_Null()
         {
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.TakeWhile<int>(default, x => true));
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.TakeWhile<int>(default, (x, i) => true));
@@ -21,7 +21,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task TakeWhile1Async()
+        public async Task TakeWhile_Sync_Simple1()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile(x => x < 3);
@@ -33,7 +33,19 @@ namespace Tests
         }
 
         [Fact]
-        public async Task TakeWhile2Async()
+        public async Task TakeWhile_Sync_Simple2()
+        {
+            var xs = new[] { 1, 2, 3, 4, 3, 2, 1 }.ToAsyncEnumerable();
+            var ys = xs.TakeWhile(x => x < 3);
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task TakeWhile_Sync_False()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile(x => false);
@@ -43,7 +55,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task TakeWhile3Async()
+        public async Task TakeWhile_Sync_True()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile(x => true);
@@ -57,19 +69,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task TakeWhile4Async()
-        {
-            var xs = new[] { 1, 2, 3, 4, 3, 2, 1 }.ToAsyncEnumerable();
-            var ys = xs.TakeWhile(x => x < 3);
-
-            var e = ys.GetAsyncEnumerator();
-            await HasNextAsync(e, 1);
-            await HasNextAsync(e, 2);
-            await NoNextAsync(e);
-        }
-
-        [Fact]
-        public async Task TakeWhile5Async()
+        public async Task TakeWhile_Sync_Throws_Predicate()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
@@ -80,7 +80,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task TakeWhile6Async()
+        public async Task TakeWhile_Sync_Indexed()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile((x, i) => i < 2);
@@ -92,7 +92,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task TakeWhile7Async()
+        public async Task TakeWhile_Sync_Indexed_False()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile((x, i) => false);
@@ -102,7 +102,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task TakeWhile8Async()
+        public async Task TakeWhile_Sync_Indexed_True()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile((x, i) => true);
@@ -116,7 +116,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task TakeWhile9Async()
+        public async Task TakeWhile_Sync_Indexed_Throws_Predicate()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
@@ -128,7 +128,7 @@ namespace Tests
 
 
         [Fact]
-        public async Task TakeWhile10()
+        public async Task TakeWhile_Sync_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile(x => x < 3);
@@ -137,7 +137,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task TakeWhile11()
+        public async Task TakeWhile_Sync_Indexed_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile((x, i) => i < 2);
