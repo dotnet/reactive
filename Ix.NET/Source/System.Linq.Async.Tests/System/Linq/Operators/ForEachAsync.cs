@@ -72,7 +72,7 @@ namespace Tests
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(default, x => Task.CompletedTask));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(Return42, default(Func<int, Task>)));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(default, (int x, int i) => Task.CompletedTask));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(default, (x, i) => Task.CompletedTask));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(Return42, default(Func<int, int, Task>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(default, x => Task.CompletedTask, CancellationToken.None));
@@ -122,14 +122,9 @@ namespace Tests
         [Fact]
         public async Task ForEachAsync_Cancel_Async_Cancel_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(default, (int x, CancellationToken ct) => Task.CompletedTask));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(Return42, default(Func<int, CancellationToken, Task>)));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(default, (int x, int i, CancellationToken ct) => Task.CompletedTask));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(Return42, default(Func<int, int, CancellationToken, Task>)));
-
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(default, (int x, CancellationToken ct) => Task.CompletedTask, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(Return42, default(Func<int, CancellationToken, Task>), CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(default, (int x, int i, CancellationToken ct) => Task.CompletedTask, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(default, (x, i, ct) => Task.CompletedTask, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync(Return42, default(Func<int, int, CancellationToken, Task>), CancellationToken.None));
         }
 
@@ -139,7 +134,7 @@ namespace Tests
             var sum = 0;
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            await xs.ForEachAsync((int x, CancellationToken ct) => { sum += x; return Task.CompletedTask; });
+            await xs.ForEachAsync((int x, CancellationToken ct) => { sum += x; return Task.CompletedTask; }, CancellationToken.None);
             Assert.Equal(10, sum);
         }
 
@@ -149,7 +144,7 @@ namespace Tests
             var sum = 0;
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            await xs.ForEachAsync((x, i, ct) => { sum += x * i; return Task.CompletedTask; });
+            await xs.ForEachAsync((x, i, ct) => { sum += x * i; return Task.CompletedTask; }, CancellationToken.None);
             Assert.Equal(1 * 0 + 2 * 1 + 3 * 2 + 4 * 3, sum);
         }
 
@@ -159,7 +154,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
 
-            await AssertThrowsAsync(xs.ForEachAsync((int x, CancellationToken ct) => Task.FromException(ex)), ex);
+            await AssertThrowsAsync(xs.ForEachAsync((int x, CancellationToken ct) => Task.FromException(ex), CancellationToken.None), ex);
         }
 
         [Fact]
@@ -168,7 +163,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
 
-            await AssertThrowsAsync(xs.ForEachAsync((x, i, ct) => Task.FromException(ex)), ex);
+            await AssertThrowsAsync(xs.ForEachAsync((x, i, ct) => Task.FromException(ex), CancellationToken.None), ex);
         }
     }
 }
