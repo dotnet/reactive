@@ -18,7 +18,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Repeat1Async()
+        public async Task Repeat_Many()
         {
             var xs = AsyncEnumerable.Repeat(2, 5);
 
@@ -32,12 +32,36 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Repeat2Async()
+        public async Task Repeat_Zero()
         {
             var xs = AsyncEnumerable.Repeat(2, 0);
 
             var e = xs.GetAsyncEnumerator();
             await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task Repeat_Count()
+        {
+            var xs = AsyncEnumerable.Repeat(2, 5);
+
+            Assert.Equal(5, await xs.CountAsync());
+        }
+
+        [Fact]
+        public async Task Repeat_ToArray()
+        {
+            var xs = AsyncEnumerable.Repeat(2, 5);
+
+            Assert.Equal(Enumerable.Repeat(2, 5), await xs.ToArrayAsync());
+        }
+
+        [Fact]
+        public async Task Repeat_ToList()
+        {
+            var xs = AsyncEnumerable.Repeat(2, 5);
+
+            Assert.Equal(Enumerable.Repeat(2, 5), await xs.ToListAsync());
         }
     }
 }
