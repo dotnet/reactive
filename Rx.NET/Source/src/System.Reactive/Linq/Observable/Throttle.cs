@@ -7,264 +7,234 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Throttle<TSource> : Producer<TSource, Throttle<TSource>._>
+    internal sealed class Throttle<TSource> : Pipe<TSource>
     {
-        private readonly IObservable<TSource> _source;
         private readonly TimeSpan _dueTime;
         private readonly IScheduler _scheduler;
 
         public Throttle(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
+            : base(source)
         {
-            _source = source;
             _dueTime = dueTime;
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
+        protected override Pipe<TSource, TSource> Clone() => new Throttle<TSource>(_source, _dueTime, _scheduler);
 
-        protected override void Run(_ sink) => sink.Run(_source);
+        private readonly object _gate = new object();
+        private TSource _value;
+        private bool _hasValue;
+        private IDisposable _serialCancelable;
+        private ulong _id;
 
-        internal sealed class _ : IdentitySink<TSource>
+        protected override void Dispose(bool disposing)
         {
-            private readonly TimeSpan _dueTime;
-            private readonly IScheduler _scheduler;
-
-            public _(Throttle<TSource> parent, IObserver<TSource> observer)
-                : base(observer)
-            {
-                _dueTime = parent._dueTime;
-                _scheduler = parent._scheduler;
-            }
-
-            private readonly object _gate = new object();
-            private TSource _value;
-            private bool _hasValue;
-            private IDisposable _serialCancelable;
-            private ulong _id;
-
-            protected override void Dispose(bool disposing)
-            {
-                if (disposing)
-                {
-                    Disposable.TryDispose(ref _serialCancelable);
-                }
-
-                base.Dispose(disposing);
-            }
-
-            public override void OnNext(TSource value)
-            {
-                var currentid = default(ulong);
-                lock (_gate)
-                {
-                    _hasValue = true;
-                    _value = value;
-                    _id = unchecked(_id + 1);
-                    currentid = _id;
-                }
-
-                Disposable.TrySetSerial(ref _serialCancelable, null);
-                Disposable.TrySetSerial(ref _serialCancelable, _scheduler.ScheduleAction((@this: this, currentid), _dueTime, tuple => tuple.@this.Propagate(tuple.currentid)));
-            }
-
-            private void Propagate(ulong currentid)
-            {
-                lock (_gate)
-                {
-                    if (_hasValue && _id == currentid)
-                    {
-                        ForwardOnNext(_value);
-                    }
-
-                    _hasValue = false;
-                }
-            }
-
-            public override void OnError(Exception error)
+            if (disposing)
             {
                 Disposable.TryDispose(ref _serialCancelable);
-
-                lock (_gate)
-                {
-                    ForwardOnError(error);
-
-                    _hasValue = false;
-                    _id = unchecked(_id + 1);
-                }
             }
 
-            public override void OnCompleted()
+            base.Dispose(disposing);
+        }
+
+        public override void OnNext(TSource value)
+        {
+            var currentid = default(ulong);
+            lock (_gate)
             {
-                Disposable.TryDispose(ref _serialCancelable);
+                _hasValue = true;
+                _value = value;
+                _id = unchecked(_id + 1);
+                currentid = _id;
+            }
 
-                lock (_gate)
+            Disposable.TrySetSerial(ref _serialCancelable, null);
+            Disposable.TrySetSerial(ref _serialCancelable, _scheduler.ScheduleAction((@this: this, currentid), _dueTime, tuple => tuple.@this.Propagate(tuple.currentid)));
+        }
+
+        private void Propagate(ulong currentid)
+        {
+            lock (_gate)
+            {
+                if (_hasValue && _id == currentid)
                 {
-                    if (_hasValue)
-                    {
-                        ForwardOnNext(_value);
-                    }
-
-                    ForwardOnCompleted();
-
-                    _hasValue = false;
-                    _id = unchecked(_id + 1);
+                    ForwardOnNext(_value);
                 }
+
+                _hasValue = false;
+            }
+        }
+
+        public override void OnError(Exception error)
+        {
+            Disposable.TryDispose(ref _serialCancelable);
+
+            lock (_gate)
+            {
+                ForwardOnError(error);
+
+                _hasValue = false;
+                _id = unchecked(_id + 1);
+            }
+        }
+
+        public override void OnCompleted()
+        {
+            Disposable.TryDispose(ref _serialCancelable);
+
+            lock (_gate)
+            {
+                if (_hasValue)
+                {
+                    ForwardOnNext(_value);
+                }
+
+                ForwardOnCompleted();
+
+                _hasValue = false;
+                _id = unchecked(_id + 1);
             }
         }
     }
 
-    internal sealed class Throttle<TSource, TThrottle> : Producer<TSource, Throttle<TSource, TThrottle>._>
+    internal sealed class Throttle<TSource, TThrottle> : Pipe<TSource>
     {
-        private readonly IObservable<TSource> _source;
         private readonly Func<TSource, IObservable<TThrottle>> _throttleSelector;
 
         public Throttle(IObservable<TSource> source, Func<TSource, IObservable<TThrottle>> throttleSelector)
+            : base(source)
         {
-            _source = source;
             _throttleSelector = throttleSelector;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
+        protected override Pipe<TSource, TSource> Clone() => new Throttle<TSource, TThrottle>(_source, _throttleSelector);
 
-        protected override void Run(_ sink) => sink.Run(_source);
+        private readonly object _gate = new object();
+        private TSource _value;
+        private bool _hasValue;
+        private IDisposable _serialCancelable;
+        private ulong _id;
 
-        internal sealed class _ : IdentitySink<TSource>
+        protected override void Dispose(bool disposing)
         {
-            private readonly Func<TSource, IObservable<TThrottle>> _throttleSelector;
-
-            public _(Throttle<TSource, TThrottle> parent, IObserver<TSource> observer)
-                : base(observer)
+            if (disposing)
             {
-                _throttleSelector = parent._throttleSelector;
+                Disposable.TryDispose(ref _serialCancelable);
             }
+            base.Dispose(disposing);
+        }
 
-            private readonly object _gate = new object();
-            private TSource _value;
-            private bool _hasValue;
-            private IDisposable _serialCancelable;
-            private ulong _id;
-
-            protected override void Dispose(bool disposing)
+        public override void OnNext(TSource value)
+        {
+            var throttle = default(IObservable<TThrottle>);
+            try
             {
-                if (disposing)
-                {
-                    Disposable.TryDispose(ref _serialCancelable);
-                }
-                base.Dispose(disposing);
+                throttle = _throttleSelector(value);
             }
-
-            public override void OnNext(TSource value)
+            catch (Exception error)
             {
-                var throttle = default(IObservable<TThrottle>);
-                try
-                {
-                    throttle = _throttleSelector(value);
-                }
-                catch (Exception error)
-                {
-                    lock (_gate)
-                    {
-                        ForwardOnError(error);
-                    }
-
-                    return;
-                }
-
-                ulong currentid;
                 lock (_gate)
                 {
-                    _hasValue = true;
-                    _value = value;
-                    _id = unchecked(_id + 1);
-                    currentid = _id;
+                    ForwardOnError(error);
                 }
 
-                Disposable.TrySetSerial(ref _serialCancelable, null);
+                return;
+            }
 
-                var newInnerObserver = new ThrottleObserver(this, value, currentid);
-                newInnerObserver.SetResource(throttle.SubscribeSafe(newInnerObserver));
+            ulong currentid;
+            lock (_gate)
+            {
+                _hasValue = true;
+                _value = value;
+                _id = unchecked(_id + 1);
+                currentid = _id;
+            }
 
-                Disposable.TrySetSerial(ref _serialCancelable, newInnerObserver);
+            Disposable.TrySetSerial(ref _serialCancelable, null);
+
+            var newInnerObserver = new ThrottleObserver(this, value, currentid);
+            newInnerObserver.SetResource(throttle.SubscribeSafe(newInnerObserver));
+
+            Disposable.TrySetSerial(ref _serialCancelable, newInnerObserver);
+        }
+
+        public override void OnError(Exception error)
+        {
+            Disposable.TryDispose(ref _serialCancelable);
+
+            lock (_gate)
+            {
+                ForwardOnError(error);
+
+                _hasValue = false;
+                _id = unchecked(_id + 1);
+            }
+        }
+
+        public override void OnCompleted()
+        {
+            Disposable.TryDispose(ref _serialCancelable);
+
+            lock (_gate)
+            {
+                if (_hasValue)
+                {
+                    ForwardOnNext(_value);
+                }
+
+                ForwardOnCompleted();
+
+                _hasValue = false;
+                _id = unchecked(_id + 1);
+            }
+        }
+
+        private sealed class ThrottleObserver : SafeObserver<TThrottle>
+        {
+            private readonly Throttle<TSource, TThrottle> _parent;
+            private readonly TSource _value;
+            private readonly ulong _currentid;
+
+            public ThrottleObserver(Throttle<TSource, TThrottle> parent, TSource value, ulong currentid)
+            {
+                _parent = parent;
+                _value = value;
+                _currentid = currentid;
+            }
+
+            public override void OnNext(TThrottle value)
+            {
+                lock (_parent._gate)
+                {
+                    if (_parent._hasValue && _parent._id == _currentid)
+                    {
+                        _parent.ForwardOnNext(_value);
+                    }
+
+                    _parent._hasValue = false;
+                    Dispose();
+                }
             }
 
             public override void OnError(Exception error)
             {
-                Disposable.TryDispose(ref _serialCancelable);
-
-                lock (_gate)
+                lock (_parent._gate)
                 {
-                    ForwardOnError(error);
-
-                    _hasValue = false;
-                    _id = unchecked(_id + 1);
+                    _parent.ForwardOnError(error);
                 }
             }
 
             public override void OnCompleted()
             {
-                Disposable.TryDispose(ref _serialCancelable);
-
-                lock (_gate)
+                lock (_parent._gate)
                 {
-                    if (_hasValue)
+                    if (_parent._hasValue && _parent._id == _currentid)
                     {
-                        ForwardOnNext(_value);
+                        _parent.ForwardOnNext(_value);
                     }
 
-                    ForwardOnCompleted();
-
-                    _hasValue = false;
-                    _id = unchecked(_id + 1);
-                }
-            }
-
-            private sealed class ThrottleObserver : SafeObserver<TThrottle>
-            {
-                private readonly _ _parent;
-                private readonly TSource _value;
-                private readonly ulong _currentid;
-
-                public ThrottleObserver(_ parent, TSource value, ulong currentid)
-                {
-                    _parent = parent;
-                    _value = value;
-                    _currentid = currentid;
-                }
-
-                public override void OnNext(TThrottle value)
-                {
-                    lock (_parent._gate)
-                    {
-                        if (_parent._hasValue && _parent._id == _currentid)
-                        {
-                            _parent.ForwardOnNext(_value);
-                        }
-
-                        _parent._hasValue = false;
-                        Dispose();
-                    }
-                }
-
-                public override void OnError(Exception error)
-                {
-                    lock (_parent._gate)
-                    {
-                        _parent.ForwardOnError(error);
-                    }
-                }
-
-                public override void OnCompleted()
-                {
-                    lock (_parent._gate)
-                    {
-                        if (_parent._hasValue && _parent._id == _currentid)
-                        {
-                            _parent.ForwardOnNext(_value);
-                        }
-
-                        _parent._hasValue = false;
-                        Dispose();
-                    }
+                    _parent._hasValue = false;
+                    Dispose();
                 }
             }
         }
