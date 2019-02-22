@@ -67,7 +67,7 @@ namespace System.Threading.Tasks
             this IAsyncEnumerable<T> source, CancellationToken cancellationToken) => TaskExtensions.WithCancellation(source, cancellationToken);
 
 #else
-        // Reference assembly, these won't be emmited, but keep these internal so we can compile
+        // Reference assembly, these won't be emitted, but keep these internal so we can compile
 
         /// <summary>Configures how awaits on the tasks returned from an async disposable will be performed.</summary>
         /// <param name="source">The source async disposable.</param>
