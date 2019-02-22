@@ -12,6 +12,7 @@
     <Compile Include="..\System.Linq.Async\System\Linq\AsyncIterator.cs" Link="System\Linq\AsyncIterator.cs" />
     <Compile Include="..\System.Linq.Async\System\Linq\Set.cs" Link="System\Linq\Set.cs" />
     <Compile Include="..\System.Linq.Async\System\Strings.cs" Link="System\Strings.cs" />
+    <Compile Include="..\System.Linq.Async\System\Threading\Tasks\AsyncEnumerableExt.cs" Link="System\Threading\Tasks\AsyncEnumerableExt.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +21,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="System\Threading\Tasks\" />
   </ItemGroup>
   
 </Project>

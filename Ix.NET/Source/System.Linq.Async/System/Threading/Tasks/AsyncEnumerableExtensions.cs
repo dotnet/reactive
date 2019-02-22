@@ -95,14 +95,5 @@ namespace System.Threading.Tasks
         internal static ConfiguredCancelableAsyncEnumerable<T> WithCancellation<T>(
             this IAsyncEnumerable<T> source, CancellationToken cancellationToken) => TaskExtensions.WithCancellation(source, cancellationToken);
 #endif
-
-        public static ConfiguredCancelableAsyncEnumerable<T>.Enumerator GetConfiguredAsyncEnumerator<T>(this IAsyncEnumerable<T> enumerable, CancellationToken cancellationToken, bool continueOnCapturedContext)
-        {
-#if REFERENCE_ASSEMBLY
-            return default;
-#else
-            return ConfigureAwait(enumerable, continueOnCapturedContext).WithCancellation(cancellationToken).GetAsyncEnumerator();
-#endif
-        }
     }
 }
