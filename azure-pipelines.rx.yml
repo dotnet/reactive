@@ -51,8 +51,7 @@ jobs:
     displayName: Build System.Reactive.sln
     inputs:
       solution: Rx.NET/Source/System.Reactive.sln    
-      msbuildArguments: /restore /t:build /p:CreatePackage=true /p:NoPackageAnalysis=true /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts /bl:$(Build.ArtifactStagingDirectory)\artifacts\build.binlog
-      platform: $(BuildPlatform)
+      msbuildArguments: /restore /t:build /p:CreatePackage=true /p:NoPackageAnalysis=true /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
       configuration: $(BuildConfiguration)
       maximumCpuCount: true
 
