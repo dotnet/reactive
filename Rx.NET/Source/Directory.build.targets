@@ -19,6 +19,11 @@
     <DefineConstants>$(DefineConstants);HAS_TRACE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;HAS_WINFORMS;HAS_DISPATCHER;DESKTOPCLR</DefineConstants>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- Workaround https://github.com/dotnet/sdk/issues/2976 -->
+    <PackageReference Update="Microsoft.NETCore.Platforms" PrivateAssets="All" />
+  </ItemGroup>
+
 
   <ItemGroup Condition="'$(IsTestProject)' != 'true' and '$(SourceLinkEnabled)' != 'false' and '$(TargetFramework)' != 'netcoreapp3.0'">
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.2" />
