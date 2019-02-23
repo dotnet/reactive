@@ -177,5 +177,5 @@ jobs:
     inputs:
       command: test
       projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-      arguments: -c $(BuildConfiguration) -f netcoreapp2.1
+      arguments: -c $(BuildConfiguration) -f netcoreapp2.1 /p:TargetFrameworks=netcoreapp2.1
     displayName: Run 2.1 Tests on Linux
