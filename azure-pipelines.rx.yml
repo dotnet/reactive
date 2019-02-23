@@ -137,6 +137,7 @@ jobs:
       downloadPath: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
       
   - script: mv $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages/artifacts/*.* $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
+    displayName: Move packages to LocalPackages directory
 
   - task: DotNetCoreCLI@2
     displayName: Update Rx
@@ -211,6 +212,7 @@ jobs:
       downloadPath: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
       
   - powershell: mv $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages/artifacts/*.* $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
+    displayName: Move packages to LocalPackages directory
 
   - task: DotNetCoreCLI@2
     displayName: Update Rx
