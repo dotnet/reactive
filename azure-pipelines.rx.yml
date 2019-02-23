@@ -166,5 +166,16 @@ jobs:
     inputs:
       command: test
       projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-      arguments: -c $(BuildConfiguration)
-    displayName: Run Tests on Linux
+      arguments: -c $(BuildConfiguration) -f netcoreapp3.0
+    displayName: Run 3.0 Tests on Linux
+
+  - task: DotNetCoreInstaller@0
+    inputs:
+      version: '2.2.104'
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: test
+      projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
+      arguments: -c $(BuildConfiguration) -f netcoreapp2.1
+    displayName: Run 2.1 Tests on Linux
