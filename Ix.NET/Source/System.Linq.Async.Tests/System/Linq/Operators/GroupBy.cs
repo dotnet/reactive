@@ -13,39 +13,10 @@ namespace Tests
     public class GroupBy : AsyncEnumerableTests
     {
         [Fact]
-        public void GroupBy_Null()
+        public void GroupBy_KeySelector_Sync_Null()
         {
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default, x => x));
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default(Func<int, int>)));
-
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default, x => x, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default(Func<int, int>), EqualityComparer<int>.Default));
-
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, x => x));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, x => x));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, x => x, default(Func<int, int>)));
-
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, x => x, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default, x => x, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, x => x, default(Func<int, int>), EqualityComparer<int>.Default));
-
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, (x, ys) => x));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, (x, ys) => x));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, x => x, default(Func<int, IAsyncEnumerable<int>, int>)));
-
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, (x, ys) => x, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default, (x, ys) => x, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, x => x, default(Func<int, IAsyncEnumerable<int>, int>), EqualityComparer<int>.Default));
-
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default, x => x, x => x, (x, ys) => x));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default, x => x, (x, ys) => x));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, default, (x, ys) => x));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, default));
-
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default, x => x, x => x, (x, ys) => x, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default, x => x, (x, ys) => x, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, default, (x, ys) => x, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, default, EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -218,68 +189,32 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_Sync_Simple1()
+        public async Task GroupBy_KeySelector_Sync_SequenceIdentity()
         {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
+            // We're using Kvp here because the types will eval as equal for this test
+            var xs = new[]
+            {
+                new Kvp("Bart", 27),
+                new Kvp("John", 62),
+                new Kvp("Eric", 27),
+                new Kvp("Lisa", 14),
+                new Kvp("Brad", 27),
+                new Kvp("Lisa", 23),
+                new Kvp("Eric", 42)
+            };
 
-            var e = ys.GetAsyncEnumerator();
+            var ys = xs.ToAsyncEnumerable();
 
-            Assert.True(await e.MoveNextAsync());
-            var g1 = e.Current;
-            Assert.Equal(0, g1.Key);
-            var g1e = g1.GetAsyncEnumerator();
-            await HasNextAsync(g1e, 'a');
-            await HasNextAsync(g1e, 'd');
-            await HasNextAsync(g1e, 'g');
-            await HasNextAsync(g1e, 'j');
-            await NoNextAsync(g1e);
+            var res = ys.GroupBy(x => x.Item / 10);
 
-            Assert.True(await e.MoveNextAsync());
-            var g2 = e.Current;
-            Assert.Equal(1, g2.Key);
-            var g2e = g2.GetAsyncEnumerator();
-            await HasNextAsync(g2e, 'b');
-            await HasNextAsync(g2e, 'e');
-            await HasNextAsync(g2e, 'h');
-            await NoNextAsync(g2e);
-
-            Assert.True(await e.MoveNextAsync());
-            var g3 = e.Current;
-            Assert.Equal(2, g3.Key);
-            var g3e = g3.GetAsyncEnumerator();
-            await HasNextAsync(g3e, 'c');
-            await HasNextAsync(g3e, 'f');
-            await HasNextAsync(g3e, 'i');
-            await NoNextAsync(g3e);
-
-            await NoNextAsync(e);
+            await SequenceIdentity(res);
         }
 
         [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Simple1()
+        public void GroupBy_KeySelector_Sync_Comparer_Null()
         {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
-
-            var e = ys.GetAsyncEnumerator();
-            await HasNextAsync(e, "0 - adgj");
-            await HasNextAsync(e, "1 - beh");
-            await HasNextAsync(e, "2 - cfi");
-            await NoNextAsync(e);
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Simple2()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x % 3, (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
-
-            var e = ys.GetAsyncEnumerator();
-            await HasNextAsync(e, "0 - 0369");
-            await HasNextAsync(e, "1 - 147");
-            await HasNextAsync(e, "2 - 258");
-            await NoNextAsync(e);
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default, x => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default(Func<int, int>), EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -319,313 +254,6 @@ namespace Tests
             await NoNextAsync(g3e);
 
             await NoNextAsync(e);
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_Sync_Comparer_Simple1()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
-
-            var e = ys.GetAsyncEnumerator();
-
-            Assert.True(await e.MoveNextAsync());
-            var g1 = e.Current;
-            Assert.Equal(0, g1.Key);
-            var g1e = g1.GetAsyncEnumerator();
-            await HasNextAsync(g1e, 'a');
-            await HasNextAsync(g1e, 'd');
-            await HasNextAsync(g1e, 'g');
-            await HasNextAsync(g1e, 'j');
-            await NoNextAsync(g1e);
-
-            Assert.True(await e.MoveNextAsync());
-            var g2 = e.Current;
-            Assert.Equal(1, g2.Key);
-            var g2e = g2.GetAsyncEnumerator();
-            await HasNextAsync(g2e, 'b');
-            await HasNextAsync(g2e, 'e');
-            await HasNextAsync(g2e, 'h');
-            await NoNextAsync(g2e);
-
-            Assert.True(await e.MoveNextAsync());
-            var g3 = e.Current;
-            Assert.Equal(2, g3.Key);
-            var g3e = g3.GetAsyncEnumerator();
-            await HasNextAsync(g3e, 'c');
-            await HasNextAsync(g3e, 'f');
-            await HasNextAsync(g3e, 'i');
-            await NoNextAsync(g3e);
-
-            await NoNextAsync(e);
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_Sync_Comparer_Simple2()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
-
-            var e = ys.GetAsyncEnumerator();
-
-            Assert.True(await e.MoveNextAsync());
-            var g1 = e.Current;
-            Assert.Equal(0, g1.Key);
-            var g1e = g1.GetAsyncEnumerator();
-            await HasNextAsync(g1e, 'a');
-            await HasNextAsync(g1e, 'd');
-            await HasNextAsync(g1e, 'g');
-            await HasNextAsync(g1e, 'j');
-            await NoNextAsync(g1e);
-            await g1e.DisposeAsync();
-
-            Assert.True(await e.MoveNextAsync());
-            var g2 = e.Current;
-            Assert.Equal(1, g2.Key);
-            var g2e = g2.GetAsyncEnumerator();
-            await HasNextAsync(g2e, 'b');
-            await HasNextAsync(g2e, 'e');
-            await HasNextAsync(g2e, 'h');
-            await NoNextAsync(g2e);
-            await g2e.DisposeAsync();
-
-            Assert.True(await e.MoveNextAsync());
-            var g3 = e.Current;
-            Assert.Equal(2, g3.Key);
-            var g3e = g3.GetAsyncEnumerator();
-            await HasNextAsync(g3e, 'c');
-            await HasNextAsync(g3e, 'f');
-            await HasNextAsync(g3e, 'i');
-            await NoNextAsync(g3e);
-            await g3e.DisposeAsync();
-
-            await NoNextAsync(e);
-
-            await e.DisposeAsync();
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Comparer_Simple1()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result, new EqMod(3));
-
-            var e = ys.GetAsyncEnumerator();
-            await HasNextAsync(e, "0 - adgj");
-            await HasNextAsync(e, "1 - beh");
-            await HasNextAsync(e, "2 - cfi");
-            await NoNextAsync(e);
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Comparer_Simple2()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result, new EqMod(3));
-
-            var e = ys.GetAsyncEnumerator();
-            await HasNextAsync(e, "0 - 0369");
-            await HasNextAsync(e, "1 - 147");
-            await HasNextAsync(e, "2 - 258");
-            await NoNextAsync(e);
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_Sync_Comparer_DisposeEarly()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
-
-            var e = ys.GetAsyncEnumerator();
-            await e.DisposeAsync();
-
-            Assert.False(await e.MoveNextAsync());
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_Sync_Comparer_Simple()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
-
-            var e = ys.GetAsyncEnumerator();
-
-            Assert.True(await e.MoveNextAsync());
-            var g1 = e.Current;
-            Assert.Equal(0, g1.Key);
-            var g1e = g1.GetAsyncEnumerator();
-            await HasNextAsync(g1e, 'a');
-
-            await e.DisposeAsync();
-
-            await HasNextAsync(g1e, 'd');
-            await HasNextAsync(g1e, 'g');
-            await HasNextAsync(g1e, 'j');
-            await NoNextAsync(g1e);
-            await g1e.DisposeAsync();
-
-            Assert.False(await e.MoveNextAsync());
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_Sync_SequenceIdentity()
-        {
-            // We're using Kvp here because the types will eval as equal for this test
-            var xs = new[]
-            {
-                new Kvp("Bart", 27),
-                new Kvp("John", 62),
-                new Kvp("Eric", 27),
-                new Kvp("Lisa", 14),
-                new Kvp("Brad", 27),
-                new Kvp("Lisa", 23),
-                new Kvp("Eric", 42)
-            };
-
-            var ys = xs.ToAsyncEnumerable();
-
-            var res = ys.GroupBy(x => x.Item / 10);
-
-            await SequenceIdentity(res);
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_ToArray()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
-
-            var arr = new[] { "0 - adgj", "1 - beh", "2 - cfi" };
-
-            Assert.Equal(arr, await ys.ToArrayAsync());
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_ToList()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
-
-            var arr = new List<string> { "0 - adgj", "1 - beh", "2 - cfi" };
-
-            Assert.Equal(arr, await ys.ToListAsync());
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Count()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
-
-            Assert.Equal(3, await ys.CountAsync());
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_SequenceIdentity()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
-
-            await SequenceIdentity(ys);
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_Sync_Group_ToArray()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
-
-            var g1a = new[] { 'a', 'd', 'g', 'j' };
-            var g2a = new[] { 'b', 'e', 'h' };
-            var g3a = new[] { 'c', 'f', 'i' };
-
-            var gar = await ys.ToArrayAsync();
-
-            Assert.Equal(3, gar.Length);
-
-            var gg1 = gar[0];
-            var gg1a = await gg1.ToArrayAsync();
-
-            Assert.Equal(g1a, gg1a);
-
-            var gg2 = gar[1];
-            var gg2a = await gg2.ToArrayAsync();
-
-            Assert.Equal(g2a, gg2a);
-
-            var gg3 = gar[2];
-            var gg3a = await gg3.ToArrayAsync();
-            Assert.Equal(g3a, gg3a);
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_Sync_Group_ToList()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
-
-            var g1a = new List<char> { 'a', 'd', 'g', 'j' };
-            var g2a = new List<char> { 'b', 'e', 'h' };
-            var g3a = new List<char> { 'c', 'f', 'i' };
-
-            var gar = await ys.ToListAsync();
-
-            Assert.Equal(3, gar.Count);
-
-            var gg1 = gar[0];
-            var gg1a = await gg1.ToListAsync();
-            Assert.Equal(g1a, gg1a);
-
-            var gg2 = gar[1];
-            var gg2a = await gg2.ToListAsync();
-            Assert.Equal(g2a, gg2a);
-
-            var gg3 = gar[2];
-            var gg3a = await gg3.ToListAsync();
-            Assert.Equal(g3a, gg3a);
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_Sync_Group_Count()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
-
-            var gar = await ys.ToListAsync();
-
-            Assert.Equal(3, gar.Count);
-
-            var gg1 = gar[0];
-            var gg1a = await gg1.CountAsync();
-            Assert.Equal(4, gg1a);
-
-            var gg2 = gar[1];
-            var gg2a = await gg2.CountAsync();
-            Assert.Equal(3, gg2a);
-
-            var gg3 = gar[2];
-            var gg3a = await gg3.CountAsync();
-            Assert.Equal(3, gg3a);
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_Sync_Count()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
-
-            var gar = await ys.CountAsync();
-
-            Assert.Equal(3, gar);
-        }
-
-        [Fact]
-        public async Task GroupBy_KeySelector_ElementSelector_Sync_SequenceIdentity()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
-
-            await SequenceIdentity(ys);
         }
 
         [Fact]
@@ -728,6 +356,296 @@ namespace Tests
         }
 
         [Fact]
+        public void GroupBy_KeySelector_ElementSelector_Sync_Null()
+        {
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, x => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, x => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, x => x, default(Func<int, int>)));
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Simple()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
+
+            var e = ys.GetAsyncEnumerator();
+
+            Assert.True(await e.MoveNextAsync());
+            var g1 = e.Current;
+            Assert.Equal(0, g1.Key);
+            var g1e = g1.GetAsyncEnumerator();
+            await HasNextAsync(g1e, 'a');
+            await HasNextAsync(g1e, 'd');
+            await HasNextAsync(g1e, 'g');
+            await HasNextAsync(g1e, 'j');
+            await NoNextAsync(g1e);
+
+            Assert.True(await e.MoveNextAsync());
+            var g2 = e.Current;
+            Assert.Equal(1, g2.Key);
+            var g2e = g2.GetAsyncEnumerator();
+            await HasNextAsync(g2e, 'b');
+            await HasNextAsync(g2e, 'e');
+            await HasNextAsync(g2e, 'h');
+            await NoNextAsync(g2e);
+
+            Assert.True(await e.MoveNextAsync());
+            var g3 = e.Current;
+            Assert.Equal(2, g3.Key);
+            var g3e = g3.GetAsyncEnumerator();
+            await HasNextAsync(g3e, 'c');
+            await HasNextAsync(g3e, 'f');
+            await HasNextAsync(g3e, 'i');
+            await NoNextAsync(g3e);
+
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Group_ToArray()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
+
+            var g1a = new[] { 'a', 'd', 'g', 'j' };
+            var g2a = new[] { 'b', 'e', 'h' };
+            var g3a = new[] { 'c', 'f', 'i' };
+
+            var gar = await ys.ToArrayAsync();
+
+            Assert.Equal(3, gar.Length);
+
+            var gg1 = gar[0];
+            var gg1a = await gg1.ToArrayAsync();
+
+            Assert.Equal(g1a, gg1a);
+
+            var gg2 = gar[1];
+            var gg2a = await gg2.ToArrayAsync();
+
+            Assert.Equal(g2a, gg2a);
+
+            var gg3 = gar[2];
+            var gg3a = await gg3.ToArrayAsync();
+            Assert.Equal(g3a, gg3a);
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Group_ToList()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
+
+            var g1a = new List<char> { 'a', 'd', 'g', 'j' };
+            var g2a = new List<char> { 'b', 'e', 'h' };
+            var g3a = new List<char> { 'c', 'f', 'i' };
+
+            var gar = await ys.ToListAsync();
+
+            Assert.Equal(3, gar.Count);
+
+            var gg1 = gar[0];
+            var gg1a = await gg1.ToListAsync();
+            Assert.Equal(g1a, gg1a);
+
+            var gg2 = gar[1];
+            var gg2a = await gg2.ToListAsync();
+            Assert.Equal(g2a, gg2a);
+
+            var gg3 = gar[2];
+            var gg3a = await gg3.ToListAsync();
+            Assert.Equal(g3a, gg3a);
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Group_Count()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
+
+            var gar = await ys.ToListAsync();
+
+            Assert.Equal(3, gar.Count);
+
+            var gg1 = gar[0];
+            var gg1a = await gg1.CountAsync();
+            Assert.Equal(4, gg1a);
+
+            var gg2 = gar[1];
+            var gg2a = await gg2.CountAsync();
+            Assert.Equal(3, gg2a);
+
+            var gg3 = gar[2];
+            var gg3a = await gg3.CountAsync();
+            Assert.Equal(3, gg3a);
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Count()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
+
+            var gar = await ys.CountAsync();
+
+            Assert.Equal(3, gar);
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_SequenceIdentity()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public void GroupBy_KeySelector_ElementSelector_Sync_Comparer_Null()
+        {
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, x => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default, x => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, x => x, default(Func<int, int>), EqualityComparer<int>.Default));
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Comparer_Simple1()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
+
+            var e = ys.GetAsyncEnumerator();
+
+            Assert.True(await e.MoveNextAsync());
+            var g1 = e.Current;
+            Assert.Equal(0, g1.Key);
+            var g1e = g1.GetAsyncEnumerator();
+            await HasNextAsync(g1e, 'a');
+            await HasNextAsync(g1e, 'd');
+            await HasNextAsync(g1e, 'g');
+            await HasNextAsync(g1e, 'j');
+            await NoNextAsync(g1e);
+
+            Assert.True(await e.MoveNextAsync());
+            var g2 = e.Current;
+            Assert.Equal(1, g2.Key);
+            var g2e = g2.GetAsyncEnumerator();
+            await HasNextAsync(g2e, 'b');
+            await HasNextAsync(g2e, 'e');
+            await HasNextAsync(g2e, 'h');
+            await NoNextAsync(g2e);
+
+            Assert.True(await e.MoveNextAsync());
+            var g3 = e.Current;
+            Assert.Equal(2, g3.Key);
+            var g3e = g3.GetAsyncEnumerator();
+            await HasNextAsync(g3e, 'c');
+            await HasNextAsync(g3e, 'f');
+            await HasNextAsync(g3e, 'i');
+            await NoNextAsync(g3e);
+
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Comparer_Simple2()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
+
+            var e = ys.GetAsyncEnumerator();
+
+            Assert.True(await e.MoveNextAsync());
+            var g1 = e.Current;
+            Assert.Equal(0, g1.Key);
+            var g1e = g1.GetAsyncEnumerator();
+            await HasNextAsync(g1e, 'a');
+            await HasNextAsync(g1e, 'd');
+            await HasNextAsync(g1e, 'g');
+            await HasNextAsync(g1e, 'j');
+            await NoNextAsync(g1e);
+            await g1e.DisposeAsync();
+
+            Assert.True(await e.MoveNextAsync());
+            var g2 = e.Current;
+            Assert.Equal(1, g2.Key);
+            var g2e = g2.GetAsyncEnumerator();
+            await HasNextAsync(g2e, 'b');
+            await HasNextAsync(g2e, 'e');
+            await HasNextAsync(g2e, 'h');
+            await NoNextAsync(g2e);
+            await g2e.DisposeAsync();
+
+            Assert.True(await e.MoveNextAsync());
+            var g3 = e.Current;
+            Assert.Equal(2, g3.Key);
+            var g3e = g3.GetAsyncEnumerator();
+            await HasNextAsync(g3e, 'c');
+            await HasNextAsync(g3e, 'f');
+            await HasNextAsync(g3e, 'i');
+            await NoNextAsync(g3e);
+            await g3e.DisposeAsync();
+
+            await NoNextAsync(e);
+
+            await e.DisposeAsync();
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Comparer_Simple3()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
+
+            var e = ys.GetAsyncEnumerator();
+
+            Assert.True(await e.MoveNextAsync());
+            var g1 = e.Current;
+            Assert.Equal(0, g1.Key);
+            var g1e = g1.GetAsyncEnumerator();
+            await HasNextAsync(g1e, 'a');
+
+            await e.DisposeAsync();
+
+            await HasNextAsync(g1e, 'd');
+            await HasNextAsync(g1e, 'g');
+            await HasNextAsync(g1e, 'j');
+            await NoNextAsync(g1e);
+            await g1e.DisposeAsync();
+
+            Assert.False(await e.MoveNextAsync());
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Comparer_DisposeEarly()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
+
+            var e = ys.GetAsyncEnumerator();
+            await e.DisposeAsync();
+
+            Assert.False(await e.MoveNextAsync());
+        }
+
+        [Fact]
+        public void GroupBy_KeySelector_ResultSelector_Sync_Null()
+        {
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, (x, ys) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default, (x, ys) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, x => x, default(Func<int, IAsyncEnumerable<int>, int>)));
+        }
+
+        [Fact]
+        public void GroupBy_KeySelector_ResultSelector_Sync_Comparer_Null()
+        {
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default, x => x, (x, ys) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default, (x, ys) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, x => x, default(Func<int, IAsyncEnumerable<int>, int>), EqualityComparer<int>.Default));
+        }
+
+        [Fact]
         public async Task GroupBy_KeySelector_ResultSelector_Sync_Comparer_ToArray()
         {
             var xs = AsyncEnumerable.Range(0, 10);
@@ -765,6 +683,116 @@ namespace Tests
             var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result, new EqMod(3));
 
             await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public void GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Null()
+        {
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default, x => x, x => x, (x, ys) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default, x => x, (x, ys) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, default, (x, ys) => x));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, default));
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Simple1()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, "0 - adgj");
+            await HasNextAsync(e, "1 - beh");
+            await HasNextAsync(e, "2 - cfi");
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Simple2()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, "0 - 0369");
+            await HasNextAsync(e, "1 - 147");
+            await HasNextAsync(e, "2 - 258");
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_ToArray()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
+
+            var arr = new[] { "0 - adgj", "1 - beh", "2 - cfi" };
+
+            Assert.Equal(arr, await ys.ToArrayAsync());
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_ToList()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
+
+            var arr = new List<string> { "0 - adgj", "1 - beh", "2 - cfi" };
+
+            Assert.Equal(arr, await ys.ToListAsync());
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Count()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
+
+            Assert.Equal(3, await ys.CountAsync());
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_SequenceIdentity()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public void GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Comparer_Null()
+        {
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default, x => x, x => x, (x, ys) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default, x => x, (x, ys) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, default, (x, ys) => x, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, x => x, x => x, default, EqualityComparer<int>.Default));
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Comparer_Simple1()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result, new EqMod(3));
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, "0 - adgj");
+            await HasNextAsync(e, "1 - beh");
+            await HasNextAsync(e, "2 - cfi");
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Comparer_Simple2()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result, new EqMod(3));
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, "0 - 0369");
+            await HasNextAsync(e, "1 - 147");
+            await HasNextAsync(e, "2 - 258");
+            await NoNextAsync(e);
         }
 
         private sealed class EqMod : IEqualityComparer<int>
