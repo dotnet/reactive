@@ -49,7 +49,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy1()
+        public async Task GroupBy_KeySelector_Sync_Simple1()
         {
             var xs = new[] {
                 new { Name = "Bart", Age = 27 },
@@ -98,7 +98,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy2()
+        public async Task GroupBy_KeySelector_Sync_Simple2()
         {
             var xs = new[] {
                 new { Name = "Bart", Age = 27 },
@@ -155,7 +155,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy3()
+        public async Task GroupBy_KeySelector_Sync_Empty()
         {
             var xs = AsyncEnumerable.Empty<int>();
             var ys = xs.GroupBy(x => x);
@@ -165,7 +165,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy4Async()
+        public async Task GroupBy_KeySelector_Sync_Throws_Source1()
         {
             var ex = new Exception("Bang!");
             var xs = Throw<int>(ex);
@@ -176,19 +176,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy5Async()
-        {
-            var ex = new Exception("Bang!");
-            var xs = GetXs(ex).ToAsyncEnumerable();
-            var ys = xs.GroupBy(x => x);
-
-            var e = ys.GetAsyncEnumerator();
-
-            await AssertThrowsAsync(e.MoveNextAsync(), ex);
-        }
-
-        [Fact]
-        public async Task GroupBy6Async()
+        public async Task GroupBy_KeySelector_Sync_Throws_Source2()
         {
             var ex = new Exception("Bang!");
             var xs = GetXs(ex).ToAsyncEnumerable();
@@ -207,7 +195,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy7Async()
+        public async Task GroupBy_KeySelector_Sync_Throws_KeySelector1()
         {
             var ex = new Exception("Bang!");
             var xs = Return42;
@@ -218,7 +206,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy8Async()
+        public async Task GroupBy_KeySelector_Sync_Throws_KeySelector2()
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -230,7 +218,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy9()
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Simple1()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
@@ -269,7 +257,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy10()
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Simple1()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
@@ -282,7 +270,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy11()
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Simple2()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
@@ -295,7 +283,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy12()
+        public async Task GroupBy_KeySelector_Sync_Comparer_Simple()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, new EqMod(3));
@@ -334,7 +322,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy13()
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Comparer_Simple1()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
@@ -373,33 +361,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy14()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result, new EqMod(3));
-
-            var e = ys.GetAsyncEnumerator();
-            await HasNextAsync(e, "0 - adgj");
-            await HasNextAsync(e, "1 - beh");
-            await HasNextAsync(e, "2 - cfi");
-            await NoNextAsync(e);
-        }
-
-        [Fact]
-        public async Task GroupBy15()
-        {
-            var xs = AsyncEnumerable.Range(0, 10);
-            var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result, new EqMod(3));
-
-            var e = ys.GetAsyncEnumerator();
-            await HasNextAsync(e, "0 - 0369");
-            await HasNextAsync(e, "1 - 147");
-            await HasNextAsync(e, "2 - 258");
-            await NoNextAsync(e);
-        }
-
-        [Fact]
-        public async Task GroupBy16()
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Comparer_Simple2()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
@@ -443,7 +405,33 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy17()
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Comparer_Simple1()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result, new EqMod(3));
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, "0 - adgj");
+            await HasNextAsync(e, "1 - beh");
+            await HasNextAsync(e, "2 - cfi");
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Comparer_Simple2()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result, new EqMod(3));
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, "0 - 0369");
+            await HasNextAsync(e, "1 - 147");
+            await HasNextAsync(e, "2 - 258");
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Comparer_DisposeEarly()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
@@ -455,7 +443,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy18()
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Comparer_Simple()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
@@ -480,7 +468,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy19()
+        public async Task GroupBy_KeySelector_Sync_SequenceIdentity()
         {
             // We're using Kvp here because the types will eval as equal for this test
             var xs = new[]
@@ -501,9 +489,8 @@ namespace Tests
             await SequenceIdentity(res);
         }
 
-
         [Fact]
-        public async Task GroupBy20()
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_ToArray()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
@@ -514,7 +501,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy21()
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_ToList()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
@@ -525,7 +512,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy22()
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_Count()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
@@ -534,7 +521,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy23()
+        public async Task GroupBy_KeySelector_ElementSelector_ResultSelector_Sync_SequenceIdentity()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result);
@@ -543,7 +530,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy24()
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Group_ToArray()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
@@ -572,7 +559,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy25()
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Group_ToList()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
@@ -599,7 +586,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy26()
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Group_Count()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
@@ -622,7 +609,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy27()
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_Count()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
@@ -633,7 +620,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy28()
+        public async Task GroupBy_KeySelector_ElementSelector_Sync_SequenceIdentity()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
@@ -642,7 +629,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy29()
+        public async Task GroupBy_KeySelector_Sync_Comparer_Group_ToList()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, new EqMod(3));
@@ -669,11 +656,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy30()
+        public async Task GroupBy_KeySelector_Sync_Comparer_Group_Count()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, new EqMod(3));
-
 
             var gar = await ys.ToListAsync();
 
@@ -693,7 +679,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy31()
+        public async Task GroupBy_KeySelector_Sync_Comparer_Group_ToArray()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, new EqMod(3));
@@ -722,7 +708,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy32()
+        public async Task GroupBy_KeySelector_Sync_Comparer_Count()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, new EqMod(3));
@@ -733,7 +719,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy33()
+        public async Task GroupBy_KeySelector_Sync_Comparer_SequenceIdentity()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, new EqMod(3));
@@ -742,7 +728,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy34()
+        public async Task GroupBy_KeySelector_ResultSelector_Sync_Comparer_ToArray()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result, new EqMod(3));
@@ -753,7 +739,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy35()
+        public async Task GroupBy_KeySelector_ResultSelector_Sync_Comparer_ToList()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result, new EqMod(3));
@@ -764,7 +750,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy36()
+        public async Task GroupBy_KeySelector_ResultSelector_Sync_Comparer_Count()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result, new EqMod(3));
@@ -773,7 +759,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task GroupBy37()
+        public async Task GroupBy_KeySelector_ResultSelector_Sync_Comparer_SequenceIdentity()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.AggregateAsync("", (a, c) => a + c).Result, new EqMod(3));
