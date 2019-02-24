@@ -26,6 +26,11 @@
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
   </PropertyGroup>
   
+  <ItemGroup>
+    <!-- Workaround https://github.com/dotnet/sdk/issues/2976 -->
+    <PackageReference Update="Microsoft.NETCore.Platforms" PrivateAssets="All" />
+  </ItemGroup>
+  
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
     <UseSourceLink>true</UseSourceLink>
     <CoverletOutputFormat>cobertura</CoverletOutputFormat>
