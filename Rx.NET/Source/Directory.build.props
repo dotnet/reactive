@@ -1,6 +1,5 @@
 <Project>    
   <PropertyGroup>
-    <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <Copyright>Copyright (c) .NET Foundation and Contributors.</Copyright>
     <MinClientVersion>2.12</MinClientVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -12,7 +11,7 @@
     <DebugType>embedded</DebugType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)ReactiveX.snk</AssemblyOriginatorKeyFile>
-    <NoWarn>$(NoWarn);1701;1702;CS1591</NoWarn>
+    <NoWarn>$(NoWarn);1701;1702;CS1591;NU5105</NoWarn>
     <DefaultLanguage>en-US</DefaultLanguage>
     <IncludeSymbols>false</IncludeSymbols>
     <IsTestProject>$(MSBuildProjectName.Contains('Tests'))</IsTestProject>
