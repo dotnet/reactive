@@ -66,20 +66,26 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);RemoveNetCoreApp3FromNuGet</TargetsForTfmSpecificBuildOutput>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);RemoveNetCoreApp3FromNuGet</TargetsForTfmSpecificBuildOutput>  
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);AddNetCore3ToNuGet</TargetsForTfmSpecificContentInPackage>  
   </PropertyGroup>
 
   <!-- We remove the output from the nuget so it doesn't wind up in the \lib folder -->
   <Target Name="RemoveNetCoreApp3FromNuGet" DependsOnTargets="BuiltProjectOutputGroup;DocumentationProjectOutputGroup" Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-
     <ItemGroup>      
       <!-- Before clearing the output groups, add them to None for packing -->
-      <None Include="@(BuiltProjectOutputGroupOutput);@(DocumentationProjectOutputGroupOutput)" PackagePath="build\netcoreapp3.0" Pack="true" />      
+      <ItemsToAddToNuGet Include="@(BuiltProjectOutputGroupOutput);@(DocumentationProjectOutputGroupOutput)" PackagePath="build\netcoreapp3.0" />      
       
       <BuiltProjectOutputGroupOutput Remove="@(BuiltProjectOutputGroupOutput)" />
       <DocumentationProjectOutputGroupOutput Remove="@(DocumentationProjectOutputGroupOutput)" />      
     </ItemGroup>
-
+  </Target>
+  
+  <Target Name="AddNetCore3ToNuGet" Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <ItemGroup>      
+      <!-- Add the removed build output to the build\netcoreapp3.0 folder -->
+      <TfmSpecificPackageFileWithRecursiveDir Include="@(ItemsToAddToNuGet)" PackagePath="build\netcoreapp3.0" />      
+    </ItemGroup>
   </Target>
   
   <ItemGroup>
