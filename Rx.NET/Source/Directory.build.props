@@ -1,6 +1,5 @@
 <Project>    
   <PropertyGroup>
-    <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <Copyright>Copyright (c) .NET Foundation and Contributors.</Copyright>
     <MinClientVersion>2.12</MinClientVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
