@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Tests
 {
-    public class GroupBy : AsyncEnumerableTests
+    public partial class GroupBy : AsyncEnumerableTests
     {
         [Fact]
         public void GroupBy_KeySelector_Sync_Null()

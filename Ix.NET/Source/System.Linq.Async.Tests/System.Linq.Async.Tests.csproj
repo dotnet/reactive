@@ -19,6 +19,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Average.Generated.tt</DependentUpon>
     </None>
+    <None Include="System\Linq\Operators\GroupBy.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GroupBy.Generated.tt</DependentUpon>
+    </None>
     <None Include="System\Linq\Operators\MinMax.Generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -51,6 +56,10 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Average.Generated.cs</LastGenOutput>
     </None>
+    <None Update="System\Linq\Operators\GroupBy.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GroupBy.Generated.cs</LastGenOutput>
+    </None>
     <None Update="System\Linq\Operators\MinMax.Generated.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MinMax.Generated.cs</LastGenOutput>
@@ -70,6 +79,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Average.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Linq\Operators\GroupBy.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GroupBy.Generated.tt</DependentUpon>
     </Compile>
     <Compile Update="System\Linq\Operators\MinMax.Generated.cs">
       <DesignTime>True</DesignTime>
