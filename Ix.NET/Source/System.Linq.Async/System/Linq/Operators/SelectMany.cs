@@ -21,6 +21,8 @@ namespace System.Linq
             return new SelectManyAsyncIterator<TSource, TResult>(source, selector);
         }
 
+        // REVIEW: Should we keep these overloads that return ValueTask<IAsyncEnumerable<TResult>>? One could argue the selector is async twice.
+
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TResult>>> selector)
         {
             if (source == null)
