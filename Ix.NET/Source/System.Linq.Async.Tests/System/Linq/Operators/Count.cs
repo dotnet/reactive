@@ -40,7 +40,7 @@ namespace Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAsync(Return42, default(Func<int, bool>)).AsTask());
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAsync<int>(default, x => true, CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAsync(Return42, default(Func<int, bool>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAsync(Return42, default, CancellationToken.None).AsTask());
         }
 
         [Fact]
@@ -66,68 +66,68 @@ namespace Tests
         }
 
         [Fact]
-        public async Task CountAsync_AsyncPredicate_Null()
+        public async Task CountAwaitAsync_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAsync<int>(default, x => new ValueTask<bool>(true)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAsync(Return42, default(Func<int, ValueTask<bool>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAwaitAsync<int>(default, x => new ValueTask<bool>(true)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAwaitAsync(Return42, default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAsync(Return42, default(Func<int, ValueTask<bool>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAwaitAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAwaitAsync(Return42, default, CancellationToken.None).AsTask());
         }
 
         [Fact]
-        public async Task CountAsync_AsyncPredicate()
+        public async Task CountAwaitAsync()
         {
-            Assert.Equal(0, await new int[0].ToAsyncEnumerable().CountAsync(x => new ValueTask<bool>(x < 3)));
-            Assert.Equal(2, await new[] { 1, 2, 3 }.ToAsyncEnumerable().CountAsync(x => new ValueTask<bool>(x < 3)));
+            Assert.Equal(0, await new int[0].ToAsyncEnumerable().CountAwaitAsync(x => new ValueTask<bool>(x < 3)));
+            Assert.Equal(2, await new[] { 1, 2, 3 }.ToAsyncEnumerable().CountAwaitAsync(x => new ValueTask<bool>(x < 3)));
         }
 
         [Fact]
-        public async Task CountAsync_AsyncPredicate_Throws_Predicate()
+        public async Task CountAwaitAsync_Throws_Predicate()
         {
             var ex = new Exception("Bang!");
-            var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().CountAsync(new Func<int, ValueTask<bool>>(x => { throw ex; }));
+            var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().CountAwaitAsync(new Func<int, ValueTask<bool>>(x => { throw ex; }));
             await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public async Task CountAsync_AsyncPredicate_Throws_Source()
+        public async Task CountAwaitAsync_Throws_Source()
         {
             var ex = new Exception("Bang!");
-            await AssertThrowsAsync(Throw<int>(ex).CountAsync(x => new ValueTask<bool>(x < 3)), ex);
+            await AssertThrowsAsync(Throw<int>(ex).CountAwaitAsync(x => new ValueTask<bool>(x < 3)), ex);
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task CountAsync_AsyncPredicateCancel_Null()
+        public async Task CountAwaitWithCancellationAsync_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAsync<int>(default, (x, ct) => new ValueTask<bool>(true)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAsync(Return42, default(Func<int, CancellationToken, ValueTask<bool>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAwaitWithCancellationAsync<int>(default, (x, ct) => new ValueTask<bool>(true)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAwaitWithCancellationAsync(Return42, default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAsync(Return42, default(Func<int, CancellationToken, ValueTask<bool>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAwaitWithCancellationAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.CountAwaitWithCancellationAsync(Return42, default, CancellationToken.None).AsTask());
         }
 
         [Fact]
-        public async Task CountAsync_AsyncPredicateCancel()
+        public async Task CountAwaitWithCancellationAsync()
         {
-            Assert.Equal(0, await new int[0].ToAsyncEnumerable().CountAsync((x, ct) => new ValueTask<bool>(x < 3)));
-            Assert.Equal(2, await new[] { 1, 2, 3 }.ToAsyncEnumerable().CountAsync((x, ct) => new ValueTask<bool>(x < 3)));
+            Assert.Equal(0, await new int[0].ToAsyncEnumerable().CountAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x < 3)));
+            Assert.Equal(2, await new[] { 1, 2, 3 }.ToAsyncEnumerable().CountAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x < 3)));
         }
 
         [Fact]
-        public async Task CountAsync_AsyncPredicateCancel_Throws_Predicate()
+        public async Task CountAwaitWithCancellationAsync_Throws_Predicate()
         {
             var ex = new Exception("Bang!");
-            var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().CountAsync(new Func<int, CancellationToken, ValueTask<bool>>((x, ct) => { throw ex; }));
+            var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().CountAwaitWithCancellationAsync(new Func<int, CancellationToken, ValueTask<bool>>((x, ct) => { throw ex; }));
             await AssertThrowsAsync(ys, ex);
         }
 
         [Fact]
-        public async Task CountAsync_AsyncPredicateCancel_Throws_Source()
+        public async Task CountAwaitWithCancellationAsync_Throws_Source()
         {
             var ex = new Exception("Bang!");
-            await AssertThrowsAsync(Throw<int>(ex).CountAsync((x, ct) => new ValueTask<bool>(x < 3)), ex);
+            await AssertThrowsAsync(Throw<int>(ex).CountAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x < 3)), ex);
         }
 #endif
     }

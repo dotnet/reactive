@@ -13,7 +13,7 @@ namespace Tests
     public class SkipWhile : AsyncEnumerableTests
     {
         [Fact]
-        public void SkipWhile_Sync_Null()
+        public void SkipWhile_Null()
         {
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(default, x => true));
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(default, (x, i) => true));
@@ -22,7 +22,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Sync_Simple1()
+        public async Task SkipWhile_Simple1()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => x < 3);
@@ -34,7 +34,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Sync_Simple2()
+        public async Task SkipWhile_Simple2()
         {
             var xs = new[] { 1, 2, 3, 4, 3, 2, 1 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => x < 3);
@@ -49,7 +49,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Sync_False()
+        public async Task SkipWhile_False()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => false);
@@ -63,7 +63,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Sync_True()
+        public async Task SkipWhile_True()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => true);
@@ -73,7 +73,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Sync_Throws_Predicate()
+        public async Task SkipWhile_Throws_Predicate()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
@@ -84,7 +84,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Sync_Indexed()
+        public async Task SkipWhile_Indexed()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => i < 2);
@@ -96,7 +96,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Sync_Indexed_False()
+        public async Task SkipWhile_Indexed_False()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => false);
@@ -110,7 +110,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Sync_Indexed_True()
+        public async Task SkipWhile_Indexed_True()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => true);
@@ -120,7 +120,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Sync_Indexed_Throws_Predicate()
+        public async Task SkipWhile_Indexed_Throws_Predicate()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
@@ -131,7 +131,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Sync_SequenceIdentity()
+        public async Task SkipWhile_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => x < 3);
@@ -140,7 +140,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Sync_Indexed_SequenceIdentity()
+        public async Task SkipWhile_Indexed_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => false);
@@ -149,19 +149,19 @@ namespace Tests
         }
 
         [Fact]
-        public void SkipWhile_Async_Null()
+        public void SkipWhileAwait_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(default, x => new ValueTask<bool>(true)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile(default, (int x, int i) => new ValueTask<bool>(true)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile(Return42, default(Func<int, ValueTask<bool>>)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile(Return42, default(Func<int, int, ValueTask<bool>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhileAwait<int>(default, x => new ValueTask<bool>(true)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhileAwait(default, (int x, int i) => new ValueTask<bool>(true)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhileAwait(Return42, default(Func<int, ValueTask<bool>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhileAwait(Return42, default(Func<int, int, ValueTask<bool>>)));
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Simple1()
+        public async Task SkipWhileAwait_Simple1()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile(x => new ValueTask<bool>(x < 3));
+            var ys = xs.SkipWhileAwait(x => new ValueTask<bool>(x < 3));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 3);
@@ -170,10 +170,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Simple2()
+        public async Task SkipWhileAwait_Simple2()
         {
             var xs = new[] { 1, 2, 3, 4, 3, 2, 1 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile(x => new ValueTask<bool>(x < 3));
+            var ys = xs.SkipWhileAwait(x => new ValueTask<bool>(x < 3));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 3);
@@ -185,10 +185,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Async_False()
+        public async Task SkipWhileAwait_False()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile(x => new ValueTask<bool>(false));
+            var ys = xs.SkipWhileAwait(x => new ValueTask<bool>(false));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 1);
@@ -199,31 +199,31 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Async_True()
+        public async Task SkipWhileAwait_True()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile(x => new ValueTask<bool>(true));
+            var ys = xs.SkipWhileAwait(x => new ValueTask<bool>(true));
 
             var e = ys.GetAsyncEnumerator();
             await NoNextAsync(e);
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Throws_Predicate()
+        public async Task SkipWhileAwait_Throws_Predicate()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile(new Func<int, ValueTask<bool>>(x => { throw ex; }));
+            var ys = xs.SkipWhileAwait(new Func<int, ValueTask<bool>>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Indexed()
+        public async Task SkipWhileAwait_Indexed()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((x, i) => new ValueTask<bool>(i < 2));
+            var ys = xs.SkipWhileAwait((x, i) => new ValueTask<bool>(i < 2));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 3);
@@ -232,10 +232,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Indexed_False()
+        public async Task SkipWhileAwait_Indexed_False()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((int x, int i) => new ValueTask<bool>(false));
+            var ys = xs.SkipWhileAwait((int x, int i) => new ValueTask<bool>(false));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 1);
@@ -246,40 +246,40 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Indexed_True()
+        public async Task SkipWhileAwait_Indexed_True()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((int x, int i) => new ValueTask<bool>(true));
+            var ys = xs.SkipWhileAwait((int x, int i) => new ValueTask<bool>(true));
 
             var e = ys.GetAsyncEnumerator();
             await NoNextAsync(e);
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Indexed_Throws_Predicate()
+        public async Task SkipWhileAwait_Indexed_Throws_Predicate()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile(new Func<int, int, ValueTask<bool>>((x, i) => { throw ex; }));
+            var ys = xs.SkipWhileAwait(new Func<int, int, ValueTask<bool>>((x, i) => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public async Task SkipWhile_Async_SequenceIdentity()
+        public async Task SkipWhileAwait_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile(x => new ValueTask<bool>(x < 3));
+            var ys = xs.SkipWhileAwait(x => new ValueTask<bool>(x < 3));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Indexed_SequenceIdentity()
+        public async Task SkipWhileAwait_Indexed_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((int x, int i) => new ValueTask<bool>(false));
+            var ys = xs.SkipWhileAwait((int x, int i) => new ValueTask<bool>(false));
 
             await SequenceIdentity(ys);
         }
@@ -287,19 +287,19 @@ namespace Tests
 #if !NO_DEEP_CANCELLATION
 
         [Fact]
-        public void SkipWhile_Async_Cancel_Null()
+        public void SkipWhileAwaitWithCancellation_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile(default, (int x, CancellationToken ct) => new ValueTask<bool>(true)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile<int>(default, (x, i, ct) => new ValueTask<bool>(true)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile(Return42, default(Func<int, CancellationToken, ValueTask<bool>>)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhile(Return42, default(Func<int, int, CancellationToken, ValueTask<bool>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhileAwaitWithCancellation(default, (int x, CancellationToken ct) => new ValueTask<bool>(true)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhileAwaitWithCancellation<int>(default, (x, i, ct) => new ValueTask<bool>(true)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhileAwaitWithCancellation(Return42, default(Func<int, CancellationToken, ValueTask<bool>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SkipWhileAwaitWithCancellation(Return42, default(Func<int, int, CancellationToken, ValueTask<bool>>)));
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Cancel_Simple1()
+        public async Task SkipWhileAwaitWithCancellation_Simple1()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((int x, CancellationToken ct) => new ValueTask<bool>(x < 3));
+            var ys = xs.SkipWhileAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<bool>(x < 3));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 3);
@@ -308,10 +308,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Cancel_Simple2()
+        public async Task SkipWhileAwaitWithCancellation_Simple2()
         {
             var xs = new[] { 1, 2, 3, 4, 3, 2, 1 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((int x, CancellationToken ct) => new ValueTask<bool>(x < 3));
+            var ys = xs.SkipWhileAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<bool>(x < 3));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 3);
@@ -323,10 +323,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Cancel_False()
+        public async Task SkipWhileAwaitWithCancellation_False()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((int x, CancellationToken ct) => new ValueTask<bool>(false));
+            var ys = xs.SkipWhileAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<bool>(false));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 1);
@@ -337,31 +337,31 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Cancel_True()
+        public async Task SkipWhileAwaitWithCancellation_True()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((int x, CancellationToken ct) => new ValueTask<bool>(true));
+            var ys = xs.SkipWhileAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<bool>(true));
 
             var e = ys.GetAsyncEnumerator();
             await NoNextAsync(e);
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Cancel_Throws_Predicate()
+        public async Task SkipWhileAwaitWithCancellation_Throws_Predicate()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile(new Func<int, CancellationToken, ValueTask<bool>>((x, ct) => { throw ex; }));
+            var ys = xs.SkipWhileAwaitWithCancellation(new Func<int, CancellationToken, ValueTask<bool>>((x, ct) => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Cancel_Indexed()
+        public async Task SkipWhileAwaitWithCancellation_Indexed()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((x, i, ct) => new ValueTask<bool>(i < 2));
+            var ys = xs.SkipWhileAwaitWithCancellation((x, i, ct) => new ValueTask<bool>(i < 2));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 3);
@@ -370,10 +370,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Cancel_Indexed_False()
+        public async Task SkipWhileAwaitWithCancellation_Indexed_False()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((x, i, ct) => new ValueTask<bool>(false));
+            var ys = xs.SkipWhileAwaitWithCancellation((x, i, ct) => new ValueTask<bool>(false));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 1);
@@ -384,40 +384,40 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Cancel_Indexed_True()
+        public async Task SkipWhileAwaitWithCancellation_Indexed_True()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((x, i, ct) => new ValueTask<bool>(true));
+            var ys = xs.SkipWhileAwaitWithCancellation((x, i, ct) => new ValueTask<bool>(true));
 
             var e = ys.GetAsyncEnumerator();
             await NoNextAsync(e);
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Cancel_Indexed_Throws_Predicate()
+        public async Task SkipWhileAwaitWithCancellation_Indexed_Throws_Predicate()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile(new Func<int, int, CancellationToken, ValueTask<bool>>((x, i, ct) => { throw ex; }));
+            var ys = xs.SkipWhileAwaitWithCancellation(new Func<int, int, CancellationToken, ValueTask<bool>>((x, i, ct) => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Cancel_SequenceIdentity()
+        public async Task SkipWhileAwaitWithCancellation_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((int x, CancellationToken ct) => new ValueTask<bool>(x < 3));
+            var ys = xs.SkipWhileAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<bool>(x < 3));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task SkipWhile_Async_Cancel_Indexed_SequenceIdentity()
+        public async Task SkipWhileAwaitWithCancellation_Indexed_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((x, i, ct) => new ValueTask<bool>(false));
+            var ys = xs.SkipWhileAwaitWithCancellation((x, i, ct) => new ValueTask<bool>(false));
 
             await SequenceIdentity(ys);
         }

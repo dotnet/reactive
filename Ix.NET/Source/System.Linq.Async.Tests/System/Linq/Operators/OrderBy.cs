@@ -19,13 +19,13 @@ namespace Tests
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.OrderBy(Return42, default(Func<int, int>)));
 
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.OrderBy<int, int>(default, x => x, Comparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.OrderBy(Return42, default(Func<int, int>), Comparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.OrderBy(Return42, default, Comparer<int>.Default));
 
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.OrderByDescending<int, int>(default, x => x));
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.OrderByDescending(Return42, default(Func<int, int>)));
 
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.OrderByDescending<int, int>(default, x => x, Comparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.OrderByDescending(Return42, default(Func<int, int>), Comparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.OrderByDescending(Return42, default, Comparer<int>.Default));
 
             var xs = Return42.OrderBy(x => x);
 
@@ -33,13 +33,13 @@ namespace Tests
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ThenBy(xs, default(Func<int, int>)));
 
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ThenBy<int, int>(default, x => x, Comparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ThenBy(xs, default(Func<int, int>), Comparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ThenBy(xs, default, Comparer<int>.Default));
 
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ThenByDescending<int, int>(default, x => x));
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ThenByDescending(xs, default(Func<int, int>)));
 
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ThenByDescending<int, int>(default, x => x, Comparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ThenByDescending(xs, default(Func<int, int>), Comparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ThenByDescending(xs, default, Comparer<int>.Default));
         }
 
         [Fact]

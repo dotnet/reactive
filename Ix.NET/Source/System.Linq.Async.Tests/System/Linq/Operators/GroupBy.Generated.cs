@@ -184,8 +184,8 @@ namespace Tests
         [Fact]
         public void KeySelector_Async_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(Return42, default(Func<int, ValueTask<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int>(Return42, default(Func<int, ValueTask<int>>)));
         }
 
         [Fact]
@@ -195,7 +195,7 @@ namespace Tests
             var methodsA = methodsS.ToAsyncEnumerable();
 
             var resS = methodsS.GroupBy(m => m.Name);
-            var resA = methodsA.GroupBy(m => new ValueTask<string>(m.Name));
+            var resA = methodsA.GroupByAwait(m => new ValueTask<string>(m.Name));
 
             await Groups_AssertCore(resS, resA);
         }
@@ -203,8 +203,8 @@ namespace Tests
         [Fact]
         public void KeySelector_Async_Comparer_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(Return42, default(Func<int, ValueTask<int>>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int>(Return42, default(Func<int, ValueTask<int>>), EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -216,7 +216,7 @@ namespace Tests
             var eq = new StringPrefixEqualityComparer(1);
 
             var resS = methodsS.GroupBy(m => m.Name, eq);
-            var resA = methodsA.GroupBy(m => new ValueTask<string>(m.Name), eq);
+            var resA = methodsA.GroupByAwait(m => new ValueTask<string>(m.Name), eq);
 
             await Groups_AssertCore(resS, resA);
         }
@@ -224,9 +224,9 @@ namespace Tests
         [Fact]
         public void KeySelector_ElementSelector_Async_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (int x) => new ValueTask<int>(x)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(Func<int, ValueTask<int>>), (int x) => new ValueTask<int>(x)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, (int x) => new ValueTask<int>(x), default(Func<int, ValueTask<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (int x) => new ValueTask<int>(x)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int>(Return42, default(Func<int, ValueTask<int>>), (int x) => new ValueTask<int>(x)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int>(Return42, (int x) => new ValueTask<int>(x), default(Func<int, ValueTask<int>>)));
         }
 
         [Fact]
@@ -236,7 +236,7 @@ namespace Tests
             var methodsA = methodsS.ToAsyncEnumerable();
 
             var resS = methodsS.GroupBy(m => m.Name, m => m.Name.ToUpper());
-            var resA = methodsA.GroupBy(m => new ValueTask<string>(m.Name), m => new ValueTask<string>(m.Name.ToUpper()));
+            var resA = methodsA.GroupByAwait(m => new ValueTask<string>(m.Name), m => new ValueTask<string>(m.Name.ToUpper()));
 
             await Groups_AssertCore(resS, resA);
         }
@@ -244,9 +244,9 @@ namespace Tests
         [Fact]
         public void KeySelector_ElementSelector_Async_Comparer_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (int x) => new ValueTask<int>(x), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(Func<int, ValueTask<int>>), (int x) => new ValueTask<int>(x), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), default(Func<int, ValueTask<int>>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (int x) => new ValueTask<int>(x), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int>(Return42, default(Func<int, ValueTask<int>>), (int x) => new ValueTask<int>(x), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), default(Func<int, ValueTask<int>>), EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -258,7 +258,7 @@ namespace Tests
             var eq = new StringPrefixEqualityComparer(1);
 
             var resS = methodsS.GroupBy(m => m.Name, m => m.Name.ToUpper(), eq);
-            var resA = methodsA.GroupBy(m => new ValueTask<string>(m.Name), m => new ValueTask<string>(m.Name.ToUpper()), eq);
+            var resA = methodsA.GroupByAwait(m => new ValueTask<string>(m.Name), m => new ValueTask<string>(m.Name.ToUpper()), eq);
 
             await Groups_AssertCore(resS, resA);
         }
@@ -266,9 +266,9 @@ namespace Tests
         [Fact]
         public void KeySelector_ResultSelector_Async_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (k, g) => new ValueTask<int>(0)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(Func<int, ValueTask<int>>), (k, g) => new ValueTask<int>(0)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, (int x) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, ValueTask<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (k, g) => new ValueTask<int>(0)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int>(Return42, default(Func<int, ValueTask<int>>), (k, g) => new ValueTask<int>(0)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int>(Return42, (int x) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, ValueTask<int>>)));
         }
 
         [Fact]
@@ -278,7 +278,7 @@ namespace Tests
             var methodsA = methodsS.ToAsyncEnumerable();
 
             var resS = methodsS.GroupBy(m => m.Name, (k, g) => k + " - " + g.Count());
-            var resA = methodsA.GroupBy<System.Reflection.MethodInfo, string, string>(m => new ValueTask<string>(m.Name), async (k, g) => k + " - " + await g.CountAsync()); // REVIEW: Ambiguity
+            var resA = methodsA.GroupByAwait(m => new ValueTask<string>(m.Name), async (k, g) => k + " - " + await g.CountAsync());
 
             await Group_Result_AssertCore(resS, resA);
         }
@@ -286,9 +286,9 @@ namespace Tests
         [Fact]
         public void KeySelector_ResultSelector_Async_Comparer_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (k, g) => new ValueTask<int>(0), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(Func<int, ValueTask<int>>), (k, g) => new ValueTask<int>(0), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, ValueTask<int>>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (k, g) => new ValueTask<int>(0), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int>(Return42, default(Func<int, ValueTask<int>>), (k, g) => new ValueTask<int>(0), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, ValueTask<int>>), EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -300,7 +300,7 @@ namespace Tests
             var eq = new StringPrefixEqualityComparer(1);
 
             var resS = methodsS.GroupBy(m => m.Name, (k, g) => k + " - " + g.Count(), eq);
-            var resA = methodsA.GroupBy(m => new ValueTask<string>(m.Name), async (k, g) => k + " - " + await g.CountAsync(), eq);
+            var resA = methodsA.GroupByAwait(m => new ValueTask<string>(m.Name), async (k, g) => k + " - " + await g.CountAsync(), eq);
 
             await Group_Result_AssertCore(resS, resA);
         }
@@ -308,10 +308,10 @@ namespace Tests
         [Fact]
         public void KeySelector_ElementSelector_ResultSelector_Async_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (int x) => new ValueTask<int>(x), (k, g) => new ValueTask<int>(0)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default(Func<int, ValueTask<int>>), (int x) => new ValueTask<int>(x), (k, g) => new ValueTask<int>(0)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, (int x) => new ValueTask<int>(x), default(Func<int, ValueTask<int>>), (k, g) => new ValueTask<int>(0)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, (int x) => new ValueTask<int>(x), (int x) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, ValueTask<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (int x) => new ValueTask<int>(x), (k, g) => new ValueTask<int>(0)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int, int>(Return42, default(Func<int, ValueTask<int>>), (int x) => new ValueTask<int>(x), (k, g) => new ValueTask<int>(0)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int, int>(Return42, (int x) => new ValueTask<int>(x), default(Func<int, ValueTask<int>>), (k, g) => new ValueTask<int>(0)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int, int>(Return42, (int x) => new ValueTask<int>(x), (int x) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, ValueTask<int>>)));
         }
 
         [Fact]
@@ -321,7 +321,7 @@ namespace Tests
             var methodsA = methodsS.ToAsyncEnumerable();
 
             var resS = methodsS.GroupBy(m => m.Name, m => m.Name.ToUpper(), (k, g) => k + " - " + g.Count());
-            var resA = methodsA.GroupBy<System.Reflection.MethodInfo, string, string, string>(m => new ValueTask<string>(m.Name), m => new ValueTask<string>(m.Name.ToUpper()), async (k, g) => k + " - " + await g.CountAsync()); // REVIEW: Ambiguity
+            var resA = methodsA.GroupByAwait(m => new ValueTask<string>(m.Name), m => new ValueTask<string>(m.Name.ToUpper()), async (k, g) => k + " - " + await g.CountAsync());
 
             await Group_Result_AssertCore(resS, resA);
         }
@@ -329,10 +329,10 @@ namespace Tests
         [Fact]
         public void KeySelector_ElementSelector_ResultSelector_Async_Comparer_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (int x) => new ValueTask<int>(x), (k, g) => new ValueTask<int>(0), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default(Func<int, ValueTask<int>>), (int x) => new ValueTask<int>(x), (k, g) => new ValueTask<int>(0), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), default(Func<int, ValueTask<int>>), (k, g) => new ValueTask<int>(0), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (int x) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, ValueTask<int>>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (int x) => new ValueTask<int>(x), (k, g) => new ValueTask<int>(0), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int, int>(Return42, default(Func<int, ValueTask<int>>), (int x) => new ValueTask<int>(x), (k, g) => new ValueTask<int>(0), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), default(Func<int, ValueTask<int>>), (k, g) => new ValueTask<int>(0), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwait<int, int, int, int>(default(IAsyncEnumerable<int>), (int x) => new ValueTask<int>(x), (int x) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, ValueTask<int>>), EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -344,7 +344,7 @@ namespace Tests
             var eq = new StringPrefixEqualityComparer(1);
 
             var resS = methodsS.GroupBy(m => m.Name, m => m.Name.ToUpper(), (k, g) => k + " - " + g.Count(), eq);
-            var resA = methodsA.GroupBy(m => new ValueTask<string>(m.Name), m => new ValueTask<string>(m.Name.ToUpper()), async (k, g) => k + " - " + await g.CountAsync(), eq);
+            var resA = methodsA.GroupByAwait(m => new ValueTask<string>(m.Name), m => new ValueTask<string>(m.Name.ToUpper()), async (k, g) => k + " - " + await g.CountAsync(), eq);
 
             await Group_Result_AssertCore(resS, resA);
         }
@@ -353,8 +353,8 @@ namespace Tests
         [Fact]
         public void KeySelector_Async_Cancel_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>)));
         }
 
         [Fact]
@@ -364,7 +364,7 @@ namespace Tests
             var methodsA = methodsS.ToAsyncEnumerable();
 
             var resS = methodsS.GroupBy(m => m.Name);
-            var resA = methodsA.GroupBy((m, ct) => new ValueTask<string>(m.Name));
+            var resA = methodsA.GroupByAwaitWithCancellation((m, ct) => new ValueTask<string>(m.Name));
 
             await Groups_AssertCore(resS, resA);
         }
@@ -372,8 +372,8 @@ namespace Tests
         [Fact]
         public void KeySelector_Async_Cancel_Comparer_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -385,7 +385,7 @@ namespace Tests
             var eq = new StringPrefixEqualityComparer(1);
 
             var resS = methodsS.GroupBy(m => m.Name, eq);
-            var resA = methodsA.GroupBy((m, ct) => new ValueTask<string>(m.Name), eq);
+            var resA = methodsA.GroupByAwaitWithCancellation((m, ct) => new ValueTask<string>(m.Name), eq);
 
             await Groups_AssertCore(resS, resA);
         }
@@ -393,9 +393,9 @@ namespace Tests
         [Fact]
         public void KeySelector_ElementSelector_Async_Cancel_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (int x, CancellationToken ct) => new ValueTask<int>(x)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), (int x, CancellationToken ct) => new ValueTask<int>(x)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, CancellationToken, ValueTask<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (int x, CancellationToken ct) => new ValueTask<int>(x)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), (int x, CancellationToken ct) => new ValueTask<int>(x)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int>(Return42, (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, CancellationToken, ValueTask<int>>)));
         }
 
         [Fact]
@@ -405,7 +405,7 @@ namespace Tests
             var methodsA = methodsS.ToAsyncEnumerable();
 
             var resS = methodsS.GroupBy(m => m.Name, m => m.Name.ToUpper());
-            var resA = methodsA.GroupBy((m, ct) => new ValueTask<string>(m.Name), (m, ct) => new ValueTask<string>(m.Name.ToUpper()));
+            var resA = methodsA.GroupByAwaitWithCancellation((m, ct) => new ValueTask<string>(m.Name), (m, ct) => new ValueTask<string>(m.Name.ToUpper()));
 
             await Groups_AssertCore(resS, resA);
         }
@@ -413,9 +413,9 @@ namespace Tests
         [Fact]
         public void KeySelector_ElementSelector_Async_Cancel_Comparer_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (int x, CancellationToken ct) => new ValueTask<int>(x), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), (int x, CancellationToken ct) => new ValueTask<int>(x), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, CancellationToken, ValueTask<int>>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (int x, CancellationToken ct) => new ValueTask<int>(x), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), (int x, CancellationToken ct) => new ValueTask<int>(x), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, CancellationToken, ValueTask<int>>), EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -427,7 +427,7 @@ namespace Tests
             var eq = new StringPrefixEqualityComparer(1);
 
             var resS = methodsS.GroupBy(m => m.Name, m => m.Name.ToUpper(), eq);
-            var resA = methodsA.GroupBy((m, ct) => new ValueTask<string>(m.Name), (m, ct) => new ValueTask<string>(m.Name.ToUpper()), eq);
+            var resA = methodsA.GroupByAwaitWithCancellation((m, ct) => new ValueTask<string>(m.Name), (m, ct) => new ValueTask<string>(m.Name.ToUpper()), eq);
 
             await Groups_AssertCore(resS, resA);
         }
@@ -435,9 +435,9 @@ namespace Tests
         [Fact]
         public void KeySelector_ResultSelector_Async_Cancel_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (k, g, ct) => new ValueTask<int>(0)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), (k, g, ct) => new ValueTask<int>(0)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (k, g, ct) => new ValueTask<int>(0)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), (k, g, ct) => new ValueTask<int>(0)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int>(Return42, (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>)));
         }
 
         [Fact]
@@ -447,7 +447,7 @@ namespace Tests
             var methodsA = methodsS.ToAsyncEnumerable();
 
             var resS = methodsS.GroupBy(m => m.Name, (k, g) => k + " - " + g.Count());
-            var resA = methodsA.GroupBy((m, ct) => new ValueTask<string>(m.Name), async (k, g, ct) => k + " - " + await g.CountAsync(ct));
+            var resA = methodsA.GroupByAwaitWithCancellation((m, ct) => new ValueTask<string>(m.Name), async (k, g, ct) => k + " - " + await g.CountAsync(ct));
 
             await Group_Result_AssertCore(resS, resA);
         }
@@ -455,9 +455,9 @@ namespace Tests
         [Fact]
         public void KeySelector_ResultSelector_Async_Cancel_Comparer_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (k, g, ct) => new ValueTask<int>(0), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), (k, g, ct) => new ValueTask<int>(0), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (k, g, ct) => new ValueTask<int>(0), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), (k, g, ct) => new ValueTask<int>(0), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>), EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -469,7 +469,7 @@ namespace Tests
             var eq = new StringPrefixEqualityComparer(1);
 
             var resS = methodsS.GroupBy(m => m.Name, (k, g) => k + " - " + g.Count(), eq);
-            var resA = methodsA.GroupBy((m, ct) => new ValueTask<string>(m.Name), async (k, g, ct) => k + " - " + await g.CountAsync(ct), eq);
+            var resA = methodsA.GroupByAwaitWithCancellation((m, ct) => new ValueTask<string>(m.Name), async (k, g, ct) => k + " - " + await g.CountAsync(ct), eq);
 
             await Group_Result_AssertCore(resS, resA);
         }
@@ -477,10 +477,10 @@ namespace Tests
         [Fact]
         public void KeySelector_ElementSelector_ResultSelector_Async_Cancel_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (int x, CancellationToken ct) => new ValueTask<int>(x), (k, g, ct) => new ValueTask<int>(0)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), (int x, CancellationToken ct) => new ValueTask<int>(x), (k, g, ct) => new ValueTask<int>(0)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, CancellationToken, ValueTask<int>>), (k, g, ct) => new ValueTask<int>(0)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, (int x, CancellationToken ct) => new ValueTask<int>(x), (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (int x, CancellationToken ct) => new ValueTask<int>(x), (k, g, ct) => new ValueTask<int>(0)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), (int x, CancellationToken ct) => new ValueTask<int>(x), (k, g, ct) => new ValueTask<int>(0)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int, int>(Return42, (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, CancellationToken, ValueTask<int>>), (k, g, ct) => new ValueTask<int>(0)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int, int>(Return42, (int x, CancellationToken ct) => new ValueTask<int>(x), (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>)));
         }
 
         [Fact]
@@ -490,7 +490,7 @@ namespace Tests
             var methodsA = methodsS.ToAsyncEnumerable();
 
             var resS = methodsS.GroupBy(m => m.Name, m => m.Name.ToUpper(), (k, g) => k + " - " + g.Count());
-            var resA = methodsA.GroupBy((m, ct) => new ValueTask<string>(m.Name), (m, ct) => new ValueTask<string>(m.Name.ToUpper()), async (k, g, ct) => k + " - " + await g.CountAsync(ct));
+            var resA = methodsA.GroupByAwaitWithCancellation((m, ct) => new ValueTask<string>(m.Name), (m, ct) => new ValueTask<string>(m.Name.ToUpper()), async (k, g, ct) => k + " - " + await g.CountAsync(ct));
 
             await Group_Result_AssertCore(resS, resA);
         }
@@ -498,10 +498,10 @@ namespace Tests
         [Fact]
         public void KeySelector_ElementSelector_ResultSelector_Async_Cancel_Comparer_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (int x, CancellationToken ct) => new ValueTask<int>(x), (k, g, ct) => new ValueTask<int>(0), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), (int x, CancellationToken ct) => new ValueTask<int>(x), (k, g, ct) => new ValueTask<int>(0), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, CancellationToken, ValueTask<int>>), (k, g, ct) => new ValueTask<int>(0), EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (int x, CancellationToken ct) => new ValueTask<int>(x), (k, g, ct) => new ValueTask<int>(0), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int, int>(Return42, default(Func<int, CancellationToken, ValueTask<int>>), (int x, CancellationToken ct) => new ValueTask<int>(x), (k, g, ct) => new ValueTask<int>(0), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, CancellationToken, ValueTask<int>>), (k, g, ct) => new ValueTask<int>(0), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupByAwaitWithCancellation<int, int, int, int>(default(IAsyncEnumerable<int>), (int x, CancellationToken ct) => new ValueTask<int>(x), (int x, CancellationToken ct) => new ValueTask<int>(x), default(Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>), EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -513,7 +513,7 @@ namespace Tests
             var eq = new StringPrefixEqualityComparer(1);
 
             var resS = methodsS.GroupBy(m => m.Name, m => m.Name.ToUpper(), (k, g) => k + " - " + g.Count(), eq);
-            var resA = methodsA.GroupBy((m, ct) => new ValueTask<string>(m.Name), (m, ct) => new ValueTask<string>(m.Name.ToUpper()), async (k, g, ct) => k + " - " + await g.CountAsync(ct), eq);
+            var resA = methodsA.GroupByAwaitWithCancellation((m, ct) => new ValueTask<string>(m.Name), (m, ct) => new ValueTask<string>(m.Name.ToUpper()), async (k, g, ct) => k + " - " + await g.CountAsync(ct), eq);
 
             await Group_Result_AssertCore(resS, resA);
         }

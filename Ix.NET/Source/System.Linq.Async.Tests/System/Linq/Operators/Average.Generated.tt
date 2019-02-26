@@ -74,34 +74,34 @@ foreach (var t in types)
         }
 
         [Fact]
-        public async Task AverageAsync_AsyncSelector_<#=t.Name#>_Empty()
+        public async Task AverageAwaitAsync_Selector_<#=t.Name#>_Empty()
         {
             var ys = new <#=cs#>[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => new ValueTask<<#=cs#>>(x)).AsTask());
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAwaitAsync(x => new ValueTask<<#=cs#>>(x)).AsTask());
         }
 
         [Fact]
-        public async Task AverageAsync_AsyncSelector_<#=t.Name#>_Many()
+        public async Task AverageAwaitAsync_Selector_<#=t.Name#>_Many()
         {
             var xs = new <#=cs#>[] { 2, 3, 5, 7, 11, 13, 17, 19 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), await ys.AverageAsync(x => new ValueTask<<#=cs#>>(x)));
+            Assert.Equal(xs.Average(), await ys.AverageAwaitAsync(x => new ValueTask<<#=cs#>>(x)));
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task AverageAsync_AsyncSelectorWithCancellation_<#=t.Name#>_Empty()
+        public async Task AverageAwaitWithCancellationAsync_Selector_<#=t.Name#>_Empty()
         {
             var ys = new <#=cs#>[0].ToAsyncEnumerable();
-            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync((x, ct) => new ValueTask<<#=cs#>>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>>(x), CancellationToken.None).AsTask());
         }
 
         [Fact]
-        public async Task AverageAsync_AsyncSelectorWithCancellation_<#=t.Name#>_Many()
+        public async Task AverageAwaitWithCancellationAsync_Selector_<#=t.Name#>_Many()
         {
             var xs = new <#=cs#>[] { 2, 3, 5, 7, 11, 13, 17, 19 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), await ys.AverageAsync((x, ct) => new ValueTask<<#=cs#>>(x), CancellationToken.None));
+            Assert.Equal(xs.Average(), await ys.AverageAwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>>(x), CancellationToken.None));
         }
 #endif
 
@@ -136,34 +136,34 @@ foreach (var t in types)
         }
 
         [Fact]
-        public async Task AverageAsync_AsyncSelector_<#=t.Name#>_Nullable_Empty()
+        public async Task AverageAwaitAsync_Selector_<#=t.Name#>_Nullable_Empty()
         {
             var ys = new <#=cs#>?[0].ToAsyncEnumerable();
-            Assert.Null(await ys.AverageAsync(x => new ValueTask<<#=cs#>?>(x)));
+            Assert.Null(await ys.AverageAwaitAsync(x => new ValueTask<<#=cs#>?>(x)));
         }
 
         [Fact]
-        public async Task AverageAsync_AsyncSelector_<#=t.Name#>_Nullable_Many()
+        public async Task AverageAwaitAsync_Selector_<#=t.Name#>_Nullable_Many()
         {
             var xs = new <#=cs#>?[] { 2, 3, 5, 7, 11, 13, 17, 19 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), await ys.AverageAsync(x => new ValueTask<<#=cs#>?>(x)));
+            Assert.Equal(xs.Average(), await ys.AverageAwaitAsync(x => new ValueTask<<#=cs#>?>(x)));
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task AverageAsync_AsyncSelectorWithCancellation_<#=t.Name#>_Nullable_Empty()
+        public async Task AverageAwaitWithCancellationAsync_Selector_<#=t.Name#>_Nullable_Empty()
         {
             var ys = new <#=cs#>?[0].ToAsyncEnumerable();
-            Assert.Null(await ys.AverageAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None));
+            Assert.Null(await ys.AverageAwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None));
         }
 
         [Fact]
-        public async Task AverageAsync_AsyncSelectorWithCancellation_<#=t.Name#>_Nullable_Many()
+        public async Task AverageAwaitWithCancellationAsync_Selector_<#=t.Name#>_Nullable_Many()
         {
             var xs = new <#=cs#>?[] { 2, 3, 5, 7, 11, 13, 17, 19 };
             var ys = xs.ToAsyncEnumerable();
-            Assert.Equal(xs.Average(), await ys.AverageAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None));
+            Assert.Equal(xs.Average(), await ys.AverageAwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None));
         }
 #endif
 

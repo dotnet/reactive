@@ -188,7 +188,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Sync_SelectSelect_AsyncIterator()
+        public async Task Select_Sync_SelectSelectAwaitIterator()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = xs.Select(i => i + 3).Select(x => (char)('a' + x));
@@ -282,19 +282,19 @@ namespace Tests
         }
 
         [Fact]
-        public void Select_Async_Null()
+        public void SelectAwait_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default, x => new ValueTask<int>(x)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Select(default, (int x, int i) => new ValueTask<int>(x)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Select(Return42, default(Func<int, ValueTask<int>>)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Select(Return42, default(Func<int, int, ValueTask<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectAwait<int, int>(default, x => new ValueTask<int>(x)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectAwait(default, (int x, int i) => new ValueTask<int>(x)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectAwait(Return42, default(Func<int, ValueTask<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectAwait(Return42, default(Func<int, int, ValueTask<int>>)));
         }
 
         [Fact]
-        public async Task Select_Async_Simple()
+        public async Task SelectAwait_Simple()
         {
             var xs = ToAsyncEnumerable(new[] { 0, 1, 2 });
-            var ys = xs.Select(x => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwait(x => new ValueTask<char>((char)('a' + x)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'a');
@@ -304,10 +304,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Simple_IList()
+        public async Task SelectAwait_Simple_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 0, 1, 2 });
-            var ys = xs.Select(x => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwait(x => new ValueTask<char>((char)('a' + x)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'a');
@@ -317,10 +317,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Simple_AsyncIterator()
+        public async Task SelectAwait_Simple_AsyncIterator()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
-            var ys = xs.Select(x => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwait(x => new ValueTask<char>((char)('a' + x)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'a');
@@ -330,10 +330,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Indexed()
+        public async Task SelectAwait_Indexed()
         {
             var xs = ToAsyncEnumerable(new[] { 8, 5, 7 });
-            var ys = xs.Select((x, i) => new ValueTask<char>((char)('a' + i)));
+            var ys = xs.SelectAwait((x, i) => new ValueTask<char>((char)('a' + i)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'a');
@@ -343,10 +343,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Indexed_IList()
+        public async Task SelectAwait_Indexed_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 8, 5, 7 });
-            var ys = xs.Select((x, i) => new ValueTask<char>((char)('a' + i)));
+            var ys = xs.SelectAwait((x, i) => new ValueTask<char>((char)('a' + i)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'a');
@@ -356,10 +356,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Indexed_AsyncIterator()
+        public async Task SelectAwait_Indexed_AsyncIterator()
         {
             var xs = new[] { 8, 5, 7 }.ToAsyncEnumerable();
-            var ys = xs.Select((x, i) => new ValueTask<char>((char)('a' + i)));
+            var ys = xs.SelectAwait((x, i) => new ValueTask<char>((char)('a' + i)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'a');
@@ -369,70 +369,70 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Throws_Selector()
+        public async Task SelectAwait_Throws_Selector()
         {
             var xs = ToAsyncEnumerable(new[] { 0, 1, 2 });
-            var ys = xs.Select(x => new ValueTask<int>(1 / x));
+            var ys = xs.SelectAwait(x => new ValueTask<int>(1 / x));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public async Task Select_Async_Throws_Selector_IList()
+        public async Task SelectAwait_Throws_Selector_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 0, 1, 2 });
-            var ys = xs.Select(x => new ValueTask<int>(1 / x));
+            var ys = xs.SelectAwait(x => new ValueTask<int>(1 / x));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public async Task Select_Async_Throws_Selector_AsyncIterator()
+        public async Task SelectAwait_Throws_Selector_AsyncIterator()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
-            var ys = xs.Select(x => new ValueTask<int>(1 / x));
+            var ys = xs.SelectAwait(x => new ValueTask<int>(1 / x));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public async Task Select_Async_Indexed_Throws_Selector()
+        public async Task SelectAwait_Indexed_Throws_Selector()
         {
             var xs = ToAsyncEnumerable(new[] { 8, 5, 7 });
-            var ys = xs.Select((x, i) => new ValueTask<int>(1 / i));
+            var ys = xs.SelectAwait((x, i) => new ValueTask<int>(1 / i));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public async Task Select_Async_Indexed_Throws_Selector_IList()
+        public async Task SelectAwait_Indexed_Throws_Selector_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 8, 5, 7 });
-            var ys = xs.Select((x, i) => new ValueTask<int>(1 / i));
+            var ys = xs.SelectAwait((x, i) => new ValueTask<int>(1 / i));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public async Task Select_Async_Indexed_Throws_Selector_AsyncIterator()
+        public async Task SelectAwait_Indexed_Throws_Selector_AsyncIterator()
         {
             var xs = new[] { 8, 5, 7 }.ToAsyncEnumerable();
-            var ys = xs.Select((x, i) => new ValueTask<int>(1 / i));
+            var ys = xs.SelectAwait((x, i) => new ValueTask<int>(1 / i));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public async Task Select_Async_SelectSelect()
+        public async Task SelectAwait_SelectSelect()
         {
             var xs = ToAsyncEnumerable(new[] { 0, 1, 2 });
-            var ys = xs.Select(i => new ValueTask<int>(i + 3)).Select(x => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwait(i => new ValueTask<int>(i + 3)).SelectAwait(x => new ValueTask<char>((char)('a' + x)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'd');
@@ -442,10 +442,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_SelectSelect_IList()
+        public async Task SelectAwait_SelectSelect_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 0, 1, 2 });
-            var ys = xs.Select(i => new ValueTask<int>(i + 3)).Select(x => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwait(i => new ValueTask<int>(i + 3)).SelectAwait(x => new ValueTask<char>((char)('a' + x)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'd');
@@ -455,10 +455,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_SelectSelect_AsyncIterator()
+        public async Task SelectAwait_SelectSelectAwaitIterator()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
-            var ys = xs.Select(i => new ValueTask<int>(i + 3)).Select(x => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwait(i => new ValueTask<int>(i + 3)).SelectAwait(x => new ValueTask<char>((char)('a' + x)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'd');
@@ -468,104 +468,102 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_SequenceIdentity()
+        public async Task SelectAwait_SequenceIdentity()
         {
             var xs = ToAsyncEnumerable(new[] { 1, 2, 3 });
-            var ys = xs.Select(x => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwait(x => new ValueTask<char>((char)('a' + x)));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task Select_Async_SequenceIdentity_IList()
+        public async Task SelectAwait_SequenceIdentity_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3 });
-            var ys = xs.Select(x => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwait(x => new ValueTask<char>((char)('a' + x)));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task Select_Async_SequenceIdentity_AsyncIterator()
+        public async Task SelectAwait_SequenceIdentity_AsyncIterator()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
-            var ys = xs.Select(x => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwait(x => new ValueTask<char>((char)('a' + x)));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task Select_Async_Indexed_SequenceIdentity()
+        public async Task SelectAwait_Indexed_SequenceIdentity()
         {
             var xs = ToAsyncEnumerable(new[] { 8, 5, 7 });
-            var ys = xs.Select((x, i) => new ValueTask<char>((char)('a' + i)));
+            var ys = xs.SelectAwait((x, i) => new ValueTask<char>((char)('a' + i)));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task Select_Async_Indexed_SequenceIdentity_IList()
+        public async Task SelectAwait_Indexed_SequenceIdentity_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 8, 5, 7 });
-            var ys = xs.Select((x, i) => new ValueTask<char>((char)('a' + i)));
+            var ys = xs.SelectAwait((x, i) => new ValueTask<char>((char)('a' + i)));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task Select_Async_Indexed_SequenceIdentity_AsyncIterator()
+        public async Task SelectAwait_Indexed_SequenceIdentity_AsyncIterator()
         {
             var xs = new[] { 8, 5, 7 }.ToAsyncEnumerable();
-            var ys = xs.Select((x, i) => new ValueTask<char>((char)('a' + i)));
+            var ys = xs.SelectAwait((x, i) => new ValueTask<char>((char)('a' + i)));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task Select_Async_IList_Count()
+        public async Task SelectAwait_IList_Count()
         {
             var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
-            var ys = xs.Select(x => new ValueTask<int>(x * 2));
+            var ys = xs.SelectAwait(x => new ValueTask<int>(x * 2));
 
             Assert.Equal(5, await ys.CountAsync());
         }
 
         [Fact]
-        public async Task Select_Async_IList_ToList()
+        public async Task SelectAwait_IList_ToList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
-            var ys = xs.Select(x => new ValueTask<int>(x * 2));
+            var ys = xs.SelectAwait(x => new ValueTask<int>(x * 2));
 
             Assert.Equal(new[] { 2, 4, 6, 8, 10 }, await ys.ToListAsync());
         }
 
         [Fact]
-        public async Task Select_Async_IList_ToArray()
+        public async Task SelectAwait_IList_ToArray()
         {
             var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
-            var ys = xs.Select(x => new ValueTask<int>(x * 2));
+            var ys = xs.SelectAwait(x => new ValueTask<int>(x * 2));
 
             Assert.Equal(new[] { 2, 4, 6, 8, 10 }, await ys.ToArrayAsync());
         }
 
 #if !NO_DEEP_CANCELLATION
 
-        // REVIEW: These overloads are problematic for type inference. E.g. xs.Select((x, ct) => ...) is ambiguous.
-
         [Fact]
-        public void Select_Async_Cancel_Null()
+        public void SelectAwaitWithCancellation_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Select(default, (int x, CancellationToken ct) => new ValueTask<int>(x)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Select(default, (int x, int i, CancellationToken ct) => new ValueTask<int>(x)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Select(Return42, default(Func<int, CancellationToken, ValueTask<int>>)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.Select(Return42, default(Func<int, int, CancellationToken, ValueTask<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectAwaitWithCancellation(default, (int x, CancellationToken ct) => new ValueTask<int>(x)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectAwaitWithCancellation(default, (int x, int i, CancellationToken ct) => new ValueTask<int>(x)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectAwaitWithCancellation(Return42, default(Func<int, CancellationToken, ValueTask<int>>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.SelectAwaitWithCancellation(Return42, default(Func<int, int, CancellationToken, ValueTask<int>>)));
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Simple()
+        public async Task SelectAwaitWithCancellation_Simple()
         {
             var xs = ToAsyncEnumerable(new[] { 0, 1, 2 });
-            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'a');
@@ -575,10 +573,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Simple_IList()
+        public async Task SelectAwaitWithCancellation_Simple_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 0, 1, 2 });
-            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'a');
@@ -588,10 +586,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Simple_Async_CancelIterator()
+        public async Task SelectAwaitWithCancellation_Simple_Async_CancelIterator()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
-            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'a');
@@ -601,10 +599,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Indexed()
+        public async Task SelectAwaitWithCancellation_Indexed()
         {
             var xs = ToAsyncEnumerable(new[] { 8, 5, 7 });
-            var ys = xs.Select((x, i, ct) => new ValueTask<char>((char)('a' + i)));
+            var ys = xs.SelectAwaitWithCancellation((x, i, ct) => new ValueTask<char>((char)('a' + i)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'a');
@@ -614,10 +612,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Indexed_IList()
+        public async Task SelectAwaitWithCancellation_Indexed_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 8, 5, 7 });
-            var ys = xs.Select((x, i, ct) => new ValueTask<char>((char)('a' + i)));
+            var ys = xs.SelectAwaitWithCancellation((x, i, ct) => new ValueTask<char>((char)('a' + i)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'a');
@@ -627,10 +625,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Indexed_Async_CancelIterator()
+        public async Task SelectAwaitWithCancellation_Indexed_Async_CancelIterator()
         {
             var xs = new[] { 8, 5, 7 }.ToAsyncEnumerable();
-            var ys = xs.Select((x, i, ct) => new ValueTask<char>((char)('a' + i)));
+            var ys = xs.SelectAwaitWithCancellation((x, i, ct) => new ValueTask<char>((char)('a' + i)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'a');
@@ -640,70 +638,70 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Throws_Selector()
+        public async Task SelectAwaitWithCancellation_Throws_Selector()
         {
             var xs = ToAsyncEnumerable(new[] { 0, 1, 2 });
-            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<int>(1 / x));
+            var ys = xs.SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<int>(1 / x));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Throws_Selector_IList()
+        public async Task SelectAwaitWithCancellation_Throws_Selector_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 0, 1, 2 });
-            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<int>(1 / x));
+            var ys = xs.SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<int>(1 / x));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Throws_Selector_Async_CancelIterator()
+        public async Task SelectAwaitWithCancellation_Throws_Selector_Async_CancelIterator()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
-            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<int>(1 / x));
+            var ys = xs.SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<int>(1 / x));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Indexed_Throws_Selector()
+        public async Task SelectAwaitWithCancellation_Indexed_Throws_Selector()
         {
             var xs = ToAsyncEnumerable(new[] { 8, 5, 7 });
-            var ys = xs.Select((x, i, ct) => new ValueTask<int>(1 / i));
+            var ys = xs.SelectAwaitWithCancellation((x, i, ct) => new ValueTask<int>(1 / i));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Indexed_Throws_Selector_IList()
+        public async Task SelectAwaitWithCancellation_Indexed_Throws_Selector_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 8, 5, 7 });
-            var ys = xs.Select((x, i, ct) => new ValueTask<int>(1 / i));
+            var ys = xs.SelectAwaitWithCancellation((x, i, ct) => new ValueTask<int>(1 / i));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Indexed_Throws_Selector_Async_CancelIterator()
+        public async Task SelectAwaitWithCancellation_Indexed_Throws_Selector_Async_CancelIterator()
         {
             var xs = new[] { 8, 5, 7 }.ToAsyncEnumerable();
-            var ys = xs.Select((x, i, ct) => new ValueTask<int>(1 / i));
+            var ys = xs.SelectAwaitWithCancellation((x, i, ct) => new ValueTask<int>(1 / i));
 
             var e = ys.GetAsyncEnumerator();
             await AssertThrowsAsync<DivideByZeroException>(e.MoveNextAsync().AsTask());
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_SelectSelect()
+        public async Task SelectAwaitWithCancellation_SelectSelect()
         {
             var xs = ToAsyncEnumerable(new[] { 0, 1, 2 });
-            var ys = xs.Select((int i, CancellationToken ct) => new ValueTask<int>(i + 3)).Select((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwaitWithCancellation((int i, CancellationToken ct) => new ValueTask<int>(i + 3)).SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'd');
@@ -713,10 +711,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_SelectSelect_IList()
+        public async Task SelectAwaitWithCancellation_SelectSelect_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 0, 1, 2 });
-            var ys = xs.Select((int i, CancellationToken ct) => new ValueTask<int>(i + 3)).Select((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwaitWithCancellation((int i, CancellationToken ct) => new ValueTask<int>(i + 3)).SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'd');
@@ -726,10 +724,10 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_SelectSelect_Async_CancelIterator()
+        public async Task SelectAwaitWithCancellation_SelectSelectAwait_CancelIterator()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
-            var ys = xs.Select((int i, CancellationToken ct) => new ValueTask<int>(i + 3)).Select((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwaitWithCancellation((int i, CancellationToken ct) => new ValueTask<int>(i + 3)).SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
 
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 'd');
@@ -739,82 +737,82 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_SequenceIdentity()
+        public async Task SelectAwaitWithCancellation_SequenceIdentity()
         {
             var xs = ToAsyncEnumerable(new[] { 1, 2, 3 });
-            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_SequenceIdentity_IList()
+        public async Task SelectAwaitWithCancellation_SequenceIdentity_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3 });
-            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_SequenceIdentity_Async_CancelIterator()
+        public async Task SelectAwaitWithCancellation_SequenceIdentity_Async_CancelIterator()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
-            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
+            var ys = xs.SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<char>((char)('a' + x)));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Indexed_SequenceIdentity()
+        public async Task SelectAwaitWithCancellation_Indexed_SequenceIdentity()
         {
             var xs = ToAsyncEnumerable(new[] { 8, 5, 7 });
-            var ys = xs.Select((x, i, ct) => new ValueTask<char>((char)('a' + i)));
+            var ys = xs.SelectAwaitWithCancellation((x, i, ct) => new ValueTask<char>((char)('a' + i)));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Indexed_SequenceIdentity_IList()
+        public async Task SelectAwaitWithCancellation_Indexed_SequenceIdentity_IList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 8, 5, 7 });
-            var ys = xs.Select((x, i, ct) => new ValueTask<char>((char)('a' + i)));
+            var ys = xs.SelectAwaitWithCancellation((x, i, ct) => new ValueTask<char>((char)('a' + i)));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_Indexed_SequenceIdentity_Async_CancelIterator()
+        public async Task SelectAwaitWithCancellation_Indexed_SequenceIdentity_Async_CancelIterator()
         {
             var xs = new[] { 8, 5, 7 }.ToAsyncEnumerable();
-            var ys = xs.Select((x, i, ct) => new ValueTask<char>((char)('a' + i)));
+            var ys = xs.SelectAwaitWithCancellation((x, i, ct) => new ValueTask<char>((char)('a' + i)));
 
             await SequenceIdentity(ys);
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_IList_Count()
+        public async Task SelectAwaitWithCancellation_IList_Count()
         {
             var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
-            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<int>(x * 2));
+            var ys = xs.SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<int>(x * 2));
 
             Assert.Equal(5, await ys.CountAsync());
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_IList_ToList()
+        public async Task SelectAwaitWithCancellation_IList_ToList()
         {
             var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
-            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<int>(x * 2));
+            var ys = xs.SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<int>(x * 2));
 
             Assert.Equal(new[] { 2, 4, 6, 8, 10 }, await ys.ToListAsync());
         }
 
         [Fact]
-        public async Task Select_Async_Cancel_IList_ToArray()
+        public async Task SelectAwaitWithCancellation_IList_ToArray()
         {
             var xs = ToAsyncEnumerableIList(new[] { 1, 2, 3, 4, 5 });
-            var ys = xs.Select((int x, CancellationToken ct) => new ValueTask<int>(x * 2));
+            var ys = xs.SelectAwaitWithCancellation((int x, CancellationToken ct) => new ValueTask<int>(x * 2));
 
             Assert.Equal(new[] { 2, 4, 6, 8, 10 }, await ys.ToArrayAsync());
         }

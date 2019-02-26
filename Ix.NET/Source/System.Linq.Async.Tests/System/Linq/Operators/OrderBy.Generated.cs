@@ -47,7 +47,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2));
             var syncRes = xs.OrderBy(x => x % 2);
 
             await AssertSorted(asyncRes, syncRes);
@@ -76,7 +76,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2));
             var syncRes = xs.OrderBy(x => x % 2);
 
             await AssertSorted(asyncRes, syncRes);
@@ -134,7 +134,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2));
             var syncRes = xs.OrderByDescending(x => x % 2);
 
             await AssertSorted(asyncRes, syncRes);
@@ -163,7 +163,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2));
             var syncRes = xs.OrderByDescending(x => x % 2);
 
             await AssertSorted(asyncRes, syncRes);
@@ -221,7 +221,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -250,7 +250,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -308,7 +308,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -337,7 +337,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -366,7 +366,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -395,7 +395,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -424,7 +424,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -453,7 +453,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -482,7 +482,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -511,7 +511,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -540,7 +540,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -569,7 +569,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -598,7 +598,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -627,7 +627,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -656,7 +656,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -685,7 +685,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -743,7 +743,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -772,7 +772,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -830,7 +830,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -859,7 +859,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -888,7 +888,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -917,7 +917,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -946,7 +946,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -975,7 +975,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1004,7 +1004,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1033,7 +1033,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1062,7 +1062,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1091,7 +1091,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1120,7 +1120,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1149,7 +1149,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1178,7 +1178,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1207,7 +1207,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1265,7 +1265,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1294,7 +1294,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1352,7 +1352,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1381,7 +1381,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1410,7 +1410,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1439,7 +1439,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1468,7 +1468,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1497,7 +1497,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1526,7 +1526,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1555,7 +1555,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1584,7 +1584,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1613,7 +1613,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1642,7 +1642,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1671,7 +1671,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1700,7 +1700,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1729,7 +1729,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1787,7 +1787,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1816,7 +1816,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1874,7 +1874,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1903,7 +1903,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1932,7 +1932,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1961,7 +1961,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -1990,7 +1990,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2019,7 +2019,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2048,7 +2048,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2077,7 +2077,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2106,7 +2106,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2135,7 +2135,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2164,7 +2164,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2193,7 +2193,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2222,7 +2222,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2251,7 +2251,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2280,7 +2280,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2309,7 +2309,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2338,7 +2338,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2367,7 +2367,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2396,7 +2396,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2425,7 +2425,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2454,7 +2454,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2483,7 +2483,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2512,7 +2512,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2541,7 +2541,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2570,7 +2570,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2599,7 +2599,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2628,7 +2628,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2657,7 +2657,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2686,7 +2686,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2715,7 +2715,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2744,7 +2744,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2773,7 +2773,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2802,7 +2802,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2831,7 +2831,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2860,7 +2860,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2889,7 +2889,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2918,7 +2918,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2947,7 +2947,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -2976,7 +2976,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3005,7 +3005,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3034,7 +3034,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3063,7 +3063,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3092,7 +3092,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3121,7 +3121,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3150,7 +3150,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3179,7 +3179,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3208,7 +3208,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3237,7 +3237,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3266,7 +3266,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3295,7 +3295,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3324,7 +3324,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3353,7 +3353,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3382,7 +3382,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3411,7 +3411,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3440,7 +3440,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3469,7 +3469,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3498,7 +3498,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3527,7 +3527,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3556,7 +3556,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3585,7 +3585,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3614,7 +3614,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3643,7 +3643,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3672,7 +3672,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3701,7 +3701,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3730,7 +3730,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3759,7 +3759,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3788,7 +3788,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3817,7 +3817,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3846,7 +3846,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3875,7 +3875,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3904,7 +3904,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3933,7 +3933,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3962,7 +3962,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -3991,7 +3991,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4020,7 +4020,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4049,7 +4049,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4078,7 +4078,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4107,7 +4107,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4136,7 +4136,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4165,7 +4165,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4194,7 +4194,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4223,7 +4223,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4252,7 +4252,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4281,7 +4281,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4310,7 +4310,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4339,7 +4339,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderBy((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderBy(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4397,7 +4397,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4426,7 +4426,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4484,7 +4484,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4513,7 +4513,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4542,7 +4542,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4571,7 +4571,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4600,7 +4600,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4629,7 +4629,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4658,7 +4658,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4687,7 +4687,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4716,7 +4716,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4745,7 +4745,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4774,7 +4774,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4803,7 +4803,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4832,7 +4832,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4861,7 +4861,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4919,7 +4919,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -4948,7 +4948,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5006,7 +5006,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5035,7 +5035,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5064,7 +5064,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5093,7 +5093,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5122,7 +5122,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5151,7 +5151,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5180,7 +5180,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5209,7 +5209,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5238,7 +5238,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5267,7 +5267,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5296,7 +5296,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5325,7 +5325,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5354,7 +5354,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5383,7 +5383,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => x % 2).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5412,7 +5412,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5441,7 +5441,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5470,7 +5470,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5499,7 +5499,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5528,7 +5528,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5557,7 +5557,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5586,7 +5586,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5615,7 +5615,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5644,7 +5644,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5673,7 +5673,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5702,7 +5702,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5731,7 +5731,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5760,7 +5760,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5789,7 +5789,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5818,7 +5818,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5847,7 +5847,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5876,7 +5876,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5905,7 +5905,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5934,7 +5934,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5963,7 +5963,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -5992,7 +5992,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6021,7 +6021,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6050,7 +6050,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6079,7 +6079,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6108,7 +6108,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6137,7 +6137,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6166,7 +6166,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6195,7 +6195,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6224,7 +6224,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6253,7 +6253,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6282,7 +6282,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6311,7 +6311,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6340,7 +6340,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6369,7 +6369,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6398,7 +6398,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6427,7 +6427,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending(x => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwait(x => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6456,7 +6456,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6485,7 +6485,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6514,7 +6514,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6543,7 +6543,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6572,7 +6572,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6601,7 +6601,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => x % 3).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6630,7 +6630,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6659,7 +6659,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6688,7 +6688,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6717,7 +6717,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6746,7 +6746,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6775,7 +6775,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6804,7 +6804,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6833,7 +6833,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6862,7 +6862,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6891,7 +6891,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6920,7 +6920,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6949,7 +6949,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenBy((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenBy(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -6978,7 +6978,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7007,7 +7007,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7036,7 +7036,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7065,7 +7065,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7094,7 +7094,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7123,7 +7123,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => x % 3).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7152,7 +7152,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7181,7 +7181,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7210,7 +7210,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7239,7 +7239,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7268,7 +7268,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7297,7 +7297,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending(x => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwait(x => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7326,7 +7326,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7355,7 +7355,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7384,7 +7384,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenBy((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenBy(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7413,7 +7413,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => x % 4);
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7442,7 +7442,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending(x => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwait(x => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);
@@ -7471,7 +7471,7 @@ namespace Tests
             var rand = new Random(42);
             var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
 
-            var asyncRes = xs.ToAsyncEnumerable().OrderByDescending((x, ct) => new ValueTask<int>(x % 2)).ThenByDescending((x, ct) => new ValueTask<int>(x % 3)).ThenByDescending((x, ct) => new ValueTask<int>(x % 4));
+            var asyncRes = xs.ToAsyncEnumerable().OrderByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 2)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 3)).ThenByDescendingAwaitWithCancellation((x, ct) => new ValueTask<int>(x % 4));
             var syncRes = xs.OrderByDescending(x => x % 2).ThenByDescending(x => x % 3).ThenByDescending(x => x % 4);
 
             await AssertSorted(asyncRes, syncRes);

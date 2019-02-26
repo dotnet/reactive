@@ -76,7 +76,7 @@ namespace Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, bool>)).AsTask());
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => true, CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, bool>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default, CancellationToken.None).AsTask());
         }
 
         [Fact]
@@ -123,106 +123,106 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_Null()
+        public async Task SingleAwaitAsync_Predicate_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => new ValueTask<bool>(true)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, ValueTask<bool>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAwaitAsync<int>(default, x => new ValueTask<bool>(true)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAwaitAsync(Return42, default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, ValueTask<bool>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAwaitAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAwaitAsync(Return42, default, CancellationToken.None).AsTask());
         }
 
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_Empty()
+        public async Task SingleAwaitAsync_Predicate_Empty()
         {
-            var res = AsyncEnumerable.Empty<int>().SingleAsync(x => new ValueTask<bool>(true));
+            var res = AsyncEnumerable.Empty<int>().SingleAwaitAsync(x => new ValueTask<bool>(true));
             await AssertThrowsAsync<InvalidOperationException>(res.AsTask());
         }
 
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_NoMatch()
+        public async Task SingleAwaitAsync_Predicate_NoMatch()
         {
-            var res = Return42.SingleAsync(x => new ValueTask<bool>(x % 2 != 0));
+            var res = Return42.SingleAwaitAsync(x => new ValueTask<bool>(x % 2 != 0));
             await AssertThrowsAsync<InvalidOperationException>(res.AsTask());
         }
 
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_Simple()
+        public async Task SingleAwaitAsync_Predicate_Simple()
         {
-            var res = Return42.SingleAsync(x => new ValueTask<bool>(x % 2 == 0));
+            var res = Return42.SingleAwaitAsync(x => new ValueTask<bool>(x % 2 == 0));
             Assert.Equal(42, await res);
         }
 
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_Throws()
+        public async Task SingleAwaitAsync_Predicate_Throws()
         {
             var ex = new Exception("Bang!");
-            var res = Throw<int>(ex).SingleAsync(x => new ValueTask<bool>(true));
+            var res = Throw<int>(ex).SingleAwaitAsync(x => new ValueTask<bool>(true));
             await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_OneMatch()
+        public async Task SingleAwaitAsync_Predicate_OneMatch()
         {
-            var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().SingleAsync(x => new ValueTask<bool>(x % 2 != 0));
+            var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().SingleAwaitAsync(x => new ValueTask<bool>(x % 2 != 0));
             Assert.Equal(45, await res);
         }
 
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_Throw_MoreThanOne()
+        public async Task SingleAwaitAsync_Predicate_Throw_MoreThanOne()
         {
-            var res = new[] { 42, 23, 45, 90 }.ToAsyncEnumerable().SingleAsync(x => new ValueTask<bool>(x % 2 != 0));
+            var res = new[] { 42, 23, 45, 90 }.ToAsyncEnumerable().SingleAwaitAsync(x => new ValueTask<bool>(x % 2 != 0));
             await AssertThrowsAsync<InvalidOperationException>(res.AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_Cancel_Null()
+        public async Task SingleAwaitWithCancellationAsync_Predicate_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAsync(Return42, default(Func<int, CancellationToken, ValueTask<bool>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAwaitWithCancellationAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleAwaitWithCancellationAsync(Return42, default, CancellationToken.None).AsTask());
         }
 
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_Cancel_Empty()
+        public async Task SingleAwaitWithCancellationAsync_Predicate_Empty()
         {
-            var res = AsyncEnumerable.Empty<int>().SingleAsync((x, ct) => new ValueTask<bool>(true));
+            var res = AsyncEnumerable.Empty<int>().SingleAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(true));
             await AssertThrowsAsync<InvalidOperationException>(res.AsTask());
         }
 
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_Cancel_NoMatch()
+        public async Task SingleAwaitWithCancellationAsync_Predicate_NoMatch()
         {
-            var res = Return42.SingleAsync((x, ct) => new ValueTask<bool>(x % 2 != 0));
+            var res = Return42.SingleAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 != 0));
             await AssertThrowsAsync<InvalidOperationException>(res.AsTask());
         }
 
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_Cancel_Simple()
+        public async Task SingleAwaitWithCancellationAsync_Predicate_Simple()
         {
-            var res = Return42.SingleAsync((x, ct) => new ValueTask<bool>(x % 2 == 0));
+            var res = Return42.SingleAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 == 0));
             Assert.Equal(42, await res);
         }
 
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_Cancel_Throws()
+        public async Task SingleAwaitWithCancellationAsync_Predicate_Throws()
         {
             var ex = new Exception("Bang!");
-            var res = Throw<int>(ex).SingleAsync((x, ct) => new ValueTask<bool>(true));
+            var res = Throw<int>(ex).SingleAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(true));
             await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_Cancel_OneMatch()
+        public async Task SingleAwaitWithCancellationAsync_Predicate_OneMatch()
         {
-            var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().SingleAsync((x, ct) => new ValueTask<bool>(x % 2 != 0));
+            var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().SingleAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 != 0));
             Assert.Equal(45, await res);
         }
 
         [Fact]
-        public async Task SingleAsync_AsyncPredicate_Cancel_Throw_MoreThanOne()
+        public async Task SingleAwaitWithCancellationAsync_Predicate_Throw_MoreThanOne()
         {
-            var res = new[] { 42, 23, 45, 90 }.ToAsyncEnumerable().SingleAsync((x, ct) => new ValueTask<bool>(x % 2 != 0));
+            var res = new[] { 42, 23, 45, 90 }.ToAsyncEnumerable().SingleAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 != 0));
             await AssertThrowsAsync<InvalidOperationException>(res.AsTask());
         }
 #endif

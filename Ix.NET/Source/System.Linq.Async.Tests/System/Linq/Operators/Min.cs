@@ -79,7 +79,7 @@ namespace Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<decimal>), x => x, CancellationToken.None).AsTask());
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<decimal?>), x => x, CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, int>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default, CancellationToken.None).AsTask());
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, int?>), CancellationToken.None).AsTask());
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, long>), CancellationToken.None).AsTask());
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, long?>), CancellationToken.None).AsTask());
@@ -92,76 +92,76 @@ namespace Tests
 
             // Min<T>(IAE<T>, Func<T, VT<P>>)
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<int>), x => new ValueTask<int>(x)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<int?>), x => new ValueTask<int?>(x)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<long>), x => new ValueTask<long>(x)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<long?>), x => new ValueTask<long?>(x)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<double>), x => new ValueTask<double>(x)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<double?>), x => new ValueTask<double?>(x)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<float>), x => new ValueTask<float>(x)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<float?>), x => new ValueTask<float?>(x)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<decimal>), x => new ValueTask<decimal>(x)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<decimal?>), x => new ValueTask<decimal?>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<int>), x => new ValueTask<int>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<int?>), x => new ValueTask<int?>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<long>), x => new ValueTask<long>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<long?>), x => new ValueTask<long?>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<double>), x => new ValueTask<double>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<double?>), x => new ValueTask<double?>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<float>), x => new ValueTask<float>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<float?>), x => new ValueTask<float?>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<decimal>), x => new ValueTask<decimal>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<decimal?>), x => new ValueTask<decimal?>(x)).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<int>>)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<int?>>)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<long>>)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<long?>>)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<double>>)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<double?>>)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<float>>)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<float?>>)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<decimal>>)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<decimal?>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<int?>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<long>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<long?>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<double>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<double?>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<float>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<float?>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<decimal>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<decimal?>>)).AsTask());
 
             // Min<T>(IAE<T>, Func<T, VT<P>>, CT)
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<int>), x => new ValueTask<int>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<int?>), x => new ValueTask<int?>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<long>), x => new ValueTask<long>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<long?>), x => new ValueTask<long?>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<double>), x => new ValueTask<double>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<double?>), x => new ValueTask<double?>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<float>), x => new ValueTask<float>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<float?>), x => new ValueTask<float?>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<decimal>), x => new ValueTask<decimal>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<decimal?>), x => new ValueTask<decimal?>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<int>), x => new ValueTask<int>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<int?>), x => new ValueTask<int?>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<long>), x => new ValueTask<long>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<long?>), x => new ValueTask<long?>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<double>), x => new ValueTask<double>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<double?>), x => new ValueTask<double?>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<float>), x => new ValueTask<float>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<float?>), x => new ValueTask<float?>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<decimal>), x => new ValueTask<decimal>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<decimal?>), x => new ValueTask<decimal?>(x), CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<int>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<int?>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<long>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<long?>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<double>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<double?>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<float>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<float?>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<decimal>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<decimal?>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<int?>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<long>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<long?>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<double>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<double?>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<float>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<float?>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<decimal>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<int>(), default(Func<int, ValueTask<decimal?>>), CancellationToken.None).AsTask());
 
 #if !NO_DEEP_CANCELLATION
             // Min<T>(IAE<T>, Func<T, CT, VT<P>>, CT)
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<int>), (x, ct) => new ValueTask<int>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<int?>), (x, ct) => new ValueTask<int?>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<long>), (x, ct) => new ValueTask<long>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<long?>), (x, ct) => new ValueTask<long?>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<double>), (x, ct) => new ValueTask<double>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<double?>), (x, ct) => new ValueTask<double?>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<float>), (x, ct) => new ValueTask<float>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<float?>), (x, ct) => new ValueTask<float?>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<decimal>), (x, ct) => new ValueTask<decimal>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<decimal?>), (x, ct) => new ValueTask<decimal?>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(default(IAsyncEnumerable<int>), (x, ct) => new ValueTask<int>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(default(IAsyncEnumerable<int?>), (x, ct) => new ValueTask<int?>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(default(IAsyncEnumerable<long>), (x, ct) => new ValueTask<long>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(default(IAsyncEnumerable<long?>), (x, ct) => new ValueTask<long?>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(default(IAsyncEnumerable<double>), (x, ct) => new ValueTask<double>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(default(IAsyncEnumerable<double?>), (x, ct) => new ValueTask<double?>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(default(IAsyncEnumerable<float>), (x, ct) => new ValueTask<float>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(default(IAsyncEnumerable<float?>), (x, ct) => new ValueTask<float?>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(default(IAsyncEnumerable<decimal>), (x, ct) => new ValueTask<decimal>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(default(IAsyncEnumerable<decimal?>), (x, ct) => new ValueTask<decimal?>(x), CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<int>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<int?>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<long>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<long?>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<double>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<double?>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<float>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<float?>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<decimal>>), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<decimal?>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(AsyncEnumerable.Empty<int>(), default, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<int?>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<long>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<long?>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<double>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<double?>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<float>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<float?>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<decimal>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(AsyncEnumerable.Empty<int>(), default(Func<int, CancellationToken, ValueTask<decimal?>>), CancellationToken.None).AsTask());
 #endif
 
             // Min<T>(IAE<T>)
@@ -184,19 +184,19 @@ namespace Tests
 
             // Min<T>(IAE<T>, Func<T, VT<R>>)
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<DateTime>), x => new ValueTask<DateTime>(x)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<DateTime>(), default(Func<DateTime, ValueTask<bool>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<DateTime>), x => new ValueTask<DateTime>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<DateTime>(), default(Func<DateTime, ValueTask<bool>>)).AsTask());
 
             // Min<T>(IAE<T>, Func<T, VT<R>>, CT)
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<DateTime>), x => new ValueTask<DateTime>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<DateTime>(), default(Func<DateTime, ValueTask<bool>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(default(IAsyncEnumerable<DateTime>), x => new ValueTask<DateTime>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitAsync(AsyncEnumerable.Empty<DateTime>(), default(Func<DateTime, ValueTask<bool>>), CancellationToken.None).AsTask());
 
 #if !NO_DEEP_CANCELLATION
             // Min<T>(IAE<T>, Func<T, CT, VT<R>>, CT)
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(default(IAsyncEnumerable<DateTime>), (x, ct) => new ValueTask<DateTime>(x), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAsync(AsyncEnumerable.Empty<DateTime>(), default(Func<DateTime, CancellationToken, ValueTask<bool>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(default(IAsyncEnumerable<DateTime>), (x, ct) => new ValueTask<DateTime>(x), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.MinAwaitWithCancellationAsync(AsyncEnumerable.Empty<DateTime>(), default(Func<DateTime, CancellationToken, ValueTask<bool>>), CancellationToken.None).AsTask());
 #endif
         }
 
@@ -207,9 +207,9 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
-            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<int>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitAsync(x => new ValueTask<int>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Equal(xs.Min(), await ys.MinAsync((x, ct) => new ValueTask<int>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<int>(x)));
 #endif
         }
 
@@ -220,9 +220,9 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
-            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<int?>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitAsync(x => new ValueTask<int?>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Equal(xs.Min(), await ys.MinAsync((x, ct) => new ValueTask<int?>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<int?>(x)));
 #endif
         }
 
@@ -233,9 +233,9 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
-            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<long>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitAsync(x => new ValueTask<long>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Equal(xs.Min(), await ys.MinAsync((x, ct) => new ValueTask<long>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<long>(x)));
 #endif
         }
 
@@ -246,9 +246,9 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
-            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<long?>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitAsync(x => new ValueTask<long?>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Equal(xs.Min(), await ys.MinAsync((x, ct) => new ValueTask<long?>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<long?>(x)));
 #endif
         }
 
@@ -259,9 +259,9 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
-            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<double>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitAsync(x => new ValueTask<double>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Equal(xs.Min(), await ys.MinAsync((x, ct) => new ValueTask<double>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<double>(x)));
 #endif
         }
 
@@ -272,9 +272,9 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
-            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<double?>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitAsync(x => new ValueTask<double?>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Equal(xs.Min(), await ys.MinAsync((x, ct) => new ValueTask<double?>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<double?>(x)));
 #endif
         }
 
@@ -285,9 +285,9 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
-            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<float>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitAsync(x => new ValueTask<float>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Equal(xs.Min(), await ys.MinAsync((x, ct) => new ValueTask<float>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<float>(x)));
 #endif
         }
 
@@ -298,9 +298,9 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
-            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<float?>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitAsync(x => new ValueTask<float?>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Equal(xs.Min(), await ys.MinAsync((x, ct) => new ValueTask<float?>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<float?>(x)));
 #endif
         }
 
@@ -311,9 +311,9 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
-            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<decimal>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitAsync(x => new ValueTask<decimal>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Equal(xs.Min(), await ys.MinAsync((x, ct) => new ValueTask<decimal>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<decimal>(x)));
 #endif
         }
 
@@ -324,9 +324,9 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
-            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<decimal?>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitAsync(x => new ValueTask<decimal?>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Equal(xs.Min(), await ys.MinAsync((x, ct) => new ValueTask<decimal?>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<decimal?>(x)));
 #endif
         }
 
@@ -337,9 +337,9 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
-            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<DateTime>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitAsync(x => new ValueTask<DateTime>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Equal(xs.Min(), await ys.MinAsync((x, ct) => new ValueTask<DateTime>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<DateTime>(x)));
 #endif
         }
 
@@ -350,9 +350,9 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
-            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<string>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitAsync(x => new ValueTask<string>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Equal(xs.Min(), await ys.MinAsync((x, ct) => new ValueTask<string>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<string>(x)));
 #endif
         }
 
@@ -362,9 +362,9 @@ namespace Tests
             var xs = new DateTimeOffset[0].ToAsyncEnumerable();
             await AssertThrowsAsync<InvalidOperationException>(xs.MinAsync().AsTask());
             await AssertThrowsAsync<InvalidOperationException>(xs.MinAsync(x => x).AsTask());
-            await AssertThrowsAsync<InvalidOperationException>(xs.MinAsync(x => new ValueTask<DateTimeOffset>(x)).AsTask());
+            await AssertThrowsAsync<InvalidOperationException>(xs.MinAwaitAsync(x => new ValueTask<DateTimeOffset>(x)).AsTask());
 #if !NO_DEEP_CANCELLATION
-            await AssertThrowsAsync<InvalidOperationException>(xs.MinAsync((x, ct) => new ValueTask<DateTimeOffset>(x)).AsTask());
+            await AssertThrowsAsync<InvalidOperationException>(xs.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<DateTimeOffset>(x)).AsTask());
 #endif
         }
 
@@ -374,9 +374,9 @@ namespace Tests
             var xs = new string[0].ToAsyncEnumerable();
             Assert.Null(await xs.MinAsync());
             Assert.Null(await xs.MinAsync(x => x));
-            Assert.Null(await xs.MinAsync(x => new ValueTask<string>(x)));
+            Assert.Null(await xs.MinAwaitAsync(x => new ValueTask<string>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Null(await xs.MinAsync((x, ct) => new ValueTask<string>(x)));
+            Assert.Null(await xs.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<string>(x)));
 #endif
         }
 
@@ -386,9 +386,9 @@ namespace Tests
             var xs = new DateTimeOffset?[0].ToAsyncEnumerable();
             Assert.Null(await xs.MinAsync());
             Assert.Null(await xs.MinAsync(x => x));
-            Assert.Null(await xs.MinAsync(x => new ValueTask<DateTimeOffset?>(x)));
+            Assert.Null(await xs.MinAwaitAsync(x => new ValueTask<DateTimeOffset?>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Null(await xs.MinAsync((x, ct) => new ValueTask<DateTimeOffset?>(x)));
+            Assert.Null(await xs.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<DateTimeOffset?>(x)));
 #endif
         }
 
@@ -399,9 +399,9 @@ namespace Tests
             var ys = xs.ToAsyncEnumerable();
             Assert.Equal(xs.Min(), await ys.MinAsync());
             Assert.Equal(xs.Min(), await ys.MinAsync(x => x));
-            Assert.Equal(xs.Min(), await ys.MinAsync(x => new ValueTask<DateTimeOffset?>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitAsync(x => new ValueTask<DateTimeOffset?>(x)));
 #if !NO_DEEP_CANCELLATION
-            Assert.Equal(xs.Min(), await ys.MinAsync((x, ct) => new ValueTask<DateTimeOffset?>(x)));
+            Assert.Equal(xs.Min(), await ys.MinAwaitWithCancellationAsync((x, ct) => new ValueTask<DateTimeOffset?>(x)));
 #endif
         }
     }

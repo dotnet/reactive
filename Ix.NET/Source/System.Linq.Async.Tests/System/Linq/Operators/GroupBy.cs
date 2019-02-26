@@ -214,7 +214,7 @@ namespace Tests
         public void GroupBy_KeySelector_Sync_Comparer_Null()
         {
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default, x => x, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default(Func<int, int>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy(Return42, default, EqualityComparer<int>.Default));
         }
 
         [Fact]

@@ -285,15 +285,17 @@ foreach (var overload in new[] {
 })
 {
     var isDeepCancellation = overload.selector.Contains("CancellationToken");
+    var suffix = overload.invoke.StartsWith("await") ? "Await" : "";
 
     if (isDeepCancellation)
     {
+        suffix += "WithCancellation";
 #>
 #if !NO_DEEP_CANCELLATION
 <#
     }
 #>
-        public static ValueTask<<#=t#>> <#=m#>Async<TSource>(this IAsyncEnumerable<TSource> source, <#=overload.selector#> selector, CancellationToken cancellationToken = default)
+        public static ValueTask<<#=t#>> <#=m#><#=suffix#>Async<TSource>(this IAsyncEnumerable<TSource> source, <#=overload.selector#> selector, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

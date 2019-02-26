@@ -54,54 +54,54 @@ foreach (var op in new[] { "Min", "Max" })
         var cs = toCSharp(t);
 #>
         [Fact]
-        public async Task <#=op#>_Empty_<#=t.Name#>()
+        public async Task <#=op#>Async_Empty_<#=t.Name#>()
         {
             await AssertThrowsAsync<InvalidOperationException>(new <#=cs#>[0].ToAsyncEnumerable().<#=op#>Async(CancellationToken.None).AsTask());
         }
 
         [Fact]
-        public async Task <#=op#>_Selector_Empty_<#=t.Name#>()
+        public async Task <#=op#>Async_Selector_Empty_<#=t.Name#>()
         {
             await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().<#=op#>Async(_ => default(<#=cs#>), CancellationToken.None).AsTask());
         }
 
         [Fact]
-        public async Task <#=op#>_AsyncSelector_Empty_<#=t.Name#>()
+        public async Task <#=op#>AwaitAsync_Selector_Empty_<#=t.Name#>()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().<#=op#>Async(_ => default(ValueTask<<#=cs#>>), CancellationToken.None).AsTask());
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().<#=op#>AwaitAsync(_ => default(ValueTask<<#=cs#>>), CancellationToken.None).AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task <#=op#>_AsyncSelectorWithCancellation_Empty_<#=t.Name#>()
+        public async Task <#=op#>AwaitWithCancellationAsync_Selector_Empty_<#=t.Name#>()
         {
-            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().<#=op#>Async((x, ct) => default(ValueTask<<#=cs#>>), CancellationToken.None).AsTask());
+            await AssertThrowsAsync<InvalidOperationException>(new object[0].ToAsyncEnumerable().<#=op#>AwaitWithCancellationAsync((x, ct) => default(ValueTask<<#=cs#>>), CancellationToken.None).AsTask());
         }
 #endif
 
         [Fact]
-        public async Task <#=op#>_Empty_Nullable_<#=t.Name#>()
+        public async Task <#=op#>Async_Empty_Nullable_<#=t.Name#>()
         {
             Assert.Null(await new <#=cs#>?[0].ToAsyncEnumerable().<#=op#>Async(CancellationToken.None));
         }
 
         [Fact]
-        public async Task <#=op#>_Selector_Empty_Nullable_<#=t.Name#>()
+        public async Task <#=op#>Async_Selector_Empty_Nullable_<#=t.Name#>()
         {
             Assert.Null(await new object[0].ToAsyncEnumerable().<#=op#>Async(_ => default(<#=cs#>?), CancellationToken.None));
         }
 
         [Fact]
-        public async Task <#=op#>_AsyncSelector_Empty_Nullable_<#=t.Name#>()
+        public async Task <#=op#>AwaitAsync_Selector_Empty_Nullable_<#=t.Name#>()
         {
-            Assert.Null(await new object[0].ToAsyncEnumerable().<#=op#>Async(_ => default(ValueTask<<#=cs#>?>), CancellationToken.None));
+            Assert.Null(await new object[0].ToAsyncEnumerable().<#=op#>AwaitAsync(_ => default(ValueTask<<#=cs#>?>), CancellationToken.None));
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task <#=op#>_AsyncSelectorWithCancellation_Empty_Nullable_<#=t.Name#>()
+        public async Task <#=op#>AwaitWithCancellationAsync_Selector_Empty_Nullable_<#=t.Name#>()
         {
-            Assert.Null(await new object[0].ToAsyncEnumerable().<#=op#>Async((x, ct) => default(ValueTask<<#=cs#>?>), CancellationToken.None));
+            Assert.Null(await new object[0].ToAsyncEnumerable().<#=op#>AwaitWithCancellationAsync((x, ct) => default(ValueTask<<#=cs#>?>), CancellationToken.None));
         }
 #endif
 
@@ -112,7 +112,7 @@ foreach (var op in new[] { "Min", "Max" })
             var valuesWithNull = string.Join(", ", getRandom(n * 42, n, -100, 100).Select((x, i) => i % 2 == 0 ? x.ToString() : "null"));
 #>
         [Fact]
-        public async Task <#=op#>_<#=t.Name#>_<#=n#>()
+        public async Task <#=op#>Async_<#=t.Name#>_<#=n#>()
         {
             var input = new <#=cs#>[] { <#=values#> }.AsEnumerable();
 
@@ -127,7 +127,7 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_Selector_<#=t.Name#>_<#=n#>()
+        public async Task <#=op#>Async_Selector_<#=t.Name#>_<#=n#>()
         {
             var input = new <#=cs#>[] { <#=values#> }.AsEnumerable();
 
@@ -142,14 +142,14 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_<#=n#>()
+        public async Task <#=op#>AwaitAsync_Selector_<#=t.Name#>_<#=n#>()
         {
             var input = new <#=cs#>[] { <#=values#> }.AsEnumerable();
 
             for (var i = 0; i < <#=ShuffleCount#>; i++)
             {
                 var expected = input.<#=op#>();
-                var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>>(x), CancellationToken.None);
+                var actual = await input.ToAsyncEnumerable().<#=op#>AwaitAsync(x => new ValueTask<<#=cs#>>(x), CancellationToken.None);
                 Assert.Equal(expected, actual);
 
                 input = Shuffle(input);
@@ -158,14 +158,14 @@ foreach (var op in new[] { "Min", "Max" })
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_<#=n#>()
+        public async Task <#=op#>AwaitWithCancellationAsync_Selector_<#=t.Name#>_<#=n#>()
         {
             var input = new <#=cs#>[] { <#=values#> }.AsEnumerable();
 
             for (var i = 0; i < <#=ShuffleCount#>; i++)
             {
                 var expected = input.<#=op#>();
-                var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>>(x), CancellationToken.None);
+                var actual = await input.ToAsyncEnumerable().<#=op#>AwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>>(x), CancellationToken.None);
                 Assert.Equal(expected, actual);
 
                 input = Shuffle(input);
@@ -174,7 +174,7 @@ foreach (var op in new[] { "Min", "Max" })
 #endif
 
         [Fact]
-        public async Task <#=op#>_<#=t.Name#>_Nullable_<#=n#>_NoNull()
+        public async Task <#=op#>Async_<#=t.Name#>_Nullable_<#=n#>_NoNull()
         {
             var input = new <#=cs#>?[] { <#=values#> }.AsEnumerable();
 
@@ -189,7 +189,7 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_Selector_<#=t.Name#>_Nullable_<#=n#>_NoNull()
+        public async Task <#=op#>Async_Selector_<#=t.Name#>_Nullable_<#=n#>_NoNull()
         {
             var input = new <#=cs#>?[] { <#=values#> }.AsEnumerable();
 
@@ -204,14 +204,14 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_Nullable_<#=n#>_NoNull()
+        public async Task <#=op#>AwaitAsync_Selector_<#=t.Name#>_Nullable_<#=n#>_NoNull()
         {
             var input = new <#=cs#>?[] { <#=values#> }.AsEnumerable();
 
             for (var i = 0; i < <#=ShuffleCount#>; i++)
             {
                 var expected = input.<#=op#>();
-                var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+                var actual = await input.ToAsyncEnumerable().<#=op#>AwaitAsync(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
                 Assert.Equal(expected, actual);
 
                 input = Shuffle(input);
@@ -220,14 +220,14 @@ foreach (var op in new[] { "Min", "Max" })
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_Nullable_<#=n#>_NoNull()
+        public async Task <#=op#>AwaitWithCancellationAsync_Selector_<#=t.Name#>_Nullable_<#=n#>_NoNull()
         {
             var input = new <#=cs#>?[] { <#=values#> }.AsEnumerable();
 
             for (var i = 0; i < <#=ShuffleCount#>; i++)
             {
                 var expected = input.<#=op#>();
-                var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+                var actual = await input.ToAsyncEnumerable().<#=op#>AwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
                 Assert.Equal(expected, actual);
 
                 input = Shuffle(input);
@@ -236,7 +236,7 @@ foreach (var op in new[] { "Min", "Max" })
 #endif
 
         [Fact]
-        public async Task <#=op#>_<#=t.Name#>_Nullable_<#=n#>_AllNull()
+        public async Task <#=op#>Async_<#=t.Name#>_Nullable_<#=n#>_AllNull()
         {
             var input = Enumerable.Repeat(default(<#=cs#>?), <#=n#>);
 
@@ -246,7 +246,7 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_Selector_<#=t.Name#>_Nullable_<#=n#>_AllNull()
+        public async Task <#=op#>Async_Selector_<#=t.Name#>_Nullable_<#=n#>_AllNull()
         {
             var input = Enumerable.Repeat(default(<#=cs#>?), <#=n#>);
 
@@ -256,29 +256,29 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_Nullable_<#=n#>_AllNull()
+        public async Task <#=op#>AwaitAsync_Selector_<#=t.Name#>_Nullable_<#=n#>_AllNull()
         {
             var input = Enumerable.Repeat(default(<#=cs#>?), <#=n#>);
 
             var expected = input.<#=op#>();
-            var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            var actual = await input.ToAsyncEnumerable().<#=op#>AwaitAsync(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
             Assert.Equal(expected, actual);
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_Nullable_<#=n#>_AllNull()
+        public async Task <#=op#>AwaitWithCancellationAsync_Selector_<#=t.Name#>_Nullable_<#=n#>_AllNull()
         {
             var input = Enumerable.Repeat(default(<#=cs#>?), <#=n#>);
 
             var expected = input.<#=op#>();
-            var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            var actual = await input.ToAsyncEnumerable().<#=op#>AwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
             Assert.Equal(expected, actual);
         }
 #endif
 
         [Fact]
-        public async Task <#=op#>_<#=t.Name#>_Nullable_<#=n#>_SomeNull()
+        public async Task <#=op#>Async_<#=t.Name#>_Nullable_<#=n#>_SomeNull()
         {
             var input = new <#=cs#>?[] { <#=valuesWithNull#> }.AsEnumerable();
 
@@ -293,7 +293,7 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_Selector_<#=t.Name#>_Nullable_<#=n#>_SomeNull()
+        public async Task <#=op#>Async_Selector_<#=t.Name#>_Nullable_<#=n#>_SomeNull()
         {
             var input = new <#=cs#>?[] { <#=valuesWithNull#> }.AsEnumerable();
 
@@ -308,14 +308,14 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_Nullable_<#=n#>_SomeNull()
+        public async Task <#=op#>AwaitAsync_Selector_<#=t.Name#>_Nullable_<#=n#>_SomeNull()
         {
             var input = new <#=cs#>?[] { <#=valuesWithNull#> }.AsEnumerable();
 
             for (var i = 0; i < <#=ShuffleCount#>; i++)
             {
                 var expected = input.<#=op#>();
-                var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+                var actual = await input.ToAsyncEnumerable().<#=op#>AwaitAsync(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
                 Assert.Equal(expected, actual);
 
                 input = Shuffle(input);
@@ -324,14 +324,14 @@ foreach (var op in new[] { "Min", "Max" })
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_Nullable_<#=n#>_SomeNull()
+        public async Task <#=op#>AwaitWithCancellationAsync_Selector_<#=t.Name#>_Nullable_<#=n#>_SomeNull()
         {
             var input = new <#=cs#>?[] { <#=valuesWithNull#> }.AsEnumerable();
 
             for (var i = 0; i < <#=ShuffleCount#>; i++)
             {
                 var expected = input.<#=op#>();
-                var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+                var actual = await input.ToAsyncEnumerable().<#=op#>AwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
                 Assert.Equal(expected, actual);
 
                 input = Shuffle(input);
@@ -350,7 +350,7 @@ foreach (var op in new[] { "Min", "Max" })
                 var valuesWithNull = string.Join(", ", getRandom(n * 42, n, -100, 100).Select((x, i) => i % 3 == 0 ? x.ToString() : (i % 3 == 1 ? "null" : toCSharp(t) + ".NaN")));
 #>
         [Fact]
-        public async Task <#=op#>_<#=t.Name#>_WithNaN_<#=n#>()
+        public async Task <#=op#>Async_<#=t.Name#>_WithNaN_<#=n#>()
         {
             var input = new <#=cs#>[] { <#=values#> }.AsEnumerable();
 
@@ -365,7 +365,7 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_Selector_<#=t.Name#>_WithNaN_<#=n#>()
+        public async Task <#=op#>Async_Selector_<#=t.Name#>_WithNaN_<#=n#>()
         {
             var input = new <#=cs#>[] { <#=values#> }.AsEnumerable();
 
@@ -380,14 +380,14 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_WithNaN_<#=n#>()
+        public async Task <#=op#>AwaitAsync_Selector_<#=t.Name#>_WithNaN_<#=n#>()
         {
             var input = new <#=cs#>[] { <#=values#> }.AsEnumerable();
 
             for (var i = 0; i < <#=ShuffleCount#>; i++)
             {
                 var expected = input.<#=op#>();
-                var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>>(x), CancellationToken.None);
+                var actual = await input.ToAsyncEnumerable().<#=op#>AwaitAsync(x => new ValueTask<<#=cs#>>(x), CancellationToken.None);
                 Assert.Equal(expected, actual);
 
                 input = Shuffle(input);
@@ -396,14 +396,14 @@ foreach (var op in new[] { "Min", "Max" })
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_WithNaN_<#=n#>()
+        public async Task <#=op#>AwaitWithCancellationAsync_Selector_<#=t.Name#>_WithNaN_<#=n#>()
         {
             var input = new <#=cs#>[] { <#=values#> }.AsEnumerable();
 
             for (var i = 0; i < <#=ShuffleCount#>; i++)
             {
                 var expected = input.<#=op#>();
-                var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>>(x), CancellationToken.None);
+                var actual = await input.ToAsyncEnumerable().<#=op#>AwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>>(x), CancellationToken.None);
                 Assert.Equal(expected, actual);
 
                 input = Shuffle(input);
@@ -412,7 +412,7 @@ foreach (var op in new[] { "Min", "Max" })
 #endif
 
         [Fact]
-        public async Task <#=op#>_<#=t.Name#>_WithNaN_<#=n#>_AllNaN()
+        public async Task <#=op#>Async_<#=t.Name#>_WithNaN_<#=n#>_AllNaN()
         {
             var input = Enumerable.Repeat(<#=toCSharp(t)#>.NaN, <#=n#>);
 
@@ -422,7 +422,7 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_Selector_<#=t.Name#>_WithNaN_<#=n#>_AllNaN()
+        public async Task <#=op#>Async_Selector_<#=t.Name#>_WithNaN_<#=n#>_AllNaN()
         {
             var input = Enumerable.Repeat(<#=toCSharp(t)#>.NaN, <#=n#>);
 
@@ -432,29 +432,29 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_WithNaN_<#=n#>_AllNaN()
+        public async Task <#=op#>AwaitAsync_Selector_<#=t.Name#>_WithNaN_<#=n#>_AllNaN()
         {
             var input = Enumerable.Repeat(<#=toCSharp(t)#>.NaN, <#=n#>);
 
             var expected = input.<#=op#>();
-            var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            var actual = await input.ToAsyncEnumerable().<#=op#>AwaitAsync(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
             Assert.Equal(expected, actual);
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_WithNaN_<#=n#>_AllNaN()
+        public async Task <#=op#>AwaitWithCancellationAsync_Selector_<#=t.Name#>_WithNaN_<#=n#>_AllNaN()
         {
             var input = Enumerable.Repeat(<#=toCSharp(t)#>.NaN, <#=n#>);
 
             var expected = input.<#=op#>();
-            var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            var actual = await input.ToAsyncEnumerable().<#=op#>AwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
             Assert.Equal(expected, actual);
         }
 #endif
 
         [Fact]
-        public async Task <#=op#>_<#=t.Name#>_WithNaN_Nullable_<#=n#>_NoNull()
+        public async Task <#=op#>Async_<#=t.Name#>_WithNaN_Nullable_<#=n#>_NoNull()
         {
             var input = new <#=cs#>?[] { <#=values#> }.AsEnumerable();
 
@@ -469,7 +469,7 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_NoNull()
+        public async Task <#=op#>Async_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_NoNull()
         {
             var input = new <#=cs#>?[] { <#=values#> }.AsEnumerable();
 
@@ -484,14 +484,14 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_NoNull()
+        public async Task <#=op#>AwaitAsync_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_NoNull()
         {
             var input = new <#=cs#>?[] { <#=values#> }.AsEnumerable();
 
             for (var i = 0; i < <#=ShuffleCount#>; i++)
             {
                 var expected = input.<#=op#>();
-                var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+                var actual = await input.ToAsyncEnumerable().<#=op#>AwaitAsync(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
                 Assert.Equal(expected, actual);
 
                 input = Shuffle(input);
@@ -500,14 +500,14 @@ foreach (var op in new[] { "Min", "Max" })
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_WithNaN_Nullable_<#=n#>_NoNull()
+        public async Task <#=op#>AwaitWithCancellationAsync_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_NoNull()
         {
             var input = new <#=cs#>?[] { <#=values#> }.AsEnumerable();
 
             for (var i = 0; i < <#=ShuffleCount#>; i++)
             {
                 var expected = input.<#=op#>();
-                var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+                var actual = await input.ToAsyncEnumerable().<#=op#>AwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
                 Assert.Equal(expected, actual);
 
                 input = Shuffle(input);
@@ -516,7 +516,7 @@ foreach (var op in new[] { "Min", "Max" })
 #endif
 
         [Fact]
-        public async Task <#=op#>_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNull()
+        public async Task <#=op#>Async_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNull()
         {
             var input = Enumerable.Repeat(default(<#=cs#>?), <#=n#>);
 
@@ -526,7 +526,7 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNull()
+        public async Task <#=op#>Async_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNull()
         {
             var input = Enumerable.Repeat(default(<#=cs#>?), <#=n#>);
 
@@ -536,29 +536,29 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNull()
+        public async Task <#=op#>AwaitAsync_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNull()
         {
             var input = Enumerable.Repeat(default(<#=cs#>?), <#=n#>);
 
             var expected = input.<#=op#>();
-            var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            var actual = await input.ToAsyncEnumerable().<#=op#>AwaitAsync(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
             Assert.Equal(expected, actual);
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNull()
+        public async Task <#=op#>AwaitWithCancellationAsync_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNull()
         {
             var input = Enumerable.Repeat(default(<#=cs#>?), <#=n#>);
 
             var expected = input.<#=op#>();
-            var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            var actual = await input.ToAsyncEnumerable().<#=op#>AwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
             Assert.Equal(expected, actual);
         }
 #endif
 
         [Fact]
-        public async Task <#=op#>_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNaN()
+        public async Task <#=op#>Async_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNaN()
         {
             var input = Enumerable.Repeat<<#=toCSharp(t)#>?>(<#=toCSharp(t)#>.NaN, <#=n#>);
 
@@ -568,7 +568,7 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNaN()
+        public async Task <#=op#>Async_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNaN()
         {
             var input = Enumerable.Repeat<<#=toCSharp(t)#>?>(<#=toCSharp(t)#>.NaN, <#=n#>);
 
@@ -578,29 +578,29 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNaN()
+        public async Task <#=op#>AwaitAsync_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNaN()
         {
             var input = Enumerable.Repeat<<#=toCSharp(t)#>?>(<#=toCSharp(t)#>.NaN, <#=n#>);
 
             var expected = input.<#=op#>();
-            var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            var actual = await input.ToAsyncEnumerable().<#=op#>AwaitAsync(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
             Assert.Equal(expected, actual);
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNaN()
+        public async Task <#=op#>AwaitWithCancellationAsync_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_AllNaN()
         {
             var input = Enumerable.Repeat<<#=toCSharp(t)#>?>(<#=toCSharp(t)#>.NaN, <#=n#>);
 
             var expected = input.<#=op#>();
-            var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+            var actual = await input.ToAsyncEnumerable().<#=op#>AwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
             Assert.Equal(expected, actual);
         }
 #endif
 
         [Fact]
-        public async Task <#=op#>_<#=t.Name#>_WithNaN_Nullable_<#=n#>_SomeNull()
+        public async Task <#=op#>Async_<#=t.Name#>_WithNaN_Nullable_<#=n#>_SomeNull()
         {
             var input = new <#=cs#>?[] { <#=valuesWithNull#> }.AsEnumerable();
 
@@ -615,7 +615,7 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_SomeNull()
+        public async Task <#=op#>Async_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_SomeNull()
         {
             var input = new <#=cs#>?[] { <#=valuesWithNull#> }.AsEnumerable();
 
@@ -630,14 +630,14 @@ foreach (var op in new[] { "Min", "Max" })
         }
 
         [Fact]
-        public async Task <#=op#>_AsyncSelector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_SomeNull()
+        public async Task <#=op#>AwaitAsync_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_SomeNull()
         {
             var input = new <#=cs#>?[] { <#=valuesWithNull#> }.AsEnumerable();
 
             for (var i = 0; i < <#=ShuffleCount#>; i++)
             {
                 var expected = input.<#=op#>();
-                var actual = await input.ToAsyncEnumerable().<#=op#>Async(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+                var actual = await input.ToAsyncEnumerable().<#=op#>AwaitAsync(x => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
                 Assert.Equal(expected, actual);
 
                 input = Shuffle(input);
@@ -646,14 +646,14 @@ foreach (var op in new[] { "Min", "Max" })
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task <#=op#>_AsyncSelectorWithCancellation_<#=t.Name#>_WithNaN_Nullable_<#=n#>_SomeNull()
+        public async Task <#=op#>AwaitWithCancellationAsync_Selector_<#=t.Name#>_WithNaN_Nullable_<#=n#>_SomeNull()
         {
             var input = new <#=cs#>?[] { <#=valuesWithNull#> }.AsEnumerable();
 
             for (var i = 0; i < <#=ShuffleCount#>; i++)
             {
                 var expected = input.<#=op#>();
-                var actual = await input.ToAsyncEnumerable().<#=op#>Async((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
+                var actual = await input.ToAsyncEnumerable().<#=op#>AwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None);
                 Assert.Equal(expected, actual);
 
                 input = Shuffle(input);

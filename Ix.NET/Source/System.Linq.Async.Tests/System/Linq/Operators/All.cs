@@ -13,31 +13,31 @@ namespace Tests
     public class All : AsyncEnumerableTests
     {
         [Fact]
-        public async Task AllAsync_Sync_Null()
+        public async Task AllAsync_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => true).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, bool>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default).AsTask());
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => true, CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, bool>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default, CancellationToken.None).AsTask());
         }
 
         [Fact]
-        public async Task AllAsync_Sync_Simple_False()
+        public async Task AllAsync_Simple_False()
         {
             var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().AllAsync(x => x % 2 == 0);
             Assert.False(await res);
         }
 
         [Fact]
-        public async Task AllAsync_Sync_Simple_True()
+        public async Task AllAsync_Simple_True()
         {
             var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AllAsync(x => x % 2 == 0);
             Assert.True(await res);
         }
 
         [Fact]
-        public async Task AllAsync_Sync_Throw_Source()
+        public async Task AllAsync_Throw_Source()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).AllAsync(x => x % 2 == 0);
@@ -45,7 +45,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task AllAsync_Sync_Throw_Selector()
+        public async Task AllAsync_Throw_Selector()
         {
             var ex = new Exception("Bang!");
             var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AllAsync(new Func<int, bool>(x => { throw ex; }));
@@ -53,83 +53,83 @@ namespace Tests
         }
 
         [Fact]
-        public async Task AllAsync_Async_Null()
+        public async Task AllAwaitAsync_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => new ValueTask<bool>(true)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, ValueTask<bool>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAwaitAsync<int>(default, x => new ValueTask<bool>(true)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAwaitAsync(Return42, default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, ValueTask<bool>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAwaitAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAwaitAsync(Return42, default, CancellationToken.None).AsTask());
         }
 
         [Fact]
-        public async Task AllAsync_Async_Simple_False()
+        public async Task AllAwaitAsync_Simple_False()
         {
-            var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().AllAsync(x => new ValueTask<bool>(x % 2 == 0));
+            var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().AllAwaitAsync(x => new ValueTask<bool>(x % 2 == 0));
             Assert.False(await res);
         }
 
         [Fact]
-        public async Task AllAsync_Async_Simple_True()
+        public async Task AllAwaitAsync_Simple_True()
         {
-            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AllAsync(x => new ValueTask<bool>(x % 2 == 0));
+            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AllAwaitAsync(x => new ValueTask<bool>(x % 2 == 0));
             Assert.True(await res);
         }
 
         [Fact]
-        public async Task AllAsync_Async_Throw_Source()
+        public async Task AllAwaitAsync_Throw_Source()
         {
             var ex = new Exception("Bang!");
-            var res = Throw<int>(ex).AllAsync(x => new ValueTask<bool>(x % 2 == 0));
+            var res = Throw<int>(ex).AllAwaitAsync(x => new ValueTask<bool>(x % 2 == 0));
             await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public async Task AllAsync_Async_Throw_Selector()
+        public async Task AllAwaitAsync_Throw_Selector()
         {
             var ex = new Exception("Bang!");
-            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AllAsync(new Func<int, ValueTask<bool>>(x => { throw ex; }));
+            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AllAwaitAsync(new Func<int, ValueTask<bool>>(x => { throw ex; }));
             await AssertThrowsAsync(res, ex);
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task AllAsync_AsyncCancel_Null()
+        public async Task AllAwaitWithCancellationAsync_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, (x, ct) => new ValueTask<bool>(true)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, CancellationToken, ValueTask<bool>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAwaitWithCancellationAsync<int>(default, (x, ct) => new ValueTask<bool>(true)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAwaitWithCancellationAsync(Return42, default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAsync(Return42, default(Func<int, CancellationToken, ValueTask<bool>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAwaitWithCancellationAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AllAwaitWithCancellationAsync(Return42, default, CancellationToken.None).AsTask());
         }
 
         [Fact]
-        public async Task AllAsync_AsyncCancel_Simple_False()
+        public async Task AllAwaitWithCancellationAsync_Simple_False()
         {
-            var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().AllAsync((x, ct) => new ValueTask<bool>(x % 2 == 0));
+            var res = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().AllAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 == 0));
             Assert.False(await res);
         }
 
         [Fact]
-        public async Task AllAsync_AsyncCancel_Simple_True()
+        public async Task AllAwaitWithCancellationAsync_Simple_True()
         {
-            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AllAsync((x, ct) => new ValueTask<bool>(x % 2 == 0));
+            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AllAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 == 0));
             Assert.True(await res);
         }
 
         [Fact]
-        public async Task AllAsync_AsyncCancel_Throw_Source()
+        public async Task AllAwaitWithCancellationAsync_Throw_Source()
         {
             var ex = new Exception("Bang!");
-            var res = Throw<int>(ex).AllAsync((x, ct) => new ValueTask<bool>(x % 2 == 0));
+            var res = Throw<int>(ex).AllAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 == 0));
             await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public async Task AllAsync_AsyncCancel_Throw_Selector()
+        public async Task AllAwaitWithCancellationAsync_Throw_Selector()
         {
             var ex = new Exception("Bang!");
-            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AllAsync(new Func<int, CancellationToken, ValueTask<bool>>((x, ct) => { throw ex; }));
+            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().AllAwaitWithCancellationAsync(new Func<int, CancellationToken, ValueTask<bool>>((x, ct) => { throw ex; }));
             await AssertThrowsAsync(res, ex);
         }
 #endif

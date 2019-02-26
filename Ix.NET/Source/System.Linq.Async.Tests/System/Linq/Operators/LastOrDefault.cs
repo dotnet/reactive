@@ -23,17 +23,17 @@ namespace Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync(Return42, default(Func<int, bool>)).AsTask());
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync<int>(default, x => true, CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync(Return42, default(Func<int, bool>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync(Return42, default, CancellationToken.None).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync<int>(default, x => new ValueTask<bool>(true)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync(Return42, default(Func<int, ValueTask<bool>>)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitAsync<int>(default, x => new ValueTask<bool>(true)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitAsync(Return42, default).AsTask());
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync(Return42, default(Func<int, ValueTask<bool>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitAsync(Return42, default, CancellationToken.None).AsTask());
 
 #if !NO_DEEP_CANCELLATION
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync(Return42, default(Func<int, CancellationToken, ValueTask<bool>>), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitWithCancellationAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitWithCancellationAsync(Return42, default, CancellationToken.None).AsTask());
 #endif
         }
 
@@ -173,159 +173,159 @@ namespace Tests
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicate_Empty()
+        public async Task LastOrDefaultAwaitAsync_Predicate_Empty()
         {
-            var res = AsyncEnumerable.Empty<int>().LastOrDefaultAsync(x => new ValueTask<bool>(true));
+            var res = AsyncEnumerable.Empty<int>().LastOrDefaultAwaitAsync(x => new ValueTask<bool>(true));
             Assert.Equal(0, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicate_Throw()
+        public async Task LastOrDefaultAwaitAsync_Predicate_Throw()
         {
             var ex = new Exception("Bang!");
-            var res = Throw<int>(ex).LastOrDefaultAsync(x => new ValueTask<bool>(true));
+            var res = Throw<int>(ex).LastOrDefaultAwaitAsync(x => new ValueTask<bool>(true));
             await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicate_Single_None()
+        public async Task LastOrDefaultAwaitAsync_Predicate_Single_None()
         {
-            var res = Return42.LastOrDefaultAsync(x => new ValueTask<bool>(x % 2 != 0));
+            var res = Return42.LastOrDefaultAwaitAsync(x => new ValueTask<bool>(x % 2 != 0));
             Assert.Equal(0, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicate_Many_IList_None()
+        public async Task LastOrDefaultAwaitAsync_Predicate_Many_IList_None()
         {
-            var res = new[] { 40, 42, 44 }.ToAsyncEnumerable().LastOrDefaultAsync(x => new ValueTask<bool>(x % 2 != 0));
+            var res = new[] { 40, 42, 44 }.ToAsyncEnumerable().LastOrDefaultAwaitAsync(x => new ValueTask<bool>(x % 2 != 0));
             Assert.Equal(0, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicate_Many_None()
+        public async Task LastOrDefaultAwaitAsync_Predicate_Many_None()
         {
-            var res = new[] { 40, 42, 44 }.Select(x => x).ToAsyncEnumerable().LastOrDefaultAsync(x => new ValueTask<bool>(x % 2 != 0));
+            var res = new[] { 40, 42, 44 }.Select(x => x).ToAsyncEnumerable().LastOrDefaultAwaitAsync(x => new ValueTask<bool>(x % 2 != 0));
             Assert.Equal(0, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicate_Single_Pass()
+        public async Task LastOrDefaultAwaitAsync_Predicate_Single_Pass()
         {
-            var res = Return42.LastOrDefaultAsync(x => new ValueTask<bool>(x % 2 == 0));
+            var res = Return42.LastOrDefaultAwaitAsync(x => new ValueTask<bool>(x % 2 == 0));
             Assert.Equal(42, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicate_Many_IList_Pass1()
+        public async Task LastOrDefaultAwaitAsync_Predicate_Many_IList_Pass1()
         {
-            var res = new[] { 43, 44, 45 }.ToAsyncEnumerable().LastOrDefaultAsync(x => new ValueTask<bool>(x % 2 != 0));
+            var res = new[] { 43, 44, 45 }.ToAsyncEnumerable().LastOrDefaultAwaitAsync(x => new ValueTask<bool>(x % 2 != 0));
             Assert.Equal(45, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicate_Many_IList_Pass2()
+        public async Task LastOrDefaultAwaitAsync_Predicate_Many_IList_Pass2()
         {
-            var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().LastOrDefaultAsync(x => new ValueTask<bool>(x % 2 != 0));
+            var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().LastOrDefaultAwaitAsync(x => new ValueTask<bool>(x % 2 != 0));
             Assert.Equal(45, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicate_Many_Pass1()
+        public async Task LastOrDefaultAwaitAsync_Predicate_Many_Pass1()
         {
-            var res = new[] { 43, 44, 45 }.Select(x => x).ToAsyncEnumerable().LastOrDefaultAsync(x => new ValueTask<bool>(x % 2 != 0));
+            var res = new[] { 43, 44, 45 }.Select(x => x).ToAsyncEnumerable().LastOrDefaultAwaitAsync(x => new ValueTask<bool>(x % 2 != 0));
             Assert.Equal(45, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicate_Many_Pass2()
+        public async Task LastOrDefaultAwaitAsync_Predicate_Many_Pass2()
         {
-            var res = new[] { 42, 45, 90 }.Select(x => x).ToAsyncEnumerable().LastOrDefaultAsync(x => new ValueTask<bool>(x % 2 != 0));
+            var res = new[] { 42, 45, 90 }.Select(x => x).ToAsyncEnumerable().LastOrDefaultAwaitAsync(x => new ValueTask<bool>(x % 2 != 0));
             Assert.Equal(45, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicate_AsyncPredicateThrows()
+        public async Task LastOrDefaultAwaitAsync_Predicate_AsyncPredicateThrows()
         {
-            var res = new[] { 0, 1, 2 }.ToAsyncEnumerable().LastOrDefaultAsync(x => new ValueTask<bool>(1 / x > 0));
+            var res = new[] { 0, 1, 2 }.ToAsyncEnumerable().LastOrDefaultAwaitAsync(x => new ValueTask<bool>(1 / x > 0));
             await AssertThrowsAsync<DivideByZeroException>(res.AsTask());
         }
 
 #if !NO_DEEP_CANCELLATION
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicateWithCancellation_Empty()
+        public async Task LastOrDefaultAwaitWithCancellationAsync_Predicate_Empty()
         {
-            var res = AsyncEnumerable.Empty<int>().LastOrDefaultAsync((x, ct) => new ValueTask<bool>(true), CancellationToken.None);
+            var res = AsyncEnumerable.Empty<int>().LastOrDefaultAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(true), CancellationToken.None);
             Assert.Equal(0, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicateWithCancellation_Throw()
+        public async Task LastOrDefaultAwaitWithCancellationAsync_Predicate_Throw()
         {
             var ex = new Exception("Bang!");
-            var res = Throw<int>(ex).LastOrDefaultAsync((x, ct) => new ValueTask<bool>(true), CancellationToken.None);
+            var res = Throw<int>(ex).LastOrDefaultAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(true), CancellationToken.None);
             await AssertThrowsAsync(res, ex);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicateWithCancellation_Single_None()
+        public async Task LastOrDefaultAwaitWithCancellationAsync_Predicate_Single_None()
         {
-            var res = Return42.LastOrDefaultAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
+            var res = Return42.LastOrDefaultAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
             Assert.Equal(0, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicateWithCancellation_Many_IList_None()
+        public async Task LastOrDefaultAwaitWithCancellationAsync_Predicate_Many_IList_None()
         {
-            var res = new[] { 40, 42, 44 }.ToAsyncEnumerable().LastOrDefaultAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
+            var res = new[] { 40, 42, 44 }.ToAsyncEnumerable().LastOrDefaultAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
             Assert.Equal(0, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicateWithCancellation_Many_None()
+        public async Task LastOrDefaultAwaitWithCancellationAsync_Predicate_Many_None()
         {
-            var res = new[] { 40, 42, 44 }.Select((x, ct) => x).ToAsyncEnumerable().LastOrDefaultAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
+            var res = new[] { 40, 42, 44 }.Select((x, ct) => x).ToAsyncEnumerable().LastOrDefaultAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
             Assert.Equal(0, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicateWithCancellation_Single_Pass()
+        public async Task LastOrDefaultAwaitWithCancellationAsync_Predicate_Single_Pass()
         {
-            var res = Return42.LastOrDefaultAsync((x, ct) => new ValueTask<bool>(x % 2 == 0), CancellationToken.None);
+            var res = Return42.LastOrDefaultAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 == 0), CancellationToken.None);
             Assert.Equal(42, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicateWithCancellation_Many_IList_Pass1()
+        public async Task LastOrDefaultAwaitWithCancellationAsync_Predicate_Many_IList_Pass1()
         {
-            var res = new[] { 43, 44, 45 }.ToAsyncEnumerable().LastOrDefaultAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
+            var res = new[] { 43, 44, 45 }.ToAsyncEnumerable().LastOrDefaultAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
             Assert.Equal(45, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicateWithCancellation_Many_IList_Pass2()
+        public async Task LastOrDefaultAwaitWithCancellationAsync_Predicate_Many_IList_Pass2()
         {
-            var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().LastOrDefaultAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
+            var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().LastOrDefaultAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
             Assert.Equal(45, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicateWithCancellation_Many_Pass1()
+        public async Task LastOrDefaultAwaitWithCancellationAsync_Predicate_Many_Pass1()
         {
-            var res = new[] { 43, 44, 45 }.Select((x, ct) => x).ToAsyncEnumerable().LastOrDefaultAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
+            var res = new[] { 43, 44, 45 }.Select((x, ct) => x).ToAsyncEnumerable().LastOrDefaultAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
             Assert.Equal(45, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicateWithCancellation_Many_Pass2()
+        public async Task LastOrDefaultAwaitWithCancellationAsync_Predicate_Many_Pass2()
         {
-            var res = new[] { 42, 45, 90 }.Select((x, ct) => x).ToAsyncEnumerable().LastOrDefaultAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
+            var res = new[] { 42, 45, 90 }.Select((x, ct) => x).ToAsyncEnumerable().LastOrDefaultAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(x % 2 != 0), CancellationToken.None);
             Assert.Equal(45, await res);
         }
 
         [Fact]
-        public async Task LastOrDefaultAsync_AsyncPredicateWithCancellation_AsyncPredicateWithCancellationThrows()
+        public async Task LastOrDefaultAwaitWithCancellationAsync_Predicate_AsyncPredicateWithCancellationThrows()
         {
-            var res = new[] { 0, 1, 2 }.ToAsyncEnumerable().LastOrDefaultAsync((x, ct) => new ValueTask<bool>(1 / x > 0), CancellationToken.None);
+            var res = new[] { 0, 1, 2 }.ToAsyncEnumerable().LastOrDefaultAwaitWithCancellationAsync((x, ct) => new ValueTask<bool>(1 / x > 0), CancellationToken.None);
             await AssertThrowsAsync<DivideByZeroException>(res.AsTask());
         }
 #endif

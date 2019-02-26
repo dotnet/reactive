@@ -24,6 +24,7 @@ foreach (var kind in new[] { "Sync", "Async", "Async_Cancel" })
 {
     string keySelectorType, elementSelectorType, resultSelectorType;
     string keySelectorFunc, elementSelectorFunc, resultSelectorFunc;
+    string suffix;
     bool isCancel = false;
 
     switch (kind)
@@ -33,18 +34,21 @@ foreach (var kind in new[] { "Sync", "Async", "Async_Cancel" })
             keySelectorFunc = elementSelectorFunc = "(int x) => x";
             resultSelectorType = "Func<int, IAsyncEnumerable<int>, int>";
             resultSelectorFunc = "(k, g) => 0";
+            suffix = "";
             break;
         case "Async":
             keySelectorType = elementSelectorType = "Func<int, ValueTask<int>>";
             keySelectorFunc = elementSelectorFunc = "(int x) => new ValueTask<int>(x)";
             resultSelectorType = "Func<int, IAsyncEnumerable<int>, ValueTask<int>>";
             resultSelectorFunc = "(k, g) => new ValueTask<int>(0)";
+            suffix = "Await";
             break;
         case "Async_Cancel":
             keySelectorType = elementSelectorType = "Func<int, CancellationToken, ValueTask<int>>";
             keySelectorFunc = elementSelectorFunc = "(int x, CancellationToken ct) => new ValueTask<int>(x)";
             resultSelectorType = "Func<int, IAsyncEnumerable<int>, CancellationToken, ValueTask<int>>";
             resultSelectorFunc = "(k, g, ct) => new ValueTask<int>(0)";
+            suffix = "AwaitWithCancellation";
             isCancel = true;
             break;
         default:
@@ -84,8 +88,8 @@ foreach (var kind in new[] { "Sync", "Async", "Async_Cancel" })
         [Fact]
         public void KeySelector_<#=kind#>_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(Return42, default(<#=keySelectorType#>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int>(Return42, default(<#=keySelectorType#>)));
         }
 
         [Fact]
@@ -95,7 +99,7 @@ foreach (var kind in new[] { "Sync", "Async", "Async_Cancel" })
             var methodsA = methodsS.ToAsyncEnumerable();
 
             var resS = methodsS.GroupBy(m => m.Name);
-            var resA = methodsA.GroupBy(<#=keySelector#>);
+            var resA = methodsA.GroupBy<#=suffix#>(<#=keySelector#>);
 
             await Groups_AssertCore(resS, resA);
         }
@@ -103,8 +107,8 @@ foreach (var kind in new[] { "Sync", "Async", "Async_Cancel" })
         [Fact]
         public void KeySelector_<#=kind#>_Comparer_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(Return42, default(<#=keySelectorType#>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int>(Return42, default(<#=keySelectorType#>), EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -116,7 +120,7 @@ foreach (var kind in new[] { "Sync", "Async", "Async_Cancel" })
             var eq = new StringPrefixEqualityComparer(1);
 
             var resS = methodsS.GroupBy(m => m.Name, eq);
-            var resA = methodsA.GroupBy(<#=keySelector#>, eq);
+            var resA = methodsA.GroupBy<#=suffix#>(<#=keySelector#>, eq);
 
             await Groups_AssertCore(resS, resA);
         }
@@ -124,9 +128,9 @@ foreach (var kind in new[] { "Sync", "Async", "Async_Cancel" })
         [Fact]
         public void KeySelector_ElementSelector_<#=kind#>_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=elementSelectorFunc#>));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(<#=keySelectorType#>), <#=elementSelectorFunc#>));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, <#=keySelectorFunc#>, default(<#=elementSelectorType#>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=elementSelectorFunc#>));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int>(Return42, default(<#=keySelectorType#>), <#=elementSelectorFunc#>));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int>(Return42, <#=keySelectorFunc#>, default(<#=elementSelectorType#>)));
         }
 
         [Fact]
@@ -136,7 +140,7 @@ foreach (var kind in new[] { "Sync", "Async", "Async_Cancel" })
             var methodsA = methodsS.ToAsyncEnumerable();
 
             var resS = methodsS.GroupBy(m => m.Name, m => m.Name.ToUpper());
-            var resA = methodsA.GroupBy(<#=keySelector#>, <#=elementSelector#>);
+            var resA = methodsA.GroupBy<#=suffix#>(<#=keySelector#>, <#=elementSelector#>);
 
             await Groups_AssertCore(resS, resA);
         }
@@ -144,9 +148,9 @@ foreach (var kind in new[] { "Sync", "Async", "Async_Cancel" })
         [Fact]
         public void KeySelector_ElementSelector_<#=kind#>_Comparer_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=elementSelectorFunc#>, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(<#=keySelectorType#>), <#=elementSelectorFunc#>, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, default(<#=elementSelectorType#>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=elementSelectorFunc#>, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int>(Return42, default(<#=keySelectorType#>), <#=elementSelectorFunc#>, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, default(<#=elementSelectorType#>), EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -158,7 +162,7 @@ foreach (var kind in new[] { "Sync", "Async", "Async_Cancel" })
             var eq = new StringPrefixEqualityComparer(1);
 
             var resS = methodsS.GroupBy(m => m.Name, m => m.Name.ToUpper(), eq);
-            var resA = methodsA.GroupBy(<#=keySelector#>, <#=elementSelector#>, eq);
+            var resA = methodsA.GroupBy<#=suffix#>(<#=keySelector#>, <#=elementSelector#>, eq);
 
             await Groups_AssertCore(resS, resA);
         }
@@ -166,9 +170,9 @@ foreach (var kind in new[] { "Sync", "Async", "Async_Cancel" })
         [Fact]
         public void KeySelector_ResultSelector_<#=kind#>_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=resultSelectorFunc#>));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(<#=keySelectorType#>), <#=resultSelectorFunc#>));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, <#=keySelectorFunc#>, default(<#=resultSelectorType#>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=resultSelectorFunc#>));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int>(Return42, default(<#=keySelectorType#>), <#=resultSelectorFunc#>));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int>(Return42, <#=keySelectorFunc#>, default(<#=resultSelectorType#>)));
         }
 
         [Fact]
@@ -178,20 +182,7 @@ foreach (var kind in new[] { "Sync", "Async", "Async_Cancel" })
             var methodsA = methodsS.ToAsyncEnumerable();
 
             var resS = methodsS.GroupBy(m => m.Name, (k, g) => k + " - " + g.Count());
-<#
-if (kind == "Async")
-{
-#>
-            var resA = methodsA.GroupBy<System.Reflection.MethodInfo, string, string>(<#=keySelector#>, <#=resultSelector#>); // REVIEW: Ambiguity
-<#
-}
-else
-{
-#>
-            var resA = methodsA.GroupBy(<#=keySelector#>, <#=resultSelector#>);
-<#
-}
-#>
+            var resA = methodsA.GroupBy<#=suffix#>(<#=keySelector#>, <#=resultSelector#>);
 
             await Group_Result_AssertCore(resS, resA);
         }
@@ -199,9 +190,9 @@ else
         [Fact]
         public void KeySelector_ResultSelector_<#=kind#>_Comparer_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=resultSelectorFunc#>, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(Return42, default(<#=keySelectorType#>), <#=resultSelectorFunc#>, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, default(<#=resultSelectorType#>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=resultSelectorFunc#>, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int>(Return42, default(<#=keySelectorType#>), <#=resultSelectorFunc#>, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, default(<#=resultSelectorType#>), EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -213,7 +204,7 @@ else
             var eq = new StringPrefixEqualityComparer(1);
 
             var resS = methodsS.GroupBy(m => m.Name, (k, g) => k + " - " + g.Count(), eq);
-            var resA = methodsA.GroupBy(<#=keySelector#>, <#=resultSelector#>, eq);
+            var resA = methodsA.GroupBy<#=suffix#>(<#=keySelector#>, <#=resultSelector#>, eq);
 
             await Group_Result_AssertCore(resS, resA);
         }
@@ -221,10 +212,10 @@ else
         [Fact]
         public void KeySelector_ElementSelector_ResultSelector_<#=kind#>_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=elementSelectorFunc#>, <#=resultSelectorFunc#>));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default(<#=keySelectorType#>), <#=elementSelectorFunc#>, <#=resultSelectorFunc#>));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, <#=keySelectorFunc#>, default(<#=elementSelectorType#>), <#=resultSelectorFunc#>));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, <#=keySelectorFunc#>, <#=elementSelectorFunc#>, default(<#=resultSelectorType#>)));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=elementSelectorFunc#>, <#=resultSelectorFunc#>));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int, int>(Return42, default(<#=keySelectorType#>), <#=elementSelectorFunc#>, <#=resultSelectorFunc#>));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int, int>(Return42, <#=keySelectorFunc#>, default(<#=elementSelectorType#>), <#=resultSelectorFunc#>));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int, int>(Return42, <#=keySelectorFunc#>, <#=elementSelectorFunc#>, default(<#=resultSelectorType#>)));
         }
 
         [Fact]
@@ -234,20 +225,7 @@ else
             var methodsA = methodsS.ToAsyncEnumerable();
 
             var resS = methodsS.GroupBy(m => m.Name, m => m.Name.ToUpper(), (k, g) => k + " - " + g.Count());
-<#
-if (kind == "Async")
-{
-#>
-            var resA = methodsA.GroupBy<System.Reflection.MethodInfo, string, string, string>(<#=keySelector#>, <#=elementSelector#>, <#=resultSelector#>); // REVIEW: Ambiguity
-<#
-}
-else
-{
-#>
-            var resA = methodsA.GroupBy(<#=keySelector#>, <#=elementSelector#>, <#=resultSelector#>);
-<#
-}
-#>
+            var resA = methodsA.GroupBy<#=suffix#>(<#=keySelector#>, <#=elementSelector#>, <#=resultSelector#>);
 
             await Group_Result_AssertCore(resS, resA);
         }
@@ -255,10 +233,10 @@ else
         [Fact]
         public void KeySelector_ElementSelector_ResultSelector_<#=kind#>_Comparer_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=elementSelectorFunc#>, <#=resultSelectorFunc#>, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(Return42, default(<#=keySelectorType#>), <#=elementSelectorFunc#>, <#=resultSelectorFunc#>, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, default(<#=elementSelectorType#>), <#=resultSelectorFunc#>, EqualityComparer<int>.Default));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=elementSelectorFunc#>, default(<#=resultSelectorType#>), EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=elementSelectorFunc#>, <#=resultSelectorFunc#>, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int, int>(Return42, default(<#=keySelectorType#>), <#=elementSelectorFunc#>, <#=resultSelectorFunc#>, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, default(<#=elementSelectorType#>), <#=resultSelectorFunc#>, EqualityComparer<int>.Default));
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.GroupBy<#=suffix#><int, int, int, int>(default(IAsyncEnumerable<int>), <#=keySelectorFunc#>, <#=elementSelectorFunc#>, default(<#=resultSelectorType#>), EqualityComparer<int>.Default));
         }
 
         [Fact]
@@ -270,7 +248,7 @@ else
             var eq = new StringPrefixEqualityComparer(1);
 
             var resS = methodsS.GroupBy(m => m.Name, m => m.Name.ToUpper(), (k, g) => k + " - " + g.Count(), eq);
-            var resA = methodsA.GroupBy(<#=keySelector#>, <#=elementSelector#>, <#=resultSelector#>, eq);
+            var resA = methodsA.GroupBy<#=suffix#>(<#=keySelector#>, <#=elementSelector#>, <#=resultSelector#>, eq);
 
             await Group_Result_AssertCore(resS, resA);
         }

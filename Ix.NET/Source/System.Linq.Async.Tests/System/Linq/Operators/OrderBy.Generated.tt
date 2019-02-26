@@ -15,6 +15,16 @@ Func<bool, bool, bool, bool, string, string> getAsyncMethod = (then, desc, async
 
     var arg = async ? (cancel ? "(x, ct) => " : "x => ") + "new ValueTask<int>(" + body + ")" : "x => " + body;
 
+    if (async)
+    {
+        mtd += "Await";
+
+        if (cancel)
+        {
+            mtd += "WithCancellation";
+        }
+    }
+
     return "." + mtd + "(" + arg + ")";
 };
 
