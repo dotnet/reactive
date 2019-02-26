@@ -34,6 +34,22 @@ namespace System.Linq
             return new AsyncEnumerableQuery<TElement>(source);
         }
 
+#if HAS_VALUETUPLE
+        public static IAsyncQueryable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IAsyncQueryable<TFirst> first, IAsyncEnumerable<TSecond> second)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+
+#if CRIPPLED_REFLECTION
+            return first.Provider.CreateQuery<(TFirst, TSecond)>(Expression.Call(InfoOf(() => AsyncQueryable.Zip<TFirst, TSecond>(default(IAsyncQueryable<TFirst>), default(IAsyncEnumerable<TSecond>))), first.Expression, GetSourceExpression(second)));
+#else
+            return first.Provider.CreateQuery<(TFirst, TSecond)>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TFirst), typeof(TSecond)), first.Expression, GetSourceExpression(second)));
+#endif
+        }
+#endif
+
         private static Expression GetSourceExpression<TSource>(IAsyncEnumerable<TSource> source)
         {
             if (source is IAsyncQueryable<TSource> queryable)

@@ -11,6 +11,36 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+#if HAS_VALUETUPLE
+        public static IAsyncEnumerable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second)
+        {
+            if (first == null)
+                throw Error.ArgumentNull(nameof(first));
+            if (second == null)
+                throw Error.ArgumentNull(nameof(second));
+
+#if USE_ASYNC_ITERATOR
+            return Create(Core);
+
+            async IAsyncEnumerator<(TFirst, TSecond)> Core(CancellationToken cancellationToken)
+            {
+                await using (var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                {
+                    await using (var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                    {
+                        while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
+                        {
+                            yield return (e1.Current, e2.Current);
+                        }
+                    }
+                }
+            }
+#else
+            return new ZipAsyncIterator<TFirst, TSecond, (TFirst, TSecond)>(first, second, (first, second) => (first, second));
+#endif
+        }
+#endif
+
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> selector)
         {
             if (first == null)
