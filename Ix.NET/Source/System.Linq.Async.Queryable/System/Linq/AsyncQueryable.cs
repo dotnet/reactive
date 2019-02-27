@@ -48,7 +48,7 @@ namespace System.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return first.Provider.CreateQuery<(TFirst, TSecond)>(Expression.Call(s_Zip__TFirst_TSecond__2__0(typeof(TFirst), typeof(TSecond)), first.Expression, GetSourceExpression(second)));
+            return first.Provider.CreateQuery<(TFirst, TSecond)>(Expression.Call(Zip__TFirst_TSecond__2__0(typeof(TFirst), typeof(TSecond)), first.Expression, GetSourceExpression(second)));
         }
 #endif
 
