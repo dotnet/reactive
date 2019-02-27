@@ -20,7 +20,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Distinct1()
+        public async Task Distinct_Simple()
         {
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
 
@@ -34,7 +34,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Distinct2()
+        public async Task Distinct_Comparer()
         {
             var xs = new[] { 1, -2, -1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct(new Eq());
 
@@ -48,7 +48,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Distinct3()
+        public async Task Distinct_ToArray()
         {
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
 
@@ -57,7 +57,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Distinct4()
+        public async Task Distinct_ToList()
         {
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
 
@@ -66,7 +66,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Distinct5()
+        public async Task Distinct_Count()
         {
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
 
@@ -74,7 +74,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Distinct10()
+        public async Task Distinct_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
 
@@ -82,7 +82,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Distinct12()
+        public async Task Distinct_Empty()
         {
             var xs = AsyncEnumerable.Empty<int>().Distinct();
 
