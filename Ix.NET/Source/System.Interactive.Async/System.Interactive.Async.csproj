@@ -22,9 +22,5 @@
   <ItemGroup>
     <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="System\Threading\Tasks\" />
-  </ItemGroup>
   
 </Project>
