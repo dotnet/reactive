@@ -20,7 +20,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToList1()
+        public async Task ToList_Simple()
         {
             var xs = new[] { 42, 25, 39 };
             var res = xs.ToAsyncEnumerable().ToListAsync();
@@ -28,7 +28,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToList2()
+        public async Task ToList_Empty()
         {
             var xs = AsyncEnumerable.Empty<int>();
             var res = xs.ToListAsync();
@@ -36,7 +36,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToList3Async()
+        public async Task ToList_Throw()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).ToListAsync();

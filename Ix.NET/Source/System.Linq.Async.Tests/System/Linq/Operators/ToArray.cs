@@ -21,7 +21,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToArray1()
+        public async Task ToArray_IAsyncIListProvider_Simple()
         {
             var xs = new[] { 42, 25, 39 };
             var res = xs.ToAsyncEnumerable().ToArrayAsync();
@@ -29,7 +29,23 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToArray2()
+        public async Task ToArray_IAsyncIListProvider_Empty1()
+        {
+            var xs = new int[0];
+            var res = xs.ToAsyncEnumerable().ToArrayAsync();
+            Assert.True((await res).SequenceEqual(xs));
+        }
+
+        [Fact]
+        public async Task ToArray_IAsyncIListProvider_Empty2()
+        {
+            var xs = new HashSet<int>();
+            var res = xs.ToAsyncEnumerable().ToArrayAsync();
+            Assert.True((await res).SequenceEqual(xs));
+        }
+
+        [Fact]
+        public async Task ToArray_Empty()
         {
             var xs = AsyncEnumerable.Empty<int>();
             var res = xs.ToArrayAsync();
@@ -37,7 +53,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToArray3Async()
+        public async Task ToArray_Throw()
         {
             var ex = new Exception("Bang!");
             var res = Throw<int>(ex).ToArrayAsync();
@@ -45,7 +61,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToArray4()
+        public async Task ToArray_Query()
         {
             var xs = await AsyncEnumerable.Range(5, 50).Take(10).ToArrayAsync();
             var ex = new[] { 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
@@ -54,7 +70,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToArray5()
+        public async Task ToArray_Set()
         {
             var res = new[] { 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
             var xs = new HashSet<int>(res);
