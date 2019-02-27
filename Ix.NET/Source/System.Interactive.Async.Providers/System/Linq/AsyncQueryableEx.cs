@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace System.Linq
 {
@@ -22,11 +21,6 @@ namespace System.Linq
             }
 
             return Expression.Constant(source, typeof(IAsyncEnumerable<TSource>));
-        }
-
-        internal static MethodInfo InfoOf<R>(Expression<Func<R>> f)
-        {
-            return ((MethodCallExpression)f.Body).Method;
         }
     }
 }

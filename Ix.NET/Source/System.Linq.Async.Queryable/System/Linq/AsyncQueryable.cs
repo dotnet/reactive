@@ -35,6 +35,12 @@ namespace System.Linq
         }
 
 #if HAS_VALUETUPLE
+        private static MethodInfo s_Zip__TFirst_TSecond__2__0;
+        
+        private static MethodInfo Zip__TFirst_TSecond__2__0(Type TFirst, Type TSecond) =>
+            (s_Zip__TFirst_TSecond__2__0 ??
+            (s_Zip__TFirst_TSecond__2__0 = new Func<IAsyncQueryable<object>, IAsyncEnumerable<object>, IAsyncQueryable<ValueTuple<object, object>>>(Zip<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TFirst, TSecond);
+
         public static IAsyncQueryable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IAsyncQueryable<TFirst> first, IAsyncEnumerable<TSecond> second)
         {
             if (first == null)
@@ -42,11 +48,7 @@ namespace System.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-#if CRIPPLED_REFLECTION
-            return first.Provider.CreateQuery<(TFirst, TSecond)>(Expression.Call(InfoOf(() => AsyncQueryable.Zip<TFirst, TSecond>(default(IAsyncQueryable<TFirst>), default(IAsyncEnumerable<TSecond>))), first.Expression, GetSourceExpression(second)));
-#else
-            return first.Provider.CreateQuery<(TFirst, TSecond)>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TFirst), typeof(TSecond)), first.Expression, GetSourceExpression(second)));
-#endif
+            return first.Provider.CreateQuery<(TFirst, TSecond)>(Expression.Call(s_Zip__TFirst_TSecond__2__0(typeof(TFirst), typeof(TSecond)), first.Expression, GetSourceExpression(second)));
         }
 #endif
 
@@ -58,11 +60,6 @@ namespace System.Linq
             }
 
             return Expression.Constant(source, typeof(IAsyncEnumerable<TSource>));
-        }
-
-        internal static MethodInfo InfoOf<R>(Expression<Func<R>> f)
-        {
-            return ((MethodCallExpression)f.Body).Method;
         }
     }
 }
