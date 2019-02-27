@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Interactive Extensions Async Library used to express queries over asynchronous enumerable sequences.</Description>
     <AssemblyTitle>Interactive Extensions - Async Library</AssemblyTitle>
-    <TargetFrameworks>net45;net46;netstandard2.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net45;net46;netstandard2.0;netstandard2.1;netcoreapp3.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable;Asynchronous</PackageTags>
   </PropertyGroup>
 
@@ -21,10 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="System\Threading\Tasks\" />
   </ItemGroup>
   
 </Project>
