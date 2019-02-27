@@ -19,7 +19,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Prepend1Async()
+        public async Task Prepend_Simple()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -35,7 +35,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Prepend2()
+        public async Task Prepend_IAsyncIListProvider_ICollection_ToArray()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -48,7 +48,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Prepend3()
+        public async Task Prepend_IAsyncIListProvider_ICollection_ToList()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -61,7 +61,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Prepend4()
+        public async Task Prepend_IAsyncIListProvider_ICollection_Count()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -70,7 +70,42 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Prepend5()
+        public async Task Prepend_IAsyncIListProvider_ToArray()
+        {
+            var xs = new[] { 1, 2, 3 }.Where(x => true).ToAsyncEnumerable();
+
+            var res = xs.Prepend(4);
+
+            var a = new[] { 4, 1, 2, 3 };
+
+            var arr = await res.ToArrayAsync();
+            Assert.Equal(a, arr);
+        }
+
+        [Fact]
+        public async Task Prepend_IAsyncIListProvider_ToList()
+        {
+            var xs = new[] { 1, 2, 3 }.Where(x => true).ToAsyncEnumerable();
+
+            var res = xs.Prepend(4);
+
+            var a = new List<int> { 4, 1, 2, 3 };
+
+            var arr = await res.ToListAsync();
+            Assert.Equal(a, arr);
+        }
+
+        [Fact]
+        public async Task Prepend_IAsyncIListProvider_Count()
+        {
+            var xs = new[] { 1, 2, 3 }.Where(x => true).ToAsyncEnumerable();
+
+            var res = xs.Prepend(4);
+            Assert.Equal(4, await res.CountAsync());
+        }
+
+        [Fact]
+        public async Task Prepend_ToArray()
         {
             var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
@@ -83,7 +118,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Prepend6()
+        public async Task Prepend_ToList()
         {
             var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
@@ -96,7 +131,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Prepend7()
+        public async Task Prepend_Count()
         {
             var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
@@ -105,7 +140,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Prepend8()
+        public async Task Prepend_SequenceIdentity()
         {
             var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
@@ -115,7 +150,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task PrependN1Async()
+        public async Task Prepend_Many_Simple()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -135,7 +170,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task PrependN2()
+        public async Task Prepend_Many_IAsyncIListProvider_ToArray()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -150,7 +185,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task PrependN3()
+        public async Task Prepend_Many_IAsyncIListProvider_ToList()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -165,7 +200,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task PrependN4()
+        public async Task Prepend_Many_IAsyncIListProvider_Count()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -177,7 +212,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task PrependN5()
+        public async Task Prepend_Many_ToArray()
         {
             var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
@@ -192,7 +227,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task PrependN6()
+        public async Task Prepend_Many_ToList()
         {
             var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
@@ -207,7 +242,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task PrependN7()
+        public async Task Prepend_Many_Count()
         {
             var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 

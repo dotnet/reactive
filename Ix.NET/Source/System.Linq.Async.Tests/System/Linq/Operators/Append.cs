@@ -19,7 +19,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Append1()
+        public async Task Append_Simple()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -35,7 +35,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Append2()
+        public async Task Append_IAsyncIListProvider_ICollection_ToArray()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -48,7 +48,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Append3()
+        public async Task Append_IAsyncIListProvider_ICollection_ToList()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -61,7 +61,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Append4()
+        public async Task Append_IAsyncIListProvider_ICollection_Count()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -71,7 +71,43 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Append5()
+        public async Task Append_IAsyncIListProvider_ToArray()
+        {
+            var xs = new[] { 1, 2, 3 }.Where(x => true).ToAsyncEnumerable();
+
+            var res = xs.Append(4);
+
+            var a = new[] { 1, 2, 3, 4 };
+
+            var arr = await res.ToArrayAsync();
+            Assert.Equal(a, arr);
+        }
+
+        [Fact]
+        public async Task Append_IAsyncIListProvider_ToList()
+        {
+            var xs = new[] { 1, 2, 3 }.Where(x => true).ToAsyncEnumerable();
+
+            var res = xs.Append(4);
+
+            var a = new List<int> { 1, 2, 3, 4 };
+
+            var arr = await res.ToListAsync();
+            Assert.Equal(a, arr);
+        }
+
+        [Fact]
+        public async Task Append_IAsyncIListProvider_Count()
+        {
+            var xs = new[] { 1, 2, 3 }.Where(x => true).ToAsyncEnumerable();
+
+            var res = xs.Append(4);
+
+            Assert.Equal(4, await res.CountAsync());
+        }
+
+        [Fact]
+        public async Task Append_ToArray()
         {
             var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
@@ -84,17 +120,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Append6()
-        {
-            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
-
-            var res = xs.Append(4);
-
-            Assert.Equal(4, await res.CountAsync());
-        }
-
-        [Fact]
-        public async Task Append7()
+        public async Task Append_ToList()
         {
             var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
@@ -106,9 +132,28 @@ namespace Tests
             Assert.Equal(a, arr);
         }
 
+        [Fact]
+        public async Task Append_Count()
+        {
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
+
+            var res = xs.Append(4);
+
+            Assert.Equal(4, await res.CountAsync());
+        }
 
         [Fact]
-        public async Task AppendN1()
+        public async Task Append_SequenceIdentity()
+        {
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
+
+            var res = xs.Append(4);
+
+            await SequenceIdentity(res);
+        }
+
+        [Fact]
+        public async Task Append_Many_Simple()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -128,7 +173,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task AppendN2()
+        public async Task Append_Many_IAsyncIListProvider_ToArray()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -143,7 +188,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task AppendN3()
+        public async Task Append_Many_IAsyncIListProvider_ToList()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -158,7 +203,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task AppendN4()
+        public async Task Append_Many_IAsyncIListProvider_Count()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
@@ -170,7 +215,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task AppendN5()
+        public async Task Append_Many_ToArray()
         {
             var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
@@ -185,7 +230,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task AppendN6()
+        public async Task Append_Many_ToList()
         {
             var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
@@ -200,7 +245,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task AppendN7()
+        public async Task Append_Many_Count()
         {
             var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
