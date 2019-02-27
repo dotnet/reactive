@@ -14,15 +14,13 @@ namespace Tests
     public class ToAsyncEnumerable : AsyncEnumerableTests
     {
         [Fact]
-        public void ToAsyncEnumerable_Null()
+        public void ToAsyncEnumerable_Enumerable_Null()
         {
             Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ToAsyncEnumerable(default(IEnumerable<int>)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ToAsyncEnumerable(default(IObservable<int>)));
-            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ToAsyncEnumerable(default(Task<int>)));
         }
 
         [Fact]
-        public async Task ToAsyncEnumerable_Array1_Async()
+        public async Task ToAsyncEnumerable_Enumerable_Array()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var e = xs.GetAsyncEnumerator();
@@ -34,74 +32,86 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToAsyncEnumerable_Enumerable1_Async()
+        public async Task ToAsyncEnumerable_Enumerable_Array_ToArray()
+        {
+            var arr = new[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+            var xs = arr.ToAsyncEnumerable();
+
+            var res = await xs.ToArrayAsync();
+
+            Assert.Equal(arr, res);
+        }
+
+        [Fact]
+        public async Task ToAsyncEnumerable_Enumerable_Array_ToList()
+        {
+            var arr = new[] { 1, 2, 3, 4 };
+            var xs = arr.ToAsyncEnumerable();
+
+            var res = await xs.ToListAsync();
+
+            Assert.Equal(arr, res);
+        }
+
+        [Fact]
+        public async Task ToAsyncEnumerable_Enumerable_Array_Count()
+        {
+            var arr = new[] { 1, 2, 3, 4 };
+            var xs = arr.ToAsyncEnumerable();
+
+            var c = await xs.CountAsync();
+
+            Assert.Equal(arr.Length, c);
+        }
+
+        [Fact]
+        public async Task ToAsyncEnumerable_Enumerable_Array_SequenceIdentity()
+        {
+            var arr = new[] { 1, 2, 3, 4 };
+            var xs = arr.ToAsyncEnumerable();
+
+            await SequenceIdentity(xs);
+        }
+
+        [Fact]
+        public async Task ToAsyncEnumerable_Enumerable_Iterator()
+        {
+            var xs = ToAsyncEnumerable_Sequence().ToAsyncEnumerable();
+            var e = xs.GetAsyncEnumerator();
+            await HasNextAsync(e, 1);
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await HasNextAsync(e, 4);
+            await NoNextAsync(e);
+        }
+
+        private IEnumerable<int> ToAsyncEnumerable_Sequence()
+        {
+            yield return 1;
+            yield return 2;
+            yield return 3;
+            yield return 4;
+        }
+
+        [Fact]
+        public async Task ToAsyncEnumerable_Enumerable_Iterator_Throw()
         {
             var ex = new Exception("Bang");
-            var xs = ToAsyncEnumerable_Sequence(ex).ToAsyncEnumerable();
+            var xs = ToAsyncEnumerable_Sequence_Throw(ex).ToAsyncEnumerable();
             var e = xs.GetAsyncEnumerator();
             await HasNextAsync(e, 42);
             await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
-        private IEnumerable<int> ToAsyncEnumerable_Sequence(Exception e)
+        private IEnumerable<int> ToAsyncEnumerable_Sequence_Throw(Exception e)
         {
             yield return 42;
             throw e;
         }
 
         [Fact]
-        public async Task ToAsyncEnumerable_Observable1_Async()
-        {
-            var subscribed = false;
-
-            var xs = new MyObservable<int>(obs =>
-            {
-                subscribed = true;
-
-                obs.OnNext(42);
-                obs.OnCompleted();
-
-                return new MyDisposable(() => { });
-            }).ToAsyncEnumerable();
-
-            Assert.False(subscribed);
-
-            var e = xs.GetAsyncEnumerator();
-
-            // NB: Breaking change to align with lazy nature of async iterators.
-            // Assert.True(subscribed);
-
-            await HasNextAsync(e, 42);
-            await NoNextAsync(e);
-        }
-
-        [Fact]
-        public async Task ToAsyncEnumerable_Observable2_Async()
-        {
-            var ex = new Exception("Bang!");
-            var subscribed = false;
-
-            var xs = new MyObservable<int>(obs =>
-            {
-                subscribed = true;
-
-                obs.OnError(ex);
-
-                return new MyDisposable(() => { });
-            }).ToAsyncEnumerable();
-
-            Assert.False(subscribed);
-
-            var e = xs.GetAsyncEnumerator();
-
-            // NB: Breaking change to align with lazy nature of async iterators.
-            // Assert.True(subscribed);
-
-            await AssertThrowsAsync(e.MoveNextAsync(), ex);
-        }
-
-        [Fact]
-        public async Task ToAsyncEnumerable_Enumerable2_Async()
+        public async Task ToAsyncEnumerable_Enumerable_HashSet()
         {
             var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
 
@@ -115,7 +125,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToAsyncEnumerable_Enumerable3_Async()
+        public async Task ToAsyncEnumerable_Enumerable_HashSet_ToArray()
         {
             var set = new HashSet<int>(new[] { 1, 2, 3, 4, 5, 6, 7, 8 });
 
@@ -127,7 +137,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToAsyncEnumerable_Enumerable4_Async()
+        public async Task ToAsyncEnumerable_Enumerable_HashSet_ToList()
         {
             var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
             var xs = set.ToAsyncEnumerable();
@@ -138,7 +148,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToAsyncEnumerable_Enumerable5_Async()
+        public async Task ToAsyncEnumerable_Enumerable_HashSet_Count()
         {
             var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
             var xs = set.ToAsyncEnumerable();
@@ -149,7 +159,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToAsyncEnumerable_Enumerable6_Async()
+        public async Task ToAsyncEnumerable_Enumerable_HashSet_SequenceIdentity()
         {
             var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
             var xs = set.ToAsyncEnumerable();
@@ -158,14 +168,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToAsyncEnumerable_Array2_Async()
-        {
-            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            await SequenceIdentity(xs);
-        }
-
-        [Fact]
-        public void ToAsyncEnumerable_Enumerable7()
+        public void ToAsyncEnumerable_Enumerable_HashSet_ICollection()
         {
             var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
             var xs = set.ToAsyncEnumerable();
@@ -190,7 +193,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToAsyncEnumerable_Enumerable8()
+        public void ToAsyncEnumerable_Enumerable_List_IList()
         {
             var set = new List<int> { 1, 2, 3, 4 };
             var xs = set.ToAsyncEnumerable();
@@ -221,49 +224,67 @@ namespace Tests
             Assert.True(arr.SequenceEqual(xl));
             xl.Clear();
             Assert.Equal(0, xl.Count);
-
         }
 
         [Fact]
-        public async Task ToAsyncEnumerable_With_Completed_TaskAsync()
+        public void ToAsyncEnumerable_Observable_Null()
         {
-            var task = Task.Factory.StartNew(() => 36);
-
-            var xs = task.ToAsyncEnumerable();
-            var e = xs.GetAsyncEnumerator();
-
-            Assert.True(await e.MoveNextAsync());
-            Assert.Equal(36, e.Current);
-            Assert.False(await e.MoveNextAsync());
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ToAsyncEnumerable(default(IObservable<int>)));
         }
 
         [Fact]
-        public async Task ToAsyncEnumerable_With_Faulted_TaskAsync()
+        public async Task ToAsyncEnumerable_Observable_Return()
         {
-            var ex = new InvalidOperationException();
-            var tcs = new TaskCompletionSource<int>();
-            tcs.SetException(ex);
+            var subscribed = false;
 
-            var xs = tcs.Task.ToAsyncEnumerable();
+            var xs = new MyObservable<int>(obs =>
+            {
+                subscribed = true;
+
+                obs.OnNext(42);
+                obs.OnCompleted();
+
+                return new MyDisposable(() => { });
+            }).ToAsyncEnumerable();
+
+            Assert.False(subscribed);
+
             var e = xs.GetAsyncEnumerator();
+
+            // NB: Breaking change to align with lazy nature of async iterators.
+            // Assert.True(subscribed);
+
+            await HasNextAsync(e, 42);
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task ToAsyncEnumerable_Observable_Throw()
+        {
+            var ex = new Exception("Bang!");
+            var subscribed = false;
+
+            var xs = new MyObservable<int>(obs =>
+            {
+                subscribed = true;
+
+                obs.OnError(ex);
+
+                return new MyDisposable(() => { });
+            }).ToAsyncEnumerable();
+
+            Assert.False(subscribed);
+
+            var e = xs.GetAsyncEnumerator();
+
+            // NB: Breaking change to align with lazy nature of async iterators.
+            // Assert.True(subscribed);
 
             await AssertThrowsAsync(e.MoveNextAsync(), ex);
         }
 
         [Fact]
-        public async Task ToAsyncEnumerable_With_Canceled_TaskAsync()
-        {
-            var tcs = new TaskCompletionSource<int>();
-            tcs.SetCanceled();
-
-            var xs = tcs.Task.ToAsyncEnumerable();
-            var e = xs.GetAsyncEnumerator();
-
-            await AssertThrowsAsync<TaskCanceledException>(e.MoveNextAsync().AsTask());
-        }
-
-        [Fact]
-        public async Task ToAsyncEnumerable_Observable3_Async()
+        public async Task ToAsyncEnumerable_Observable_Dispose()
         {
             var stop = new ManualResetEvent(false);
 
@@ -297,7 +318,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToAsyncEnumerable_Observable4_Async()
+        public async Task ToAsyncEnumerable_Observable_Zip()
         {
             var subCount = 0;
 
@@ -337,7 +358,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ToAsyncEnumerable_Observable5_Async()
+        public async Task ToAsyncEnumerable_Observable_Cancel()
         {
             var stop = new ManualResetEvent(false);
 
@@ -407,6 +428,50 @@ namespace Tests
         }
 
         // TODO: Add more tests for Observable conversion.
+
+        [Fact]
+        public void ToAsyncEnumerable_Task_Null()
+        {
+            Assert.Throws<ArgumentNullException>(() => AsyncEnumerable.ToAsyncEnumerable(default(Task<int>)));
+        }
+
+        [Fact]
+        public async Task ToAsyncEnumerable_Task_With_Completed_TaskAsync()
+        {
+            var task = Task.Factory.StartNew(() => 36);
+
+            var xs = task.ToAsyncEnumerable();
+            var e = xs.GetAsyncEnumerator();
+
+            Assert.True(await e.MoveNextAsync());
+            Assert.Equal(36, e.Current);
+            Assert.False(await e.MoveNextAsync());
+        }
+
+        [Fact]
+        public async Task ToAsyncEnumerable_Task_With_Faulted_TaskAsync()
+        {
+            var ex = new InvalidOperationException();
+            var tcs = new TaskCompletionSource<int>();
+            tcs.SetException(ex);
+
+            var xs = tcs.Task.ToAsyncEnumerable();
+            var e = xs.GetAsyncEnumerator();
+
+            await AssertThrowsAsync(e.MoveNextAsync(), ex);
+        }
+
+        [Fact]
+        public async Task ToAsyncEnumerable_Task_With_Canceled_TaskAsync()
+        {
+            var tcs = new TaskCompletionSource<int>();
+            tcs.SetCanceled();
+
+            var xs = tcs.Task.ToAsyncEnumerable();
+            var e = xs.GetAsyncEnumerator();
+
+            await AssertThrowsAsync<TaskCanceledException>(e.MoveNextAsync().AsTask());
+        }
 
         private sealed class MyObservable<T> : IObservable<T>
         {
