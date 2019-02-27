@@ -19,7 +19,7 @@ Catch us in the #rxnet channel over at http://reactiveui.net/slack
 ### v4.0 changes
 
 Ix Async 4.0 has a breaking change from prior versions due to being the first LINQ implementation
-to support the new C# 8 [async streams](https://github.com/dotnet/csharplang/blob/master/proposals/csharp-8.0/async-streams.md) feature. This means for .NET Standard 2.1 and .NET Core 3 targets, we use the in-box interfaces for `IAsyncEnumerable<T>` and friends. On other platforms, we provide the implementation, so you can use `await foreach` and create async iterators as you would expect. The types will unify to the system ones where the platform provides it.
+to support the new C# 8 [async streams](https://github.com/dotnet/roslyn/blob/master/docs/features/async-streams.md) feature. This means for .NET Standard 2.1 and .NET Core 3 targets, we use the in-box interfaces for `IAsyncEnumerable<T>` and friends. On other platforms, we provide the implementation, so you can use `await foreach` and create async iterators as you would expect. The types will unify to the system ones where the platform provides it.
 
 The code should be code-compatible, so recompiling should take care of most of it; note that binary compatibility will not work.
 
