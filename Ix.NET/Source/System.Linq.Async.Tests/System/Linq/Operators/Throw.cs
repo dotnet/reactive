@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -16,7 +17,7 @@ namespace Tests
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Throw1Async()
+        public async Task Throw_Simple()
         {
             var ex = new Exception("Bang");
             var xs = Throw<int>(ex);
