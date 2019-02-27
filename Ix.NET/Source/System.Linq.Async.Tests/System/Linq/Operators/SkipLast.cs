@@ -19,7 +19,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipLast1Async()
+        public async Task SkipLast_Few()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().SkipLast(2);
 
@@ -30,7 +30,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipLast2Async()
+        public async Task SkipLast_All()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().SkipLast(5);
 
@@ -39,7 +39,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipLast3()
+        public async Task SkipLast_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().SkipLast(2);
 
@@ -47,11 +47,14 @@ namespace Tests
         }
 
         [Fact]
-        public async Task SkipLast4Async()
+        public async Task SkipLast_Zero()
         {
-            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().SkipLast(0);
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var ys = xs.SkipLast(0);
 
-            var e = xs.GetAsyncEnumerator();
+            Assert.Same(xs, ys);
+
+            var e = ys.GetAsyncEnumerator();
 
             await HasNextAsync(e, 1);
             await HasNextAsync(e, 2);
@@ -59,5 +62,22 @@ namespace Tests
             await HasNextAsync(e, 4);
             await NoNextAsync(e);
         }
+
+#if USE_ASYNC_ITERATOR
+        [Fact]
+        public void SkipLast_Zero_NoAlias()
+        {
+            var xs = Xs();
+            var ys = xs.SkipLast(0);
+
+            Assert.NotSame(xs, ys);
+        }
+
+        private async IAsyncEnumerable<int> Xs()
+        {
+            await Task.Yield();
+            yield return 1;
+        }
+#endif
     }
 }

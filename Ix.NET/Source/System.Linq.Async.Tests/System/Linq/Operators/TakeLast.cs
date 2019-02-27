@@ -19,7 +19,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task TakeLast0()
+        public async Task TakeLast_Negative()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(-2);
 
@@ -28,7 +28,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task TakeLast1()
+        public async Task TakeLast_Positive()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(2);
 
@@ -39,7 +39,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task TakeLast2()
+        public async Task TakeLast_TooMany()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(5);
 
@@ -52,7 +52,18 @@ namespace Tests
         }
 
         [Fact]
-        public async Task TakeLast3()
+        public async Task TakeLast_BreakEarly_Take()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(3).Take(2);
+
+            var e = xs.GetAsyncEnumerator();
+            await HasNextAsync(e, 2);
+            await HasNextAsync(e, 3);
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task TakeLast_SequenceIdentity()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(2);
 
