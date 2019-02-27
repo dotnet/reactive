@@ -18,7 +18,20 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Cast1()
+        public async Task Cast_References()
+        {
+            var xs = new object[] { "bar", "foo", "qux" }.ToAsyncEnumerable();
+            var ys = xs.Cast<string>();
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, "bar");
+            await HasNextAsync(e, "foo");
+            await HasNextAsync(e, "qux");
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task Cast_Values()
         {
             var xs = new object[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Cast<int>();
@@ -32,7 +45,18 @@ namespace Tests
         }
 
         [Fact]
-        public void Cast2()
+        public async Task Cast_InvalidCast()
+        {
+            var xs = new object[] { 42, "foo", 43 }.ToAsyncEnumerable();
+            var ys = xs.Cast<int>();
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, 42);
+            await AssertThrowsAsync<InvalidCastException>(e.MoveNextAsync().AsTask());
+        }
+
+        [Fact]
+        public void Cast_Aliasing()
         {
             var xs = new[] { new EventArgs(), new EventArgs(), new EventArgs() }.ToAsyncEnumerable();
             var ys = xs.Cast<EventArgs>();

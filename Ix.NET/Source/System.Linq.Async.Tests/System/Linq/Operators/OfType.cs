@@ -18,7 +18,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task OfType1Async()
+        public async Task OfType_Int32()
         {
             var xs = new object[] { 1, 1.2, true, 4, "" }.ToAsyncEnumerable();
             var ys = xs.OfType<int>();
@@ -26,6 +26,18 @@ namespace Tests
             var e = ys.GetAsyncEnumerator();
             await HasNextAsync(e, 1);
             await HasNextAsync(e, 4);
+            await NoNextAsync(e);
+        }
+
+        [Fact]
+        public async Task OfType_String()
+        {
+            var xs = new object[] { "bar", 42, "foo", 43 }.ToAsyncEnumerable();
+            var ys = xs.OfType<string>();
+
+            var e = ys.GetAsyncEnumerator();
+            await HasNextAsync(e, "bar");
+            await HasNextAsync(e, "foo");
             await NoNextAsync(e);
         }
     }
