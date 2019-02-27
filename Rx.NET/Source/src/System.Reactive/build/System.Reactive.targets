@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <UseWindowsRxVersion Condition="'$(UseWpf)' == 'true' OR '$(UseWindowsForms)' == 'true'" >true</UseWindowsRxVersion>
+    <UseWindowsRxVersion Condition="'$(UseWindowsRxVersion)' == '' " >false</UseWindowsRxVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Condition="'$(UseWindowsRxVersion)' == 'true' "  Include="$(MSBuildThisFileDirectory)..\..\build\netcoreapp3.0\System.Reactive.dll" />
+    <Reference Condition="'$(UseWindowsRxVersion)' != 'true' "  Include="$(MSBuildThisFileDirectory)..\..\lib\netstandard2.0\System.Reactive.dll" />
+  </ItemGroup>
+</Project>
