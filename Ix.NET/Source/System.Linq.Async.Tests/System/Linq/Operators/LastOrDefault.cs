@@ -13,28 +13,10 @@ namespace Tests
     public class LastOrDefault : AsyncEnumerableTests
     {
         [Fact]
-        public async Task LastOrDefault_Null()
+        public async Task LastOrDefaultAsync_NoParam_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync<int>(default).AsTask());
-
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync<int>(default, CancellationToken.None).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync<int>(default, x => true).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync(Return42, default(Func<int, bool>)).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync<int>(default, x => true, CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync(Return42, default, CancellationToken.None).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitAsync<int>(default, x => new ValueTask<bool>(true)).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitAsync(Return42, default).AsTask());
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitAsync(Return42, default, CancellationToken.None).AsTask());
-
-#if !NO_DEEP_CANCELLATION
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitWithCancellationAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None).AsTask());
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitWithCancellationAsync(Return42, default, CancellationToken.None).AsTask());
-#endif
         }
 
         [Fact]
@@ -92,6 +74,16 @@ namespace Tests
         {
             var res = new[] { 42, 43, 44 }.Select(x => x).ToAsyncEnumerable().LastOrDefaultAsync();
             Assert.Equal(44, await res);
+        }
+
+        [Fact]
+        public async Task LastOrDefaultAsync_Predicate_Null()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync<int>(default, x => true).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync(Return42, default(Func<int, bool>)).AsTask());
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync<int>(default, x => true, CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAsync(Return42, default, CancellationToken.None).AsTask());
         }
 
         [Fact]
@@ -173,6 +165,16 @@ namespace Tests
         }
 
         [Fact]
+        public async Task LastOrDefaultAwaitAsync_Predicate_Null()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitAsync<int>(default, x => new ValueTask<bool>(true)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitAsync(Return42, default).AsTask());
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitAsync<int>(default, x => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitAsync(Return42, default, CancellationToken.None).AsTask());
+        }
+
+        [Fact]
         public async Task LastOrDefaultAwaitAsync_Predicate_Empty()
         {
             var res = AsyncEnumerable.Empty<int>().LastOrDefaultAwaitAsync(x => new ValueTask<bool>(true));
@@ -251,6 +253,13 @@ namespace Tests
         }
 
 #if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task LastOrDefaultAwaitWithCancellationAsync_Predicate_Null()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitWithCancellationAsync<int>(default, (x, ct) => new ValueTask<bool>(true), CancellationToken.None).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefaultAwaitWithCancellationAsync(Return42, default, CancellationToken.None).AsTask());
+        }
+
         [Fact]
         public async Task LastOrDefaultAwaitWithCancellationAsync_Predicate_Empty()
         {
