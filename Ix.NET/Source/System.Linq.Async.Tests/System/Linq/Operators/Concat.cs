@@ -20,7 +20,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Concat1Async()
+        public async Task Concat_Simple()
         {
             var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(new[] { 4, 5, 6 }.ToAsyncEnumerable());
 
@@ -35,7 +35,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Concat2Async()
+        public async Task Concat_Throw_Second()
         {
             var ex = new Exception("Bang");
             var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
@@ -48,7 +48,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Concat3Async()
+        public async Task Concat_Throw_First()
         {
             var ex = new Exception("Bang");
             var ys = Throw<int>(ex).Concat(new[] { 4, 5, 6 }.ToAsyncEnumerable());
@@ -58,7 +58,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Concat7Async()
+        public async Task Concat_Four()
         {
             var ws = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var xs = new[] { 4, 5 }.ToAsyncEnumerable();
@@ -83,7 +83,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Concat8()
+        public async Task Concat_SequenceIdentity()
         {
             var ws = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var xs = new[] { 4, 5 }.ToAsyncEnumerable();
@@ -96,7 +96,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Concat10()
+        public async Task Concat_Three_ToArray()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 4, 5 }.ToAsyncEnumerable();
@@ -109,7 +109,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Concat11()
+        public async Task Concat_Three_ToList()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 4, 5 }.ToAsyncEnumerable();
@@ -122,7 +122,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Concat12()
+        public async Task Concat_Three_Count()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 4, 5 }.ToAsyncEnumerable();
