@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;net46;netstandard2.0;netstandard2.1;netcoreapp3.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="System\Linq\AsyncQueryable.Generated.cs">
+      <DependentUpon>AsyncQueryable.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="System\Linq\AsyncQueryable.Generated.tt">
+      <LastGenOutput>AsyncQueryable.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>

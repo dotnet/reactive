@@ -1,0 +1,228 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
+
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+int maxCombine = 4;
+#>
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace System.Linq
+{
+    public static partial class AsyncEnumerable
+    {
+<#
+for (var i = 2; i <= maxCombine; i++)
+{
+    Func<int, string> getInputType = j => j == 1 ? "TSource" : "TMiddle" + (j - 1);
+    Func<int, string> getOutputType = j => j == i ? "TResult" : "TMiddle" + j;
+    Func<int, string> getSelectorType = j => "Func<" + getInputType(j) + ", " + getOutputType(j) + ">";
+
+    var types = string.Join(", ", Enumerable.Range(1, i - 1).Select(j => "TMiddle" + j));
+    var allSelectors = string.Join(", ", Enumerable.Range(1, i).Select(j => getSelectorType(j) + " selector" + j));
+
+    var applyAll = Enumerable.Range(1, i).Reverse().Aggregate("", (s, j) => s + "_selector" + j + "(") + "x" + new string(')', i);
+#>
+        private sealed class CombinedSelectors<#=i#><TSource, <#=types#>, TResult> : ICombinedSelectors<TSource, TResult>
+        {
+<#
+for (var j = 1; j <= i; j++)
+{
+    var type = getSelectorType(j);
+#>
+            private readonly <#=type#> _selector<#=j#>;
+<#
+}
+#>
+
+            public CombinedSelectors<#=i#>(<#=allSelectors#>)
+            {
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                _selector<#=j#> = selector<#=j#>;
+<#
+}
+#>
+            }
+
+            public ICombinedSelectors<TSource, TNewResult> Combine<TNewResult>(Func<TResult, TNewResult> selector) =>
+<#
+if (i == maxCombine)
+{
+#>
+                new CombinedSelectors2<TSource, TResult, TNewResult>(this.Invoke, selector);
+<#
+}
+else
+{
+#>
+                new CombinedSelectors<#=i + 1#><TSource, <#=types#>, TResult, TNewResult>(
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                    _selector<#=j#>,
+<#
+}
+#>
+                    selector
+                );
+<#
+}
+#>
+
+            public TResult Invoke(TSource x) => <#=applyAll#>;
+        }
+
+<#
+}
+#>
+<#
+for (var i = 2; i <= maxCombine; i++)
+{
+    Func<int, string> getInputType = j => j == 1 ? "TSource" : "TMiddle" + (j - 1);
+    Func<int, string> getOutputType = j => "ValueTask<" + (j == i ? "TResult" : "TMiddle" + j) + ">";
+    Func<int, string> getSelectorType = j => "Func<" + getInputType(j) + ", " + getOutputType(j) + ">";
+
+    var types = string.Join(", ", Enumerable.Range(1, i - 1).Select(j => "TMiddle" + j));
+    var allSelectors = string.Join(", ", Enumerable.Range(1, i).Select(j => getSelectorType(j) + " selector" + j));
+
+    var applyAll = Enumerable.Range(1, i).Reverse().Aggregate("", (s, j) => s + "await _selector" + j + "(") + "x" + string.Join("", Enumerable.Repeat(").ConfigureAwait(false)", i));
+#>
+        private sealed class CombinedAsyncSelectors<#=i#><TSource, <#=types#>, TResult> : ICombinedAsyncSelectors<TSource, TResult>
+        {
+<#
+for (var j = 1; j <= i; j++)
+{
+    var type = getSelectorType(j);
+#>
+            private readonly <#=type#> _selector<#=j#>;
+<#
+}
+#>
+
+            public CombinedAsyncSelectors<#=i#>(<#=allSelectors#>)
+            {
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                _selector<#=j#> = selector<#=j#>;
+<#
+}
+#>
+            }
+
+            public ICombinedAsyncSelectors<TSource, TNewResult> Combine<TNewResult>(Func<TResult, ValueTask<TNewResult>> selector) =>
+<#
+if (i == maxCombine)
+{
+#>
+                new CombinedAsyncSelectors2<TSource, TResult, TNewResult>(this.Invoke, selector);
+<#
+}
+else
+{
+#>
+                new CombinedAsyncSelectors<#=i + 1#><TSource, <#=types#>, TResult, TNewResult>(
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                    _selector<#=j#>,
+<#
+}
+#>
+                    selector
+                );
+<#
+}
+#>
+
+            public async ValueTask<TResult> Invoke(TSource x) => <#=applyAll#>;
+        }
+
+<#
+}
+#>
+#if !NO_DEEP_CANCELLATION
+<#
+for (var i = 2; i <= maxCombine; i++)
+{
+    Func<int, string> getInputType = j => j == 1 ? "TSource" : "TMiddle" + (j - 1);
+    Func<int, string> getOutputType = j => "ValueTask<" + (j == i ? "TResult" : "TMiddle" + j) + ">";
+    Func<int, string> getSelectorType = j => "Func<" + getInputType(j) + ", CancellationToken, " + getOutputType(j) + ">";
+
+    var types = string.Join(", ", Enumerable.Range(1, i - 1).Select(j => "TMiddle" + j));
+    var allSelectors = string.Join(", ", Enumerable.Range(1, i).Select(j => getSelectorType(j) + " selector" + j));
+
+    var applyAll = Enumerable.Range(1, i).Reverse().Aggregate("", (s, j) => s + "await _selector" + j + "(") + "x" + string.Join("", Enumerable.Repeat(", ct).ConfigureAwait(false)", i));
+#>
+        private sealed class CombinedAsyncSelectorsWithCancellation<#=i#><TSource, <#=types#>, TResult> : ICombinedAsyncSelectorsWithCancellation<TSource, TResult>
+        {
+<#
+for (var j = 1; j <= i; j++)
+{
+    var type = getSelectorType(j);
+#>
+            private readonly <#=type#> _selector<#=j#>;
+<#
+}
+#>
+
+            public CombinedAsyncSelectorsWithCancellation<#=i#>(<#=allSelectors#>)
+            {
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                _selector<#=j#> = selector<#=j#>;
+<#
+}
+#>
+            }
+
+            public ICombinedAsyncSelectorsWithCancellation<TSource, TNewResult> Combine<TNewResult>(Func<TResult, CancellationToken, ValueTask<TNewResult>> selector) =>
+<#
+if (i == maxCombine)
+{
+#>
+                new CombinedAsyncSelectorsWithCancellation2<TSource, TResult, TNewResult>(this.Invoke, selector);
+<#
+}
+else
+{
+#>
+                new CombinedAsyncSelectorsWithCancellation<#=i + 1#><TSource, <#=types#>, TResult, TNewResult>(
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+                    _selector<#=j#>,
+<#
+}
+#>
+                    selector
+                );
+<#
+}
+#>
+
+            public async ValueTask<TResult> Invoke(TSource x, CancellationToken ct) => <#=applyAll#>;
+        }
+
+<#
+}
+#>
+#endif
+    }
+}

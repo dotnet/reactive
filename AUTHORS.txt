@@ -14,6 +14,7 @@ Arthur Watson
 Gert Drapers
 Mark Shields
 Eric Rozell
+Oren Novotny
 
 Rx.js and Ix.js:
 Matthew Podwysocki

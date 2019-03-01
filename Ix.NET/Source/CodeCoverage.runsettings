@@ -19,6 +19,7 @@ Included items must then not match any entries in the exclude list to remain inc
             <ModulePaths>
               <Include>
                 <ModulePath>.*Interactive.*</ModulePath>
+                <ModulePath>.*System.Linq.Async.dll$</ModulePath>
               </Include>
               <Exclude>
                 <ModulePath>.*Tests.dll$</ModulePath>

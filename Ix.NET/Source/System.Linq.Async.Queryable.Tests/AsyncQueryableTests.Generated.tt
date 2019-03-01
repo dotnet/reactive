@@ -1,0 +1,483 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
+
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Runtime" #>
+<#@ assembly name="$(ProjectDir)\..\System.Linq.Async\bin\$(Configuration)\net46\System.Threading.Tasks.Extensions.dll" #>
+<#@ assembly name="$(ProjectDir)\..\System.Linq.Async\bin\$(Configuration)\net46\System.Linq.Async.dll" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Threading" #>
+<#@ import namespace="System.Threading.Tasks" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+var nullableParameterNames = new[] { "comparer" };
+var failing = new string[0];
+var exclude = new[] { "ForEach", "ForEachAsync", "ToEnumerable", "ToAsyncEnumerable", "ToObservable", "AsAsyncEnumerable", "WithCancellation" };
+
+var toQuotedImpl = default(Func<Type, int, bool, string>);
+toQuotedImpl = (t, i, b) =>
+{
+var name = t.Name;
+
+if (t.IsGenericType)
+{
+    var genDef = t.GetGenericTypeDefinition();
+    name = genDef.Name.Substring(0, genDef.Name.LastIndexOf('`'));
+
+    var genArgs = "<" + string.Join(", ", t.GetGenericArguments().Select(a => toQuotedImpl(a, i, false))) + ">";
+
+    if (b)
+    {
+        if (name == "Func" || name == "Action")
+        {
+            name = "Expression<" + name + genArgs + ">";
+        }
+        else if (name == "IAsyncEnumerable" && i == 0)
+        {
+            name = "IAsyncQueryable" + genArgs;
+        }
+        else if (name == "IOrderedAsyncEnumerable" && i == 0)
+        {
+            name = "IOrderedAsyncQueryable" + genArgs;
+        }
+        else
+        {
+            name += genArgs;
+        }
+    }
+    else
+    {
+        if (name == "Nullable")
+        {
+            name = genArgs.Substring(1, genArgs.Length - 2) + "?";
+        }
+        else
+        {
+            name += genArgs;
+        }
+    }
+}
+else if (t.IsArray)
+{
+    var elem = toQuotedImpl(t.GetElementType(), i, b);
+    name = elem + "[]";
+}
+else
+{
+    if (t == typeof(int))
+    {
+        name = "int";
+    }
+    else if (t == typeof(long))
+    {
+        name = "long";
+    }
+    else if (t == typeof(float))
+    {
+        name = "float";
+    }
+    else if (t == typeof(double))
+    {
+        name = "double";
+    }
+    else if (t == typeof(decimal))
+    {
+        name = "decimal";
+    }
+    else if (t == typeof(bool))
+    {
+        name = "bool";
+    }
+    else if (t == typeof(object))
+    {
+        name = "object";
+    }
+}
+
+return name;
+};
+
+var toQuoted = new Func<Type, int, string>((t, i) => toQuotedImpl(t, i, true));
+
+var index = new Dictionary<string, int>();
+#>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace Tests
+{
+    public class AsyncQueryableExTests
+    {
+<#
+// NOTE: Just including extension methods
+foreach (var m in typeof(AsyncEnumerable).GetMethods()
+                        .Where(m => m.IsStatic)
+                        .Where(m => !exclude.Contains(m.Name))
+                        .Where(m => m.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), true))
+                        .Where(m =>
+                        {
+                            var p0 = m.GetParameters()[0].ParameterType;
+                            if (p0.IsGenericType)
+                            {
+                                var p0d = p0.GetGenericTypeDefinition();
+                                return p0d == typeof(IAsyncEnumerable<>) || p0d == typeof(IOrderedAsyncEnumerable<>);
+                            }
+
+                            return false;
+                        })
+                        .OrderBy(m => m.Name)
+                        .ThenBy(m => m.IsGenericMethod ? m.GetGenericArguments().Length : 0)
+                        .ThenBy(m => m.GetParameters().Length)
+                        .ThenBy(m => string.Join(", ", m.GetParameters().Select(p => p.Name))))
+{
+    var genArgs = m.GetGenericArguments();
+
+    var ret = toQuoted(m.ReturnType, 0);
+    var name = m.Name;
+
+    if (genArgs.Length > 0)
+    {
+        name += "<" + string.Join(", ", genArgs.Select(a => a.Name)) + ">";
+    }
+
+    var isParams = false;
+    var parCount = m.GetParameters().Length;
+
+    if (parCount != 0)
+    {
+        if (m.GetParameters().Last().IsDefined(typeof(ParamArrayAttribute), true))
+        {
+            isParams = true;
+        }
+    }
+
+    var pars = string.Join(", ", m.GetParameters().Select((p, i) => (i == parCount - 1 && isParams ? "params " : "") + toQuoted(p.ParameterType, i) + " " + p.Name));
+
+    if (m.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), true))
+    {
+        pars = "this " + pars;
+    }
+
+    var mtd = "(MethodInfo)MethodBase.GetCurrentMethod()";
+
+    if (m.IsGenericMethod)
+    {
+        mtd = "(" + mtd + ").MakeGenericMethod(" + string.Join(", ", genArgs.Select(a => "typeof(" + a.Name + ")")) + ")";
+    }
+
+    var provider = m.GetParameters()[0].Name + ".Provider";
+    var factory = "";
+    var rem = "";
+    var cast = "";
+    var quotedArgs = new List<string>();
+
+    if (m.ReturnType.IsGenericType)
+    {
+        var td = m.ReturnType.GetGenericTypeDefinition();
+
+        if (td.Name.EndsWith("Task`1")) // NB: Covers Task and ValueTask
+        {
+            factory = "ExecuteAsync<" + toQuotedImpl(m.ReturnType.GetGenericArguments()[0], -1, false) + ">";
+
+            var last = m.GetParameters().Last();
+            if (last.ParameterType == typeof(CancellationToken))
+            {
+                rem = ", " + last.Name;
+            }
+            else
+            {
+                rem = ", CancellationToken.None";
+            }
+        }
+        else if (td == typeof(IAsyncEnumerable<>) || td == typeof(IOrderedAsyncEnumerable<>))
+        {
+            factory = "CreateQuery<" + toQuotedImpl(m.ReturnType.GetGenericArguments()[0], -1, false) + ">";
+
+            if (td == typeof(IOrderedAsyncEnumerable<>))
+            {
+                cast = "(" + toQuoted(m.ReturnType, 0) + ")";
+            }
+        }
+    }
+
+    var n = 0;
+    foreach (var p in m.GetParameters())
+    {
+        var pt = p.ParameterType;
+
+        var add = false;
+
+        if (pt.IsGenericType)
+        {
+            var ptd = pt.GetGenericTypeDefinition();
+
+            if (ptd == typeof(IAsyncEnumerable<>) || ptd == typeof(IOrderedAsyncEnumerable<>))
+            {
+                if (n == 0)
+                {
+                    quotedArgs.Add(p.Name + ".Expression");
+                }
+                else
+                {
+                    quotedArgs.Add("GetSourceExpression(" + p.Name + ")");
+                }
+                add = true;
+            }
+            else if (ptd.Name.StartsWith("Func") || ptd.Name.StartsWith("Action"))
+            {
+                quotedArgs.Add(p.Name);
+                add = true;
+            }
+        }
+        
+        if (!add)
+        {
+            quotedArgs.Add("Expression.Constant(" + p.Name + ", typeof(" + toQuoted(pt, -1) + "))");
+        }
+
+        n++;
+    }
+
+    var expr = "Expression.Call(" + mtd + ", " + string.Join(", ", quotedArgs) + ")";
+
+    var testName = m.Name;
+
+    var num = 0;
+    if (!index.TryGetValue(testName, out num))
+    {
+        index[testName] = 0;
+    }
+
+    index[testName] = num + 1;
+
+    testName += (num + 1);
+#>
+        [Fact]
+        public void <#=testName#>()
+        {
+<#
+var indexes = new List<int>();
+var j = 0;
+foreach (var p in m.GetParameters())
+{
+    if (!p.ParameterType.IsValueType && !p.ParameterType.IsGenericParameter && !nullableParameterNames.Contains(p.Name))
+    {
+        indexes.Add(j);
+    }
+
+    j++;
+}
+
+var tm = m;
+
+if (tm.IsGenericMethodDefinition)
+{
+    tm = m.MakeGenericMethod(m.GetGenericArguments().Select(a =>
+    {
+        var cs = a.GetGenericParameterConstraints();
+        if (cs.Length > 0)
+        {
+            var bc = cs.FirstOrDefault(c => c.IsClass);
+            if (bc != null)
+            {
+                return bc;
+            }
+        }
+
+        return typeof(int);
+    }).ToArray());
+}
+
+var opName = tm.Name;
+
+if (tm.IsGenericMethod)
+{
+    opName += "<" + string.Join(", ", tm.GetGenericArguments().Select(a => toQuotedImpl(a, -1, false))) + ">";
+}
+
+var getVal = default(Func<Type, int, string>);
+getVal = (tp, pos) =>
+{
+    if (tp.IsGenericType)
+    {
+        var tpd = tp.GetGenericTypeDefinition();
+
+        if (tpd == typeof(IAsyncEnumerable<>))
+        {
+            var tpa = tp.GetGenericArguments()[0];
+            var et = toQuotedImpl(tpa, -1, false);
+            var res = "new " + et + "[] { default(" + et + ") }.ToAsyncEnumerable()";
+
+            if (pos == 0)
+            {
+                res += ".AsAsyncQueryable()";
+            }
+
+            return res;
+        }
+        else if (tpd == typeof(IOrderedAsyncEnumerable<>))
+        {
+            var tpa = tp.GetGenericArguments()[0];
+            var res = "new " + toQuotedImpl(tpa, -1, false) + "[0].ToAsyncEnumerable()";
+
+            if (pos == 0)
+            {
+                res += ".AsAsyncQueryable()";
+            }
+
+            return res + ".OrderBy(x => x)";
+        }
+        else if (tpd.Name.StartsWith("Func"))
+        {
+            var inv = tp.GetMethod("Invoke");
+                
+            var largs = string.Join(", ", inv.GetParameters().Select((lp, lpi) => toQuoted(lp.ParameterType, -1) + " arg" + lpi).ToArray());
+
+            var lret = "default(" + toQuoted(inv.ReturnType, -1) + ")";
+
+            if (inv.ReturnType.IsGenericType)
+            {
+                if (inv.ReturnType.GetGenericTypeDefinition() == typeof(IAsyncEnumerable<>))
+                {
+                    var tpa = inv.ReturnType.GetGenericArguments()[0];
+                    var et = toQuotedImpl(tpa, -1, false);
+                    lret = "new " + et + "[] { default(" + et + ") }.ToAsyncEnumerable()";
+                }
+            }
+            else if (inv.ReturnType == typeof(bool))
+            {
+                lret = "true";
+            }
+
+            return "(" + largs + ") => " + lret;
+        }
+        else if (tpd.Name.StartsWith("Action"))
+        {
+            var inv = tp.GetMethod("Invoke");
+                
+            var largs = string.Join(", ", inv.GetParameters().Select((lp, lpi) => toQuoted(lp.ParameterType, -1) + " arg" + lpi).ToArray());
+            var lret = "Console.WriteLine()";
+
+            return "(" + largs + ") => " + lret;
+        }
+        else if (tpd == typeof(IEqualityComparer<>))
+        {
+            var tpa = tp.GetGenericArguments()[0];
+
+            return "EqualityComparer<" + toQuotedImpl(tpa, -1, false) + ">.Default";
+        }
+        else if (tpd == typeof(IComparer<>))
+        {
+            var tpa = tp.GetGenericArguments()[0];
+
+            return "Comparer<" + toQuotedImpl(tpa, -1, false) + ">.Default";
+        }
+        else if (tpd == typeof(IObserver<>))
+        {
+            var tpa = tp.GetGenericArguments()[0];
+
+            return "new NopObserver<" + toQuotedImpl(tpa, -1, false) + ">()";
+        }
+    }
+    else if (tp == typeof(CancellationToken))
+    {
+        return "CancellationToken.None";
+    }
+    else if (tp == typeof(Action))
+    {
+        return "() => { }";
+    }
+    else if (tp.IsArray)
+    {
+        var tpa = tp.GetElementType();
+        var et = toQuotedImpl(tpa, -1, false);
+
+        return "new " + et + "[] { default(" + et + ") }";
+    }
+    else if (tp == typeof(int))
+    {
+        return "1";
+    }
+
+    return "default(" + toQuoted(tp, pos) + ")";
+};
+
+var vals = tm.GetParameters().Select((p, i) => getVal(p.ParameterType, i)).ToArray();
+var nulls = tm.GetParameters().Select((p, i) => "default(" + toQuoted(p.ParameterType, i) + ")").ToArray();
+
+var len = vals.Length;
+
+if (indexes.Count != 0)
+{
+    foreach (var idx in indexes)
+    {
+        var args = string.Join(", ", Enumerable.Range(0, len).Select(k => k == idx ? nulls[k] : vals[k]).ToArray());
+        var nullArg = tm.GetParameters()[idx].Name;
+#>
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.<#=opName#>(<#=args#>), ane => ane.ParamName == "<#=nullArg#>");
+<#
+    }
+#>
+
+<#
+}
+
+{
+    var args = string.Join(", ", vals);
+#>
+            var res = AsyncQueryable.<#=opName#>(<#=args#>);
+<#
+    var tmRet = tm.ReturnType;
+
+    if (tmRet.IsGenericType)
+    {
+        tmRet = tmRet.GetGenericTypeDefinition();
+    }
+
+    if (tm.Name == "Repeat" || tm.Name == "Expand")
+    {
+#>
+            res = res.Take(5);
+<#
+    }
+
+    if (!failing.Contains(tm.Name))
+    {
+        if (tmRet.Name.EndsWith("Task`1")) // NB: Covers Task and ValueTask
+        {
+#>
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+<#
+        }
+        else if (tmRet == typeof(IAsyncEnumerable<>))
+        {
+#>
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+<#
+        }
+    }
+    else
+    {
+#>
+            // TODO: investigate test hang
+<#
+    }
+}
+#>
+        }
+
+<#
+}
+#>
+    }
+}

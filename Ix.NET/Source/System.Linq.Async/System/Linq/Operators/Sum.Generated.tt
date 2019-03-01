@@ -1,0 +1,202 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
+
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace System.Linq
+{
+    public static partial class AsyncEnumerable
+    {
+<#
+var os = new[]
+{
+    new { type = "int", zero = "0", @checked = true },
+    new { type = "long", zero = "0L", @checked = true },
+    new { type = "float", zero = "0.0f", @checked = false },
+    new { type = "double", zero = "0.0", @checked = false },
+    new { type = "decimal", zero = "0m", @checked = false },
+    new { type = "int?", zero = "0", @checked = true },
+    new { type = "long?", zero = "0L", @checked = true },
+    new { type = "float?", zero = "0.0f", @checked = false },
+    new { type = "double?", zero = "0.0", @checked = false },
+    new { type = "decimal?", zero = "0m", @checked = false },
+};
+
+foreach (var o in os)
+{
+    var n = o.type.EndsWith("?") ? ".GetValueOrDefault()" : "";
+#>
+        public static ValueTask<<#=o.type#>> SumAsync(this IAsyncEnumerable<<#=o.type#>> source, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+
+            return Core(source, cancellationToken);
+
+            static async ValueTask<<#=o.type#>> Core(IAsyncEnumerable<<#=o.type#>> _source, CancellationToken _cancellationToken)
+            {
+                var sum = <#=o.zero#>;
+
+                await foreach (<#=o.type#> value in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                {
+<#
+if (o.@checked)
+{
+#>
+                    checked
+                    {
+                        sum += value<#=n#>;
+                    }
+<#
+}
+else
+{
+#>
+                    sum += value<#=n#>;
+<#
+}
+#>
+                }
+
+                return sum;
+            }
+        }
+
+        public static ValueTask<<#=o.type#>> SumAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, <#=o.type#>> selector, CancellationToken cancellationToken = default)
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return Core(source, selector, cancellationToken);
+
+            static async ValueTask<<#=o.type#>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, <#=o.type#>> _selector, CancellationToken _cancellationToken)
+            {
+                var sum = <#=o.zero#>;
+
+                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                {
+                    var value = _selector(item);
+
+<#
+if (o.@checked)
+{
+#>
+                    checked
+                    {
+                        sum += value<#=n#>;
+                    }
+<#
+}
+else
+{
+#>
+                    sum += value<#=n#>;
+<#
+}
+#>
+                }
+
+                return sum;
+            }
+        }
+
+        internal static ValueTask<<#=o.type#>> SumAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken = default)
+
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return Core(source, selector, cancellationToken);
+
+            static async ValueTask<<#=o.type#>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<<#=o.type#>>> _selector, CancellationToken _cancellationToken)
+            {
+                var sum = <#=o.zero#>;
+
+                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item).ConfigureAwait(false);
+
+<#
+if (o.@checked)
+{
+#>
+                    checked
+                    {
+                        sum += value<#=n#>;
+                    }
+<#
+}
+else
+{
+#>
+                    sum += value<#=n#>;
+<#
+}
+#>
+                }
+
+                return sum;
+            }
+        }
+
+#if !NO_DEEP_CANCELLATION
+        internal static ValueTask<<#=o.type#>> SumWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken = default)
+
+        {
+            if (source == null)
+                throw Error.ArgumentNull(nameof(source));
+            if (selector == null)
+                throw Error.ArgumentNull(nameof(selector));
+
+            return Core(source, selector, cancellationToken);
+
+            static async ValueTask<<#=o.type#>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<<#=o.type#>>> _selector, CancellationToken _cancellationToken)
+            {
+                var sum = <#=o.zero#>;
+
+                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                {
+                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+
+<#
+if (o.@checked)
+{
+#>
+                    checked
+                    {
+                        sum += value<#=n#>;
+                    }
+<#
+}
+else
+{
+#>
+                    sum += value<#=n#>;
+<#
+}
+#>
+                }
+
+                return sum;
+            }
+        }
+#endif
+
+<#
+}
+#>
+    }
+}

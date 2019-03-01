@@ -22,12 +22,16 @@ pr:
       - azure-pipelines.ix.yml
 
 pool:
-  vmImage: vs2017-win2016
+  vmImage: windows-2019
 
 variables: 
   BuildConfiguration: Release
   
 steps:
+- task: DotNetCoreInstaller@0
+  inputs:
+    version: '3.0.100-preview4-010530'
+
 - task: DotNetCoreCLI@2  
   inputs:
     command: custom
@@ -40,23 +44,56 @@ steps:
 
 - task: DotNetCoreCLI@2
   inputs:
+    command: restore
+    projects: Ix.NET/Source/**/*.csproj 
+  displayName: Restore
+
+- task: DotNetCoreCLI@2
+  inputs:
     command: pack
-    packagesToPack: Ix.NET/Source/**/System.Interactive*.csproj;!Ix.NET/Source/**/*.Tests*.csproj;!Ix.NET/Source/refs/**
+    packagesToPack: Ix.NET/Source/**/System.Interactive*.csproj;Ix.NET/Source/**/System.Linq.*.csproj;!Ix.NET/Source/**/*.Tests*.csproj;!Ix.NET/Source/refs/**
     configuration: $(BuildConfiguration)
     packDirectory: $(Build.ArtifactStagingDirectory)\artifacts    
     verbosityPack: Minimal
   displayName: Pack
 
+- task: DotNetCoreCLI@2  
+  inputs:
+    command: custom
+    custom: tool
+    arguments: install --tool-path . dotnet-reportgenerator-globaltool
+  displayName: Install ReportGenerator tool
+
 - task: DotNetCoreCLI@2
   inputs:
     command: test
     projects: Ix.NET/Source/**/*.Tests.csproj
-    arguments: -c $(BuildConfiguration) --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Ix.NET/Source/CodeCoverage.runsettings /p:DebugType=Full 
+    arguments: -c $(BuildConfiguration) -- RunConfiguration.DisableAppDomain=true
   displayName: Run Tests
 
-- task: whitesource.ws-bolt.bolt.wss.WhiteSource Bolt@18
-  displayName: 'WhiteSource Bolt'
-  enabled: false
+- script: reportgenerator -reports:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/raw/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"HtmlInline_AzurePipelines;Cobertura"
+  displayName: Create reports
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml'
+    reportDirectory: '$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports'
+
+- task: DotNetCoreCLI@2  
+  inputs:
+    command: custom
+    custom: tool
+    arguments: install --tool-path . Codecov.Tool
+  displayName: Install Codecov tool
+  condition: and(succeeded(), not(eq(variables['CODECOV_TOKEN'], '')))
+
+- script: codecov -f $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml --flag ixnet
+  env:
+    CODECOV_TOKEN: $(CODECOV_TOKEN)
+  displayName: Upload coverage to Codecov
+  condition: and(succeeded(), not(eq(variables['CODECOV_TOKEN'], '')))
 
 - task: PowerShell@2
   displayName: Authenticode Sign Packages

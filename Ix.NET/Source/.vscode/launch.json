@@ -1,0 +1,35 @@
+{
+   "version": "0.2.0",
+   "configurations": [
+        {
+            "name": ".NET Core Launch (console) - Ix.NET.sln",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build - Ix.NET.sln",
+            "program": "${workspaceFolder}/Playground/bin/Debug/netcoreapp2.1/Playground.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Playground",
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "name": ".NET Core Launch (console) - Ix.Async.NET.sln",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build - Ix.Async.NET.sln",
+            "program": "${workspaceFolder}/Playground/bin/Debug/netcoreapp2.1/Playground.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Playground",
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}"
+        }
+    ,]
+}

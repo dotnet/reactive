@@ -1,0 +1,15 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
+
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="$(ProjectDir)\..\System.Linq.Async\bin\$(Configuration)\net46\System.Threading.Tasks.Extensions.dll" #>
+<#@ assembly name="$(ProjectDir)\..\System.Linq.Async\bin\$(Configuration)\net46\System.Linq.Async.dll" #>
+<#@ output extension=".cs" #>
+<#
+var asyncEnumerableType = typeof(AsyncEnumerable);
+var className = "AsyncQueryable";
+var nullableParameterNames = new[] { "comparer" };
+var exclude = new[] { "ForEachAsync", "ForEachAwaitAsync", "ForEachAwaitWithCancellationAsync", "ToEnumerable", "ToAsyncEnumerable", "ToObservable", "AsAsyncEnumerable", "WithCancellation" };
+#>
+<#@ include file="$(SolutionDir)\AsyncQueryableGenerator.t4" #>

@@ -1,0 +1,222 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
+
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+var types = new[] { typeof(int), typeof(long), typeof(float), typeof(double), typeof(decimal) };
+
+Func<Type, string> toCSharp = t =>
+{
+    if (t == typeof(int))
+        return "int";
+    else if (t == typeof(long))
+        return "long";
+    else if (t == typeof(float))
+        return "float";
+    else if (t == typeof(double))
+        return "double";
+    else if (t == typeof(decimal))
+        return "decimal";
+
+    throw new Exception();
+};
+#>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace Tests
+{
+    public class AverageAsync : AsyncEnumerableTests
+    {
+<#
+foreach (var t in types)
+{
+    var cs = toCSharp(t);
+#>
+        [Fact]
+        public async Task AverageAsync_<#=t.Name#>_Null()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AverageAsync(default(IAsyncEnumerable<<#=cs#>>)).AsTask());
+        }
+
+        [Fact]
+        public async Task AverageAsync_<#=t.Name#>_Empty()
+        {
+            var ys = new <#=cs#>[0].ToAsyncEnumerable();
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync().AsTask());
+        }
+
+        [Fact]
+        public async Task AverageAsync_<#=t.Name#>_Many()
+        {
+            var xs = new <#=cs#>[] { 2, 3, 5, 7, 11, 13, 17, 19 };
+            var ys = xs.ToAsyncEnumerable();
+            Assert.Equal(xs.Average(), await ys.AverageAsync());
+        }
+
+        [Fact]
+        public async Task AverageAsync_Selector_<#=t.Name#>_Null()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AverageAsync(default(IAsyncEnumerable<<#=cs#>>), x => x).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AverageAsync(AsyncEnumerable.Empty<object>(), default(Func<object, <#=cs#>>)).AsTask());
+        }
+
+        [Fact]
+        public async Task AverageAsync_Selector_<#=t.Name#>_Empty()
+        {
+            var ys = new <#=cs#>[0].ToAsyncEnumerable();
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAsync(x => x).AsTask());
+        }
+
+        [Fact]
+        public async Task AverageAsync_Selector_<#=t.Name#>_Many()
+        {
+            var xs = new <#=cs#>[] { 2, 3, 5, 7, 11, 13, 17, 19 };
+            var ys = xs.ToAsyncEnumerable();
+            Assert.Equal(xs.Average(), await ys.AverageAsync(x => x));
+        }
+
+        [Fact]
+        public async Task AverageAwaitAsync_Selector_<#=t.Name#>_Null()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AverageAwaitAsync(default(IAsyncEnumerable<<#=cs#>>), x => new ValueTask<<#=cs#>>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AverageAwaitAsync(AsyncEnumerable.Empty<object>(), default(Func<object, ValueTask<<#=cs#>>>)).AsTask());
+        }
+
+        [Fact]
+        public async Task AverageAwaitAsync_Selector_<#=t.Name#>_Empty()
+        {
+            var ys = new <#=cs#>[0].ToAsyncEnumerable();
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAwaitAsync(x => new ValueTask<<#=cs#>>(x)).AsTask());
+        }
+
+        [Fact]
+        public async Task AverageAwaitAsync_Selector_<#=t.Name#>_Many()
+        {
+            var xs = new <#=cs#>[] { 2, 3, 5, 7, 11, 13, 17, 19 };
+            var ys = xs.ToAsyncEnumerable();
+            Assert.Equal(xs.Average(), await ys.AverageAwaitAsync(x => new ValueTask<<#=cs#>>(x)));
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task AverageAwaitWithCancellationAsync_Selector_<#=t.Name#>_Null()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AverageAwaitWithCancellationAsync(default(IAsyncEnumerable<<#=cs#>>), (x, ct) => new ValueTask<<#=cs#>>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AverageAwaitWithCancellationAsync(AsyncEnumerable.Empty<object>(), default(Func<object, CancellationToken, ValueTask<<#=cs#>>>)).AsTask());
+        }
+
+        [Fact]
+        public async Task AverageAwaitWithCancellationAsync_Selector_<#=t.Name#>_Empty()
+        {
+            var ys = new <#=cs#>[0].ToAsyncEnumerable();
+            await Assert.ThrowsAsync<InvalidOperationException>(() => ys.AverageAwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>>(x), CancellationToken.None).AsTask());
+        }
+
+        [Fact]
+        public async Task AverageAwaitWithCancellationAsync_Selector_<#=t.Name#>_Many()
+        {
+            var xs = new <#=cs#>[] { 2, 3, 5, 7, 11, 13, 17, 19 };
+            var ys = xs.ToAsyncEnumerable();
+            Assert.Equal(xs.Average(), await ys.AverageAwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>>(x), CancellationToken.None));
+        }
+#endif
+
+        [Fact]
+        public async Task AverageAsync_<#=t.Name#>_Nullable_Null()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AverageAsync(default(IAsyncEnumerable<<#=cs#>?>)).AsTask());
+        }
+
+        [Fact]
+        public async Task AverageAsync_<#=t.Name#>_Nullable_Empty()
+        {
+            var ys = new <#=cs#>?[0].ToAsyncEnumerable();
+            Assert.Null(await ys.AverageAsync());
+        }
+
+        [Fact]
+        public async Task AverageAsync_<#=t.Name#>_Nullable_Many()
+        {
+            var xs = new <#=cs#>?[] { 2, 3, 5, 7, 11, 13, 17, 19 };
+            var ys = xs.ToAsyncEnumerable();
+            Assert.Equal(xs.Average(), await ys.AverageAsync());
+        }
+
+        [Fact]
+        public async Task AverageAsync_Selector_<#=t.Name#>_Nullable_Empty()
+        {
+            var ys = new <#=cs#>?[0].ToAsyncEnumerable();
+            Assert.Null(await ys.AverageAsync(x => x));
+        }
+
+        [Fact]
+        public async Task AverageAsync_Selector_<#=t.Name#>_Nullable_Many()
+        {
+            var xs = new <#=cs#>?[] { 2, 3, 5, 7, 11, 13, 17, 19 };
+            var ys = xs.ToAsyncEnumerable();
+            Assert.Equal(xs.Average(), await ys.AverageAsync(x => x));
+        }
+
+        [Fact]
+        public async Task AverageAwaitAsync_Selector_<#=t.Name#>_Nullable_Null()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AverageAwaitAsync(default(IAsyncEnumerable<<#=cs#>?>), x => new ValueTask<<#=cs#>?>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AverageAwaitAsync(AsyncEnumerable.Empty<object>(), default(Func<object, ValueTask<<#=cs#>?>>)).AsTask());
+        }
+
+
+        [Fact]
+        public async Task AverageAwaitAsync_Selector_<#=t.Name#>_Nullable_Empty()
+        {
+            var ys = new <#=cs#>?[0].ToAsyncEnumerable();
+            Assert.Null(await ys.AverageAwaitAsync(x => new ValueTask<<#=cs#>?>(x)));
+        }
+
+        [Fact]
+        public async Task AverageAwaitAsync_Selector_<#=t.Name#>_Nullable_Many()
+        {
+            var xs = new <#=cs#>?[] { 2, 3, 5, 7, 11, 13, 17, 19 };
+            var ys = xs.ToAsyncEnumerable();
+            Assert.Equal(xs.Average(), await ys.AverageAwaitAsync(x => new ValueTask<<#=cs#>?>(x)));
+        }
+
+#if !NO_DEEP_CANCELLATION
+        [Fact]
+        public async Task AverageAwaitWithCancellationAsync_Selector_<#=t.Name#>_Nullable_Null()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AverageAwaitWithCancellationAsync(default(IAsyncEnumerable<<#=cs#>?>), (x, ct) => new ValueTask<<#=cs#>?>(x)).AsTask());
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.AverageAwaitWithCancellationAsync(AsyncEnumerable.Empty<object>(), default(Func<object, CancellationToken, ValueTask<<#=cs#>?>>)).AsTask());
+        }
+
+        [Fact]
+        public async Task AverageAwaitWithCancellationAsync_Selector_<#=t.Name#>_Nullable_Empty()
+        {
+            var ys = new <#=cs#>?[0].ToAsyncEnumerable();
+            Assert.Null(await ys.AverageAwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task AverageAwaitWithCancellationAsync_Selector_<#=t.Name#>_Nullable_Many()
+        {
+            var xs = new <#=cs#>?[] { 2, 3, 5, 7, 11, 13, 17, 19 };
+            var ys = xs.ToAsyncEnumerable();
+            Assert.Equal(xs.Average(), await ys.AverageAwaitWithCancellationAsync((x, ct) => new ValueTask<<#=cs#>?>(x), CancellationToken.None));
+        }
+#endif
+
+<#
+}
+#>
+    }
+}

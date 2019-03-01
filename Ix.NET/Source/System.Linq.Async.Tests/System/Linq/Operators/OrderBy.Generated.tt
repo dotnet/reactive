@@ -1,0 +1,168 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
+
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+Func<bool, bool, bool, bool, string, string> getAsyncMethod = (then, desc, async, cancel, body) =>
+{
+    var mtd = (then ? "ThenBy" : "OrderBy") + (desc ? "Descending" : "");
+
+    var arg = async ? (cancel ? "(x, ct) => " : "x => ") + "new ValueTask<int>(" + body + ")" : "x => " + body;
+
+    if (async)
+    {
+        mtd += "Await";
+
+        if (cancel)
+        {
+            mtd += "WithCancellation";
+        }
+    }
+
+    return "." + mtd + "(" + arg + ")";
+};
+
+Func<bool, bool, int, string, string> getAsyncMethodWithVariant = (then, desc, variant, body) =>
+{
+    return getAsyncMethod(then, desc, variant > 0 ? true : false, variant == 2 ? true : false, body);
+};
+
+Func<bool, bool, string, string> getSyncMethod = (then, desc, body) =>
+{
+    var mtd = (then ? "ThenBy" : "OrderBy") + (desc ? "Descending" : "");
+
+    var arg = "x => " + body;
+
+    return "." + mtd + "(" + arg + ")";
+};
+
+Func<bool, bool, int, string> getVariantName = (then, desc, variant) =>
+{
+    var v = variant == 0 ? "" : (variant == 1 ? "Async" : "AsyncWithCancellation");
+    return "_" + (then ? "ThenBy" : "OrderBy") + (desc ? "Descending" : "") + v;
+};
+
+Func<bool, string, List<Tuple<string, string, string>>> getAsyncMethodVariants = (then, body) =>
+{
+    var res = new List<Tuple<string, string, string>>();
+
+    foreach (var desc in new[] { false, true })
+    {
+        foreach (var variant in new[] { 0, 1, 2 })
+        {
+            var v = getVariantName(then, desc, variant);
+            var async = getAsyncMethodWithVariant(then, desc, variant, body);
+            var sync = getSyncMethod(then, desc, body);
+
+            res.Add(new Tuple<string, string, string>(v, async, sync));
+        }
+    }
+
+    return res;
+};
+
+Func<int, List<Tuple<string, string, string>>> getVariants = null;
+
+getVariants = depth =>
+{
+    if (depth == 1)
+    {
+        return getAsyncMethodVariants(false, "x % 2");
+    }
+    else
+    {
+        var res = new List<Tuple<string, string, string>>();
+
+        var next = getVariants(depth - 1);
+
+        foreach (var item in next)
+        {
+            foreach (var variant in getAsyncMethodVariants(true, "x % " + (depth + 1)))
+            {
+                res.Add(new Tuple<string, string, string>(item.Item1 + variant.Item1, item.Item2 + variant.Item2, item.Item3 + variant.Item3));
+            }
+        }
+
+        return res;
+    }
+};
+#>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace Tests
+{
+    partial class OrderBy
+    {
+<#
+for (var i = 1; i <= 3; i++)
+{
+    foreach (var v in getVariants(i))
+    {
+        var variant = v.Item1;
+        var asyncCall = v.Item2;
+        var syncCall = v.Item3;
+#>
+        [Fact]
+        public async Task OrderBy<#=variant#>()
+        {
+            var rand = new Random(42);
+            var xs = Enumerable.Range(0, 100).Select(x => rand.Next(0, 100)).ToArray().Select(x => x);
+
+            var asyncRes = xs.ToAsyncEnumerable()<#=asyncCall#>;
+            var syncRes = xs<#=syncCall#>;
+
+            await AssertSorted(asyncRes, syncRes);
+
+            var asyncSegment = asyncRes.AsAsyncEnumerable();
+            var syncSegment = syncRes.AsEnumerable();
+
+            foreach (var skipCount in new[] { 3, 7, 2, 5 })
+            {
+                asyncSegment = asyncSegment.Skip(skipCount);
+                syncSegment = syncSegment.Skip(skipCount);
+            }
+
+            foreach (var takeCount in new[] { 31, 29, 23 })
+            {
+                asyncSegment = asyncSegment.Take(takeCount);
+                syncSegment = syncSegment.Take(takeCount);
+            }
+
+            await AssertSorted(asyncSegment, syncSegment);
+        }
+
+<#
+    }
+}
+#>
+
+        private async Task AssertSorted<T>(IAsyncEnumerable<T> asyncRes, IEnumerable<T> syncRes)
+        {
+            Assert.True(await syncRes.ToAsyncEnumerable().SequenceEqualAsync(asyncRes));
+            Assert.True(syncRes.ToList().SequenceEqual(await asyncRes.ToListAsync()));
+            Assert.True(syncRes.ToArray().SequenceEqual(await asyncRes.ToArrayAsync()));
+
+            int syncCount = syncRes.Count();
+            int asyncCount = await asyncRes.CountAsync();
+            Assert.Equal(syncCount, asyncCount);
+
+            Assert.Equal(syncRes.First(), await asyncRes.FirstAsync());
+            Assert.Equal(syncRes.Last(), await asyncRes.LastAsync());
+
+            for (var i = 0; i < syncCount; i++)
+            {
+                Assert.Equal(syncRes.ElementAt(i), await asyncRes.ElementAtAsync(i));
+            }
+        }
+    }
+}

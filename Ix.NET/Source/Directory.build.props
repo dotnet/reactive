@@ -1,30 +1,34 @@
-﻿<Project>  
-  
+﻿<Project>
   <PropertyGroup>
     <Copyright>Copyright (c) .NET Foundation and Contributors.</Copyright>
     <MinClientVersion>2.12</MinClientVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Authors>.NET Foundation and Contributors</Authors>
-    <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/dotnet/reactive/0f837d11385cfaf575861ccc5a5fbcafb22d888f/Rx.NET/Resources/Artwork/Logo.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/dotnet/reactive</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/Reactive-Extensions/Rx.NET/master/Ix.NET/Source/license.txt</PackageLicenseUrl>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>    
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)ReactiveX.snk</AssemblyOriginatorKeyFile>
     <NoWarn>$(NoWarn);1701;1702;CS1591;NU5105</NoWarn>
     <DefaultLanguage>en-US</DefaultLanguage>
     <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
-    <DebugType>embedded</DebugType>
+    <DebugType Condition="'$(Configuration)' != 'Debug'">embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <LangVersion>latest</LangVersion>
+    <!-- While in beta, we need to set 8.0 manually (rather than latest). -->
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
-    
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All"/>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="2.2.13" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All"/>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.3.105" PrivateAssets="all" />
   </ItemGroup>
-  
+
+  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+    <PackageReference Include="coverlet.msbuild" Version="2.5.1" />
+  </ItemGroup>
+
   <Target Name="AddCommitHashToAssemblyAttributes" BeforeTargets="GetAssemblyAttributes">
     <ItemGroup>
       <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute" Condition=" '$(SourceRevisionId)' != '' ">

@@ -1,0 +1,94 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;net46;netstandard2.0;netstandard2.1;netcoreapp3.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="System\Linq\AsyncEnumerable.AsyncOverloads.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AsyncEnumerable.AsyncOverloads.tt</DependentUpon>
+    </None>
+    <None Include="System\Linq\Operators\Select.Opt.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Select.Opt.Generated.tt</DependentUpon>
+    </None>
+    <None Include="System\Linq\Operators\Where.Opt.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Where.Opt.Generated.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.0' and '$(TargetFramework)' != 'netstandard2.1' " Include="System.Threading.Tasks.Extensions" Version="4.5.2" />
+    <ReferenceAssemblyProjectReference Include="..\refs\System.Linq.Async.Ref\System.Linq.Async.Ref.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="System\Linq\AsyncEnumerable.AsyncOverloads.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AsyncEnumerable.AsyncOverloads.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Linq\Operators\Average.Generated.cs">
+      <DependentUpon>Average.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="System\Linq\Operators\MinMax.Generated.cs">
+      <DependentUpon>MinMax.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="System\Linq\Operators\Select.Opt.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Select.Opt.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Linq\Operators\Sum.Generated.cs">
+      <DependentUpon>Sum.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="System\Linq\Operators\Where.Opt.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Where.Opt.Generated.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="System\Linq\AsyncEnumerable.AsyncOverloads.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AsyncEnumerable.AsyncOverloads.cs</LastGenOutput>
+    </None>
+    <None Update="System\Linq\Operators\Average.Generated.tt">
+      <LastGenOutput>Average.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Linq\Operators\MinMax.Generated.tt">
+      <LastGenOutput>MinMax.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Linq\Operators\Select.Opt.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Select.Opt.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="System\Linq\Operators\Sum.Generated.tt">
+      <LastGenOutput>Sum.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Linq\Operators\Where.Opt.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Where.Opt.Generated.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>

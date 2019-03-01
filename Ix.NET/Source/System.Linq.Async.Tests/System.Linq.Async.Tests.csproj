@@ -1,0 +1,100 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.1;net461;netcoreapp3.0</TargetFrameworks>
+    <NoWarn>$(NoWarn);CS0618</NoWarn>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <Content Include="xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="System\Linq\Operators\Average.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Average.Generated.tt</DependentUpon>
+    </None>
+    <None Include="System\Linq\Operators\GroupBy.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GroupBy.Generated.tt</DependentUpon>
+    </None>
+    <None Include="System\Linq\Operators\MinMax.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MinMax.Generated.tt</DependentUpon>
+    </None>
+    <None Include="System\Linq\Operators\OrderBy.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OrderBy.Generated.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.0-preview-20190203-03" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="5.6.0" />
+
+    <PackageReference Include="xunit" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="System\Linq\Operators\Average.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Average.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="System\Linq\Operators\GroupBy.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GroupBy.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="System\Linq\Operators\MinMax.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MinMax.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="System\Linq\Operators\OrderBy.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>OrderBy.Generated.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="System\Linq\Operators\Average.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Average.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Linq\Operators\GroupBy.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GroupBy.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Linq\Operators\MinMax.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MinMax.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Linq\Operators\OrderBy.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OrderBy.Generated.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

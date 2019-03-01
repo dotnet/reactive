@@ -14,6 +14,17 @@ Catch us in the #rxnet channel over at http://reactiveui.net/slack
 ### Get nightly builds
 - NuGet v3 feed url (VS 2015+): `https://dotnet.myget.org/F/rx/api/v3/index.json`
 
+## System.Linq.Async / System.Interactive.Async / System.Interactive
+
+### v4.0 changes
+
+Ix Async 4.0 has a breaking change from prior versions due to being the first LINQ implementation
+to support the new C# 8 [async streams](https://github.com/dotnet/roslyn/blob/master/docs/features/async-streams.md) feature. This means for .NET Standard 2.1 and .NET Core 3 targets, we use the in-box interfaces for `IAsyncEnumerable<T>` and friends. On other platforms, we provide the implementation, so you can use `await foreach` and create async iterators as you would expect. The types will unify to the system ones where the platform provides it.
+
+The code should be code-compatible, so recompiling should take care of most of it; note that binary compatibility will not work.
+
+## System.Reactive
+
 ### v4.0 changes
 Due to the [overwhelming](https://github.com/dotnet/reactive/issues/299) [pain](https://github.com/dotnet/reactive/issues/305) that fixing [#205 - Implement assembly version strategy](https://github.com/dotnet/reactive/issues/205) caused, we have refactored the libraries into a single library `System.Reactive`. To prevent breaking existing code that references the v3 libraries, we have facades with TypeForwarders to the new assembly. If you have a reference to a binary built against v3.0, then use the new `System.Reactive.Compatibility` package. 
 
@@ -97,7 +108,7 @@ Contributing
 
 ### Source code
 
-* Clone the sources: `git clone https://github.com/dotnet/reactive.git`
+* Clone the sources: `git clone https://github.com/dotnet/reactive`
 * [Building, testing and debugging the sources](https://github.com/dotnet/reactive/wiki/Building%20Testing%20and%20Debugging)
 
 ### Contribute!

@@ -1,14 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.SDK">
 
   <PropertyGroup>
     <Description>Interactive Extensions Async Library used to express queries over asynchronous enumerable sequences.</Description>
     <AssemblyTitle>Interactive Extensions - Async Library</AssemblyTitle>
-    <TargetFrameworks>net45;net46;netstandard1.0;netstandard1.3;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net45;net46;netstandard2.0;netstandard2.1;netcoreapp3.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable;Asynchronous</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\System.Linq.Async\System\Error.cs" Link="System\Error.cs" />
+    <Compile Include="..\System.Linq.Async\System\Linq\AsyncIterator.cs" Link="System\Linq\AsyncIterator.cs" />
+    <Compile Include="..\System.Linq.Async\System\Linq\Set.cs" Link="System\Linq\Set.cs" />
+    <Compile Include="..\System.Linq.Async\System\Strings.cs" Link="System\Strings.cs" />
+    <Compile Include="..\System.Linq.Async\System\Threading\Tasks\AsyncEnumerableExt.cs" Link="System\Threading\Tasks\AsyncEnumerableExt.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Properties\System.Interactive.Async.rd.xml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
+  </ItemGroup>
+  
 </Project>

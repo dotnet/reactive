@@ -1,0 +1,35 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build - Ix.NET.sln",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "${workspaceFolder}/Ix.NET.sln",
+                "/property:GenerateFullPaths=true"
+            ],
+            "type": "shell",
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build - Ix.Async.NET.sln",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "${workspaceFolder}/Ix.NET.sln",
+                "/property:GenerateFullPaths=true"
+            ],
+            "type": "shell",
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
