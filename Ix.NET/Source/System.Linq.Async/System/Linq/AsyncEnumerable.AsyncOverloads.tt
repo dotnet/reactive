@@ -11,16 +11,6 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Reflection" #>
 <#@ output extension=".cs" #>
-#if SUPPORT_FLAT_ASYNC_API
-
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace System.Linq
-{
-    partial class AsyncEnumerable
-    {
 <#
 Func<Type, string> toCSharp = null;
 toCSharp = t =>
@@ -75,9 +65,21 @@ toCSharp = t =>
         return t.Name;
     }
 };
+#>
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
-var methods = typeof(AsyncEnumerable).GetMethods(BindingFlags.Public | BindingFlags.Static);
-var asyncMethods = methods.Where(m => m.Name.Contains("Await")).OrderBy(m => m.Name).ThenBy(m => m.GetParameters().Length);
+namespace System.Linq
+{
+    partial class AsyncEnumerable
+    {
+<#
+var methods = typeof(AsyncEnumerable).GetMethods(BindingFlags.NonPublic | BindingFlags.Static);
+var asyncMethods = methods.Where(m => m.Name.Contains("Await") && m.Name.EndsWith("Core")).OrderBy(m => m.Name).ThenBy(m => m.GetParameters().Length);
+#>
+#if SUPPORT_FLAT_ASYNC_API
+<#
 foreach (var g in asyncMethods.GroupBy(m => m.Name.Contains("WithCancellation")))
 {
     if (g.Key)
@@ -91,7 +93,7 @@ foreach (var g in asyncMethods.GroupBy(m => m.Name.Contains("WithCancellation"))
     foreach (var m in g)
     {
         var longName = m.Name;
-        var shortName = m.Name.Replace("WithCancellation", "").Replace("Await", "");
+        var shortName = m.Name.Replace("WithCancellation", "").Replace("Await", "").Replace("Core", "");
         var genArgs = m.IsGenericMethod ? "<" + string.Join(", ", m.GetGenericArguments().Select(t => t.Name)) + ">" : "";
         var returnType = toCSharp(m.ReturnType);
         var isExtension = m.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), true);
@@ -110,7 +112,40 @@ foreach (var g in asyncMethods.GroupBy(m => m.Name.Contains("WithCancellation"))
     }
 }
 #>
+#else
+<#
+foreach (var g in asyncMethods.GroupBy(m => m.Name.Contains("WithCancellation")))
+{
+    if (g.Key)
+    {
+#>
+
+#if !NO_DEEP_CANCELLATION
+<#
+    }
+
+    foreach (var m in g)
+    {
+        var longName = m.Name;
+        var shortName = m.Name.Replace("Core", "");
+        var genArgs = m.IsGenericMethod ? "<" + string.Join(", ", m.GetGenericArguments().Select(t => t.Name)) + ">" : "";
+        var returnType = toCSharp(m.ReturnType);
+        var isExtension = m.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), true);
+        var pars = (isExtension ? "this " : "") + string.Join(", ", m.GetParameters().Select(p => toCSharp(p.ParameterType) + " " + p.Name));
+        var args = string.Join(", ", m.GetParameters().Select(p => p.Name));
+#>
+        public static <#=returnType#> <#=shortName#><#=genArgs#>(<#=pars#>) => <#=longName#><#=genArgs#>(<#=args#>);
+<#
+    }
+
+    if (g.Key)
+    {
+#>
+#endif
+<#
     }
 }
-
+#>
 #endif
+    }
+}

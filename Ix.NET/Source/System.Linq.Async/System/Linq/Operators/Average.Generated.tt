@@ -191,7 +191,8 @@ else
             }
         }
 
-        public static ValueTask<<#=o.res#>> AverageAwaitAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken = default)
+        internal static ValueTask<<#=o.res#>> AverageAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken = default)
+
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -266,7 +267,8 @@ else
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static ValueTask<<#=o.res#>> AverageAwaitWithCancellationAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken = default)
+        internal static ValueTask<<#=o.res#>> AverageWithCancellationAsyncCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<<#=o.type#>>> selector, CancellationToken cancellationToken = default)
+
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

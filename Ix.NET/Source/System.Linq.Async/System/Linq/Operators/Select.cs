@@ -58,7 +58,7 @@ namespace System.Linq
 #endif
         }
 
-        public static IAsyncEnumerable<TResult> SelectAwait<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
+        internal static IAsyncEnumerable<TResult> SelectAwaitCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -77,7 +77,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static IAsyncEnumerable<TResult> SelectAwaitWithCancellation<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector)
+        internal static IAsyncEnumerable<TResult> SelectAwaitWithCancellationCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -96,7 +96,7 @@ namespace System.Linq
         }
 #endif
 
-        public static IAsyncEnumerable<TResult> SelectAwait<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<TResult>> selector)
+        internal static IAsyncEnumerable<TResult> SelectAwaitCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<TResult>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -126,7 +126,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static IAsyncEnumerable<TResult> SelectAwaitWithCancellation<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<TResult>> selector)
+        internal static IAsyncEnumerable<TResult> SelectAwaitWithCancellationCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<TResult>> selector)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

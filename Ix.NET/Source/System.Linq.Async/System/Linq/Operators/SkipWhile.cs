@@ -92,7 +92,7 @@ namespace System.Linq
 #endif
         }
 
-        public static IAsyncEnumerable<TSource> SkipWhileAwait<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
+        internal static IAsyncEnumerable<TSource> SkipWhileAwaitCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -130,7 +130,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static IAsyncEnumerable<TSource> SkipWhileAwaitWithCancellation<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate)
+        internal static IAsyncEnumerable<TSource> SkipWhileAwaitWithCancellationCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -168,7 +168,7 @@ namespace System.Linq
         }
 #endif
 
-        public static IAsyncEnumerable<TSource> SkipWhileAwait<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
+        internal static IAsyncEnumerable<TSource> SkipWhileAwaitCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -213,7 +213,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static IAsyncEnumerable<TSource> SkipWhileAwaitWithCancellation<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate)
+        internal static IAsyncEnumerable<TSource> SkipWhileAwaitWithCancellationCore<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<bool>> predicate)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
