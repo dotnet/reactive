@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="System\Linq\AsyncEnumerable.AsyncOverloads.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AsyncEnumerable.AsyncOverloads.tt</DependentUpon>
+    </None>
     <None Include="System\Linq\Operators\Select.Opt.Generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -18,12 +23,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.0' and '$(TargetFramework)' != 'netstandard2.1' "
-                      Include="System.Threading.Tasks.Extensions" Version="4.5.2" />
+    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.0' and '$(TargetFramework)' != 'netstandard2.1' " Include="System.Threading.Tasks.Extensions" Version="4.5.2" />
     <ReferenceAssemblyProjectReference Include="..\refs\System.Linq.Async.Ref\System.Linq.Async.Ref.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="System\Linq\AsyncEnumerable.AsyncOverloads.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AsyncEnumerable.AsyncOverloads.tt</DependentUpon>
+    </Compile>
     <Compile Update="System\Linq\Operators\Average.Generated.cs">
       <DependentUpon>Average.Generated.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -52,6 +61,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="System\Linq\AsyncEnumerable.AsyncOverloads.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AsyncEnumerable.AsyncOverloads.cs</LastGenOutput>
+    </None>
     <None Update="System\Linq\Operators\Average.Generated.tt">
       <LastGenOutput>Average.Generated.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
