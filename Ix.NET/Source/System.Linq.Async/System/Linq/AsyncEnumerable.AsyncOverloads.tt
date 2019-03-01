@@ -65,6 +65,16 @@ toCSharp = t =>
         return t.Name;
     }
 };
+
+Func<ParameterInfo, string> getOptionalSuffix = p =>
+{
+    if (p.IsOptional)
+    {
+        return " = default";
+    }
+
+    return "";
+};
 #>
 using System.Collections.Generic;
 using System.Threading;
@@ -97,7 +107,7 @@ foreach (var g in asyncMethods.GroupBy(m => m.Name.Contains("WithCancellation"))
         var genArgs = m.IsGenericMethod ? "<" + string.Join(", ", m.GetGenericArguments().Select(t => t.Name)) + ">" : "";
         var returnType = toCSharp(m.ReturnType);
         var isExtension = m.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), true);
-        var pars = (isExtension ? "this " : "") + string.Join(", ", m.GetParameters().Select(p => toCSharp(p.ParameterType) + " " + p.Name));
+        var pars = (isExtension ? "this " : "") + string.Join(", ", m.GetParameters().Select(p => toCSharp(p.ParameterType) + " " + p.Name + getOptionalSuffix(p)));
         var args = string.Join(", ", m.GetParameters().Select(p => p.Name));
 #>
         public static <#=returnType#> <#=shortName#><#=genArgs#>(<#=pars#>) => <#=longName#><#=genArgs#>(<#=args#>);
@@ -131,7 +141,7 @@ foreach (var g in asyncMethods.GroupBy(m => m.Name.Contains("WithCancellation"))
         var genArgs = m.IsGenericMethod ? "<" + string.Join(", ", m.GetGenericArguments().Select(t => t.Name)) + ">" : "";
         var returnType = toCSharp(m.ReturnType);
         var isExtension = m.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), true);
-        var pars = (isExtension ? "this " : "") + string.Join(", ", m.GetParameters().Select(p => toCSharp(p.ParameterType) + " " + p.Name));
+        var pars = (isExtension ? "this " : "") + string.Join(", ", m.GetParameters().Select(p => toCSharp(p.ParameterType) + " " + p.Name + getOptionalSuffix(p)));
         var args = string.Join(", ", m.GetParameters().Select(p => p.Name));
 #>
         public static <#=returnType#> <#=shortName#><#=genArgs#>(<#=pars#>) => <#=longName#><#=genArgs#>(<#=args#>);
