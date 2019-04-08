@@ -370,7 +370,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="args">Currently not used.</param>
         /// <param name="sender">Currently not used.</param>
-        internal void SystemClockChanged(object sender, SystemClockChangedEventArgs args)
+        internal virtual void SystemClockChanged(object sender, SystemClockChangedEventArgs args)
         {
             lock (StaticGate)
             {
