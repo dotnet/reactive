@@ -59,7 +59,9 @@ namespace System.Reactive.PlatformServices
         {
             lock (SystemClockChanged)
             {
-                foreach (var entry in SystemClockChanged)
+                // create a defensive copy as the callbacks may change the hashset
+                var copySystemClockChanged = new List<WeakReference<LocalScheduler>>(SystemClockChanged);
+                foreach (var entry in copySystemClockChanged)
                 {
                     if (entry.TryGetTarget(out var scheduler))
                     {
