@@ -21,7 +21,7 @@ namespace System.Reactive.PlatformServices
     {
         private static readonly Lazy<ISystemClock> ServiceSystemClock = new Lazy<ISystemClock>(InitializeSystemClock);
         private static readonly Lazy<INotifySystemClockChanged> ServiceSystemClockChanged = new Lazy<INotifySystemClockChanged>(InitializeSystemClockChanged);
-        private static readonly HashSet<WeakReference<LocalScheduler>> SystemClockChanged = new HashSet<WeakReference<LocalScheduler>>();
+        internal static readonly HashSet<WeakReference<LocalScheduler>> SystemClockChanged = new HashSet<WeakReference<LocalScheduler>>();
         private static IDisposable _systemClockChangedHandlerCollector;
 
         private static int _refCount;
@@ -55,11 +55,13 @@ namespace System.Reactive.PlatformServices
             }
         }
 
-        private static void OnSystemClockChanged(object sender, SystemClockChangedEventArgs e)
+        internal static void OnSystemClockChanged(object sender, SystemClockChangedEventArgs e)
         {
             lock (SystemClockChanged)
             {
-                foreach (var entry in SystemClockChanged)
+                // create a defensive copy as the callbacks may change the hashset
+                var copySystemClockChanged = new List<WeakReference<LocalScheduler>>(SystemClockChanged);
+                foreach (var entry in copySystemClockChanged)
                 {
                     if (entry.TryGetTarget(out var scheduler))
                     {
