@@ -905,6 +905,37 @@ namespace ReactiveTests.Tests
             Assert.Equal(0, scm.N);
         }
 
+        [Fact]
+        public void SystemClockChange_SignalNoInvalidOperationExceptionDueToRemove()
+        {
+            var local = new RemoveScheduler();
+            SystemClock.SystemClockChanged.Add(new WeakReference<LocalScheduler>(local));
+
+            SystemClock.OnSystemClockChanged(this, new SystemClockChangedEventArgs());
+        }
+
+        private class RemoveScheduler : LocalScheduler
+        {
+            public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
+            {
+                throw new NotImplementedException();
+            }
+
+            internal override void SystemClockChanged(object sender, SystemClockChangedEventArgs args)
+            {
+                var target = default(WeakReference<LocalScheduler>);
+                foreach (var entries in SystemClock.SystemClockChanged)
+                {
+                    if (entries.TryGetTarget(out var local) && local == this)
+                    {
+                        target = entries;
+                        break;
+                    }
+                }
+                SystemClock.SystemClockChanged.Remove(target);
+            }
+        }
+
         private class MyScheduler : LocalScheduler
         {
             internal List<ScheduledItem<TimeSpan>> _queue = new List<ScheduledItem<TimeSpan>>();
