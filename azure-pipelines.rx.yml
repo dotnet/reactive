@@ -32,7 +32,7 @@ jobs:
   steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '3.0.100-preview4-010374'
+      version: '3.0.100-preview4-011033'
 
   - task: DotNetCoreCLI@2  
     inputs:
@@ -43,9 +43,6 @@ jobs:
 
   - script: nbgv cloud -a -p Rx.NET/Source
     displayName: Set Version
-
-  - powershell: iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/onovotny/UpdateVsOnAgent/master/Fix-VisualStudioPreviewNuGetSdk.ps1'))
-    displayName: VS Preview workaround
 
   - task: MSBuild@1
     displayName: Build System.Reactive.sln
