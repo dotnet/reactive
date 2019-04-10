@@ -1845,6 +1845,73 @@ namespace ReactiveTests.Tests
             }));
         }
 
+        [Fact]
+        public void UnsubscribeAnotherObserverFromOnNext_Unbounded()
+        {
+            var subject = new ReplaySubject<int>();
+
+            var calls = 0;
+            IDisposable otherDisposable = null;
+
+            subject.Subscribe(_ =>
+            {
+                otherDisposable?.Dispose();
+            });
+
+            otherDisposable = subject.Subscribe(_ => calls++);
+
+            subject.OnNext(0);
+            subject.OnCompleted();
+
+            Assert.Equal(0, calls);
+        }
+
+        [Fact]
+        public void UnsubscribeAnotherObserverFromOnNext_SizeBound()
+        {
+            var subject = new ReplaySubject<int>(10);
+
+            var calls = 0;
+            IDisposable otherDisposable = null;
+
+            subject.Subscribe(_ =>
+            {
+                otherDisposable?.Dispose();
+            });
+
+            otherDisposable = subject.Subscribe(_ => calls++);
+
+            subject.OnNext(0);
+            subject.OnCompleted();
+
+            Assert.Equal(0, calls);
+        }
+
+        [Fact]
+        public void UnsubscribeAnotherObserverFromOnNext_TimeBound()
+        {
+            var subject = new ReplaySubject<int>(TimeSpan.FromHours(1));
+
+            var calls = 0;
+            IDisposable otherDisposable = null;
+
+            subject.Subscribe(_ =>
+            {
+                otherDisposable?.Dispose();
+            });
+
+            otherDisposable = subject.Subscribe(_ =>
+            {
+                calls++;
+            });
+
+            subject.OnNext(0);
+            subject.OnCompleted();
+
+            Assert.Equal(0, calls);
+        }
+
+
 #if !NO_INTERNALSTEST
         [Fact]
         public void FastImmediateObserver_Simple1()

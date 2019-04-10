@@ -5,6 +5,7 @@
 using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
+using System.Threading;
 using Microsoft.Reactive.Testing;
 using Xunit;
 
@@ -559,6 +560,27 @@ namespace ReactiveTests.Tests
             });
 
             Assert.False(s.TryGetValue(out var x));
+        }
+
+        [Fact]
+        public void UnsubscribeAnotherObserverFromOnNext()
+        {
+            var subject = new BehaviorSubject<int>(0);
+
+            var calls = 0;
+            IDisposable otherDisposable = null;
+
+            subject.Subscribe(_ =>
+            {
+                otherDisposable?.Dispose();
+            });
+
+            otherDisposable = subject.Subscribe(_ => calls++);
+
+            subject.OnNext(0);
+            subject.OnCompleted();
+
+            Assert.Equal(1, calls);
         }
     }
 }

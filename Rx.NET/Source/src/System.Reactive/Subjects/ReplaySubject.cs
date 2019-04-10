@@ -223,7 +223,7 @@ namespace System.Reactive.Subjects
         {
             private readonly object _gate = new object();
 
-            private ImmutableList<IScheduledObserver<T>> _observers;
+            private ImmutableList<Subscription> _observers;
 
             private bool _isStopped;
             private Exception _error;
@@ -231,7 +231,7 @@ namespace System.Reactive.Subjects
 
             protected ReplayBase()
             {
-                _observers = ImmutableList<IScheduledObserver<T>>.Empty;
+                _observers = ImmutableList<Subscription>.Empty;
 
                 _isStopped = false;
                 _error = null;
@@ -252,7 +252,7 @@ namespace System.Reactive.Subjects
 
             public override void OnNext(T value)
             {
-                var o = default(IScheduledObserver<T>[]);
+                var o = default(Subscription[]);
                 lock (_gate)
                 {
                     CheckDisposed();
@@ -265,7 +265,7 @@ namespace System.Reactive.Subjects
                         o = _observers.Data;
                         foreach (var observer in o)
                         {
-                            observer.OnNext(value);
+                            observer.Observer?.OnNext(value);
                         }
                     }
                 }
@@ -274,14 +274,14 @@ namespace System.Reactive.Subjects
                 {
                     foreach (var observer in o)
                     {
-                        observer.EnsureActive();
+                        observer.Observer?.EnsureActive();
                     }
                 }
             }
 
             public override void OnError(Exception error)
             {
-                var o = default(IScheduledObserver<T>[]);
+                var o = default(Subscription[]);
                 lock (_gate)
                 {
                     CheckDisposed();
@@ -295,10 +295,10 @@ namespace System.Reactive.Subjects
                         o = _observers.Data;
                         foreach (var observer in o)
                         {
-                            observer.OnError(error);
+                            observer.Observer?.OnError(error);
                         }
 
-                        _observers = ImmutableList<IScheduledObserver<T>>.Empty;
+                        _observers = ImmutableList<Subscription>.Empty;
                     }
                 }
 
@@ -306,14 +306,14 @@ namespace System.Reactive.Subjects
                 {
                     foreach (var observer in o)
                     {
-                        observer.EnsureActive();
+                        observer.Observer?.EnsureActive();
                     }
                 }
             }
 
             public override void OnCompleted()
             {
-                var o = default(IScheduledObserver<T>[]);
+                var o = default(Subscription[]);
                 lock (_gate)
                 {
                     CheckDisposed();
@@ -326,10 +326,10 @@ namespace System.Reactive.Subjects
                         o = _observers.Data;
                         foreach (var observer in o)
                         {
-                            observer.OnCompleted();
+                            observer.Observer?.OnCompleted();
                         }
 
-                        _observers = ImmutableList<IScheduledObserver<T>>.Empty;
+                        _observers = ImmutableList<Subscription>.Empty;
                     }
                 }
 
@@ -337,7 +337,7 @@ namespace System.Reactive.Subjects
                 {
                     foreach (var observer in o)
                     {
-                        observer.EnsureActive();
+                        observer.Observer?.EnsureActive();
                     }
                 }
             }
@@ -348,7 +348,7 @@ namespace System.Reactive.Subjects
 
                 var n = 0;
 
-                var subscription = Disposable.Empty;
+                var disposable = Disposable.Empty;
 
                 lock (_gate)
                 {
@@ -390,14 +390,15 @@ namespace System.Reactive.Subjects
 
                     if (!_isStopped)
                     {
-                        subscription = new Subscription(this, so);
-                        _observers = _observers.Add(so);
+                        var subscription = new Subscription(this, so);
+                        disposable = subscription;
+                        _observers = _observers.Add(subscription);
                     }
                 }
 
                 so.EnsureActive(n);
 
-                return subscription;
+                return disposable;
             }
 
             public override void Dispose()
@@ -428,7 +429,7 @@ namespace System.Reactive.Subjects
                 }
             }
 
-            private void Unsubscribe(IScheduledObserver<T> observer)
+            private void Unsubscribe(Subscription observer)
             {
                 lock (_gate)
                 {
@@ -442,7 +443,7 @@ namespace System.Reactive.Subjects
             private sealed class Subscription : IDisposable
             {
                 private readonly ReplayBase _subject;
-                private readonly IScheduledObserver<T> _observer;
+                private IScheduledObserver<T> _observer;
 
                 public Subscription(ReplayBase subject, IScheduledObserver<T> observer)
                 {
@@ -452,9 +453,14 @@ namespace System.Reactive.Subjects
 
                 public void Dispose()
                 {
-                    _observer.Dispose();
-                    _subject.Unsubscribe(_observer);
+                    var observer = Observer;
+                    Volatile.Write(ref _observer, null);
+                    observer?.Dispose();
+
+                    _subject.Unsubscribe(this);
                 }
+
+                internal IScheduledObserver<T> Observer => Volatile.Read(ref _observer);
             }
         }
 

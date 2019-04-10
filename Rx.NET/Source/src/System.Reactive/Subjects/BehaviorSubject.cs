@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive.Subjects
 {
@@ -17,7 +18,7 @@ namespace System.Reactive.Subjects
 
         private readonly object _gate = new object();
 
-        private ImmutableList<IObserver<T>> _observers;
+        private ImmutableList<Subscription> _observers;
         private bool _isStopped;
         private T _value;
         private Exception _exception;
@@ -34,7 +35,7 @@ namespace System.Reactive.Subjects
         public BehaviorSubject(T value)
         {
             _value = value;
-            _observers = ImmutableList<IObserver<T>>.Empty;
+            _observers = ImmutableList<Subscription>.Empty;
         }
 
         #endregion
@@ -136,7 +137,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         public override void OnCompleted()
         {
-            var os = default(IObserver<T>[]);
+            var os = default(Subscription[]);
             lock (_gate)
             {
                 CheckDisposed();
@@ -144,7 +145,7 @@ namespace System.Reactive.Subjects
                 if (!_isStopped)
                 {
                     os = _observers.Data;
-                    _observers = ImmutableList<IObserver<T>>.Empty;
+                    _observers = ImmutableList<Subscription>.Empty;
                     _isStopped = true;
                 }
             }
@@ -153,7 +154,7 @@ namespace System.Reactive.Subjects
             {
                 foreach (var o in os)
                 {
-                    o.OnCompleted();
+                    o.Observer?.OnCompleted();
                 }
             }
         }
@@ -170,7 +171,7 @@ namespace System.Reactive.Subjects
                 throw new ArgumentNullException(nameof(error));
             }
 
-            var os = default(IObserver<T>[]);
+            var os = default(Subscription[]);
             lock (_gate)
             {
                 CheckDisposed();
@@ -178,7 +179,7 @@ namespace System.Reactive.Subjects
                 if (!_isStopped)
                 {
                     os = _observers.Data;
-                    _observers = ImmutableList<IObserver<T>>.Empty;
+                    _observers = ImmutableList<Subscription>.Empty;
                     _isStopped = true;
                     _exception = error;
                 }
@@ -188,7 +189,7 @@ namespace System.Reactive.Subjects
             {
                 foreach (var o in os)
                 {
-                    o.OnError(error);
+                    o.Observer?.OnError(error);
                 }
             }
         }
@@ -199,7 +200,7 @@ namespace System.Reactive.Subjects
         /// <param name="value">The value to send to all observers.</param>
         public override void OnNext(T value)
         {
-            var os = default(IObserver<T>[]);
+            var os = default(Subscription[]);
             lock (_gate)
             {
                 CheckDisposed();
@@ -215,7 +216,7 @@ namespace System.Reactive.Subjects
             {
                 foreach (var o in os)
                 {
-                    o.OnNext(value);
+                    o.Observer?.OnNext(value);
                 }
             }
         }
@@ -245,9 +246,10 @@ namespace System.Reactive.Subjects
 
                 if (!_isStopped)
                 {
-                    _observers = _observers.Add(observer);
+                    var handle = new Subscription(this, observer);
+                    _observers = _observers.Add(handle);
                     observer.OnNext(_value);
-                    return new Subscription(this, observer);
+                    return handle;
                 }
 
                 ex = _exception;
@@ -306,18 +308,20 @@ namespace System.Reactive.Subjects
 
             public void Dispose()
             {
-                if (_observer != null)
+                if (Observer != null)
                 {
                     lock (_subject._gate)
                     {
-                        if (!_subject._isDisposed && _observer != null)
+                        if (!_subject._isDisposed && Observer != null)
                         {
-                            _subject._observers = _subject._observers.Remove(_observer);
-                            _observer = null;
+                            _subject._observers = _subject._observers.Remove(this);
+                            Volatile.Write(ref _observer, null);
                         }
                     }
                 }
             }
+
+            internal IObserver<T> Observer => Volatile.Read(ref _observer);
         }
 
         #endregion

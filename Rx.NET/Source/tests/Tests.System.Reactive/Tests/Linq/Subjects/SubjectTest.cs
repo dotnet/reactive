@@ -609,5 +609,26 @@ namespace ReactiveTests.Tests
             s.OnError(new Exception());
             Assert.False(s.HasObservers);
         }
+
+        [Fact]
+        public void UnsubscribeAnotherObserverFromOnNext()
+        {
+            var subject = new Subject<int>();
+
+            var calls = 0;
+            IDisposable otherDisposable = null;
+
+            subject.Subscribe(_ =>
+            {
+                otherDisposable?.Dispose();
+            });
+
+            otherDisposable = subject.Subscribe(_ => calls++);
+
+            subject.OnNext(0);
+            subject.OnCompleted();
+
+            Assert.Equal(0, calls);
+        }
     }
 }
