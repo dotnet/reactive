@@ -78,8 +78,7 @@ steps:
   displayName: 'Publish code coverage'
   inputs:
     codeCoverageTool: Cobertura
-    summaryFileLocation: '$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml'
-    reportDirectory: '$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports'
+    summaryFileLocation: $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/raw/**/coverage.cobertura.xml
 
 - task: DotNetCoreCLI@2  
   inputs:
