@@ -658,6 +658,54 @@ namespace ReactiveTests.Tests
 
             Assert.True(cde.Wait(5000), "Timeout!");
         }
+
+        [Fact]
+        public void ObserveOn_LongRunning_SameThread()
+        {
+            var scheduler = TaskPoolScheduler.Default;
+
+            Assert.NotNull(scheduler.AsLongRunning());
+
+            var N = 1_000_000;
+            var threads = new HashSet<long>();
+            var cde = new CountdownEvent(1);
+
+            Observable.Range(1, N)
+                .ObserveOn(scheduler)
+                .Subscribe(
+                    v => threads.Add(Thread.CurrentThread.ManagedThreadId), 
+                    e => cde.Signal(), 
+                    () => cde.Signal()
+                );
+
+            Assert.True(cde.Wait(5000), "Timeout!");
+
+            Assert.Equal(1, threads.Count);
+        }
+
+        [Fact]
+        public void ObserveOn_LongRunning_DisableOptimizations()
+        {
+            var scheduler = TaskPoolScheduler.Default.DisableOptimizations();
+
+            Assert.Null(scheduler.AsLongRunning());
+
+            var N = 1_000_000;
+            var threads = new HashSet<long>();
+            var cde = new CountdownEvent(1);
+
+            Observable.Range(1, N)
+                .ObserveOn(scheduler)
+                .Subscribe(
+                    v => threads.Add(Thread.CurrentThread.ManagedThreadId),
+                    e => cde.Signal(),
+                    () => cde.Signal()
+                );
+
+            Assert.True(cde.Wait(5000), "Timeout!");
+
+            Assert.True(threads.Count >= 1);
+        }
     }
 
     internal class MyCtx : SynchronizationContext

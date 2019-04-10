@@ -181,6 +181,11 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(scheduler));
             }
 
+            var longRunning = scheduler.AsLongRunning();
+            if (longRunning != null)
+            {
+                return new ObserveOn<TSource>.SchedulerLongRunning(source, longRunning);
+            }
             return new ObserveOn<TSource>.Scheduler(source, scheduler);
         }
 
