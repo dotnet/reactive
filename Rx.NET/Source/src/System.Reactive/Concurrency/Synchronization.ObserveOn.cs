@@ -28,6 +28,26 @@ namespace System.Reactive.Concurrency
             protected override void Run(ObserveOnObserverNew<TSource> sink) => sink.Run(_source);
         }
 
+        /// <summary>
+        /// The new ObserveOn operator run with an ISchedulerLongRunning in a mostly lock-free manner.
+        /// </summary>
+        internal sealed class SchedulerLongRunning : Producer<TSource, ObserveOnObserverLongRunning<TSource>>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly ISchedulerLongRunning _scheduler;
+
+            public SchedulerLongRunning(IObservable<TSource> source, ISchedulerLongRunning scheduler)
+            {
+                _source = source;
+                _scheduler = scheduler;
+            }
+
+            protected override ObserveOnObserverLongRunning<TSource> CreateSink(IObserver<TSource> observer) => new ObserveOnObserverLongRunning<TSource>(_scheduler, observer);
+
+            [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
+            protected override void Run(ObserveOnObserverLongRunning<TSource> sink) => sink.Run(_source);
+        }
+
         internal sealed class Context : Producer<TSource, Context._>
         {
             private readonly IObservable<TSource> _source;
