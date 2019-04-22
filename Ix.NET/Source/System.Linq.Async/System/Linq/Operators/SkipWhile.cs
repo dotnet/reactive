@@ -25,9 +25,15 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core();
+
+            async IAsyncEnumerable<TSource> Core([System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
@@ -66,9 +72,15 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core();
+
+            async IAsyncEnumerable<TSource> Core([System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
                 var index = -1;
@@ -104,9 +116,15 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core();
+
+            async IAsyncEnumerable<TSource> Core([System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
@@ -137,9 +155,15 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core();
+
+            async IAsyncEnumerable<TSource> Core([System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
@@ -170,9 +194,15 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core();
+
+            async IAsyncEnumerable<TSource> Core([System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
                 var index = -1;
@@ -209,9 +239,15 @@ namespace System.Linq
             if (predicate == null)
                 throw Error.ArgumentNull(nameof(predicate));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core();
+
+            async IAsyncEnumerable<TSource> Core([System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
                 var index = -1;

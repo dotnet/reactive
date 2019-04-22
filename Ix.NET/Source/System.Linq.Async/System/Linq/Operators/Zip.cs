@@ -18,9 +18,15 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core();
+
+            async IAsyncEnumerable<(TFirst, TSecond)> Core([System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<(TFirst, TSecond)> Core(CancellationToken cancellationToken)
+#endif
             {
                 await using var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false);
                 await using var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false);
@@ -53,9 +59,15 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core();
+
+            async IAsyncEnumerable<TResult> Core([System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+#endif
             {
                 await using var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false);
                 await using var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false);
@@ -76,9 +88,15 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core();
+
+            async IAsyncEnumerable<TResult> Core([System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+#endif
             {
                 await using var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false);
                 await using var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false);
