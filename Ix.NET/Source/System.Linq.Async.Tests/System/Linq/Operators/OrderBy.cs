@@ -43,6 +43,15 @@ namespace Tests
         }
 
         [Fact]
+        public async Task OrderBy_Empty()
+        {
+            var ys = AsyncEnumerable.Empty<int>().OrderBy(x => x);
+
+            var e = ys.GetAsyncEnumerator();
+            await NoNextAsync(e);
+        }
+
+        [Fact]
         public async Task OrderBy1()
         {
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
