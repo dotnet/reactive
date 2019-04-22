@@ -625,66 +625,7 @@ namespace System.Linq
 
         private int CompareKeys(int index1, int index2) => index1 == index2 ? 0 : CompareAnyKeys(index1, index2);
 
-        protected override void QuickSort(int[] map, int left, int right)
-        {
-            // REVIEW: Consider using Array.Sort, see https://github.com/dotnet/corefx/commit/a6aff797a33e606a60ec0c9ca034a161c609620f#diff-d90239bd8284188e2bd210790483f5ca.
-
-            do
-            {
-                var i = left;
-                var j = right;
-                var x = map[i + ((j - i) >> 1)];
-
-                do
-                {
-                    while (i < map.Length && CompareKeys(x, map[i]) > 0)
-                    {
-                        i++;
-                    }
-
-                    while (j >= 0 && CompareKeys(x, map[j]) < 0)
-                    {
-                        j--;
-                    }
-
-                    if (i > j)
-                    {
-                        break;
-                    }
-
-                    if (i < j)
-                    {
-                        var temp = map[i];
-                        map[i] = map[j];
-                        map[j] = temp;
-                    }
-
-                    i++;
-                    j--;
-                }
-                while (i <= j);
-
-                if (j - left <= right - i)
-                {
-                    if (left < j)
-                    {
-                        QuickSort(map, left, j);
-                    }
-
-                    left = i;
-                }
-                else
-                {
-                    if (i < right)
-                    {
-                        QuickSort(map, i, right);
-                    }
-
-                    right = j;
-                }
-            }
-            while (left < right);
-        }
+        protected override void QuickSort(int[] keys, int lo, int hi) => Array.Sort(keys, lo, hi - lo + 1, Comparer<int>.Create(CompareAnyKeys));
 
         protected override void PartialQuickSort(int[] map, int left, int right, int minIndexInclusive, int maxIndexInclusive)
         {
