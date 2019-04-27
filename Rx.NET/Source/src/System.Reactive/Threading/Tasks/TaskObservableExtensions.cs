@@ -319,12 +319,7 @@ namespace System.Reactive.Threading.Tasks
         /// <exception cref="ArgumentNullException"><paramref name="observable"/> is <c>null</c>.</exception>
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable)
         {
-            if (observable == null)
-            {
-                throw new ArgumentNullException(nameof(observable));
-            }
-
-            return observable.ToTask(new CancellationToken(), state: null);
+            return ToTask(observable, new CancellationToken(), state: null);
         }
 
         /// <summary>
@@ -337,12 +332,7 @@ namespace System.Reactive.Threading.Tasks
         /// <exception cref="ArgumentNullException"><paramref name="observable"/> is <c>null</c>.</exception>
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, object state)
         {
-            if (observable == null)
-            {
-                throw new ArgumentNullException(nameof(observable));
-            }
-
-            return observable.ToTask(new CancellationToken(), state);
+            return ToTask(observable, new CancellationToken(), state);
         }
 
         /// <summary>
@@ -355,12 +345,7 @@ namespace System.Reactive.Threading.Tasks
         /// <exception cref="ArgumentNullException"><paramref name="observable"/> is <c>null</c>.</exception>
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken)
         {
-            if (observable == null)
-            {
-                throw new ArgumentNullException(nameof(observable));
-            }
-
-            return observable.ToTask(cancellationToken, state: null);
+            return ToTask(observable, cancellationToken, state: null);
         }
 
         private sealed class ToTaskObserver<TResult> : SafeObserver<TResult>

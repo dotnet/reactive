@@ -27,7 +27,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return scheduler.Schedule(action, (_action, self) => _action(() => self(_action)));
+            return Schedule_(scheduler, action, (_action, self) => _action(() => self(_action)));
         }
 
         /// <summary>
@@ -51,6 +51,11 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
+            return Schedule_(scheduler, state, action);
+        }
+
+        private static IDisposable Schedule_<TState>(this IScheduler scheduler, TState state, Action<TState, Action<TState>> action)
+        {
             return scheduler.Schedule((state, action), (s, p) => InvokeRec1(s, p));
         }
 
@@ -81,7 +86,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return scheduler.Schedule(action, dueTime, (_action, self) => _action(dt => self(_action, dt)));
+            return Schedule_(scheduler, action, dueTime, (_action, self) => _action(dt => self(_action, dt)));
         }
 
         /// <summary>
@@ -106,6 +111,11 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
+            return Schedule_(scheduler, state, dueTime, action);
+        }
+
+        private static IDisposable Schedule_<TState>(IScheduler scheduler, TState state, TimeSpan dueTime, Action<TState, Action<TState, TimeSpan>> action)
+        {
             return scheduler.Schedule((state, action), dueTime, (s, p) => InvokeRec2(s, p));
         }
 
@@ -136,7 +146,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            return scheduler.Schedule(action, dueTime, (_action, self) => _action(dt => self(_action, dt)));
+            return Schedule_(scheduler, action, dueTime, (_action, self) => _action(dt => self(_action, dt)));
         }
 
         /// <summary>
@@ -161,6 +171,11 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
+            return Schedule_(scheduler, state, dueTime, action);
+        }
+
+        private static IDisposable Schedule_<TState>(this IScheduler scheduler, TState state, DateTimeOffset dueTime, Action<TState, Action<TState, DateTimeOffset>> action)
+        {
             return scheduler.Schedule((state, action), dueTime, (s, p) => InvokeRec3(s, p));
         }
 

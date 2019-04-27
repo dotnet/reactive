@@ -26,7 +26,7 @@ namespace System.Reactive
                 throw new ArgumentNullException(nameof(handler));
             }
 
-            return new AnonymousObserver<T>(
+            return AnonymousObserver.Create_<T>(
                 x => handler(Notification.CreateOnNext(x)),
                 exception => handler(Notification.CreateOnError<T>(exception)),
                 () => handler(Notification.CreateOnCompleted<T>())
@@ -65,7 +65,7 @@ namespace System.Reactive
                 throw new ArgumentNullException(nameof(onNext));
             }
 
-            return new AnonymousObserver<T>(onNext);
+            return AnonymousObserver.Create_(onNext);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace System.Reactive
                 throw new ArgumentNullException(nameof(onError));
             }
 
-            return new AnonymousObserver<T>(onNext, onError);
+            return AnonymousObserver.Create_(onNext, onError);
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace System.Reactive
                 throw new ArgumentNullException(nameof(onCompleted));
             }
 
-            return new AnonymousObserver<T>(onNext, onCompleted);
+            return AnonymousObserver.Create_(onNext, onCompleted);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace System.Reactive
                 throw new ArgumentNullException(nameof(onCompleted));
             }
 
-            return new AnonymousObserver<T>(onNext, onError, onCompleted);
+            return AnonymousObserver.Create_(onNext, onError, onCompleted);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace System.Reactive
                 throw new ArgumentNullException(nameof(observer));
             }
 
-            return new AnonymousObserver<T>(observer.OnNext, observer.OnError, observer.OnCompleted);
+            return AnonymousObserver.Create_<T>(observer.OnNext, observer.OnError, observer.OnCompleted);
         }
 
         /// <summary>
@@ -399,7 +399,7 @@ namespace System.Reactive
                 throw new ArgumentNullException(nameof(progress));
             }
 
-            return new AnonymousObserver<T>(progress.Report);
+            return AnonymousObserver.Create_<T>(progress.Report);
         }
     }
 }

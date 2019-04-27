@@ -77,6 +77,21 @@ namespace System.Reactive.Concurrency
                     throw new ArgumentNullException(nameof(action));
                 }
 
+                return Schedule_(state, action);
+            }
+
+            public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
+            {
+                if (action == null)
+                {
+                    throw new ArgumentNullException(nameof(action));
+                }
+
+                return Schedule_(state, dueTime, action);
+            }
+
+            private IDisposable Schedule_<TState>(in TState state, Func<IScheduler, TState, IDisposable> action)
+            {
                 var m = new SingleAssignmentDisposable();
 
                 if (_asyncLock == null)
@@ -97,23 +112,13 @@ namespace System.Reactive.Concurrency
                 return m;
             }
 
-            public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
+            private IDisposable Schedule_<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
             {
-                if (action == null)
-                {
-                    throw new ArgumentNullException(nameof(action));
-                }
-
                 if (dueTime.Ticks <= 0)
                 {
-                    return Schedule(state, action);
+                    return Schedule_(state, action);
                 }
 
-                return ScheduleSlow(state, dueTime, action);
-            }
-
-            private IDisposable ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
-            {
                 var timer = ConcurrencyAbstractionLayer.Current.StartStopwatch();
 
                 var m = new SingleAssignmentDisposable();

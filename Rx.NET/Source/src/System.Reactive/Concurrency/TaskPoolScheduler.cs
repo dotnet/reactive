@@ -202,14 +202,9 @@ namespace System.Reactive.Concurrency
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
             {
-                return Schedule(state, action);
+                return new ScheduledWorkItem<TState>(this, state, action);
             }
 
-            return ScheduleSlow(state, dt, action);
-        }
-
-        private IDisposable ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
-        {
             return new SlowlyScheduledWorkItem<TState>(this, state, dueTime, action);
         }
 

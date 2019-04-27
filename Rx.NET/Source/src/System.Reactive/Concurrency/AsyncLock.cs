@@ -30,7 +30,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            Wait(action, closureAction => closureAction());
+            Wait(null, action, (actionObject, stateObject) => ((Action)actionObject)());
         }
 
         /// <summary>

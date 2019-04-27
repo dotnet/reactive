@@ -34,7 +34,7 @@ namespace System
             //
             // [OK] Use of unsafe Subscribe: non-pretentious constructor for an observer; this overload is not to be used internally.
             //
-            return source.Subscribe/*Unsafe*/(new AnonymousObserver<T>(Stubs<T>.Ignore, Stubs.Throw, Stubs.Nop));
+            return source.Subscribe/*Unsafe*/(AnonymousObserver.Create_<T>());
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace System
             //
             // [OK] Use of unsafe Subscribe: non-pretentious constructor for an observer; this overload is not to be used internally.
             //
-            return source.Subscribe/*Unsafe*/(new AnonymousObserver<T>(onNext, Stubs.Throw, Stubs.Nop));
+            return source.Subscribe/*Unsafe*/(AnonymousObserver.Create_(onNext));
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace System
             //
             // [OK] Use of unsafe Subscribe: non-pretentious constructor for an observer; this overload is not to be used internally.
             //
-            return source.Subscribe/*Unsafe*/(new AnonymousObserver<T>(onNext, onError, Stubs.Nop));
+            return source.Subscribe/*Unsafe*/(AnonymousObserver.Create_(onNext, onError));
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace System
             //
             // [OK] Use of unsafe Subscribe: non-pretentious constructor for an observer; this overload is not to be used internally.
             //
-            return source.Subscribe/*Unsafe*/(new AnonymousObserver<T>(onNext, Stubs.Throw, onCompleted));
+            return source.Subscribe/*Unsafe*/(AnonymousObserver.Create_(onNext, onCompleted));
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace System
             //
             // [OK] Use of unsafe Subscribe: non-pretentious constructor for an observer; this overload is not to be used internally.
             //
-            return source.Subscribe/*Unsafe*/(new AnonymousObserver<T>(onNext, onError, onCompleted));
+            return source.Subscribe/*Unsafe*/(AnonymousObserver.Create_(onNext, onError, onCompleted));
         }
 
         #endregion
@@ -207,7 +207,7 @@ namespace System
                 throw new ArgumentNullException(nameof(source));
             }
 
-            source.Subscribe_(new AnonymousObserver<T>(Stubs<T>.Ignore, Stubs.Throw, Stubs.Nop), token);
+            source.Subscribe_(AnonymousObserver.Create_<T>(), token);
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace System
                 throw new ArgumentNullException(nameof(onNext));
             }
 
-            source.Subscribe_(new AnonymousObserver<T>(onNext, Stubs.Throw, Stubs.Nop), token);
+            source.Subscribe_(AnonymousObserver.Create_(onNext), token);
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace System
                 throw new ArgumentNullException(nameof(onError));
             }
 
-            source.Subscribe_(new AnonymousObserver<T>(onNext, onError, Stubs.Nop), token);
+            source.Subscribe_(AnonymousObserver.Create_(onNext, onError), token);
         }
 
         /// <summary>
@@ -288,7 +288,7 @@ namespace System
                 throw new ArgumentNullException(nameof(onCompleted));
             }
 
-            source.Subscribe_(new AnonymousObserver<T>(onNext, Stubs.Throw, onCompleted), token);
+            source.Subscribe_(AnonymousObserver.Create_(onNext, onCompleted), token);
         }
 
         /// <summary>
@@ -323,7 +323,7 @@ namespace System
                 throw new ArgumentNullException(nameof(onCompleted));
             }
 
-            source.Subscribe_(new AnonymousObserver<T>(onNext, onError, onCompleted), token);
+            source.Subscribe_(AnonymousObserver.Create_(onNext, onError, onCompleted), token);
         }
 
         private static void Subscribe_<T>(this IObservable<T> source, IObserver<T> observer, CancellationToken token)
@@ -387,8 +387,8 @@ namespace System
             {
                 return producer.SubscribeRaw(observer, enableSafeguard: false);
             }
-
-            var d = Disposable.Empty;
+            
+            IDisposable d;
 
             try
             {
@@ -419,6 +419,8 @@ namespace System
                 // cause disposal of the CompositeDisposable that's returned from the method.
                 //
                 observer.OnError(exception);
+
+                d = Disposable.Empty;
             }
 
             return d;

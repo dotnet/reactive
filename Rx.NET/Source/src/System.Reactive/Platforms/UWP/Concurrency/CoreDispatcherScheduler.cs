@@ -85,6 +85,30 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
+            return Schedule_(state, action);
+        }
+
+        /// <summary>
+        /// Schedules an action to be executed after <paramref name="dueTime"/> on the dispatcher, using a <see cref="DispatcherTimer"/> object.
+        /// </summary>
+        /// <typeparam name="TState">The type of the state passed to the scheduled action.</typeparam>
+        /// <param name="state">State passed to the action to be executed.</param>
+        /// <param name="action">Action to be executed.</param>
+        /// <param name="dueTime">Relative time after which to execute the action.</param>
+        /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
+        public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            return Schedule_(state, dueTime, action);
+        }
+
+        private IDisposable Schedule_<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
+        {
             var d = new SingleAssignmentDisposable();
 
             var res = Dispatcher.RunAsync(Priority, () =>
@@ -129,33 +153,14 @@ namespace System.Reactive.Concurrency
             );
         }
 
-        /// <summary>
-        /// Schedules an action to be executed after <paramref name="dueTime"/> on the dispatcher, using a <see cref="DispatcherTimer"/> object.
-        /// </summary>
-        /// <typeparam name="TState">The type of the state passed to the scheduled action.</typeparam>
-        /// <param name="state">State passed to the action to be executed.</param>
-        /// <param name="action">Action to be executed.</param>
-        /// <param name="dueTime">Relative time after which to execute the action.</param>
-        /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
-        public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
+        private IDisposable Schedule_<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
             {
-                return Schedule(state, action);
+                return Schedule_(state, action);
             }
 
-            return ScheduleSlow(state, dt, action);
-        }
-
-        private IDisposable ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
-        {
             var d = new MultipleAssignmentDisposable();
 
             var timer = new DispatcherTimer();

@@ -22,10 +22,29 @@ namespace System.Reactive
         /// <param name="onCompleted">Observer's <see cref="IObserver{T}.OnCompleted()"/> action implementation.</param>
         /// <exception cref="ArgumentNullException"><paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is <c>null</c>.</exception>
         public AnonymousObserver(Action<T> onNext, Action<Exception> onError, Action onCompleted)
+            : this(onNext, onError, onCompleted, true)
         {
-            _onNext = onNext ?? throw new ArgumentNullException(nameof(onNext));
-            _onError = onError ?? throw new ArgumentNullException(nameof(onError));
-            _onCompleted = onCompleted ?? throw new ArgumentNullException(nameof(onCompleted));
+            if (onNext == null)
+            {
+                throw new ArgumentNullException(nameof(onNext));
+            }
+
+            if (onError == null)
+            {
+                throw new ArgumentNullException(nameof(onError));
+            }
+
+            if (onCompleted == null)
+            {
+                throw new ArgumentNullException(nameof(onCompleted));
+            }
+        }
+
+        internal AnonymousObserver(Action<T> onNext, Action<Exception> onError, Action onCompleted, bool @internal)
+        {
+            _onNext = onNext;
+            _onError = onError;
+            _onCompleted = onCompleted;
         }
 
         /// <summary>
@@ -34,8 +53,12 @@ namespace System.Reactive
         /// <param name="onNext">Observer's <see cref="IObserver{T}.OnNext(T)"/> action implementation.</param>
         /// <exception cref="ArgumentNullException"><paramref name="onNext"/> is <c>null</c>.</exception>
         public AnonymousObserver(Action<T> onNext)
-            : this(onNext, Stubs.Throw, Stubs.Nop)
+            : this(onNext, Stubs.Throw, Stubs.Nop, true)
         {
+            if (onNext == null)
+            {
+                throw new ArgumentNullException(nameof(onNext));
+            }
         }
 
         /// <summary>
@@ -45,8 +68,17 @@ namespace System.Reactive
         /// <param name="onError">Observer's <see cref="IObserver{T}.OnError(Exception)"/> action implementation.</param>
         /// <exception cref="ArgumentNullException"><paramref name="onNext"/> or <paramref name="onError"/> is <c>null</c>.</exception>
         public AnonymousObserver(Action<T> onNext, Action<Exception> onError)
-            : this(onNext, onError, Stubs.Nop)
+            : this(onNext, onError, Stubs.Nop, true)
         {
+            if (onNext == null)
+            {
+                throw new ArgumentNullException(nameof(onNext));
+            }
+
+            if (onError == null)
+            {
+                throw new ArgumentNullException(nameof(onError));
+            }
         }
 
         /// <summary>
@@ -56,8 +88,17 @@ namespace System.Reactive
         /// <param name="onCompleted">Observer's <see cref="IObserver{T}.OnCompleted()"/> action implementation.</param>
         /// <exception cref="ArgumentNullException"><paramref name="onNext"/> or <paramref name="onCompleted"/> is <c>null</c>.</exception>
         public AnonymousObserver(Action<T> onNext, Action onCompleted)
-            : this(onNext, Stubs.Throw, onCompleted)
+            : this(onNext, Stubs.Throw, onCompleted, true)
         {
+            if (onNext == null)
+            {
+                throw new ArgumentNullException(nameof(onNext));
+            }
+
+            if (onCompleted == null)
+            {
+                throw new ArgumentNullException(nameof(onCompleted));
+            }
         }
 
         /// <summary>
@@ -78,5 +119,33 @@ namespace System.Reactive
         protected override void OnCompletedCore() => _onCompleted();
 
         internal ISafeObserver<T> MakeSafe() => new AnonymousSafeObserver<T>(_onNext, _onError, _onCompleted);
+    }
+
+    internal static class AnonymousObserver
+    {
+        public static AnonymousObserver<T> Create_<T>()
+        {
+            return new AnonymousObserver<T>(Stubs<T>.Ignore, Stubs.Throw, Stubs.Nop, true);
+        }
+
+        public static AnonymousObserver<T> Create_<T>(Action<T> onNext)
+        {
+            return new AnonymousObserver<T>(onNext, Stubs.Throw, Stubs.Nop, true);
+        }
+
+        public static AnonymousObserver<T> Create_<T>(Action<T> onNext, Action<Exception> onError)
+        {
+            return new AnonymousObserver<T>(onNext, onError, Stubs.Nop, true);
+        }
+
+        public static AnonymousObserver<T> Create_<T>(Action<T> onNext, Action onCompleted)
+        {
+            return new AnonymousObserver<T>(onNext, Stubs.Throw, onCompleted, true);
+        }
+
+        public static AnonymousObserver<T> Create_<T>(Action<T> onNext, Action<Exception> onError, Action onCompleted)
+        {
+            return new AnonymousObserver<T>(onNext, onError, onCompleted, true);
+        }
     }
 }
