@@ -15,6 +15,22 @@ namespace ReactiveTests.Tests
 {
     public class ThrottleTest : ReactiveTest
     {
+        [Fact]
+        public void DoThing()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(100, 0),
+                OnCompleted<int>(800)
+            );
+
+            var res = scheduler.Start(() =>
+                xs
+            );
+
+            res.Messages.AssertEqual(xs.Messages);
+        }
 
         [Fact]
         public void Throttle_ArgumentChecking()
