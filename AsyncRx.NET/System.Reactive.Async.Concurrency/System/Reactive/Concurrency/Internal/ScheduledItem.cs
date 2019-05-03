@@ -9,7 +9,7 @@ namespace System.Reactive.Concurrency
     /// Represents a work item that has been scheduled.
     /// </summary>
     /// <typeparam name="TAbsolute">Absolute time representation type.</typeparam>
-    internal sealed class ScheduledItem<TAbsolute> : IComparable<ScheduledItem<TAbsolute>>, IAsyncDisposable
+    internal sealed class ScheduledItem<TAbsolute> : IComparable<ScheduledItem<TAbsolute>>, IAsyncCancelable
         where TAbsolute : IComparable<TAbsolute>
     {
         private readonly Func<Task<IAsyncDisposable>> _action;
@@ -36,17 +36,17 @@ namespace System.Reactive.Concurrency
         /// </summary>
         public async Task Invoke()
         {
-            // TODO: Check if already
+            if (_disposable.IsDisposed) return;
             var disposable = await _action().ConfigureAwait(false);
             await _disposable.AssignAsync(disposable).ConfigureAwait(false);
         }
 
         public Task DisposeAsync() => _disposable.DisposeAsync();
 
-        public bool IsDisposed = false; // TODO: Check if disposed
+        public bool IsDisposed { get => _disposable.IsDisposed; }
 
 
-        #region Equality
+        #region Inequality
 
         /// <summary>
         /// Compares the work item with another work item based on absolute time values.
@@ -101,6 +101,9 @@ namespace System.Reactive.Concurrency
         /// <remarks>This operator provides results consistent with the <see cref="IComparable"/> implementation.</remarks>
         public static bool operator >=(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right) => Comparer<ScheduledItem<TAbsolute>>.Default.Compare(left, right) >= 0;
 
+        #endregion
+
+        #region Equality
 
         /// <summary>
         /// Determines whether two specified <see cref="ScheduledItem{TAbsolute, TValue}" /> objects are equal.

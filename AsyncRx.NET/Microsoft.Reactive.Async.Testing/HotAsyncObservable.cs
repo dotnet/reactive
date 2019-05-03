@@ -48,20 +48,16 @@ namespace Microsoft.Reactive.Async.Testing
 
             for (var i = 0; i < messages.Length; ++i)
             {
-                var message = messages[i];
-                await scheduler.ScheduleAbsolute(message.Time, async cancel =>
+                var notification = messages[i].Value;
+                await scheduler.ScheduleAbsolute(messages[i].Time, async cancel =>
                 {
-                    var obsvs = observers.ToArray();
-                    for (var j = 0; j < obsvs.Length; ++j)
+                    var _observers = observers.ToArray();
+                    for (var j = 0; j < _observers.Length; ++j)
                     {
-                        await message.Value.AcceptAsync(obsvs[j]);
+                        await notification.AcceptAsync(_observers[j]).ConfigureAwait(false);
                     }
                 });
             }
-
-            foreach (var message in messages) await scheduler.ScheduleAbsolute(
-                 dueTime: message.Time,
-                 action: async cancel => { foreach (var observer in observers) await message.Value.AcceptAsync(observer); });
 
             return new HotAsyncObservable<T>(scheduler, observers, messages);
         }

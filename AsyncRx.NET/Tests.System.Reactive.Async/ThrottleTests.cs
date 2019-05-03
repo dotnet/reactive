@@ -65,7 +65,7 @@ namespace Tests.System.Reactive.Async.Linq
             );
 
             var res = await scheduler.Start(() =>
-                xs.Select(x => x).Select(x => x)
+                xs
             );
 
             res.Messages.AssertEqual(xs.Messages);
