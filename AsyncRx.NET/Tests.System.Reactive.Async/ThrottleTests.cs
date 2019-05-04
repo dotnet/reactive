@@ -53,22 +53,5 @@ namespace Tests.System.Reactive.Async.Linq
                 Subscribe(200, 400)
             );
         }
-
-        [Fact]
-        public async Task DoesThing()
-        {
-            var scheduler = new TestAsyncScheduler();
-
-            var xs = await scheduler.CreateHotObservable(
-                OnNext(100, 0),
-                OnCompleted<int>(800)
-            );
-
-            var res = await scheduler.Start(() =>
-                xs
-            );
-
-            res.Messages.AssertEqual(xs.Messages);
-        }
     }
 }
