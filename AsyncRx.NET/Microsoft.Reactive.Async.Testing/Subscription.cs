@@ -6,7 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 
-namespace Microsoft.Reactive.Async.Testing
+namespace Microsoft.Reactive.Testing
 {
     /// <summary>
     /// Records information about subscriptions to and unsubscriptions from observable sequences.

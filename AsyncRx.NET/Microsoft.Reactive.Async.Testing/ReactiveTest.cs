@@ -6,7 +6,7 @@ using System;
 using System.Reactive;
 using System.Threading.Tasks;
 
-namespace Microsoft.Reactive.Async.Testing
+namespace Microsoft.Reactive.Testing
 {
     /// <summary>
     /// Base class to write unit tests for applications and libraries built using Reactive Extensions.

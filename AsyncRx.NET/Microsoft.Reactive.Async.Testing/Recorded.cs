@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 
-namespace Microsoft.Reactive.Async.Testing
+namespace Microsoft.Reactive.Testing
 {
     /// <summary>
     /// Record of a value including the virtual time it was produced on.
