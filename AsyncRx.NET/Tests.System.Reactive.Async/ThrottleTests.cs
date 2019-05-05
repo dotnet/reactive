@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Async.Testing;
 using Microsoft.Reactive.Testing;
@@ -12,17 +9,6 @@ namespace Tests.System.Reactive.Async.Linq
 {
     public class ThrottleTests : ReactiveTest
     {
-        private IEnumerable<Recorded<Notification<T>>> Generate<T, S>(S seed, Func<S, bool> condition, Func<S, S> iterate, Func<S, Recorded<Notification<T>>> selector, Func<S, Recorded<Notification<T>>> final)
-        {
-            S s;
-            for (s = seed; condition(s); s = iterate(s))
-            {
-                yield return selector(s);
-            }
-
-            yield return final(s);
-        }
-
         [Fact]
         public async Task Throttle_TimeSpan_AllPass()
         {
