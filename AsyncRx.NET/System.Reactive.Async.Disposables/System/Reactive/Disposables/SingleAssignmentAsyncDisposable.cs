@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Disposables
 {
-    public sealed class SingleAssignmentAsyncDisposable : IAsyncDisposable
+    public sealed class SingleAssignmentAsyncDisposable : IAsyncCancelable
     {
         private static readonly IAsyncDisposable Disposed = AsyncDisposable.Create(() => Task.CompletedTask);
 
@@ -33,5 +33,7 @@ namespace System.Reactive.Disposables
         {
             return Interlocked.Exchange(ref _disposable, Disposed)?.DisposeAsync() ?? Task.CompletedTask;
         }
+
+        public bool IsDisposed { get => _disposable == Disposed; }
     }
 }

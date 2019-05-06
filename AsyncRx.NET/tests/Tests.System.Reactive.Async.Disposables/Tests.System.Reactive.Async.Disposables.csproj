@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\Tests.props" />
+  <PropertyGroup>
+    <TargetFramework>$(TargetFramework)</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.Reactive.Async.Disposables\System.Reactive.Async.Disposables.csproj" />
+  </ItemGroup>
+
+</Project>

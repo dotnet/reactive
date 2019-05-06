@@ -134,7 +134,7 @@ namespace System.Reactive.Linq
                                         hasValue = false;
                                     }
                                 }
-                            }).ConfigureAwait(false);
+                            }, dueTime: dueTime).ConfigureAwait(false);
                             await d.AssignAsync(t).ConfigureAwait(false);
                         },
                         async ex =>

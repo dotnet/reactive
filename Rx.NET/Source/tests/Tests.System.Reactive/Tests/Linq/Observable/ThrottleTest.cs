@@ -15,7 +15,6 @@ namespace ReactiveTests.Tests
 {
     public class ThrottleTest : ReactiveTest
     {
-
         [Fact]
         public void Throttle_ArgumentChecking()
         {

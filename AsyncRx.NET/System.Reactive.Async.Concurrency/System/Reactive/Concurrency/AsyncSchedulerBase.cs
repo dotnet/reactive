@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Disposables;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -63,19 +64,5 @@ namespace System.Reactive.Concurrency
         protected abstract Task Delay(TimeSpan dueTime, CancellationToken token);
 
         protected static TimeSpan Normalize(TimeSpan timeSpan) => timeSpan < TimeSpan.Zero ? TimeSpan.Zero : timeSpan;
-
-        private sealed class CancellationAsyncDisposable : IAsyncDisposable
-        {
-            private readonly CancellationTokenSource _cts = new CancellationTokenSource();
-
-            public CancellationToken Token => _cts.Token;
-
-            public Task DisposeAsync()
-            {
-                _cts.Cancel();
-
-                return Task.CompletedTask;
-            }
-        }
     }
 }
