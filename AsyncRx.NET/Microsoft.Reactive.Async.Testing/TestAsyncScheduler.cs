@@ -20,7 +20,6 @@ namespace Microsoft.Reactive.Testing
     "\\}")]
     public class TestAsyncScheduler : PriorityQueueVirtualTimeAsyncScheduler<long,long>
     {
-
         /// <summary>
         /// Converts the absolute virtual time value to a DateTimeOffset value.
         /// </summary>
@@ -52,7 +51,6 @@ namespace Microsoft.Reactive.Testing
             return absolute + relative;
         }
 
-
         /// <summary>
         /// Schedules an action to be executed at the specified virtual time.
         /// </summary>
@@ -69,11 +67,6 @@ namespace Microsoft.Reactive.Testing
 
             return base.ScheduleAbsolute(dueTime, action);
         }
-
-        
-
-
-
 
         /// <summary>
         /// Starts the test scheduler and uses the specified virtual times to invoke the factory function, subscribe to the resulting sequence, and dispose the subscription.
