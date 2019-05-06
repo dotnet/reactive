@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Concurrency
 {
-    public abstract partial class AsyncSchedulerBase : IAsyncScheduler
+    public abstract class AsyncSchedulerBase : IAsyncScheduler
     {
         public virtual DateTimeOffset Now => DateTimeOffset.Now;
 
