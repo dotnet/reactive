@@ -79,8 +79,6 @@ namespace System.Reactive.Concurrency
         /// <returns>The next scheduled item.</returns>
         internal abstract Task<ScheduledItem<TAbsolute>> GetNext();
 
-
-
         /// <summary>
         /// Schedules an action to be executed at dueTime.
         /// </summary>
@@ -107,8 +105,6 @@ namespace System.Reactive.Concurrency
         public Task<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action, TimeSpan dueTime) => ScheduleRelative(ToRelative(dueTime), action);
 
         public Task<IAsyncDisposable> ScheduleAsync(Func<CancellationToken, Task> action, DateTimeOffset dueTime) => ScheduleRelative(ToRelative(dueTime - Now), action);
-
-
 
         /// <summary>
         /// Starts the virtual time scheduler.

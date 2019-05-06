@@ -23,9 +23,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Creates a new virtual time scheduler with the default value of TAbsolute as the initial clock value.
         /// </summary>
-        protected PriorityQueueVirtualTimeAsyncScheduler()
-        {
-        }
+        protected PriorityQueueVirtualTimeAsyncScheduler() { }
 
         /// <summary>
         /// Creates a new virtual time scheduler.
@@ -34,9 +32,7 @@ namespace System.Reactive.Concurrency
         /// <param name="comparer">Comparer to determine causality of events based on absolute time.</param>
         /// <exception cref="ArgumentNullException"><paramref name="comparer"/> is <c>null</c>.</exception>
         protected PriorityQueueVirtualTimeAsyncScheduler(TAbsolute initialClock, IComparer<TAbsolute> comparer)
-            : base(initialClock, comparer)
-        {
-        }
+            : base(initialClock, comparer) { }
 
         /// <summary>
         /// Gets the next scheduled item to be executed.
