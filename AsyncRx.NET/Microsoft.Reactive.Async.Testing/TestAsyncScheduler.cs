@@ -97,8 +97,8 @@ namespace Microsoft.Reactive.Testing
             var observer = new MockAsyncObserver<T>(this);
 
             await ScheduleAbsolute(created, _ => { source = create(); return Task.CompletedTask; }).ConfigureAwait(false);
-            await ScheduleAbsolute(subscribed, async _ => { subscription = await source.SubscribeAsync(observer); }).ConfigureAwait(false);
-            await ScheduleAbsolute(disposed, async _ => { await subscription.DisposeAsync(); }).ConfigureAwait(false);
+            await ScheduleAbsolute(subscribed, async _ => { subscription = await source.SubscribeAsync(observer).ConfigureAwait(false); }).ConfigureAwait(false);
+            await ScheduleAbsolute(disposed, async _ => { await subscription.DisposeAsync().ConfigureAwait(false); }).ConfigureAwait(false);
 
             await Start().ConfigureAwait(false);
 
