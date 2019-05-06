@@ -51,9 +51,7 @@ namespace Microsoft.Reactive.Testing
         public static Recorded<Notification<T>> OnNext<T>(long ticks, Func<T, bool> predicate)
         {
             if (predicate == null)
-            {
                 throw new ArgumentNullException(nameof(predicate));
-            }
 
             return new Recorded<Notification<T>>(ticks, new OnNextPredicate<T>(predicate));
         }
@@ -92,9 +90,7 @@ namespace Microsoft.Reactive.Testing
         public static Recorded<Notification<T>> OnError<T>(long ticks, Exception exception)
         {
             if (exception == null)
-            {
                 throw new ArgumentNullException(nameof(exception));
-            }
 
             return new Recorded<Notification<T>>(ticks, Notification.CreateOnError<T>(exception));
         }
@@ -110,9 +106,7 @@ namespace Microsoft.Reactive.Testing
         public static Recorded<Notification<T>> OnError<T>(long ticks, Func<Exception, bool> predicate)
         {
             if (predicate == null)
-            {
                 throw new ArgumentNullException(nameof(predicate));
-            }
 
             return new Recorded<Notification<T>>(ticks, new OnErrorPredicate<T>(predicate));
         }
@@ -129,9 +123,7 @@ namespace Microsoft.Reactive.Testing
         public static Recorded<Notification<T>> OnError<T>(long ticks, Exception exception, T witness)
         {
             if (exception == null)
-            {
                 throw new ArgumentNullException(nameof(exception));
-            }
 
             return new Recorded<Notification<T>>(ticks, Notification.CreateOnError<T>(exception));
         }
@@ -148,9 +140,7 @@ namespace Microsoft.Reactive.Testing
         public static Recorded<Notification<T>> OnError<T>(long ticks, Func<Exception, bool> predicate, T witness)
         {
             if (predicate == null)
-            {
                 throw new ArgumentNullException(nameof(predicate));
-            }
 
             return new Recorded<Notification<T>>(ticks, new OnErrorPredicate<T>(predicate));
         }

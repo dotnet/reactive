@@ -67,7 +67,8 @@ namespace System.Reactive.Concurrency
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
         public override async Task<IAsyncDisposable> ScheduleAbsolute(TAbsolute dueTime, Func<CancellationToken, Task> action)
         {
-            if (action == null) throw new ArgumentNullException(nameof(action));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
 
             var si = default(ScheduledItem<TAbsolute>);
 

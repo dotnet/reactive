@@ -81,9 +81,7 @@ namespace Microsoft.Reactive.Testing
         public async Task<ITestableAsyncObserver<T>> Start<T>(Func<IAsyncObservable<T>> create, long created, long subscribed, long disposed)
         {
             if (create == null)
-            {
                 throw new ArgumentNullException(nameof(create));
-            }
 
             var source = default(IAsyncObservable<T>);
             var subscription = default(IAsyncDisposable);
@@ -107,7 +105,8 @@ namespace Microsoft.Reactive.Testing
         /// <exception cref="ArgumentNullException"><paramref name="create"/> is null.</exception>
         public Task<ITestableAsyncObserver<T>> Start<T>(Func<IAsyncObservable<T>> create)
         {
-            if (create == null) throw new ArgumentNullException(nameof(create));
+            if (create == null)
+                throw new ArgumentNullException(nameof(create));
 
             return Start(create, ReactiveTest.Created, ReactiveTest.Subscribed, ReactiveTest.Disposed);
         }

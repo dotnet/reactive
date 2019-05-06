@@ -95,7 +95,9 @@ namespace System.Reactive.Concurrency
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
         public Task<IAsyncDisposable> ScheduleRelative(TRelative dueTime, Func<CancellationToken, Task> action)
         {
-            if (action == null) throw new ArgumentNullException(nameof(action));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
             var runAt = Add(Clock, dueTime);
             return ScheduleAbsolute(runAt, action);
         }

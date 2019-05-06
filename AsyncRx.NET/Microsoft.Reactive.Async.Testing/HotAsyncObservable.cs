@@ -32,7 +32,8 @@ namespace Microsoft.Reactive.Testing
 
         public Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
         {
-            if (observer == null) throw new ArgumentNullException(nameof(observer));
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
 
             _observers.Add(observer);
             _subscriptions.Add(new Subscription(_scheduler.Clock));
