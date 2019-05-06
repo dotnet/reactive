@@ -10,7 +10,7 @@ using System.Reactive.Linq;
 using System.Text;
 using Xunit;
 
-namespace ReactiveTests.Fx
+namespace Microsoft.Reactive.Testing
 {
     /// <summary>
     /// Helper class to write asserts in unit tests for applications and libraries built using Reactive Extensions.

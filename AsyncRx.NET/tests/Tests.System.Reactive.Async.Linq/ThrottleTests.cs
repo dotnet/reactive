@@ -6,7 +6,6 @@ using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using ReactiveTests.Fx;
 using Xunit;
 
 namespace ReactiveTests
