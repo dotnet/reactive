@@ -28,12 +28,12 @@ namespace System.Linq
             {
                 var set = new Set<TSource>(comparer);
 
-                await foreach (var element in AsyncEnumerableExtensions.WithCancellation(second, cancellationToken).ConfigureAwait(false))
+                await foreach (var element in second.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     set.Add(element);
                 }
 
-                await foreach (var element in AsyncEnumerableExtensions.WithCancellation(first, cancellationToken).ConfigureAwait(false))
+                await foreach (var element in first.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     if (set.Remove(element))
                     {

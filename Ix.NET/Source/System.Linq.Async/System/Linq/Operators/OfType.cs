@@ -28,7 +28,7 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await foreach (var obj in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
+                await foreach (var obj in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     if (obj is TResult result)
                     {

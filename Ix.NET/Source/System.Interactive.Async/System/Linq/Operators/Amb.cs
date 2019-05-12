@@ -94,8 +94,8 @@ namespace System.Linq
                 }
 
                 try
-                {
-                    await using (AsyncEnumerableExtensions.ConfigureAwait(winner, false))
+                {                    
+                    await using (winner.ConfigureAwait(false))
                     {
                         if (!await moveNextWinner.ConfigureAwait(false))
                         {
@@ -204,7 +204,7 @@ namespace System.Linq
 
                 try
                 {
-                    await using (AsyncEnumerableExtensions.ConfigureAwait(winner, false))
+                    await using (winner.ConfigureAwait(false))
                     {
                         if (!await moveNextWinner.ConfigureAwait(false))
                         {
@@ -246,7 +246,7 @@ namespace System.Linq
         {
             if (enumerator != null)
             {
-                await using (AsyncEnumerableExtensions.ConfigureAwait(enumerator, false))
+                await using (enumerator.ConfigureAwait(false))
                 {
                     if (moveNextAsync != null)
                     {

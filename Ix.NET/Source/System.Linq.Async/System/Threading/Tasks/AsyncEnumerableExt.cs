@@ -11,7 +11,7 @@ namespace System.Threading.Tasks
     {
         public static ConfiguredCancelableAsyncEnumerable<T>.Enumerator GetConfiguredAsyncEnumerator<T>(this IAsyncEnumerable<T> enumerable, CancellationToken cancellationToken, bool continueOnCapturedContext)
         {
-            return AsyncEnumerableExtensions.ConfigureAwait(enumerable, continueOnCapturedContext).WithCancellation(cancellationToken).GetAsyncEnumerator();
+            return enumerable.ConfigureAwait(continueOnCapturedContext).WithCancellation(cancellationToken).GetAsyncEnumerator();
         }
     }
 }
