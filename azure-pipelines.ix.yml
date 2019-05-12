@@ -26,11 +26,12 @@ pool:
 
 variables: 
   BuildConfiguration: Release
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   
 steps:
 - task: DotNetCoreInstaller@0
   inputs:
-    version: '3.0.100-preview4-011033'
+    version: '3.0.100-preview5-011568'
 
 - task: DotNetCoreCLI@2  
   inputs:
