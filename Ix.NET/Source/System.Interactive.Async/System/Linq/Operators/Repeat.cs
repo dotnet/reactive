@@ -44,7 +44,7 @@ namespace System.Linq
             {
                 while (true)
                 {
-                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         yield return item;
                     }
@@ -69,7 +69,7 @@ namespace System.Linq
             {
                 for (var i = 0; i < count; i++)
                 {
-                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         yield return item;
                     }

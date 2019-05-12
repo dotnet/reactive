@@ -21,7 +21,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-                await foreach (int value in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (int value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
                     {
@@ -46,7 +46,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
@@ -73,7 +73,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
@@ -101,7 +101,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
@@ -127,7 +127,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-                await foreach (long value in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (long value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
                     {
@@ -152,7 +152,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
@@ -179,7 +179,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
@@ -207,7 +207,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
@@ -233,7 +233,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-                await foreach (float value in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (float value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value;
                 }
@@ -255,7 +255,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
@@ -279,7 +279,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
@@ -304,7 +304,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
@@ -327,7 +327,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-                await foreach (double value in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (double value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value;
                 }
@@ -349,7 +349,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
@@ -373,7 +373,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
@@ -398,7 +398,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
@@ -421,7 +421,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-                await foreach (decimal value in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (decimal value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value;
                 }
@@ -443,7 +443,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
@@ -467,7 +467,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
@@ -492,7 +492,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
@@ -515,7 +515,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-                await foreach (int? value in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (int? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
                     {
@@ -540,7 +540,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
@@ -567,7 +567,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
@@ -595,7 +595,7 @@ namespace System.Linq
             {
                 var sum = 0;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
@@ -621,7 +621,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-                await foreach (long? value in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (long? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
                     {
@@ -646,7 +646,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
@@ -673,7 +673,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
@@ -701,7 +701,7 @@ namespace System.Linq
             {
                 var sum = 0L;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
@@ -727,7 +727,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-                await foreach (float? value in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (float? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value.GetValueOrDefault();
                 }
@@ -749,7 +749,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
@@ -773,7 +773,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
@@ -798,7 +798,7 @@ namespace System.Linq
             {
                 var sum = 0.0f;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
@@ -821,7 +821,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-                await foreach (double? value in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (double? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value.GetValueOrDefault();
                 }
@@ -843,7 +843,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
@@ -867,7 +867,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
@@ -892,7 +892,7 @@ namespace System.Linq
             {
                 var sum = 0.0;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 
@@ -915,7 +915,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-                await foreach (decimal? value in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (decimal? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     sum += value.GetValueOrDefault();
                 }
@@ -937,7 +937,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = _selector(item);
 
@@ -961,7 +961,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item).ConfigureAwait(false);
 
@@ -986,7 +986,7 @@ namespace System.Linq
             {
                 var sum = 0m;
 
-                await foreach (TSource item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
 

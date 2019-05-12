@@ -64,7 +64,7 @@ namespace System.Linq
 
                 if (err != null)
                 {
-                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(err, cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in err.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         yield return item;
                     }
@@ -122,7 +122,7 @@ namespace System.Linq
 
                 if (err != null)
                 {
-                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(err, cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in err.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         yield return item;
                     }
@@ -181,7 +181,7 @@ namespace System.Linq
 
                 if (err != null)
                 {
-                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(err, cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in err.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         yield return item;
                     }

@@ -101,7 +101,7 @@ namespace System.Linq
                     var last = default(TSource);
                     var hasLast = false;
 
-                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                     {
                         hasLast = true;
                         last = item;
@@ -119,7 +119,7 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
+            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 if (predicate(item))
                 {
@@ -136,7 +136,7 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
+            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 if (await predicate(item).ConfigureAwait(false))
                 {
@@ -154,7 +154,7 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
+            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 if (await predicate(item, cancellationToken).ConfigureAwait(false))
                 {

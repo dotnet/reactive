@@ -24,7 +24,7 @@ namespace System.Linq
             {
                 var set = new HashSet<TSource>(_comparer);
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     set.Add(item);
                 }

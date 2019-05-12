@@ -21,7 +21,7 @@ namespace System.Linq
             {
                 var count = 0L;
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     checked
                     {
@@ -46,7 +46,7 @@ namespace System.Linq
             {
                 var count = 0L;
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     if (_predicate(item))
                     {
@@ -74,7 +74,7 @@ namespace System.Linq
             {
                 var count = 0L;
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     if (await _predicate(item).ConfigureAwait(false))
                     {
@@ -103,7 +103,7 @@ namespace System.Linq
             {
                 var count = 0L;
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
                 {
                     if (await _predicate(item, _cancellationToken).ConfigureAwait(false))
                     {

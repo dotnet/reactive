@@ -16,8 +16,8 @@
     <DebugType Condition="'$(Configuration)' != 'Debug'">embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <!-- While in beta, we need to set 8.0 manually (rather than latest). -->
-    <LangVersion>8.0</LangVersion>
+    <!-- While in beta, we need to set preview for 8.0 manually (rather than latest). -->
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

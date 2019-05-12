@@ -206,7 +206,7 @@ namespace System.Linq
                 }
                 else
                 {
-                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         array[index] = item;
                         ++index;
@@ -234,7 +234,7 @@ namespace System.Linq
                     list.Add(_item);
                 }
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     list.Add(item);
                 }
@@ -395,7 +395,7 @@ namespace System.Linq
                 }
                 else
                 {
-                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         array[index] = item;
                         ++index;
@@ -421,7 +421,7 @@ namespace System.Linq
                     list.Add(n.Item);
                 }
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     list.Add(item);
                 }

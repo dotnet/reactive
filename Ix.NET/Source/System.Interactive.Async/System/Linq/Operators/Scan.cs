@@ -63,7 +63,7 @@ namespace System.Linq
             {
                 var res = seed;
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     res = accumulator(res, item);
 
@@ -159,7 +159,7 @@ namespace System.Linq
             {
                 var res = seed;
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     res = await accumulator(res, item).ConfigureAwait(false);
 
@@ -186,7 +186,7 @@ namespace System.Linq
             {
                 var res = seed;
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     res = await accumulator(res, item, cancellationToken).ConfigureAwait(false);
 
