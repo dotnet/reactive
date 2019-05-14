@@ -25,16 +25,17 @@ jobs:
   pool:
     vmImage: windows-2019
 
-  variables: 
+  variables:
     BuildConfiguration: Release
     BuildPlatform: Any CPU
-      
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
   steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '3.0.100-preview4-011033'
+      version: '3.0.100-preview5-011568'
 
-  - task: DotNetCoreCLI@2  
+  - task: DotNetCoreCLI@2
     inputs:
       command: custom
       custom: tool
@@ -47,7 +48,7 @@ jobs:
   - task: MSBuild@1
     displayName: Build System.Reactive.sln
     inputs:
-      solution: Rx.NET/Source/System.Reactive.sln    
+      solution: Rx.NET/Source/System.Reactive.sln
       msbuildArguments: /restore /t:build /p:CreatePackage=true /p:NoPackageAnalysis=true /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)\artifacts
       configuration: $(BuildConfiguration)
       maximumCpuCount: true
@@ -57,11 +58,11 @@ jobs:
     inputs:
       command: custom
       arguments: pack Rx.NET/Source/facades/System.Reactive.Compatibility.nuspec -Version $(NBGV_NuGetPackageVersion) -MinClientVersion 2.12 -NoPackageAnalysis -outputdirectory $(Build.ArtifactStagingDirectory)\artifacts
-    
+
   - task: MSBuild@1
     displayName: Build for Test (ppdb) workaround
     inputs:
-      solution: Rx.NET/Source/System.Reactive.sln    
+      solution: Rx.NET/Source/System.Reactive.sln
       msbuildArguments: /t:build /p:DebugType=portable
       platform: $(BuildPlatform)
       configuration: $(BuildConfiguration)
@@ -78,10 +79,10 @@ jobs:
     inputs:
       command: test
       projects: Rx.NET/Source/tests/Tests.System.Reactive.ApiApprovals/Tests.System.Reactive.ApiApprovals.csproj
-      arguments: -c $(BuildConfiguration) --no-build --no-restore 
+      arguments: -c $(BuildConfiguration) --no-build --no-restore
     displayName: Run Api Approvals Tests
 
-    
+
   - task: PowerShell@2
     displayName: Authenticode Sign Packages
     inputs:
@@ -103,17 +104,18 @@ jobs:
   dependsOn: Build
   pool:
     vmImage: ubuntu-16.04
-  
-  variables: 
+
+  variables:
     BuildConfiguration: Release
     BuildPlatform: Any CPU
-  
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
   steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '2.2.104'
+      version: '3.0.100-preview5-011568'
 
-  - task: DotNetCoreCLI@2  
+  - task: DotNetCoreCLI@2
     inputs:
       command: custom
       custom: tool
@@ -123,16 +125,12 @@ jobs:
   - script: ./nbgv cloud -a -p Rx.NET/Source
     displayName: Set Version
 
-  - task: DotNetCoreInstaller@0
-    inputs:
-      version: '3.0.100-preview4-010374'
-
   - task: DownloadBuildArtifacts@0
     displayName: 'Download Build Artifacts'
     inputs:
       artifactName: artifacts
       downloadPath: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
-      
+
   - script: mv $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages/artifacts/*.* $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
     displayName: Move packages to LocalPackages directory
 
@@ -182,17 +180,18 @@ jobs:
   dependsOn: Build
   pool:
     vmImage: windows-2019
-  
-  variables: 
+
+  variables:
     BuildConfiguration: Release
     BuildPlatform: Any CPU
-  
-  steps:  
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+  steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '3.0.100-preview4-010374'
+      version: '3.0.100-preview5-011568'
 
-  - task: DotNetCoreCLI@2  
+  - task: DotNetCoreCLI@2
     inputs:
       command: custom
       custom: tool
@@ -207,7 +206,7 @@ jobs:
     inputs:
       artifactName: artifacts
       downloadPath: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
-      
+
   - powershell: mv $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages/artifacts/*.* $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
     displayName: Move packages to LocalPackages directory
 
@@ -239,5 +238,5 @@ jobs:
     inputs:
       command: test
       projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/WindowsDesktopTests/WindowsDesktopTests.csproj
-      arguments: -c $(BuildConfiguration) 
+      arguments: -c $(BuildConfiguration)
     displayName: Run 3.0 Tests on WindowDesktop
