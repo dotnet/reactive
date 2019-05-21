@@ -17,14 +17,14 @@ namespace System.Linq
 
             return Core(source, comparer, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, IComparer<TSource> _comparer, CancellationToken _cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
             {
-                if (_comparer == null)
+                if (comparer == null)
                 {
-                    _comparer = Comparer<TSource>.Default;
+                    comparer = Comparer<TSource>.Default;
                 }
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                         throw Error.NoElements();
@@ -35,7 +35,7 @@ namespace System.Linq
                     {
                         var cur = e.Current;
 
-                        if (_comparer.Compare(cur, min) < 0)
+                        if (comparer.Compare(cur, min) < 0)
                         {
                             min = cur;
                         }

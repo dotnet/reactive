@@ -50,15 +50,15 @@ namespace System.Linq
 
             return Core(first, second, comparer, cancellationToken);
 
-            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _first, IAsyncEnumerable<TSource> _second, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
+            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
             {
-                await using (var e1 = _first.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
-                    await using (var e2 = _second.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                    await using (var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
                         while (await e1.MoveNextAsync())
                         {
-                            if (!(await e2.MoveNextAsync() && _comparer.Equals(e1.Current, e2.Current)))
+                            if (!(await e2.MoveNextAsync() && comparer.Equals(e1.Current, e2.Current)))
                             {
                                 return false;
                             }

@@ -17,9 +17,9 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
             {
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     return !await e.MoveNextAsync();
                 }

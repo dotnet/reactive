@@ -17,11 +17,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<int> Core(IAsyncEnumerable<int> _source, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<int> source, CancellationToken cancellationToken)
             {
                 var sum = 0;
 
-                await foreach (int value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (int value in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     checked
                     {
@@ -42,13 +42,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken)
             {
                 var sum = 0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = _selector(item);
+                    var value = selector(item);
 
                     checked
                     {
@@ -69,13 +69,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item).ConfigureAwait(false);
+                    var value = await selector(item).ConfigureAwait(false);
 
                     checked
                     {
@@ -97,13 +97,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+                    var value = await selector(item, cancellationToken).ConfigureAwait(false);
 
                     checked
                     {
@@ -123,11 +123,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<long> Core(IAsyncEnumerable<long> _source, CancellationToken _cancellationToken)
+            static async ValueTask<long> Core(IAsyncEnumerable<long> source, CancellationToken cancellationToken)
             {
                 var sum = 0L;
 
-                await foreach (long value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (long value in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     checked
                     {
@@ -148,13 +148,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long> Core(IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken)
             {
                 var sum = 0L;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = _selector(item);
+                    var value = selector(item);
 
                     checked
                     {
@@ -175,13 +175,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0L;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item).ConfigureAwait(false);
+                    var value = await selector(item).ConfigureAwait(false);
 
                     checked
                     {
@@ -203,13 +203,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0L;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+                    var value = await selector(item, cancellationToken).ConfigureAwait(false);
 
                     checked
                     {
@@ -229,11 +229,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<float> Core(IAsyncEnumerable<float> _source, CancellationToken _cancellationToken)
+            static async ValueTask<float> Core(IAsyncEnumerable<float> source, CancellationToken cancellationToken)
             {
                 var sum = 0.0f;
 
-                await foreach (float value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (float value in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     sum += value;
                 }
@@ -251,13 +251,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float> Core(IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken)
             {
                 var sum = 0.0f;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = _selector(item);
+                    var value = selector(item);
 
                     sum += value;
                 }
@@ -275,13 +275,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0.0f;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item).ConfigureAwait(false);
+                    var value = await selector(item).ConfigureAwait(false);
 
                     sum += value;
                 }
@@ -300,13 +300,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0.0f;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+                    var value = await selector(item, cancellationToken).ConfigureAwait(false);
 
                     sum += value;
                 }
@@ -323,11 +323,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<double> Core(IAsyncEnumerable<double> _source, CancellationToken _cancellationToken)
+            static async ValueTask<double> Core(IAsyncEnumerable<double> source, CancellationToken cancellationToken)
             {
                 var sum = 0.0;
 
-                await foreach (double value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (double value in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     sum += value;
                 }
@@ -345,13 +345,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double> Core(IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken)
             {
                 var sum = 0.0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = _selector(item);
+                    var value = selector(item);
 
                     sum += value;
                 }
@@ -369,13 +369,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0.0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item).ConfigureAwait(false);
+                    var value = await selector(item).ConfigureAwait(false);
 
                     sum += value;
                 }
@@ -394,13 +394,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0.0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+                    var value = await selector(item, cancellationToken).ConfigureAwait(false);
 
                     sum += value;
                 }
@@ -417,11 +417,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<decimal> Core(IAsyncEnumerable<decimal> _source, CancellationToken _cancellationToken)
+            static async ValueTask<decimal> Core(IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
             {
                 var sum = 0m;
 
-                await foreach (decimal value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (decimal value in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     sum += value;
                 }
@@ -439,13 +439,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken)
             {
                 var sum = 0m;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = _selector(item);
+                    var value = selector(item);
 
                     sum += value;
                 }
@@ -463,13 +463,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0m;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item).ConfigureAwait(false);
+                    var value = await selector(item).ConfigureAwait(false);
 
                     sum += value;
                 }
@@ -488,13 +488,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0m;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+                    var value = await selector(item, cancellationToken).ConfigureAwait(false);
 
                     sum += value;
                 }
@@ -511,11 +511,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<int?> Core(IAsyncEnumerable<int?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<int?> Core(IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
             {
                 var sum = 0;
 
-                await foreach (int? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (int? value in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     checked
                     {
@@ -536,13 +536,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken)
             {
                 var sum = 0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = _selector(item);
+                    var value = selector(item);
 
                     checked
                     {
@@ -563,13 +563,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item).ConfigureAwait(false);
+                    var value = await selector(item).ConfigureAwait(false);
 
                     checked
                     {
@@ -591,13 +591,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+                    var value = await selector(item, cancellationToken).ConfigureAwait(false);
 
                     checked
                     {
@@ -617,11 +617,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<long?> Core(IAsyncEnumerable<long?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<long?> Core(IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
             {
                 var sum = 0L;
 
-                await foreach (long? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (long? value in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     checked
                     {
@@ -642,13 +642,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken)
             {
                 var sum = 0L;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = _selector(item);
+                    var value = selector(item);
 
                     checked
                     {
@@ -669,13 +669,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0L;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item).ConfigureAwait(false);
+                    var value = await selector(item).ConfigureAwait(false);
 
                     checked
                     {
@@ -697,13 +697,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0L;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+                    var value = await selector(item, cancellationToken).ConfigureAwait(false);
 
                     checked
                     {
@@ -723,11 +723,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<float?> Core(IAsyncEnumerable<float?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<float?> Core(IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
             {
                 var sum = 0.0f;
 
-                await foreach (float? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (float? value in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     sum += value.GetValueOrDefault();
                 }
@@ -745,13 +745,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken)
             {
                 var sum = 0.0f;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = _selector(item);
+                    var value = selector(item);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -769,13 +769,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0.0f;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item).ConfigureAwait(false);
+                    var value = await selector(item).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -794,13 +794,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0.0f;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+                    var value = await selector(item, cancellationToken).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -817,11 +817,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<double?> Core(IAsyncEnumerable<double?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<double?> Core(IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
             {
                 var sum = 0.0;
 
-                await foreach (double? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (double? value in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     sum += value.GetValueOrDefault();
                 }
@@ -839,13 +839,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken)
             {
                 var sum = 0.0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = _selector(item);
+                    var value = selector(item);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -863,13 +863,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0.0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item).ConfigureAwait(false);
+                    var value = await selector(item).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -888,13 +888,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0.0;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+                    var value = await selector(item, cancellationToken).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -911,11 +911,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<decimal?> Core(IAsyncEnumerable<decimal?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<decimal?> Core(IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
             {
                 var sum = 0m;
 
-                await foreach (decimal? value in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (decimal? value in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     sum += value.GetValueOrDefault();
                 }
@@ -933,13 +933,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken)
             {
                 var sum = 0m;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = _selector(item);
+                    var value = selector(item);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -957,13 +957,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0m;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item).ConfigureAwait(false);
+                    var value = await selector(item).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }
@@ -982,13 +982,13 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
             {
                 var sum = 0m;
 
-                await foreach (TSource item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (TSource item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var value = await _selector(item, _cancellationToken).ConfigureAwait(false);
+                    var value = await selector(item, cancellationToken).ConfigureAwait(false);
 
                     sum += value.GetValueOrDefault();
                 }

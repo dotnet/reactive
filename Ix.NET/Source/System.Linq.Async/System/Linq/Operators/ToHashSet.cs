@@ -20,11 +20,11 @@ namespace System.Linq
 
             return Core(source, comparer, cancellationToken);
 
-            static async ValueTask<HashSet<TSource>> Core(IAsyncEnumerable<TSource> _source, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
+            static async ValueTask<HashSet<TSource>> Core(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
             {
-                var set = new HashSet<TSource>(_comparer);
+                var set = new HashSet<TSource>(comparer);
 
-                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     set.Add(item);
                 }
