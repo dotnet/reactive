@@ -76,20 +76,14 @@ namespace System.Linq
 
         private static ValueTask<IList<TSource>> MinByCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
         {
-            if (comparer == null)
-            {
-                comparer = Comparer<TKey>.Default;
-            }
+            comparer ??= Comparer<TKey>.Default;
 
             return ExtremaBy(source, keySelector, (key, minValue) => -comparer.Compare(key, minValue), cancellationToken);
         }
 
         private static ValueTask<IList<TSource>> MinByCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
         {
-            if (comparer == null)
-            {
-                comparer = Comparer<TKey>.Default;
-            }
+            comparer ??= Comparer<TKey>.Default;
 
             return ExtremaBy(source, keySelector, (key, minValue) => -comparer.Compare(key, minValue), cancellationToken);
         }
@@ -97,10 +91,7 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static ValueTask<IList<TSource>> MinByCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
         {
-            if (comparer == null)
-            {
-                comparer = Comparer<TKey>.Default;
-            }
+            comparer ??= Comparer<TKey>.Default;
 
             return ExtremaBy(source, keySelector, (key, minValue) => -comparer.Compare(key, minValue), cancellationToken);
         }

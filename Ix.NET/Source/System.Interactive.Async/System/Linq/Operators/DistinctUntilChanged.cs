@@ -94,10 +94,7 @@ namespace System.Linq
         private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource>(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
 #if USE_ASYNC_ITERATOR
-            if (comparer == null)
-            {
-                comparer = EqualityComparer<TSource>.Default;
-            }
+            comparer ??= EqualityComparer<TSource>.Default;
 
             return AsyncEnumerable.Create(Core);
 
@@ -135,10 +132,7 @@ namespace System.Linq
         private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
 #if USE_ASYNC_ITERATOR
-            if (comparer == null)
-            {
-                comparer = EqualityComparer<TKey>.Default;
-            }
+            comparer ??= EqualityComparer<TKey>.Default;
 
             return AsyncEnumerable.Create(Core);
 
@@ -180,10 +174,7 @@ namespace System.Linq
         private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
 #if USE_ASYNC_ITERATOR
-            if (comparer == null)
-            {
-                comparer = EqualityComparer<TKey>.Default;
-            }
+            comparer ??= EqualityComparer<TKey>.Default;
 
             return AsyncEnumerable.Create(Core);
 
@@ -226,10 +217,7 @@ namespace System.Linq
         private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
 #if USE_ASYNC_ITERATOR
-            if (comparer == null)
-            {
-                comparer = EqualityComparer<TKey>.Default;
-            }
+            comparer ??= EqualityComparer<TKey>.Default;
 
             return AsyncEnumerable.Create(Core);
 

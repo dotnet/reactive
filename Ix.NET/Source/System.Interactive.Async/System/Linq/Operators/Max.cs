@@ -19,10 +19,7 @@ namespace System.Linq
 
             static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
             {
-                if (comparer == null)
-                {
-                    comparer = Comparer<TSource>.Default;
-                }
+                comparer ??= Comparer<TSource>.Default;
 
                 await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
