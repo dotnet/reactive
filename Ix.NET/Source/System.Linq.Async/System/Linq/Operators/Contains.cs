@@ -26,11 +26,11 @@ namespace System.Linq
             {
                 return Core(source, value, cancellationToken);
 
-                static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, CancellationToken _cancellationToken)
+                static async ValueTask<bool> Core(IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken)
                 {
-                    await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
-                        if (EqualityComparer<TSource>.Default.Equals(item, _value))
+                        if (EqualityComparer<TSource>.Default.Equals(item, value))
                         {
                             return true;
                         }
@@ -43,11 +43,11 @@ namespace System.Linq
             {
                 return Core(source, value, comparer, cancellationToken);
 
-                static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
+                static async ValueTask<bool> Core(IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
                 {
-                    await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
-                        if (_comparer.Equals(item, _value))
+                        if (comparer.Equals(item, value))
                         {
                             return true;
                         }

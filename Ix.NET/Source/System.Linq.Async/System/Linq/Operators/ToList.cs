@@ -20,11 +20,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<List<TSource>> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+            static async ValueTask<List<TSource>> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
             {
                 var list = new List<TSource>();
 
-                await foreach (var item in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     list.Add(item);
                 }

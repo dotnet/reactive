@@ -35,7 +35,7 @@ foreach (var m in new[] { "Max", "Min" })
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<<#=t#>> Core(IAsyncEnumerable<<#=t#>> _source, CancellationToken _cancellationToken)
+            static async ValueTask<<#=t#>> Core(IAsyncEnumerable<<#=t#>> source, CancellationToken cancellationToken)
             {
 <#
         if (!isNullable)
@@ -43,7 +43,7 @@ foreach (var m in new[] { "Max", "Min" })
 #>
                 <#=t#> value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -115,7 +115,7 @@ foreach (var m in new[] { "Max", "Min" })
 #>
                 <#=t#> value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -279,9 +279,9 @@ foreach (var m in new[] { "Max", "Min" })
 
 <#
 foreach (var overload in new[] {
-    new { selector = "Func<TSource, " + t + ">", invoke = "_selector(e.Current)" },
-    new { selector = "Func<TSource, ValueTask<" + t + ">>", invoke = "await _selector(e.Current).ConfigureAwait(false)" },
-    new { selector = "Func<TSource, CancellationToken, ValueTask<" + t + ">>", invoke = "await _selector(e.Current, _cancellationToken).ConfigureAwait(false)" },
+    new { selector = "Func<TSource, " + t + ">", invoke = "selector(e.Current)" },
+    new { selector = "Func<TSource, ValueTask<" + t + ">>", invoke = "await selector(e.Current).ConfigureAwait(false)" },
+    new { selector = "Func<TSource, CancellationToken, ValueTask<" + t + ">>", invoke = "await selector(e.Current, cancellationToken).ConfigureAwait(false)" },
 })
 {
     var isAsync = overload.invoke.StartsWith("await");
@@ -307,7 +307,7 @@ foreach (var overload in new[] {
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<<#=t#>> Core(IAsyncEnumerable<TSource> _source, <#=overload.selector#> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<<#=t#>> Core(IAsyncEnumerable<TSource> source, <#=overload.selector#> selector, CancellationToken cancellationToken)
             {
 <#
         if (!isNullable)
@@ -315,7 +315,7 @@ foreach (var overload in new[] {
 #>
                 <#=t#> value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -387,7 +387,7 @@ foreach (var overload in new[] {
 #>
                 <#=t#> value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.

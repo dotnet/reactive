@@ -17,11 +17,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<int> Core(IAsyncEnumerable<int> _source, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<int> source, CancellationToken cancellationToken)
             {
                 int value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -53,22 +53,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken)
             {
                 int value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = _selector(e.Current);
+                    value = selector(e.Current);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = _selector(e.Current);
+                        var x = selector(e.Current);
                         if (x > value)
                         {
                             value = x;
@@ -89,22 +89,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken)
             {
                 int value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current).ConfigureAwait(false);
+                    value = await selector(e.Current).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current).ConfigureAwait(false);
+                        var x = await selector(e.Current).ConfigureAwait(false);
                         if (x > value)
                         {
                             value = x;
@@ -126,22 +126,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken)
             {
                 int value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                    value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (x > value)
                         {
                             value = x;
@@ -161,11 +161,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<int?> Core(IAsyncEnumerable<int?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<int?> Core(IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
             {
                 int? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -236,11 +236,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken)
             {
                 int? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -251,7 +251,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = _selector(e.Current);
+                        value = selector(e.Current);
                     }
                     while (!value.HasValue);
 
@@ -270,7 +270,7 @@ namespace System.Linq
 
                         while (await e.MoveNextAsync())
                         {
-                            var cur = _selector(e.Current);
+                            var cur = selector(e.Current);
                             var x = cur.GetValueOrDefault();
 
                             if (x > valueVal)
@@ -284,7 +284,7 @@ namespace System.Linq
                     {
                         while (await e.MoveNextAsync())
                         {
-                            var cur = _selector(e.Current);
+                            var cur = selector(e.Current);
                             var x = cur.GetValueOrDefault();
 
                             // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -311,11 +311,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken)
             {
                 int? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -326,7 +326,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current).ConfigureAwait(false);
+                        value = await selector(e.Current).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -345,7 +345,7 @@ namespace System.Linq
 
                         while (await e.MoveNextAsync())
                         {
-                            var cur = await _selector(e.Current).ConfigureAwait(false);
+                            var cur = await selector(e.Current).ConfigureAwait(false);
                             var x = cur.GetValueOrDefault();
 
                             if (x > valueVal)
@@ -359,7 +359,7 @@ namespace System.Linq
                     {
                         while (await e.MoveNextAsync())
                         {
-                            var cur = await _selector(e.Current).ConfigureAwait(false);
+                            var cur = await selector(e.Current).ConfigureAwait(false);
                             var x = cur.GetValueOrDefault();
 
                             // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -387,11 +387,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken)
             {
                 int? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -402,7 +402,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -421,7 +421,7 @@ namespace System.Linq
 
                         while (await e.MoveNextAsync())
                         {
-                            var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                            var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                             var x = cur.GetValueOrDefault();
 
                             if (x > valueVal)
@@ -435,7 +435,7 @@ namespace System.Linq
                     {
                         while (await e.MoveNextAsync())
                         {
-                            var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                            var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                             var x = cur.GetValueOrDefault();
 
                             // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -461,11 +461,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<long> Core(IAsyncEnumerable<long> _source, CancellationToken _cancellationToken)
+            static async ValueTask<long> Core(IAsyncEnumerable<long> source, CancellationToken cancellationToken)
             {
                 long value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -497,22 +497,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long> Core(IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken)
             {
                 long value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = _selector(e.Current);
+                    value = selector(e.Current);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = _selector(e.Current);
+                        var x = selector(e.Current);
                         if (x > value)
                         {
                             value = x;
@@ -533,22 +533,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken)
             {
                 long value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current).ConfigureAwait(false);
+                    value = await selector(e.Current).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current).ConfigureAwait(false);
+                        var x = await selector(e.Current).ConfigureAwait(false);
                         if (x > value)
                         {
                             value = x;
@@ -570,22 +570,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken)
             {
                 long value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                    value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (x > value)
                         {
                             value = x;
@@ -605,11 +605,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<long?> Core(IAsyncEnumerable<long?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<long?> Core(IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
             {
                 long? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -680,11 +680,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken)
             {
                 long? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -695,7 +695,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = _selector(e.Current);
+                        value = selector(e.Current);
                     }
                     while (!value.HasValue);
 
@@ -714,7 +714,7 @@ namespace System.Linq
 
                         while (await e.MoveNextAsync())
                         {
-                            var cur = _selector(e.Current);
+                            var cur = selector(e.Current);
                             var x = cur.GetValueOrDefault();
 
                             if (x > valueVal)
@@ -728,7 +728,7 @@ namespace System.Linq
                     {
                         while (await e.MoveNextAsync())
                         {
-                            var cur = _selector(e.Current);
+                            var cur = selector(e.Current);
                             var x = cur.GetValueOrDefault();
 
                             // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -755,11 +755,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken)
             {
                 long? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -770,7 +770,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current).ConfigureAwait(false);
+                        value = await selector(e.Current).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -789,7 +789,7 @@ namespace System.Linq
 
                         while (await e.MoveNextAsync())
                         {
-                            var cur = await _selector(e.Current).ConfigureAwait(false);
+                            var cur = await selector(e.Current).ConfigureAwait(false);
                             var x = cur.GetValueOrDefault();
 
                             if (x > valueVal)
@@ -803,7 +803,7 @@ namespace System.Linq
                     {
                         while (await e.MoveNextAsync())
                         {
-                            var cur = await _selector(e.Current).ConfigureAwait(false);
+                            var cur = await selector(e.Current).ConfigureAwait(false);
                             var x = cur.GetValueOrDefault();
 
                             // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -831,11 +831,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken)
             {
                 long? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -846,7 +846,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -865,7 +865,7 @@ namespace System.Linq
 
                         while (await e.MoveNextAsync())
                         {
-                            var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                            var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                             var x = cur.GetValueOrDefault();
 
                             if (x > valueVal)
@@ -879,7 +879,7 @@ namespace System.Linq
                     {
                         while (await e.MoveNextAsync())
                         {
-                            var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                            var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                             var x = cur.GetValueOrDefault();
 
                             // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -905,11 +905,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<float> Core(IAsyncEnumerable<float> _source, CancellationToken _cancellationToken)
+            static async ValueTask<float> Core(IAsyncEnumerable<float> source, CancellationToken cancellationToken)
             {
                 float value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -956,18 +956,18 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float> Core(IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken)
             {
                 float value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = _selector(e.Current);
+                    value = selector(e.Current);
 
                     // NaN is ordered less than all other values. We need to do explicit checks
                     // to ensure this, but once we've found a value that is not NaN we need no
@@ -981,12 +981,12 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = _selector(e.Current);
+                        value = selector(e.Current);
                     }
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = _selector(e.Current);
+                        var x = selector(e.Current);
                         if (x > value)
                         {
                             value = x;
@@ -1007,18 +1007,18 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken)
             {
                 float value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current).ConfigureAwait(false);
+                    value = await selector(e.Current).ConfigureAwait(false);
 
                     // NaN is ordered less than all other values. We need to do explicit checks
                     // to ensure this, but once we've found a value that is not NaN we need no
@@ -1032,12 +1032,12 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current).ConfigureAwait(false);
+                        value = await selector(e.Current).ConfigureAwait(false);
                     }
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current).ConfigureAwait(false);
+                        var x = await selector(e.Current).ConfigureAwait(false);
                         if (x > value)
                         {
                             value = x;
@@ -1059,18 +1059,18 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken)
             {
                 float value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                    value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     // NaN is ordered less than all other values. We need to do explicit checks
                     // to ensure this, but once we've found a value that is not NaN we need no
@@ -1084,12 +1084,12 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     }
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (x > value)
                         {
                             value = x;
@@ -1109,11 +1109,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<float?> Core(IAsyncEnumerable<float?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<float?> Core(IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
             {
                 float? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1180,11 +1180,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken)
             {
                 float? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1195,7 +1195,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = _selector(e.Current);
+                        value = selector(e.Current);
                     }
                     while (!value.HasValue);
 
@@ -1215,7 +1215,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        var cur = _selector(e.Current);
+                        var cur = selector(e.Current);
 
                         if (cur.HasValue)
                         {
@@ -1225,7 +1225,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = _selector(e.Current);
+                        var cur = selector(e.Current);
                         var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -1251,11 +1251,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken)
             {
                 float? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1266,7 +1266,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current).ConfigureAwait(false);
+                        value = await selector(e.Current).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -1286,7 +1286,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        var cur = await _selector(e.Current).ConfigureAwait(false);
+                        var cur = await selector(e.Current).ConfigureAwait(false);
 
                         if (cur.HasValue)
                         {
@@ -1296,7 +1296,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current).ConfigureAwait(false);
+                        var cur = await selector(e.Current).ConfigureAwait(false);
                         var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -1323,11 +1323,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken)
             {
                 float? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1338,7 +1338,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -1358,7 +1358,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                         if (cur.HasValue)
                         {
@@ -1368,7 +1368,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -1393,11 +1393,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<double> Core(IAsyncEnumerable<double> _source, CancellationToken _cancellationToken)
+            static async ValueTask<double> Core(IAsyncEnumerable<double> source, CancellationToken cancellationToken)
             {
                 double value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1444,18 +1444,18 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double> Core(IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken)
             {
                 double value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = _selector(e.Current);
+                    value = selector(e.Current);
 
                     // NaN is ordered less than all other values. We need to do explicit checks
                     // to ensure this, but once we've found a value that is not NaN we need no
@@ -1469,12 +1469,12 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = _selector(e.Current);
+                        value = selector(e.Current);
                     }
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = _selector(e.Current);
+                        var x = selector(e.Current);
                         if (x > value)
                         {
                             value = x;
@@ -1495,18 +1495,18 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken)
             {
                 double value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current).ConfigureAwait(false);
+                    value = await selector(e.Current).ConfigureAwait(false);
 
                     // NaN is ordered less than all other values. We need to do explicit checks
                     // to ensure this, but once we've found a value that is not NaN we need no
@@ -1520,12 +1520,12 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current).ConfigureAwait(false);
+                        value = await selector(e.Current).ConfigureAwait(false);
                     }
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current).ConfigureAwait(false);
+                        var x = await selector(e.Current).ConfigureAwait(false);
                         if (x > value)
                         {
                             value = x;
@@ -1547,18 +1547,18 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken)
             {
                 double value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                    value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     // NaN is ordered less than all other values. We need to do explicit checks
                     // to ensure this, but once we've found a value that is not NaN we need no
@@ -1572,12 +1572,12 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     }
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (x > value)
                         {
                             value = x;
@@ -1597,11 +1597,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<double?> Core(IAsyncEnumerable<double?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<double?> Core(IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
             {
                 double? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1668,11 +1668,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken)
             {
                 double? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1683,7 +1683,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = _selector(e.Current);
+                        value = selector(e.Current);
                     }
                     while (!value.HasValue);
 
@@ -1703,7 +1703,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        var cur = _selector(e.Current);
+                        var cur = selector(e.Current);
 
                         if (cur.HasValue)
                         {
@@ -1713,7 +1713,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = _selector(e.Current);
+                        var cur = selector(e.Current);
                         var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -1739,11 +1739,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken)
             {
                 double? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1754,7 +1754,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current).ConfigureAwait(false);
+                        value = await selector(e.Current).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -1774,7 +1774,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        var cur = await _selector(e.Current).ConfigureAwait(false);
+                        var cur = await selector(e.Current).ConfigureAwait(false);
 
                         if (cur.HasValue)
                         {
@@ -1784,7 +1784,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current).ConfigureAwait(false);
+                        var cur = await selector(e.Current).ConfigureAwait(false);
                         var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -1811,11 +1811,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken)
             {
                 double? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -1826,7 +1826,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -1846,7 +1846,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                         if (cur.HasValue)
                         {
@@ -1856,7 +1856,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -1881,11 +1881,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<decimal> Core(IAsyncEnumerable<decimal> _source, CancellationToken _cancellationToken)
+            static async ValueTask<decimal> Core(IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
             {
                 decimal value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -1917,22 +1917,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken)
             {
                 decimal value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = _selector(e.Current);
+                    value = selector(e.Current);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = _selector(e.Current);
+                        var x = selector(e.Current);
                         if (x > value)
                         {
                             value = x;
@@ -1953,22 +1953,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken)
             {
                 decimal value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current).ConfigureAwait(false);
+                    value = await selector(e.Current).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current).ConfigureAwait(false);
+                        var x = await selector(e.Current).ConfigureAwait(false);
                         if (x > value)
                         {
                             value = x;
@@ -1990,22 +1990,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken)
             {
                 decimal value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                    value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (x > value)
                         {
                             value = x;
@@ -2025,11 +2025,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<decimal?> Core(IAsyncEnumerable<decimal?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<decimal?> Core(IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
             {
                 decimal? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2074,11 +2074,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken)
             {
                 decimal? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2089,7 +2089,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = _selector(e.Current);
+                        value = selector(e.Current);
                     }
                     while (!value.HasValue);
 
@@ -2099,7 +2099,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = _selector(e.Current);
+                        var cur = selector(e.Current);
                         var x = cur.GetValueOrDefault();
 
                         if (cur.HasValue && x > valueVal)
@@ -2123,11 +2123,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
             {
                 decimal? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2138,7 +2138,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current).ConfigureAwait(false);
+                        value = await selector(e.Current).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -2148,7 +2148,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current).ConfigureAwait(false);
+                        var cur = await selector(e.Current).ConfigureAwait(false);
                         var x = cur.GetValueOrDefault();
 
                         if (cur.HasValue && x > valueVal)
@@ -2173,11 +2173,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
             {
                 decimal? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2188,7 +2188,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -2198,7 +2198,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         var x = cur.GetValueOrDefault();
 
                         if (cur.HasValue && x > valueVal)
@@ -2221,11 +2221,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<int> Core(IAsyncEnumerable<int> _source, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<int> source, CancellationToken cancellationToken)
             {
                 int value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2257,22 +2257,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken)
             {
                 int value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = _selector(e.Current);
+                    value = selector(e.Current);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = _selector(e.Current);
+                        var x = selector(e.Current);
                         if (x < value)
                         {
                             value = x;
@@ -2293,22 +2293,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int>> selector, CancellationToken cancellationToken)
             {
                 int value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current).ConfigureAwait(false);
+                    value = await selector(e.Current).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current).ConfigureAwait(false);
+                        var x = await selector(e.Current).ConfigureAwait(false);
                         if (x < value)
                         {
                             value = x;
@@ -2330,22 +2330,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int>> selector, CancellationToken cancellationToken)
             {
                 int value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                    value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (x < value)
                         {
                             value = x;
@@ -2365,11 +2365,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<int?> Core(IAsyncEnumerable<int?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<int?> Core(IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
             {
                 int? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2416,11 +2416,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, int?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken)
             {
                 int? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2431,7 +2431,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = _selector(e.Current);
+                        value = selector(e.Current);
                     }
                     while (!value.HasValue);
 
@@ -2441,7 +2441,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = _selector(e.Current);
+                        var cur = selector(e.Current);
                         var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -2467,11 +2467,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<int?>> selector, CancellationToken cancellationToken)
             {
                 int? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2482,7 +2482,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current).ConfigureAwait(false);
+                        value = await selector(e.Current).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -2492,7 +2492,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current).ConfigureAwait(false);
+                        var cur = await selector(e.Current).ConfigureAwait(false);
                         var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -2519,11 +2519,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<int?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<int?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<int?>> selector, CancellationToken cancellationToken)
             {
                 int? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2534,7 +2534,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -2544,7 +2544,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -2569,11 +2569,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<long> Core(IAsyncEnumerable<long> _source, CancellationToken _cancellationToken)
+            static async ValueTask<long> Core(IAsyncEnumerable<long> source, CancellationToken cancellationToken)
             {
                 long value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2605,22 +2605,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long> Core(IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken)
             {
                 long value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = _selector(e.Current);
+                    value = selector(e.Current);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = _selector(e.Current);
+                        var x = selector(e.Current);
                         if (x < value)
                         {
                             value = x;
@@ -2641,22 +2641,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long>> selector, CancellationToken cancellationToken)
             {
                 long value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current).ConfigureAwait(false);
+                    value = await selector(e.Current).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current).ConfigureAwait(false);
+                        var x = await selector(e.Current).ConfigureAwait(false);
                         if (x < value)
                         {
                             value = x;
@@ -2678,22 +2678,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long>> selector, CancellationToken cancellationToken)
             {
                 long value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                    value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (x < value)
                         {
                             value = x;
@@ -2713,11 +2713,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<long?> Core(IAsyncEnumerable<long?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<long?> Core(IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
             {
                 long? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2764,11 +2764,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, long?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken)
             {
                 long? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2779,7 +2779,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = _selector(e.Current);
+                        value = selector(e.Current);
                     }
                     while (!value.HasValue);
 
@@ -2789,7 +2789,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = _selector(e.Current);
+                        var cur = selector(e.Current);
                         var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -2815,11 +2815,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<long?>> selector, CancellationToken cancellationToken)
             {
                 long? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2830,7 +2830,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current).ConfigureAwait(false);
+                        value = await selector(e.Current).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -2840,7 +2840,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current).ConfigureAwait(false);
+                        var cur = await selector(e.Current).ConfigureAwait(false);
                         var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -2867,11 +2867,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<long?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<long?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<long?>> selector, CancellationToken cancellationToken)
             {
                 long? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -2882,7 +2882,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -2892,7 +2892,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         var x = cur.GetValueOrDefault();
 
                         // Do not replace & with &&. The branch prediction cost outweighs the extra operation
@@ -2917,11 +2917,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<float> Core(IAsyncEnumerable<float> _source, CancellationToken _cancellationToken)
+            static async ValueTask<float> Core(IAsyncEnumerable<float> source, CancellationToken cancellationToken)
             {
                 float value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -2969,22 +2969,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float> Core(IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken)
             {
                 float value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = _selector(e.Current);
+                    value = selector(e.Current);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = _selector(e.Current);
+                        var x = selector(e.Current);
                         if (x < value)
                         {
                             value = x;
@@ -3021,22 +3021,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float>> selector, CancellationToken cancellationToken)
             {
                 float value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current).ConfigureAwait(false);
+                    value = await selector(e.Current).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current).ConfigureAwait(false);
+                        var x = await selector(e.Current).ConfigureAwait(false);
                         if (x < value)
                         {
                             value = x;
@@ -3074,22 +3074,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float>> selector, CancellationToken cancellationToken)
             {
                 float value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                    value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (x < value)
                         {
                             value = x;
@@ -3125,11 +3125,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<float?> Core(IAsyncEnumerable<float?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<float?> Core(IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
             {
                 float? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3192,11 +3192,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, float?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken)
             {
                 float? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3207,7 +3207,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = _selector(e.Current);
+                        value = selector(e.Current);
                     }
                     while (!value.HasValue);
 
@@ -3217,7 +3217,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = _selector(e.Current);
+                        var cur = selector(e.Current);
                         if (cur.HasValue)
                         {
                             var x = cur.GetValueOrDefault();
@@ -3259,11 +3259,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<float?>> selector, CancellationToken cancellationToken)
             {
                 float? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3274,7 +3274,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current).ConfigureAwait(false);
+                        value = await selector(e.Current).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -3284,7 +3284,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current).ConfigureAwait(false);
+                        var cur = await selector(e.Current).ConfigureAwait(false);
                         if (cur.HasValue)
                         {
                             var x = cur.GetValueOrDefault();
@@ -3327,11 +3327,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<float?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<float?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<float?>> selector, CancellationToken cancellationToken)
             {
                 float? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3342,7 +3342,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -3352,7 +3352,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (cur.HasValue)
                         {
                             var x = cur.GetValueOrDefault();
@@ -3393,11 +3393,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<double> Core(IAsyncEnumerable<double> _source, CancellationToken _cancellationToken)
+            static async ValueTask<double> Core(IAsyncEnumerable<double> source, CancellationToken cancellationToken)
             {
                 double value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -3445,22 +3445,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double> Core(IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken)
             {
                 double value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = _selector(e.Current);
+                    value = selector(e.Current);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = _selector(e.Current);
+                        var x = selector(e.Current);
                         if (x < value)
                         {
                             value = x;
@@ -3497,22 +3497,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double>> selector, CancellationToken cancellationToken)
             {
                 double value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current).ConfigureAwait(false);
+                    value = await selector(e.Current).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current).ConfigureAwait(false);
+                        var x = await selector(e.Current).ConfigureAwait(false);
                         if (x < value)
                         {
                             value = x;
@@ -3550,22 +3550,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double>> selector, CancellationToken cancellationToken)
             {
                 double value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                    value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (x < value)
                         {
                             value = x;
@@ -3601,11 +3601,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<double?> Core(IAsyncEnumerable<double?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<double?> Core(IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
             {
                 double? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3668,11 +3668,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, double?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken)
             {
                 double? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3683,7 +3683,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = _selector(e.Current);
+                        value = selector(e.Current);
                     }
                     while (!value.HasValue);
 
@@ -3693,7 +3693,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = _selector(e.Current);
+                        var cur = selector(e.Current);
                         if (cur.HasValue)
                         {
                             var x = cur.GetValueOrDefault();
@@ -3735,11 +3735,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<double?>> selector, CancellationToken cancellationToken)
             {
                 double? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3750,7 +3750,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current).ConfigureAwait(false);
+                        value = await selector(e.Current).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -3760,7 +3760,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current).ConfigureAwait(false);
+                        var cur = await selector(e.Current).ConfigureAwait(false);
                         if (cur.HasValue)
                         {
                             var x = cur.GetValueOrDefault();
@@ -3803,11 +3803,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<double?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<double?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<double?>> selector, CancellationToken cancellationToken)
             {
                 double? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -3818,7 +3818,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -3828,7 +3828,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (cur.HasValue)
                         {
                             var x = cur.GetValueOrDefault();
@@ -3869,11 +3869,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<decimal> Core(IAsyncEnumerable<decimal> _source, CancellationToken _cancellationToken)
+            static async ValueTask<decimal> Core(IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
             {
                 decimal value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
@@ -3905,22 +3905,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken)
             {
                 decimal value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = _selector(e.Current);
+                    value = selector(e.Current);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = _selector(e.Current);
+                        var x = selector(e.Current);
                         if (x < value)
                         {
                             value = x;
@@ -3941,22 +3941,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal>> selector, CancellationToken cancellationToken)
             {
                 decimal value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current).ConfigureAwait(false);
+                    value = await selector(e.Current).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current).ConfigureAwait(false);
+                        var x = await selector(e.Current).ConfigureAwait(false);
                         if (x < value)
                         {
                             value = x;
@@ -3978,22 +3978,22 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal>> selector, CancellationToken cancellationToken)
             {
                 decimal value;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     if (!await e.MoveNextAsync())
                     {
                         throw Error.NoElements();
                     }
 
-                    value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                    value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                     while (await e.MoveNextAsync())
                     {
-                        var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         if (x < value)
                         {
                             value = x;
@@ -4013,11 +4013,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<decimal?> Core(IAsyncEnumerable<decimal?> _source, CancellationToken _cancellationToken)
+            static async ValueTask<decimal?> Core(IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
             {
                 decimal? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -4062,11 +4062,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, decimal?> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken)
             {
                 decimal? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -4077,7 +4077,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = _selector(e.Current);
+                        value = selector(e.Current);
                     }
                     while (!value.HasValue);
 
@@ -4087,7 +4087,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = _selector(e.Current);
+                        var cur = selector(e.Current);
                         var x = cur.GetValueOrDefault();
 
                         if (cur.HasValue && x < valueVal)
@@ -4111,11 +4111,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
             {
                 decimal? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -4126,7 +4126,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current).ConfigureAwait(false);
+                        value = await selector(e.Current).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -4136,7 +4136,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current).ConfigureAwait(false);
+                        var cur = await selector(e.Current).ConfigureAwait(false);
                         var x = cur.GetValueOrDefault();
 
                         if (cur.HasValue && x < valueVal)
@@ -4161,11 +4161,11 @@ namespace System.Linq
 
             return Core(source, selector, cancellationToken);
 
-            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<decimal?>> _selector, CancellationToken _cancellationToken)
+            static async ValueTask<decimal?> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<decimal?>> selector, CancellationToken cancellationToken)
             {
                 decimal? value = null;
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     // Start off knowing that we've a non-null value (or exit here, knowing we don't)
                     // so we don't have to keep testing for nullity.
@@ -4176,7 +4176,7 @@ namespace System.Linq
                             return value;
                         }
 
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                     }
                     while (!value.HasValue);
 
@@ -4186,7 +4186,7 @@ namespace System.Linq
 
                     while (await e.MoveNextAsync())
                     {
-                        var cur = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        var cur = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         var x = cur.GetValueOrDefault();
 
                         if (cur.HasValue && x < valueVal)
