@@ -63,7 +63,6 @@ namespace Tests
             await NoNextAsync(e);
         }
 
-#if USE_ASYNC_ITERATOR
         [Fact]
         public void SkipLast_Zero_NoAlias()
         {
@@ -78,6 +77,5 @@ namespace Tests
             await Task.Yield();
             yield return 1;
         }
-#endif
     }
 }

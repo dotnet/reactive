@@ -36,7 +36,6 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -53,9 +52,6 @@ namespace System.Linq
                     yield return selector(element, index);
                 }
             }
-#else
-            return new SelectEnumerableWithIndexAsyncIterator<TSource, TResult>(source, selector);
-#endif
         }
 
         internal static IAsyncEnumerable<TResult> SelectAwaitCore<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
@@ -103,7 +99,6 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -120,9 +115,6 @@ namespace System.Linq
                     yield return await selector(element, index).ConfigureAwait(false);
                 }
             }
-#else
-            return new SelectEnumerableWithIndexAsyncIteratorWithTask<TSource, TResult>(source, selector);
-#endif
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -133,7 +125,6 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -150,9 +141,6 @@ namespace System.Linq
                     yield return await selector(element, index, cancellationToken).ConfigureAwait(false);
                 }
             }
-#else
-            return new SelectEnumerableWithIndexAsyncIteratorWithTaskAndCancellation<TSource, TResult>(source, selector);
-#endif
         }
 #endif
 
@@ -216,72 +204,6 @@ namespace System.Linq
                 return false;
             }
         }
-
-#if !USE_ASYNC_ITERATOR
-        private sealed class SelectEnumerableWithIndexAsyncIterator<TSource, TResult> : AsyncIterator<TResult>
-        {
-            private readonly Func<TSource, int, TResult> _selector;
-            private readonly IAsyncEnumerable<TSource> _source;
-            private IAsyncEnumerator<TSource> _enumerator;
-            private int _index;
-
-            public SelectEnumerableWithIndexAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, int, TResult> selector)
-            {
-                Debug.Assert(source != null);
-                Debug.Assert(selector != null);
-
-                _source = source;
-                _selector = selector;
-            }
-
-            public override AsyncIteratorBase<TResult> Clone()
-            {
-                return new SelectEnumerableWithIndexAsyncIterator<TSource, TResult>(_source, _selector);
-            }
-
-            public override async ValueTask DisposeAsync()
-            {
-                if (_enumerator != null)
-                {
-                    await _enumerator.DisposeAsync().ConfigureAwait(false);
-                    _enumerator = null;
-                }
-
-                await base.DisposeAsync().ConfigureAwait(false);
-            }
-
-            protected override async ValueTask<bool> MoveNextCore()
-            {
-                switch (_state)
-                {
-                    case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
-                        _index = -1;
-                        _state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var item = _enumerator.Current;
-
-                            checked
-                            {
-                                _index++;
-                            }
-
-                            _current = _selector(item, _index);
-                            return true;
-                        }
-
-                        break;
-                }
-
-                await DisposeAsync().ConfigureAwait(false);
-                return false;
-            }
-        }
-#endif
 
         internal sealed class SelectIListIterator<TSource, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
@@ -521,138 +443,6 @@ namespace System.Linq
                 return false;
             }
         }
-#endif
-
-#if !USE_ASYNC_ITERATOR
-        private sealed class SelectEnumerableWithIndexAsyncIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>
-        {
-            private readonly Func<TSource, int, ValueTask<TResult>> _selector;
-            private readonly IAsyncEnumerable<TSource> _source;
-            private IAsyncEnumerator<TSource> _enumerator;
-            private int _index;
-
-            public SelectEnumerableWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, ValueTask<TResult>> selector)
-            {
-                Debug.Assert(source != null);
-                Debug.Assert(selector != null);
-
-                _source = source;
-                _selector = selector;
-            }
-
-            public override AsyncIteratorBase<TResult> Clone()
-            {
-                return new SelectEnumerableWithIndexAsyncIteratorWithTask<TSource, TResult>(_source, _selector);
-            }
-
-            public override async ValueTask DisposeAsync()
-            {
-                if (_enumerator != null)
-                {
-                    await _enumerator.DisposeAsync().ConfigureAwait(false);
-                    _enumerator = null;
-                }
-
-                await base.DisposeAsync().ConfigureAwait(false);
-            }
-
-            protected override async ValueTask<bool> MoveNextCore()
-            {
-                switch (_state)
-                {
-                    case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
-                        _index = -1;
-                        _state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var item = _enumerator.Current;
-
-                            checked
-                            {
-                                _index++;
-                            }
-
-                            _current = await _selector(item, _index).ConfigureAwait(false);
-                            return true;
-                        }
-
-                        break;
-                }
-
-                await DisposeAsync().ConfigureAwait(false);
-                return false;
-            }
-        }
-
-#if !NO_DEEP_CANCELLATION
-        private sealed class SelectEnumerableWithIndexAsyncIteratorWithTaskAndCancellation<TSource, TResult> : AsyncIterator<TResult>
-        {
-            private readonly Func<TSource, int, CancellationToken, ValueTask<TResult>> _selector;
-            private readonly IAsyncEnumerable<TSource> _source;
-            private IAsyncEnumerator<TSource> _enumerator;
-            private int _index;
-
-            public SelectEnumerableWithIndexAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, ValueTask<TResult>> selector)
-            {
-                Debug.Assert(source != null);
-                Debug.Assert(selector != null);
-
-                _source = source;
-                _selector = selector;
-            }
-
-            public override AsyncIteratorBase<TResult> Clone()
-            {
-                return new SelectEnumerableWithIndexAsyncIteratorWithTaskAndCancellation<TSource, TResult>(_source, _selector);
-            }
-
-            public override async ValueTask DisposeAsync()
-            {
-                if (_enumerator != null)
-                {
-                    await _enumerator.DisposeAsync().ConfigureAwait(false);
-                    _enumerator = null;
-                }
-
-                await base.DisposeAsync().ConfigureAwait(false);
-            }
-
-            protected override async ValueTask<bool> MoveNextCore()
-            {
-                switch (_state)
-                {
-                    case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
-                        _index = -1;
-                        _state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var item = _enumerator.Current;
-
-                            checked
-                            {
-                                _index++;
-                            }
-
-                            _current = await _selector(item, _index, _cancellationToken).ConfigureAwait(false);
-                            return true;
-                        }
-
-                        break;
-                }
-
-                await DisposeAsync().ConfigureAwait(false);
-                return false;
-            }
-        }
-#endif
 #endif
 
         // NB: LINQ to Objects implements IPartition<TResult> for this. However, it seems incorrect to do so in a trivial

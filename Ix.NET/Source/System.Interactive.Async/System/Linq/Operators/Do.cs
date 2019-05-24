@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -171,7 +170,6 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
-#if USE_ASYNC_ITERATOR
             return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -209,14 +207,10 @@ namespace System.Linq
                     onCompleted?.Invoke();
                 }
             }
-#else
-            return new DoAsyncIterator<TSource>(source, onNext, onError, onCompleted);
-#endif
         }
 
         private static IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task> onError, Func<Task> onCompleted)
         {
-#if USE_ASYNC_ITERATOR
             return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -257,15 +251,11 @@ namespace System.Linq
                     }
                 }
             }
-#else
-            return new DoAsyncIteratorWithTask<TSource>(source, onNext, onError, onCompleted);
-#endif
         }
 
 #if !NO_DEEP_CANCELLATION
         private static IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<Exception, CancellationToken, Task> onError, Func<CancellationToken, Task> onCompleted)
         {
-#if USE_ASYNC_ITERATOR
             return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
@@ -306,248 +296,7 @@ namespace System.Linq
                     }
                 }
             }
-#else
-            return new DoAsyncIteratorWithTaskAndCancellation<TSource>(source, onNext, onError, onCompleted);
-#endif
         }
-#endif
-
-#if !USE_ASYNC_ITERATOR
-        private sealed class DoAsyncIterator<TSource> : AsyncIterator<TSource>
-        {
-            private readonly Action _onCompleted;
-            private readonly Action<Exception> _onError;
-            private readonly Action<TSource> _onNext;
-            private readonly IAsyncEnumerable<TSource> _source;
-
-            private IAsyncEnumerator<TSource> _enumerator;
-
-            public DoAsyncIterator(IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
-            {
-                Debug.Assert(source != null);
-                Debug.Assert(onNext != null);
-
-                _source = source;
-                _onNext = onNext;
-                _onError = onError;
-                _onCompleted = onCompleted;
-            }
-
-            public override AsyncIteratorBase<TSource> Clone()
-            {
-                return new DoAsyncIterator<TSource>(_source, _onNext, _onError, _onCompleted);
-            }
-
-            public override async ValueTask DisposeAsync()
-            {
-                if (_enumerator != null)
-                {
-                    await _enumerator.DisposeAsync().ConfigureAwait(false);
-                    _enumerator = null;
-                }
-
-                await base.DisposeAsync().ConfigureAwait(false);
-            }
-
-            protected override async ValueTask<bool> MoveNextCore()
-            {
-                switch (_state)
-                {
-                    case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
-                        _state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        try
-                        {
-                            if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
-                            {
-                                _current = _enumerator.Current;
-                                _onNext(_current);
-
-                                return true;
-                            }
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            throw;
-                        }
-                        catch (Exception ex) when (_onError != null)
-                        {
-                            _onError(ex);
-                            throw;
-                        }
-
-                        _onCompleted?.Invoke();
-
-                        await DisposeAsync().ConfigureAwait(false);
-                        break;
-                }
-
-                return false;
-            }
-        }
-
-        private sealed class DoAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
-        {
-            private readonly Func<Task> _onCompleted;
-            private readonly Func<Exception, Task> _onError;
-            private readonly Func<TSource, Task> _onNext;
-            private readonly IAsyncEnumerable<TSource> _source;
-
-            private IAsyncEnumerator<TSource> _enumerator;
-
-            public DoAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task> onError, Func<Task> onCompleted)
-            {
-                Debug.Assert(source != null);
-                Debug.Assert(onNext != null);
-
-                _source = source;
-                _onNext = onNext;
-                _onError = onError;
-                _onCompleted = onCompleted;
-            }
-
-            public override AsyncIteratorBase<TSource> Clone()
-            {
-                return new DoAsyncIteratorWithTask<TSource>(_source, _onNext, _onError, _onCompleted);
-            }
-
-            public override async ValueTask DisposeAsync()
-            {
-                if (_enumerator != null)
-                {
-                    await _enumerator.DisposeAsync().ConfigureAwait(false);
-                    _enumerator = null;
-                }
-
-                await base.DisposeAsync().ConfigureAwait(false);
-            }
-
-            protected override async ValueTask<bool> MoveNextCore()
-            {
-                switch (_state)
-                {
-                    case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
-                        _state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        try
-                        {
-                            if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
-                            {
-                                _current = _enumerator.Current;
-                                await _onNext(_current).ConfigureAwait(false);
-
-                                return true;
-                            }
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            throw;
-                        }
-                        catch (Exception ex) when (_onError != null)
-                        {
-                            await _onError(ex).ConfigureAwait(false);
-                            throw;
-                        }
-
-                        if (_onCompleted != null)
-                        {
-                            await _onCompleted().ConfigureAwait(false);
-                        }
-
-                        await DisposeAsync().ConfigureAwait(false);
-                        break;
-                }
-
-                return false;
-            }
-        }
-
-#if !NO_DEEP_CANCELLATION
-        private sealed class DoAsyncIteratorWithTaskAndCancellation<TSource> : AsyncIterator<TSource>
-        {
-            private readonly Func<CancellationToken, Task> _onCompleted;
-            private readonly Func<Exception, CancellationToken, Task> _onError;
-            private readonly Func<TSource, CancellationToken, Task> _onNext;
-            private readonly IAsyncEnumerable<TSource> _source;
-
-            private IAsyncEnumerator<TSource> _enumerator;
-
-            public DoAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<Exception, CancellationToken, Task> onError, Func<CancellationToken, Task> onCompleted)
-            {
-                Debug.Assert(source != null);
-                Debug.Assert(onNext != null);
-
-                _source = source;
-                _onNext = onNext;
-                _onError = onError;
-                _onCompleted = onCompleted;
-            }
-
-            public override AsyncIteratorBase<TSource> Clone()
-            {
-                return new DoAsyncIteratorWithTaskAndCancellation<TSource>(_source, _onNext, _onError, _onCompleted);
-            }
-
-            public override async ValueTask DisposeAsync()
-            {
-                if (_enumerator != null)
-                {
-                    await _enumerator.DisposeAsync().ConfigureAwait(false);
-                    _enumerator = null;
-                }
-
-                await base.DisposeAsync().ConfigureAwait(false);
-            }
-
-            protected override async ValueTask<bool> MoveNextCore()
-            {
-                switch (_state)
-                {
-                    case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
-                        _state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        try
-                        {
-                            if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
-                            {
-                                _current = _enumerator.Current;
-                                await _onNext(_current, _cancellationToken).ConfigureAwait(false);
-
-                                return true;
-                            }
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            throw;
-                        }
-                        catch (Exception ex) when (_onError != null)
-                        {
-                            await _onError(ex, _cancellationToken).ConfigureAwait(false);
-                            throw;
-                        }
-
-                        if (_onCompleted != null)
-                        {
-                            await _onCompleted(_cancellationToken).ConfigureAwait(false);
-                        }
-
-                        await DisposeAsync().ConfigureAwait(false);
-                        break;
-                }
-
-                return false;
-            }
-        }
-#endif
 #endif
     }
 }

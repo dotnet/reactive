@@ -23,7 +23,6 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-#if USE_ASYNC_ITERATOR
             return Create(Core);
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
@@ -36,65 +35,6 @@ namespace System.Linq
                     }
                 }
             }
-#else
-            return new OfTypeAsyncIterator<TResult>(source);
-#endif
         }
-
-#if !USE_ASYNC_ITERATOR
-        private sealed class OfTypeAsyncIterator<TResult> : AsyncIterator<TResult>
-        {
-            private readonly IAsyncEnumerable<object> _source;
-            private IAsyncEnumerator<object> _enumerator;
-
-            public OfTypeAsyncIterator(IAsyncEnumerable<object> source)
-            {
-                _source = source;
-            }
-
-            public override AsyncIteratorBase<TResult> Clone()
-            {
-                return new OfTypeAsyncIterator<TResult>(_source);
-            }
-
-            public override async ValueTask DisposeAsync()
-            {
-                if (_enumerator != null)
-                {
-                    await _enumerator.DisposeAsync().ConfigureAwait(false);
-                    _enumerator = null;
-                }
-
-                await base.DisposeAsync().ConfigureAwait(false);
-            }
-
-            protected override async ValueTask<bool> MoveNextCore()
-            {
-                switch (_state)
-                {
-                    case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
-                        _state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            var item = _enumerator.Current;
-                            if (item is TResult res)
-                            {
-                                _current = res;
-                                return true;
-                            }
-                        }
-
-                        await DisposeAsync().ConfigureAwait(false);
-                        break;
-                }
-
-                return false;
-            }
-        }
-#endif
     }
 }
