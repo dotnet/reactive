@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Runtime.CompilerServices;
+
 namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class MostRecent<TSource> : PushToPullAdapter<TSource, TSource>
@@ -16,12 +18,19 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override PushToPullSink<TSource, TSource> Run()
         {
-            return new _(_initialValue);
+            if (IntPtr.Size < Unsafe.SizeOf<TSource>())
+            {
+                return new NonAtomic(_initialValue);
+            }
+            else
+            {
+                return new Atomic(_initialValue);
+            }
         }
 
-        private sealed class _ : PushToPullSink<TSource, TSource>
+        private abstract class Shared : PushToPullSink<TSource, TSource>
         {
-            public _(TSource initialValue)
+            protected Shared(in TSource initialValue)
             {
                 _kind = NotificationKind.OnNext;
                 _value = initialValue;
@@ -31,7 +40,12 @@ namespace System.Reactive.Linq.ObservableImpl
             private TSource _value;
             private Exception _error;
 
-            public override void OnNext(TSource value)
+            protected virtual void GetValue(out TSource value)
+            {
+                value = _value;
+            }
+
+            protected void SetValue(in TSource value)
             {
                 _value = value;
                 _kind = NotificationKind.OnNext;       // Write last!
@@ -63,7 +77,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 switch (_kind)
                 {
                     case NotificationKind.OnNext:
-                        current = _value;
+                        GetValue(out current);
                         return true;
                     case NotificationKind.OnError:
                         _error.Throw();
@@ -74,6 +88,43 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 current = default;
                 return false;
+            }
+        }
+
+        private sealed class Atomic : Shared
+        {
+            public Atomic(TSource initialValue)
+                : base(initialValue)
+            { }
+
+            public override void OnNext(TSource value)
+            {
+                SetValue(value);
+            }
+        }
+
+        private sealed class NonAtomic : Shared
+        {
+            private readonly object _gate = new object();
+
+            public NonAtomic(in TSource initialValue)
+                : base(initialValue)
+            { }
+
+            public override void OnNext(TSource value)
+            {
+                lock (_gate)
+                {
+                    SetValue(value);
+                }
+            }
+
+            protected override void GetValue(out TSource value)
+            {
+                lock (_gate)
+                {
+                    base.GetValue(out value);
+                }
             }
         }
     }
