@@ -20,10 +20,7 @@ namespace System.Linq
             if (second == null)
                 throw Error.ArgumentNull(nameof(second));
 
-            if (comparer == null)
-            {
-                comparer = EqualityComparer<TSource>.Default;
-            }
+            comparer ??= EqualityComparer<TSource>.Default;
 
             if (first is ICollection<TSource> firstCol && second is ICollection<TSource> secondCol)
             {

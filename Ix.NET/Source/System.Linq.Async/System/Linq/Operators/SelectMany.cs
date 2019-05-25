@@ -364,11 +364,11 @@ namespace System.Linq
 
                 return Core(cancellationToken);
 
-                async ValueTask<int> Core(CancellationToken _cancellationToken)
+                async ValueTask<int> Core(CancellationToken cancellationToken)
                 {
                     var count = 0;
 
-                    await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                    await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         checked
                         {
@@ -503,11 +503,11 @@ namespace System.Linq
 
                 return Core(cancellationToken);
 
-                async ValueTask<int> Core(CancellationToken _cancellationToken)
+                async ValueTask<int> Core(CancellationToken cancellationToken)
                 {
                     var count = 0;
 
-                    await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                    await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         var items = await _selector(element).ConfigureAwait(false);
 
@@ -645,13 +645,13 @@ namespace System.Linq
 
                 return Core(cancellationToken);
 
-                async ValueTask<int> Core(CancellationToken _cancellationToken)
+                async ValueTask<int> Core(CancellationToken cancellationToken)
                 {
                     var count = 0;
 
-                    await foreach (var element in _source.WithCancellation(_cancellationToken).ConfigureAwait(false))
+                    await foreach (var element in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
-                        var items = await _selector(element, _cancellationToken).ConfigureAwait(false);
+                        var items = await _selector(element, cancellationToken).ConfigureAwait(false);
 
                         checked
                         {
