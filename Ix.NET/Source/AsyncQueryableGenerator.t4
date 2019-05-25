@@ -93,6 +93,8 @@ return name;
 
 var toQuoted = new Func<Type, int, string>((t, i) => toQuotedImpl(t, i, true));
 #>
+#nullable enable
+
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
