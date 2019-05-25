@@ -176,7 +176,7 @@ namespace System.Linq
             {
                 var count = sources.Length;
 
-                var enumerators = new IAsyncEnumerator<TSource>[count];
+                var enumerators = new IAsyncEnumerator<TSource>?[count];
                 var moveNextTasks = new Task<bool>[count];
 
                 try
@@ -212,7 +212,7 @@ namespace System.Linq
 
                         var index = Array.IndexOf(moveNextTasks, moveNextTask);
 
-                        var enumerator = enumerators[index];
+                        var enumerator = enumerators[index]!; // NB: Only gets set to null after setting task to Never.
 
                         if (!await moveNextTask.ConfigureAwait(false))
                         {

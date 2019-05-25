@@ -19,7 +19,15 @@ namespace System.Linq.Internal
         internal int _hashCode;
         internal Grouping<TKey, TElement> _hashNext;
         internal TKey _key;
-        internal Grouping<TKey, TElement> _next;
+        internal Grouping<TKey, TElement>? _next;
+
+        public Grouping(TKey key, int hashCode, TElement[] elements, Grouping<TKey, TElement> hashNext)
+        {
+            _key = key;
+            _hashCode = hashCode;
+            _elements = elements;
+            _hashNext = hashNext;
+        }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

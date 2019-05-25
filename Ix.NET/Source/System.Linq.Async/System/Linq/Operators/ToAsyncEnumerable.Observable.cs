@@ -23,11 +23,11 @@ namespace System.Linq
         {
             private readonly IObservable<TSource> _source;
 
-            private ConcurrentQueue<TSource> _values = new ConcurrentQueue<TSource>();
-            private Exception _error;
+            private ConcurrentQueue<TSource>? _values = new ConcurrentQueue<TSource>();
+            private Exception? _error;
             private bool _completed;
-            private TaskCompletionSource<bool> _signal;
-            private IDisposable _subscription;
+            private TaskCompletionSource<bool>? _signal;
+            private IDisposable? _subscription;
             private CancellationTokenRegistration _ctr;
 
             public ObservableAsyncEnumerable(IObservable<TSource> source) => _source = source;
@@ -78,7 +78,7 @@ namespace System.Linq
                         {
                             var completed = Volatile.Read(ref _completed);
 
-                            if (_values.TryDequeue(out _current))
+                            if (_values!.TryDequeue(out _current))
                             {
                                 return true;
                             }
@@ -166,7 +166,7 @@ namespace System.Linq
 
             private Task Resume()
             {
-                TaskCompletionSource<bool> newSignal = null;
+                TaskCompletionSource<bool>? newSignal = null;
 
                 while (true)
                 {
@@ -177,10 +177,7 @@ namespace System.Linq
                         return signal.Task;
                     }
 
-                    if (newSignal == null)
-                    {
-                        newSignal = new TaskCompletionSource<bool>();
-                    }
+                    newSignal ??= new TaskCompletionSource<bool>();
 
                     if (Interlocked.CompareExchange(ref _signal, newSignal, null) == null)
                     {

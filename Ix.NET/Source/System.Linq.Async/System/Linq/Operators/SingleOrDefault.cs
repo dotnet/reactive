@@ -17,13 +17,13 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
             {
                 if (source is IList<TSource> list)
                 {
                     switch (list.Count)
                     {
-                        case 0: return default;
+                        case 0: return default!;
                         case 1: return list[0];
                     }
 
@@ -34,7 +34,7 @@ namespace System.Linq
                 {
                     if (!await e.MoveNextAsync())
                     {
-                        return default;
+                        return default!;
                     }
 
                     var result = e.Current;
@@ -58,7 +58,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
             {
                 await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
@@ -81,7 +81,7 @@ namespace System.Linq
                     }
                 }
 
-                return default;
+                return default!;
             }
         }
 
@@ -94,7 +94,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
             {
                 await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
@@ -117,7 +117,7 @@ namespace System.Linq
                     }
                 }
 
-                return default;
+                return default!;
             }
         }
 
@@ -131,7 +131,7 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
             {
                 await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
@@ -154,7 +154,7 @@ namespace System.Linq
                     }
                 }
 
-                return default;
+                return default!;
             }
         }
 #endif

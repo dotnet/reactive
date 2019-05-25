@@ -47,7 +47,7 @@ namespace System.Linq
                 return new ConcatNAsyncIterator<TSource>(this, next, 2);
             }
 
-            internal override IAsyncEnumerable<TSource> GetAsyncEnumerable(int index)
+            internal override IAsyncEnumerable<TSource>? GetAsyncEnumerable(int index)
             {
                 switch (index)
                 {
@@ -64,7 +64,7 @@ namespace System.Linq
         private abstract class ConcatAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
             private int _counter;
-            private IAsyncEnumerator<TSource> _enumerator;
+            private IAsyncEnumerator<TSource>? _enumerator;
 
             public ValueTask<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
@@ -140,7 +140,7 @@ namespace System.Linq
             {
                 if (_state == AsyncIteratorState.Allocated)
                 {
-                    _enumerator = GetAsyncEnumerable(0).GetAsyncEnumerator(_cancellationToken);
+                    _enumerator = GetAsyncEnumerable(0)!.GetAsyncEnumerator(_cancellationToken);
                     _state = AsyncIteratorState.Iterating;
                     _counter = 2;
                 }
@@ -149,7 +149,7 @@ namespace System.Linq
                 {
                     while (true)
                     {
-                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                         {
                             _current = _enumerator.Current;
                             return true;
@@ -178,7 +178,7 @@ namespace System.Linq
 
             internal abstract ConcatAsyncIterator<TSource> Concat(IAsyncEnumerable<TSource> next);
 
-            internal abstract IAsyncEnumerable<TSource> GetAsyncEnumerable(int index);
+            internal abstract IAsyncEnumerable<TSource>? GetAsyncEnumerable(int index);
         }
 
         // To handle chains of >= 3 sources, we chain the concat iterators together and allow
@@ -222,7 +222,7 @@ namespace System.Linq
                 return new ConcatNAsyncIterator<TSource>(this, next, _nextIndex + 1);
             }
 
-            internal override IAsyncEnumerable<TSource> GetAsyncEnumerable(int index)
+            internal override IAsyncEnumerable<TSource>? GetAsyncEnumerable(int index)
             {
                 if (index > _nextIndex)
                 {

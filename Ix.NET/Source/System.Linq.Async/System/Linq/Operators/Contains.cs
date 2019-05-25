@@ -14,7 +14,7 @@ namespace System.Linq
             source is ICollection<TSource> collection ? new ValueTask<bool>(collection.Contains(value)) :
             ContainsAsync(source, value, comparer: null, cancellationToken);
 
-        public static ValueTask<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));

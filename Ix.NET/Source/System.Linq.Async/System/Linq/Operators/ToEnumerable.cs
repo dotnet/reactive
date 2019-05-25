@@ -19,9 +19,9 @@ namespace System.Linq
 
             return Core(source);
 
-            IEnumerable<TSource> Core(IAsyncEnumerable<TSource> _source)
+            static IEnumerable<TSource> Core(IAsyncEnumerable<TSource> source)
             {
-                var e = _source.GetAsyncEnumerator(default);
+                var e = source.GetAsyncEnumerator(default);
 
                 try
                 {

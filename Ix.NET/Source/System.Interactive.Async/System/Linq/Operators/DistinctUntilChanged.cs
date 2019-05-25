@@ -18,7 +18,7 @@ namespace System.Linq
             return DistinctUntilChangedCore(source, comparer: null);
         }
 
-        public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
+        public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource>? comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -36,7 +36,7 @@ namespace System.Linq
             return DistinctUntilChangedCore(source, keySelector, comparer: null);
         }
 
-        public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -68,7 +68,7 @@ namespace System.Linq
         }
 #endif
 
-        public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -90,7 +90,7 @@ namespace System.Linq
         }
 #endif
 
-        private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource>(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
+        private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource>(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource>? comparer)
         {
             comparer ??= EqualityComparer<TSource>.Default;
 
@@ -113,7 +113,9 @@ namespace System.Linq
                     {
                         var item = e.Current;
 
-                        if (!comparer.Equals(latest, item))
+                        // REVIEW: Need comparer!.Equals to satisfy nullable reference type warnings.
+
+                        if (!comparer!.Equals(latest, item))
                         {
                             latest = item;
 
@@ -124,7 +126,7 @@ namespace System.Linq
             }
         }
 
-        private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
         {
             comparer ??= EqualityComparer<TKey>.Default;
 
@@ -151,7 +153,9 @@ namespace System.Linq
 
                         var currentKey = keySelector(item);
 
-                        if (!comparer.Equals(latestKey, currentKey))
+                        // REVIEW: Need comparer!.Equals to satisfy nullable reference type warnings.
+
+                        if (!comparer!.Equals(latestKey, currentKey))
                         {
                             latestKey = currentKey;
 
@@ -162,7 +166,7 @@ namespace System.Linq
             }
         }
 
-        private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             comparer ??= EqualityComparer<TKey>.Default;
 
@@ -189,7 +193,9 @@ namespace System.Linq
 
                         var currentKey = await keySelector(item).ConfigureAwait(false);
 
-                        if (!comparer.Equals(latestKey, currentKey))
+                        // REVIEW: Need comparer!.Equals to satisfy nullable reference type warnings.
+
+                        if (!comparer!.Equals(latestKey, currentKey))
                         {
                             latestKey = currentKey;
 
@@ -201,7 +207,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        private static IAsyncEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             comparer ??= EqualityComparer<TKey>.Default;
 
@@ -228,7 +234,9 @@ namespace System.Linq
 
                         var currentKey = await keySelector(item, cancellationToken).ConfigureAwait(false);
 
-                        if (!comparer.Equals(latestKey, currentKey))
+                        // REVIEW: Need comparer!.Equals to satisfy nullable reference type warnings.
+
+                        if (!comparer!.Equals(latestKey, currentKey))
                         {
                             latestKey = currentKey;
 

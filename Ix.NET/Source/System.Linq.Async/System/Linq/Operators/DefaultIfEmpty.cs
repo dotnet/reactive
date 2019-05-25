@@ -13,7 +13,7 @@ namespace System.Linq
     public static partial class AsyncEnumerable
     {
         public static IAsyncEnumerable<TSource> DefaultIfEmpty<TSource>(this IAsyncEnumerable<TSource> source) =>
-            DefaultIfEmpty(source, default);
+            DefaultIfEmpty(source, default!);
 
         public static IAsyncEnumerable<TSource> DefaultIfEmpty<TSource>(this IAsyncEnumerable<TSource> source, TSource defaultValue)
         {
@@ -28,7 +28,7 @@ namespace System.Linq
             private readonly IAsyncEnumerable<TSource> _source;
             private readonly TSource _defaultValue;
 
-            private IAsyncEnumerator<TSource> _enumerator;
+            private IAsyncEnumerator<TSource>? _enumerator;
 
             public DefaultIfEmptyAsyncIterator(IAsyncEnumerable<TSource> source, TSource defaultValue)
             {
@@ -76,7 +76,7 @@ namespace System.Linq
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                         {
                             _current = _enumerator.Current;
                             return true;

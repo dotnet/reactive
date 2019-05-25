@@ -15,7 +15,7 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            if (default(TSource) == null)
+            if (default(TSource)! == null) // NB: Null value is desired; JIT-time check.
             {
                 return Core(source, cancellationToken);
 
@@ -23,7 +23,7 @@ namespace System.Linq
                 {
                     var comparer = Comparer<TSource>.Default;
 
-                    var value = default(TSource);
+                    TSource value;
 
                     await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
@@ -31,7 +31,7 @@ namespace System.Linq
                         {
                             if (!await e.MoveNextAsync())
                             {
-                                return value;
+                                return default!;
                             }
 
                             value = e.Current;
@@ -60,7 +60,7 @@ namespace System.Linq
                 {
                     var comparer = Comparer<TSource>.Default;
 
-                    var value = default(TSource);
+                    TSource value;
 
                     await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
@@ -94,7 +94,7 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            if (default(TResult) == null)
+            if (default(TResult)! == null) // NB: Null value is desired; JIT-time check.
             {
                 return Core(source, selector, cancellationToken);
 
@@ -102,7 +102,7 @@ namespace System.Linq
                 {
                     var comparer = Comparer<TResult>.Default;
 
-                    var value = default(TResult);
+                    TResult value;
 
                     await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
@@ -110,7 +110,7 @@ namespace System.Linq
                         {
                             if (!await e.MoveNextAsync())
                             {
-                                return value;
+                                return default!;
                             }
 
                             value = selector(e.Current);
@@ -139,7 +139,7 @@ namespace System.Linq
                 {
                     var comparer = Comparer<TResult>.Default;
 
-                    var value = default(TResult);
+                    TResult value;
 
                     await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
@@ -173,7 +173,7 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            if (default(TResult) == null)
+            if (default(TResult)! == null) // NB: Null value is desired; JIT-time check.
             {
                 return Core(source, selector, cancellationToken);
 
@@ -181,7 +181,7 @@ namespace System.Linq
                 {
                     var comparer = Comparer<TResult>.Default;
 
-                    var value = default(TResult);
+                    TResult value;
 
                     await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
@@ -189,7 +189,7 @@ namespace System.Linq
                         {
                             if (!await e.MoveNextAsync())
                             {
-                                return value;
+                                return default!;
                             }
 
                             value = await selector(e.Current).ConfigureAwait(false);
@@ -218,7 +218,7 @@ namespace System.Linq
                 {
                     var comparer = Comparer<TResult>.Default;
 
-                    var value = default(TResult);
+                    TResult value;
 
                     await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
@@ -253,7 +253,7 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            if (default(TResult) == null)
+            if (default(TResult)! == null) // NB: Null value is desired; JIT-time check.
             {
                 return Core(source, selector, cancellationToken);
 
@@ -261,7 +261,7 @@ namespace System.Linq
                 {
                     var comparer = Comparer<TResult>.Default;
 
-                    var value = default(TResult);
+                    TResult value;
 
                     await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
@@ -269,7 +269,7 @@ namespace System.Linq
                         {
                             if (!await e.MoveNextAsync())
                             {
-                                return value;
+                                return default!;
                             }
 
                             value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
@@ -298,7 +298,7 @@ namespace System.Linq
                 {
                     var comparer = Comparer<TResult>.Default;
 
-                    var value = default(TResult);
+                    TResult value;
 
                     await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {

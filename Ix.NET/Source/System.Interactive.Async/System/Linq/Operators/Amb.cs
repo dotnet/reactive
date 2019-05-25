@@ -21,11 +21,11 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                IAsyncEnumerator<TSource> firstEnumerator = null;
-                IAsyncEnumerator<TSource> secondEnumerator = null;
+                IAsyncEnumerator<TSource>? firstEnumerator = null;
+                IAsyncEnumerator<TSource>? secondEnumerator = null;
 
-                Task<bool> firstMoveNext = null;
-                Task<bool> secondMoveNext = null;
+                Task<bool>? firstMoveNext = null;
+                Task<bool>? secondMoveNext = null;
 
                 try
                 {
@@ -228,7 +228,7 @@ namespace System.Linq
             return Amb(sources.ToArray());
         }
 
-        private static async Task AwaitMoveNextAsyncAndDispose<T>(Task<bool> moveNextAsync, IAsyncEnumerator<T> enumerator)
+        private static async Task AwaitMoveNextAsyncAndDispose<T>(Task<bool>? moveNextAsync, IAsyncEnumerator<T>? enumerator)
         {
             if (enumerator != null)
             {

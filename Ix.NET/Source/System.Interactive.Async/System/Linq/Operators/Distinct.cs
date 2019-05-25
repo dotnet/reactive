@@ -21,7 +21,7 @@ namespace System.Linq
             return DistinctCore(source, keySelector, comparer: null);
         }
 
-        public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -53,7 +53,7 @@ namespace System.Linq
         }
 #endif
 
-        public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -64,7 +64,7 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -75,18 +75,18 @@ namespace System.Linq
         }
 #endif
 
-        private static IAsyncEnumerable<TSource> DistinctCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        private static IAsyncEnumerable<TSource> DistinctCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
         {
             return new DistinctAsyncIterator<TSource, TKey>(source, keySelector, comparer);
         }
 
-        private static IAsyncEnumerable<TSource> DistinctCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        private static IAsyncEnumerable<TSource> DistinctCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             return new DistinctAsyncIteratorWithTask<TSource, TKey>(source, keySelector, comparer);
         }
 
 #if !NO_DEEP_CANCELLATION
-        private static IAsyncEnumerable<TSource> DistinctCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        private static IAsyncEnumerable<TSource> DistinctCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             return new DistinctAsyncIteratorWithTaskAndCancellation<TSource, TKey>(source, keySelector, comparer);
         }
@@ -94,14 +94,14 @@ namespace System.Linq
 
         private sealed class DistinctAsyncIterator<TSource, TKey> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
-            private readonly IEqualityComparer<TKey> _comparer;
+            private readonly IEqualityComparer<TKey>? _comparer;
             private readonly Func<TSource, TKey> _keySelector;
             private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> _enumerator;
-            private Set<TKey> _set;
+            private IAsyncEnumerator<TSource>? _enumerator;
+            private Set<TKey>? _set;
 
-            public DistinctAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+            public DistinctAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
@@ -194,11 +194,11 @@ namespace System.Linq
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                         {
                             element = _enumerator.Current;
 
-                            if (_set.Add(_keySelector(element)))
+                            if (_set!.Add(_keySelector(element)))
                             {
                                 _current = element;
                                 return true;
@@ -242,14 +242,14 @@ namespace System.Linq
 
         private sealed class DistinctAsyncIteratorWithTask<TSource, TKey> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
-            private readonly IEqualityComparer<TKey> _comparer;
+            private readonly IEqualityComparer<TKey>? _comparer;
             private readonly Func<TSource, ValueTask<TKey>> _keySelector;
             private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> _enumerator;
-            private Set<TKey> _set;
+            private IAsyncEnumerator<TSource>? _enumerator;
+            private Set<TKey>? _set;
 
-            public DistinctAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+            public DistinctAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
@@ -342,11 +342,11 @@ namespace System.Linq
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                         {
                             element = _enumerator.Current;
 
-                            if (_set.Add(await _keySelector(element).ConfigureAwait(false)))
+                            if (_set!.Add(await _keySelector(element).ConfigureAwait(false)))
                             {
                                 _current = element;
                                 return true;
@@ -391,14 +391,14 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private sealed class DistinctAsyncIteratorWithTaskAndCancellation<TSource, TKey> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
-            private readonly IEqualityComparer<TKey> _comparer;
+            private readonly IEqualityComparer<TKey>? _comparer;
             private readonly Func<TSource, CancellationToken, ValueTask<TKey>> _keySelector;
             private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> _enumerator;
-            private Set<TKey> _set;
+            private IAsyncEnumerator<TSource>? _enumerator;
+            private Set<TKey>? _set;
 
-            public DistinctAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+            public DistinctAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
             {
                 Debug.Assert(source != null);
                 Debug.Assert(keySelector != null);
@@ -491,11 +491,11 @@ namespace System.Linq
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                         {
                             element = _enumerator.Current;
 
-                            if (_set.Add(await _keySelector(element, _cancellationToken).ConfigureAwait(false)))
+                            if (_set!.Add(await _keySelector(element, _cancellationToken).ConfigureAwait(false)))
                             {
                                 _current = element;
                                 return true;

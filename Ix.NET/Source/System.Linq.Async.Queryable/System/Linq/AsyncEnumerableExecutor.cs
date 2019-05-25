@@ -15,7 +15,7 @@ namespace System.Linq
     internal class AsyncEnumerableExecutor<T>
     {
         private readonly Expression _expression;
-        private Func<CancellationToken, ValueTask<T>> _func;
+        private Func<CancellationToken, ValueTask<T>>? _func;
 
         /// <summary>
         /// Creates a new execution helper instance for the specified expression tree representing a computation over asynchronous enumerable sequences.

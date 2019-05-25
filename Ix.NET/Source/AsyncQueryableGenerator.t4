@@ -154,7 +154,7 @@ foreach (var m in asyncEnumerableType.GetMethods()
         }
     }
 
-    var pars = string.Join(", ", m.GetParameters().Select((p, i) => (i == parCount - 1 && isParams ? "params " : "") + toQuoted(p.ParameterType, i) + " " + p.Name + (i == parCount - 1 && lastParameterDefault ? " = default" : "")));
+    var pars = string.Join(", ", m.GetParameters().Select((p, i) => (i == parCount - 1 && isParams ? "params " : "") + toQuoted(p.ParameterType, i) + (nullableParameterNames.Contains(p.Name) ? "?" : "") + " " + p.Name + (i == parCount - 1 && lastParameterDefault ? " = default" : "")));
     var quotedPars = string.Join(", ", m.GetParameters().Select((p, i) => "default(" + toQuoted(p.ParameterType, i) + ")"));
 
     if (m.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), true))

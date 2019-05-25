@@ -51,7 +51,7 @@ namespace System.Linq
                     _moveNextThrows = moveNextThrows;
                 }
 
-                public TValue Current => default;
+                public TValue Current => default!;
 
                 public ValueTask DisposeAsync()
                 {

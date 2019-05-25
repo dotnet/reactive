@@ -102,7 +102,7 @@ namespace System.Collections.Generic
             return result;
         }
 
-        internal static async Task<Set<T>> ToSet<T>(IAsyncEnumerable<T> source, IEqualityComparer<T> comparer, CancellationToken cancellationToken)
+        internal static async Task<Set<T>> ToSet<T>(IAsyncEnumerable<T> source, IEqualityComparer<T>? comparer, CancellationToken cancellationToken)
         {
             var set = new Set<T>(comparer);
 

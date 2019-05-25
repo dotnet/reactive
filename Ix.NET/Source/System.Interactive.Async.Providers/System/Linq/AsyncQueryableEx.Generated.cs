@@ -188,7 +188,7 @@ namespace System.Linq
             (s_Distinct__TSource_TKey__3__0 ??
             (s_Distinct__TSource_TKey__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, IEqualityComparer<object>, IAsyncQueryable<object>>(Distinct<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
-        public static IAsyncQueryable<TSource> Distinct<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncQueryable<TSource> Distinct<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -204,7 +204,7 @@ namespace System.Linq
             (s_Distinct__TSource_TKey__3__1 ??
             (s_Distinct__TSource_TKey__3__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, IEqualityComparer<object>, IAsyncQueryable<object>>(Distinct<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
-        public static IAsyncQueryable<TSource> Distinct<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncQueryable<TSource> Distinct<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -220,7 +220,7 @@ namespace System.Linq
             (s_Distinct__TSource_TKey__3__2 ??
             (s_Distinct__TSource_TKey__3__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, IEqualityComparer<object>, IAsyncQueryable<object>>(Distinct<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
-        public static IAsyncQueryable<TSource> Distinct<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncQueryable<TSource> Distinct<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -250,7 +250,7 @@ namespace System.Linq
             (s_DistinctUntilChanged__TSource__2__0 ??
             (s_DistinctUntilChanged__TSource__2__0 = new Func<IAsyncQueryable<object>, IEqualityComparer<object>, IAsyncQueryable<object>>(DistinctUntilChanged<object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
-        public static IAsyncQueryable<TSource> DistinctUntilChanged<TSource>(this IAsyncQueryable<TSource> source, IEqualityComparer<TSource> comparer)
+        public static IAsyncQueryable<TSource> DistinctUntilChanged<TSource>(this IAsyncQueryable<TSource> source, IEqualityComparer<TSource>? comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -312,7 +312,7 @@ namespace System.Linq
             (s_DistinctUntilChanged__TSource_TKey__3__0 ??
             (s_DistinctUntilChanged__TSource_TKey__3__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, IEqualityComparer<object>, IAsyncQueryable<object>>(DistinctUntilChanged<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
-        public static IAsyncQueryable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncQueryable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -328,7 +328,7 @@ namespace System.Linq
             (s_DistinctUntilChanged__TSource_TKey__3__1 ??
             (s_DistinctUntilChanged__TSource_TKey__3__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, IEqualityComparer<object>, IAsyncQueryable<object>>(DistinctUntilChanged<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
-        public static IAsyncQueryable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncQueryable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -344,7 +344,7 @@ namespace System.Linq
             (s_DistinctUntilChanged__TSource_TKey__3__2 ??
             (s_DistinctUntilChanged__TSource_TKey__3__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, IEqualityComparer<object>, IAsyncQueryable<object>>(DistinctUntilChanged<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
-        public static IAsyncQueryable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IEqualityComparer<TKey> comparer)
+        public static IAsyncQueryable<TSource> DistinctUntilChanged<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IEqualityComparer<TKey>? comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -700,7 +700,7 @@ namespace System.Linq
             (s_MaxAsync__TSource__3__0 ??
             (s_MaxAsync__TSource__3__0 = new Func<IAsyncQueryable<object>, IComparer<object>, CancellationToken, ValueTask<object>>(MaxAsync<object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
-        public static ValueTask<TSource> MaxAsync<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource> MaxAsync<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -762,7 +762,7 @@ namespace System.Linq
             (s_MaxByAsync__TSource_TKey__4__0 ??
             (s_MaxByAsync__TSource_TKey__4__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MaxByAsync<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
-        public static ValueTask<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IComparer<TKey>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -778,7 +778,7 @@ namespace System.Linq
             (s_MaxByAsync__TSource_TKey__4__1 ??
             (s_MaxByAsync__TSource_TKey__4__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MaxByAsync<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
-        public static ValueTask<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -794,7 +794,7 @@ namespace System.Linq
             (s_MaxByAsync__TSource_TKey__4__2 ??
             (s_MaxByAsync__TSource_TKey__4__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MaxByAsync<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
-        public static ValueTask<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MaxByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -824,7 +824,7 @@ namespace System.Linq
             (s_MinAsync__TSource__3__0 ??
             (s_MinAsync__TSource__3__0 = new Func<IAsyncQueryable<object>, IComparer<object>, CancellationToken, ValueTask<object>>(MinAsync<object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource);
 
-        public static ValueTask<TSource> MinAsync<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource> MinAsync<TSource>(this IAsyncQueryable<TSource> source, IComparer<TSource>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -886,7 +886,7 @@ namespace System.Linq
             (s_MinByAsync__TSource_TKey__4__0 ??
             (s_MinByAsync__TSource_TKey__4__0 = new Func<IAsyncQueryable<object>, Expression<Func<object, CancellationToken, ValueTask<object>>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MinByAsync<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
-        public static ValueTask<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, CancellationToken, ValueTask<TKey>>> keySelector, IComparer<TKey>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -902,7 +902,7 @@ namespace System.Linq
             (s_MinByAsync__TSource_TKey__4__1 ??
             (s_MinByAsync__TSource_TKey__4__1 = new Func<IAsyncQueryable<object>, Expression<Func<object, object>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MinByAsync<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
-        public static ValueTask<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -918,7 +918,7 @@ namespace System.Linq
             (s_MinByAsync__TSource_TKey__4__2 ??
             (s_MinByAsync__TSource_TKey__4__2 = new Func<IAsyncQueryable<object>, Expression<Func<object, ValueTask<object>>>, IComparer<object>, CancellationToken, ValueTask<IList<object>>>(MinByAsync<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TSource, TKey);
 
-        public static ValueTask<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<IList<TSource>> MinByAsync<TSource, TKey>(this IAsyncQueryable<TSource> source, Expression<Func<TSource, ValueTask<TKey>>> keySelector, IComparer<TKey>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

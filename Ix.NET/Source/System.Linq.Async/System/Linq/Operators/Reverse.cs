@@ -25,7 +25,7 @@ namespace System.Linq
             private readonly IAsyncEnumerable<TSource> _source;
 
             private int _index;
-            private TSource[] _items;
+            private TSource[]? _items;
 
             public ReverseAsyncIterator(IAsyncEnumerable<TSource> source)
             {
@@ -101,7 +101,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (_index != -1)
                         {
-                            _current = _items[_index];
+                            _current = _items![_index];
                             --_index;
                             return true;
                         }
