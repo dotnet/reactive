@@ -44,7 +44,7 @@ namespace System.Linq
         /// <summary>
         /// The next node in the singly-linked list.
         /// </summary>
-        public SingleLinkedNode<TSource> Linked { get; }
+        public SingleLinkedNode<TSource>? Linked { get; }
 
         /// <summary>
         /// Creates a new node that holds the specified item and is linked to this node.
@@ -58,7 +58,7 @@ namespace System.Linq
         public int GetCount()
         {
             var count = 0;
-            for (var node = this; node != null; node = node.Linked)
+            for (SingleLinkedNode<TSource>? node = this; node != null; node = node.Linked)
             {
                 count++;
             }
@@ -86,10 +86,10 @@ namespace System.Linq
         {
             Debug.Assert(index >= 0 && index < GetCount());
 
-            var node = this;
+            SingleLinkedNode<TSource>? node = this;
             for (; index > 0; index--)
             {
-                node = node.Linked;
+                node = node!.Linked;
             }
 
             Debug.Assert(node != null);
@@ -106,7 +106,7 @@ namespace System.Linq
 
             var array = new TSource[count];
             var index = count;
-            for (var node = this; node != null; node = node.Linked)
+            for (SingleLinkedNode<TSource>? node = this; node != null; node = node.Linked)
             {
                 --index;
                 array[index] = node.Item;

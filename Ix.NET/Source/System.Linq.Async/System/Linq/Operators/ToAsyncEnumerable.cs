@@ -32,7 +32,7 @@ namespace System.Linq
         {
             private readonly IEnumerable<T> _source;
 
-            private IEnumerator<T> _enumerator;
+            private IEnumerator<T>? _enumerator;
  
             public AsyncEnumerableAdapter(IEnumerable<T> source)
             {
@@ -64,7 +64,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (_enumerator.MoveNext())
+                        if (_enumerator!.MoveNext())
                         {
                             _current = _enumerator.Current;
                             return true;
@@ -107,7 +107,7 @@ namespace System.Linq
         private sealed class AsyncIListEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>, IList<T>
         {
             private readonly IList<T> _source;
-            private IEnumerator<T> _enumerator;
+            private IEnumerator<T>? _enumerator;
 
             public AsyncIListEnumerableAdapter(IList<T> source)
             {
@@ -139,7 +139,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (_enumerator.MoveNext())
+                        if (_enumerator!.MoveNext())
                         {
                             _current = _enumerator.Current;
                             return true;
@@ -214,7 +214,7 @@ namespace System.Linq
         private sealed class AsyncICollectionEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>, ICollection<T>
         {
             private readonly ICollection<T> _source;
-            private IEnumerator<T> _enumerator;
+            private IEnumerator<T>? _enumerator;
 
             public AsyncICollectionEnumerableAdapter(ICollection<T> source)
             {
@@ -246,7 +246,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (_enumerator.MoveNext())
+                        if (_enumerator!.MoveNext())
                         {
                             _current = _enumerator.Current;
                             return true;

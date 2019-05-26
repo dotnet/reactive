@@ -13,7 +13,7 @@ namespace System.Linq
         public static ValueTask<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken = default) =>
             SequenceEqualAsync(first, second, comparer: null, cancellationToken);
 
-        public static ValueTask<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<bool> SequenceEqualAsync<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource>? comparer, CancellationToken cancellationToken = default)
         {
             if (first == null)
                 throw Error.ArgumentNull(nameof(first));

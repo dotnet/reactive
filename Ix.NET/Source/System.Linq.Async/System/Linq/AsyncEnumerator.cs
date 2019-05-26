@@ -63,7 +63,7 @@ namespace System.Collections.Generic
         {
             private readonly Func<T> _currentFunc;
             private readonly Func<ValueTask<bool>> _moveNext;
-            private Func<ValueTask> _dispose;
+            private Func<ValueTask>? _dispose;
 
             public AnonymousAsyncIterator(Func<ValueTask<bool>> moveNext, Func<T> currentFunc, Func<ValueTask> dispose)
             {

@@ -10,14 +10,14 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
-        public static ValueTask<TSource> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
             return Core(source, comparer, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, IComparer<TSource>? comparer, CancellationToken cancellationToken)
             {
                 comparer ??= Comparer<TSource>.Default;
 

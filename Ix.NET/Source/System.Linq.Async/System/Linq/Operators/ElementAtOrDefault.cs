@@ -52,7 +52,7 @@ namespace System.Linq
                     }
                 }
 
-                return default;
+                return default!;
             }
         }
     }

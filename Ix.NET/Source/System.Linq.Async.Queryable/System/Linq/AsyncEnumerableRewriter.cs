@@ -138,7 +138,7 @@ namespace System.Linq
             return type;
         }
 
-        private static bool ArgsMatch(MethodInfo method, ReadOnlyCollection<Expression> args, Type[] typeArgs)
+        private static bool ArgsMatch(MethodInfo method, ReadOnlyCollection<Expression> args, Type[]? typeArgs)
         {
             //
             // Number of parameters should match the number of arguments to bind.
@@ -388,7 +388,7 @@ namespace System.Linq
             return elemType.MakeArrayType();
         }
 
-        private static MethodInfo FindEnumerableMethod(string name, ReadOnlyCollection<Expression> args, params Type[] typeArgs)
+        private static MethodInfo FindEnumerableMethod(string name, ReadOnlyCollection<Expression> args, params Type[]? typeArgs)
         {
             //
             // Ensure the cached lookup table for AsyncEnumerable methods is initialized.
@@ -418,7 +418,7 @@ namespace System.Linq
             return method;
         }
 
-        private static MethodInfo FindMethod(Type type, string name, ReadOnlyCollection<Expression> args, Type[] typeArgs, BindingFlags flags)
+        private static MethodInfo FindMethod(Type type, string name, ReadOnlyCollection<Expression> args, Type[]? typeArgs, BindingFlags flags)
         {
             //
             // Support the enumerable methods to be defined on another type.
@@ -454,7 +454,7 @@ namespace System.Linq
             return method;
         }
 
-        private static Type FindGenericType(Type definition, Type type)
+        private static Type? FindGenericType(Type definition, Type type)
         {
             while (type != null && type != typeof(object))
             {

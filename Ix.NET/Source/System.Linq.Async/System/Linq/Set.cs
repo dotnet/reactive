@@ -20,7 +20,7 @@ namespace System.Linq
 #endif
         private Slot[] _slots;
 
-        public Set(IEqualityComparer<TElement> comparer)
+        public Set(IEqualityComparer<TElement>? comparer)
         {
             _comparer = comparer ?? EqualityComparer<TElement>.Default;
             _buckets = new int[7];
@@ -82,7 +82,7 @@ namespace System.Linq
                     }
 
                     _slots[i]._hashCode = -1;
-                    _slots[i]._value = default;
+                    _slots[i]._value = default!;
                     _slots[i]._next = -1;
                     return true;
                 }

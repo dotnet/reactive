@@ -21,7 +21,7 @@ namespace System.Linq
         private readonly int _minIndexInclusive;
         private readonly int _maxIndexInclusive; // -1 if we want everything past _minIndexInclusive.
                                                  // If this is -1, it's impossible to set a limit on the count.
-        private IAsyncEnumerator<TSource> _enumerator;
+        private IAsyncEnumerator<TSource>? _enumerator;
 
         internal AsyncEnumerablePartition(IAsyncEnumerable<TSource> source, int minIndexInclusive, int maxIndexInclusive)
         {
@@ -122,7 +122,7 @@ namespace System.Linq
                 case AsyncIteratorState.Iterating:
                     if (!_hasSkipped)
                     {
-                        if (!await SkipBeforeFirstAsync(_enumerator).ConfigureAwait(false))
+                        if (!await SkipBeforeFirstAsync(_enumerator!).ConfigureAwait(false))
                         {
                             // Reached the end before we finished skipping.
                             break;
@@ -131,7 +131,7 @@ namespace System.Linq
                         _hasSkipped = true;
                     }
 
-                    if ((!HasLimit || _taken < Limit) && await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                    if ((!HasLimit || _taken < Limit) && await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                     {
                         if (HasLimit)
                         {

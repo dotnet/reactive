@@ -321,8 +321,8 @@ namespace System.Linq
             private readonly IAsyncEnumerable<TSource> _source;
 
             private int _mode;
-            private IAsyncEnumerator<TResult> _resultEnumerator;
-            private IAsyncEnumerator<TSource> _sourceEnumerator;
+            private IAsyncEnumerator<TResult>? _resultEnumerator;
+            private IAsyncEnumerator<TSource>? _sourceEnumerator;
 
             public SelectManyAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TResult>> selector)
             {
@@ -417,7 +417,7 @@ namespace System.Linq
                         switch (_mode)
                         {
                             case State_Source:
-                                if (await _sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _sourceEnumerator!.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     if (_resultEnumerator != null)
                                     {
@@ -433,7 +433,7 @@ namespace System.Linq
                                 break;
 
                             case State_Result:
-                                if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _resultEnumerator!.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     _current = _resultEnumerator.Current;
                                     return true;
@@ -460,8 +460,8 @@ namespace System.Linq
             private readonly IAsyncEnumerable<TSource> _source;
 
             private int _mode;
-            private IAsyncEnumerator<TResult> _resultEnumerator;
-            private IAsyncEnumerator<TSource> _sourceEnumerator;
+            private IAsyncEnumerator<TResult>? _resultEnumerator;
+            private IAsyncEnumerator<TSource>? _sourceEnumerator;
 
             public SelectManyAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TResult>>> selector)
             {
@@ -558,7 +558,7 @@ namespace System.Linq
                         switch (_mode)
                         {
                             case State_Source:
-                                if (await _sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _sourceEnumerator!.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     if (_resultEnumerator != null)
                                     {
@@ -574,7 +574,7 @@ namespace System.Linq
                                 break;
 
                             case State_Result:
-                                if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _resultEnumerator!.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     _current = _resultEnumerator.Current;
                                     return true;
@@ -602,8 +602,8 @@ namespace System.Linq
             private readonly IAsyncEnumerable<TSource> _source;
 
             private int _mode;
-            private IAsyncEnumerator<TResult> _resultEnumerator;
-            private IAsyncEnumerator<TSource> _sourceEnumerator;
+            private IAsyncEnumerator<TResult>? _resultEnumerator;
+            private IAsyncEnumerator<TSource>? _sourceEnumerator;
 
             public SelectManyAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TResult>>> selector)
             {
@@ -700,7 +700,7 @@ namespace System.Linq
                         switch (_mode)
                         {
                             case State_Source:
-                                if (await _sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _sourceEnumerator!.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     if (_resultEnumerator != null)
                                     {
@@ -716,7 +716,7 @@ namespace System.Linq
                                 break;
 
                             case State_Result:
-                                if (await _resultEnumerator.MoveNextAsync().ConfigureAwait(false))
+                                if (await _resultEnumerator!.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     _current = _resultEnumerator.Current;
                                     return true;

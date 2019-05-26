@@ -83,13 +83,13 @@ namespace System.Linq
 
     internal abstract class AsyncIterator<TSource> : AsyncIteratorBase<TSource>
     {
-        protected TSource _current;
+        protected TSource _current = default!;
 
         public override TSource Current => _current;
 
         public override ValueTask DisposeAsync()
         {
-            _current = default;
+            _current = default!;
 
             return base.DisposeAsync();
         }

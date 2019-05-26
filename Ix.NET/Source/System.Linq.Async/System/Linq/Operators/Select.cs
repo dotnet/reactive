@@ -149,7 +149,7 @@ namespace System.Linq
             private readonly Func<TSource, TResult> _selector;
             private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> _enumerator;
+            private IAsyncEnumerator<TSource>? _enumerator;
 
             public SelectEnumerableAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector)
             {
@@ -191,7 +191,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                         {
                             _current = _selector(_enumerator.Current);
                             return true;
@@ -209,7 +209,7 @@ namespace System.Linq
         {
             private readonly Func<TSource, TResult> _selector;
             private readonly IList<TSource> _source;
-            private IEnumerator<TSource> _enumerator;
+            private IEnumerator<TSource>? _enumerator;
 
             public SelectIListIterator(IList<TSource> source, Func<TSource, TResult> selector)
             {
@@ -307,7 +307,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (_enumerator.MoveNext())
+                        if (_enumerator!.MoveNext())
                         {
                             _current = _selector(_enumerator.Current);
                             return true;
@@ -326,7 +326,7 @@ namespace System.Linq
             private readonly Func<TSource, ValueTask<TResult>> _selector;
             private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> _enumerator;
+            private IAsyncEnumerator<TSource>? _enumerator;
 
             public SelectEnumerableAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
             {
@@ -368,7 +368,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                         {
                             _current = await _selector(_enumerator.Current).ConfigureAwait(false);
                             return true;
@@ -388,7 +388,7 @@ namespace System.Linq
             private readonly Func<TSource, CancellationToken, ValueTask<TResult>> _selector;
             private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> _enumerator;
+            private IAsyncEnumerator<TSource>? _enumerator;
 
             public SelectEnumerableAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector)
             {
@@ -430,7 +430,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        if (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                         {
                             _current = await _selector(_enumerator.Current, _cancellationToken).ConfigureAwait(false);
                             return true;
@@ -454,7 +454,7 @@ namespace System.Linq
         {
             private readonly Func<TSource, ValueTask<TResult>> _selector;
             private readonly IList<TSource> _source;
-            private IEnumerator<TSource> _enumerator;
+            private IEnumerator<TSource>? _enumerator;
 
             public SelectIListIteratorWithTask(IList<TSource> source, Func<TSource, ValueTask<TResult>> selector)
             {
@@ -557,7 +557,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (_enumerator.MoveNext())
+                        if (_enumerator!.MoveNext())
                         {
                             _current = await _selector(_enumerator.Current).ConfigureAwait(false);
                             return true;
@@ -576,7 +576,7 @@ namespace System.Linq
         {
             private readonly Func<TSource, CancellationToken, ValueTask<TResult>> _selector;
             private readonly IList<TSource> _source;
-            private IEnumerator<TSource> _enumerator;
+            private IEnumerator<TSource>? _enumerator;
 
             public SelectIListIteratorWithTaskAndCancellation(IList<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector)
             {
@@ -679,7 +679,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (_enumerator.MoveNext())
+                        if (_enumerator!.MoveNext())
                         {
                             _current = await _selector(_enumerator.Current, _cancellationToken).ConfigureAwait(false);
                             return true;

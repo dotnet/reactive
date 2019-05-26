@@ -21,7 +21,7 @@ namespace System.Linq
             {
                 var last = await TryGetLast(source, cancellationToken).ConfigureAwait(false);
 
-                return last.HasValue ? last.Value : default;
+                return last.HasValue ? last.Value : default!;
             }
         }
 
@@ -38,7 +38,7 @@ namespace System.Linq
             {
                 var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
-                return last.HasValue ? last.Value : default;
+                return last.HasValue ? last.Value : default!;
             }
         }
 
@@ -55,7 +55,7 @@ namespace System.Linq
             {
                 var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
-                return last.HasValue ? last.Value : default;
+                return last.HasValue ? last.Value : default!;
             }
         }
 
@@ -73,7 +73,7 @@ namespace System.Linq
             {
                 var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
-                return last.HasValue ? last.Value : default;
+                return last.HasValue ? last.Value : default!;
             }
         }
 #endif
@@ -98,7 +98,7 @@ namespace System.Linq
 
                 static async ValueTask<Maybe<TSource>> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
                 {
-                    var last = default(TSource);
+                    var last = default(TSource)!; // NB: Only matters when hasLast is set to true.
                     var hasLast = false;
 
                     await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
@@ -107,7 +107,7 @@ namespace System.Linq
                         last = item;
                     }
 
-                    return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
+                    return hasLast ? new Maybe<TSource>(last!) : new Maybe<TSource>();
                 }
             }
 
@@ -116,7 +116,7 @@ namespace System.Linq
 
         private static async ValueTask<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            var last = default(TSource);
+            var last = default(TSource)!; // NB: Only matters when hasLast is set to true.
             var hasLast = false;
 
             await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
@@ -128,12 +128,12 @@ namespace System.Linq
                 }
             }
 
-            return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
+            return hasLast ? new Maybe<TSource>(last!) : new Maybe<TSource>();
         }
 
         private static async ValueTask<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            var last = default(TSource);
+            var last = default(TSource)!; // NB: Only matters when hasLast is set to true.
             var hasLast = false;
 
             await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
@@ -145,13 +145,13 @@ namespace System.Linq
                 }
             }
 
-            return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
+            return hasLast ? new Maybe<TSource>(last!) : new Maybe<TSource>();
         }
 
 #if !NO_DEEP_CANCELLATION
         private static async ValueTask<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            var last = default(TSource);
+            var last = default(TSource)!; // NB: Only matters when hasLast is set to true.
             var hasLast = false;
 
             await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
@@ -163,7 +163,7 @@ namespace System.Linq
                 }
             }
 
-            return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
+            return hasLast ? new Maybe<TSource>(last!) : new Maybe<TSource>();
         }
 #endif
     }

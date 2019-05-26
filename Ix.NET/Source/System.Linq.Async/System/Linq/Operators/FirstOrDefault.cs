@@ -21,7 +21,7 @@ namespace System.Linq
             {
                 var first = await TryGetFirst(source, cancellationToken).ConfigureAwait(false);
 
-                return first.HasValue ? first.Value : default;
+                return first.HasValue ? first.Value : default!;
             }
         }
 
@@ -38,7 +38,7 @@ namespace System.Linq
             {
                 var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
-                return first.HasValue ? first.Value : default;
+                return first.HasValue ? first.Value : default!;
             }
         }
 
@@ -55,7 +55,7 @@ namespace System.Linq
             {
                 var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
-                return first.HasValue ? first.Value : default;
+                return first.HasValue ? first.Value : default!;
             }
         }
 
@@ -73,7 +73,7 @@ namespace System.Linq
             {
                 var first = await TryGetFirst(source, predicate, cancellationToken).ConfigureAwait(false);
 
-                return first.HasValue ? first.Value : default;
+                return first.HasValue ? first.Value : default!;
             }
         }
 #endif

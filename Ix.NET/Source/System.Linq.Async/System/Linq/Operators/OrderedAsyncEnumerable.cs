@@ -15,8 +15,8 @@ namespace System.Linq
     {
         protected readonly IAsyncEnumerable<TElement> _source;
 
-        private TElement[] _buffer;
-        private int[] _indexes;
+        private TElement[]? _buffer;
+        private int[]? _indexes;
         private int _index;
 
         protected OrderedAsyncEnumerable(IAsyncEnumerable<TElement> source)
@@ -24,17 +24,17 @@ namespace System.Linq
             _source = source ?? throw Error.ArgumentNull(nameof(source));
         }
 
-        IOrderedAsyncEnumerable<TElement> IOrderedAsyncEnumerable<TElement>.CreateOrderedEnumerable<TKey>(Func<TElement, TKey> keySelector, IComparer<TKey> comparer, bool descending)
+        IOrderedAsyncEnumerable<TElement> IOrderedAsyncEnumerable<TElement>.CreateOrderedEnumerable<TKey>(Func<TElement, TKey> keySelector, IComparer<TKey>? comparer, bool descending)
         {
             return new OrderedAsyncEnumerable<TElement, TKey>(_source, keySelector, comparer, descending, this);
         }
 
-        IOrderedAsyncEnumerable<TElement> IOrderedAsyncEnumerable<TElement>.CreateOrderedEnumerable<TKey>(Func<TElement, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending)
+        IOrderedAsyncEnumerable<TElement> IOrderedAsyncEnumerable<TElement>.CreateOrderedEnumerable<TKey>(Func<TElement, ValueTask<TKey>> keySelector, IComparer<TKey>? comparer, bool descending)
         {
             return new OrderedAsyncEnumerableWithTask<TElement, TKey>(_source, keySelector, comparer, descending, this);
         }
 
-        IOrderedAsyncEnumerable<TElement> IOrderedAsyncEnumerable<TElement>.CreateOrderedEnumerable<TKey>(Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending)
+        IOrderedAsyncEnumerable<TElement> IOrderedAsyncEnumerable<TElement>.CreateOrderedEnumerable<TKey>(Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey>? comparer, bool descending)
         {
             return new OrderedAsyncEnumerableWithTaskAndCancellation<TElement, TKey>(_source, keySelector, comparer, descending, this);
         }
@@ -54,9 +54,9 @@ namespace System.Linq
                     goto case AsyncIteratorState.Iterating;
 
                 case AsyncIteratorState.Iterating:
-                    if (_index < _buffer.Length)
+                    if (_index < _buffer!.Length)
                     {
-                        _current = _buffer[_indexes[_index++]];
+                        _current = _buffer[_indexes![_index++]];
                         return true;
                     }
 
@@ -75,7 +75,7 @@ namespace System.Linq
             await base.DisposeAsync().ConfigureAwait(false);
         }
 
-        internal abstract AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement> next, CancellationToken cancellationToken);
+        internal abstract AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement>? next, CancellationToken cancellationToken);
 
         internal AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(CancellationToken cancellationToken) => GetAsyncEnumerableSorter(next: null, cancellationToken);
 
@@ -260,7 +260,7 @@ namespace System.Linq
 
         private AsyncCachingComparer<TElement> GetComparer() => GetComparer(childComparer: null);
 
-        internal abstract AsyncCachingComparer<TElement> GetComparer(AsyncCachingComparer<TElement> childComparer);
+        internal abstract AsyncCachingComparer<TElement> GetComparer(AsyncCachingComparer<TElement>? childComparer);
 
         public async ValueTask<Maybe<TElement>> TryGetFirstAsync(CancellationToken cancellationToken)
         {
@@ -413,9 +413,9 @@ namespace System.Linq
         private readonly IComparer<TKey> _comparer;
         private readonly bool _descending;
         private readonly Func<TElement, TKey> _keySelector;
-        private readonly OrderedAsyncEnumerable<TElement> _parent;
+        private readonly OrderedAsyncEnumerable<TElement>? _parent;
 
-        public OrderedAsyncEnumerable(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IComparer<TKey> comparer, bool descending, OrderedAsyncEnumerable<TElement> parent)
+        public OrderedAsyncEnumerable(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IComparer<TKey>? comparer, bool descending, OrderedAsyncEnumerable<TElement>? parent)
             : base(source)
         {
             _keySelector = keySelector ?? throw Error.ArgumentNull(nameof(keySelector));
@@ -429,7 +429,7 @@ namespace System.Linq
             return new OrderedAsyncEnumerable<TElement, TKey>(_source, _keySelector, _comparer, _descending, _parent);
         }
 
-        internal override AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement> next, CancellationToken cancellationToken)
+        internal override AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement>? next, CancellationToken cancellationToken)
         {
             var sorter = new SyncKeySelectorAsyncEnumerableSorter<TElement, TKey>(_keySelector, _comparer, _descending, next);
 
@@ -441,7 +441,7 @@ namespace System.Linq
             return sorter;
         }
 
-        internal override AsyncCachingComparer<TElement> GetComparer(AsyncCachingComparer<TElement> childComparer)
+        internal override AsyncCachingComparer<TElement> GetComparer(AsyncCachingComparer<TElement>? childComparer)
         {
             AsyncCachingComparer<TElement> cmp = childComparer == null
                 ? new AsyncCachingComparer<TElement, TKey>(_keySelector, _comparer, _descending)
@@ -456,9 +456,9 @@ namespace System.Linq
         private readonly IComparer<TKey> _comparer;
         private readonly bool _descending;
         private readonly Func<TElement, ValueTask<TKey>> _keySelector;
-        private readonly OrderedAsyncEnumerable<TElement> _parent;
+        private readonly OrderedAsyncEnumerable<TElement>? _parent;
 
-        public OrderedAsyncEnumerableWithTask(IAsyncEnumerable<TElement> source, Func<TElement, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending, OrderedAsyncEnumerable<TElement> parent)
+        public OrderedAsyncEnumerableWithTask(IAsyncEnumerable<TElement> source, Func<TElement, ValueTask<TKey>> keySelector, IComparer<TKey>? comparer, bool descending, OrderedAsyncEnumerable<TElement>? parent)
             : base(source)
         {
             _keySelector = keySelector ?? throw Error.ArgumentNull(nameof(keySelector));
@@ -472,7 +472,7 @@ namespace System.Linq
             return new OrderedAsyncEnumerableWithTask<TElement, TKey>(_source, _keySelector, _comparer, _descending, _parent);
         }
 
-        internal override AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement> next, CancellationToken cancellationToken)
+        internal override AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement>? next, CancellationToken cancellationToken)
         {
             var sorter = new AsyncKeySelectorAsyncEnumerableSorter<TElement, TKey>(_keySelector, _comparer, _descending, next);
 
@@ -484,7 +484,7 @@ namespace System.Linq
             return sorter;
         }
 
-        internal override AsyncCachingComparer<TElement> GetComparer(AsyncCachingComparer<TElement> childComparer)
+        internal override AsyncCachingComparer<TElement> GetComparer(AsyncCachingComparer<TElement>? childComparer)
         {
             AsyncCachingComparer<TElement> cmp = childComparer == null
                 ? new AsyncCachingComparerWithTask<TElement, TKey>(_keySelector, _comparer, _descending)
@@ -500,9 +500,9 @@ namespace System.Linq
         private readonly IComparer<TKey> _comparer;
         private readonly bool _descending;
         private readonly Func<TElement, CancellationToken, ValueTask<TKey>> _keySelector;
-        private readonly OrderedAsyncEnumerable<TElement> _parent;
+        private readonly OrderedAsyncEnumerable<TElement>? _parent;
 
-        public OrderedAsyncEnumerableWithTaskAndCancellation(IAsyncEnumerable<TElement> source, Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending, OrderedAsyncEnumerable<TElement> parent)
+        public OrderedAsyncEnumerableWithTaskAndCancellation(IAsyncEnumerable<TElement> source, Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey>? comparer, bool descending, OrderedAsyncEnumerable<TElement>? parent)
             : base(source)
         {
             _keySelector = keySelector ?? throw Error.ArgumentNull(nameof(keySelector));
@@ -516,7 +516,7 @@ namespace System.Linq
             return new OrderedAsyncEnumerableWithTaskAndCancellation<TElement, TKey>(_source, _keySelector, _comparer, _descending, _parent);
         }
 
-        internal override AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement> next, CancellationToken cancellationToken)
+        internal override AsyncEnumerableSorter<TElement> GetAsyncEnumerableSorter(AsyncEnumerableSorter<TElement>? next, CancellationToken cancellationToken)
         {
             var sorter = new AsyncKeySelectorAsyncEnumerableSorterWithCancellation<TElement, TKey>(_keySelector, _comparer, _descending, next, cancellationToken);
 
@@ -528,7 +528,7 @@ namespace System.Linq
             return sorter;
         }
 
-        internal override AsyncCachingComparer<TElement> GetComparer(AsyncCachingComparer<TElement> childComparer)
+        internal override AsyncCachingComparer<TElement> GetComparer(AsyncCachingComparer<TElement>? childComparer)
         {
             AsyncCachingComparer<TElement> cmp = childComparer == null
                 ? new AsyncCachingComparerWithTaskAndCancellation<TElement, TKey>(_keySelector, _comparer, _descending)
@@ -599,10 +599,10 @@ namespace System.Linq
     {
         private readonly IComparer<TKey> _comparer;
         private readonly bool _descending;
-        protected readonly AsyncEnumerableSorter<TElement> _next;
-        protected TKey[] _keys;
+        protected readonly AsyncEnumerableSorter<TElement>? _next;
+        protected TKey[]? _keys;
 
-        public AsyncEnumerableSorterBase(IComparer<TKey> comparer, bool descending, AsyncEnumerableSorter<TElement> next)
+        public AsyncEnumerableSorterBase(IComparer<TKey> comparer, bool descending, AsyncEnumerableSorter<TElement>? next)
         {
             _comparer = comparer;
             _descending = descending;
@@ -611,7 +611,7 @@ namespace System.Linq
 
         internal sealed override int CompareAnyKeys(int index1, int index2)
         {
-            var c = _comparer.Compare(_keys[index1], _keys[index2]);
+            var c = _comparer.Compare(_keys![index1], _keys[index2]); // NB: _keys is assigned before calling this method.
 
             if (c == 0)
             {
@@ -783,7 +783,7 @@ namespace System.Linq
     {
         private readonly Func<TElement, TKey> _keySelector;
 
-        public SyncKeySelectorAsyncEnumerableSorter(Func<TElement, TKey> keySelector, IComparer<TKey> comparer, bool descending, AsyncEnumerableSorter<TElement> next)
+        public SyncKeySelectorAsyncEnumerableSorter(Func<TElement, TKey> keySelector, IComparer<TKey> comparer, bool descending, AsyncEnumerableSorter<TElement>? next)
             : base(comparer, descending, next)
         {
             _keySelector = keySelector;
@@ -809,7 +809,7 @@ namespace System.Linq
     {
         private readonly Func<TElement, ValueTask<TKey>> _keySelector;
 
-        public AsyncKeySelectorAsyncEnumerableSorter(Func<TElement, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending, AsyncEnumerableSorter<TElement> next)
+        public AsyncKeySelectorAsyncEnumerableSorter(Func<TElement, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending, AsyncEnumerableSorter<TElement>? next)
             : base(comparer, descending, next)
         {
             _keySelector = keySelector;
@@ -837,7 +837,7 @@ namespace System.Linq
         private readonly Func<TElement, CancellationToken, ValueTask<TKey>> _keySelector;
         private readonly CancellationToken _cancellationToken;
 
-        public AsyncKeySelectorAsyncEnumerableSorterWithCancellation(Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending, AsyncEnumerableSorter<TElement> next, CancellationToken cancellationToken)
+        public AsyncKeySelectorAsyncEnumerableSorterWithCancellation(Func<TElement, CancellationToken, ValueTask<TKey>> keySelector, IComparer<TKey> comparer, bool descending, AsyncEnumerableSorter<TElement>? next, CancellationToken cancellationToken)
             : base(comparer, descending, next)
         {
             _keySelector = keySelector;
@@ -927,8 +927,8 @@ namespace System.Linq
 
         // REVIEW: Consider to tear off an iterator object rather than storing this state here?
 
-        private TElement[] _buffer;
-        private int[] _indexes;
+        private TElement[]? _buffer;
+        private int[]? _indexes;
         private int _minIndexIterator;
         private int _maxIndexIterator;
 
@@ -978,7 +978,7 @@ namespace System.Linq
                 case AsyncIteratorState.Iterating:
                     if (_minIndexIterator <= _maxIndexIterator)
                     {
-                        _current = _buffer[_indexes[_minIndexIterator++]];
+                        _current = _buffer![_indexes![_minIndexIterator++]];
                         return true;
                     }
 
@@ -1017,6 +1017,7 @@ namespace System.Linq
             _keySelector = keySelector;
             _comparer = comparer;
             _descending = descending;
+            _lastKey = default!;
         }
 
         internal override ValueTask<int> Compare(TElement element, bool cacheLower, CancellationToken cancellationToken)
@@ -1092,6 +1093,7 @@ namespace System.Linq
             _keySelector = keySelector;
             _comparer = comparer;
             _descending = descending;
+            _lastKey = default!;
         }
 
         internal override async ValueTask<int> Compare(TElement element, bool cacheLower, CancellationToken cancellationToken)
@@ -1166,6 +1168,7 @@ namespace System.Linq
             _keySelector = keySelector;
             _comparer = comparer;
             _descending = descending;
+            _lastKey = default!;
         }
 
         internal override async ValueTask<int> Compare(TElement element, bool cacheLower, CancellationToken cancellationToken)

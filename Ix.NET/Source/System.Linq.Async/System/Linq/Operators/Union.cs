@@ -14,7 +14,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second) =>
             Union(first, second, comparer: null);
 
-        public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
+        public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource>? comparer)
         {
             if (first == null)
                 throw Error.ArgumentNull(nameof(first));
@@ -24,7 +24,7 @@ namespace System.Linq
             return first is UnionAsyncIterator<TSource> union && AreEqualityComparersEqual(comparer, union._comparer) ? union.Union(second) : new UnionAsyncIterator2<TSource>(first, second, comparer);
         }
 
-        private static bool AreEqualityComparersEqual<TSource>(IEqualityComparer<TSource> first, IEqualityComparer<TSource> second)
+        private static bool AreEqualityComparersEqual<TSource>(IEqualityComparer<TSource>? first, IEqualityComparer<TSource>? second)
         {
             return first == second || (first != null && second != null && first.Equals(second));
         }
@@ -35,12 +35,12 @@ namespace System.Linq
         /// <typeparam name="TSource">The type of the source enumerables.</typeparam>
         private abstract class UnionAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
-            internal readonly IEqualityComparer<TSource> _comparer;
-            private IAsyncEnumerator<TSource> _enumerator;
-            private Set<TSource> _set;
+            internal readonly IEqualityComparer<TSource>? _comparer;
+            private IAsyncEnumerator<TSource>? _enumerator;
+            private Set<TSource>? _set;
             private int _index;
 
-            protected UnionAsyncIterator(IEqualityComparer<TSource> comparer)
+            protected UnionAsyncIterator(IEqualityComparer<TSource>? comparer)
             {
                 _comparer = comparer;
             }
@@ -57,7 +57,7 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            internal abstract IAsyncEnumerable<TSource> GetEnumerable(int index);
+            internal abstract IAsyncEnumerable<TSource>? GetEnumerable(int index);
 
             internal abstract UnionAsyncIterator<TSource> Union(IAsyncEnumerable<TSource> next);
 
@@ -74,7 +74,7 @@ namespace System.Linq
             private void StoreFirst()
             {
                 var set = new Set<TSource>(_comparer);
-                var element = _enumerator.Current;
+                var element = _enumerator!.Current;
                 set.Add(element);
                 _current = element;
                 _set = set;
@@ -85,7 +85,7 @@ namespace System.Linq
                 var set = _set;
                 Debug.Assert(set != null);
 
-                while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                while (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                 {
                     var element = _enumerator.Current;
                     if (set.Add(element))
@@ -207,7 +207,7 @@ namespace System.Linq
             private readonly IAsyncEnumerable<TSource> _first;
             private readonly IAsyncEnumerable<TSource> _second;
 
-            public UnionAsyncIterator2(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
+            public UnionAsyncIterator2(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource>? comparer)
                 : base(comparer)
             {
                 Debug.Assert(first != null);
@@ -218,7 +218,7 @@ namespace System.Linq
 
             public override AsyncIteratorBase<TSource> Clone() => new UnionAsyncIterator2<TSource>(_first, _second, _comparer);
 
-            internal override IAsyncEnumerable<TSource> GetEnumerable(int index)
+            internal override IAsyncEnumerable<TSource>? GetEnumerable(int index)
             {
                 Debug.Assert(index >= 0 && index <= 2);
                 switch (index)
@@ -248,11 +248,11 @@ namespace System.Linq
             private readonly SingleLinkedNode<IAsyncEnumerable<TSource>> _sources;
             private readonly int _headIndex;
 
-            public UnionAsyncIteratorN(SingleLinkedNode<IAsyncEnumerable<TSource>> sources, int headIndex, IEqualityComparer<TSource> comparer)
+            public UnionAsyncIteratorN(SingleLinkedNode<IAsyncEnumerable<TSource>> sources, int headIndex, IEqualityComparer<TSource>? comparer)
                 : base(comparer)
             {
                 Debug.Assert(headIndex >= 2);
-                Debug.Assert(sources?.GetCount() == headIndex + 1);
+                Debug.Assert(sources.GetCount() == headIndex + 1);
 
                 _sources = sources;
                 _headIndex = headIndex;
@@ -260,7 +260,7 @@ namespace System.Linq
 
             public override AsyncIteratorBase<TSource> Clone() => new UnionAsyncIteratorN<TSource>(_sources, _headIndex, _comparer);
 
-            internal override IAsyncEnumerable<TSource> GetEnumerable(int index) => index > _headIndex ? null : _sources.GetNode(_headIndex - index).Item;
+            internal override IAsyncEnumerable<TSource>? GetEnumerable(int index) => index > _headIndex ? null : _sources.GetNode(_headIndex - index).Item;
 
             internal override UnionAsyncIterator<TSource> Union(IAsyncEnumerable<TSource> next)
             {

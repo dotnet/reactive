@@ -28,9 +28,9 @@ namespace System.Linq
             private readonly IAsyncEnumerable<TSource> _source;
             private readonly TimeSpan _timeout;
 
-            private IAsyncEnumerator<TSource> _enumerator;
+            private IAsyncEnumerator<TSource>? _enumerator;
 
-            private Task _loserTask;
+            private Task? _loserTask;
 
             public TimeoutAsyncIterator(IAsyncEnumerable<TSource> source, TimeSpan timeout)
             {
@@ -73,7 +73,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        var moveNext = _enumerator.MoveNextAsync();
+                        var moveNext = _enumerator!.MoveNextAsync();
 
                         if (!moveNext.IsCompleted)
                         {

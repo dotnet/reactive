@@ -151,7 +151,7 @@ namespace System.Linq
         {
             private readonly Func<TSource, bool> _predicate;
             private readonly IAsyncEnumerable<TSource> _source;
-            private IAsyncEnumerator<TSource> _enumerator;
+            private IAsyncEnumerator<TSource>? _enumerator;
 
             public WhereEnumerableAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
             {
@@ -198,7 +198,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = _enumerator.Current;
                             if (_predicate(item))
@@ -220,7 +220,7 @@ namespace System.Linq
         {
             private readonly Func<TSource, ValueTask<bool>> _predicate;
             private readonly IAsyncEnumerable<TSource> _source;
-            private IAsyncEnumerator<TSource> _enumerator;
+            private IAsyncEnumerator<TSource>? _enumerator;
 
             public WhereEnumerableAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
             {
@@ -262,7 +262,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = _enumerator.Current;
                             if (await _predicate(item).ConfigureAwait(false))
@@ -285,7 +285,7 @@ namespace System.Linq
         {
             private readonly Func<TSource, CancellationToken, ValueTask<bool>> _predicate;
             private readonly IAsyncEnumerable<TSource> _source;
-            private IAsyncEnumerator<TSource> _enumerator;
+            private IAsyncEnumerator<TSource>? _enumerator;
 
             public WhereEnumerableAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate)
             {
@@ -327,7 +327,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = _enumerator.Current;
                             if (await _predicate(item, _cancellationToken).ConfigureAwait(false))
@@ -352,7 +352,7 @@ namespace System.Linq
             private readonly Func<TSource, TResult> _selector;
             private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> _enumerator;
+            private IAsyncEnumerator<TSource>? _enumerator;
 
             public WhereSelectEnumerableAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, Func<TSource, TResult> selector)
             {
@@ -396,7 +396,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = _enumerator.Current;
                             if (_predicate(item))

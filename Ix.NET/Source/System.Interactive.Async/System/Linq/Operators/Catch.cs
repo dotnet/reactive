@@ -41,7 +41,7 @@ namespace System.Linq
                 {
                     while (true)
                     {
-                        var c = default(TSource);
+                        TSource c;
 
                         try
                         {
@@ -95,7 +95,7 @@ namespace System.Linq
                 {
                     while (true)
                     {
-                        var c = default(TSource);
+                        TSource c;
 
                         try
                         {
@@ -150,7 +150,7 @@ namespace System.Linq
                 {
                     while (true)
                     {
-                        var c = default(TSource);
+                        TSource c;
 
                         try
                         {
@@ -222,7 +222,7 @@ namespace System.Linq
 
                         while (true)
                         {
-                            var c = default(TSource);
+                            TSource c;
 
                             try
                             {
