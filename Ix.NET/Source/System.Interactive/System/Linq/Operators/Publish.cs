@@ -35,9 +35,7 @@ namespace System.Linq
         public static IBuffer<TSource> Publish<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-            {
                 throw new ArgumentNullException(nameof(source));
-            }
 
             return new PublishedBuffer<TSource>(source.GetEnumerator());
         }
@@ -54,14 +52,9 @@ namespace System.Linq
         public static IEnumerable<TResult> Publish<TSource, TResult>(this IEnumerable<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
             if (source == null)
-            {
                 throw new ArgumentNullException(nameof(source));
-            }
-
             if (selector == null)
-            {
                 throw new ArgumentNullException(nameof(selector));
-            }
 
             return Create(() => selector(source.Publish()).GetEnumerator());
         }

@@ -18,9 +18,7 @@ namespace System.Linq
         public static IEnumerable<TSource> StartWith<TSource>(this IEnumerable<TSource> source, params TSource[] values)
         {
             if (source == null)
-            {
                 throw new ArgumentNullException(nameof(source));
-            }
 
             return StartWithCore(source, values);
         }

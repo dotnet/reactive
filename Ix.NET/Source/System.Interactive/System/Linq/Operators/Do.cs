@@ -108,31 +108,30 @@ namespace System.Linq
 
         private static IEnumerable<TSource> DoCore<TSource>(IEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
-            using (var e = source.GetEnumerator())
+            using var e = source.GetEnumerator();
+
+            while (true)
             {
-                while (true)
+                TSource current;
+                try
                 {
-                    var current = default(TSource);
-                    try
-                    {
-                        if (!e.MoveNext())
-                            break;
+                    if (!e.MoveNext())
+                        break;
 
-                        current = e.Current;
-                    }
-                    catch (Exception ex)
-                    {
-                        onError(ex);
-                        throw;
-                    }
-
-                    onNext(current);
-
-                    yield return current;
+                    current = e.Current;
+                }
+                catch (Exception ex)
+                {
+                    onError(ex);
+                    throw;
                 }
 
-                onCompleted();
+                onNext(current);
+
+                yield return current;
             }
+
+            onCompleted();
         }
     }
 }

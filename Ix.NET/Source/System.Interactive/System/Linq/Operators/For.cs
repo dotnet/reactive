@@ -23,21 +23,11 @@ namespace System.Linq
         public static IEnumerable<TResult> For<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, IEnumerable<TResult>> resultSelector)
         {
             if (source == null)
-            {
                 throw new ArgumentNullException(nameof(source));
-            }
-
             if (resultSelector == null)
-            {
                 throw new ArgumentNullException(nameof(resultSelector));
-            }
 
-            return ForCore(source, resultSelector).Concat();
-        }
-
-        private static IEnumerable<IEnumerable<TResult>> ForCore<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, IEnumerable<TResult>> resultSelector)
-        {
-            return source.Select(resultSelector);
+            return source.Select(resultSelector).Concat();
         }
     }
 }

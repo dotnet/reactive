@@ -20,26 +20,20 @@ namespace System.Linq
         public static IEnumerable<TSource> Using<TSource, TResource>(Func<TResource> resourceFactory, Func<TResource, IEnumerable<TSource>> enumerableFactory) where TResource : IDisposable
         {
             if (resourceFactory == null)
-            {
                 throw new ArgumentNullException(nameof(resourceFactory));
-            }
-
             if (enumerableFactory == null)
-            {
                 throw new ArgumentNullException(nameof(enumerableFactory));
-            }
 
             return UsingCore(resourceFactory, enumerableFactory);
         }
 
         private static IEnumerable<TSource> UsingCore<TSource, TResource>(Func<TResource> resourceFactory, Func<TResource, IEnumerable<TSource>> enumerableFactory) where TResource : IDisposable
         {
-            using (var res = resourceFactory())
+            using var res = resourceFactory();
+
+            foreach (var item in enumerableFactory(res))
             {
-                foreach (var item in enumerableFactory(res))
-                {
-                    yield return item;
-                }
+                yield return item;
             }
         }
     }

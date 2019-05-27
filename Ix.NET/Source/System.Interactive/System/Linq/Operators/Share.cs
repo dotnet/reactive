@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -56,8 +53,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() => selector(source.Share())
-                              .GetEnumerator());
+            return Create(() => selector(source.Share()).GetEnumerator());
         }
 
         private class SharedBuffer<T> : IBuffer<T>
@@ -100,32 +96,21 @@ namespace System.Linq
                 }
             }
 
-            private IEnumerator<T> GetEnumerator_()
+            private IEnumerator<T> GetEnumerator_() => new ShareEnumerator(this);
+
+            private sealed class ShareEnumerator : IEnumerator<T>
             {
-                return new ShareEnumerator(this);
-            }
+                private readonly SharedBuffer<T> _parent;
 
-            sealed class ShareEnumerator : IEnumerator<T>
-            {
-                readonly SharedBuffer<T> _parent;
+                private bool _disposed;
 
-                T _current;
+                public ShareEnumerator(SharedBuffer<T> parent) => _parent = parent;
 
-                bool _disposed;
+                public T Current { get; private set; }
 
-                public ShareEnumerator(SharedBuffer<T> parent)
-                {
-                    _parent = parent;
-                }
+                object IEnumerator.Current => Current;
 
-                public T Current => _current;
-
-                object IEnumerator.Current => _current;
-
-                public void Dispose()
-                {
-                    _disposed = true;
-                }
+                public void Dispose() => _disposed = true;
 
                 public bool MoveNext()
                 {
@@ -145,7 +130,7 @@ namespace System.Linq
                         hasValue = src.MoveNext();
                         if (hasValue)
                         {
-                            _current = src.Current;
+                            Current = src.Current;
                         }
                     }
                     if (hasValue)
@@ -153,14 +138,11 @@ namespace System.Linq
                         return true;
                     }
                     _disposed = true;
-                    _current = default(T);
+                    Current = default;
                     return false;
                 }
 
-                public void Reset()
-                {
-                    throw new NotSupportedException();
-                }
+                public void Reset() => throw new NotSupportedException();
             }
         }
     }

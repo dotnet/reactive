@@ -18,9 +18,7 @@ namespace System.Linq
         public static IEnumerable<TResult> Create<TResult>(Func<IEnumerator<TResult>> getEnumerator)
         {
             if (getEnumerator == null)
-            {
                 throw new ArgumentNullException(nameof(getEnumerator));
-            }
 
             return new AnonymousEnumerable<TResult>(getEnumerator);
         }
@@ -37,9 +35,7 @@ namespace System.Linq
         public static IEnumerable<T> Create<T>(Action<IYielder<T>> create)
         {
             if (create == null)
-            {
                 throw new ArgumentNullException(nameof(create));
-            }
 
             foreach (var x in new Yielder<T>(create))
             {
@@ -51,10 +47,7 @@ namespace System.Linq
         {
             private readonly Func<IEnumerator<TResult>> _getEnumerator;
 
-            public AnonymousEnumerable(Func<IEnumerator<TResult>> getEnumerator)
-            {
-                _getEnumerator = getEnumerator;
-            }
+            public AnonymousEnumerable(Func<IEnumerator<TResult>> getEnumerator) => _getEnumerator = getEnumerator;
 
             public IEnumerator<TResult> GetEnumerator() => _getEnumerator();
 

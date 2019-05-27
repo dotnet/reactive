@@ -17,9 +17,7 @@ namespace System.Linq
         public static IEnumerable<TSource> Concat<TSource>(this IEnumerable<IEnumerable<TSource>> sources)
         {
             if (sources == null)
-            {
                 throw new ArgumentNullException(nameof(sources));
-            }
 
             return ConcatCore(sources);
         }
@@ -33,9 +31,7 @@ namespace System.Linq
         public static IEnumerable<TSource> Concat<TSource>(params IEnumerable<TSource>[] sources)
         {
             if (sources == null)
-            {
                 throw new ArgumentNullException(nameof(sources));
-            }
 
             return ConcatCore(sources);
         }
