@@ -299,9 +299,16 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception>? onError, Action? onCompleted)
         {
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(source, onNext, onError, onCompleted);
+
+            // TODO: Can remove local function.
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception>? onError, Action? onCompleted, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
@@ -339,9 +346,16 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task>? onError, Func<Task>? onCompleted)
         {
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(source, onNext, onError, onCompleted);
+
+            // TODO: Can remove local function.
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task>? onError, Func<Task>? onCompleted, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
@@ -383,9 +397,16 @@ namespace System.Linq
 #if !NO_DEEP_CANCELLATION
         private static IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<Exception, CancellationToken, Task>? onError, Func<CancellationToken, Task>? onCompleted)
         {
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(source, onNext, onError, onCompleted);
+
+            // TODO: Can remove local function.
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<Exception, CancellationToken, Task>? onError, Func<CancellationToken, Task>? onCompleted, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
 

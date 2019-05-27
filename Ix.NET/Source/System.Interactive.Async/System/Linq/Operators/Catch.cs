@@ -33,9 +33,15 @@ namespace System.Linq
             if (handler == null)
                 throw Error.ArgumentNull(nameof(handler));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(source, handler);
+
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TException, IAsyncEnumerable<TSource>> handler, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 // REVIEW: This implementation mirrors the Ix implementation, which does not protect GetEnumerator
                 //         using the try statement either. A more trivial implementation would use await foreach
@@ -96,9 +102,15 @@ namespace System.Linq
             if (handler == null)
                 throw Error.ArgumentNull(nameof(handler));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(source, handler);
+
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TException, ValueTask<IAsyncEnumerable<TSource>>> handler, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 // REVIEW: This implementation mirrors the Ix implementation, which does not protect GetEnumerator
                 //         using the try statement either. A more trivial implementation would use await foreach
@@ -160,9 +172,15 @@ namespace System.Linq
             if (handler == null)
                 throw Error.ArgumentNull(nameof(handler));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(source, handler);
+
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, Func<TException, CancellationToken, ValueTask<IAsyncEnumerable<TSource>>> handler, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 // REVIEW: This implementation mirrors the Ix implementation, which does not protect GetEnumerator
                 //         using the try statement either. A more trivial implementation would use await foreach

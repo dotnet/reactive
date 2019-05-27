@@ -22,6 +22,15 @@ namespace System.Linq
             if (sources == null)
                 throw Error.ArgumentNull(nameof(sources));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(sources);
+
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource>[] sources, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
+            return AsyncEnumerable.Create(Core);
+
+            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
 #if USE_FAIR_AND_CHEAPER_MERGE
             //
             // This new implementation of Merge differs from the original one in a few ways:
@@ -34,10 +43,6 @@ namespace System.Linq
             //     instead of awaiting a new WhenAny task where "left" sources have preferential
             //     treatment over "right" sources.
             //
-
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
                 var count = sources.Length;
 
@@ -177,9 +182,6 @@ namespace System.Linq
                 }
             }
 #else
-            return AsyncEnumerable.Create(Core);
-
-            async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
                 var count = sources.Length;
 

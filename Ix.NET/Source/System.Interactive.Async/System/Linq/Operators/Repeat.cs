@@ -18,10 +18,16 @@ namespace System.Linq
         /// <returns>The async-enumerable sequence producing the element repeatedly and sequentially.</returns>
         public static IAsyncEnumerable<TResult> Repeat<TResult>(TResult element)
         {
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(element);
+
+            static async IAsyncEnumerable<TResult> Core(TResult element, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return AsyncEnumerable.Create(Core);
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+#endif
             {
                 while (true)
                 {
@@ -45,9 +51,15 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(source);
+
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 while (true)
                 {
@@ -75,9 +87,15 @@ namespace System.Linq
             if (count < 0)
                 throw Error.ArgumentOutOfRange(nameof(count));
 
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(source, count);
+
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> source, int count, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return AsyncEnumerable.Create(Core);
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
+#endif
             {
                 for (var i = 0; i < count; i++)
                 {

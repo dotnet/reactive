@@ -31,10 +31,16 @@ namespace System.Linq
             if (resultSelector == null)
                 throw Error.ArgumentNull(nameof(resultSelector));
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+#if HAS_ASYNC_ENUMERABLE_CANCELLATION
+            return Core(initialState, condition, iterate, resultSelector);
+
+            static async IAsyncEnumerable<TResult> Core(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+#else
             return AsyncEnumerable.Create(Core);
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
+#endif
             {
                 for (var state = initialState; condition(state); state = iterate(state))
                 {
