@@ -56,9 +56,9 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(resultSelector));
 
 #if HAS_ASYNC_ENUMERABLE_CANCELLATION
-            return Core();
+            return Core(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
 
-            async IAsyncEnumerable<TResult> Core([System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, TResult> resultSelector, IEqualityComparer<TKey>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
 #else
             return Create(Core);
 
@@ -99,9 +99,9 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(resultSelector));
 
 #if HAS_ASYNC_ENUMERABLE_CANCELLATION
-            return Core();
+            return Core(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
 
-            async IAsyncEnumerable<TResult> Core([System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, ValueTask<TKey>> outerKeySelector, Func<TInner, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
 #else
             return Create(Core);
 
@@ -143,9 +143,9 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(resultSelector));
 
 #if HAS_ASYNC_ENUMERABLE_CANCELLATION
-            return Core();
+            return Core(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
 
-            async IAsyncEnumerable<TResult> Core([System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+            static async IAsyncEnumerable<TResult> Core(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, CancellationToken, ValueTask<TKey>> outerKeySelector, Func<TInner, CancellationToken, ValueTask<TKey>> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, CancellationToken, ValueTask<TResult>> resultSelector, IEqualityComparer<TKey>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
 #else
             return Create(Core);
 

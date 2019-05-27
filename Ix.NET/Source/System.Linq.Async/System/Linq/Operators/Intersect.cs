@@ -38,9 +38,9 @@ namespace System.Linq
                 throw Error.ArgumentNull(nameof(second));
 
 #if HAS_ASYNC_ENUMERABLE_CANCELLATION
-            return Core();
+            return Core(first, second, comparer);
 
-            async IAsyncEnumerable<TSource> Core([System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
+            static async IAsyncEnumerable<TSource> Core(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource>? comparer, [System.Runtime.CompilerServices.EnumeratorCancellation]CancellationToken cancellationToken = default)
 #else
             return Create(Core);
 
