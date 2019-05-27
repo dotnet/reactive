@@ -14,10 +14,7 @@ namespace System.Linq
         private bool _running;
         private bool _stopped;
 
-        public Yielder(Action<Yielder<T>> create)
-        {
-            _create = create;
-        }
+        public Yielder(Action<Yielder<T>> create) => _create = create;
 
         public T Current { get; private set; }
 
@@ -71,9 +68,6 @@ namespace System.Linq
             return !_stopped && _hasValue;
         }
 
-        public void Reset()
-        {
-            throw new NotSupportedException();
-        }
+        public void Reset() => throw new NotSupportedException();
     }
 }

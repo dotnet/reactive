@@ -19,14 +19,9 @@ namespace System.Linq
         public static IEnumerable<TSource> TakeLast<TSource>(this IEnumerable<TSource> source, int count)
         {
             if (source == null)
-            {
                 throw new ArgumentNullException(nameof(source));
-            }
-
             if (count < 0)
-            {
                 throw new ArgumentOutOfRangeException(nameof(count));
-            }
 
             return TakeLastCore(source, count);
         }

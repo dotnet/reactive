@@ -9,31 +9,25 @@ namespace System.Linq
 {
     internal sealed class RefCountList<T> : IRefCountList<T>
     {
-        private int _readerCount;
         private readonly IDictionary<int, RefCount> _list;
-        private int _count;
 
         public RefCountList(int readerCount)
         {
-            _readerCount = readerCount;
+            ReaderCount = readerCount;
             _list = new Dictionary<int, RefCount>();
         }
 
-        public int ReaderCount
-        {
-            get => _readerCount;
-            set => _readerCount = value;
-        }
+        public int ReaderCount { get; set; }
 
         public void Clear() => _list.Clear();
 
-        public int Count => _count;
+        public int Count { get; private set; }
 
         public T this[int i]
         {
             get
             {
-                Debug.Assert(i < _count);
+                Debug.Assert(i < Count);
 
                 if (!_list.TryGetValue(i, out var res))
                     throw new InvalidOperationException("Element no longer available in the buffer.");
@@ -51,19 +45,19 @@ namespace System.Linq
 
         public void Add(T item)
         {
-            _list[_count] = new RefCount { Value = item, Count = _readerCount };
+            _list[Count] = new RefCount { Value = item, Count = ReaderCount };
 
-            _count++;
+            Count++;
         }
 
         public void Done(int index)
         {
-            for (var i = index; i < _count; i++)
+            for (var i = index; i < Count; i++)
             {
-                var ignore = this[i];
+                _ = this[i];
             }
 
-            _readerCount--;
+            ReaderCount--;
         }
 
         private sealed class RefCount

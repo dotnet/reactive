@@ -19,19 +19,11 @@ namespace System.Linq
         public static IEnumerable<TResult> If<TResult>(Func<bool> condition, IEnumerable<TResult> thenSource, IEnumerable<TResult> elseSource)
         {
             if (condition == null)
-            {
                 throw new ArgumentNullException(nameof(condition));
-            }
-
             if (thenSource == null)
-            {
                 throw new ArgumentNullException(nameof(thenSource));
-            }
-
             if (elseSource == null)
-            {
                 throw new ArgumentNullException(nameof(elseSource));
-            }
 
             return Defer(() => condition() ? thenSource : elseSource);
         }
@@ -47,14 +39,9 @@ namespace System.Linq
         public static IEnumerable<TResult> If<TResult>(Func<bool> condition, IEnumerable<TResult> thenSource)
         {
             if (condition == null)
-            {
                 throw new ArgumentNullException(nameof(condition));
-            }
-
             if (thenSource == null)
-            {
                 throw new ArgumentNullException(nameof(thenSource));
-            }
 
             return Defer(() => condition() ? thenSource : Enumerable.Empty<TResult>());
         }

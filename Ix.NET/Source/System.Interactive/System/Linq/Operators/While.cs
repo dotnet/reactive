@@ -18,14 +18,9 @@ namespace System.Linq
         public static IEnumerable<TResult> While<TResult>(Func<bool> condition, IEnumerable<TResult> source)
         {
             if (condition == null)
-            {
                 throw new ArgumentNullException(nameof(condition));
-            }
-
             if (source == null)
-            {
                 throw new ArgumentNullException(nameof(source));
-            }
 
             return WhileCore(condition, source).Concat();
         }

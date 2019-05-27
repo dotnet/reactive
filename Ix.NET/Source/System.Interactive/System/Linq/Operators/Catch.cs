@@ -116,33 +116,31 @@ namespace System.Linq
 
             foreach (var source in sources)
             {
-                using (var e = source.GetEnumerator())
+                using var e = source.GetEnumerator();
+                error = null;
+
+                while (true)
                 {
-                    error = null;
+                    var c = default(TSource);
 
-                    while (true)
+                    try
                     {
-                        var c = default(TSource);
-
-                        try
-                        {
-                            if (!e.MoveNext())
-                                break;
-
-                            c = e.Current;
-                        }
-                        catch (Exception ex)
-                        {
-                            error = ex;
+                        if (!e.MoveNext())
                             break;
-                        }
 
-                        yield return c;
+                        c = e.Current;
+                    }
+                    catch (Exception ex)
+                    {
+                        error = ex;
+                        break;
                     }
 
-                    if (error == null)
-                        break;
+                    yield return c;
                 }
+
+                if (error == null)
+                    break;
             }
 
             if (error != null)
