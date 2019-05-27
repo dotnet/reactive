@@ -30,35 +30,34 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (await e.MoveNextAsync())
                 {
-                    if (await e.MoveNextAsync())
+                    var lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+
+                    if (lookup.Count != 0)
                     {
-                        var lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
-
-                        if (lookup.Count != 0)
+                        do
                         {
-                            do
+                            var item = e.Current;
+
+                            var outerKey = outerKeySelector(item);
+
+                            var g = lookup.GetGrouping(outerKey);
+
+                            if (g != null)
                             {
-                                var item = e.Current;
+                                var count = g._count;
+                                var elements = g._elements;
 
-                                var outerKey = outerKeySelector(item);
-
-                                var g = lookup.GetGrouping(outerKey);
-
-                                if (g != null)
+                                for (var i = 0; i != count; ++i)
                                 {
-                                    var count = g._count;
-                                    var elements = g._elements;
-
-                                    for (var i = 0; i != count; ++i)
-                                    {
-                                        yield return resultSelector(item, elements[i]);
-                                    }
+                                    yield return resultSelector(item, elements[i]);
                                 }
                             }
-                            while (await e.MoveNextAsync());
                         }
+                        while (await e.MoveNextAsync());
                     }
                 }
             }
@@ -84,35 +83,34 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (await e.MoveNextAsync())
                 {
-                    if (await e.MoveNextAsync())
+                    var lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+
+                    if (lookup.Count != 0)
                     {
-                        var lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
-
-                        if (lookup.Count != 0)
+                        do
                         {
-                            do
+                            var item = e.Current;
+
+                            var outerKey = await outerKeySelector(item).ConfigureAwait(false);
+
+                            var g = lookup.GetGrouping(outerKey);
+
+                            if (g != null)
                             {
-                                var item = e.Current;
+                                var count = g._count;
+                                var elements = g._elements;
 
-                                var outerKey = await outerKeySelector(item).ConfigureAwait(false);
-
-                                var g = lookup.GetGrouping(outerKey);
-
-                                if (g != null)
+                                for (var i = 0; i != count; ++i)
                                 {
-                                    var count = g._count;
-                                    var elements = g._elements;
-
-                                    for (var i = 0; i != count; ++i)
-                                    {
-                                        yield return await resultSelector(item, elements[i]).ConfigureAwait(false);
-                                    }
+                                    yield return await resultSelector(item, elements[i]).ConfigureAwait(false);
                                 }
                             }
-                            while (await e.MoveNextAsync());
                         }
+                        while (await e.MoveNextAsync());
                     }
                 }
             }
@@ -139,35 +137,34 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (await e.MoveNextAsync())
                 {
-                    if (await e.MoveNextAsync())
+                    var lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+
+                    if (lookup.Count != 0)
                     {
-                        var lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
-
-                        if (lookup.Count != 0)
+                        do
                         {
-                            do
+                            var item = e.Current;
+
+                            var outerKey = await outerKeySelector(item, cancellationToken).ConfigureAwait(false);
+
+                            var g = lookup.GetGrouping(outerKey);
+
+                            if (g != null)
                             {
-                                var item = e.Current;
+                                var count = g._count;
+                                var elements = g._elements;
 
-                                var outerKey = await outerKeySelector(item, cancellationToken).ConfigureAwait(false);
-
-                                var g = lookup.GetGrouping(outerKey);
-
-                                if (g != null)
+                                for (var i = 0; i != count; ++i)
                                 {
-                                    var count = g._count;
-                                    var elements = g._elements;
-
-                                    for (var i = 0; i != count; ++i)
-                                    {
-                                        yield return await resultSelector(item, elements[i], cancellationToken).ConfigureAwait(false);
-                                    }
+                                    yield return await resultSelector(item, elements[i], cancellationToken).ConfigureAwait(false);
                                 }
                             }
-                            while (await e.MoveNextAsync());
                         }
+                        while (await e.MoveNextAsync());
                     }
                 }
             }

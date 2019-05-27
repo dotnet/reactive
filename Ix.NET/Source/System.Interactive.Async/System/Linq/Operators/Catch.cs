@@ -216,33 +216,32 @@ namespace System.Linq
 
                 foreach (var source in sources)
                 {
-                    await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                    await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                    error = null;
+
+                    while (true)
                     {
-                        error = null;
+                        TSource c;
 
-                        while (true)
+                        try
                         {
-                            TSource c;
-
-                            try
-                            {
-                                if (!await e.MoveNextAsync())
-                                    break;
-
-                                c = e.Current;
-                            }
-                            catch (Exception ex)
-                            {
-                                error = ExceptionDispatchInfo.Capture(ex);
+                            if (!await e.MoveNextAsync())
                                 break;
-                            }
 
-                            yield return c;
+                            c = e.Current;
+                        }
+                        catch (Exception ex)
+                        {
+                            error = ExceptionDispatchInfo.Capture(ex);
+                            break;
                         }
 
-                        if (error == null)
-                            break;
+                        yield return c;
                     }
+
+                    if (error == null)
+                        break;
                 }
 
                 error?.Throw();

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,15 +22,12 @@ namespace System.Linq
 
             async IAsyncEnumerator<(TFirst, TSecond)> Core(CancellationToken cancellationToken)
             {
-                await using (var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false);
+                await using var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false);
+                
+                while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
                 {
-                    await using (var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false))
-                    {
-                        while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
-                        {
-                            yield return (e1.Current, e2.Current);
-                        }
-                    }
+                    yield return (e1.Current, e2.Current);
                 }
             }
         }
@@ -50,15 +46,12 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false);
+                await using var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
                 {
-                    await using (var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false))
-                    {
-                        while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
-                        {
-                            yield return selector(e1.Current, e2.Current);
-                        }
-                    }
+                    yield return selector(e1.Current, e2.Current);
                 }
             }
         }
@@ -76,15 +69,12 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false);
+                await using var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
                 {
-                    await using (var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false))
-                    {
-                        while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
-                        {
-                            yield return await selector(e1.Current, e2.Current).ConfigureAwait(false);
-                        }
-                    }
+                    yield return await selector(e1.Current, e2.Current).ConfigureAwait(false);
                 }
             }
         }
@@ -103,15 +93,12 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false);
+                await using var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
                 {
-                    await using (var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false))
-                    {
-                        while (await e1.MoveNextAsync() && await e2.MoveNextAsync())
-                        {
-                            yield return await selector(e1.Current, e2.Current, cancellationToken).ConfigureAwait(false);
-                        }
-                    }
+                    yield return await selector(e1.Current, e2.Current, cancellationToken).ConfigureAwait(false);
                 }
             }
         }

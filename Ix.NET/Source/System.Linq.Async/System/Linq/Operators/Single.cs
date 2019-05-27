@@ -30,22 +30,21 @@ namespace System.Linq
                     throw Error.MoreThanOneElement();
                 }
 
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (!await e.MoveNextAsync())
                 {
-                    if (!await e.MoveNextAsync())
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    var result = e.Current;
-
-                    if (await e.MoveNextAsync())
-                    {
-                        throw Error.MoreThanOneElement();
-                    }
-
-                    return result;
+                    throw Error.NoElements();
                 }
+
+                var result = e.Current;
+
+                if (await e.MoveNextAsync())
+                {
+                    throw Error.MoreThanOneElement();
+                }
+
+                return result;
             }
         }
 

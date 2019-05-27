@@ -264,60 +264,58 @@ namespace System.Linq
 
         public async ValueTask<Maybe<TElement>> TryGetFirstAsync(CancellationToken cancellationToken)
         {
-            await using (var e = _source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+            await using var e = _source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+            if (!await e.MoveNextAsync())
             {
-                if (!await e.MoveNextAsync())
-                {
-                    return new Maybe<TElement>();
-                }
-
-                var value = e.Current;
-
-                var comparer = GetComparer();
-
-                await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
-
-                while (await e.MoveNextAsync())
-                {
-                    var x = e.Current;
-
-                    if (await comparer.Compare(x, cacheLower: true, cancellationToken).ConfigureAwait(false) < 0)
-                    {
-                        value = x;
-                    }
-                }
-
-                return new Maybe<TElement>(value);
+                return new Maybe<TElement>();
             }
+
+            var value = e.Current;
+
+            var comparer = GetComparer();
+
+            await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
+
+            while (await e.MoveNextAsync())
+            {
+                var x = e.Current;
+
+                if (await comparer.Compare(x, cacheLower: true, cancellationToken).ConfigureAwait(false) < 0)
+                {
+                    value = x;
+                }
+            }
+
+            return new Maybe<TElement>(value);
         }
 
         public async ValueTask<Maybe<TElement>> TryGetLastAsync(CancellationToken cancellationToken)
         {
-            await using (var e = _source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+            await using var e = _source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+            if (!await e.MoveNextAsync())
             {
-                if (!await e.MoveNextAsync())
-                {
-                    return new Maybe<TElement>();
-                }
-
-                var value = e.Current;
-
-                var comparer = GetComparer();
-
-                await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
-
-                while (await e.MoveNextAsync())
-                {
-                    var current = e.Current;
-
-                    if (await comparer.Compare(current, cacheLower: false, cancellationToken).ConfigureAwait(false) >= 0)
-                    {
-                        value = current;
-                    }
-                }
-
-                return new Maybe<TElement>(value);
+                return new Maybe<TElement>();
             }
+
+            var value = e.Current;
+
+            var comparer = GetComparer();
+
+            await comparer.SetElement(value, cancellationToken).ConfigureAwait(false);
+
+            while (await e.MoveNextAsync())
+            {
+                var current = e.Current;
+
+                if (await comparer.Compare(current, cacheLower: false, cancellationToken).ConfigureAwait(false) >= 0)
+                {
+                    value = current;
+                }
+            }
+
+            return new Maybe<TElement>(value);
         }
 
         internal async ValueTask<Maybe<TElement>> TryGetLastAsync(int minIndexInclusive, int maxIndexInclusive, CancellationToken cancellationToken)

@@ -21,25 +21,24 @@ namespace System.Linq
             {
                 comparer ??= Comparer<TSource>.Default;
 
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (!await e.MoveNextAsync())
+                    throw Error.NoElements();
+
+                var max = e.Current;
+
+                while (await e.MoveNextAsync())
                 {
-                    if (!await e.MoveNextAsync())
-                        throw Error.NoElements();
+                    var cur = e.Current;
 
-                    var max = e.Current;
-
-                    while (await e.MoveNextAsync())
+                    if (comparer.Compare(cur, max) > 0)
                     {
-                        var cur = e.Current;
-
-                        if (comparer.Compare(cur, max) > 0)
-                        {
-                            max = cur;
-                        }
+                        max = cur;
                     }
-
-                    return max;
                 }
+
+                return max;
             }
         }
     }

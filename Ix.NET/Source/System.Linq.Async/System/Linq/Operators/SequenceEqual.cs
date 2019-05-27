@@ -49,21 +49,18 @@ namespace System.Linq
 
             static async ValueTask<bool> Core(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
             {
-                await using (var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false))
-                {
-                    await using (var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false))
-                    {
-                        while (await e1.MoveNextAsync())
-                        {
-                            if (!(await e2.MoveNextAsync() && comparer.Equals(e1.Current, e2.Current)))
-                            {
-                                return false;
-                            }
-                        }
+                await using var e1 = first.GetConfiguredAsyncEnumerator(cancellationToken, false);
+                await using var e2 = second.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
-                        return !await e2.MoveNextAsync();
+                while (await e1.MoveNextAsync())
+                {
+                    if (!(await e2.MoveNextAsync() && comparer.Equals(e1.Current, e2.Current)))
+                    {
+                        return false;
                     }
                 }
+
+                return !await e2.MoveNextAsync();
             }
         }
     }

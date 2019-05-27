@@ -23,12 +23,11 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                using (var resource = resourceFactory())
+                using var resource = resourceFactory();
+
+                await foreach (var item in enumerableFactory(resource).WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    await foreach (var item in enumerableFactory(resource).WithCancellation(cancellationToken).ConfigureAwait(false))
-                    {
-                        yield return item;
-                    }
+                    yield return item;
                 }
             }
         }
@@ -44,12 +43,11 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                using (var resource = await resourceFactory().ConfigureAwait(false))
+                using var resource = await resourceFactory().ConfigureAwait(false);
+
+                await foreach (var item in (await enumerableFactory(resource).ConfigureAwait(false)).WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    await foreach (var item in (await enumerableFactory(resource).ConfigureAwait(false)).WithCancellation(cancellationToken).ConfigureAwait(false))
-                    {
-                        yield return item;
-                    }
+                    yield return item;
                 }
             }
         }
@@ -66,12 +64,11 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                using (var resource = await resourceFactory(cancellationToken).ConfigureAwait(false))
+                using var resource = await resourceFactory(cancellationToken).ConfigureAwait(false);
+
+                await foreach (var item in (await enumerableFactory(resource, cancellationToken).ConfigureAwait(false)).WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    await foreach (var item in (await enumerableFactory(resource, cancellationToken).ConfigureAwait(false)).WithCancellation(cancellationToken).ConfigureAwait(false))
-                    {
-                        yield return item;
-                    }
+                    yield return item;
                 }
             }
         }

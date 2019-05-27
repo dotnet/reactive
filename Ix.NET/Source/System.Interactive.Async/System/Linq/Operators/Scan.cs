@@ -25,21 +25,20 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (!await e.MoveNextAsync())
                 {
-                    if (!await e.MoveNextAsync())
-                    {
-                        yield break;
-                    }
+                    yield break;
+                }
 
-                    var res = e.Current;
+                var res = e.Current;
 
-                    while (await e.MoveNextAsync())
-                    {
-                        res = accumulator(res, e.Current);
+                while (await e.MoveNextAsync())
+                {
+                    res = accumulator(res, e.Current);
 
-                        yield return res;
-                    }
+                    yield return res;
                 }
             }
         }
@@ -77,21 +76,20 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (!await e.MoveNextAsync())
                 {
-                    if (!await e.MoveNextAsync())
-                    {
-                        yield break;
-                    }
+                    yield break;
+                }
 
-                    var res = e.Current;
+                var res = e.Current;
 
-                    while (await e.MoveNextAsync())
-                    {
-                        res = await accumulator(res, e.Current).ConfigureAwait(false);
+                while (await e.MoveNextAsync())
+                {
+                    res = await accumulator(res, e.Current).ConfigureAwait(false);
 
-                        yield return res;
-                    }
+                    yield return res;
                 }
             }
         }
@@ -108,21 +106,20 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (!await e.MoveNextAsync())
                 {
-                    if (!await e.MoveNextAsync())
-                    {
-                        yield break;
-                    }
+                    yield break;
+                }
 
-                    var res = e.Current;
+                var res = e.Current;
 
-                    while (await e.MoveNextAsync())
-                    {
-                        res = await accumulator(res, e.Current, cancellationToken).ConfigureAwait(false);
+                while (await e.MoveNextAsync())
+                {
+                    res = await accumulator(res, e.Current, cancellationToken).ConfigureAwait(false);
 
-                        yield return res;
-                    }
+                    yield return res;
                 }
             }
         }
