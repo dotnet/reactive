@@ -30,20 +30,19 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false))
-                {
-                    if (await e.MoveNextAsync())
-                    {
-                        var lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+                await using var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
-                        do
-                        {
-                            var item = e.Current;
-                            var outerKey = outerKeySelector(item);
-                            yield return resultSelector(item, lookup[outerKey].ToAsyncEnumerable());
-                        }
-                        while (await e.MoveNextAsync());
+                if (await e.MoveNextAsync())
+                {
+                    var lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+
+                    do
+                    {
+                        var item = e.Current;
+                        var outerKey = outerKeySelector(item);
+                        yield return resultSelector(item, lookup[outerKey].ToAsyncEnumerable());
                     }
+                    while (await e.MoveNextAsync());
                 }
             }
         }
@@ -68,20 +67,19 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false))
-                {
-                    if (await e.MoveNextAsync())
-                    {
-                        var lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+                await using var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
-                        do
-                        {
-                            var item = e.Current;
-                            var outerKey = await outerKeySelector(item).ConfigureAwait(false);
-                            yield return await resultSelector(item, lookup[outerKey].ToAsyncEnumerable()).ConfigureAwait(false);
-                        }
-                        while (await e.MoveNextAsync());
+                if (await e.MoveNextAsync())
+                {
+                    var lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+
+                    do
+                    {
+                        var item = e.Current;
+                        var outerKey = await outerKeySelector(item).ConfigureAwait(false);
+                        yield return await resultSelector(item, lookup[outerKey].ToAsyncEnumerable()).ConfigureAwait(false);
                     }
+                    while (await e.MoveNextAsync());
                 }
             }
         }
@@ -107,20 +105,19 @@ namespace System.Linq
 
             async IAsyncEnumerator<TResult> Core(CancellationToken cancellationToken)
             {
-                await using (var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false))
-                {
-                    if (await e.MoveNextAsync())
-                    {
-                        var lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+                await using var e = outer.GetConfiguredAsyncEnumerator(cancellationToken, false);
 
-                        do
-                        {
-                            var item = e.Current;
-                            var outerKey = await outerKeySelector(item, cancellationToken).ConfigureAwait(false);
-                            yield return await resultSelector(item, lookup[outerKey].ToAsyncEnumerable(), cancellationToken).ConfigureAwait(false);
-                        }
-                        while (await e.MoveNextAsync());
+                if (await e.MoveNextAsync())
+                {
+                    var lookup = await Internal.LookupWithTask<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+
+                    do
+                    {
+                        var item = e.Current;
+                        var outerKey = await outerKeySelector(item, cancellationToken).ConfigureAwait(false);
+                        yield return await resultSelector(item, lookup[outerKey].ToAsyncEnumerable(), cancellationToken).ConfigureAwait(false);
                     }
+                    while (await e.MoveNextAsync());
                 }
             }
         }

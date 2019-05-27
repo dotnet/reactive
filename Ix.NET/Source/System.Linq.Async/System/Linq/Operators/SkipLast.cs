@@ -34,24 +34,23 @@ namespace System.Linq
             {
                 var queue = new Queue<TSource>();
 
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                while (await e.MoveNextAsync())
                 {
-                    while (await e.MoveNextAsync())
+                    if (queue.Count == count)
                     {
-                        if (queue.Count == count)
+                        do
                         {
-                            do
-                            {
-                                yield return queue.Dequeue();
-                                queue.Enqueue(e.Current);
-                            }
-                            while (await e.MoveNextAsync());
-                            break;
-                        }
-                        else
-                        {
+                            yield return queue.Dequeue();
                             queue.Enqueue(e.Current);
                         }
+                        while (await e.MoveNextAsync());
+                        break;
+                    }
+                    else
+                    {
+                        queue.Enqueue(e.Current);
                     }
                 }
             }

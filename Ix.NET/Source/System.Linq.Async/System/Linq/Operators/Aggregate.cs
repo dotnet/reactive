@@ -21,22 +21,21 @@ namespace System.Linq
 
             static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator, CancellationToken cancellationToken)
             {
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (!await e.MoveNextAsync())
                 {
-                    if (!await e.MoveNextAsync())
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    var acc = e.Current;
-
-                    while (await e.MoveNextAsync())
-                    {
-                        acc = accumulator(acc, e.Current);
-                    }
-
-                    return acc;
+                    throw Error.NoElements();
                 }
+
+                var acc = e.Current;
+
+                while (await e.MoveNextAsync())
+                {
+                    acc = accumulator(acc, e.Current);
+                }
+
+                return acc;
             }
         }
 
@@ -51,22 +50,21 @@ namespace System.Linq
 
             static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, TSource, ValueTask<TSource>> accumulator, CancellationToken cancellationToken)
             {
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (!await e.MoveNextAsync())
                 {
-                    if (!await e.MoveNextAsync())
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    var acc = e.Current;
-
-                    while (await e.MoveNextAsync())
-                    {
-                        acc = await accumulator(acc, e.Current).ConfigureAwait(false);
-                    }
-
-                    return acc;
+                    throw Error.NoElements();
                 }
+
+                var acc = e.Current;
+
+                while (await e.MoveNextAsync())
+                {
+                    acc = await accumulator(acc, e.Current).ConfigureAwait(false);
+                }
+
+                return acc;
             }
         }
 
@@ -82,22 +80,21 @@ namespace System.Linq
 
             static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, TSource, CancellationToken, ValueTask<TSource>> accumulator, CancellationToken cancellationToken)
             {
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (!await e.MoveNextAsync())
                 {
-                    if (!await e.MoveNextAsync())
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    var acc = e.Current;
-
-                    while (await e.MoveNextAsync())
-                    {
-                        acc = await accumulator(acc, e.Current, cancellationToken).ConfigureAwait(false);
-                    }
-
-                    return acc;
+                    throw Error.NoElements();
                 }
+
+                var acc = e.Current;
+
+                while (await e.MoveNextAsync())
+                {
+                    acc = await accumulator(acc, e.Current, cancellationToken).ConfigureAwait(false);
+                }
+
+                return acc;
             }
         }
 #endif

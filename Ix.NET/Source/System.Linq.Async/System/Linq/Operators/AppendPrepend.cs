@@ -428,12 +428,11 @@ namespace System.Linq
 
                 if (_appended != null)
                 {
-                    using (var en2 = _appended.GetEnumerator(_appendCount))
+                    using var en2 = _appended.GetEnumerator(_appendCount);
+
+                    while (en2.MoveNext())
                     {
-                        while (en2.MoveNext())
-                        {
-                            list.Add(en2.Current);
-                        }
+                        list.Add(en2.Current);
                     }
                 }
 

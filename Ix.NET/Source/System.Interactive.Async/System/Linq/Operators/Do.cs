@@ -174,38 +174,37 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                while (true)
                 {
-                    while (true)
+                    TSource item;
+
+                    try
                     {
-                        TSource item;
-
-                        try
+                        if (!await e.MoveNextAsync())
                         {
-                            if (!await e.MoveNextAsync())
-                            {
-                                break;
-                            }
-
-                            item = e.Current;
-
-                            onNext(item);
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            throw;
-                        }
-                        catch (Exception ex) when (onError != null)
-                        {
-                            onError(ex);
-                            throw;
+                            break;
                         }
 
-                        yield return item;
+                        item = e.Current;
+
+                        onNext(item);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        throw;
+                    }
+                    catch (Exception ex) when (onError != null)
+                    {
+                        onError(ex);
+                        throw;
                     }
 
-                    onCompleted?.Invoke();
+                    yield return item;
                 }
+
+                onCompleted?.Invoke();
             }
         }
 
@@ -215,40 +214,39 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                while (true)
                 {
-                    while (true)
+                    TSource item;
+
+                    try
                     {
-                        TSource item;
-
-                        try
+                        if (!await e.MoveNextAsync())
                         {
-                            if (!await e.MoveNextAsync())
-                            {
-                                break;
-                            }
-
-                            item = e.Current;
-
-                            await onNext(item).ConfigureAwait(false);
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            throw;
-                        }
-                        catch (Exception ex) when (onError != null)
-                        {
-                            await onError(ex).ConfigureAwait(false);
-                            throw;
+                            break;
                         }
 
-                        yield return item;
+                        item = e.Current;
+
+                        await onNext(item).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        throw;
+                    }
+                    catch (Exception ex) when (onError != null)
+                    {
+                        await onError(ex).ConfigureAwait(false);
+                        throw;
                     }
 
-                    if (onCompleted != null)
-                    {
-                        await onCompleted().ConfigureAwait(false);
-                    }
+                    yield return item;
+                }
+
+                if (onCompleted != null)
+                {
+                    await onCompleted().ConfigureAwait(false);
                 }
             }
         }
@@ -260,40 +258,39 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                while (true)
                 {
-                    while (true)
+                    TSource item;
+
+                    try
                     {
-                        TSource item;
-
-                        try
+                        if (!await e.MoveNextAsync())
                         {
-                            if (!await e.MoveNextAsync())
-                            {
-                                break;
-                            }
-
-                            item = e.Current;
-
-                            await onNext(item, cancellationToken).ConfigureAwait(false);
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            throw;
-                        }
-                        catch (Exception ex) when (onError != null)
-                        {
-                            await onError(ex, cancellationToken).ConfigureAwait(false);
-                            throw;
+                            break;
                         }
 
-                        yield return item;
+                        item = e.Current;
+
+                        await onNext(item, cancellationToken).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        throw;
+                    }
+                    catch (Exception ex) when (onError != null)
+                    {
+                        await onError(ex, cancellationToken).ConfigureAwait(false);
+                        throw;
                     }
 
-                    if (onCompleted != null)
-                    {
-                        await onCompleted(cancellationToken).ConfigureAwait(false);
-                    }
+                    yield return item;
+                }
+
+                if (onCompleted != null)
+                {
+                    await onCompleted(cancellationToken).ConfigureAwait(false);
                 }
             }
         }

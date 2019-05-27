@@ -98,29 +98,28 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (!await e.MoveNextAsync())
                 {
-                    if (!await e.MoveNextAsync())
+                    yield break;
+                }
+
+                var latest = e.Current;
+
+                yield return latest;
+
+                while (await e.MoveNextAsync())
+                {
+                    var item = e.Current;
+
+                    // REVIEW: Need comparer!.Equals to satisfy nullable reference type warnings.
+
+                    if (!comparer!.Equals(latest, item))
                     {
-                        yield break;
-                    }
+                        latest = item;
 
-                    var latest = e.Current;
-
-                    yield return latest;
-
-                    while (await e.MoveNextAsync())
-                    {
-                        var item = e.Current;
-
-                        // REVIEW: Need comparer!.Equals to satisfy nullable reference type warnings.
-
-                        if (!comparer!.Equals(latest, item))
-                        {
-                            latest = item;
-
-                            yield return latest;
-                        }
+                        yield return latest;
                     }
                 }
             }
@@ -134,33 +133,32 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (!await e.MoveNextAsync())
                 {
-                    if (!await e.MoveNextAsync())
+                    yield break;
+                }
+
+                var item = e.Current;
+
+                var latestKey = keySelector(item);
+
+                yield return item;
+
+                while (await e.MoveNextAsync())
+                {
+                    item = e.Current;
+
+                    var currentKey = keySelector(item);
+
+                    // REVIEW: Need comparer!.Equals to satisfy nullable reference type warnings.
+
+                    if (!comparer!.Equals(latestKey, currentKey))
                     {
-                        yield break;
-                    }
+                        latestKey = currentKey;
 
-                    var item = e.Current;
-
-                    var latestKey = keySelector(item);
-
-                    yield return item;
-
-                    while (await e.MoveNextAsync())
-                    {
-                        item = e.Current;
-
-                        var currentKey = keySelector(item);
-
-                        // REVIEW: Need comparer!.Equals to satisfy nullable reference type warnings.
-
-                        if (!comparer!.Equals(latestKey, currentKey))
-                        {
-                            latestKey = currentKey;
-
-                            yield return item;
-                        }
+                        yield return item;
                     }
                 }
             }
@@ -174,33 +172,32 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (!await e.MoveNextAsync())
                 {
-                    if (!await e.MoveNextAsync())
+                    yield break;
+                }
+
+                var item = e.Current;
+
+                var latestKey = await keySelector(item).ConfigureAwait(false);
+
+                yield return item;
+
+                while (await e.MoveNextAsync())
+                {
+                    item = e.Current;
+
+                    var currentKey = await keySelector(item).ConfigureAwait(false);
+
+                    // REVIEW: Need comparer!.Equals to satisfy nullable reference type warnings.
+
+                    if (!comparer!.Equals(latestKey, currentKey))
                     {
-                        yield break;
-                    }
+                        latestKey = currentKey;
 
-                    var item = e.Current;
-
-                    var latestKey = await keySelector(item).ConfigureAwait(false);
-
-                    yield return item;
-
-                    while (await e.MoveNextAsync())
-                    {
-                        item = e.Current;
-
-                        var currentKey = await keySelector(item).ConfigureAwait(false);
-
-                        // REVIEW: Need comparer!.Equals to satisfy nullable reference type warnings.
-
-                        if (!comparer!.Equals(latestKey, currentKey))
-                        {
-                            latestKey = currentKey;
-
-                            yield return item;
-                        }
+                        yield return item;
                     }
                 }
             }
@@ -215,33 +212,32 @@ namespace System.Linq
 
             async IAsyncEnumerator<TSource> Core(CancellationToken cancellationToken)
             {
-                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (!await e.MoveNextAsync())
                 {
-                    if (!await e.MoveNextAsync())
+                    yield break;
+                }
+
+                var item = e.Current;
+
+                var latestKey = await keySelector(item, cancellationToken).ConfigureAwait(false);
+
+                yield return item;
+
+                while (await e.MoveNextAsync())
+                {
+                    item = e.Current;
+
+                    var currentKey = await keySelector(item, cancellationToken).ConfigureAwait(false);
+
+                    // REVIEW: Need comparer!.Equals to satisfy nullable reference type warnings.
+
+                    if (!comparer!.Equals(latestKey, currentKey))
                     {
-                        yield break;
-                    }
+                        latestKey = currentKey;
 
-                    var item = e.Current;
-
-                    var latestKey = await keySelector(item, cancellationToken).ConfigureAwait(false);
-
-                    yield return item;
-
-                    while (await e.MoveNextAsync())
-                    {
-                        item = e.Current;
-
-                        var currentKey = await keySelector(item, cancellationToken).ConfigureAwait(false);
-
-                        // REVIEW: Need comparer!.Equals to satisfy nullable reference type warnings.
-
-                        if (!comparer!.Equals(latestKey, currentKey))
-                        {
-                            latestKey = currentKey;
-
-                            yield return item;
-                        }
+                        yield return item;
                     }
                 }
             }
