@@ -29,7 +29,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<IList<TSource>> Buffer<TSource>(IEnumerable<TSource> source, int count)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Buffer<TSource>(source, count);
+#endif
         }
 #pragma warning restore 1591
 
@@ -51,7 +55,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<IList<TSource>> Buffer<TSource>(IEnumerable<TSource> source, int count, int skip)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Buffer<TSource>(source, count, skip);
+#endif
         }
 #pragma warning restore 1591
 
@@ -73,7 +81,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Catch<TSource>(IEnumerable<IEnumerable<TSource>> sources)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Catch<TSource>(sources);
+#endif
         }
 #pragma warning restore 1591
 
@@ -97,7 +109,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Catch<TSource>(IEnumerable<TSource> first, IEnumerable<TSource> second)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Catch<TSource>(first, second);
+#endif
         }
 #pragma warning restore 1591
 
@@ -121,7 +137,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Catch<TSource, TException>(IEnumerable<TSource> source, Func<TException, IEnumerable<TSource>> handler) where TException : Exception
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Catch<TSource, TException>(source, handler);
+#endif
         }
 #pragma warning restore 1591
 
@@ -143,7 +163,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Concat<TSource>(IEnumerable<IEnumerable<TSource>> sources)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Concat<TSource>(sources);
+#endif
         }
 #pragma warning restore 1591
 
@@ -167,7 +191,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Distinct<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Distinct<TSource, TKey>(source, keySelector);
+#endif
         }
 #pragma warning restore 1591
 
@@ -193,7 +221,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Distinct<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Distinct<TSource, TKey>(source, keySelector, comparer);
+#endif
         }
 #pragma warning restore 1591
 
@@ -215,7 +247,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> DistinctUntilChanged<TSource>(IEnumerable<TSource> source)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.DistinctUntilChanged<TSource>(source);
+#endif
         }
 #pragma warning restore 1591
 
@@ -239,7 +275,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> DistinctUntilChanged<TSource>(IEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.DistinctUntilChanged<TSource>(source, comparer);
+#endif
         }
 #pragma warning restore 1591
 
@@ -263,7 +303,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.DistinctUntilChanged<TSource, TKey>(source, keySelector);
+#endif
         }
 #pragma warning restore 1591
 
@@ -289,7 +333,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.DistinctUntilChanged<TSource, TKey>(source, keySelector, comparer);
+#endif
         }
 #pragma warning restore 1591
 
@@ -313,7 +361,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Do<TSource>(IEnumerable<TSource> source, Action<TSource> onNext)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Do<TSource>(source, onNext);
+#endif
         }
 #pragma warning restore 1591
 
@@ -337,7 +389,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Do<TSource>(IEnumerable<TSource> source, IObserver<TSource> observer)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Do<TSource>(source, observer);
+#endif
         }
 #pragma warning restore 1591
 
@@ -363,7 +419,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Do<TSource>(IEnumerable<TSource> source, Action<TSource> onNext, Action onCompleted)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Do<TSource>(source, onNext, onCompleted);
+#endif
         }
 #pragma warning restore 1591
 
@@ -389,7 +449,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Do<TSource>(IEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Do<TSource>(source, onNext, onError);
+#endif
         }
 #pragma warning restore 1591
 
@@ -417,7 +481,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Do<TSource>(IEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Do<TSource>(source, onNext, onError, onCompleted);
+#endif
         }
 #pragma warning restore 1591
 
@@ -441,7 +509,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TResult> DoWhile<TResult>(IEnumerable<TResult> source, Func<bool> condition)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.DoWhile<TResult>(source, condition);
+#endif
         }
 #pragma warning restore 1591
 
@@ -465,7 +537,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Expand<TSource>(IEnumerable<TSource> source, Func<TSource, IEnumerable<TSource>> selector)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Expand<TSource>(source, selector);
+#endif
         }
 #pragma warning restore 1591
 
@@ -489,7 +565,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Finally<TSource>(IEnumerable<TSource> source, Action finallyAction)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Finally<TSource>(source, finallyAction);
+#endif
         }
 #pragma warning restore 1591
 
@@ -511,7 +591,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Hide<TSource>(IEnumerable<TSource> source)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Hide<TSource>(source);
+#endif
         }
 #pragma warning restore 1591
 
@@ -533,7 +617,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> IgnoreElements<TSource>(IEnumerable<TSource> source)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.IgnoreElements<TSource>(source);
+#endif
         }
 #pragma warning restore 1591
 
@@ -555,7 +643,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static bool IsEmpty<TSource>(IEnumerable<TSource> source)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.IsEmpty<TSource>(source);
+#endif
         }
 #pragma warning restore 1591
 
@@ -579,7 +671,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static TSource Max<TSource>(IEnumerable<TSource> source, IComparer<TSource> comparer)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Max<TSource>(source, comparer);
+#endif
         }
 #pragma warning restore 1591
 
@@ -603,7 +699,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IList<TSource> MaxBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.MaxBy<TSource, TKey>(source, keySelector);
+#endif
         }
 #pragma warning restore 1591
 
@@ -629,7 +729,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IList<TSource> MaxBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.MaxBy<TSource, TKey>(source, keySelector, comparer);
+#endif
         }
 #pragma warning restore 1591
 
@@ -653,7 +757,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TResult> Memoize<TSource, TResult>(IEnumerable<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Memoize<TSource, TResult>(source, selector);
+#endif
         }
 #pragma warning restore 1591
 
@@ -677,7 +785,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TResult> Memoize<TSource, TResult>(IEnumerable<TSource> source, int readerCount, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Memoize<TSource, TResult>(source, readerCount, selector);
+#endif
         }
 #pragma warning restore 1591
 
@@ -701,7 +813,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static TSource Min<TSource>(IEnumerable<TSource> source, IComparer<TSource> comparer)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Min<TSource>(source, comparer);
+#endif
         }
 #pragma warning restore 1591
 
@@ -725,7 +841,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IList<TSource> MinBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.MinBy<TSource, TKey>(source, keySelector);
+#endif
         }
 #pragma warning restore 1591
 
@@ -751,7 +871,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IList<TSource> MinBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.MinBy<TSource, TKey>(source, keySelector, comparer);
+#endif
         }
 #pragma warning restore 1591
 
@@ -773,7 +897,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> OnErrorResumeNext<TSource>(IEnumerable<IEnumerable<TSource>> sources)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.OnErrorResumeNext<TSource>(sources);
+#endif
         }
 #pragma warning restore 1591
 
@@ -797,7 +925,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> OnErrorResumeNext<TSource>(IEnumerable<TSource> first, IEnumerable<TSource> second)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.OnErrorResumeNext<TSource>(first, second);
+#endif
         }
 #pragma warning restore 1591
 
@@ -821,7 +953,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TResult> Publish<TSource, TResult>(IEnumerable<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Publish<TSource, TResult>(source, selector);
+#endif
         }
 #pragma warning restore 1591
 
@@ -843,7 +979,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Repeat<TSource>(IEnumerable<TSource> source)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Repeat<TSource>(source);
+#endif
         }
 #pragma warning restore 1591
 
@@ -865,7 +1005,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Repeat<TSource>(IEnumerable<TSource> source, int count)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Repeat<TSource>(source, count);
+#endif
         }
 #pragma warning restore 1591
 
@@ -887,7 +1031,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Retry<TSource>(IEnumerable<TSource> source)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Retry<TSource>(source);
+#endif
         }
 #pragma warning restore 1591
 
@@ -909,7 +1057,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Retry<TSource>(IEnumerable<TSource> source, int retryCount)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Retry<TSource>(source, retryCount);
+#endif
         }
 #pragma warning restore 1591
 
@@ -933,7 +1085,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> Scan<TSource>(IEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Scan<TSource>(source, accumulator);
+#endif
         }
 #pragma warning restore 1591
 
@@ -957,7 +1113,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TAccumulate> Scan<TSource, TAccumulate>(IEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Scan<TSource, TAccumulate>(source, seed, accumulator);
+#endif
         }
 #pragma warning restore 1591
 
@@ -981,7 +1141,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TOther> SelectMany<TSource, TOther>(IEnumerable<TSource> source, IEnumerable<TOther> other)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.SelectMany<TSource, TOther>(source, other);
+#endif
         }
 #pragma warning restore 1591
 
@@ -1005,7 +1169,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TResult> Share<TSource, TResult>(IEnumerable<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.Share<TSource, TResult>(source, selector);
+#endif
         }
 #pragma warning restore 1591
 
@@ -1027,7 +1195,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> SkipLast<TSource>(IEnumerable<TSource> source, int count)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.SkipLast<TSource>(source, count);
+#endif
         }
 #pragma warning restore 1591
 
@@ -1051,7 +1223,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> StartWith<TSource>(IEnumerable<TSource> source, TSource[] values)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.StartWith<TSource>(source, values);
+#endif
         }
 #pragma warning restore 1591
 
@@ -1073,7 +1249,11 @@ namespace System.Linq
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static IEnumerable<TSource> TakeLast<TSource>(IEnumerable<TSource> source, int count)
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return EnumerableEx.TakeLast<TSource>(source, count);
+#endif
         }
 #pragma warning restore 1591
 

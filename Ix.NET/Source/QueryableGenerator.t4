@@ -334,7 +334,11 @@ if (any)
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static <#=toCSharp(m.ReturnType)#> <#=name#>(<#=string.Join(", ", m.GetParameters().Select(p => toCSharp(p.ParameterType) + " " + p.Name))#>)<#=constraints#>
         {
+#if REFERENCE_ASSEMBLY
+            return default;
+#else
             return <#=enumerableType.Name#>.<#=name#>(<#=string.Join(", ", m.GetParameters().Select(p => p.Name))#>);
+#endif
         }
 #pragma warning restore 1591
 
