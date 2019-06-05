@@ -27,6 +27,25 @@ namespace System.Linq
                 Task<bool>? firstMoveNext = null;
                 Task<bool>? secondMoveNext = null;
 
+                //
+                // We need separate tokens for each source so that the non-winner can get disposed and unblocked
+                // i.e., see Never()
+                //
+
+                var firstCancelToken = new CancellationTokenSource();
+                var secondCancelToken = new CancellationTokenSource();
+
+                //
+                // The incoming cancellationToken should still be able to cancel both
+                //
+
+                var bothRegistry = cancellationToken.Register(() =>
+                {
+                    firstCancelToken.Cancel();
+                    secondCancelToken.Cancel();
+                });
+
+
                 try
                 {
                     //
@@ -36,7 +55,7 @@ namespace System.Linq
                     //         adding a WhenAny combinator that does exactly that. We can even avoid calling AsTask.
                     //
 
-                    firstEnumerator = first.GetAsyncEnumerator(cancellationToken);
+                    firstEnumerator = first.GetAsyncEnumerator(firstCancelToken.Token);
                     firstMoveNext = firstEnumerator.MoveNextAsync().AsTask();
 
                     //
@@ -44,7 +63,7 @@ namespace System.Linq
                     //         overload which performs GetAsyncEnumerator/MoveNextAsync in pairs, rather than phased.
                     //
 
-                    secondEnumerator = second.GetAsyncEnumerator(cancellationToken);
+                    secondEnumerator = second.GetAsyncEnumerator(secondCancelToken.Token);
                     secondMoveNext = secondEnumerator.MoveNextAsync().AsTask();
                 }
                 catch
@@ -57,6 +76,8 @@ namespace System.Linq
                         AwaitMoveNextAsyncAndDispose(secondMoveNext, secondEnumerator),
                         AwaitMoveNextAsyncAndDispose(firstMoveNext, firstEnumerator)
                     };
+
+                    bothRegistry.Dispose();
 
                     await Task.WhenAll(cleanup).ConfigureAwait(false);
 
@@ -83,11 +104,13 @@ namespace System.Linq
                 if (moveNextWinner == firstMoveNext)
                 {
                     winner = firstEnumerator;
+                    secondCancelToken.Cancel();
                     disposeLoser = AwaitMoveNextAsyncAndDispose(secondMoveNext, secondEnumerator);
                 }
                 else
                 {
                     winner = secondEnumerator;
+                    firstCancelToken.Cancel();
                     disposeLoser = AwaitMoveNextAsyncAndDispose(firstMoveNext, firstEnumerator);
                 }
 
@@ -110,6 +133,8 @@ namespace System.Linq
                 }
                 finally
                 {
+                    bothRegistry.Dispose();
+
                     //
                     // REVIEW: This behavior differs from the original implementation in that we never discard any in flight
                     //         asynchronous operations. If an exception occurs while enumerating the winner, it can be
@@ -143,12 +168,24 @@ namespace System.Linq
 
                 var enumerators = new IAsyncEnumerator<TSource>[n];
                 var moveNexts = new Task<bool>[n];
+                var individualTokenSources = new CancellationTokenSource[n];
+                for (var i = 0; i < n; i++)
+                {
+                    individualTokenSources[i] = new CancellationTokenSource();
+                }
+                var allIndividualDispose = cancellationToken.Register(() =>
+                {
+                    foreach (var tokenSource in individualTokenSources)
+                    {
+                        tokenSource.Cancel();
+                    }
+                });
 
                 try
                 {
                     for (var i = 0; i < n; i++)
                     {
-                        var enumerator = sources[i].GetAsyncEnumerator(cancellationToken);
+                        var enumerator = sources[i].GetAsyncEnumerator(individualTokenSources[i].Token);
 
                         enumerators[i] = enumerator;
                         moveNexts[i] = enumerator.MoveNextAsync().AsTask();
@@ -161,9 +198,14 @@ namespace System.Linq
                     for (var i = 0; i < n; i++)
                     {
                         cleanup[i] = AwaitMoveNextAsyncAndDispose(moveNexts[i], enumerators[i]);
+
+                        individualTokenSources[i].Cancel();
                     }
 
                     await Task.WhenAll(cleanup).ConfigureAwait(false);
+
+                    allIndividualDispose.Dispose();
+
                     throw;
                 }
 
@@ -189,6 +231,7 @@ namespace System.Linq
                 {
                     if (i != winnerIndex)
                     {
+                        individualTokenSources[i].Cancel();
                         var loserCleanupTask = AwaitMoveNextAsyncAndDispose(moveNexts[i], enumerators[i]);
                         loserCleanupTasks.Add(loserCleanupTask);
                     }
@@ -215,6 +258,8 @@ namespace System.Linq
                 }
                 finally
                 {
+                    allIndividualDispose.Dispose();
+
                     await cleanupLosers.ConfigureAwait(false);
                 }
             }
@@ -236,7 +281,14 @@ namespace System.Linq
                 {
                     if (moveNextAsync != null)
                     {
-                        await moveNextAsync.ConfigureAwait(false);
+                        try
+                        {
+                            await moveNextAsync.ConfigureAwait(false);
+                        }
+                        catch (TaskCanceledException)
+                        {
+                            // ignored because of cancelling the non-winners
+                        }
                     }
                 }
             }
