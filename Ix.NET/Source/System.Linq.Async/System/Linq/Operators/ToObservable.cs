@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -28,51 +29,40 @@ namespace System.Linq
             public IDisposable Subscribe(IObserver<T> observer)
             {
                 var ctd = new CancellationTokenDisposable();
-                var e = _source.GetAsyncEnumerator(ctd.Token);
 
                 async void Core()
                 {
-                    bool hasNext;
                     try
                     {
-                        hasNext = await e.MoveNextAsync().ConfigureAwait(false);
+                        await foreach (var element in _source.WithCancellation(ctd.Token).ConfigureAwait(false))
+                        {
+                            observer.OnNext(element);
+
+                            if (ctd.Token.IsCancellationRequested)
+                            {
+                                return;
+                            }
+                        }
                     }
-                    catch (Exception ex)
+                    catch (Exception error)
                     {
                         if (!ctd.Token.IsCancellationRequested)
                         {
-                            observer.OnError(ex);
-                            await e.DisposeAsync().ConfigureAwait(false);
+                            observer.OnError(error);
                         }
-
                         return;
                     }
 
-                    if (hasNext)
-                    {
-                        observer.OnNext(e.Current);
-
-                        if (!ctd.Token.IsCancellationRequested)
-                        {
-                            Core();
-                        }
-
-                        // In case cancellation is requested, this could only have happened
-                        // by disposing the returned composite disposable (see below).
-                        // In that case, e will be disposed too, so there is no need to dispose e here.
-                    }
-                    else
+                    if (!ctd.Token.IsCancellationRequested)
                     {
                         observer.OnCompleted();
-                        await e.DisposeAsync().ConfigureAwait(false);
                     }
                 }
 
+                // Fire and forget
                 Core();
 
-                // REVIEW: Safety of concurrent dispose operation; fire-and-forget nature of dispose?
-
-                return Disposable.Create(ctd, Disposable.Create(() => { e.DisposeAsync(); }));
+                return ctd;
             }
         }
     }
