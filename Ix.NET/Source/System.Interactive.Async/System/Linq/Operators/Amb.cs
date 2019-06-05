@@ -202,9 +202,9 @@ namespace System.Linq
                         individualTokenSources[i].Cancel();
                     }
 
-                    await Task.WhenAll(cleanup).ConfigureAwait(false);
-
                     allIndividualDispose.Dispose();
+
+                    await Task.WhenAll(cleanup).ConfigureAwait(false);
 
                     throw;
                 }
