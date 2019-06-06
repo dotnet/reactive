@@ -31,7 +31,6 @@ namespace System.Linq
 
                 async void Core()
                 {
-                    // REVIEW: fire-and-forget DisposeAsync?
                     await using (var e = _source.GetAsyncEnumerator(ctd.Token))
                     {
                         do
@@ -57,7 +56,17 @@ namespace System.Linq
                                 return;
                             }
 
-                            observer.OnNext(e.Current);
+                            T v;
+                            try
+                            {
+                                v= e.Current;
+                            }
+                            catch (Exception ex)
+                            {
+                                observer.OnError(ex);
+                                return;
+                            }
+                            observer.OnNext(v);
                         }
                         while (!ctd.Token.IsCancellationRequested);
                     }
