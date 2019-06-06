@@ -36,9 +36,15 @@ namespace System.Linq
                         do
                         {
                             bool hasNext;
+                            var value = default(T)!;
+
                             try
                             {
                                 hasNext = await e.MoveNextAsync().ConfigureAwait(false);
+                                if (hasNext)
+                                {
+                                    value = e.Current;
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -56,17 +62,7 @@ namespace System.Linq
                                 return;
                             }
 
-                            T v;
-                            try
-                            {
-                                v= e.Current;
-                            }
-                            catch (Exception ex)
-                            {
-                                observer.OnError(ex);
-                                return;
-                            }
-                            observer.OnNext(v);
+                            observer.OnNext(value);
                         }
                         while (!ctd.Token.IsCancellationRequested);
                     }
