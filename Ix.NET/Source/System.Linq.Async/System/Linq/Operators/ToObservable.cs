@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -32,30 +31,35 @@ namespace System.Linq
 
                 async void Core()
                 {
-                    try
+                    // REVIEW: fire-and-forget DisposeAsync?
+                    await using (var e = _source.GetAsyncEnumerator(ctd.Token))
                     {
-                        await foreach (var element in _source.WithCancellation(ctd.Token).ConfigureAwait(false))
+                        do
                         {
-                            observer.OnNext(element);
-
-                            if (ctd.Token.IsCancellationRequested)
+                            bool hasNext;
+                            try
                             {
+                                hasNext = await e.MoveNextAsync().ConfigureAwait(false);
+                            }
+                            catch (Exception ex)
+                            {
+                                if (!ctd.Token.IsCancellationRequested)
+                                {
+                                    observer.OnError(ex);
+                                }
+
                                 return;
                             }
-                        }
-                    }
-                    catch (Exception error)
-                    {
-                        if (!ctd.Token.IsCancellationRequested)
-                        {
-                            observer.OnError(error);
-                        }
-                        return;
-                    }
 
-                    if (!ctd.Token.IsCancellationRequested)
-                    {
-                        observer.OnCompleted();
+                            if (!hasNext)
+                            {
+                                observer.OnCompleted();
+                                return;
+                            }
+
+                            observer.OnNext(e.Current);
+                        }
+                        while (!ctd.Token.IsCancellationRequested);
                     }
                 }
 
