@@ -65,8 +65,8 @@ namespace System.Linq
 
                     var cleanup = new[]
                     {
-                        AwaitMoveNextAsyncAndDispose(secondMoveNext, secondEnumerator, secondCancelToken.Token),
-                        AwaitMoveNextAsyncAndDispose(firstMoveNext, firstEnumerator, firstCancelToken.Token)
+                        AwaitMoveNextAsyncAndDispose(secondMoveNext, secondEnumerator),
+                        AwaitMoveNextAsyncAndDispose(firstMoveNext, firstEnumerator)
                     };
 
 
@@ -96,13 +96,13 @@ namespace System.Linq
                 {
                     winner = firstEnumerator;
                     secondCancelToken.Cancel();
-                    disposeLoser = AwaitMoveNextAsyncAndDispose(secondMoveNext, secondEnumerator, secondCancelToken.Token);
+                    disposeLoser = AwaitMoveNextAsyncAndDispose(secondMoveNext, secondEnumerator);
                 }
                 else
                 {
                     winner = secondEnumerator;
                     firstCancelToken.Cancel();
-                    disposeLoser = AwaitMoveNextAsyncAndDispose(firstMoveNext, firstEnumerator, firstCancelToken.Token);
+                    disposeLoser = AwaitMoveNextAsyncAndDispose(firstMoveNext, firstEnumerator);
                 }
 
                 try
@@ -181,7 +181,7 @@ namespace System.Linq
                     {
                         individualTokenSources[i].Cancel();
 
-                        cleanup[i] = AwaitMoveNextAsyncAndDispose(moveNexts[i], enumerators[i], individualTokenSources[i].Token);
+                        cleanup[i] = AwaitMoveNextAsyncAndDispose(moveNexts[i], enumerators[i]);
                     }
 
                     await Task.WhenAll(cleanup).ConfigureAwait(false);
@@ -212,7 +212,7 @@ namespace System.Linq
                     if (i != winnerIndex)
                     {
                         individualTokenSources[i].Cancel();
-                        var loserCleanupTask = AwaitMoveNextAsyncAndDispose(moveNexts[i], enumerators[i], individualTokenSources[i].Token);
+                        var loserCleanupTask = AwaitMoveNextAsyncAndDispose(moveNexts[i], enumerators[i]);
                         loserCleanupTasks.Add(loserCleanupTask);
                     }
                 }
@@ -251,7 +251,7 @@ namespace System.Linq
             return Amb(sources.ToArray());
         }
 
-        private static async Task AwaitMoveNextAsyncAndDispose<T>(Task<bool>? moveNextAsync, IAsyncEnumerator<T>? enumerator, CancellationToken token)
+        private static async Task AwaitMoveNextAsyncAndDispose<T>(Task<bool>? moveNextAsync, IAsyncEnumerator<T>? enumerator)
         {
             if (enumerator != null)
             {
@@ -263,7 +263,7 @@ namespace System.Linq
                         {
                             await moveNextAsync.ConfigureAwait(false);
                         }
-                        catch (TaskCanceledException tce) when (tce.CancellationToken == token)
+                        catch (TaskCanceledException)
                         {
                             // ignored because of cancelling the non-winners
                         }
