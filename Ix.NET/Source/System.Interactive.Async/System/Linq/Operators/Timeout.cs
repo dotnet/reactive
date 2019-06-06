@@ -60,6 +60,11 @@ namespace System.Linq
                     await _enumerator.DisposeAsync().ConfigureAwait(false);
                     _enumerator = null;
                 }
+                if (_sourceCTS != null)
+                {
+                    _sourceCTS.Dispose();
+                    _sourceCTS = null;
+                }
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
