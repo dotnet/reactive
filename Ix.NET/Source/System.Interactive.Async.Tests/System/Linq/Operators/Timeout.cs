@@ -36,6 +36,31 @@ namespace Tests
         }
 
         [Fact]
+        public async Task Timeout_Double_Never()
+        {
+            var source = AsyncEnumerableEx.Never<int>()
+                .Timeout(TimeSpan.FromMilliseconds(300))
+                .Timeout(TimeSpan.FromMilliseconds(100));
+
+            var en = source.GetAsyncEnumerator();
+
+            try
+            {
+                await en.MoveNextAsync();
+
+                Assert.False(true, "MoveNextAsync should have thrown");
+            }
+            catch (TimeoutException)
+            {
+                // expected
+            }
+            finally
+            {
+                await en.DisposeAsync();
+            }
+        }
+
+        [Fact]
         public async Task Timeout_Delayed_Main()
         {
             var source = AsyncEnumerable.Range(1, 5)
