@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -226,6 +227,115 @@ namespace Tests
             finally
             {
                 await xs.DisposeAsync();
+            }
+        }
+
+
+        [Fact]
+        public async Task Amb_First_GetAsyncEnumerator_Crashes()
+        {
+            var source = new FailingGetAsyncEnumerator<int>().Amb(AsyncEnumerableEx.Never<int>());
+
+            var xs = source.GetAsyncEnumerator();
+
+            try
+            {
+                await xs.MoveNextAsync();
+
+                Assert.False(true, "Should not have gotten here");
+            }
+            catch (InvalidOperationException)
+            {
+                // we expect this
+            }
+            finally
+            {
+                await xs.DisposeAsync();
+            }
+        }
+
+        [Fact]
+        public async Task Amb_Second_GetAsyncEnumerator_Crashes()
+        {
+            var source = AsyncEnumerableEx.Never<int>().Amb(new FailingGetAsyncEnumerator<int>());
+
+            var xs = source.GetAsyncEnumerator();
+
+            try
+            {
+                await xs.MoveNextAsync();
+
+                Assert.False(true, "Should not have gotten here");
+            }
+            catch (InvalidOperationException)
+            {
+                // we expect this
+            }
+            finally
+            {
+                await xs.DisposeAsync();
+            }
+        }
+
+        [Fact]
+        public async Task Amb_Many_First_GetAsyncEnumerator_Crashes()
+        {
+            var source = AsyncEnumerableEx.Amb(
+                new FailingGetAsyncEnumerator<int>(),
+                AsyncEnumerableEx.Never<int>(),
+                AsyncEnumerableEx.Never<int>()
+            );
+
+            var xs = source.GetAsyncEnumerator();
+
+            try
+            {
+                await xs.MoveNextAsync();
+
+                Assert.False(true, "Should not have gotten here");
+            }
+            catch (InvalidOperationException)
+            {
+                // we expect this
+            }
+            finally
+            {
+                await xs.DisposeAsync();
+            }
+        }
+
+        [Fact]
+        public async Task Amb_Many_Last_GetAsyncEnumerator_Crashes()
+        {
+            var source = AsyncEnumerableEx.Amb(
+                AsyncEnumerableEx.Never<int>(),
+                AsyncEnumerableEx.Never<int>(),
+                new FailingGetAsyncEnumerator<int>()
+            );
+
+            var xs = source.GetAsyncEnumerator();
+
+            try
+            {
+                await xs.MoveNextAsync();
+
+                Assert.False(true, "Should not have gotten here");
+            }
+            catch (InvalidOperationException)
+            {
+                // we expect this
+            }
+            finally
+            {
+                await xs.DisposeAsync();
+            }
+        }
+
+        private class FailingGetAsyncEnumerator<T> : IAsyncEnumerable<T>
+        {
+            public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+            {
+                throw new InvalidOperationException();
             }
         }
     }
