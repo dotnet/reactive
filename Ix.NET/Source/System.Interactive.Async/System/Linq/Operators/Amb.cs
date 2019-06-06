@@ -263,7 +263,7 @@ namespace System.Linq
                         {
                             await moveNextAsync.ConfigureAwait(false);
                         }
-                        catch (TaskCanceledException tce) // when (tce.CancellationToken == token)
+                        catch (TaskCanceledException tce) when (tce.CancellationToken == token)
                         {
                             // ignored because of cancelling the non-winners
                         }
