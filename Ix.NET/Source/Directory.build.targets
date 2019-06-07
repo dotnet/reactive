@@ -20,7 +20,8 @@
   <PropertyGroup>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
   </PropertyGroup>
-  
+
+<!--  
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
     <UseSourceLink>true</UseSourceLink>
     <CoverletOutputFormat>cobertura</CoverletOutputFormat>
@@ -28,5 +29,5 @@
     <CoverletOutput>$(MSBuildThisFileDirectory)coverlet/raw/$(AssemblyName)/$(TargetFramework)/</CoverletOutput>
     <CollectCoverage Condition="'$(TF_BUILD)' == 'true'">true</CollectCoverage>
   </PropertyGroup>
-
+-->
 </Project>

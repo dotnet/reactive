@@ -25,9 +25,12 @@
     <PackageReference Include="Nerdbank.GitVersioning" Version="2.3.138" PrivateAssets="all" />
   </ItemGroup>
 
+
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <PackageReference Include="coverlet.msbuild" Version="2.5.1" />
+    <!--<PackageReference Include="coverlet.msbuild" Version="2.5.1" />-->
+    <PackageReference Include="coverlet.collector" Version="1.0.0" />
   </ItemGroup>
+
 
   <Target Name="AddCommitHashToAssemblyAttributes" BeforeTargets="GetAssemblyAttributes">
     <ItemGroup>
