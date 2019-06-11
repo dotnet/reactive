@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.0' and '$(TargetFramework)' != 'netstandard2.1' " Include="Microsoft.Bcl.AsyncInterfaces" Version="1.0.0-preview6.19259.10" />
+    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.0' and '$(TargetFramework)' != 'netstandard2.1' " Include="Microsoft.Bcl.AsyncInterfaces" Version="1.0.0-preview7.19311.1" />
   </ItemGroup>
 
   <ItemGroup>
