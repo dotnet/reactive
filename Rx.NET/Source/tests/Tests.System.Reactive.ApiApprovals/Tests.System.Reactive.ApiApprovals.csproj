@@ -39,7 +39,7 @@
     <PackageReference Include="xunit" Version="2.4.0-beta.2.build4010" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0-beta.2.build4010" />
     <PackageReference Include="ApprovalTests" Version="3.0.14" />
-    <PackageReference Include="DiffPlex" Version="1.4.1" />
+    <PackageReference Include="DiffPlex" Version="1.4.4" />
     <PackageReference Include="PublicApiGenerator" Version="7.0.1" />
   </ItemGroup>
 
