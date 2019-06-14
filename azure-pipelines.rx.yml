@@ -33,7 +33,7 @@ jobs:
   steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '3.0.100-preview5-011568'
+      version: '3.0.100-preview6-012264'
 
   - task: DotNetCoreCLI@2
     inputs:
@@ -113,7 +113,7 @@ jobs:
   steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '3.0.100-preview5-011568'
+      version: '3.0.100-preview6-012264'
 
   - task: DotNetCoreCLI@2
     inputs:
@@ -189,7 +189,7 @@ jobs:
   steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '3.0.100-preview5-011568'
+      version: '3.0.100-preview6-012264'
 
   - task: DotNetCoreCLI@2
     inputs:
