@@ -24,16 +24,16 @@ pr:
 pool:
   vmImage: windows-2019
 
-variables: 
+variables:
   BuildConfiguration: Release
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  
+
 steps:
 - task: DotNetCoreInstaller@0
   inputs:
     version: '3.0.100-preview6-012264'
 
-- task: DotNetCoreCLI@2  
+- task: DotNetCoreCLI@2
   inputs:
     command: custom
     custom: tool
@@ -46,7 +46,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: restore
-    projects: Ix.NET/Source/**/*.csproj 
+    projects: Ix.NET/Source/**/*.csproj
   displayName: Restore
 
 - task: DotNetCoreCLI@2
@@ -54,11 +54,11 @@ steps:
     command: pack
     packagesToPack: Ix.NET/Source/**/System.Interactive*.csproj;Ix.NET/Source/**/System.Linq.*.csproj;!Ix.NET/Source/**/*.Tests*.csproj;!Ix.NET/Source/refs/**
     configuration: $(BuildConfiguration)
-    packDirectory: $(Build.ArtifactStagingDirectory)\artifacts    
+    packDirectory: $(Build.ArtifactStagingDirectory)\artifacts
     verbosityPack: Minimal
   displayName: Pack
 
-- task: DotNetCoreCLI@2  
+- task: DotNetCoreCLI@2
   inputs:
     command: custom
     custom: tool
@@ -81,7 +81,7 @@ steps:
     codeCoverageTool: Cobertura
     summaryFileLocation: $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml
 
-- task: DotNetCoreCLI@2  
+- task: DotNetCoreCLI@2
   inputs:
     command: custom
     custom: tool
@@ -105,8 +105,12 @@ steps:
     ArtifactDirectory: $(Build.ArtifactStagingDirectory)\artifacts
   condition: and(succeeded(), not(eq(variables['build.reason'], 'PullRequest')), not(eq(variables['SignClientSecret'], '')), not(eq(variables['SignClientUser'], '')))
 
-- task: PublishBuildArtifacts@1
+- task: PublishPipelineArtifact@0
   inputs:
-    PathtoPublish: $(Build.ArtifactStagingDirectory)\artifacts
-    ArtifactName: artifacts
-    publishLocation: Container
+    targetPath: $(Build.ArtifactStagingDirectory)\artifacts
+    artifactName: artifacts
+
+- task: PublishPipelineArtifact@0
+  inputs:
+    artifactName: Coverage Report XML
+    targetPath: $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml
