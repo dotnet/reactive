@@ -31,7 +31,7 @@ variables:
 steps:
 - task: DotNetCoreInstaller@0
   inputs:
-    version: '3.0.100-preview6-012264'
+    version: '3.0.100-preview7-012588'
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -72,14 +72,10 @@ steps:
     arguments: -c $(BuildConfiguration) -- RunConfiguration.DisableAppDomain=true
   displayName: Run Tests
 
-- script: reportgenerator -reports:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/raw/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
+- script: reportgenerator -reports:$(Build.SourcesDirectory)/Ix.NET/Source/**/TestResults/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
   displayName: Create reports
 
-- task: PublishCodeCoverageResults@1
-  displayName: 'Publish code coverage'
-  inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml
+
 
 - task: DotNetCoreCLI@2
   inputs:
