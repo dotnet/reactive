@@ -47,6 +47,7 @@ steps:
   inputs:
     command: restore
     feedsToUse: config
+    nugetConfigPath: Ix.NET/Source/NuGet.config
     projects: Ix.NET/Source/**/*.csproj
   displayName: Restore
 
