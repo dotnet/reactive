@@ -46,8 +46,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: restore
-    selectOrConfig: config
-    nugetConfigPath: Ix.NET/Source/NuGet.config
+    feedsToUse: config
     projects: Ix.NET/Source/**/*.csproj
   displayName: Restore
 
