@@ -31,7 +31,7 @@ variables:
 steps:
 - task: DotNetCoreInstaller@0
   inputs:
-    version: '3.0.100-preview6-012264'
+    version: '3.0.100-preview7-012588'
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -46,6 +46,8 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: restore
+    feedsToUse: config
+    nugetConfigPath: Ix.NET/Source/NuGet.config
     projects: Ix.NET/Source/**/*.csproj
   displayName: Restore
 
@@ -69,10 +71,10 @@ steps:
   inputs:
     command: test
     projects: Ix.NET/Source/**/*.Tests.csproj
-    arguments: -c $(BuildConfiguration) -- RunConfiguration.DisableAppDomain=true
+    arguments: -c $(BuildConfiguration) --settings Ix.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
   displayName: Run Tests
 
-- script: reportgenerator -reports:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/raw/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
+- script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
   displayName: Create reports
 
 - task: PublishCodeCoverageResults@1
@@ -106,11 +108,13 @@ steps:
   condition: and(succeeded(), not(eq(variables['build.reason'], 'PullRequest')), not(eq(variables['SignClientSecret'], '')), not(eq(variables['SignClientUser'], '')))
 
 - task: PublishPipelineArtifact@0
+  displayName: Publish packages
   inputs:
     targetPath: $(Build.ArtifactStagingDirectory)\artifacts
     artifactName: artifacts
 
 - task: PublishPipelineArtifact@0
+  displayName: Publish Code Coverage XML
   inputs:
     artifactName: Coverage Report XML
     targetPath: $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml
