@@ -108,11 +108,13 @@ steps:
   condition: and(succeeded(), not(eq(variables['build.reason'], 'PullRequest')), not(eq(variables['SignClientSecret'], '')), not(eq(variables['SignClientUser'], '')))
 
 - task: PublishPipelineArtifact@0
+  displayName: Publish packages
   inputs:
     targetPath: $(Build.ArtifactStagingDirectory)\artifacts
     artifactName: artifacts
 
 - task: PublishPipelineArtifact@0
+  displayName: Publish Code Coverage XML
   inputs:
     artifactName: Coverage Report XML
     targetPath: $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml
