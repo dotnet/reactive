@@ -70,7 +70,7 @@ jobs:
     inputs:
       command: test
       projects: Rx.NET/Source/tests/Tests.System.Reactive/*.csproj
-      arguments: -c $(BuildConfiguration) --no-build --no-restore --filter "SkipCI!=true" --collect:"XPlat Code Coverage" -s $(System.DefaultWorkingDirectory)/Rx.NET/Source/CodeCoverage.runsettings
+      arguments: -c $(BuildConfiguration) --no-build --no-restore --filter "SkipCI!=true" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
     displayName: Run Unit Tests
 
   - task: DotNetCoreCLI@2
