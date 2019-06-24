@@ -46,8 +46,6 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: restore
-    selectOrConfig: config
-    nugetConfigPath: Ix.NET/Source/NuGet.config
     projects: Ix.NET/Source/**/*.csproj
   displayName: Restore
 
@@ -74,7 +72,7 @@ steps:
     arguments: -c $(BuildConfiguration) -- RunConfiguration.DisableAppDomain=true
   displayName: Run Tests
 
-- script: reportgenerator -reports:$(Build.SourcesDirectory)/Ix.NET/Source/**/TestResults/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
+- script: reportgenerator -reports:$(Build.SourcesDirectory)/Ix.NET/Source/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
   displayName: Create reports
 
 
