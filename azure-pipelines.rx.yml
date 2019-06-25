@@ -33,7 +33,7 @@ jobs:
   steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '3.0.100-preview6-012264'
+      version: '3.0.100-preview7-012588'
 
   - task: DotNetCoreCLI@2
     inputs:
@@ -59,20 +59,18 @@ jobs:
       command: custom
       arguments: pack Rx.NET/Source/facades/System.Reactive.Compatibility.nuspec -Version $(NBGV_NuGetPackageVersion) -MinClientVersion 2.12 -NoPackageAnalysis -outputdirectory $(Build.ArtifactStagingDirectory)\artifacts
 
-  - task: MSBuild@1
-    displayName: Build for Test (ppdb) workaround
+  - task: DotNetCoreCLI@2
     inputs:
-      solution: Rx.NET/Source/System.Reactive.sln
-      msbuildArguments: /t:build /p:DebugType=portable
-      platform: $(BuildPlatform)
-      configuration: $(BuildConfiguration)
-      maximumCpuCount: true
+      command: custom
+      custom: tool
+      arguments: install --tool-path . dotnet-reportgenerator-globaltool
+    displayName: Install ReportGenerator tool
 
   - task: DotNetCoreCLI@2
     inputs:
       command: test
       projects: Rx.NET/Source/tests/Tests.System.Reactive/*.csproj
-      arguments: -c $(BuildConfiguration) --no-build --no-restore --filter "SkipCI!=true" --collect:"Code Coverage" -s $(System.DefaultWorkingDirectory)/Rx.NET/Source/CodeCoverage.runsettings
+      arguments: -c $(BuildConfiguration) --no-build --no-restore --filter "SkipCI!=true" --settings Rx.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
     displayName: Run Unit Tests
 
   - task: DotNetCoreCLI@2
@@ -82,7 +80,29 @@ jobs:
       arguments: -c $(BuildConfiguration) --no-build --no-restore
     displayName: Run Api Approvals Tests
 
+  - script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Rx.NET/Source/coverlet/reports -reporttypes:"Cobertura"
+    displayName: Create reports
 
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish code coverage'
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: $(Build.SourcesDirectory)/Rx.NET/Source/coverlet/reports/Cobertura.xml
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: custom
+      custom: tool
+      arguments: install --tool-path . Codecov.Tool
+    displayName: Install Codecov tool
+    condition: and(succeeded(), not(eq(variables['CODECOV_TOKEN'], '')))
+
+  - script: codecov -f $(Build.SourcesDirectory)/Rx.NET/Source/coverlet/reports/Cobertura.xml --flag rxnet
+    env:
+      CODECOV_TOKEN: $(CODECOV_TOKEN)
+    displayName: Upload coverage to Codecov
+    condition: and(succeeded(), not(eq(variables['CODECOV_TOKEN'], '')))
+    
   - task: PowerShell@2
     displayName: Authenticode Sign Packages
     inputs:
@@ -113,7 +133,7 @@ jobs:
   steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '3.0.100-preview6-012264'
+      version: '3.0.100-preview7-012588'
 
   - task: DotNetCoreCLI@2
     inputs:
@@ -189,7 +209,7 @@ jobs:
   steps:
   - task: DotNetCoreInstaller@0
     inputs:
-      version: '3.0.100-preview6-012264'
+      version: '3.0.100-preview7-012588'
 
   - task: DotNetCoreCLI@2
     inputs:
