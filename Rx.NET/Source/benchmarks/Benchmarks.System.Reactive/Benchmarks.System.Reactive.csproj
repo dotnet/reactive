@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.10.14" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.11.5" />
     <PackageReference Include="WindowsBase" Version="4.6.1055" />
   </ItemGroup>
 
