@@ -1,4 +1,4 @@
-﻿/*
+/*
  * WARNING: Auto-generated file (merged on 06/13/2018)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
@@ -16691,6 +16691,84 @@ namespace System.Reactive.Linq
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     resourceFactory,
+                    observableFactory
+                )
+            );
+        }
+
+        /// <summary>
+        /// Constructs an observable sequence that depends on a resource object, whose lifetime is tied to the resulting observable sequence's lifetime. The resource is used through asynchronous method.
+        /// The <see cref="T:System.Threading.CancellationToken" /> passed to the asynchronous methods is tied to the returned disposable subscription, allowing best-effort cancellation at any stage of the resource usage.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
+        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="IDisposable" />.</typeparam>
+        /// <param name="resourceFactory">Factory function to obtain a resource object.</param>
+        /// <param name="observableFactoryAsync">Asynchronous factory function to obtain an observable sequence that depends on the obtained resource.</param>
+        /// <returns>An observable sequence whose lifetime controls the lifetime of the dependent resource object.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="resourceFactory" /> or <paramref name="observableFactoryAsync" /> is null.</exception>
+        /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
+        /// <remarks>When a subscription to the resulting sequence is disposed, the <see cref="T:System.Threading.CancellationToken" /> that was fed to the asynchronous observable factory function will be signaled.</remarks>
+        public static IQbservable<TResult> Using<TResult, TResource>(this IQbservableProvider provider, Expression<Func<TResource>> resourceFactory, Expression<Func<TResource, CancellationToken, Task<IObservable<TResult>>>> observableFactoryAsync)
+            where TResource : IDisposable
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (resourceFactory == null)
+                throw new ArgumentNullException(nameof(resourceFactory));
+            if (observableFactoryAsync == null)
+                throw new ArgumentNullException(nameof(observableFactoryAsync));
+
+            return provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Using<TResult, TResource>(default(IQbservableProvider), default(Expression<Func<TResource>>), default(Expression<Func<TResource, CancellationToken, Task<IObservable<TResult>>>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult), typeof(TResource)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    resourceFactory,
+                    observableFactoryAsync
+                )
+            );
+        }
+
+        /// <summary>
+        /// Constructs an observable sequence that depends on a resource object, whose lifetime is tied to the resulting observable sequence's lifetime. The resource is obtained through asynchronous method.
+        /// The <see cref="T:System.Threading.CancellationToken" /> passed to the asynchronous methods is tied to the returned disposable subscription, allowing best-effort cancellation at any stage of the resource acquisition or usage.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
+        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="IDisposable" />.</typeparam>
+        /// <param name="resourceFactoryAsync">Asynchronous factory function to obtain a resource object.</param>
+        /// <param name="observableFactory">Factory function to obtain an observable sequence that depends on the obtained resource.</param>
+        /// <returns>An observable sequence whose lifetime controls the lifetime of the dependent resource object.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="resourceFactoryAsync" /> or <paramref name="observableFactory" /> is null.</exception>
+        /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
+        /// <remarks>When a subscription to the resulting sequence is disposed, the <see cref="T:System.Threading.CancellationToken" /> that was fed to the asynchronous resource factory function will be signaled.</remarks>
+        public static IQbservable<TResult> Using<TResult, TResource>(this IQbservableProvider provider, Expression<Func<CancellationToken, Task<TResource>>> resourceFactoryAsync, Expression<Func<TResource, IObservable<TResult>>> observableFactory)
+            where TResource : IDisposable
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (resourceFactoryAsync == null)
+                throw new ArgumentNullException(nameof(resourceFactoryAsync));
+            if (observableFactory == null)
+                throw new ArgumentNullException(nameof(observableFactory));
+
+            return provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Using<TResult, TResource>(default(IQbservableProvider), default(Expression<Func<CancellationToken, Task<TResource>>>), default(Expression<Func<TResource, IObservable<TResult>>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult), typeof(TResource)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    resourceFactoryAsync,
                     observableFactory
                 )
             );

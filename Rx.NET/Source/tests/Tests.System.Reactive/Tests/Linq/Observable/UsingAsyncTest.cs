@@ -20,8 +20,14 @@ namespace ReactiveTests.Tests
         [Fact]
         public void UsingAsync_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using<int, IDisposable>(null, (res, ct) => null));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using<int, IDisposable>(ct => null, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using<int, IDisposable>(resourceFactoryAsync: null, observableFactoryAsync: (res, ct) => null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using<int, IDisposable>(resourceFactoryAsync: ct => null, observableFactoryAsync: null));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using<int, IDisposable>(resourceFactory: null, observableFactoryAsync: (res, ct) => null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using<int, IDisposable>(resourceFactory: () => null, observableFactoryAsync: null));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using<int, IDisposable>(resourceFactoryAsync: null, observableFactory: res => null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Using<int, IDisposable>(resourceFactoryAsync: ct => null, observableFactory: null));
         }
 
         [Fact]
@@ -31,6 +37,38 @@ namespace ReactiveTests.Tests
 
             var xs = Observable.Using(
                 ct => Task.Factory.StartNew(() => Disposable.Create(() => done.Signal())),
+                (_, ct) => Task.Factory.StartNew(() => Observable.Return(42))
+            );
+
+            var res = xs.ToEnumerable().ToList();
+
+            Assert.Equal(new List<int> { 42 }, res);
+            Assert.True(done.Wait(5000), "done.Wait(5000)");
+        }
+
+        [Fact]
+        public void UsingAsync_AsyncResource_SyncCreate()
+        {
+            var done = new CountdownEvent(1);
+
+            var xs = Observable.Using(
+                ct => Task.Factory.StartNew(() => Disposable.Create(() => done.Signal())),
+                _ => Observable.Return(42)
+            );
+
+            var res = xs.ToEnumerable().ToList();
+
+            Assert.Equal(new List<int> { 42 }, res);
+            Assert.True(done.Wait(5000), "done.Wait(5000)");
+        }
+
+        [Fact]
+        public void UsingAsync_SyncResource_AsyncCreate()
+        {
+            var done = new CountdownEvent(1);
+
+            var xs = Observable.Using(
+                () => Disposable.Create(() => done.Signal()),
                 (_, ct) => Task.Factory.StartNew(() => Observable.Return(42))
             );
 

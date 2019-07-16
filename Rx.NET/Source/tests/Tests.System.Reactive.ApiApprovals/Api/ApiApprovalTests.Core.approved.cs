@@ -1535,6 +1535,10 @@ namespace System.Reactive.Linq
             where TResource : System.IDisposable { }
         public static System.IObservable<TResult> Using<TResult, TResource>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResource>> resourceFactoryAsync, System.Func<TResource, System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>> observableFactoryAsync)
             where TResource : System.IDisposable { }
+        public static System.IObservable<TResult> Using<TResult, TResource>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResource>> resourceFactoryAsync, System.Func<TResource, System.IObservable<TResult>> observableFactory)
+            where TResource : System.IDisposable { }
+        public static System.IObservable<TResult> Using<TResult, TResource>(System.Func<TResource> resourceFactory, System.Func<TResource, System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>> observableFactoryAsync)
+            where TResource : System.IDisposable { }
         public static TSource Wait<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TResult> When<TResult>(params System.Reactive.Joins.Plan<>[] plans) { }
         public static System.IObservable<TResult> When<TResult>(this System.Collections.Generic.IEnumerable<System.Reactive.Joins.Plan<TResult>> plans) { }
@@ -2235,6 +2239,10 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TSource> ToQbservable<TSource>(this System.Linq.IQueryable<TSource> source, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.Linq.IQueryable<TSource> ToQueryable<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
         public static System.Reactive.Linq.IQbservable<TResult> Using<TResult, TResource>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<TResource>> resourceFactory, System.Linq.Expressions.Expression<System.Func<TResource, System.IObservable<TResult>>> observableFactory)
+            where TResource : System.IDisposable { }
+        public static System.Reactive.Linq.IQbservable<TResult> Using<TResult, TResource>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<TResource>> resourceFactory, System.Linq.Expressions.Expression<System.Func<TResource, System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>>> observableFactoryAsync)
+            where TResource : System.IDisposable { }
+        public static System.Reactive.Linq.IQbservable<TResult> Using<TResult, TResource>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResource>>> resourceFactoryAsync, System.Linq.Expressions.Expression<System.Func<TResource, System.IObservable<TResult>>> observableFactory)
             where TResource : System.IDisposable { }
         public static System.Reactive.Linq.IQbservable<TResult> Using<TResult, TResource>(this System.Reactive.Linq.IQbservableProvider provider, System.Linq.Expressions.Expression<System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<TResource>>> resourceFactoryAsync, System.Linq.Expressions.Expression<System.Func<TResource, System.Threading.CancellationToken, System.Threading.Tasks.Task<System.IObservable<TResult>>>> observableFactoryAsync)
             where TResource : System.IDisposable { }
