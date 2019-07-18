@@ -153,7 +153,7 @@ namespace System.Reactive.Concurrency
             {
                 if (_disposed)
                 {
-                    throw new ObjectDisposedException("");
+                    throw new ObjectDisposedException(nameof(EventLoopScheduler));
                 }
 
                 if (dueTime <= TimeSpan.Zero)
@@ -351,7 +351,15 @@ namespace System.Reactive.Concurrency
                     {
                         if (!item.IsCanceled)
                         {
-                            item.Invoke();
+                            try
+                            {
+                                item.Invoke();
+                            }
+                            catch (ObjectDisposedException ex) when (nameof(EventLoopScheduler).Equals(ex.ObjectName))
+                            {
+                                // Since we are not inside the lock at this point
+                                // the scheduler can be disposed before the item had a chance to run
+                            }
                         }
                     }
                 }
