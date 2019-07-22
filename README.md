@@ -78,7 +78,7 @@ Rx complements and interoperates smoothly with both synchronous data streams (`I
    </tr>
 </table>
 
-Additional documentation, video, tutorials and HOL are available on MSDN.
+Additional documentation, video, tutorials and HOL are available on [MSDN](https://docs.microsoft.com/en-us/previous-versions/dotnet/reactive-extensions/hh242985(v=vs.103)), on [*Introduction to Rx*](http://introtorx.com/), [*ReactiveX*](http://reactivex.io/), and [ReactiveUI](https://reactiveui.net/).
 
 Flavors of Rx
 ---------------
