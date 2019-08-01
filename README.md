@@ -12,7 +12,7 @@ MyGet<br>([gallery](https://dotnet.myget.org/gallery/rx)) | ![#](https://img.shi
 Catch us in the #rxnet channel over at http://reactiveui.net/slack
 
 ### Get nightly builds
-- NuGet v3 feed url (VS 2015+): `https://dotnet.myget.org/F/rx/api/v3/index.json`
+- NuGet v3 feed url (VS 2015+): `https://pkgs.dev.azure.com/dotnet/Rx.NET/_packaging/RxNet/nuget/v3/index.json`
 
 ## System.Linq.Async / System.Interactive.Async / System.Interactive
 
