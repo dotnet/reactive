@@ -19,7 +19,9 @@ foreach ($nupkg in $nupkgs){
 	Write-Host "Submitting $nupkg for signing"
 
 	.\SignClient 'sign' -c $appSettings -i $nupkg -r $Env:SignClientUser -s $Env:SignClientSecret -n 'Rx.NET' -d 'Rx.NET' -u 'https://github.com/dotnet/reactive' 
-
+  if ($LASTEXITCODE -ne 0) {
+    exit 1
+  }
 	Write-Host "Finished signing $nupkg"
 }
 

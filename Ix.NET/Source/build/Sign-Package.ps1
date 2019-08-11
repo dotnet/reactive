@@ -20,6 +20,10 @@ foreach ($nupkg in $nupkgs){
 
 	.\SignClient 'sign' -c $appSettings -i $nupkg -r $Env:SignClientUser -s $Env:SignClientSecret -n 'Ix.NET' -d 'Ix.NET' -u 'https://github.com/dotnet/reactive' 
 
+  if ($LASTEXITCODE -ne 0) {
+    exit 1
+  }
+  
 	Write-Host "Finished signing $nupkg"
 }
 
