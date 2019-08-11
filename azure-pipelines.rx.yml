@@ -31,9 +31,11 @@ jobs:
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
   steps:
-  - task: DotNetCoreInstaller@0
+  - task: UseDotNet@2
     inputs:
       version: '3.0.100-preview7-012821'
+      includePreviewVersions: true
+      performMultiLevelLookup: true
 
   - task: DotNetCoreCLI@2
     inputs:
@@ -131,9 +133,15 @@ jobs:
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
   steps:
-  - task: DotNetCoreInstaller@0
+  - task: UseDotNet@2
     inputs:
       version: '3.0.100-preview7-012821'
+      includePreviewVersions: true
+
+  - task: UseDotNet@2
+    inputs:
+      version: '2.2.x'      
+      performMultiLevelLookup: true
 
   - task: DotNetCoreCLI@2
     inputs:
@@ -185,10 +193,6 @@ jobs:
       arguments: -c $(BuildConfiguration) -f netcoreapp3.0
     displayName: Run 3.0 Tests on Linux
 
-  - task: DotNetCoreInstaller@0
-    inputs:
-      version: '2.2.104'
-
   - task: DotNetCoreCLI@2
     inputs:
       command: test
@@ -207,9 +211,11 @@ jobs:
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
   steps:
-  - task: DotNetCoreInstaller@0
+  - task: UseDotNet@2
     inputs:
       version: '3.0.100-preview7-012821'
+      includePreviewVersions: true
+      performMultiLevelLookup: true
 
   - task: DotNetCoreCLI@2
     inputs:
