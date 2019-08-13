@@ -24,7 +24,7 @@
   
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19408-01" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19412-01" PrivateAssets="All"/>
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.0.24" PrivateAssets="all" />
   </ItemGroup>
 
