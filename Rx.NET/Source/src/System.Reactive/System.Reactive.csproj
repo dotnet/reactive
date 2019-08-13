@@ -1,9 +1,9 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.0;netstandard2.0;net46;uap10.0;uap10.0.16299</TargetFrameworks>
-    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>       
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
-    <Description>Reactive Extensions (Rx) for .NET</Description>    
+    <Description>Reactive Extensions (Rx) for .NET</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
@@ -12,39 +12,43 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <FrameworkReference Update="Microsoft.WindowsDesktop.App" PrivateAssets="all" />
+  </ItemGroup>
 
-  <ItemGroup>    
+
+  <ItemGroup>
     <Compile Remove="Platforms\**\*.*" />
     <EmbeddedResource Remove="Platforms\**\*.*" />
     <!-- Workaround so the files appear in VS -->
     <None Include="Platforms\**\*.*" />
-    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />    
-    <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />     
-    <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />      
+    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+    <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />
+    <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />
   </ItemGroup>
 
-  
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
   </ItemGroup>
-  
+
   <!-- UWP -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">      
+  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="System.ComponentModel" Version="4.0.1" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.0.11" />
-    <PackageReference Include="System.Linq.Queryable" Version="4.0.1" />    
+    <PackageReference Include="System.Linq.Queryable" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
     <Compile Include="Platforms\UWP\**\*.cs" />
   </ItemGroup>
-  
+
   <!-- Windows includes for Desktop and UWP -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net46' or $(TargetFramework.StartsWith('uap10.0')) or '$(TargetFramework)' == 'netcoreapp3.0'">
     <Compile Include="Platforms\Windows\**\*.cs" />
-    <EmbeddedResource Include="Platforms\Windows\**\*.resx" />    
+    <EmbeddedResource Include="Platforms\Windows\**\*.resx" />
   </ItemGroup>
-  
+
   <!-- Desktop -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net46'">
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
@@ -56,42 +60,42 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net46' or '$(TargetFramework)' == 'netcoreapp3.0'">
     <Compile Include="Platforms\Desktop\**\*.cs" />
   </ItemGroup>
-  
+
   <!-- Designer support -->
   <ItemGroup>
     <None Update="Linq\Observable\CombineLatest.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="CombineLatest.Generated.cs" />
     <Compile Update="Linq\Observable\CombineLatest.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="CombineLatest.Generated.tt" />
     <None Update="Linq\Observable\Zip.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="Zip.Generated.cs" />
-    <Compile Update="Linq\Observable\Zip.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="Zip.Generated.tt" />   
+    <Compile Update="Linq\Observable\Zip.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="Zip.Generated.tt" />
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);RemoveNetCoreApp3FromNuGet</TargetsForTfmSpecificBuildOutput>  
-    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);AddNetCore3ToNuGet</TargetsForTfmSpecificContentInPackage>  
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);RemoveNetCoreApp3FromNuGet</TargetsForTfmSpecificBuildOutput>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);AddNetCore3ToNuGet</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
 
   <!-- We remove the output from the nuget so it doesn't wind up in the \lib folder -->
   <Target Name="RemoveNetCoreApp3FromNuGet" DependsOnTargets="BuiltProjectOutputGroup;DocumentationProjectOutputGroup" Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-    <ItemGroup>      
+    <ItemGroup>
       <!-- Before clearing the output groups, add them to None for packing -->
-      <ItemsToAddToNuGet Include="@(BuiltProjectOutputGroupOutput);@(DocumentationProjectOutputGroupOutput)" PackagePath="build\netcoreapp3.0" />      
-      
+      <ItemsToAddToNuGet Include="@(BuiltProjectOutputGroupOutput);@(DocumentationProjectOutputGroupOutput)" PackagePath="build\netcoreapp3.0" />
+
       <BuiltProjectOutputGroupOutput Remove="@(BuiltProjectOutputGroupOutput)" />
-      <DocumentationProjectOutputGroupOutput Remove="@(DocumentationProjectOutputGroupOutput)" />      
+      <DocumentationProjectOutputGroupOutput Remove="@(DocumentationProjectOutputGroupOutput)" />
     </ItemGroup>
   </Target>
-  
+
   <Target Name="AddNetCore3ToNuGet" Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-    <ItemGroup>      
+    <ItemGroup>
       <!-- Add the removed build output to the build\netcoreapp3.0 folder -->
-      <TfmSpecificPackageFileWithRecursiveDir Include="@(ItemsToAddToNuGet)" PackagePath="build\netcoreapp3.0" />      
+      <TfmSpecificPackageFileWithRecursiveDir Include="@(ItemsToAddToNuGet)" PackagePath="build\netcoreapp3.0" />
     </ItemGroup>
   </Target>
-  
+
   <ItemGroup>
     <None Include="build\_._" PackagePath="lib\netcoreapp3.0" Pack="true" />
     <None Include="build\System.Reactive.targets" PackagePath="buildTransitive\netcoreapp3.0" Pack="true" />
     <None Include="build\System.Reactive.targets" PackagePath="build\netcoreapp3.0" Pack="true" />
   </ItemGroup>
-  
+
 </Project>
