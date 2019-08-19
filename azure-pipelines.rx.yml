@@ -35,6 +35,7 @@ jobs:
     inputs:
       version: '3.0.100-preview8-013656'
       includePreviewVersions: true
+      performMultiLevelLookup: true
 
   - task: DotNetCoreCLI@2
     inputs:
@@ -213,6 +214,7 @@ jobs:
     inputs:
       version: '3.0.100-preview8-013656'
       includePreviewVersions: true
+      performMultiLevelLookup: true
 
   - task: DotNetCoreCLI@2
     inputs:

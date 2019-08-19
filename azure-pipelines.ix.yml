@@ -14,7 +14,6 @@ pr:
     include:
       - master
       - rel/*
-      - IxAsyncCSharp8
   paths:
     include:
       - Ix.NET/Source/*
@@ -46,8 +45,6 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: restore
-    feedsToUse: config
-    nugetConfigPath: Ix.NET/Source/NuGet.config
     projects: Ix.NET/Source/**/*.csproj
   displayName: Restore
 
