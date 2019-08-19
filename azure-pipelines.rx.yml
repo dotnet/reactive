@@ -33,8 +33,9 @@ jobs:
   steps:
   - task: UseDotNet@2
     inputs:
-      version: '3.0.100-preview7-012821'
+      version: '3.0.100-preview8-013656'
       includePreviewVersions: true
+      performMultiLevelLookup: true
 
   - task: DotNetCoreCLI@2
     inputs:
@@ -103,7 +104,7 @@ jobs:
       CODECOV_TOKEN: $(CODECOV_TOKEN)
     displayName: Upload coverage to Codecov
     condition: and(succeeded(), not(eq(variables['CODECOV_TOKEN'], '')))
-    
+
   - task: PowerShell@2
     displayName: Authenticode Sign Packages
     inputs:
@@ -134,7 +135,7 @@ jobs:
   steps:
   - task: UseDotNet@2
     inputs:
-      version: '3.0.100-preview7-012821'
+      version: '3.0.100-preview8-013656'
       includePreviewVersions: true
 
   - task: UseDotNet@2
@@ -211,8 +212,9 @@ jobs:
   steps:
   - task: UseDotNet@2
     inputs:
-      version: '3.0.100-preview7-012821'
+      version: '3.0.100-preview8-013656'
       includePreviewVersions: true
+      performMultiLevelLookup: true
 
   - task: DotNetCoreCLI@2
     inputs:

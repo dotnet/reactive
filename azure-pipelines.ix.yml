@@ -14,7 +14,6 @@ pr:
     include:
       - master
       - rel/*
-      - IxAsyncCSharp8
   paths:
     include:
       - Ix.NET/Source/*
@@ -31,7 +30,7 @@ variables:
 steps:
 - task: DotNetCoreInstaller@0
   inputs:
-    version: '3.0.100-preview7-012588'
+    version: '3.0.100-preview8-013656'
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -46,8 +45,6 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: restore
-    feedsToUse: config
-    nugetConfigPath: Ix.NET/Source/NuGet.config
     projects: Ix.NET/Source/**/*.csproj
   displayName: Restore
 
