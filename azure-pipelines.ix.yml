@@ -31,7 +31,7 @@ variables:
 steps:
 - task: DotNetCoreInstaller@0
   inputs:
-    version: '3.0.100-preview7-012588'
+    version: '3.0.100-preview8-013656'
 
 - task: DotNetCoreCLI@2
   inputs:
