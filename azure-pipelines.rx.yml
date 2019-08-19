@@ -91,20 +91,6 @@ jobs:
       codeCoverageTool: Cobertura
       summaryFileLocation: $(Build.SourcesDirectory)/Rx.NET/Source/coverlet/reports/Cobertura.xml
 
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: custom
-      custom: tool
-      arguments: install --tool-path . Codecov.Tool
-    displayName: Install Codecov tool
-    condition: and(succeeded(), not(eq(variables['CODECOV_TOKEN'], '')))
-
-  - script: codecov -f $(Build.SourcesDirectory)/Rx.NET/Source/coverlet/reports/Cobertura.xml --flag rxnet
-    env:
-      CODECOV_TOKEN: $(CODECOV_TOKEN)
-    displayName: Upload coverage to Codecov
-    condition: and(succeeded(), not(eq(variables['CODECOV_TOKEN'], '')))
-
   - task: PowerShell@2
     displayName: Authenticode Sign Packages
     inputs:
