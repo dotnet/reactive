@@ -10,7 +10,9 @@
 
   <ItemGroup>
     <Compile Remove="Api\*.approved.cs" />    
+    <Compile Remove="Api\*.received.cs" />    
     <None Include="Api\*.approved.cs" />
+    <None Include="Api\*.received.cs" />
   </ItemGroup>
 
   <ItemGroup>
