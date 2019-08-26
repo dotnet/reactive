@@ -9,17 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Api\ApiApprovalTests.Aliases.approved.cs" />
-    <Compile Remove="Api\ApiApprovalTests.Core.approved.cs" />
-    <Compile Remove="Api\ApiApprovalTests.Testing.approved.cs" />
-    
-    <None Include="Api\ApiApprovalTests.Aliases.approved.cs" />
-    <None Include="Api\ApiApprovalTests.Core.approved.cs" />
-    <None Include="Api\ApiApprovalTests.Testing.approved.cs" />
-    
-    <None Include="Api\ApiApprovalTests.Aliases.approved.cs" />
-    <None Include="Api\ApiApprovalTests.Core.approved.cs" />
-    <None Include="Api\ApiApprovalTests.Testing.approved.cs" />
+    <Compile Remove="Api\*.approved.cs" />    
+    <None Include="Api\*.approved.cs" />
   </ItemGroup>
 
   <ItemGroup>
