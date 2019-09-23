@@ -33,7 +33,7 @@ jobs:
   steps:
   - task: UseDotNet@2
     inputs:
-      version: '3.0.100-preview8-013656'
+      version: '3.0.x'
       includePreviewVersions: true
       performMultiLevelLookup: true
 
@@ -121,12 +121,13 @@ jobs:
   steps:
   - task: UseDotNet@2
     inputs:
-      version: '3.0.100-preview8-013656'
+      version: '3.0.x'
       includePreviewVersions: true
 
   - task: UseDotNet@2
     inputs:
       version: '2.2.x'
+      packageType: runtime
 
   - task: DotNetCoreCLI@2
     inputs:
@@ -198,7 +199,7 @@ jobs:
   steps:
   - task: UseDotNet@2
     inputs:
-      version: '3.0.100-preview8-013656'
+      version: '3.0.x'
       includePreviewVersions: true
       performMultiLevelLookup: true
 
