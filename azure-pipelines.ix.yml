@@ -33,6 +33,7 @@ steps:
   inputs:
     version: 3.0.x
     includePreviewVersions: true
+    performMultiLevelLookup: true
 
 - task: DotNetCoreCLI@2
   inputs:
