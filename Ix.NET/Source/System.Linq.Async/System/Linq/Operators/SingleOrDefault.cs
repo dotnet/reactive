@@ -21,13 +21,12 @@ namespace System.Linq
             {
                 if (source is IList<TSource> list)
                 {
-                    switch (list.Count)
+                    return list.Count switch
                     {
-                        case 0: return default!;
-                        case 1: return list[0];
-                    }
-
-                    throw Error.MoreThanOneElement();
+                        0 => default!,
+                        1 => list[0],
+                        _ => throw Error.MoreThanOneElement(),
+                    };
                 }
 
                 await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
