@@ -17,15 +17,12 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            switch (source)
+            return source switch
             {
-                case AsyncIterator<TSource> iterator:
-                    return iterator.Select(selector);
-                case IList<TSource> list:
-                    return new SelectIListIterator<TSource, TResult>(list, selector);
-            }
-
-            return new SelectEnumerableAsyncIterator<TSource, TResult>(source, selector);
+                AsyncIterator<TSource> iterator => iterator.Select(selector),
+                IList<TSource> list => new SelectIListIterator<TSource, TResult>(list, selector),
+                _ => new SelectEnumerableAsyncIterator<TSource, TResult>(source, selector),
+            };
         }
 
         public static IAsyncEnumerable<TResult> Select<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, TResult> selector)
@@ -60,15 +57,12 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            switch (source)
+            return source switch
             {
-                case AsyncIterator<TSource> iterator:
-                    return iterator.Select(selector);
-                case IList<TSource> list:
-                    return new SelectIListIteratorWithTask<TSource, TResult>(list, selector);
-            }
-
-            return new SelectEnumerableAsyncIteratorWithTask<TSource, TResult>(source, selector);
+                AsyncIterator<TSource> iterator => iterator.Select(selector),
+                IList<TSource> list => new SelectIListIteratorWithTask<TSource, TResult>(list, selector),
+                _ => new SelectEnumerableAsyncIteratorWithTask<TSource, TResult>(source, selector),
+            };
         }
 
 #if !NO_DEEP_CANCELLATION
@@ -79,15 +73,12 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            switch (source)
+            return source switch
             {
-                case AsyncIterator<TSource> iterator:
-                    return iterator.Select(selector);
-                case IList<TSource> list:
-                    return new SelectIListIteratorWithTaskAndCancellation<TSource, TResult>(list, selector);
-            }
-
-            return new SelectEnumerableAsyncIteratorWithTaskAndCancellation<TSource, TResult>(source, selector);
+                AsyncIterator<TSource> iterator => iterator.Select(selector),
+                IList<TSource> list => new SelectIListIteratorWithTaskAndCancellation<TSource, TResult>(list, selector),
+                _ => new SelectEnumerableAsyncIteratorWithTaskAndCancellation<TSource, TResult>(source, selector),
+            };
         }
 #endif
 
