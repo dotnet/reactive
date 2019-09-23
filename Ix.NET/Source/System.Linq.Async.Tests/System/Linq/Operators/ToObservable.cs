@@ -194,7 +194,8 @@ namespace Tests
                 .Subscribe(new MyObserver<int>(
                     x =>
                     {
-                        subscription.Dispose();
+                        Assert.NotNull(subscription);
+                        subscription!.Dispose();
                     },
                     ex =>
                     {
@@ -242,7 +243,8 @@ namespace Tests
                 .Subscribe(new MyObserver<int>(
                     x =>
                     {
-                        subscription.Dispose();
+                        Assert.NotNull(subscription);
+                        subscription!.Dispose();
                     },
                     ex =>
                     {

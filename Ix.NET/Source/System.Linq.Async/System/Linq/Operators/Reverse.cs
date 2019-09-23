@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,8 +28,6 @@ namespace System.Linq
 
             public ReverseAsyncIterator(IAsyncEnumerable<TSource> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 

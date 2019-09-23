@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -50,8 +49,6 @@ namespace System.Linq
 
             public OnErrorResumeNextAsyncIterator(IEnumerable<IAsyncEnumerable<TSource>> sources)
             {
-                Debug.Assert(sources != null);
-
                 _sources = sources;
             }
 

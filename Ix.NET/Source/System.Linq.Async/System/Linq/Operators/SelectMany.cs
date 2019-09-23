@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -326,9 +325,6 @@ namespace System.Linq
 
             public SelectManyAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TResult>> selector)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(selector != null);
-
                 _source = source;
                 _selector = selector;
             }
@@ -465,9 +461,6 @@ namespace System.Linq
 
             public SelectManyAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<IAsyncEnumerable<TResult>>> selector)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(selector != null);
-
                 _source = source;
                 _selector = selector;
             }
@@ -607,9 +600,6 @@ namespace System.Linq
 
             public SelectManyAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<IAsyncEnumerable<TResult>>> selector)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(selector != null);
-
                 _source = source;
                 _selector = selector;
             }

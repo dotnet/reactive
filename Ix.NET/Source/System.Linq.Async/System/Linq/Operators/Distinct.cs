@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,8 +30,6 @@ namespace System.Linq
 
             public DistinctAsyncIterator(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource>? comparer)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
                 _comparer = comparer;
             }

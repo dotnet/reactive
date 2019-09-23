@@ -15,7 +15,7 @@ namespace System.Linq
     /// </summary>
     internal class AsyncEnumerableRewriter : ExpressionVisitor
     {
-        private static volatile ILookup<string, MethodInfo> _methods;
+        private static volatile ILookup<string, MethodInfo>? _methods;
 
         protected override Expression VisitConstant(ConstantExpression node)
         {
@@ -215,7 +215,7 @@ namespace System.Linq
                 //
                 if (type.IsByRef)
                 {
-                    type = type.GetElementType();
+                    type = type.GetElementType()!;
                 }
 
                 var expression = args[i];
@@ -328,7 +328,7 @@ namespace System.Linq
                             var newArrayExpression = (NewArrayExpression)res;
 
                             var count = newArrayExpression.Expressions.Count;
-                            var elementType = type.GetElementType();
+                            var elementType = type.GetElementType()!;
                             var list = new List<Expression>(count);
 
                             for (var i = 0; i < count; i++)
@@ -357,7 +357,7 @@ namespace System.Linq
             //
             // Array of quotes need to be stripped, so extract the element type.
             //
-            var elemType = type.IsArray ? type.GetElementType() : type;
+            var elemType = type.IsArray ? type.GetElementType()! : type;
 
             //
             // Try to find Expression<T> and obtain T.
@@ -454,7 +454,7 @@ namespace System.Linq
             return method;
         }
 
-        private static Type? FindGenericType(Type definition, Type type)
+        private static Type? FindGenericType(Type definition, Type? type)
         {
             while (type != null && type != typeof(object))
             {

@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,8 +35,6 @@ namespace System.Linq
  
             public AsyncEnumerableAdapter(IEnumerable<T> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 
@@ -111,8 +108,6 @@ namespace System.Linq
 
             public AsyncIListEnumerableAdapter(IList<T> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 
@@ -218,8 +213,6 @@ namespace System.Linq
 
             public AsyncICollectionEnumerableAdapter(ICollection<T> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 

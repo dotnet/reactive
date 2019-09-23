@@ -24,9 +24,9 @@ namespace System.Linq
 
         public AsyncListPartition(IList<TSource> source, int minIndexInclusive, int maxIndexInclusive)
         {
-            Debug.Assert(source != null);
             Debug.Assert(minIndexInclusive >= 0);
             Debug.Assert(minIndexInclusive <= maxIndexInclusive);
+
             _source = source;
             _minIndexInclusive = minIndexInclusive;
             _maxIndexInclusive = maxIndexInclusive;
