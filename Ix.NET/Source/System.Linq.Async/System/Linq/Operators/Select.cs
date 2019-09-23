@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -144,9 +143,6 @@ namespace System.Linq
 
             public SelectEnumerableAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(selector != null);
-
                 _source = source;
                 _selector = selector;
             }
@@ -204,9 +200,6 @@ namespace System.Linq
 
             public SelectIListIterator(IList<TSource> source, Func<TSource, TResult> selector)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(selector != null);
-
                 _source = source;
                 _selector = selector;
             }
@@ -321,9 +314,6 @@ namespace System.Linq
 
             public SelectEnumerableAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(selector != null);
-
                 _source = source;
                 _selector = selector;
             }
@@ -383,9 +373,6 @@ namespace System.Linq
 
             public SelectEnumerableAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(selector != null);
-
                 _source = source;
                 _selector = selector;
             }
@@ -449,9 +436,6 @@ namespace System.Linq
 
             public SelectIListIteratorWithTask(IList<TSource> source, Func<TSource, ValueTask<TResult>> selector)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(selector != null);
-
                 _source = source;
                 _selector = selector;
             }
@@ -571,9 +555,6 @@ namespace System.Linq
 
             public SelectIListIteratorWithTaskAndCancellation(IList<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(selector != null);
-
                 _source = source;
                 _selector = selector;
             }

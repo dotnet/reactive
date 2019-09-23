@@ -26,12 +26,12 @@ namespace Tests
             Assert.Null(d);
 
             var d1 = default(MyDisposable);
-            xs.ForEach(_ => { d1 = d; Assert.NotNull(d1); Assert.False(d1.Done); });
-            Assert.True(d1.Done);
+            xs.ForEach(_ => { d1 = d; Assert.NotNull(d1); Assert.False(d1!.Done); });
+            Assert.True(d1!.Done);
 
             var d2 = default(MyDisposable);
-            xs.ForEach(_ => { d2 = d; Assert.NotNull(d2); Assert.False(d2.Done); });
-            Assert.True(d2.Done);
+            xs.ForEach(_ => { d2 = d; Assert.NotNull(d2); Assert.False(d2!.Done); });
+            Assert.True(d2!.Done);
 
             Assert.NotSame(d1, d2);
         }
@@ -45,7 +45,7 @@ namespace Tests
             Assert.Null(d);
 
             AssertThrows<MyException>(() => xs.ForEach(_ => { }));
-            Assert.True(d.Done);
+            Assert.True(d!.Done);
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace Tests
             Assert.Null(d);
 
             AssertThrows<MyException>(() => xs.ForEach(_ => { }));
-            Assert.True(d.Done);
+            Assert.True(d!.Done);
         }
 
         private sealed class MyDisposable : IDisposable

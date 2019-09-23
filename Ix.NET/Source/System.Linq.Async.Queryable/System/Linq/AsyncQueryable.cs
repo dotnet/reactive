@@ -35,11 +35,11 @@ namespace System.Linq
         }
 
 #if HAS_VALUETUPLE
-        private static MethodInfo s_Zip__TFirst_TSecond__2__0;
+        private static MethodInfo? s_Zip__TFirst_TSecond__2__0;
         
         private static MethodInfo Zip__TFirst_TSecond__2__0(Type TFirst, Type TSecond) =>
             (s_Zip__TFirst_TSecond__2__0 ??
-            (s_Zip__TFirst_TSecond__2__0 = new Func<IAsyncQueryable<object>, IAsyncEnumerable<object>, IAsyncQueryable<ValueTuple<object, object>>>(Zip<object, object>).GetMethodInfo().GetGenericMethodDefinition())).MakeGenericMethod(TFirst, TSecond);
+            (s_Zip__TFirst_TSecond__2__0 = new Func<IAsyncQueryable<object>, IAsyncEnumerable<object>, IAsyncQueryable<ValueTuple<object, object>>>(Zip<object, object>).GetMethodInfo()!.GetGenericMethodDefinition())).MakeGenericMethod(TFirst, TSecond);
 
         public static IAsyncQueryable<(TFirst First, TSecond Second)> Zip<TFirst, TSecond>(this IAsyncQueryable<TFirst> first, IAsyncEnumerable<TSecond> second)
         {

@@ -115,7 +115,7 @@ namespace System.Linq
         {
             private IRefCountList<T> _buffer;
             private bool _disposed;
-            private Exception _error;
+            private Exception? _error;
             private IEnumerator<T> _source;
             private bool _stopped;
 

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -103,9 +102,6 @@ namespace System.Linq
 
             public DistinctAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(keySelector != null);
-
                 _source = source;
                 _keySelector = keySelector;
                 _comparer = comparer;
@@ -251,9 +247,6 @@ namespace System.Linq
 
             public DistinctAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(keySelector != null);
-
                 _source = source;
                 _keySelector = keySelector;
                 _comparer = comparer;
@@ -400,9 +393,6 @@ namespace System.Linq
 
             public DistinctAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(keySelector != null);
-
                 _source = source;
                 _keySelector = keySelector;
                 _comparer = comparer;
