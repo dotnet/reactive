@@ -177,7 +177,7 @@ namespace Tests
 
             Assert.NotNull(xc);
 
-            Assert.False(xc.IsReadOnly);
+            Assert.False(xc!.IsReadOnly);
 
             xc.Add(5);
 
@@ -202,7 +202,7 @@ namespace Tests
 
             Assert.NotNull(xl);
 
-            Assert.False(xl.IsReadOnly);
+            Assert.False(xl!.IsReadOnly);
 
             xl.Add(5);
 

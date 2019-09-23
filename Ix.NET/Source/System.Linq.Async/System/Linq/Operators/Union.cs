@@ -88,7 +88,7 @@ namespace System.Linq
                 while (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                 {
                     var element = _enumerator.Current;
-                    if (set.Add(element))
+                    if (set!.Add(element))
                     {
                         _current = element;
                         return true;
@@ -210,8 +210,6 @@ namespace System.Linq
             public UnionAsyncIterator2(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource>? comparer)
                 : base(comparer)
             {
-                Debug.Assert(first != null);
-                Debug.Assert(second != null);
                 _first = first;
                 _second = second;
             }

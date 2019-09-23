@@ -25,7 +25,6 @@ namespace System.Linq
 
         internal AsyncEnumerablePartition(IAsyncEnumerable<TSource> source, int minIndexInclusive, int maxIndexInclusive)
         {
-            Debug.Assert(source != null);
             Debug.Assert(!(source is IList<TSource>), $"The caller needs to check for {nameof(IList<TSource>)}.");
             Debug.Assert(minIndexInclusive >= 0);
             Debug.Assert(maxIndexInclusive >= -1);
@@ -373,8 +372,6 @@ namespace System.Linq
 
         private static async ValueTask<uint> SkipAndCountAsync(uint index, IAsyncEnumerator<TSource> en)
         {
-            Debug.Assert(en != null);
-
             for (uint i = 0; i < index; i++)
             {
                 if (!await en.MoveNextAsync().ConfigureAwait(false))

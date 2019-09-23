@@ -30,9 +30,6 @@ namespace System.Linq
 
             internal Concat2AsyncIterator(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
             {
-                Debug.Assert(first != null);
-                Debug.Assert(second != null);
-
                 _first = first;
                 _second = second;
             }
@@ -195,8 +192,6 @@ namespace System.Linq
 
             internal ConcatNAsyncIterator(ConcatAsyncIterator<TSource> previousConcat, IAsyncEnumerable<TSource> next, int nextIndex)
             {
-                Debug.Assert(previousConcat != null);
-                Debug.Assert(next != null);
                 Debug.Assert(nextIndex >= 2);
 
                 _previousConcat = previousConcat;
