@@ -175,7 +175,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override TDelegate GetHandler(Action<TEventArgs> onNext)
         {
-            var handler = default(TDelegate);
+            TDelegate handler;
 
             if (_conversion == null)
             {

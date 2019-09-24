@@ -58,7 +58,7 @@ namespace System.Reactive.Joins
             activePlan = new ActivePlan<T1>(firstJoinObserver,
                 first =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first);
@@ -104,7 +104,7 @@ namespace System.Reactive.Joins
             activePlan = new ActivePlan<T1, T2>(firstJoinObserver, secondJoinObserver,
                 (first, second) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second);
@@ -154,7 +154,7 @@ namespace System.Reactive.Joins
             activePlan = new ActivePlan<T1, T2, T3>(firstJoinObserver, secondJoinObserver, thirdJoinObserver,
                 (first, second, third) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third);
@@ -207,7 +207,7 @@ namespace System.Reactive.Joins
             activePlan = new ActivePlan<T1, T2, T3, T4>(firstJoinObserver, secondJoinObserver, thirdJoinObserver, fourthJoinObserver,
                 (first, second, third, fourth) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third, fourth);
@@ -263,7 +263,7 @@ namespace System.Reactive.Joins
             activePlan = new ActivePlan<T1, T2, T3, T4, T5>(firstJoinObserver, secondJoinObserver, thirdJoinObserver, fourthJoinObserver, fifthJoinObserver,
                 (first, second, third, fourth, fifth) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third, fourth, fifth);
@@ -323,7 +323,7 @@ namespace System.Reactive.Joins
                 fourthJoinObserver, fifthJoinObserver, sixthJoinObserver,
                 (first, second, third, fourth, fifth, sixth) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third, fourth, fifth, sixth);
@@ -386,7 +386,7 @@ namespace System.Reactive.Joins
                 fourthJoinObserver, fifthJoinObserver, sixthJoinObserver, seventhJoinObserver,
                 (first, second, third, fourth, fifth, sixth, seventh) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third, fourth, fifth, sixth, seventh);
@@ -452,7 +452,7 @@ namespace System.Reactive.Joins
                 fourthJoinObserver, fifthJoinObserver, sixthJoinObserver, seventhJoinObserver, eighthJoinObserver,
                 (first, second, third, fourth, fifth, sixth, seventh, eighth) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third, fourth, fifth, sixth, seventh, eighth);
@@ -521,7 +521,7 @@ namespace System.Reactive.Joins
                 fourthJoinObserver, fifthJoinObserver, sixthJoinObserver, seventhJoinObserver, eighthJoinObserver, ninthJoinObserver,
                 (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth);
@@ -593,7 +593,7 @@ namespace System.Reactive.Joins
                 fourthJoinObserver, fifthJoinObserver, sixthJoinObserver, seventhJoinObserver, eighthJoinObserver, ninthJoinObserver, tenthJoinObserver,
                 (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth);
@@ -669,7 +669,7 @@ namespace System.Reactive.Joins
                 fourthJoinObserver, fifthJoinObserver, sixthJoinObserver, seventhJoinObserver, eighthJoinObserver, ninthJoinObserver, tenthJoinObserver, eleventhJoinObserver,
                 (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh);
@@ -749,7 +749,7 @@ namespace System.Reactive.Joins
                 twelfthJoinObserver,
                 (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth);
@@ -833,7 +833,7 @@ namespace System.Reactive.Joins
                 twelfthJoinObserver, thirteenthJoinObserver,
                 (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth);
@@ -924,7 +924,7 @@ namespace System.Reactive.Joins
                 fourteenthJoinObserver,
                 (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth);
@@ -1017,7 +1017,7 @@ namespace System.Reactive.Joins
                 fourteenthJoinObserver, fifteenthJoinObserver,
                 (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth);
@@ -1113,7 +1113,7 @@ namespace System.Reactive.Joins
                 sixteenthJoinObserver,
                 (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth) =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = Selector(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth);

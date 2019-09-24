@@ -123,7 +123,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             if (rightValue.Key < rightID)
                             {
-                                var result = default(TResult);
+                                TResult result;
                                 try
                                 {
                                     result = _parent._resultSelector(value, rightValue.Value);
@@ -246,7 +246,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             if (leftValue.Key < leftID)
                             {
-                                var result = default(TResult);
+                                TResult result;
                                 try
                                 {
                                     result = _parent._resultSelector(leftValue.Value, value);

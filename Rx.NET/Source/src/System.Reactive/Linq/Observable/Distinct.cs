@@ -37,7 +37,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                var key = default(TKey);
+                TKey key;
                 var hasAdded = false;
                 try
                 {

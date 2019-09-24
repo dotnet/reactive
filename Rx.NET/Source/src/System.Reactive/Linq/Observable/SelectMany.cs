@@ -121,7 +121,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     public override void OnNext(TCollection value)
                     {
-                        var res = default(TResult);
+                        TResult res;
 
                         try
                         {
@@ -288,7 +288,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     public override void OnNext(TCollection value)
                     {
-                        var res = default(TResult);
+                        TResult res;
 
                         try
                         {
@@ -598,7 +598,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         case TaskStatus.RanToCompletion:
                         {
-                            var res = default(TResult);
+                            TResult res;
                             try
                             {
                                 res = _resultSelector(value, task.Result);
@@ -755,7 +755,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         case TaskStatus.RanToCompletion:
                         {
-                            var res = default(TResult);
+                            TResult res;
                             try
                             {
                                 res = _resultSelector(value, index, task.Result);
