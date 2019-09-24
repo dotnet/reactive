@@ -162,7 +162,7 @@ namespace Tests
             AssertThrows<MyException>(() => e2.MoveNext());
         }
 
-        class MyException : Exception
+        private class MyException : Exception
         {
         }
 
