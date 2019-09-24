@@ -77,7 +77,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 var fireNewMapEntry = false;
-                var writer = default(Subject<TElement>);
+                Subject<TElement> writer;
                 try
                 {
                     //

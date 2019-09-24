@@ -36,8 +36,8 @@ namespace System.Reactive.Linq.ObservableImpl
         protected override IDisposable Run(IObserver<T> observer)
         {
             var sourcesEnumerable = _sources;
-            var sources = default(IObservable<T>[]);
 
+            IObservable<T>[] sources;
             try
             {
                 sources = sourcesEnumerable.ToArray();

@@ -322,7 +322,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TFirst value)
                 {
-                    var hasNext = false;
+                    bool hasNext;
                     try
                     {
                         hasNext = _rightEnumerator.MoveNext();
