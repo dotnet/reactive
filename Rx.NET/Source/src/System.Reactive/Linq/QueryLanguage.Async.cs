@@ -901,7 +901,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((function, subject), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function();
@@ -930,7 +930,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((function, subject, first), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first);
@@ -959,7 +959,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second);
@@ -988,7 +988,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third);
@@ -1017,7 +1017,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third, fourth), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third, state.fourth);
@@ -1046,7 +1046,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third, state.fourth, state.fifth);
@@ -1075,7 +1075,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth);
@@ -1104,7 +1104,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh);
@@ -1133,7 +1133,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight);
@@ -1162,7 +1162,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth);
@@ -1191,7 +1191,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth);
@@ -1220,7 +1220,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth, state.eleventh);
@@ -1249,7 +1249,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth, state.eleventh, state.twelfth);
@@ -1278,7 +1278,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth, state.eleventh, state.twelfth, state.thirteenth);
@@ -1307,7 +1307,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth, state.eleventh, state.twelfth, state.thirteenth, state.fourteenth);
@@ -1336,7 +1336,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth, state.eleventh, state.twelfth, state.thirteenth, state.fourteenth, state.fifteenth);
@@ -1365,7 +1365,7 @@ namespace System.Reactive.Linq
                 var subject = new AsyncSubject<TResult>();
                 scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth), state =>
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = state.function(state.first, state.second, state.third, state.fourth, state.fifth, state.sixth, state.seventh, state.eight, state.ninth, state.tenth, state.eleventh, state.twelfth, state.thirteenth, state.fourteenth, state.fifteenth, state.sixteenth);
