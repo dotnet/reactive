@@ -670,7 +670,7 @@ namespace System.Reactive.Linq
 
         private IObservable<TSource> StartAsyncImpl<TSource>(Func<Task<TSource>> functionAsync, IScheduler scheduler)
         {
-            var task = default(Task<TSource>);
+            Task<TSource> task;
             try
             {
                 task = functionAsync();
@@ -702,7 +702,7 @@ namespace System.Reactive.Linq
         {
             var cancellable = new CancellationDisposable();
 
-            var task = default(Task<TSource>);
+            Task<TSource> task;
             try
             {
                 task = functionAsync(cancellable.Token);
@@ -712,7 +712,7 @@ namespace System.Reactive.Linq
                 return Throw<TSource>(exception);
             }
 
-            var result = default(IObservable<TSource>);
+            IObservable<TSource> result;
 
             if (scheduler != null)
             {
@@ -773,7 +773,7 @@ namespace System.Reactive.Linq
 
         private IObservable<Unit> StartAsyncImpl(Func<Task> actionAsync, IScheduler scheduler)
         {
-            var task = default(Task);
+            Task task;
             try
             {
                 task = actionAsync();
@@ -805,7 +805,7 @@ namespace System.Reactive.Linq
         {
             var cancellable = new CancellationDisposable();
 
-            var task = default(Task);
+            Task task;
             try
             {
                 task = actionAsync(cancellable.Token);
@@ -815,7 +815,7 @@ namespace System.Reactive.Linq
                 return Throw<Unit>(exception);
             }
 
-            var result = default(IObservable<Unit>);
+            IObservable<Unit> result;
 
             if (scheduler != null)
             {

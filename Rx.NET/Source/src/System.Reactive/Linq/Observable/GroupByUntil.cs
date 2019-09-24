@@ -319,7 +319,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             added = false;
 
-            var value = default(TValue);
+            TValue value;
             var newValue = default(TValue);
             var hasNewValue = false;
             while (true)

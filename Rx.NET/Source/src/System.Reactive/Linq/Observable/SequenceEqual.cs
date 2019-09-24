@@ -314,8 +314,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    var hasNext = false;
-
+                    bool hasNext;
                     try
                     {
                         hasNext = _enumerator.MoveNext();

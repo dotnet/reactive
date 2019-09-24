@@ -327,7 +327,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private void AddHandler(TDelegate onNext)
             {
-                var removeHandler = default(IDisposable);
+                IDisposable removeHandler;
                 try
                 {
                     removeHandler = _parent.AddHandler(onNext);

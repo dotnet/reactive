@@ -381,7 +381,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    var e = default(IEnumerator<TCollection>);
+                    IEnumerator<TCollection> e;
                     try
                     {
                         e = xs.GetEnumerator();
@@ -470,7 +470,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    var e = default(IEnumerator<TCollection>);
+                    IEnumerator<TCollection> e;
                     try
                     {
                         e = xs.GetEnumerator();
@@ -1333,7 +1333,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    var e = default(IEnumerator<TResult>);
+                    IEnumerator<TResult> e;
                     try
                     {
                         e = xs.GetEnumerator();
@@ -1416,7 +1416,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    var e = default(IEnumerator<TResult>);
+                    IEnumerator<TResult> e;
                     try
                     {
                         e = xs.GetEnumerator();
