@@ -14,7 +14,11 @@ namespace System.Linq
         private bool _running;
         private bool _stopped;
 
-        public Yielder(Action<Yielder<T>> create) => _create = create;
+        public Yielder(Action<Yielder<T>> create)
+        {
+            _create = create;
+            Current = default!;
+        }
 
         public T Current { get; private set; }
 

@@ -68,9 +68,9 @@ namespace Tests
             static bool IsTaskLike(Type t) => IsTask(t) || IsValueTask(t);
 
             static bool IsDelegate(Type t) => typeof(Delegate).IsAssignableFrom(t);
-            static bool TryGetInvoke(Type t, out MethodInfo m) => (m = t.GetMethod("Invoke")) != null;
-            static bool IsAsyncDelegate(Type t) => IsDelegate(t) && TryGetInvoke(t, out var i) && IsTaskLike(i.ReturnType);
-            static bool IsCancelableDelegate(Type t) => IsDelegate(t) && TryGetInvoke(t, out var i) && i.GetParameters().LastOrDefault()?.ParameterType == typeof(CancellationToken);
+            static bool TryGetInvoke(Type t, out MethodInfo? m) => (m = t.GetMethod("Invoke")) != null;
+            static bool IsAsyncDelegate(Type t) => IsDelegate(t) && TryGetInvoke(t, out var i) && IsTaskLike(i!.ReturnType);
+            static bool IsCancelableDelegate(Type t) => IsDelegate(t) && TryGetInvoke(t, out var i) && i!.GetParameters().LastOrDefault()?.ParameterType == typeof(CancellationToken);
             static DelegateKind GetDelegateKind(Type t) => IsAsyncDelegate(t) ? (IsCancelableDelegate(t) ? DelegateKind.AsyncCancel : DelegateKind.Async) : DelegateKind.Sync;
         }
 

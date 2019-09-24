@@ -58,13 +58,14 @@ namespace System.Linq
                 return node;
             }
 
+            var declType = node.Method.DeclaringType;
             var typeArgs = node.Method.IsGenericMethod ? node.Method.GetGenericArguments() : null;
 
             //
             // Check whether the method is compatible with the recursively rewritten instance
             // and arguments expressions. If so, create a new call expression.
             //
-            if ((node.Method.IsStatic || node.Method.DeclaringType.IsAssignableFrom(obj.Type)) && ArgsMatch(node.Method, args, typeArgs))
+            if ((node.Method.IsStatic || declType != null && declType.IsAssignableFrom(obj.Type)) && ArgsMatch(node.Method, args, typeArgs))
             {
                 return Expression.Call(obj, node.Method, args);
             }
@@ -75,7 +76,7 @@ namespace System.Linq
             // Find a corresponding method in the non-expression world, e.g. rewriting from
             // the AsyncQueryable methods to the ones on AsyncEnumerable.
             //
-            if (node.Method.DeclaringType == typeof(AsyncQueryable))
+            if (declType == typeof(AsyncQueryable))
             {
                 method = FindEnumerableMethod(node.Method.Name, args, typeArgs);
                 args = FixupQuotedArgs(method, args);
@@ -83,7 +84,12 @@ namespace System.Linq
             }
             else
             {
-                method = FindMethod(node.Method.DeclaringType, node.Method.Name, args, typeArgs, BindingFlags.Static | (node.Method.IsPublic ? BindingFlags.Public : BindingFlags.NonPublic));
+                if (declType == null)
+                {
+                    throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "Could not rewrite method with name '{0}' without a DeclaringType.", node.Method.Name));
+                }
+
+                method = FindMethod(declType, node.Method.Name, args, typeArgs, BindingFlags.Static | (node.Method.IsPublic ? BindingFlags.Public : BindingFlags.NonPublic));
                 args = FixupQuotedArgs(method, args);
             }
 
