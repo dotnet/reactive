@@ -45,7 +45,7 @@ namespace System.Linq
 
         public void Add(T item)
         {
-            _list[Count] = new RefCount { Value = item, Count = ReaderCount };
+            _list[Count] = new RefCount(item, ReaderCount);
 
             Count++;
         }
@@ -62,8 +62,14 @@ namespace System.Linq
 
         private sealed class RefCount
         {
-            public int Count;
-            public T Value;
+            public RefCount(T value, int count)
+            {
+                Value = value;
+                Count = count;
+            }
+
+            public int Count { get; set; }
+            public T Value { get; }
         }
     }
 }

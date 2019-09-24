@@ -86,14 +86,14 @@ namespace System.Linq
         {
             Debug.Assert(index >= 0 && index < GetCount());
 
-            SingleLinkedNode<TSource>? node = this;
+            SingleLinkedNode<TSource> node = this;
             for (; index > 0; index--)
             {
-                node = node!.Linked;
+                node = node.Linked!;
+                Debug.Assert(node != null);
             }
 
-            Debug.Assert(node != null);
-            return node;
+            return node!;
         }
 
         /// <summary>

@@ -65,7 +65,7 @@ namespace System.Linq
         private static IEnumerable<TSource> ScanCore<TSource>(IEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
         {
             var hasSeed = false;
-            var acc = default(TSource);
+            var acc = default(TSource)!;
 
             foreach (var item in source)
             {
