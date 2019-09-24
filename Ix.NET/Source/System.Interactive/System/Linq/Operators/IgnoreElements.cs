@@ -24,7 +24,7 @@ namespace System.Linq
 
         private static IEnumerable<TSource> IgnoreElementsCore<TSource>(IEnumerable<TSource> source)
         {
-            foreach (var item in source)
+            foreach (var _ in source)
                 ;
 
             yield break;

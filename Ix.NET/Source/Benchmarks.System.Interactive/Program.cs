@@ -10,7 +10,7 @@ namespace Benchmarks.System.Interactive
 {
     internal class Program
     {
-        internal static void Main(string[] args)
+        internal static void Main()
         {
             Console.WriteLine("Effective Ix-version: " + typeof(EnumerableEx).Assembly.GetName().Version);
 
