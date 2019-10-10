@@ -92,17 +92,7 @@ stages:
         codeCoverageTool: Cobertura
         summaryFileLocation: $(Build.SourcesDirectory)/Rx.NET/Source/coverlet/reports/Cobertura.xml
 
-    - task: PowerShell@2
-      displayName: Authenticode Sign Packages
-      inputs:
-        filePath: Rx.NET/Source/build/Sign-Package.ps1
-      env:
-        SignClientUser: $(SignClientUser)
-        SignClientSecret: $(SignClientSecret)
-        ArtifactDirectory: $(Build.ArtifactStagingDirectory)\artifacts
-      condition: and(succeeded(), not(eq(variables['build.reason'], 'PullRequest')), not(eq(variables['SignClientSecret'], '')), not(eq(variables['SignClientUser'], '')))
-
-    - publish: Rx.NET/Source/build
+    - publish:  Rx.NET/Source/build
       artifact: config
       displayName: Publish signing config
 
