@@ -136,9 +136,6 @@ stages:
         artifactName: BuildPackages
         targetPath: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
 
-    - script: mv $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages/BuildPackages/*.* $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
-      displayName: Move packages to LocalPackages directory
-
     - task: DotNetCoreCLI@2
       displayName: Update Rx
       inputs:
@@ -208,9 +205,6 @@ stages:
       inputs:
         artifactName: BuildPackages
         targetPath: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
-
-    - script: mv $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages/BuildPackages/*.* $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LocalPackages
-      displayName: Move packages to LocalPackages directory
 
     - task: DotNetCoreCLI@2
       displayName: Update Rx
