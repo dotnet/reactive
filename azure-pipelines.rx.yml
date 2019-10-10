@@ -238,7 +238,7 @@ stages:
       displayName: Run 3.0 Tests on WindowDesktop
 
 - stage: CodeSign
-  #condition: and(succeeded('Build'), not(eq(variables['build.reason'], 'PullRequest')))
+  condition: and(succeeded('Build'), not(eq(variables['build.reason'], 'PullRequest')))
   jobs:
   - deployment: CodeSign
     displayName: Code Signing
