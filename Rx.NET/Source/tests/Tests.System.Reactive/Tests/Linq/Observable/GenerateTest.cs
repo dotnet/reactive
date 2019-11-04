@@ -9,6 +9,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using ReactiveTests.Dummies;
 using Xunit;
@@ -453,6 +454,40 @@ namespace ReactiveTests.Tests
         {
             Observable.Generate(0, x => x < 10, x => x + 1, x => x, x => DateTimeOffset.Now.AddMilliseconds(x)).AssertEqual(Observable.Generate(0, x => x < 10, x => x + 1, x => x, x => DateTimeOffset.Now.AddMilliseconds(x), DefaultScheduler.Instance));
         }
+
+        [Fact]
+        public void Generate_TimeSpan_DisposeLater()
+        {
+            var count = 0;
+            var d = Observable.Generate(0, i => true, i => i + 1, i => i, _ => TimeSpan.Zero)
+                .WithLatestFrom(Observable.Return(1).Concat(Observable.Never<int>()), (a, b) => a)
+                .Subscribe(v => Volatile.Write(ref count, v));
+
+            while (Volatile.Read(ref count) < 10000)
+            {
+                Thread.Sleep(10);
+            }
+
+            d.Dispose();
+        }
+
+        [Fact]
+        public void Generate_DateTimeOffset_DisposeLater()
+        {
+            var count = 0;
+
+            var d = Observable.Generate(0, i => true, i => i + 1, i => i, _ => DateTimeOffset.Now)
+                .WithLatestFrom(Observable.Return(1).Concat(Observable.Never<int>()), (a, b) => a)
+                .Subscribe(v => Volatile.Write(ref count, v));
+
+            while (Volatile.Read(ref count) < 10000)
+            {
+                Thread.Sleep(10);
+            }
+
+            d.Dispose();
+        }
+
 
         #endregion
     }
