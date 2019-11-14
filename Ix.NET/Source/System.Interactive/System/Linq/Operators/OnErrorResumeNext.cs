@@ -63,7 +63,7 @@ namespace System.Linq
 
                 while (true)
                 {
-                    var value = default(TSource);
+                    TSource value;
                     try
                     {
                         if (!innerEnumerator.MoveNext())

@@ -82,7 +82,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
             }
 
-            var queue = default(SchedulerQueue<TimeSpan>);
+            SchedulerQueue<TimeSpan> queue;
 
             // There is no timed task and no task is currently running
             if (!_running)

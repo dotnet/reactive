@@ -16,17 +16,13 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            switch (source)
+            return source switch
             {
-                case ICollection<TSource> collection:
-                    return new ValueTask<int>(collection.Count);
-                case IAsyncIListProvider<TSource> listProv:
-                    return listProv.GetCountAsync(onlyIfCheap: false, cancellationToken);
-                case ICollection collection:
-                    return new ValueTask<int>(collection.Count);
-            }
-
-            return Core(source, cancellationToken);
+                ICollection<TSource> collection => new ValueTask<int>(collection.Count),
+                IAsyncIListProvider<TSource> listProv => listProv.GetCountAsync(onlyIfCheap: false, cancellationToken),
+                ICollection collection => new ValueTask<int>(collection.Count),
+                _ => Core(source, cancellationToken),
+            };
 
             static async ValueTask<int> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
             {

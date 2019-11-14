@@ -26,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                var result = default(TResult);
+                TResult result;
                 try
                 {
                     result = (TResult)(object)value;

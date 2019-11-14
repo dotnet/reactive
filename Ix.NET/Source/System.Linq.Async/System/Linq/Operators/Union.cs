@@ -88,7 +88,7 @@ namespace System.Linq
                 while (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                 {
                     var element = _enumerator.Current;
-                    if (set.Add(element))
+                    if (set!.Add(element))
                     {
                         _current = element;
                         return true;
@@ -210,8 +210,6 @@ namespace System.Linq
             public UnionAsyncIterator2(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource>? comparer)
                 : base(comparer)
             {
-                Debug.Assert(first != null);
-                Debug.Assert(second != null);
                 _first = first;
                 _second = second;
             }
@@ -221,15 +219,13 @@ namespace System.Linq
             internal override IAsyncEnumerable<TSource>? GetEnumerable(int index)
             {
                 Debug.Assert(index >= 0 && index <= 2);
-                switch (index)
+
+                return index switch
                 {
-                    case 0:
-                        return _first;
-                    case 1:
-                        return _second;
-                    default:
-                        return null;
-                }
+                    0 => _first,
+                    1 => _second,
+                    _ => null,
+                };
             }
 
             internal override UnionAsyncIterator<TSource> Union(IAsyncEnumerable<TSource> next)

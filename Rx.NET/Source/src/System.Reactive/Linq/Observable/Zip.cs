@@ -106,7 +106,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 var r = _other.Queue.Dequeue();
 
-                                var res = default(TResult);
+                                TResult res;
                                 try
                                 {
                                     res = _parent._resultSelector(value, r);
@@ -188,7 +188,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 var l = _other.Queue.Dequeue();
 
-                                var res = default(TResult);
+                                TResult res;
                                 try
                                 {
                                     res = _parent._resultSelector(l, value);
@@ -322,7 +322,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TFirst value)
                 {
-                    var hasNext = false;
+                    bool hasNext;
                     try
                     {
                         hasNext = _rightEnumerator.MoveNext();
@@ -335,7 +335,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (hasNext)
                     {
-                        var right = default(TSecond);
+                        TSecond right;
                         try
                         {
                             right = _rightEnumerator.Current;
@@ -413,7 +413,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             if (hasValueAll)
             {
-                var res = default(TResult);
+                TResult res;
                 try
                 {
                     res = GetResult();

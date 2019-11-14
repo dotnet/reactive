@@ -187,7 +187,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                var result = default(TResult);
+                TResult result;
                 try
                 {
                     result = _resultSelector(_accumulation);

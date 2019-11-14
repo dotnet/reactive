@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,8 +35,6 @@ namespace System.Linq
 
             public TimeoutAsyncIterator(IAsyncEnumerable<TSource> source, TimeSpan timeout)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
                 _timeout = timeout;
             }
@@ -107,7 +104,7 @@ namespace System.Linq
                                 // REVIEW: Should exceptions reported by a timed out MoveNextAsync operation come out
                                 //         when attempting to call DisposeAsync?
 
-                                _loserTask = next.ContinueWith((_, state) => ((IAsyncDisposable)state).DisposeAsync().AsTask(), _enumerator);
+                                _loserTask = next.ContinueWith((_, state) => ((IAsyncDisposable)state!).DisposeAsync().AsTask(), _enumerator);
 
                                 _sourceCTS!.Cancel();
 

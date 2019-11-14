@@ -100,7 +100,7 @@ namespace System.Linq
                 return type.GetMethods(BindingFlags.Static | BindingFlags.Public).ToLookup(m => m.Name);
             }
 
-            private static bool ArgsMatch(MethodInfo method, IList<Expression> arguments, Type[] typeArgs)
+            private static bool ArgsMatch(MethodInfo method, IList<Expression> arguments, Type[]? typeArgs)
             {
                 //
                 // Number of parameters should match. Notice we've sanitized IQueryProvider "this"

@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,8 +31,6 @@ namespace System.Linq
 
             public DefaultIfEmptyAsyncIterator(IAsyncEnumerable<TSource> source, TSource defaultValue)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
                 _defaultValue = defaultValue;
             }

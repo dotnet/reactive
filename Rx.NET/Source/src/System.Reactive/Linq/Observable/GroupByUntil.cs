@@ -74,7 +74,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                var key = default(TKey);
+                TKey key;
                 try
                 {
                     key = _keySelector(value);
@@ -148,7 +148,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     durationObserver.SetResource(duration.SubscribeSafe(durationObserver));
                 }
 
-                var element = default(TElement);
+                TElement element;
                 try
                 {
                     element = _elementSelector(value);
@@ -319,7 +319,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             added = false;
 
-            var value = default(TValue);
+            TValue value;
             var newValue = default(TValue);
             var hasNewValue = false;
             while (true)

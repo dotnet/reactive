@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -155,9 +154,6 @@ namespace System.Linq
 
             public WhereEnumerableAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(predicate != null);
-
                 _source = source;
                 _predicate = predicate;
             }
@@ -224,9 +220,6 @@ namespace System.Linq
 
             public WhereEnumerableAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(predicate != null);
-
                 _source = source;
                 _predicate = predicate;
             }
@@ -289,9 +282,6 @@ namespace System.Linq
 
             public WhereEnumerableAsyncIteratorWithTaskAndCancellation(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(predicate != null);
-
                 _source = source;
                 _predicate = predicate;
             }
@@ -356,10 +346,6 @@ namespace System.Linq
 
             public WhereSelectEnumerableAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, Func<TSource, TResult> selector)
             {
-                Debug.Assert(source != null);
-                Debug.Assert(predicate != null);
-                Debug.Assert(selector != null);
-
                 _source = source;
                 _predicate = predicate;
                 _selector = selector;

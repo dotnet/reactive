@@ -92,7 +92,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (_other.HasValue)
                         {
-                            var res = default(TResult);
+                            TResult res;
                             try
                             {
                                 res = _parent._resultSelector(value, _other.Value);
@@ -163,7 +163,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (_other.HasValue)
                         {
-                            var res = default(TResult);
+                            TResult res;
                             try
                             {
                                 res = _parent._resultSelector(_other.Value, value);
@@ -262,7 +262,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             if (_hasValueAll)
             {
-                var res = default(TResult);
+                TResult res;
                 try
                 {
                     res = GetResult();
@@ -450,7 +450,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (_hasValueAll || (_hasValueAll = _hasValue.All()))
                     {
-                        var res = default(TResult);
+                        TResult res;
                         try
                         {
                             res = _resultSelector(new ReadOnlyCollection<TSource>(_values));

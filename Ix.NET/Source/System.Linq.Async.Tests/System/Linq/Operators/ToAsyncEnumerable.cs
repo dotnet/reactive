@@ -177,7 +177,7 @@ namespace Tests
 
             Assert.NotNull(xc);
 
-            Assert.False(xc.IsReadOnly);
+            Assert.False(xc!.IsReadOnly);
 
             xc.Add(5);
 
@@ -202,7 +202,7 @@ namespace Tests
 
             Assert.NotNull(xl);
 
-            Assert.False(xl.IsReadOnly);
+            Assert.False(xl!.IsReadOnly);
 
             xl.Add(5);
 
@@ -286,7 +286,7 @@ namespace Tests
         [Fact]
         public async Task ToAsyncEnumerable_Observable_Dispose()
         {
-            var stop = new ManualResetEvent(false);
+            using var stop = new ManualResetEvent(false);
 
             var xs = new MyObservable<int>(obs =>
             {
@@ -320,9 +320,9 @@ namespace Tests
         [Fact]
         public async Task ToAsyncEnumerable_Observable_Zip()
         {
-            var subCount = 0;
+            using var stop = new ManualResetEvent(false);
 
-            var stop = new ManualResetEvent(false);
+            var subCount = 0;
 
             var xs = new MyObservable<int>(obs =>
             {
@@ -360,7 +360,7 @@ namespace Tests
         [Fact]
         public async Task ToAsyncEnumerable_Observable_Cancel()
         {
-            var stop = new ManualResetEvent(false);
+            using var stop = new ManualResetEvent(false);
 
             var xs = new MyObservable<int>(obs =>
             {
@@ -380,7 +380,7 @@ namespace Tests
                 return new MyDisposable(cts.Cancel);
             }).ToAsyncEnumerable();
 
-            var c = new CancellationTokenSource();
+            using var c = new CancellationTokenSource();
 
             var e = xs.GetAsyncEnumerator(c.Token);
 
@@ -396,7 +396,7 @@ namespace Tests
         [Fact]
         public async Task ToAsyncEnumerable_Observable6_Async()
         {
-            var stop = new ManualResetEvent(false);
+            using var stop = new ManualResetEvent(false);
 
             var xs = new MyObservable<int>(obs =>
             {

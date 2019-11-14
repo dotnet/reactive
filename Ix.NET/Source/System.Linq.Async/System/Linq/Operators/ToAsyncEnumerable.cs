@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,15 +16,12 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            switch (source)
+            return source switch
             {
-                case IList<TSource> list:
-                    return new AsyncIListEnumerableAdapter<TSource>(list);
-                case ICollection<TSource> collection:
-                    return new AsyncICollectionEnumerableAdapter<TSource>(collection);
-            }
-
-            return new AsyncEnumerableAdapter<TSource>(source);
+                IList<TSource> list => new AsyncIListEnumerableAdapter<TSource>(list),
+                ICollection<TSource> collection => new AsyncICollectionEnumerableAdapter<TSource>(collection),
+                _ => new AsyncEnumerableAdapter<TSource>(source),
+            };
         }
 
         private sealed class AsyncEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>
@@ -36,8 +32,6 @@ namespace System.Linq
  
             public AsyncEnumerableAdapter(IEnumerable<T> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 
@@ -111,8 +105,6 @@ namespace System.Linq
 
             public AsyncIListEnumerableAdapter(IList<T> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 
@@ -218,8 +210,6 @@ namespace System.Linq
 
             public AsyncICollectionEnumerableAdapter(ICollection<T> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 
