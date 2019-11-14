@@ -49,7 +49,7 @@ namespace System.Linq
 
                     _once = true;
                     var task = new TaskCompletionSource<bool>();
-                    _registration = _token.Register(state => ((TaskCompletionSource<bool>)state!).SetCanceled(), task);
+                    _registration = _token.Register(state => ((TaskCompletionSource<bool>)state).TrySetCanceled(_token), task);
                     return new ValueTask<bool>(task.Task);
                 }
             }
