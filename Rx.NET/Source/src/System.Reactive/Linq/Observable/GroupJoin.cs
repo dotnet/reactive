@@ -124,7 +124,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     // BREAKING CHANGE v2 > v1.x - The duration sequence is subscribed to before the result sequence is evaluated.
                     durationObserver.SetResource(duration.SubscribeSafe(durationObserver));
 
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = _parent._resultSelector(value, window);

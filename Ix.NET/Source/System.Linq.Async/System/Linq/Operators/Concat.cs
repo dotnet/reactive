@@ -30,9 +30,6 @@ namespace System.Linq
 
             internal Concat2AsyncIterator(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
             {
-                Debug.Assert(first != null);
-                Debug.Assert(second != null);
-
                 _first = first;
                 _second = second;
             }
@@ -49,15 +46,12 @@ namespace System.Linq
 
             internal override IAsyncEnumerable<TSource>? GetAsyncEnumerable(int index)
             {
-                switch (index)
+                return index switch
                 {
-                    case 0:
-                        return _first;
-                    case 1:
-                        return _second;
-                    default:
-                        return null;
-                }
+                    0 => _first,
+                    1 => _second,
+                    _ => null,
+                };
             }
         }
 
@@ -195,8 +189,6 @@ namespace System.Linq
 
             internal ConcatNAsyncIterator(ConcatAsyncIterator<TSource> previousConcat, IAsyncEnumerable<TSource> next, int nextIndex)
             {
-                Debug.Assert(previousConcat != null);
-                Debug.Assert(next != null);
                 Debug.Assert(nextIndex >= 2);
 
                 _previousConcat = previousConcat;

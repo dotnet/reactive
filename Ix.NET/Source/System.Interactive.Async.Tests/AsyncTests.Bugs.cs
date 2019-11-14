@@ -113,16 +113,16 @@ namespace Tests
             enumerable?.Dispose();
         }
 
-        private class DisposeCounter : IAsyncEnumerable<object>
+        private class DisposeCounter : IAsyncEnumerable<object?>
         {
             public int DisposeCount { get; private set; }
 
-            public IAsyncEnumerator<object> GetAsyncEnumerator(CancellationToken cancellationToken)
+            public IAsyncEnumerator<object?> GetAsyncEnumerator(CancellationToken cancellationToken)
             {
                 return new Enumerator(this);
             }
 
-            private class Enumerator : IAsyncEnumerator<object>
+            private class Enumerator : IAsyncEnumerator<object?>
             {
                 private readonly DisposeCounter _disposeCounter;
 
@@ -142,7 +142,7 @@ namespace Tests
                     return new ValueTask<bool>(Task.Factory.StartNew(() => false));
                 }
 
-                public object Current { get; private set; }
+                public object? Current { get; private set; }
             }
         }
     }

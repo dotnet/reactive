@@ -657,7 +657,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_gate)
                     {
                         _atEnd = true;
-                        _subscription.Dispose();
+                        Disposable.TryDispose(ref _subscription);
 
                         CheckDone();
                     }

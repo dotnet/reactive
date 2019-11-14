@@ -35,8 +35,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public IAppendPrepend Append(TSource value)
             {
                 var prev = new Node<TSource>(_value);
-                var appendNode = default(Node<TSource>);
-                var prependNode = default(Node<TSource>);
+
+                Node<TSource> appendNode;
+                Node<TSource> prependNode = null;
 
                 if (_append)
                 {
@@ -54,8 +55,9 @@ namespace System.Reactive.Linq.ObservableImpl
             public IAppendPrepend Prepend(TSource value)
             {
                 var prev = new Node<TSource>(_value);
-                var appendNode = default(Node<TSource>);
-                var prependNode = default(Node<TSource>);
+
+                Node<TSource> appendNode = null;
+                Node<TSource> prependNode;
 
                 if (_append)
                 {

@@ -57,6 +57,8 @@ namespace Microsoft.Reactive.Testing
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
+        public static bool ==(Microsoft.Reactive.Testing.Recorded<T> left, Microsoft.Reactive.Testing.Recorded<T> right) { }
+        public static bool !=(Microsoft.Reactive.Testing.Recorded<T> left, Microsoft.Reactive.Testing.Recorded<T> right) { }
     }
     [System.Diagnostics.DebuggerDisplayAttribute("({Subscribe}, {Unsubscribe})")]
     public struct Subscription : System.IEquatable<Microsoft.Reactive.Testing.Subscription>
@@ -70,6 +72,8 @@ namespace Microsoft.Reactive.Testing
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
+        public static bool ==(Microsoft.Reactive.Testing.Subscription left, Microsoft.Reactive.Testing.Subscription right) { }
+        public static bool !=(Microsoft.Reactive.Testing.Subscription left, Microsoft.Reactive.Testing.Subscription right) { }
     }
     [System.Diagnostics.DebuggerDisplayAttribute("\\{ Clock = {Clock} Now = {Now.ToString(\"O\")} \\}")]
     public class TestScheduler : System.Reactive.Concurrency.VirtualTimeScheduler<long, long>

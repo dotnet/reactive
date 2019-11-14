@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net46</TargetFrameworks>
+    <TargetFrameworks>net461</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -9,17 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Api\ApiApprovalTests.Aliases.approved.cs" />
-    <Compile Remove="Api\ApiApprovalTests.Core.approved.cs" />
-    <Compile Remove="Api\ApiApprovalTests.Testing.approved.cs" />
-    
-    <None Include="Api\ApiApprovalTests.Aliases.approved.cs" />
-    <None Include="Api\ApiApprovalTests.Core.approved.cs" />
-    <None Include="Api\ApiApprovalTests.Testing.approved.cs" />
-    
-    <None Include="Api\ApiApprovalTests.Aliases.approved.cs" />
-    <None Include="Api\ApiApprovalTests.Core.approved.cs" />
-    <None Include="Api\ApiApprovalTests.Testing.approved.cs" />
+    <Compile Remove="Api\*.approved.cs" />    
+    <Compile Remove="Api\*.received.cs" />    
+    <None Include="Api\*.approved.cs" />
+    <None Include="Api\*.received.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,12 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0-preview-20180610-02" />
-    <PackageReference Include="xunit" Version="2.4.0-beta.2.build4010" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0-beta.2.build4010" />
-    <PackageReference Include="ApprovalTests" Version="3.0.14" />
-    <PackageReference Include="DiffPlex" Version="1.4.1" />
-    <PackageReference Include="PublicApiGenerator" Version="7.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
+    <PackageReference Include="ApprovalTests" Version="4.2.2" />
+    <PackageReference Include="DiffPlex" Version="1.4.4" />
+    <PackageReference Include="PublicApiGenerator" Version="9.3.0" />
   </ItemGroup>
 
 </Project>

@@ -274,7 +274,7 @@ namespace System.Reactive.Subjects
                     break;
                 }
 
-                var b = default(AsyncSubjectDisposable[]);
+                AsyncSubjectDisposable[] b;
                 if (n == 1)
                 {
                     b = Array.Empty<AsyncSubjectDisposable>();

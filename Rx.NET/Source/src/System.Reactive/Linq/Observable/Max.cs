@@ -46,8 +46,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (_hasValue)
                 {
-                    var comparison = 0;
-
+                    int comparison;
                     try
                     {
                         comparison = _comparer.Compare(value, _lastValue);
@@ -103,8 +102,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        var comparison = 0;
-
+                        int comparison;
                         try
                         {
                             comparison = _comparer.Compare(value, _lastValue);

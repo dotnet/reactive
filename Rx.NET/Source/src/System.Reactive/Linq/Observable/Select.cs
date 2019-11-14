@@ -33,7 +33,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = _selector(value);
@@ -77,7 +77,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnNext(TSource value)
                 {
-                    var result = default(TResult);
+                    TResult result;
                     try
                     {
                         result = _selector(value, checked(_index++));

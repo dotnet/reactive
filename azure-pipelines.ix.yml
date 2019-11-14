@@ -14,7 +14,6 @@ pr:
     include:
       - master
       - rel/*
-      - IxAsyncCSharp8
   paths:
     include:
       - Ix.NET/Source/*
@@ -24,89 +23,115 @@ pr:
 pool:
   vmImage: windows-2019
 
-variables: 
+variables:
   BuildConfiguration: Release
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  
-steps:
-- task: DotNetCoreInstaller@0
-  inputs:
-    version: '3.0.100-preview5-011568'
 
-- task: DotNetCoreCLI@2  
-  inputs:
-    command: custom
-    custom: tool
-    arguments: install --tool-path . nbgv
-  displayName: Install NBGV tool
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core SDK 3.x'
+      inputs:
+        version: 3.0.x
+        performMultiLevelLookup: true
 
-- script: nbgv cloud -p Ix.NET\Source
-  displayName: Set Version
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: custom
+        custom: tool
+        arguments: install --tool-path . nbgv
+      displayName: Install NBGV tool
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: restore
-    projects: Ix.NET/Source/**/*.csproj 
-  displayName: Restore
+    - script: nbgv cloud -p Ix.NET\Source
+      displayName: Set Version
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: pack
-    packagesToPack: Ix.NET/Source/**/System.Interactive*.csproj;Ix.NET/Source/**/System.Linq.*.csproj;!Ix.NET/Source/**/*.Tests*.csproj;!Ix.NET/Source/refs/**
-    configuration: $(BuildConfiguration)
-    packDirectory: $(Build.ArtifactStagingDirectory)\artifacts    
-    verbosityPack: Minimal
-  displayName: Pack
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: restore
+        projects: Ix.NET/Source/**/*.csproj
+      displayName: Restore
 
-- task: DotNetCoreCLI@2  
-  inputs:
-    command: custom
-    custom: tool
-    arguments: install --tool-path . dotnet-reportgenerator-globaltool
-  displayName: Install ReportGenerator tool
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: pack
+        packagesToPack: Ix.NET/Source/**/System.Interactive*.csproj;Ix.NET/Source/**/System.Linq.*.csproj;!Ix.NET/Source/**/*.Tests*.csproj;!Ix.NET/Source/refs/**
+        configuration: $(BuildConfiguration)
+        packDirectory: $(Build.ArtifactStagingDirectory)\artifacts
+        verbosityPack: Minimal
+      displayName: Pack
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: test
-    projects: Ix.NET/Source/**/*.Tests.csproj
-    arguments: -c $(BuildConfiguration) -- RunConfiguration.DisableAppDomain=true
-  displayName: Run Tests
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: custom
+        custom: tool
+        arguments: install --tool-path . dotnet-reportgenerator-globaltool
+      displayName: Install ReportGenerator tool
 
-- script: reportgenerator -reports:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/raw/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
-  displayName: Create reports
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: test
+        projects: Ix.NET/Source/**/*.Tests.csproj
+        arguments: -c $(BuildConfiguration) --settings Ix.NET/Source/CodeCoverage.runsettings --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
+      displayName: Run Tests
 
-- task: PublishCodeCoverageResults@1
-  displayName: 'Publish code coverage'
-  inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml
+    - script: reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports -reporttypes:"Cobertura"
+      displayName: Create reports
 
-- task: DotNetCoreCLI@2  
-  inputs:
-    command: custom
-    custom: tool
-    arguments: install --tool-path . Codecov.Tool
-  displayName: Install Codecov tool
-  condition: and(succeeded(), not(eq(variables['CODECOV_TOKEN'], '')))
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage'
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml
 
-- script: codecov -f $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml --flag ixnet
-  env:
-    CODECOV_TOKEN: $(CODECOV_TOKEN)
-  displayName: Upload coverage to Codecov
-  condition: and(succeeded(), not(eq(variables['CODECOV_TOKEN'], '')))
+    - publish:  Ix.NET/Source/build
+      artifact: config
+      displayName: Publish signing config
 
-- task: PowerShell@2
-  displayName: Authenticode Sign Packages
-  inputs:
-    filePath: Ix.NET/Source/build/Sign-Package.ps1
-  env:
-    SignClientUser: $(SignClientUser)
-    SignClientSecret: $(SignClientSecret)
-    ArtifactDirectory: $(Build.ArtifactStagingDirectory)\artifacts
-  condition: and(succeeded(), not(eq(variables['build.reason'], 'PullRequest')), not(eq(variables['SignClientSecret'], '')), not(eq(variables['SignClientUser'], '')))
+    - publish: $(Build.ArtifactStagingDirectory)\artifacts
+      displayName: Publish artifacts
+      artifact: BuildPackages
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: $(Build.ArtifactStagingDirectory)\artifacts
-    ArtifactName: artifacts
-    publishLocation: Container
+    - task: PublishPipelineArtifact@0
+      displayName: Publish Code Coverage XML
+      inputs:
+        artifactName: Coverage Report XML
+        targetPath: $(Build.SourcesDirectory)/Ix.NET/Source/coverlet/reports/Cobertura.xml
+
+- stage: CodeSign
+  condition: and(succeeded('Build'), not(eq(variables['build.reason'], 'PullRequest')))
+  jobs:
+  - deployment: CodeSign
+    displayName: Code Signing
+    pool:
+      vmImage: windows-latest
+    environment: Code Sign
+    variables:
+    - group: SignClient Credentials
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: custom
+              custom: tool
+              arguments: install --tool-path . SignClient
+            displayName: Install SignTool tool
+
+          - pwsh: |
+              .\SignClient "Sign" `
+              --baseDirectory "$(Pipeline.Workspace)\BuildPackages" `
+              --input "**/*.nupkg" `
+              --config "$(Pipeline.Workspace)\config\signclient.json" `
+              --user "$(SignClientUser)" `
+              --secret "$(SignClientSecret)" `
+              --name "Ix.NET" `
+              --description "Ix.NET" `
+              --descriptionUrl "https://github.com/dotnet/reactive"
+            displayName: Sign packages
+          - publish: $(Pipeline.Workspace)/BuildPackages
+            displayName: Publish Signed Packages
+            artifact: SignedPackages
