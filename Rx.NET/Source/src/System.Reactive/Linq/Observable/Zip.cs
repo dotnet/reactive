@@ -353,7 +353,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             if (Interlocked.Decrement(ref _enumerationInProgress) != 0)
                             {
-                                currentEnumerator.Dispose();
+                                Interlocked.Exchange(ref _rightEnumerator, DisposedEnumerator)?.Dispose();
                                 wasDisposed = true;
                             }
                         }
