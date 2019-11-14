@@ -16,7 +16,7 @@ namespace System.Linq
         {
             public static readonly EmptyAsyncIterator<TValue> Instance = new EmptyAsyncIterator<TValue>();
 
-            public TValue Current => default;
+            public TValue Current => default!;
 
             public ValueTask<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => new ValueTask<int>(0);
 

@@ -17,11 +17,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
             {
-                var last = await TryGetLast(_source, _cancellationToken).ConfigureAwait(false);
+                var last = await TryGetLast(source, cancellationToken).ConfigureAwait(false);
 
-                return last.HasValue ? last.Value : default;
+                return last.HasValue ? last.Value : default!;
             }
         }
 
@@ -34,11 +34,11 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
             {
-                var last = await TryGetLast(_source, _predicate, _cancellationToken).ConfigureAwait(false);
+                var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
-                return last.HasValue ? last.Value : default;
+                return last.HasValue ? last.Value : default!;
             }
         }
 
@@ -51,11 +51,11 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
             {
-                var last = await TryGetLast(_source, _predicate, _cancellationToken).ConfigureAwait(false);
+                var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
-                return last.HasValue ? last.Value : default;
+                return last.HasValue ? last.Value : default!;
             }
         }
 
@@ -69,11 +69,11 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
             {
-                var last = await TryGetLast(_source, _predicate, _cancellationToken).ConfigureAwait(false);
+                var last = await TryGetLast(source, predicate, cancellationToken).ConfigureAwait(false);
 
-                return last.HasValue ? last.Value : default;
+                return last.HasValue ? last.Value : default!;
             }
         }
 #endif
@@ -96,18 +96,18 @@ namespace System.Linq
             {
                 return Core(source, cancellationToken);
 
-                static async ValueTask<Maybe<TSource>> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+                static async ValueTask<Maybe<TSource>> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
                 {
-                    var last = default(TSource);
+                    var last = default(TSource)!; // NB: Only matters when hasLast is set to true.
                     var hasLast = false;
 
-                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         hasLast = true;
                         last = item;
                     }
 
-                    return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
+                    return hasLast ? new Maybe<TSource>(last!) : new Maybe<TSource>();
                 }
             }
 
@@ -116,10 +116,10 @@ namespace System.Linq
 
         private static async ValueTask<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            var last = default(TSource);
+            var last = default(TSource)!; // NB: Only matters when hasLast is set to true.
             var hasLast = false;
 
-            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
+            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 if (predicate(item))
                 {
@@ -128,15 +128,15 @@ namespace System.Linq
                 }
             }
 
-            return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
+            return hasLast ? new Maybe<TSource>(last!) : new Maybe<TSource>();
         }
 
         private static async ValueTask<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            var last = default(TSource);
+            var last = default(TSource)!; // NB: Only matters when hasLast is set to true.
             var hasLast = false;
 
-            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
+            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 if (await predicate(item).ConfigureAwait(false))
                 {
@@ -145,16 +145,16 @@ namespace System.Linq
                 }
             }
 
-            return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
+            return hasLast ? new Maybe<TSource>(last!) : new Maybe<TSource>();
         }
 
 #if !NO_DEEP_CANCELLATION
         private static async ValueTask<Maybe<TSource>> TryGetLast<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
         {
-            var last = default(TSource);
+            var last = default(TSource)!; // NB: Only matters when hasLast is set to true.
             var hasLast = false;
 
-            await foreach (var item in AsyncEnumerableExtensions.WithCancellation(source, cancellationToken).ConfigureAwait(false))
+            await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 if (await predicate(item, cancellationToken).ConfigureAwait(false))
                 {
@@ -163,7 +163,7 @@ namespace System.Linq
                 }
             }
 
-            return hasLast ? new Maybe<TSource>(last) : new Maybe<TSource>();
+            return hasLast ? new Maybe<TSource>(last!) : new Maybe<TSource>();
         }
 #endif
     }

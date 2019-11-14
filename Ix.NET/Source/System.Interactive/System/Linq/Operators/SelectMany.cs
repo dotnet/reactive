@@ -19,14 +19,9 @@ namespace System.Linq
         public static IEnumerable<TOther> SelectMany<TSource, TOther>(this IEnumerable<TSource> source, IEnumerable<TOther> other)
         {
             if (source == null)
-            {
                 throw new ArgumentNullException(nameof(source));
-            }
-
             if (other == null)
-            {
                 throw new ArgumentNullException(nameof(other));
-            }
 
             return source.SelectMany(_ => other);
         }

@@ -25,7 +25,7 @@ namespace System.Reactive
 
         public static IObservable<T> Unpack<T>(IObservable<T> source)
         {
-            var hasOpt = default(bool);
+            bool hasOpt;
 
             do
             {

@@ -15,7 +15,7 @@ namespace System.Linq
     /// </summary>
     internal class AsyncEnumerableRewriter : ExpressionVisitor
     {
-        private static volatile ILookup<string, MethodInfo> _methods;
+        private static volatile ILookup<string, MethodInfo>? _methods;
 
         protected override Expression VisitConstant(ConstantExpression node)
         {
@@ -58,13 +58,14 @@ namespace System.Linq
                 return node;
             }
 
+            var declType = node.Method.DeclaringType;
             var typeArgs = node.Method.IsGenericMethod ? node.Method.GetGenericArguments() : null;
 
             //
             // Check whether the method is compatible with the recursively rewritten instance
             // and arguments expressions. If so, create a new call expression.
             //
-            if ((node.Method.IsStatic || node.Method.DeclaringType.IsAssignableFrom(obj.Type)) && ArgsMatch(node.Method, args, typeArgs))
+            if ((node.Method.IsStatic || declType != null && declType.IsAssignableFrom(obj.Type)) && ArgsMatch(node.Method, args, typeArgs))
             {
                 return Expression.Call(obj, node.Method, args);
             }
@@ -75,7 +76,7 @@ namespace System.Linq
             // Find a corresponding method in the non-expression world, e.g. rewriting from
             // the AsyncQueryable methods to the ones on AsyncEnumerable.
             //
-            if (node.Method.DeclaringType == typeof(AsyncQueryable))
+            if (declType == typeof(AsyncQueryable))
             {
                 method = FindEnumerableMethod(node.Method.Name, args, typeArgs);
                 args = FixupQuotedArgs(method, args);
@@ -83,7 +84,12 @@ namespace System.Linq
             }
             else
             {
-                method = FindMethod(node.Method.DeclaringType, node.Method.Name, args, typeArgs, BindingFlags.Static | (node.Method.IsPublic ? BindingFlags.Public : BindingFlags.NonPublic));
+                if (declType == null)
+                {
+                    throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "Could not rewrite method with name '{0}' without a DeclaringType.", node.Method.Name));
+                }
+
+                method = FindMethod(declType, node.Method.Name, args, typeArgs, BindingFlags.Static | (node.Method.IsPublic ? BindingFlags.Public : BindingFlags.NonPublic));
                 args = FixupQuotedArgs(method, args);
             }
 
@@ -138,7 +144,7 @@ namespace System.Linq
             return type;
         }
 
-        private static bool ArgsMatch(MethodInfo method, ReadOnlyCollection<Expression> args, Type[] typeArgs)
+        private static bool ArgsMatch(MethodInfo method, ReadOnlyCollection<Expression> args, Type[]? typeArgs)
         {
             //
             // Number of parameters should match the number of arguments to bind.
@@ -215,7 +221,7 @@ namespace System.Linq
                 //
                 if (type.IsByRef)
                 {
-                    type = type.GetElementType();
+                    type = type.GetElementType()!;
                 }
 
                 var expression = args[i];
@@ -328,7 +334,7 @@ namespace System.Linq
                             var newArrayExpression = (NewArrayExpression)res;
 
                             var count = newArrayExpression.Expressions.Count;
-                            var elementType = type.GetElementType();
+                            var elementType = type.GetElementType()!;
                             var list = new List<Expression>(count);
 
                             for (var i = 0; i < count; i++)
@@ -357,7 +363,7 @@ namespace System.Linq
             //
             // Array of quotes need to be stripped, so extract the element type.
             //
-            var elemType = type.IsArray ? type.GetElementType() : type;
+            var elemType = type.IsArray ? type.GetElementType()! : type;
 
             //
             // Try to find Expression<T> and obtain T.
@@ -388,7 +394,7 @@ namespace System.Linq
             return elemType.MakeArrayType();
         }
 
-        private static MethodInfo FindEnumerableMethod(string name, ReadOnlyCollection<Expression> args, params Type[] typeArgs)
+        private static MethodInfo FindEnumerableMethod(string name, ReadOnlyCollection<Expression> args, params Type[]? typeArgs)
         {
             //
             // Ensure the cached lookup table for AsyncEnumerable methods is initialized.
@@ -418,7 +424,7 @@ namespace System.Linq
             return method;
         }
 
-        private static MethodInfo FindMethod(Type type, string name, ReadOnlyCollection<Expression> args, Type[] typeArgs, BindingFlags flags)
+        private static MethodInfo FindMethod(Type type, string name, ReadOnlyCollection<Expression> args, Type[]? typeArgs, BindingFlags flags)
         {
             //
             // Support the enumerable methods to be defined on another type.
@@ -454,7 +460,7 @@ namespace System.Linq
             return method;
         }
 
-        private static Type FindGenericType(Type definition, Type type)
+        private static Type? FindGenericType(Type definition, Type? type)
         {
             while (type != null && type != typeof(object))
             {

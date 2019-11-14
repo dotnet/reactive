@@ -69,14 +69,13 @@ namespace System.Reactive
                     return false;
                 }
 
-                var b = default(Exception);
+                Exception b;
 
                 if (current == null)
                 {
                     b = ex;
                 }
-                else
-                if (current is AggregateException a)
+                else if (current is AggregateException a)
                 {
                     var list = new List<Exception>(a.InnerExceptions)
                     {
@@ -88,6 +87,7 @@ namespace System.Reactive
                 {
                     b = new AggregateException(current, ex);
                 }
+
                 if (Interlocked.CompareExchange(ref field, b, current) == current)
                 {
                     return true;
@@ -102,7 +102,6 @@ namespace System.Reactive
         {
             internal TerminatedException() : base("No further exceptions")
             {
-
             }
         }
     }

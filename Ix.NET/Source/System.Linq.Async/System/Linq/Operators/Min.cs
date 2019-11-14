@@ -15,23 +15,23 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            if (default(TSource) == null)
+            if (default(TSource)! == null) // NB: Null value is desired; JIT-time check.
             {
                 return Core(source, cancellationToken);
 
-                static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+                static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
                 {
                     var comparer = Comparer<TSource>.Default;
 
-                    var value = default(TSource);
+                    TSource value;
 
-                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                    await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
                         do
                         {
                             if (!await e.MoveNextAsync())
                             {
-                                return value;
+                                return default!;
                             }
 
                             value = e.Current;
@@ -56,13 +56,13 @@ namespace System.Linq
             {
                 return Core(source, cancellationToken);
 
-                static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+                static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
                 {
                     var comparer = Comparer<TSource>.Default;
 
-                    var value = default(TSource);
+                    TSource value;
 
-                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                    await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
                         if (!await e.MoveNextAsync())
                         {
@@ -94,32 +94,32 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            if (default(TResult) == null)
+            if (default(TResult)! == null) // NB: Null value is desired; JIT-time check.
             {
                 return Core(source, selector, cancellationToken);
 
-                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TResult> _selector, CancellationToken _cancellationToken)
+                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
-                    var value = default(TResult);
+                    TResult value;
 
-                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                    await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
                         do
                         {
                             if (!await e.MoveNextAsync())
                             {
-                                return value;
+                                return default!;
                             }
 
-                            value = _selector(e.Current);
+                            value = selector(e.Current);
                         }
                         while (value == null);
 
                         while (await e.MoveNextAsync())
                         {
-                            var x = _selector(e.Current);
+                            var x = selector(e.Current);
 
                             if (x != null && comparer.Compare(x, value) < 0)
                             {
@@ -135,24 +135,24 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TResult> _selector, CancellationToken _cancellationToken)
+                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
-                    var value = default(TResult);
+                    TResult value;
 
-                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                    await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
                         if (!await e.MoveNextAsync())
                         {
                             throw Error.NoElements();
                         }
 
-                        value = _selector(e.Current);
+                        value = selector(e.Current);
 
                         while (await e.MoveNextAsync())
                         {
-                            var x = _selector(e.Current);
+                            var x = selector(e.Current);
 
                             if (comparer.Compare(x, value) < 0)
                             {
@@ -173,32 +173,32 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            if (default(TResult) == null)
+            if (default(TResult)! == null) // NB: Null value is desired; JIT-time check.
             {
                 return Core(source, selector, cancellationToken);
 
-                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
+                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
-                    var value = default(TResult);
+                    TResult value;
 
-                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                    await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
                         do
                         {
                             if (!await e.MoveNextAsync())
                             {
-                                return value;
+                                return default!;
                             }
 
-                            value = await _selector(e.Current).ConfigureAwait(false);
+                            value = await selector(e.Current).ConfigureAwait(false);
                         }
                         while (value == null);
 
                         while (await e.MoveNextAsync())
                         {
-                            var x = await _selector(e.Current).ConfigureAwait(false);
+                            var x = await selector(e.Current).ConfigureAwait(false);
 
                             if (x != null && comparer.Compare(x, value) < 0)
                             {
@@ -214,24 +214,24 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
+                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TResult>> selector, CancellationToken cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
-                    var value = default(TResult);
+                    TResult value;
 
-                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                    await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
                         if (!await e.MoveNextAsync())
                         {
                             throw Error.NoElements();
                         }
 
-                        value = await _selector(e.Current).ConfigureAwait(false);
+                        value = await selector(e.Current).ConfigureAwait(false);
 
                         while (await e.MoveNextAsync())
                         {
-                            var x = await _selector(e.Current).ConfigureAwait(false);
+                            var x = await selector(e.Current).ConfigureAwait(false);
 
                             if (comparer.Compare(x, value) < 0)
                             {
@@ -253,32 +253,32 @@ namespace System.Linq
             if (selector == null)
                 throw Error.ArgumentNull(nameof(selector));
 
-            if (default(TResult) == null)
+            if (default(TResult)! == null) // NB: Null value is desired; JIT-time check.
             {
                 return Core(source, selector, cancellationToken);
 
-                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
+                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
-                    var value = default(TResult);
+                    TResult value;
 
-                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                    await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
                         do
                         {
                             if (!await e.MoveNextAsync())
                             {
-                                return value;
+                                return default!;
                             }
 
-                            value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                            value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         }
                         while (value == null);
 
                         while (await e.MoveNextAsync())
                         {
-                            var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                            var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
 
                             if (x != null && comparer.Compare(x, value) < 0)
                             {
@@ -294,23 +294,23 @@ namespace System.Linq
             {
                 return Core(source, selector, cancellationToken);
 
-                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TResult>> _selector, CancellationToken _cancellationToken)
+                static async ValueTask<TResult> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TResult>> selector, CancellationToken cancellationToken)
                 {
                     var comparer = Comparer<TResult>.Default;
 
-                    var value = default(TResult);
+                    TResult value;
 
-                    await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                    await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                     {
                         if (!await e.MoveNextAsync())
                         {
                             throw Error.NoElements();
                         }
 
-                        value = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                        value = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                         while (await e.MoveNextAsync())
                         {
-                            var x = await _selector(e.Current, _cancellationToken).ConfigureAwait(false);
+                            var x = await selector(e.Current, cancellationToken).ConfigureAwait(false);
                             if (comparer.Compare(x, value) < 0)
                             {
                                 value = x;

@@ -17,11 +17,11 @@ namespace System.Linq
 
             return Core(source, index, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, int _index, CancellationToken _cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
             {
-                if (_source is IAsyncPartition<TSource> p)
+                if (source is IAsyncPartition<TSource> p)
                 {
-                    var first = await p.TryGetElementAtAsync(_index, _cancellationToken).ConfigureAwait(false);
+                    var first = await p.TryGetElementAtAsync(index, cancellationToken).ConfigureAwait(false);
 
                     if (first.HasValue)
                     {
@@ -30,21 +30,21 @@ namespace System.Linq
                 }
                 else
                 {
-                    if (_source is IList<TSource> list)
+                    if (source is IList<TSource> list)
                     {
-                        return list[_index];
+                        return list[index];
                     }
 
-                    if (_index >= 0)
+                    if (index >= 0)
                     {
-                        await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                        await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                         {
-                            if (_index == 0)
+                            if (index == 0)
                             {
                                 return item;
                             }
 
-                            _index--;
+                            index--;
                         }
                     }
                 }

@@ -42,7 +42,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run(Case<TValue, TResult> parent)
             {
-                var result = default(IObservable<TResult>);
+                IObservable<TResult> result;
                 try
                 {
                     result = parent.Eval();

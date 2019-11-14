@@ -26,11 +26,11 @@ namespace System.Linq
 
             return Core(source, action, cancellationToken);
 
-            static async Task Core(IAsyncEnumerable<TSource> _source, Action<TSource> _action, CancellationToken _cancellationToken)
+            static async Task Core(IAsyncEnumerable<TSource> source, Action<TSource> action, CancellationToken cancellationToken)
             {
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    _action(item);
+                    action(item);
                 }
             }
         }
@@ -44,13 +44,13 @@ namespace System.Linq
 
             return Core(source, action, cancellationToken);
 
-            static async Task Core(IAsyncEnumerable<TSource> _source, Action<TSource, int> _action, CancellationToken _cancellationToken)
+            static async Task Core(IAsyncEnumerable<TSource> source, Action<TSource, int> action, CancellationToken cancellationToken)
             {
                 var index = 0;
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    _action(item, checked(index++));
+                    action(item, checked(index++));
                 }
             }
         }
@@ -64,11 +64,11 @@ namespace System.Linq
 
             return Core(source, action, cancellationToken);
 
-            static async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, Task> _action, CancellationToken _cancellationToken)
+            static async Task Core(IAsyncEnumerable<TSource> source, Func<TSource, Task> action, CancellationToken cancellationToken)
             {
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    await _action(item).ConfigureAwait(false);
+                    await action(item).ConfigureAwait(false);
                 }
             }
         }
@@ -82,11 +82,11 @@ namespace System.Linq
 
             return Core(source, action, cancellationToken);
 
-            static async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, Task> _action, CancellationToken _cancellationToken)
+            static async Task Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> action, CancellationToken cancellationToken)
             {
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    await _action(item, _cancellationToken).ConfigureAwait(false);
+                    await action(item, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -100,13 +100,13 @@ namespace System.Linq
 
             return Core(source, action, cancellationToken);
 
-            static async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, int, Task> _action, CancellationToken _cancellationToken)
+            static async Task Core(IAsyncEnumerable<TSource> source, Func<TSource, int, Task> action, CancellationToken cancellationToken)
             {
                 var index = 0;
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    await _action(item, checked(index++)).ConfigureAwait(false);
+                    await action(item, checked(index++)).ConfigureAwait(false);
                 }
             }
         }
@@ -120,13 +120,13 @@ namespace System.Linq
 
             return Core(source, action, cancellationToken);
 
-            static async Task Core(IAsyncEnumerable<TSource> _source, Func<TSource, int, CancellationToken, Task> _action, CancellationToken _cancellationToken)
+            static async Task Core(IAsyncEnumerable<TSource> source, Func<TSource, int, CancellationToken, Task> action, CancellationToken cancellationToken)
             {
                 var index = 0;
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    await _action(item, checked(index++), _cancellationToken).ConfigureAwait(false);
+                    await action(item, checked(index++), cancellationToken).ConfigureAwait(false);
                 }
             }
         }

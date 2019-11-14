@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,27 +16,22 @@ namespace System.Linq
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
-            switch (source)
+            return source switch
             {
-                case IList<TSource> list:
-                    return new AsyncIListEnumerableAdapter<TSource>(list);
-                case ICollection<TSource> collection:
-                    return new AsyncICollectionEnumerableAdapter<TSource>(collection);
-            }
-
-            return new AsyncEnumerableAdapter<TSource>(source);
+                IList<TSource> list => new AsyncIListEnumerableAdapter<TSource>(list),
+                ICollection<TSource> collection => new AsyncICollectionEnumerableAdapter<TSource>(collection),
+                _ => new AsyncEnumerableAdapter<TSource>(source),
+            };
         }
 
         private sealed class AsyncEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>
         {
             private readonly IEnumerable<T> _source;
 
-            private IEnumerator<T> _enumerator;
+            private IEnumerator<T>? _enumerator;
  
             public AsyncEnumerableAdapter(IEnumerable<T> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 
@@ -64,7 +58,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (_enumerator.MoveNext())
+                        if (_enumerator!.MoveNext())
                         {
                             _current = _enumerator.Current;
                             return true;
@@ -107,12 +101,10 @@ namespace System.Linq
         private sealed class AsyncIListEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>, IList<T>
         {
             private readonly IList<T> _source;
-            private IEnumerator<T> _enumerator;
+            private IEnumerator<T>? _enumerator;
 
             public AsyncIListEnumerableAdapter(IList<T> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 
@@ -139,7 +131,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (_enumerator.MoveNext())
+                        if (_enumerator!.MoveNext())
                         {
                             _current = _enumerator.Current;
                             return true;
@@ -214,12 +206,10 @@ namespace System.Linq
         private sealed class AsyncICollectionEnumerableAdapter<T> : AsyncIterator<T>, IAsyncIListProvider<T>, ICollection<T>
         {
             private readonly ICollection<T> _source;
-            private IEnumerator<T> _enumerator;
+            private IEnumerator<T>? _enumerator;
 
             public AsyncICollectionEnumerableAdapter(ICollection<T> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 
@@ -246,7 +236,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (_enumerator.MoveNext())
+                        if (_enumerator!.MoveNext())
                         {
                             _current = _enumerator.Current;
                             return true;

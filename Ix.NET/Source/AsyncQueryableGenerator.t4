@@ -93,6 +93,8 @@ return name;
 
 var toQuoted = new Func<Type, int, string>((t, i) => toQuotedImpl(t, i, true));
 #>
+#nullable enable
+
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -154,7 +156,7 @@ foreach (var m in asyncEnumerableType.GetMethods()
         }
     }
 
-    var pars = string.Join(", ", m.GetParameters().Select((p, i) => (i == parCount - 1 && isParams ? "params " : "") + toQuoted(p.ParameterType, i) + " " + p.Name + (i == parCount - 1 && lastParameterDefault ? " = default" : "")));
+    var pars = string.Join(", ", m.GetParameters().Select((p, i) => (i == parCount - 1 && isParams ? "params " : "") + toQuoted(p.ParameterType, i) + (nullableParameterNames.Contains(p.Name) ? "?" : "") + " " + p.Name + (i == parCount - 1 && lastParameterDefault ? " = default" : "")));
     var quotedPars = string.Join(", ", m.GetParameters().Select((p, i) => "default(" + toQuoted(p.ParameterType, i) + ")"));
 
     if (m.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), true))
@@ -172,7 +174,7 @@ foreach (var m in asyncEnumerableType.GetMethods()
     {
         infoName += "__" + string.Join("_", genArgs.Select(a => a.Name));
         infoTypeArgs = "(" + string.Join(", ", genArgs.Select(a => "Type " + a.Name)) + ")";
-        infoToGeneric = ".GetGenericMethodDefinition()";
+        infoToGeneric = "!.GetGenericMethodDefinition()";
         infoMakeGeneric = ".MakeGenericMethod(" + string.Join(", ", genArgs.Select(a => a.Name)) + ")";
         infoGenArgs = "<" + string.Join(", ", genArgs.Select(_ => "object")) + ">";
     }
@@ -279,14 +281,16 @@ foreach (var m in asyncEnumerableType.GetMethods()
     }
 
     var expr = "Expression.Call(" + mtd + ", " + string.Join(", ", quotedArgs) + ")";
+
+    var cons = name.StartsWith("ToDictionary") ? " where TKey : notnull" : "";
 #>
-        private static MethodInfo s_<#=infoName#>;
+        private static MethodInfo? s_<#=infoName#>;
         
         private static MethodInfo <#=infoName#><#=infoTypeArgs#> =>
             (s_<#=infoName#> ??
             (s_<#=infoName#> = new Func<<#=infoSignature#>>(<#=m.Name#><#=infoGenArgs#>).GetMethodInfo()<#=infoToGeneric#>))<#=infoMakeGeneric#>;
 
-        public static <#=ret#> <#=name#>(<#=pars#>)
+        public static <#=ret#> <#=name#>(<#=pars#>)<#=cons#>
         {
 <#
 var any = false;

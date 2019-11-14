@@ -29,7 +29,6 @@ namespace System.Linq
 
                 private CancellationTokenRegistration _registration;
                 private bool _once;
-                private TaskCompletionSource<bool> _task;
 
                 public NeverAsyncEnumerator(CancellationToken token) => _token = token;
 
@@ -38,7 +37,6 @@ namespace System.Linq
                 public ValueTask DisposeAsync()
                 {
                     _registration.Dispose();
-                    _task = null;
                     return default;
                 }
 
@@ -50,9 +48,9 @@ namespace System.Linq
                     }
 
                     _once = true;
-                    _task = new TaskCompletionSource<bool>();
-                    _registration = _token.Register(state => ((NeverAsyncEnumerator)state)._task.SetCanceled(), this);
-                    return new ValueTask<bool>(_task.Task);
+                    var task = new TaskCompletionSource<bool>();
+                    _registration = _token.Register(state => ((TaskCompletionSource<bool>)state!).SetCanceled(), task);
+                    return new ValueTask<bool>(task.Task);
                 }
             }
         }

@@ -10,10 +10,10 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken = default) =>
+        public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken = default) where TKey : notnull =>
             ToDictionaryAsync(source, keySelector, comparer: null, cancellationToken);
 
-        public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAsync<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default) where TKey : notnull
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -22,13 +22,13 @@ namespace System.Linq
 
             return Core(source, keySelector, comparer, cancellationToken);
 
-            static async ValueTask<Dictionary<TKey, TSource>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TKey> _keySelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
+            static async ValueTask<Dictionary<TKey, TSource>> Core(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
             {
-                var d = new Dictionary<TKey, TSource>(_comparer);
+                var d = new Dictionary<TKey, TSource>(comparer);
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var key = _keySelector(item);
+                    var key = keySelector(item);
 
                     d.Add(key, item);
                 }
@@ -37,10 +37,10 @@ namespace System.Linq
             }
         }
 
-        internal static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default) =>
+        internal static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default) where TKey : notnull =>
             ToDictionaryAwaitAsyncCore<TSource, TKey>(source, keySelector, comparer: null, cancellationToken);
 
-        internal static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        internal static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default) where TKey : notnull
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -49,13 +49,13 @@ namespace System.Linq
 
             return Core(source, keySelector, comparer, cancellationToken);
 
-            static async ValueTask<Dictionary<TKey, TSource>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TKey>> _keySelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
+            static async ValueTask<Dictionary<TKey, TSource>> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
             {
-                var d = new Dictionary<TKey, TSource>(_comparer);
+                var d = new Dictionary<TKey, TSource>(comparer);
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var key = await _keySelector(item).ConfigureAwait(false);
+                    var key = await keySelector(item).ConfigureAwait(false);
 
                     d.Add(key, item);
                 }
@@ -65,10 +65,10 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default) =>
+        internal static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, CancellationToken cancellationToken = default) where TKey : notnull =>
             ToDictionaryAwaitWithCancellationAsyncCore(source, keySelector, comparer: null, cancellationToken);
 
-        internal static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        internal static ValueTask<Dictionary<TKey, TSource>> ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default) where TKey : notnull
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -77,13 +77,13 @@ namespace System.Linq
 
             return Core(source, keySelector, comparer, cancellationToken);
 
-            static async ValueTask<Dictionary<TKey, TSource>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TKey>> _keySelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
+            static async ValueTask<Dictionary<TKey, TSource>> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
             {
-                var d = new Dictionary<TKey, TSource>(_comparer);
+                var d = new Dictionary<TKey, TSource>(comparer);
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var key = await _keySelector(item, _cancellationToken).ConfigureAwait(false);
+                    var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
 
                     d.Add(key, item);
                 }
@@ -93,10 +93,10 @@ namespace System.Linq
         }
 #endif
 
-        public static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, CancellationToken cancellationToken = default) =>
+        public static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, CancellationToken cancellationToken = default) where TKey : notnull =>
             ToDictionaryAsync(source, keySelector, elementSelector, comparer: null, cancellationToken);
 
-        public static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAsync<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default) where TKey : notnull
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -107,14 +107,14 @@ namespace System.Linq
 
             return Core(source, keySelector, elementSelector, comparer, cancellationToken);
 
-            static async ValueTask<Dictionary<TKey, TElement>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, TKey> _keySelector, Func<TSource, TElement> _elementSelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
+            static async ValueTask<Dictionary<TKey, TElement>> Core(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
             {
-                var d = new Dictionary<TKey, TElement>(_comparer);
+                var d = new Dictionary<TKey, TElement>(comparer);
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var key = _keySelector(item);
-                    var value = _elementSelector(item);
+                    var key = keySelector(item);
+                    var value = elementSelector(item);
 
                     d.Add(key, value);
                 }
@@ -123,10 +123,10 @@ namespace System.Linq
             }
         }
 
-        internal static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAwaitAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default) =>
+        internal static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAwaitAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default) where TKey : notnull =>
             ToDictionaryAwaitAsyncCore<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer: null, cancellationToken);
 
-        internal static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAwaitAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        internal static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAwaitAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default) where TKey : notnull
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -137,14 +137,14 @@ namespace System.Linq
 
             return Core(source, keySelector, elementSelector, comparer, cancellationToken);
 
-            static async ValueTask<Dictionary<TKey, TElement>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<TKey>> _keySelector, Func<TSource, ValueTask<TElement>> _elementSelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
+            static async ValueTask<Dictionary<TKey, TElement>> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<TKey>> keySelector, Func<TSource, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
             {
-                var d = new Dictionary<TKey, TElement>(_comparer);
+                var d = new Dictionary<TKey, TElement>(comparer);
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var key = await _keySelector(item).ConfigureAwait(false);
-                    var value = await _elementSelector(item).ConfigureAwait(false);
+                    var key = await keySelector(item).ConfigureAwait(false);
+                    var value = await elementSelector(item).ConfigureAwait(false);
 
                     d.Add(key, value);
                 }
@@ -154,10 +154,10 @@ namespace System.Linq
         }
 
 #if !NO_DEEP_CANCELLATION
-        internal static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default) =>
+        internal static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, CancellationToken cancellationToken = default) where TKey : notnull =>
             ToDictionaryAwaitWithCancellationAsyncCore(source, keySelector, elementSelector, comparer: null, cancellationToken);
 
-        internal static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default)
+        internal static ValueTask<Dictionary<TKey, TElement>> ToDictionaryAwaitWithCancellationAsyncCore<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken = default) where TKey : notnull
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -168,14 +168,14 @@ namespace System.Linq
 
             return Core(source, keySelector, elementSelector, comparer, cancellationToken);
 
-            static async ValueTask<Dictionary<TKey, TElement>> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<TKey>> _keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> _elementSelector, IEqualityComparer<TKey> _comparer, CancellationToken _cancellationToken)
+            static async ValueTask<Dictionary<TKey, TElement>> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<TKey>> keySelector, Func<TSource, CancellationToken, ValueTask<TElement>> elementSelector, IEqualityComparer<TKey>? comparer, CancellationToken cancellationToken)
             {
-                var d = new Dictionary<TKey, TElement>(_comparer);
+                var d = new Dictionary<TKey, TElement>(comparer);
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    var key = await _keySelector(item, _cancellationToken).ConfigureAwait(false);
-                    var value = await _elementSelector(item, _cancellationToken).ConfigureAwait(false);
+                    var key = await keySelector(item, cancellationToken).ConfigureAwait(false);
+                    var value = await elementSelector(item, cancellationToken).ConfigureAwait(false);
 
                     d.Add(key, value);
                 }

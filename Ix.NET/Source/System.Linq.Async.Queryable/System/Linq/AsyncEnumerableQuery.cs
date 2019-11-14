@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +17,7 @@ namespace System.Linq
         /// <summary>
         /// Gets the enumerable sequence obtained from evaluating the expression tree.
         /// </summary>
-        internal abstract object Enumerable { get; }
+        internal abstract object? Enumerable { get; }
 
         /// <summary>
         /// Gets the expression tree representing the asynchronous enumerable sequence.
@@ -33,7 +32,7 @@ namespace System.Linq
     internal class AsyncEnumerableQuery<T> : AsyncEnumerableQuery, IOrderedAsyncQueryable<T>, IAsyncQueryProvider
     {
         private readonly Expression _expression;
-        private IAsyncEnumerable<T> _enumerable;
+        private IAsyncEnumerable<T>? _enumerable;
 
         /// <summary>
         /// Creates a new asynchronous enumerable sequence represented by the specified expression tree.
@@ -72,7 +71,7 @@ namespace System.Linq
         /// <summary>
         /// Gets the enumerable sequence obtained from evaluating the expression tree.
         /// </summary>
-        internal override object Enumerable => _enumerable;
+        internal override object? Enumerable => _enumerable;
 
         /// <summary>
         /// Gets the expression tree representing the asynchronous enumerable sequence.
@@ -134,7 +133,7 @@ namespace System.Linq
         /// Gets a string representation of the enumerable sequence.
         /// </summary>
         /// <returns>String representation of the enumerable sequence.</returns>
-        public override string ToString()
+        public override string? ToString()
         {
             if (!(_expression is ConstantExpression ce) || ce.Value != this)
             {

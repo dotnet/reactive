@@ -17,9 +17,7 @@ namespace System.Linq
         public static IEnumerable<TResult> Throw<TResult>(Exception exception)
         {
             if (exception == null)
-            {
                 throw new ArgumentNullException(nameof(exception));
-            }
 
             return ThrowCore<TResult>(exception);
         }

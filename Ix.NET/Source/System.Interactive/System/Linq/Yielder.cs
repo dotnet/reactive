@@ -9,7 +9,7 @@ namespace System.Linq
     internal sealed class Yielder<T> : IYielder<T>, IAwaitable, IAwaiter
     {
         private readonly Action<Yielder<T>> _create;
-        private Action _continuation;
+        private Action? _continuation;
         private bool _hasValue;
         private bool _running;
         private bool _stopped;
@@ -17,6 +17,7 @@ namespace System.Linq
         public Yielder(Action<Yielder<T>> create)
         {
             _create = create;
+            Current = default!;
         }
 
         public T Current { get; private set; }
@@ -65,15 +66,12 @@ namespace System.Linq
             else
             {
                 _hasValue = false;
-                _continuation();
+                _continuation!();
             }
 
             return !_stopped && _hasValue;
         }
 
-        public void Reset()
-        {
-            throw new NotSupportedException();
-        }
+        public void Reset() => throw new NotSupportedException();
     }
 }

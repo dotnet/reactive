@@ -225,7 +225,7 @@ namespace System.Reactive.Subjects
                     break;
                 }
 
-                var b = default(SubjectDisposable[]);
+                SubjectDisposable[] b;
                 if (n == 1)
                 {
                     b = Array.Empty<SubjectDisposable>();

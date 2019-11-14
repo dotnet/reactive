@@ -30,8 +30,8 @@ namespace System.Linq
 
     internal sealed class BinaryDisposable : IDisposable
     {
-        private IDisposable _d1;
-        private IDisposable _d2;
+        private IDisposable? _d1;
+        private IDisposable? _d2;
 
         public BinaryDisposable(IDisposable d1, IDisposable d2)
         {
@@ -57,7 +57,7 @@ namespace System.Linq
 
     internal sealed class AnonymousDisposable : IDisposable
     {
-        private Action _action;
+        private Action? _action;
 
         public AnonymousDisposable(Action action)
         {

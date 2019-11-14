@@ -59,25 +59,24 @@ namespace System.Linq
         {
             foreach (var source in sources)
             {
-                using (var innerEnumerator = source.GetEnumerator())
+                using var innerEnumerator = source.GetEnumerator();
+
+                while (true)
                 {
-                    while (true)
+                    TSource value;
+                    try
                     {
-                        var value = default(TSource);
-                        try
-                        {
-                            if (!innerEnumerator.MoveNext())
-                                break;
-
-                            value = innerEnumerator.Current;
-                        }
-                        catch
-                        {
+                        if (!innerEnumerator.MoveNext())
                             break;
-                        }
 
-                        yield return value;
+                        value = innerEnumerator.Current;
                     }
+                    catch
+                    {
+                        break;
+                    }
+
+                    yield return value;
                 }
             }
         }

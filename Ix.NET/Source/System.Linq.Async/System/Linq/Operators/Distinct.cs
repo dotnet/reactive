@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +12,7 @@ namespace System.Linq
     {
         public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source) => Distinct(source, comparer: null);
 
-        public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
+        public static IAsyncEnumerable<TSource> Distinct<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource>? comparer)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -23,16 +22,14 @@ namespace System.Linq
 
         private sealed class DistinctAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
-            private readonly IEqualityComparer<TSource> _comparer;
+            private readonly IEqualityComparer<TSource>? _comparer;
             private readonly IAsyncEnumerable<TSource> _source;
 
-            private IAsyncEnumerator<TSource> _enumerator;
-            private Set<TSource> _set;
+            private IAsyncEnumerator<TSource>? _enumerator;
+            private Set<TSource>? _set;
 
-            public DistinctAsyncIterator(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
+            public DistinctAsyncIterator(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource>? comparer)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
                 _comparer = comparer;
             }
@@ -103,10 +100,10 @@ namespace System.Linq
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        while (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                         {
                             element = _enumerator.Current;
-                            if (_set.Add(element))
+                            if (_set!.Add(element))
                             {
                                 _current = element;
                                 return true;

@@ -99,7 +99,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             latest = _parent._latest;
                         }
 
-                        var res = default(TResult);
+                        TResult res;
 
                         try
                         {

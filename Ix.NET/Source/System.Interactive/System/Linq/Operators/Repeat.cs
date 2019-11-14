@@ -43,9 +43,7 @@ namespace System.Linq
         public static IEnumerable<TSource> Repeat<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-            {
                 throw new ArgumentNullException(nameof(source));
-            }
 
             return RepeatCore(source);
         }
@@ -60,9 +58,7 @@ namespace System.Linq
         public static IEnumerable<TSource> Repeat<TSource>(this IEnumerable<TSource> source, int count)
         {
             if (source == null)
-            {
                 throw new ArgumentNullException(nameof(source));
-            }
 
             if (count < 0)
             {

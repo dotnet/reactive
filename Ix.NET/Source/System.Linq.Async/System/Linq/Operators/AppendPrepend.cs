@@ -41,12 +41,10 @@ namespace System.Linq
         private abstract class AppendPrependAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
             protected readonly IAsyncEnumerable<TSource> _source;
-            protected IAsyncEnumerator<TSource> _enumerator;
+            protected IAsyncEnumerator<TSource>? _enumerator;
 
             protected AppendPrependAsyncIterator(IAsyncEnumerable<TSource> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 
@@ -61,7 +59,7 @@ namespace System.Linq
 
             protected async Task<bool> LoadFromEnumeratorAsync()
             {
-                if (await _enumerator.MoveNextAsync().ConfigureAwait(false))
+                if (await _enumerator!.MoveNextAsync().ConfigureAwait(false))
                 {
                     _current = _enumerator.Current;
                     return true;
@@ -206,7 +204,7 @@ namespace System.Linq
                 }
                 else
                 {
-                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         array[index] = item;
                         ++index;
@@ -234,7 +232,7 @@ namespace System.Linq
                     list.Add(_item);
                 }
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     list.Add(item);
                 }
@@ -261,15 +259,15 @@ namespace System.Linq
 
         private sealed class AppendPrependNAsyncIterator<TSource> : AppendPrependAsyncIterator<TSource>
         {
-            private readonly SingleLinkedNode<TSource> _prepended;
-            private readonly SingleLinkedNode<TSource> _appended;
+            private readonly SingleLinkedNode<TSource>? _prepended;
+            private readonly SingleLinkedNode<TSource>? _appended;
             private readonly int _prependCount;
             private readonly int _appendCount;
-            private SingleLinkedNode<TSource> _node;
+            private SingleLinkedNode<TSource>? _node;
             private int _mode;
-            private IEnumerator<TSource> _appendedEnumerator;
+            private IEnumerator<TSource>? _appendedEnumerator;
 
-            public AppendPrependNAsyncIterator(IAsyncEnumerable<TSource> source, SingleLinkedNode<TSource> prepended, SingleLinkedNode<TSource> appended, int prependCount, int appendCount)
+            public AppendPrependNAsyncIterator(IAsyncEnumerable<TSource> source, SingleLinkedNode<TSource>? prepended, SingleLinkedNode<TSource>? appended, int prependCount, int appendCount)
                 : base(source)
             {
                 Debug.Assert(prepended != null || appended != null);
@@ -346,7 +344,7 @@ namespace System.Linq
 
 
                             case 4:
-                                if (_appendedEnumerator.MoveNext())
+                                if (_appendedEnumerator!.MoveNext())
                                 {
                                     _current = _appendedEnumerator.Current;
                                     return true;
@@ -395,7 +393,7 @@ namespace System.Linq
                 }
                 else
                 {
-                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
                         array[index] = item;
                         ++index;
@@ -421,19 +419,18 @@ namespace System.Linq
                     list.Add(n.Item);
                 }
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, cancellationToken).ConfigureAwait(false))
+                await foreach (var item in _source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     list.Add(item);
                 }
 
                 if (_appended != null)
                 {
-                    using (var en2 = _appended.GetEnumerator(_appendCount))
+                    using var en2 = _appended.GetEnumerator(_appendCount);
+
+                    while (en2.MoveNext())
                     {
-                        while (en2.MoveNext())
-                        {
-                            list.Add(en2.Current);
-                        }
+                        list.Add(en2.Current);
                     }
                 }
 

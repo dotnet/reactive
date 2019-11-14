@@ -14,7 +14,7 @@ namespace System.Linq
             source is ICollection<TSource> collection ? new ValueTask<bool>(collection.Contains(value)) :
             ContainsAsync(source, value, comparer: null, cancellationToken);
 
-        public static ValueTask<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<bool> ContainsAsync<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
@@ -26,11 +26,11 @@ namespace System.Linq
             {
                 return Core(source, value, cancellationToken);
 
-                static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, CancellationToken _cancellationToken)
+                static async ValueTask<bool> Core(IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken)
                 {
-                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
-                        if (EqualityComparer<TSource>.Default.Equals(item, _value))
+                        if (EqualityComparer<TSource>.Default.Equals(item, value))
                         {
                             return true;
                         }
@@ -43,11 +43,11 @@ namespace System.Linq
             {
                 return Core(source, value, comparer, cancellationToken);
 
-                static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, TSource _value, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
+                static async ValueTask<bool> Core(IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
                 {
-                    await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                    await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                     {
-                        if (_comparer.Equals(item, _value))
+                        if (comparer.Equals(item, value))
                         {
                             return true;
                         }

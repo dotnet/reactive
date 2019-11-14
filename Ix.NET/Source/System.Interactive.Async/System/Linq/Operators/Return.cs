@@ -43,7 +43,7 @@ namespace System.Linq
 
                 public ValueTask DisposeAsync()
                 {
-                    Current = default;
+                    Current = default!;
                     return default;
                 }
 

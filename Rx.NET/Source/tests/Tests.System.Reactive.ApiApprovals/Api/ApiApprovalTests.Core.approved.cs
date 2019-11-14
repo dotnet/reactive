@@ -39,6 +39,12 @@ namespace System.Reactive
         protected override void OnErrorCore(System.Exception error) { }
         protected override void OnNextCore(T value) { }
     }
+    public abstract class EventPatternSourceBase<TSender, TEventArgs>
+    {
+        protected EventPatternSourceBase(System.IObservable<System.Reactive.EventPattern<TSender, TEventArgs>> source, System.Action<System.Action<TSender, TEventArgs>, System.Reactive.EventPattern<TSender, TEventArgs>> invokeHandler) { }
+        protected void Add(System.Delegate handler, System.Action<TSender, TEventArgs> invoke) { }
+        protected void Remove(System.Delegate handler) { }
+    }
     public class EventPattern<TEventArgs> : System.Reactive.EventPattern<object, TEventArgs>
     {
         public EventPattern(object sender, TEventArgs e) { }
@@ -51,12 +57,8 @@ namespace System.Reactive
         public bool Equals(System.Reactive.EventPattern<TSender, TEventArgs> other) { }
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
-    }
-    public abstract class EventPatternSourceBase<TSender, TEventArgs>
-    {
-        protected EventPatternSourceBase(System.IObservable<System.Reactive.EventPattern<TSender, TEventArgs>> source, System.Action<System.Action<TSender, TEventArgs>, System.Reactive.EventPattern<TSender, TEventArgs>> invokeHandler) { }
-        protected void Add(System.Delegate handler, System.Action<TSender, TEventArgs> invoke) { }
-        protected void Remove(System.Delegate handler) { }
+        public static bool ==(System.Reactive.EventPattern<TSender, TEventArgs> first, System.Reactive.EventPattern<TSender, TEventArgs> second) { }
+        public static bool !=(System.Reactive.EventPattern<TSender, TEventArgs> first, System.Reactive.EventPattern<TSender, TEventArgs> second) { }
     }
     [System.AttributeUsageAttribute(System.AttributeTargets.Assembly | System.AttributeTargets.Module | System.AttributeTargets.Class | System.AttributeTargets.Struct | System.AttributeTargets.Enum | System.AttributeTargets.Constructor | System.AttributeTargets.Method | System.AttributeTargets.Property | System.AttributeTargets.Field | System.AttributeTargets.Event | System.AttributeTargets.Interface | System.AttributeTargets.Parameter | System.AttributeTargets.Delegate | System.AttributeTargets.ReturnValue | System.AttributeTargets.GenericParameter | System.AttributeTargets.All)]
     [System.Reactive.ExperimentalAttribute()]
@@ -64,14 +66,14 @@ namespace System.Reactive
     {
         public ExperimentalAttribute() { }
     }
+    public interface IEventPatternSource<TEventArgs>
+    {
+        public event System.EventHandler<TEventArgs> OnNext;
+    }
     public interface IEventPattern<out TSender, out TEventArgs>
     {
         TEventArgs EventArgs { get; }
         TSender Sender { get; }
-    }
-    public interface IEventPatternSource<TEventArgs>
-    {
-        public event System.EventHandler<TEventArgs> OnNext;
     }
     public interface IEventSource<out T>
     {
@@ -83,15 +85,15 @@ namespace System.Reactive
         TResult OnError(System.Exception exception);
         TResult OnNext(TValue value);
     }
-    [System.Runtime.CompilerServices.AsyncMethodBuilderAttribute(typeof(System.Runtime.CompilerServices.TaskObservableMethodBuilder<>))]
-    public interface ITaskObservable<out T> : System.IObservable<T>
-    {
-        System.Reactive.ITaskObservableAwaiter<T> GetAwaiter();
-    }
     public interface ITaskObservableAwaiter<out T> : System.Runtime.CompilerServices.INotifyCompletion
     {
         bool IsCompleted { get; }
         T GetResult();
+    }
+    [System.Runtime.CompilerServices.AsyncMethodBuilderAttribute(typeof(System.Runtime.CompilerServices.TaskObservableMethodBuilder<T>))]
+    public interface ITaskObservable<out T> : System.IObservable<T>
+    {
+        System.Reactive.ITaskObservableAwaiter<T> GetAwaiter();
     }
     [System.Reactive.ExperimentalAttribute()]
     public class ListObservable<T> : System.Collections.Generic.ICollection<T>, System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IList<T>, System.Collections.IEnumerable, System.IObservable<object>
@@ -118,9 +120,15 @@ namespace System.Reactive
         public static System.Reactive.Notification<T> CreateOnError<T>(System.Exception error) { }
         public static System.Reactive.Notification<T> CreateOnNext<T>(T value) { }
     }
+    public enum NotificationKind
+    {
+        OnNext = 0,
+        OnError = 1,
+        OnCompleted = 2,
+    }
     public abstract class Notification<T> : System.IEquatable<System.Reactive.Notification<T>>
     {
-        protected internal Notification() { }
+        protected Notification() { }
         public abstract System.Exception Exception { get; }
         public abstract bool HasValue { get; }
         public abstract System.Reactive.NotificationKind Kind { get; }
@@ -133,12 +141,8 @@ namespace System.Reactive
         public override bool Equals(object obj) { }
         public System.IObservable<T> ToObservable() { }
         public System.IObservable<T> ToObservable(System.Reactive.Concurrency.IScheduler scheduler) { }
-    }
-    public enum NotificationKind
-    {
-        OnNext = 0,
-        OnError = 1,
-        OnCompleted = 2,
+        public static bool ==(System.Reactive.Notification<T> left, System.Reactive.Notification<T> right) { }
+        public static bool !=(System.Reactive.Notification<T> left, System.Reactive.Notification<T> right) { }
     }
     public abstract class ObservableBase<T> : System.IObservable<T>
     {
@@ -187,6 +191,8 @@ namespace System.Reactive
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
+        public static bool ==(System.Reactive.TimeInterval<T> first, System.Reactive.TimeInterval<T> second) { }
+        public static bool !=(System.Reactive.TimeInterval<T> first, System.Reactive.TimeInterval<T> second) { }
     }
     public class static Timestamped
     {
@@ -201,6 +207,8 @@ namespace System.Reactive
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
+        public static bool ==(System.Reactive.Timestamped<T> first, System.Reactive.Timestamped<T> second) { }
+        public static bool !=(System.Reactive.Timestamped<T> first, System.Reactive.Timestamped<T> second) { }
     }
     public struct Unit : System.IEquatable<System.Reactive.Unit>
     {
@@ -209,6 +217,8 @@ namespace System.Reactive
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
+        public static bool ==(System.Reactive.Unit first, System.Reactive.Unit second) { }
+        public static bool !=(System.Reactive.Unit first, System.Reactive.Unit second) { }
     }
 }
 namespace System.Reactive.Concurrency
@@ -295,12 +305,6 @@ namespace System.Reactive.Concurrency
         void StartThread(System.Action<object> action, object state);
         System.IDisposable StartTimer(System.Action<object> action, object state, System.TimeSpan dueTime);
     }
-    public sealed class ImmediateScheduler : System.Reactive.Concurrency.LocalScheduler
-    {
-        public static System.Reactive.Concurrency.ImmediateScheduler Instance { get; }
-        public override System.IDisposable Schedule<TState>(TState state, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
-        public override System.IDisposable Schedule<TState>(TState state, System.TimeSpan dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
-    }
     public interface IScheduledItem<TAbsolute>
     {
         TAbsolute DueTime { get; }
@@ -329,6 +333,12 @@ namespace System.Reactive.Concurrency
     {
         System.Reactive.Concurrency.IStopwatch StartStopwatch();
     }
+    public sealed class ImmediateScheduler : System.Reactive.Concurrency.LocalScheduler
+    {
+        public static System.Reactive.Concurrency.ImmediateScheduler Instance { get; }
+        public override System.IDisposable Schedule<TState>(TState state, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
+        public override System.IDisposable Schedule<TState>(TState state, System.TimeSpan dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
+    }
     public abstract class LocalScheduler : System.IServiceProvider, System.Reactive.Concurrency.IScheduler, System.Reactive.Concurrency.IStopwatchProvider
     {
         protected LocalScheduler() { }
@@ -350,7 +360,7 @@ namespace System.Reactive.Concurrency
         public override System.Reactive.Concurrency.IStopwatch StartStopwatch() { }
     }
     public abstract class ScheduledItem<TAbsolute> : System.IComparable<System.Reactive.Concurrency.ScheduledItem<TAbsolute>>, System.IDisposable, System.Reactive.Concurrency.IScheduledItem<TAbsolute>
-        where TAbsolute : System.IComparable<>
+        where TAbsolute : System.IComparable<TAbsolute>
     {
         protected ScheduledItem(TAbsolute dueTime, System.Collections.Generic.IComparer<TAbsolute> comparer) { }
         public TAbsolute DueTime { get; }
@@ -361,9 +371,15 @@ namespace System.Reactive.Concurrency
         public override int GetHashCode() { }
         public void Invoke() { }
         protected abstract System.IDisposable InvokeCore();
+        public static bool ==(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
+        public static bool >(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
+        public static bool >=(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
+        public static bool !=(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
+        public static bool <(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
+        public static bool <=(System.Reactive.Concurrency.ScheduledItem<TAbsolute> left, System.Reactive.Concurrency.ScheduledItem<TAbsolute> right) { }
     }
     public sealed class ScheduledItem<TAbsolute, TValue> : System.Reactive.Concurrency.ScheduledItem<TAbsolute>
-        where TAbsolute : System.IComparable<>
+        where TAbsolute : System.IComparable<TAbsolute>
     {
         public ScheduledItem(System.Reactive.Concurrency.IScheduler scheduler, TValue state, System.Func<System.Reactive.Concurrency.IScheduler, TValue, System.IDisposable> action, TAbsolute dueTime, System.Collections.Generic.IComparer<TAbsolute> comparer) { }
         public ScheduledItem(System.Reactive.Concurrency.IScheduler scheduler, TValue state, System.Func<System.Reactive.Concurrency.IScheduler, TValue, System.IDisposable> action, TAbsolute dueTime) { }
@@ -438,7 +454,7 @@ namespace System.Reactive.Concurrency
         public void OnCompleted(System.Action continuation) { }
     }
     public class SchedulerQueue<TAbsolute>
-        where TAbsolute : System.IComparable<>
+        where TAbsolute : System.IComparable<TAbsolute>
     {
         public SchedulerQueue() { }
         public SchedulerQueue(int capacity) { }
@@ -483,16 +499,8 @@ namespace System.Reactive.Concurrency
         public System.IDisposable SchedulePeriodic<TState>(TState state, System.TimeSpan period, System.Func<TState, TState> action) { }
         public override System.Reactive.Concurrency.IStopwatch StartStopwatch() { }
     }
-    public abstract class VirtualTimeScheduler<TAbsolute, TRelative> : System.Reactive.Concurrency.VirtualTimeSchedulerBase<TAbsolute, TRelative>
-        where TAbsolute : System.IComparable<>
-    {
-        protected VirtualTimeScheduler() { }
-        protected VirtualTimeScheduler(TAbsolute initialClock, System.Collections.Generic.IComparer<TAbsolute> comparer) { }
-        protected override System.Reactive.Concurrency.IScheduledItem<TAbsolute> GetNext() { }
-        public override System.IDisposable ScheduleAbsolute<TState>(TState state, TAbsolute dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
-    }
     public abstract class VirtualTimeSchedulerBase<TAbsolute, TRelative> : System.IServiceProvider, System.Reactive.Concurrency.IScheduler, System.Reactive.Concurrency.IStopwatchProvider
-        where TAbsolute : System.IComparable<>
+        where TAbsolute : System.IComparable<TAbsolute>
     {
         protected VirtualTimeSchedulerBase() { }
         protected VirtualTimeSchedulerBase(TAbsolute initialClock, System.Collections.Generic.IComparer<TAbsolute> comparer) { }
@@ -520,9 +528,17 @@ namespace System.Reactive.Concurrency
     public class static VirtualTimeSchedulerExtensions
     {
         public static System.IDisposable ScheduleAbsolute<TAbsolute, TRelative>(this System.Reactive.Concurrency.VirtualTimeSchedulerBase<TAbsolute, TRelative> scheduler, TAbsolute dueTime, System.Action action)
-            where TAbsolute : System.IComparable<> { }
+            where TAbsolute : System.IComparable<TAbsolute> { }
         public static System.IDisposable ScheduleRelative<TAbsolute, TRelative>(this System.Reactive.Concurrency.VirtualTimeSchedulerBase<TAbsolute, TRelative> scheduler, TRelative dueTime, System.Action action)
-            where TAbsolute : System.IComparable<> { }
+            where TAbsolute : System.IComparable<TAbsolute> { }
+    }
+    public abstract class VirtualTimeScheduler<TAbsolute, TRelative> : System.Reactive.Concurrency.VirtualTimeSchedulerBase<TAbsolute, TRelative>
+        where TAbsolute : System.IComparable<TAbsolute>
+    {
+        protected VirtualTimeScheduler() { }
+        protected VirtualTimeScheduler(TAbsolute initialClock, System.Collections.Generic.IComparer<TAbsolute> comparer) { }
+        protected override System.Reactive.Concurrency.IScheduledItem<TAbsolute> GetNext() { }
+        public override System.IDisposable ScheduleAbsolute<TState>(TState state, TAbsolute dueTime, System.Func<System.Reactive.Concurrency.IScheduler, TState, System.IDisposable> action) { }
     }
 }
 namespace System.Reactive.Disposables
@@ -822,11 +838,11 @@ namespace System.Reactive.Linq
         System.Linq.Expressions.Expression Expression { get; }
         System.Reactive.Linq.IQbservableProvider Provider { get; }
     }
-    public interface IQbservable<out T> : System.IObservable<T>, System.Reactive.Linq.IQbservable { }
     public interface IQbservableProvider
     {
         System.Reactive.Linq.IQbservable<TResult> CreateQuery<TResult>(System.Linq.Expressions.Expression expression);
     }
+    public interface IQbservable<out T> : System.IObservable<T>, System.Reactive.Linq.IQbservable { }
     [System.AttributeUsageAttribute(System.AttributeTargets.Class | System.AttributeTargets.All, Inherited=false)]
     public sealed class LocalQueryMethodImplementationTypeAttribute : System.Attribute
     {
@@ -2469,17 +2485,6 @@ namespace System.Reactive.Subjects
         public static System.Reactive.Subjects.ISubject<TSource, TResult> Synchronize<TSource, TResult>(System.Reactive.Subjects.ISubject<TSource, TResult> subject, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.Reactive.Subjects.ISubject<TSource> Synchronize<TSource>(System.Reactive.Subjects.ISubject<TSource> subject, System.Reactive.Concurrency.IScheduler scheduler) { }
     }
-    public sealed class Subject<T> : System.Reactive.Subjects.SubjectBase<T>
-    {
-        public Subject() { }
-        public override bool HasObservers { get; }
-        public override bool IsDisposed { get; }
-        public override void Dispose() { }
-        public override void OnCompleted() { }
-        public override void OnError(System.Exception error) { }
-        public override void OnNext(T value) { }
-        public override System.IDisposable Subscribe(System.IObserver<T> observer) { }
-    }
     public abstract class SubjectBase<T> : System.IDisposable, System.IObservable<T>, System.IObserver<T>, System.Reactive.Subjects.ISubject<T>, System.Reactive.Subjects.ISubject<T, T>
     {
         protected SubjectBase() { }
@@ -2490,6 +2495,17 @@ namespace System.Reactive.Subjects
         public abstract void OnError(System.Exception error);
         public abstract void OnNext(T value);
         public abstract System.IDisposable Subscribe(System.IObserver<T> observer);
+    }
+    public sealed class Subject<T> : System.Reactive.Subjects.SubjectBase<T>
+    {
+        public Subject() { }
+        public override bool HasObservers { get; }
+        public override bool IsDisposed { get; }
+        public override void Dispose() { }
+        public override void OnCompleted() { }
+        public override void OnError(System.Exception error) { }
+        public override void OnNext(T value) { }
+        public override System.IDisposable Subscribe(System.IObserver<T> observer) { }
     }
 }
 namespace System.Reactive.Threading.Tasks

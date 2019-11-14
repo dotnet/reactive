@@ -17,12 +17,11 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
             {
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
-                {
-                    return await e.MoveNextAsync();
-                }
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                return await e.MoveNextAsync();
             }
         }
 
@@ -35,11 +34,11 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
+            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
             {
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    if (_predicate(item))
+                    if (predicate(item))
                     {
                         return true;
                     }
@@ -58,11 +57,11 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
             {
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    if (await _predicate(item).ConfigureAwait(false))
+                    if (await predicate(item).ConfigureAwait(false))
                     {
                         return true;
                     }
@@ -82,11 +81,11 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async ValueTask<bool> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
             {
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
-                    if (await _predicate(item, _cancellationToken).ConfigureAwait(false))
+                    if (await predicate(item, cancellationToken).ConfigureAwait(false))
                     {
                         return true;
                     }

@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -46,13 +44,11 @@ namespace System.Linq
         {
             private readonly IEnumerable<IAsyncEnumerable<TSource>> _sources;
 
-            private IAsyncEnumerator<TSource> _enumerator;
-            private IEnumerator<IAsyncEnumerable<TSource>> _sourcesEnumerator;
+            private IAsyncEnumerator<TSource>? _enumerator;
+            private IEnumerator<IAsyncEnumerable<TSource>>? _sourcesEnumerator;
 
             public OnErrorResumeNextAsyncIterator(IEnumerable<IAsyncEnumerable<TSource>> sources)
             {
-                Debug.Assert(sources != null);
-
                 _sources = sources;
             }
 
@@ -93,7 +89,7 @@ namespace System.Linq
                         {
                             if (_enumerator == null)
                             {
-                                if (!_sourcesEnumerator.MoveNext())
+                                if (!_sourcesEnumerator!.MoveNext())
                                 {
                                     break; // while -- done, nothing else to do
                                 }

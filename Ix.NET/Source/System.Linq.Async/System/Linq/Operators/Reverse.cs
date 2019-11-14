@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,12 +24,10 @@ namespace System.Linq
             private readonly IAsyncEnumerable<TSource> _source;
 
             private int _index;
-            private TSource[] _items;
+            private TSource[]? _items;
 
             public ReverseAsyncIterator(IAsyncEnumerable<TSource> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 
@@ -101,7 +98,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         if (_index != -1)
                         {
-                            _current = _items[_index];
+                            _current = _items![_index];
                             --_index;
                             return true;
                         }

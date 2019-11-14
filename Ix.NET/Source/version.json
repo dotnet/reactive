@@ -1,8 +1,9 @@
 {
-  "version": "4.0.0-preview.2.build.{height}",
+  "version": "4.1.0-preview.{height}",
   "publicReleaseRefSpec": [
     "^refs/heads/master$", // we release out of master
-    "^refs/heads/rel/v\\d+\\.\\d+" // we also release branches starting with vN.N
+    "^refs/heads/rel/v\\d+\\.\\d+", // we also release branches starting with vN.N
+    "^refs/heads/rel/ix-v\\d+\\.\\d+" // we also release branches starting with vN.N
   ],
   "nugetPackageVersion":{
     "semVer": 2

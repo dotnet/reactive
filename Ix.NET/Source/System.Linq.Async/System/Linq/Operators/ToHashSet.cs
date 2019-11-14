@@ -13,18 +13,18 @@ namespace System.Linq
         public static ValueTask<HashSet<TSource>> ToHashSetAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default) =>
             ToHashSetAsync(source, comparer: null, cancellationToken);
 
-        public static ValueTask<HashSet<TSource>> ToHashSetAsync<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken = default)
+        public static ValueTask<HashSet<TSource>> ToHashSetAsync<TSource>(this IAsyncEnumerable<TSource> source, IEqualityComparer<TSource>? comparer, CancellationToken cancellationToken = default)
         {
             if (source == null)
                 throw Error.ArgumentNull(nameof(source));
 
             return Core(source, comparer, cancellationToken);
 
-            static async ValueTask<HashSet<TSource>> Core(IAsyncEnumerable<TSource> _source, IEqualityComparer<TSource> _comparer, CancellationToken _cancellationToken)
+            static async ValueTask<HashSet<TSource>> Core(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource>? comparer, CancellationToken cancellationToken)
             {
-                var set = new HashSet<TSource>(_comparer);
+                var set = new HashSet<TSource>(comparer);
 
-                await foreach (var item in AsyncEnumerableExtensions.WithCancellation(_source, _cancellationToken).ConfigureAwait(false))
+                await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
                 {
                     set.Add(item);
                 }

@@ -18,14 +18,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Expand<TSource>(this IEnumerable<TSource> source, Func<TSource, IEnumerable<TSource>> selector)
         {
             if (source == null)
-            {
                 throw new ArgumentNullException(nameof(source));
-            }
-
             if (selector == null)
-            {
                 throw new ArgumentNullException(nameof(selector));
-            }
 
             return ExpandCore(source, selector);
         }

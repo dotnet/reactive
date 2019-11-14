@@ -231,19 +231,19 @@ namespace Tests
 
         public class Customer
         {
-            public string CustomerId { get; set; }
+            public string? CustomerId { get; set; }
         }
 
         public class Order
         {
             public int OrderId { get; set; }
-            public string CustomerId { get; set; }
+            public string? CustomerId { get; set; }
         }
 
         public class CustomerOrder : IEquatable<CustomerOrder>
         {
             public int OrderId { get; set; }
-            public string CustomerId { get; set; }
+            public string? CustomerId { get; set; }
 
             public bool Equals(CustomerOrder other)
             {
@@ -252,7 +252,7 @@ namespace Tests
                 return OrderId == other.OrderId && string.Equals(CustomerId, other.CustomerId);
             }
 
-            public override bool Equals(object obj)
+            public override bool Equals(object? obj)
             {
                 if (obj is null) return false;
                 if (ReferenceEquals(this, obj)) return true;

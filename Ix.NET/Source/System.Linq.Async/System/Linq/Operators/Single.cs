@@ -17,35 +17,33 @@ namespace System.Linq
 
             return Core(source, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, CancellationToken _cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
             {
-                if (_source is IList<TSource> list)
+                if (source is IList<TSource> list)
                 {
-                    switch (list.Count)
+                    return list.Count switch
                     {
-                        case 0: throw Error.NoElements();
-                        case 1: return list[0];
-                    }
+                        0 => throw Error.NoElements(),
+                        1 => list[0],
+                        _ => throw Error.MoreThanOneElement(),
+                    };
+                }
 
+                await using var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false);
+
+                if (!await e.MoveNextAsync())
+                {
+                    throw Error.NoElements();
+                }
+
+                var result = e.Current;
+
+                if (await e.MoveNextAsync())
+                {
                     throw Error.MoreThanOneElement();
                 }
 
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
-                {
-                    if (!await e.MoveNextAsync())
-                    {
-                        throw Error.NoElements();
-                    }
-
-                    var result = e.Current;
-
-                    if (await e.MoveNextAsync())
-                    {
-                        throw Error.MoreThanOneElement();
-                    }
-
-                    return result;
-                }
+                return result;
             }
         }
 
@@ -58,19 +56,19 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, bool> _predicate, CancellationToken _cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
             {
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
                         var result = e.Current;
 
-                        if (_predicate(result))
+                        if (predicate(result))
                         {
                             while (await e.MoveNextAsync())
                             {
-                                if (_predicate(e.Current))
+                                if (predicate(e.Current))
                                 {
                                     throw Error.MoreThanOneElement();
                                 }
@@ -94,19 +92,19 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, ValueTask<bool>> predicate, CancellationToken cancellationToken)
             {
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
                         var result = e.Current;
 
-                        if (await _predicate(result).ConfigureAwait(false))
+                        if (await predicate(result).ConfigureAwait(false))
                         {
                             while (await e.MoveNextAsync())
                             {
-                                if (await _predicate(e.Current).ConfigureAwait(false))
+                                if (await predicate(e.Current).ConfigureAwait(false))
                                 {
                                     throw Error.MoreThanOneElement();
                                 }
@@ -131,19 +129,19 @@ namespace System.Linq
 
             return Core(source, predicate, cancellationToken);
 
-            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> _source, Func<TSource, CancellationToken, ValueTask<bool>> _predicate, CancellationToken _cancellationToken)
+            static async ValueTask<TSource> Core(IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, ValueTask<bool>> predicate, CancellationToken cancellationToken)
             {
-                await using (var e = _source.GetConfiguredAsyncEnumerator(_cancellationToken, false))
+                await using (var e = source.GetConfiguredAsyncEnumerator(cancellationToken, false))
                 {
                     while (await e.MoveNextAsync())
                     {
                         var result = e.Current;
 
-                        if (await _predicate(result, _cancellationToken).ConfigureAwait(false))
+                        if (await predicate(result, cancellationToken).ConfigureAwait(false))
                         {
                             while (await e.MoveNextAsync())
                             {
-                                if (await _predicate(e.Current, _cancellationToken).ConfigureAwait(false))
+                                if (await predicate(e.Current, cancellationToken).ConfigureAwait(false))
                                 {
                                     throw Error.MoreThanOneElement();
                                 }
