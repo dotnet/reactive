@@ -334,7 +334,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     if (Interlocked.Increment(ref _enumerationInProgress) != 1)
                     {
-                        currentEnumerator.Dispose();
                         return;
                     }
                     bool hasNext;
