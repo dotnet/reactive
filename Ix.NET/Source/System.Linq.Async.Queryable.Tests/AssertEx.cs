@@ -36,7 +36,7 @@ namespace Tests
             }
             catch (AggregateException ex)
             {
-                var inner = ex.Flatten().InnerException;
+                _ = ex.Flatten().InnerException;
 
                 // TODO: proper assert; unfortunately there's not always a good call stack
             }

@@ -13,20 +13,12 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'net46' or '$(TargetFramework)' == 'net461'">
     <DefineConstants>$(DefineConstants);USE_ASYNC_ITERATOR</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0' or '$(TargetFramework)' == 'netstandard2.1'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0' or '$(TargetFramework)' == 'netstandard2.1' or '$(TargetFramework)' == 'netstandard2.0'">
     <DefineConstants>$(DefineConstants);USE_ASYNC_ITERATOR;HAS_ASYNCENUMERABLE;HAS_ASYNCDISPOSABLE;BCL_HAS_CONFIGUREAWAIT;HAS_VALUETUPLE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
-    <UseSourceLink>true</UseSourceLink>
-    <CoverletOutputFormat>cobertura</CoverletOutputFormat>
-    <Exclude>[xunit.*]*</Exclude>
-    <CoverletOutput>$(MSBuildThisFileDirectory)coverlet/raw/$(AssemblyName)/$(TargetFramework)/</CoverletOutput>
-    <CollectCoverage Condition="'$(TF_BUILD)' == 'true'">true</CollectCoverage>
   </PropertyGroup>
 
 </Project>

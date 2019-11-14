@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <Optimize>true</Optimize>
     <IsPackable>false</IsPackable>
     <Configurations>Current Sources;Rx.net 3.1.1;Rx.net 4.0</Configurations>
@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.10.14" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.12.0" />
     <PackageReference Include="WindowsBase" Version="4.6.1055" />
   </ItemGroup>
 

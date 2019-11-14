@@ -45,8 +45,6 @@ namespace System.Linq
 
             protected AppendPrependAsyncIterator(IAsyncEnumerable<TSource> source)
             {
-                Debug.Assert(source != null);
-
                 _source = source;
             }
 

@@ -22,8 +22,9 @@ namespace Tests
         [Fact]
         public void ToObservable1()
         {
+            using var evt = new ManualResetEvent(false);
+
             var fail = false;
-            var evt = new ManualResetEvent(false);
 
             var xs = AsyncEnumerable.Empty<int>().ToObservable();
             xs.Subscribe(new MyObserver<int>(
@@ -49,9 +50,10 @@ namespace Tests
         [Fact]
         public void ToObservable2()
         {
+            using var evt = new ManualResetEvent(false);
+
             var lst = new List<int>();
             var fail = false;
-            var evt = new ManualResetEvent(false);
 
             var xs = Return42.ToObservable();
             xs.Subscribe(new MyObserver<int>(
@@ -78,9 +80,10 @@ namespace Tests
         [Fact]
         public void ToObservable3()
         {
+            using var evt = new ManualResetEvent(false);
+
             var lst = new List<int>();
             var fail = false;
-            var evt = new ManualResetEvent(false);
 
             var xs = AsyncEnumerable.Range(0, 10).ToObservable();
             xs.Subscribe(new MyObserver<int>(
@@ -107,10 +110,11 @@ namespace Tests
         [Fact]
         public void ToObservable_ThrowOnMoveNext()
         {
+            using var evt = new ManualResetEvent(false);
+
             var ex1 = new Exception("Bang!");
             var ex_ = default(Exception);
             var fail = false;
-            var evt = new ManualResetEvent(false);
 
             var xs = Throw<int>(ex1).ToObservable();
             xs.Subscribe(new MyObserver<int>(
@@ -169,8 +173,9 @@ namespace Tests
         [Fact]
         public void ToObservable_DisposesEnumeratorOnCompletion()
         {
+            using var evt = new ManualResetEvent(false);
+
             var fail = false;
-            var evt = new ManualResetEvent(false);
 
             var ae = AsyncEnumerable.Create(
                 _ => AsyncEnumerator.Create<int>(
@@ -201,8 +206,9 @@ namespace Tests
         [Fact]
         public void ToObservable_DisposesEnumeratorWhenSubscriptionIsDisposed()
         {
+            using var evt = new ManualResetEvent(false);
+
             var fail = false;
-            var evt = new ManualResetEvent(false);
             var subscription = default(IDisposable);
             var subscriptionAssignedTcs = new TaskCompletionSource<object>();
 
@@ -225,7 +231,8 @@ namespace Tests
                 .Subscribe(new MyObserver<int>(
                     x =>
                     {
-                        subscription.Dispose();
+                        Assert.NotNull(subscription);
+                        subscription!.Dispose();
                     },
                     ex =>
                     {
@@ -246,9 +253,10 @@ namespace Tests
         [Fact]
         public void ToObservable_DesNotCallMoveNextAgainWhenSubscriptionIsDisposed()
         {
+            using var evt = new ManualResetEvent(false);
+
             var fail = false;
             var moveNextCount = 0;
-            var evt = new ManualResetEvent(false);
             var subscription = default(IDisposable);
             var subscriptionAssignedTcs = new TaskCompletionSource<object>();
 
@@ -273,7 +281,8 @@ namespace Tests
                 .Subscribe(new MyObserver<int>(
                     x =>
                     {
-                        subscription.Dispose();
+                        Assert.NotNull(subscription);
+                        subscription!.Dispose();
                     },
                     ex =>
                     {

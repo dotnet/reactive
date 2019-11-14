@@ -58,8 +58,8 @@ namespace System.Linq
 
         private class SharedBuffer<T> : IBuffer<T>
         {
+            private readonly IEnumerator<T> _source;
             private bool _disposed;
-            private IEnumerator<T> _source;
 
             public SharedBuffer(IEnumerator<T> source)
             {
@@ -89,7 +89,6 @@ namespace System.Linq
                     if (!_disposed)
                     {
                         _source.Dispose();
-                        _source = null;
                     }
 
                     _disposed = true;
@@ -104,11 +103,15 @@ namespace System.Linq
 
                 private bool _disposed;
 
-                public ShareEnumerator(SharedBuffer<T> parent) => _parent = parent;
+                public ShareEnumerator(SharedBuffer<T> parent)
+                {
+                    _parent = parent;
+                    Current = default!;
+                }
 
                 public T Current { get; private set; }
 
-                object IEnumerator.Current => Current;
+                object? IEnumerator.Current => Current;
 
                 public void Dispose() => _disposed = true;
 
@@ -138,7 +141,7 @@ namespace System.Linq
                         return true;
                     }
                     _disposed = true;
-                    Current = default;
+                    Current = default!;
                     return false;
                 }
 

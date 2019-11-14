@@ -80,7 +80,7 @@ namespace System.Linq
 
         private static IEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
-            var currentKey = default(TKey);
+            var currentKey = default(TKey)!;
             var hasCurrentKey = false;
 
             foreach (var item in source)

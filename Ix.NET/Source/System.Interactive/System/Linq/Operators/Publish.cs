@@ -61,10 +61,12 @@ namespace System.Linq
 
         private sealed class PublishedBuffer<T> : IBuffer<T>
         {
-            private RefCountList<T> _buffer;
+            private readonly object _gate = new object();
+            private readonly RefCountList<T> _buffer;
+            private readonly IEnumerator<T> _source;
+
             private bool _disposed;
-            private Exception _error;
-            private IEnumerator<T> _source;
+            private Exception? _error;
             private bool _stopped;
 
             public PublishedBuffer(IEnumerator<T> source)
@@ -81,7 +83,7 @@ namespace System.Linq
                 }
 
                 var i = default(int);
-                lock (_source)
+                lock (_gate)
                 {
                     i = _buffer.Count;
                     _buffer.ReaderCount++;
@@ -102,15 +104,12 @@ namespace System.Linq
 
             public void Dispose()
             {
-                lock (_source)
+                lock (_gate)
                 {
                     if (!_disposed)
                     {
                         _source.Dispose();
-                        _source = null;
-
                         _buffer.Clear();
-                        _buffer = null;
                     }
 
                     _disposed = true;
@@ -129,9 +128,9 @@ namespace System.Linq
                         }
 
                         var hasValue = default(bool);
-                        var current = default(T);
+                        var current = default(T)!;
 
-                        lock (_source)
+                        lock (_gate)
                         {
                             if (i >= _buffer.Count)
                             {

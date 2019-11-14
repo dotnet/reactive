@@ -175,7 +175,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override TDelegate GetHandler(Action<TEventArgs> onNext)
         {
-            var handler = default(TDelegate);
+            TDelegate handler;
 
             if (_conversion == null)
             {
@@ -327,7 +327,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private void AddHandler(TDelegate onNext)
             {
-                var removeHandler = default(IDisposable);
+                IDisposable removeHandler;
                 try
                 {
                     removeHandler = _parent.AddHandler(onNext);

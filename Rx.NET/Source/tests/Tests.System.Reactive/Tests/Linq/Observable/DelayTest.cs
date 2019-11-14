@@ -1813,6 +1813,17 @@ namespace ReactiveTests.Tests
             e.WaitOne();
         }
 
+        [Fact]
+        public void Delay_Selector_Immediate()
+        {
+            var result = 0;
+            var source = Observable.Return(1);
+            var delayed = source.Delay(_ => Observable.Return(2));
+            delayed.Subscribe(v => result = v);
+
+            Assert.Equal(1, result);
+        }
+
         private class MyLongRunning2 : LocalScheduler, ISchedulerLongRunning
         {
             private ManualResetEvent _start;

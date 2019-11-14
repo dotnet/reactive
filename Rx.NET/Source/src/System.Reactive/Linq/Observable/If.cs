@@ -36,7 +36,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Run()
             {
-                var result = default(IObservable<TResult>);
+                IObservable<TResult> result;
                 try
                 {
                     result = _parent.Eval();
