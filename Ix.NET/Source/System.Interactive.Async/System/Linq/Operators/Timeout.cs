@@ -31,6 +31,8 @@ namespace System.Linq
 
             private Task? _loserTask;
 
+            private CancellationTokenSource? _sourceCTS;
+
             public TimeoutAsyncIterator(IAsyncEnumerable<TSource> source, TimeSpan timeout)
             {
                 _source = source;
@@ -55,6 +57,11 @@ namespace System.Linq
                     await _enumerator.DisposeAsync().ConfigureAwait(false);
                     _enumerator = null;
                 }
+                if (_sourceCTS != null)
+                {
+                    _sourceCTS.Dispose();
+                    _sourceCTS = null;
+                }
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
@@ -64,7 +71,8 @@ namespace System.Linq
                 switch (_state)
                 {
                     case AsyncIteratorState.Allocated:
-                        _enumerator = _source.GetAsyncEnumerator(_cancellationToken);
+                        _sourceCTS = CancellationTokenSource.CreateLinkedTokenSource(_cancellationToken);
+                        _enumerator = _source.GetAsyncEnumerator(_sourceCTS.Token);
 
                         _state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -74,7 +82,7 @@ namespace System.Linq
 
                         if (!moveNext.IsCompleted)
                         {
-                            using var delayCts = new CancellationTokenSource();
+                            using var delayCts = CancellationTokenSource.CreateLinkedTokenSource(_cancellationToken);
 
                             var delay = Task.Delay(_timeout, delayCts.Token);
 
@@ -97,6 +105,8 @@ namespace System.Linq
                                 //         when attempting to call DisposeAsync?
 
                                 _loserTask = next.ContinueWith((_, state) => ((IAsyncDisposable)state!).DisposeAsync().AsTask(), _enumerator);
+
+                                _sourceCTS!.Cancel();
 
                                 throw new TimeoutException();
                             }
