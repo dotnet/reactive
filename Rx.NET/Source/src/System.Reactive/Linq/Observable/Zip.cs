@@ -274,6 +274,8 @@ namespace System.Reactive.Linq.ObservableImpl
                     _resultSelector = resultSelector;
                 }
 
+                int _enumerationInProgress;
+
                 private IEnumerator<TSecond> _rightEnumerator;
 
                 private static readonly IEnumerator<TSecond> DisposedEnumerator = MakeDisposedEnumerator();
@@ -315,17 +317,47 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (disposing)
                     {
-                        Interlocked.Exchange(ref _rightEnumerator, DisposedEnumerator)?.Dispose();
+                        if (Interlocked.Increment(ref _enumerationInProgress) == 1)
+                        {
+                            Interlocked.Exchange(ref _rightEnumerator, DisposedEnumerator)?.Dispose();
+                        }
                     }
                     base.Dispose(disposing);
                 }
 
                 public override void OnNext(TFirst value)
                 {
+                    var currentEnumerator = Volatile.Read(ref _rightEnumerator);
+                    if (currentEnumerator == DisposedEnumerator)
+                    {
+                        return;
+                    }
+                    if (Interlocked.Increment(ref _enumerationInProgress) != 1)
+                    {
+                        currentEnumerator.Dispose();
+                        return;
+                    }
                     bool hasNext;
+                    TSecond right = default;
+                    var wasDisposed = false;
                     try
                     {
-                        hasNext = _rightEnumerator.MoveNext();
+                        try
+                        {
+                            hasNext = currentEnumerator.MoveNext();
+                            if (hasNext)
+                            {
+                                right = currentEnumerator.Current;
+                            }
+                        }
+                        finally
+                        {
+                            if (Interlocked.Decrement(ref _enumerationInProgress) != 0)
+                            {
+                                currentEnumerator.Dispose();
+                                wasDisposed = true;
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -333,19 +365,13 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
+                    if (wasDisposed)
+                    {
+                        return;
+                    }
+
                     if (hasNext)
                     {
-                        TSecond right;
-                        try
-                        {
-                            right = _rightEnumerator.Current;
-                        }
-                        catch (Exception ex)
-                        {
-                            ForwardOnError(ex);
-                            return;
-                        }
-
                         TResult result;
                         try
                         {
