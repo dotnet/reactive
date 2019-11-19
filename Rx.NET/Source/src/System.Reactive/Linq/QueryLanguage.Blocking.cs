@@ -69,14 +69,9 @@ namespace System.Reactive.Linq
         {
             using (var consumer = new FirstBlocking<TSource>())
             {
-                using (var d = source.Subscribe(consumer))
+                using (source.Subscribe(consumer))
                 {
-                    consumer.SetUpstream(d);
-
-                    if (consumer.CurrentCount != 0)
-                    {
-                        consumer.Wait();
-                    }
+                    consumer.Wait();
                 }
 
                 consumer._error.ThrowIfNotNull();
@@ -166,14 +161,9 @@ namespace System.Reactive.Linq
             using (var consumer = new LastBlocking<TSource>())
             {
 
-                using (var d = source.Subscribe(consumer))
+                using (source.Subscribe(consumer))
                 {
-                    consumer.SetUpstream(d);
-
-                    if (consumer.CurrentCount != 0)
-                    {
-                        consumer.Wait();
-                    }
+                    consumer.Wait();
                 }
 
                 consumer._error.ThrowIfNotNull();
