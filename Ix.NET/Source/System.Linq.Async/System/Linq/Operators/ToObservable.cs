@@ -28,51 +28,50 @@ namespace System.Linq
             public IDisposable Subscribe(IObserver<T> observer)
             {
                 var ctd = new CancellationTokenDisposable();
-                var e = _source.GetAsyncEnumerator(ctd.Token);
 
                 async void Core()
                 {
-                    bool hasNext;
-                    try
+                    await using (var e = _source.GetAsyncEnumerator(ctd.Token))
                     {
-                        hasNext = await e.MoveNextAsync().ConfigureAwait(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (!ctd.Token.IsCancellationRequested)
+                        do
                         {
-                            observer.OnError(ex);
-                            await e.DisposeAsync().ConfigureAwait(false);
+                            bool hasNext;
+                            var value = default(T)!;
+
+                            try
+                            {
+                                hasNext = await e.MoveNextAsync().ConfigureAwait(false);
+                                if (hasNext)
+                                {
+                                    value = e.Current;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                if (!ctd.Token.IsCancellationRequested)
+                                {
+                                    observer.OnError(ex);
+                                }
+
+                                return;
+                            }
+
+                            if (!hasNext)
+                            {
+                                observer.OnCompleted();
+                                return;
+                            }
+
+                            observer.OnNext(value);
                         }
-
-                        return;
-                    }
-
-                    if (hasNext)
-                    {
-                        observer.OnNext(e.Current);
-
-                        if (!ctd.Token.IsCancellationRequested)
-                        {
-                            Core();
-                        }
-
-                        // In case cancellation is requested, this could only have happened
-                        // by disposing the returned composite disposable (see below).
-                        // In that case, e will be disposed too, so there is no need to dispose e here.
-                    }
-                    else
-                    {
-                        observer.OnCompleted();
-                        await e.DisposeAsync().ConfigureAwait(false);
+                        while (!ctd.Token.IsCancellationRequested);
                     }
                 }
 
+                // Fire and forget
                 Core();
 
-                // REVIEW: Safety of concurrent dispose operation; fire-and-forget nature of dispose?
-
-                return Disposable.Create(ctd, Disposable.Create(() => { e.DisposeAsync(); }));
+                return ctd;
             }
         }
     }

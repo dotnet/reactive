@@ -108,7 +108,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToObservable4()
+        public void ToObservable_ThrowOnMoveNext()
         {
             using var evt = new ManualResetEvent(false);
 
@@ -135,6 +135,37 @@ namespace Tests
             ));
 
             evt.WaitOne();
+            Assert.False(fail);
+            Assert.Equal(ex1, ex_);
+        }
+
+        [Fact]
+        public void ToObservable_ThrowOnCurrent()
+        {
+            var ex1 = new Exception("Bang!");
+            var ex_ = default(Exception);
+            var fail = false;
+
+            var ae = AsyncEnumerable.Create(
+                _ => new ThrowOnCurrentAsyncEnumerator(ex1)
+            );
+
+            ae.ToObservable()
+                .Subscribe(new MyObserver<int>(
+                x =>
+                {
+                    fail = true;
+                },
+                ex =>
+                {
+                    ex_ = ex;
+                },
+                () =>
+                {
+                    fail = true;
+                }
+            ));
+
             Assert.False(fail);
             Assert.Equal(ex1, ex_);
         }
@@ -269,6 +300,34 @@ namespace Tests
             Assert.Equal(1, moveNextCount);
             Assert.False(fail);
         }
+        
+        [Fact]
+        public void ToObservable_SupportsLargeEnumerable()
+        {
+            using var evt = new ManualResetEvent(false);
+
+            var fail = false;
+
+            var xs = AsyncEnumerable.Range(0, 10000).ToObservable();
+            xs.Subscribe(new MyObserver<int>(
+                x =>
+                {
+                    // ok
+                },
+                ex =>
+                {
+                    fail = true;
+                    evt.Set();
+                },
+                () =>
+                {
+                    evt.Set();
+                }
+            ));
+
+            evt.WaitOne();
+            Assert.False(fail);
+        }
 
         private sealed class MyObserver<T> : IObserver<T>
         {
@@ -288,6 +347,19 @@ namespace Tests
             public void OnError(Exception error) => _onError(error);
 
             public void OnNext(T value) => _onNext(value);
+        }
+
+        private sealed class ThrowOnCurrentAsyncEnumerator : IAsyncEnumerator<int>
+        {
+            readonly private Exception _exception;
+            public ThrowOnCurrentAsyncEnumerator(Exception ex)
+            {
+                _exception = ex;
+            }
+
+            public int Current => throw _exception;
+            public ValueTask DisposeAsync() => default;
+            public ValueTask<bool> MoveNextAsync() => new ValueTask<bool>(true);
         }
     }
 }
