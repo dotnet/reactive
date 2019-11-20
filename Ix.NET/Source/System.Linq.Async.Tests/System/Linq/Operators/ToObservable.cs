@@ -269,6 +269,34 @@ namespace Tests
             Assert.Equal(1, moveNextCount);
             Assert.False(fail);
         }
+        
+        [Fact]
+        public void ToObservable_SupportsLargeEnumerable()
+        {
+            using var evt = new ManualResetEvent(false);
+
+            var fail = false;
+
+            var xs = AsyncEnumerable.Range(0, 10000).ToObservable();
+            xs.Subscribe(new MyObserver<int>(
+                x =>
+                {
+                    // ok
+                },
+                ex =>
+                {
+                    fail = true;
+                    evt.Set();
+                },
+                () =>
+                {
+                    evt.Set();
+                }
+            ));
+
+            evt.WaitOne();
+            Assert.False(fail);
+        }
 
         private sealed class MyObserver<T> : IObserver<T>
         {
