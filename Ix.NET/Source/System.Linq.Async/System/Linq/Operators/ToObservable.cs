@@ -32,39 +32,44 @@ namespace System.Linq
 
                 async void Core()
                 {
-                    bool hasNext;
-                    try
+                    while (true)
                     {
-                        hasNext = await e.MoveNextAsync().ConfigureAwait(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (!ctd.Token.IsCancellationRequested)
+                        bool hasNext;
+                        try
                         {
-                            observer.OnError(ex);
+                            hasNext = await e.MoveNextAsync().ConfigureAwait(false);
+                        }
+                        catch (Exception ex)
+                        {
+                            if (!ctd.Token.IsCancellationRequested)
+                            {
+                                observer.OnError(ex);
+                                await e.DisposeAsync().ConfigureAwait(false);
+                            }
+
+                            return;
+                        }
+
+                        if (hasNext)
+                        {
+                            observer.OnNext(e.Current);
+
+                            if (!ctd.Token.IsCancellationRequested)
+                            {
+                                continue;
+                            }
+
+                            // In case cancellation is requested, this could only have happened
+                            // by disposing the returned composite disposable (see below).
+                            // In that case, e will be disposed too, so there is no need to dispose e here.
+                        }
+                        else
+                        {
+                            observer.OnCompleted();
                             await e.DisposeAsync().ConfigureAwait(false);
                         }
 
-                        return;
-                    }
-
-                    if (hasNext)
-                    {
-                        observer.OnNext(e.Current);
-
-                        if (!ctd.Token.IsCancellationRequested)
-                        {
-                            Core();
-                        }
-
-                        // In case cancellation is requested, this could only have happened
-                        // by disposing the returned composite disposable (see below).
-                        // In that case, e will be disposed too, so there is no need to dispose e here.
-                    }
-                    else
-                    {
-                        observer.OnCompleted();
-                        await e.DisposeAsync().ConfigureAwait(false);
+                        break;
                     }
                 }
 
