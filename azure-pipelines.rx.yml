@@ -171,7 +171,7 @@ stages:
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/LinuxTests/LinuxTests.csproj
-        arguments: -c $(BuildConfiguration) -f netcoreapp2.1 /p:TargetFrameworks=netcoreapp2.1
+        arguments: -c $(BuildConfiguration) --filter "SkipCI!=true" -f netcoreapp2.1 /p:TargetFrameworks=netcoreapp2.1
       displayName: Run 2.1 Tests on Linux
 
   - job: Integration_WindowsDesktop_Tests
@@ -234,7 +234,7 @@ stages:
       inputs:
         command: test
         projects: $(System.DefaultWorkingDirectory)/Rx.NET/Integration/WindowsDesktopTests/WindowsDesktopTests.csproj
-        arguments: -c $(BuildConfiguration)
+        arguments: -c $(BuildConfiguration) --filter "SkipCI!=true"
       displayName: Run 3.0 Tests on WindowDesktop
 
 - stage: CodeSign
