@@ -8,6 +8,15 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Bypasses a specified number of elements in an async-enumerable sequence and then returns the remaining elements.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">The sequence to take elements from.</param>
+        /// <param name="count">The number of elements to skip before returning the remaining elements.</param>
+        /// <returns>An async-enumerable sequence that contains the elements that occur after the specified index in the input sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero.</exception>
         public static IAsyncEnumerable<TSource> Skip<TSource>(this IAsyncEnumerable<TSource> source, int count)
         {
             if (source == null)

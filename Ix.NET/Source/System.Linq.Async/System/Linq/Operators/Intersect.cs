@@ -10,9 +10,26 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Produces the set intersection of two async-enumerable sequences by using the default equality comparer to compare values.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
+        /// <param name="first">An async-enumerable sequence whose distinct elements that also appear in second will be returned.</param>
+        /// <param name="second">An async-enumerable sequence whose distinct elements that also appear in the first sequence will be returned.</param>
+        /// <returns>A sequence that contains the elements that form the set intersection of two sequences.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Intersect<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second) =>
             Intersect(first, second, comparer: null);
 
+        /// <summary>
+        /// Produces the set intersection of two async-enumerable sequences by using the specified equality comparer to compare values.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
+        /// <param name="first">An async-enumerable sequence whose distinct elements that also appear in second will be returned.</param>
+        /// <param name="second">An async-enumerable sequence whose distinct elements that also appear in the first sequence will be returned.</param>
+        /// <param name="comparer">An equality comparer to compare values.</param>
+        /// <returns>A sequence that contains the elements that form the set intersection of two sequences.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Intersect<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource>? comparer)
         {
             if (first == null)

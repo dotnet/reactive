@@ -12,6 +12,14 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Append a value to an async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence to append the value to.</param>
+        /// <param name="element">Element to append to the specified sequence.</param>
+        /// <returns>The source sequence appended with the specified value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Append<TSource>(this IAsyncEnumerable<TSource> source, TSource element)
         {
             if (source == null)
@@ -25,6 +33,14 @@ namespace System.Linq
             return new AppendPrepend1AsyncIterator<TSource>(source, element, appending: true);
         }
 
+        /// <summary>
+        /// Prepend a value to an async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence to prepend the value to.</param>
+        /// <param name="element">Element to prepend to the specified sequence.</param>
+        /// <returns>The source sequence prepended with the specified value.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Prepend<TSource>(this IAsyncEnumerable<TSource> source, TSource element)
         {
             if (source == null)

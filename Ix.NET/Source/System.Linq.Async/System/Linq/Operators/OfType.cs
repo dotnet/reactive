@@ -18,6 +18,13 @@ namespace System.Linq
         //         what's done in Enumerable.OfType. Should we move this method to Ix, thus doing away with OfType
         //         in the API surface altogether?
 
+        /// <summary>
+        /// Filters the elements of an async-enumerable sequence based on the specified type.
+        /// </summary>
+        /// <typeparam name="TResult">The type to filter the elements in the source sequence on.</typeparam>
+        /// <param name="source">The async-enumerable sequence that contains the elements to be filtered.</param>
+        /// <returns>An async-enumerable sequence that contains elements from the input sequence of type TResult.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IAsyncEnumerable<TResult> OfType<TResult>(this IAsyncEnumerable<object> source)
         {
             if (source == null)

@@ -10,6 +10,14 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Filters the elements of an async-enumerable sequence based on a predicate.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to filter.</param>
+        /// <param name="predicate">A function to test each source element for a condition.</param>
+        /// <returns>An async-enumerable sequence that contains elements from the input sequence that satisfy the condition.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
@@ -26,6 +34,14 @@ namespace System.Linq
             return new WhereEnumerableAsyncIterator<TSource>(source, predicate);
         }
 
+        /// <summary>
+        /// Filters the elements of an async-enumerable sequence based on a predicate by incorporating the element's index.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose elements to filter.</param>
+        /// <param name="predicate">A function to test each source element for a condition; the second parameter of the function represents the index of the source element.</param>
+        /// <returns>An async-enumerable sequence that contains elements from the input sequence that satisfy the condition.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (source == null)

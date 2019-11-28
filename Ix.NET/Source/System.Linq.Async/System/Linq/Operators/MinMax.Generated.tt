@@ -20,6 +20,7 @@ namespace System.Linq
 foreach (var m in new[] { "Max", "Min" })
 {
     var comparison = m == "Max" ? ">" : "<";
+    var extremum = m == "Max" ? "maximum" : "minimum";
 
     foreach (var t in new[] { "int", "int?", "long", "long?", "float", "float?", "double", "double?", "decimal", "decimal?" })
     {
@@ -27,7 +28,18 @@ foreach (var m in new[] { "Max", "Min" })
         var isInteger = t.StartsWith("int") || t.StartsWith("long");
         var isNullable = t.EndsWith("?");
         var shortCircuit = t.StartsWith("decimal");
+        var typeStr = t;
+        if (isNullable) {
+            typeStr = "Nullable{" + t.Substring(0, 1).ToUpper() + t.Substring(1, t.Length - 2) + "}";
+        }
 #>
+        /// <summary>
+        /// Returns the <#=extremum#> value in an async-enumerable sequence of <see cref="<#=typeStr#>" /> values.
+        /// </summary>
+        /// <param name="source">A sequence of <see cref="<#=typeStr#>" /> values to determine the <#=extremum#> value of.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>A ValueTask containing a single element with the <#=extremum#> value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<<#=t#>> <#=m#>Async(this IAsyncEnumerable<<#=t#>> source, CancellationToken cancellationToken = default)
         {
             if (source == null)

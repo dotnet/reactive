@@ -12,6 +12,13 @@ namespace System.Linq
         // REVIEW: This type of blocking is an anti-pattern. We may want to move it to System.Interactive.Async
         //         and remove it from System.Linq.Async API surface.
 
+        /// <summary>
+        /// Converts an async-enumerable sequence to an enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence to convert to an enumerable sequence.</param>
+        /// <returns>The enumerable sequence containing the elements in the async-enumerable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IEnumerable<TSource> ToEnumerable<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
