@@ -17,6 +17,16 @@ namespace System.Linq
         //         want to keep these methods, they may be a candidate for System.Interactive.Async if we consider them to be
         //         non-standard (i.e. IEnumerable<T> doesn't have a ForEach extension method either).
 
+        /// <summary>
+        /// Invokes an action for each element in the async-enumerable sequence, and returns a Task object that will get signaled when the sequence terminates.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="action">Action to invoke for each element in the async-enumerable sequence.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>Task that signals the termination of the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is null.</exception>
+        /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> action, CancellationToken cancellationToken = default)
         {
             if (source == null)
@@ -35,6 +45,16 @@ namespace System.Linq
             }
         }
 
+        /// <summary>
+        /// Invokes an action for each element in the async-enumerable sequence, incorporating the element's index, and returns a Task object that will get signaled when the sequence terminates.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="action">Action to invoke for each element in the async-enumerable sequence.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>Task that signals the termination of the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is null.</exception>
+        /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action, CancellationToken cancellationToken = default)
         {
             if (source == null)

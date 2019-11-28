@@ -10,6 +10,13 @@ namespace System.Linq
     {
         // NB: Synchronous LINQ to Objects doesn't hide the implementation of the source either.
 
+        /// <summary>
+        /// Hides the identity of an async-enumerable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An async-enumerable sequence whose identity to hide.</param>
+        /// <returns>An async-enumerable sequence that hides the identity of the source sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IAsyncEnumerable<TSource> AsAsyncEnumerable<TSource>(this IAsyncEnumerable<TSource> source) => source;
     }
 }

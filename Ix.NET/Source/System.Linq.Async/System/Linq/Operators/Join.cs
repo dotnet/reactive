@@ -10,9 +10,38 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Correlates the elements of two sequences based on matching keys. The default equality comparer is used to compare keys.
+        /// </summary>
+        /// <typeparam name="TOuter">The type of the elements of the first async-enumerable sequence.</typeparam>
+        /// <typeparam name="TInner">The type of the elements of the second async-enumerable sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the keys returned by the key selector functions.</typeparam>
+        /// <typeparam name="TResult">The type of the result elements.</typeparam>
+        /// <param name="outer">The first async-enumerable sequence to join.</param>
+        /// <param name="inner">The async-enumerable sequence to join to the first sequence.</param>
+        /// <param name="outerKeySelector">A function to extract the join key from each element of the first sequence.</param>
+        /// <param name="innerKeySelector">A function to extract the join key from each element of the second sequence.</param>
+        /// <param name="resultSelector">A function to create a result element from two matching elements.</param>
+        /// <returns>An async-enumerable sequence that has elements of type TResult that are obtained by performing an inner join on two sequences.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="outer"/> or <paramref name="inner"/> or <paramref name="outerKeySelector"/> or <paramref name="innerKeySelector"/> or <paramref name="resultSelector"/> is null.</exception>
         public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector) =>
             Join(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer: null);
 
+        /// <summary>
+        /// Correlates the elements of two sequences based on matching keys. A specified equality comparer is used to compare keys.
+        /// </summary>
+        /// <typeparam name="TOuter">The type of the elements of the first async-enumerable sequence.</typeparam>
+        /// <typeparam name="TInner">The type of the elements of the second async-enumerable sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the keys returned by the key selector functions.</typeparam>
+        /// <typeparam name="TResult">The type of the result elements.</typeparam>
+        /// <param name="outer">The first async-enumerable sequence to join.</param>
+        /// <param name="inner">The async-enumerable sequence to join to the first sequence.</param>
+        /// <param name="outerKeySelector">A function to extract the join key from each element of the first sequence.</param>
+        /// <param name="innerKeySelector">A function to extract the join key from each element of the second sequence.</param>
+        /// <param name="resultSelector">A function to create a result element from two matching elements.</param>
+        /// <param name="comparer">An equality comparer to hash and compare keys.</param>
+        /// <returns>An async-enumerable sequence that has elements of type TResult that are obtained by performing an inner join on two sequences.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="outer"/> or <paramref name="inner"/> or <paramref name="outerKeySelector"/> or <paramref name="innerKeySelector"/> or <paramref name="resultSelector"/> is null.</exception>
         public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey>? comparer)
         {
             if (outer == null)

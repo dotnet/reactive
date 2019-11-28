@@ -11,9 +11,26 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Produces the set union of two sequences by using the default equality comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
+        /// <param name="first">An async-enumerable sequence whose distinct elements form the first set for the union.</param>
+        /// <param name="second">An async-enumerable sequence whose distinct elements form the second set for the union.</param>
+        /// <returns>An async-enumerable sequence that contains the elements from both input sequences, excluding duplicates.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second) =>
             Union(first, second, comparer: null);
 
+        /// <summary>
+        /// Produces the set union of two sequences by using a specified equality comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
+        /// <param name="first">An async-enumerable sequence whose distinct elements form the first set for the union.</param>
+        /// <param name="second">An async-enumerable sequence whose distinct elements form the second set for the union.</param>
+        /// <param name="comparer">The equality comparer to compare values.</param>
+        /// <returns>An async-enumerable sequence that contains the elements from both input sequences, excluding duplicates.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource>? comparer)
         {
             if (first == null)

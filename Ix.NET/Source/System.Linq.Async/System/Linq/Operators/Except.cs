@@ -10,9 +10,26 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Produces the set difference of two async-enumerable sequences by using the default equality comparer to compare values.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
+        /// <param name="first">An async-enumerable sequence whose elements that are not also in second will be returned.</param>
+        /// <param name="second">An async-enumerable sequence whose elements that also occur in the first sequence will cause those elements to be removed from the returned sequence.</param>
+        /// <returns>A sequence that contains the set difference of the elements of two sequences.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null</exception>
         public static IAsyncEnumerable<TSource> Except<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second) =>
             Except(first, second, comparer: null);
 
+        /// <summary>
+        /// Produces the set difference of two async-enumerable sequences by using the specified equality comparer to compare values.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
+        /// <param name="first">An async-enumerable sequence whose elements that are not also in second will be returned.</param>
+        /// <param name="second">An async-enumerable sequence whose elements that also occur in the first sequence will cause those elements to be removed from the returned sequence.</param>
+        /// <param name="comparer">An equality comparer to compare values.</param>
+        /// <returns>A sequence that contains the set difference of the elements of two sequences.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Except<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource>? comparer)
         {
             if (first == null)

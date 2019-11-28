@@ -13,6 +13,13 @@ namespace System.Linq
         // NB: This is a non-standard LINQ operator, because we don't have a non-generic IAsyncEnumerable.
         //     We're keeping it to enable `from T x in xs` binding in C#.
 
+        /// <summary>
+        /// Converts the elements of an async-enumerable sequence to the specified type.
+        /// </summary>
+        /// <typeparam name="TResult">The type to convert the elements in the source sequence to.</typeparam>
+        /// <param name="source">The async-enumerable sequence that contains the elements to be converted.</param>
+        /// <returns>An async-enumerable sequence that contains each element of the source sequence converted to the specified type.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IAsyncEnumerable<TResult> Cast<TResult>(this IAsyncEnumerable<object> source)
         {
             if (source == null)

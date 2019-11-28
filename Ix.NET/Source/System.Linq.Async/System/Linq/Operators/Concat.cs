@@ -11,6 +11,14 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        /// <summary>
+        /// Concatenates the second async-enumerable sequence to the first async-enumerable sequence upon successful termination of the first.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
+        /// <param name="first">First async-enumerable sequence.</param>
+        /// <param name="second">Second async-enumerable sequence.</param>
+        /// <returns>An async-enumerable sequence that contains the elements of the first sequence, followed by those of the second the sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
