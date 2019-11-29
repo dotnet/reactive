@@ -11,6 +11,17 @@ namespace System.Linq
     {
         // REVIEW: Add async variant?
 
+        /// <summary>
+        /// Generates an observable sequence by running a state-driven loop producing the sequence's elements.
+        /// </summary>
+        /// <typeparam name="TState">The type of the state used in the generator loop.</typeparam>
+        /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
+        /// <param name="initialState">Initial state.</param>
+        /// <param name="condition">Condition to terminate generation (upon returning false).</param>
+        /// <param name="iterate">Iteration step function.</param>
+        /// <param name="resultSelector">Selector function for results produced in the sequence.</param>
+        /// <returns>The generated sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="condition"/> or <paramref name="iterate"/> or <paramref name="resultSelector"/> is null.</exception>
         public static IAsyncEnumerable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
         {
             if (condition == null)

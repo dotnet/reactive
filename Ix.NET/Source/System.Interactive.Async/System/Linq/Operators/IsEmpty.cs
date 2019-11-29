@@ -10,6 +10,14 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
+        /// <summary>
+        /// Determines whether an observable sequence is empty.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence to check for emptiness.</param>
+        /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
+        /// <returns>An observable sequence containing a single element determining whether the source sequence is empty.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static ValueTask<bool> IsEmptyAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken = default)
         {
             if (source == null)

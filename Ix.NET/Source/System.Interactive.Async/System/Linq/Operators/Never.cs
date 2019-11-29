@@ -10,6 +10,11 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
+        /// <summary>
+        /// Returns a non-terminating observable sequence, which can be used to denote an infinite duration (e.g. when using reactive joins).
+        /// </summary>
+        /// <typeparam name="TValue">The type used for the <see cref="IAsyncEnumerable{T}"/> type parameter of the resulting sequence.</typeparam>
+        /// <returns>An observable sequence whose consumers will never resume after awaiting <see cref="IAsyncEnumerator{T}.MoveNextAsync"/>.</returns>
         public static IAsyncEnumerable<TValue> Never<TValue>() => NeverAsyncEnumerable<TValue>.Instance;
 
         private sealed class NeverAsyncEnumerable<TValue> : IAsyncEnumerable<TValue>

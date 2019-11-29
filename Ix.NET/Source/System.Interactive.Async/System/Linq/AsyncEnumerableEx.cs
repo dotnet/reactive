@@ -4,6 +4,10 @@
 
 namespace System.Linq
 {
+    /// <summary>
+    /// Provides an additional set of extension methods for writing in-memory queries, transformations of async-enumerable sequences.
+    /// </summary>
+    /// <seealso cref="AsyncEnumerable"/>
     public static partial class AsyncEnumerableEx
     {
     }

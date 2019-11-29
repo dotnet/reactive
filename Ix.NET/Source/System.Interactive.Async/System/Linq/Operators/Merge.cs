@@ -10,6 +10,13 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
+        /// <summary>
+        /// Merges elements from all of the specified observable sequences into a single observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
+        /// <param name="sources">Observable sequences.</param>
+        /// <returns>The observable sequence that merges the elements of the observable sequences.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Merge<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
             if (sources == null)
@@ -296,6 +303,13 @@ namespace System.Linq
 #endif
         }
 
+        /// <summary>
+        /// Merges elements from all observable sequences in the given enumerable sequence into a single observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
+        /// <param name="sources">Enumerable sequence of observable sequences.</param>
+        /// <returns>The observable sequence that merges the elements of the observable sequences.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Merge<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
@@ -323,6 +337,13 @@ namespace System.Linq
             return sources.ToAsyncEnumerable().SelectMany(source => source);
         }
 
+        /// <summary>
+        /// Merges elements from all inner observable sequences into a single observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
+        /// <param name="sources">Observable sequence of inner observable sequences.</param>
+        /// <returns>The observable sequence that merges the elements of the inner sequences.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Merge<TSource>(this IAsyncEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
