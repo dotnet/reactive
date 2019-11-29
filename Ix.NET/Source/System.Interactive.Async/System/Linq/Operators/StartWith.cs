@@ -12,7 +12,7 @@ namespace System.Linq
         //         If so, likely in Ix rather than System.Linq.Async.
 
         /// <summary>
-        /// Prepends a sequence of values to an observable sequence.
+        /// Prepends a sequence of values to an async-enumerable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence to prepend values to.</param>

@@ -11,12 +11,12 @@ namespace System.Linq
     public static partial class AsyncEnumerableEx
     {
         /// <summary>
-        /// Propagates the observable sequence that reacts first.
+        /// Propagates the async-enumerable sequence that reacts first.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
-        /// <param name="first">First observable sequence.</param>
-        /// <param name="second">Second observable sequence.</param>
-        /// <returns>An observable sequence that surfaces either of the given sequences, whichever reacted first.</returns>
+        /// <param name="first">First async-enumerable sequence.</param>
+        /// <param name="second">Second async-enumerable sequence.</param>
+        /// <returns>An async-enumerable sequence that surfaces either of the given sequences, whichever reacted first.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Amb<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
@@ -149,11 +149,11 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Propagates the observable sequence that reacts first.
+        /// Propagates the async-enumerable sequence that reacts first.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sources competing to react first.</param>
-        /// <returns>An observable sequence that surfaces any of the given sequences, whichever reacted first.</returns>
+        /// <returns>An async-enumerable sequence that surfaces any of the given sequences, whichever reacted first.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Amb<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
@@ -259,11 +259,11 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Propagates the observable sequence that reacts first.
+        /// Propagates the async-enumerable sequence that reacts first.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sources competing to react first.</param>
-        /// <returns>An observable sequence that surfaces any of the given sequences, whichever reacted first.</returns>
+        /// <returns>An async-enumerable sequence that surfaces any of the given sequences, whichever reacted first.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Amb<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {

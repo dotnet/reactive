@@ -15,7 +15,7 @@ namespace System.Linq
         /// </summary>
         /// <typeparam name="TResult">The type of the elements in the source sequence.</typeparam>
         /// <param name="element">Element to repeat.</param>
-        /// <returns>The observable sequence producing the element repeatedly and sequentially.</returns>
+        /// <returns>The async-enumerable sequence producing the element repeatedly and sequentially.</returns>
         public static IAsyncEnumerable<TResult> Repeat<TResult>(TResult element)
         {
             return AsyncEnumerable.Create(Core);
@@ -34,11 +34,11 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Repeats the observable sequence indefinitely.
+        /// Repeats the async-enumerable sequence indefinitely.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable sequence to repeat.</param>
-        /// <returns>The observable sequence producing the elements of the given sequence repeatedly and sequentially.</returns>
+        /// <returns>The async-enumerable sequence producing the elements of the given sequence repeatedly and sequentially.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source)
         {
@@ -60,14 +60,14 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Repeats the observable sequence a specified number of times.
+        /// Repeats the async-enumerable sequence a specified number of times.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable sequence to repeat.</param>
-        /// <param name="repeatCount">Number of times to repeat the sequence.</param>
-        /// <returns>The observable sequence producing the elements of the given sequence repeatedly.</returns>
+        /// <param name="count">Number of times to repeat the sequence.</param>
+        /// <returns>The async-enumerable sequence producing the elements of the given sequence repeatedly.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatCount"/> is less than zero.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero.</exception>
         public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source, int count)
         {
             if (source == null)

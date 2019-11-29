@@ -11,11 +11,11 @@ namespace System.Linq
     public static partial class AsyncEnumerableEx
     {
         /// <summary>
-        /// Returns the elements in an observable sequence with the maximum key value.
+        /// Returns the elements in an async-enumerable sequence with the maximum key value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TKey">The type of the key computed for each element in the source sequence.</typeparam>
-        /// <param name="source">An observable sequence to get the maximum elements for.</param>
+        /// <param name="source">An async-enumerable sequence to get the maximum elements for.</param>
         /// <param name="keySelector">Key selector function.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing a list of zero or more elements that have a maximum key value.</returns>
@@ -32,11 +32,11 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Returns the elements in an observable sequence with the maximum key value according to the specified comparer.
+        /// Returns the elements in an async-enumerable sequence with the maximum key value according to the specified comparer.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TKey">The type of the key computed for each element in the source sequence.</typeparam>
-        /// <param name="source">An observable sequence to get the maximum elements for.</param>
+        /// <param name="source">An async-enumerable sequence to get the maximum elements for.</param>
         /// <param name="keySelector">Key selector function.</param>
         /// <param name="comparer">Comparer used to compare key values.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
@@ -54,11 +54,11 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Returns the elements in an observable sequence with the maximum key value.
+        /// Returns the elements in an async-enumerable sequence with the maximum key value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TKey">The type of the key computed for each element in the source sequence.</typeparam>
-        /// <param name="source">An observable sequence to get the maximum elements for.</param>
+        /// <param name="source">An async-enumerable sequence to get the maximum elements for.</param>
         /// <param name="keySelector">Key selector function returning a key possibly asynchronously.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing a list of zero or more elements that have a maximum key value.</returns>
@@ -76,11 +76,11 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         /// <summary>
-        /// Returns the elements in an observable sequence with the maximum key value.
+        /// Returns the elements in an async-enumerable sequence with the maximum key value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TKey">The type of the key computed for each element in the source sequence.</typeparam>
-        /// <param name="source">An observable sequence to get the maximum elements for.</param>
+        /// <param name="source">An async-enumerable sequence to get the maximum elements for.</param>
         /// <param name="keySelector">Key selector function returning a key possibly asynchronously and supporting cancellation.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
         /// <returns>A ValueTask containing a list of zero or more elements that have a maximum key value.</returns>
@@ -98,11 +98,11 @@ namespace System.Linq
 #endif
 
         /// <summary>
-        /// Returns the elements in an observable sequence with the maximum key value according to the specified comparer.
+        /// Returns the elements in an async-enumerable sequence with the maximum key value according to the specified comparer.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TKey">The type of the key computed for each element in the source sequence.</typeparam>
-        /// <param name="source">An observable sequence to get the maximum elements for.</param>
+        /// <param name="source">An async-enumerable sequence to get the maximum elements for.</param>
         /// <param name="keySelector">Key selector function returning a key possibly asynchronously.</param>
         /// <param name="comparer">Comparer used to compare key values.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
@@ -121,11 +121,11 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         /// <summary>
-        /// Returns the elements in an observable sequence with the maximum key value according to the specified comparer.
+        /// Returns the elements in an async-enumerable sequence with the maximum key value according to the specified comparer.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TKey">The type of the key computed for each element in the source sequence.</typeparam>
-        /// <param name="source">An observable sequence to get the maximum elements for.</param>
+        /// <param name="source">An async-enumerable sequence to get the maximum elements for.</param>
         /// <param name="keySelector">Key selector function returning a key possibly asynchronously and supporting cancellation.</param>
         /// <param name="comparer">Comparer used to compare key values.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>

@@ -10,12 +10,12 @@ namespace System.Linq
     public static partial class AsyncEnumerableEx
     {
         /// <summary>
-        /// Concatenates the second observable sequence to the first observable sequence upon successful or exceptional termination of the first.
+        /// Concatenates the second async-enumerable sequence to the first async-enumerable sequence upon successful or exceptional termination of the first.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
-        /// <param name="first">First observable sequence whose exception (if any) is caught.</param>
-        /// <param name="second">Second observable sequence used to produce results after the first sequence terminates.</param>
-        /// <returns>An observable sequence that concatenates the first and second sequence, even if the first sequence terminates exceptionally.</returns>
+        /// <param name="first">First async-enumerable sequence whose exception (if any) is caught.</param>
+        /// <param name="second">Second async-enumerable sequence used to produce results after the first sequence terminates.</param>
+        /// <returns>An async-enumerable sequence that concatenates the first and second sequence, even if the first sequence terminates exceptionally.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
         public static IAsyncEnumerable<TSource> OnErrorResumeNext<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
@@ -28,11 +28,11 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Concatenates all of the specified observable sequences, even if the previous observable sequence terminated exceptionally.
+        /// Concatenates all of the specified async-enumerable sequences, even if the previous async-enumerable sequence terminated exceptionally.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequences to concatenate.</param>
-        /// <returns>An observable sequence that concatenates the source sequences, even if a sequence terminates exceptionally.</returns>
+        /// <returns>An async-enumerable sequence that concatenates the source sequences, even if a sequence terminates exceptionally.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> OnErrorResumeNext<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
@@ -43,11 +43,11 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Concatenates all observable sequences in the given enumerable sequence, even if the previous observable sequence terminated exceptionally.
+        /// Concatenates all async-enumerable sequences in the given enumerable sequence, even if the previous async-enumerable sequence terminated exceptionally.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequences to concatenate.</param>
-        /// <returns>An observable sequence that concatenates the source sequences, even if a sequence terminates exceptionally.</returns>
+        /// <returns>An async-enumerable sequence that concatenates the source sequences, even if a sequence terminates exceptionally.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> OnErrorResumeNext<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {

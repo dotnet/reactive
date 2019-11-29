@@ -12,7 +12,7 @@ namespace System.Linq
         // REVIEW: Add async variant?
 
         /// <summary>
-        /// Generates an observable sequence by running a state-driven loop producing the sequence's elements.
+        /// Generates an async-enumerable sequence by running a state-driven loop producing the sequence's elements.
         /// </summary>
         /// <typeparam name="TState">The type of the state used in the generator loop.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>

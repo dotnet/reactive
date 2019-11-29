@@ -11,13 +11,13 @@ namespace System.Linq
     public static partial class AsyncEnumerableEx
     {
         /// <summary>
-        /// Returns the minimum element in an observable sequence according to the specified comparer.
+        /// Returns the minimum element in an async-enumerable sequence according to the specified comparer.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An observable sequence to determine the minimum element of.</param>
+        /// <param name="source">An async-enumerable sequence to determine the minimum element of.</param>
         /// <param name="comparer">Comparer used to compare elements.</param>
         /// <param name="cancellationToken">The optional cancellation token to be used for cancelling the sequence at any time.</param>
-        /// <returns>An observable sequence containing a single element with the minimum element in the source sequence.</returns>
+        /// <returns>An async-enumerable sequence containing a single element with the minimum element in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="comparer"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static ValueTask<TSource> MinAsync<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource>? comparer, CancellationToken cancellationToken = default)

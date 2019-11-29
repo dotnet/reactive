@@ -11,11 +11,11 @@ namespace System.Linq
     public static partial class AsyncEnumerableEx
     {
         /// <summary>
-        /// Concatenates all inner observable sequences, as long as the previous observable sequence terminated successfully.
+        /// Concatenates all inner async-enumerable sequences, as long as the previous async-enumerable sequence terminated successfully.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
-        /// <param name="sources">Observable sequence of inner observable sequences.</param>
-        /// <returns>An observable sequence that contains the elements of each observed inner sequence, in sequential order.</returns>
+        /// <param name="sources">Observable sequence of inner async-enumerable sequences.</param>
+        /// <returns>An async-enumerable sequence that contains the elements of each observed inner sequence, in sequential order.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IAsyncEnumerable<IAsyncEnumerable<TSource>> sources)
         {
@@ -37,11 +37,11 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Concatenates all observable sequences in the given enumerable sequence, as long as the previous observable sequence terminated successfully.
+        /// Concatenates all async-enumerable sequences in the given enumerable sequence, as long as the previous async-enumerable sequence terminated successfully.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequences to concatenate.</param>
-        /// <returns>An observable sequence that contains the elements of each given sequence, in sequential order.</returns>
+        /// <returns>An async-enumerable sequence that contains the elements of each given sequence, in sequential order.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
@@ -63,11 +63,11 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Concatenates all of the specified observable sequences, as long as the previous observable sequence terminated successfully.
+        /// Concatenates all of the specified async-enumerable sequences, as long as the previous async-enumerable sequence terminated successfully.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequences to concatenate.</param>
-        /// <returns>An observable sequence that contains the elements of each given sequence, in sequential order.</returns>
+        /// <returns>An async-enumerable sequence that contains the elements of each given sequence, in sequential order.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="sources"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Concat<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {

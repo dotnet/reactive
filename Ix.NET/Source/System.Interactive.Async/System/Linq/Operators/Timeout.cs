@@ -11,7 +11,7 @@ namespace System.Linq
     public static partial class AsyncEnumerableEx
     {
         /// <summary>
-        /// Applies a timeout policy for each element in the observable sequence.
+        /// Applies a timeout policy for each element in the async-enumerable sequence.
         /// If the next element isn't received within the specified timeout duration starting from its predecessor, a TimeoutException is propagated to the observer.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>

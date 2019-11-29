@@ -13,12 +13,12 @@ namespace System.Linq
         // REVIEW: Should we convert Task-based overloads to ValueTask?
 
         /// <summary>
-        /// Invokes an action for each element in the observable sequence, and propagates all observer messages through the result sequence.
+        /// Invokes an action for each element in the async-enumerable sequence, and propagates all observer messages through the result sequence.
         /// This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
+        /// <param name="onNext">Action to invoke for each element in the async-enumerable sequence.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext)
@@ -32,13 +32,13 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Invokes an action for each element in the observable sequence and invokes an action upon graceful termination of the observable sequence.
+        /// Invokes an action for each element in the async-enumerable sequence and invokes an action upon graceful termination of the async-enumerable sequence.
         /// This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
-        /// <param name="onCompleted">Action to invoke upon graceful termination of the observable sequence.</param>
+        /// <param name="onNext">Action to invoke for each element in the async-enumerable sequence.</param>
+        /// <param name="onCompleted">Action to invoke upon graceful termination of the async-enumerable sequence.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onCompleted"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action onCompleted)
@@ -54,13 +54,13 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Invokes an action for each element in the observable sequence and invokes an action upon exceptional termination of the observable sequence.
+        /// Invokes an action for each element in the async-enumerable sequence and invokes an action upon exceptional termination of the async-enumerable sequence.
         /// This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
-        /// <param name="onError">Action to invoke upon exceptional termination of the observable sequence.</param>
+        /// <param name="onNext">Action to invoke for each element in the async-enumerable sequence.</param>
+        /// <param name="onError">Action to invoke upon exceptional termination of the async-enumerable sequence.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError)
@@ -76,14 +76,14 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Invokes an action for each element in the observable sequence and invokes an action upon graceful or exceptional termination of the observable sequence.
+        /// Invokes an action for each element in the async-enumerable sequence and invokes an action upon graceful or exceptional termination of the async-enumerable sequence.
         /// This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
-        /// <param name="onError">Action to invoke upon exceptional termination of the observable sequence.</param>
-        /// <param name="onCompleted">Action to invoke upon graceful termination of the observable sequence.</param>
+        /// <param name="onNext">Action to invoke for each element in the async-enumerable sequence.</param>
+        /// <param name="onError">Action to invoke upon exceptional termination of the async-enumerable sequence.</param>
+        /// <param name="onCompleted">Action to invoke upon graceful termination of the async-enumerable sequence.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
@@ -101,12 +101,12 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Invokes and awaits an asynchronous action for each element in the observable sequence, and propagates all observer messages through the result sequence.
+        /// Invokes and awaits an asynchronous action for each element in the async-enumerable sequence, and propagates all observer messages through the result sequence.
         /// This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="onNext">Action to invoke and await for each element in the observable sequence.</param>
+        /// <param name="onNext">Action to invoke and await for each element in the async-enumerable sequence.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext)
@@ -120,13 +120,13 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Invokes and awaits an asynchronous action for each element in the observable sequence, then invokes and awaits an asynchronous an action upon graceful termination of the observable sequence.
+        /// Invokes and awaits an asynchronous action for each element in the async-enumerable sequence, then invokes and awaits an asynchronous an action upon graceful termination of the async-enumerable sequence.
         /// This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="onNext">Action to invoke and await for each element in the observable sequence.</param>
-        /// <param name="onCompleted">Action to invoke and await upon graceful termination of the observable sequence.</param>
+        /// <param name="onNext">Action to invoke and await for each element in the async-enumerable sequence.</param>
+        /// <param name="onCompleted">Action to invoke and await upon graceful termination of the async-enumerable sequence.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onCompleted"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Task> onCompleted)
@@ -142,13 +142,13 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Invokes and awaits an asynchronous action for each element in the observable sequence, then invokes and awaits an asynchronous action upon exceptional termination of the observable sequence.
+        /// Invokes and awaits an asynchronous action for each element in the async-enumerable sequence, then invokes and awaits an asynchronous action upon exceptional termination of the async-enumerable sequence.
         /// This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="onNext">Action to invoke and await for each element in the observable sequence.</param>
-        /// <param name="onError">Action to invoke and await upon exceptional termination of the observable sequence.</param>
+        /// <param name="onNext">Action to invoke and await for each element in the async-enumerable sequence.</param>
+        /// <param name="onError">Action to invoke and await upon exceptional termination of the async-enumerable sequence.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task> onError)
@@ -164,14 +164,14 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Invokes and awaits an asynchronous action for each element in the observable sequence, then invokes and awaits an asynchronous action upon graceful or exceptional termination of the observable sequence.
+        /// Invokes and awaits an asynchronous action for each element in the async-enumerable sequence, then invokes and awaits an asynchronous action upon graceful or exceptional termination of the async-enumerable sequence.
         /// This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="onNext">Action to invoke and await for each element in the observable sequence.</param>
-        /// <param name="onError">Action to invoke and await upon exceptional termination of the observable sequence.</param>
-        /// <param name="onCompleted">Action to invoke and await upon graceful termination of the observable sequence.</param>
+        /// <param name="onNext">Action to invoke and await for each element in the async-enumerable sequence.</param>
+        /// <param name="onError">Action to invoke and await upon exceptional termination of the async-enumerable sequence.</param>
+        /// <param name="onCompleted">Action to invoke and await upon graceful termination of the async-enumerable sequence.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task> onError, Func<Task> onCompleted)
@@ -190,12 +190,12 @@ namespace System.Linq
 
 #if !NO_DEEP_CANCELLATION
         /// <summary>
-        /// Invokes and awaits an asynchronous (cancellable) action for each element in the observable sequence, and propagates all observer messages through the result sequence.
+        /// Invokes and awaits an asynchronous (cancellable) action for each element in the async-enumerable sequence, and propagates all observer messages through the result sequence.
         /// This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="onNext">Action to invoke and await for each element in the observable sequence while supporting cancellation.</param>
+        /// <param name="onNext">Action to invoke and await for each element in the async-enumerable sequence while supporting cancellation.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext)
@@ -209,13 +209,13 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Invokes and awaits an asynchronous (cancellable) action for each element in the observable sequence, then invokes and awaits an asynchronous (cancellable) an action upon graceful termination of the observable sequence.
+        /// Invokes and awaits an asynchronous (cancellable) action for each element in the async-enumerable sequence, then invokes and awaits an asynchronous (cancellable) an action upon graceful termination of the async-enumerable sequence.
         /// This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="onNext">Action to invoke and await for each element in the observable sequence while supporting cancellation.</param>
-        /// <param name="onCompleted">Action to invoke and await upon graceful termination of the observable sequence while supporting cancellation.</param>
+        /// <param name="onNext">Action to invoke and await for each element in the async-enumerable sequence while supporting cancellation.</param>
+        /// <param name="onCompleted">Action to invoke and await upon graceful termination of the async-enumerable sequence while supporting cancellation.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onCompleted"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<CancellationToken, Task> onCompleted)
@@ -231,13 +231,13 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Invokes and awaits an asynchronous (cancellable) action for each element in the observable sequence, then invokes and awaits an asynchronous (cancellable) action upon exceptional termination of the observable sequence.
+        /// Invokes and awaits an asynchronous (cancellable) action for each element in the async-enumerable sequence, then invokes and awaits an asynchronous (cancellable) action upon exceptional termination of the async-enumerable sequence.
         /// This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="onNext">Action to invoke and await for each element in the observable sequence while supporting cancellation.</param>
-        /// <param name="onError">Action to invoke and await upon exceptional termination of the observable sequence while supporting cancellation.</param>
+        /// <param name="onNext">Action to invoke and await for each element in the async-enumerable sequence while supporting cancellation.</param>
+        /// <param name="onError">Action to invoke and await upon exceptional termination of the async-enumerable sequence while supporting cancellation.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<Exception, CancellationToken, Task> onError)
@@ -253,14 +253,14 @@ namespace System.Linq
         }
 
         /// <summary>
-        /// Invokes and awaits an asynchronous (cancellable) action for each element in the observable sequence, then invokes and awaits an asynchronous (cancellable) action upon graceful or exceptional termination of the observable sequence.
+        /// Invokes and awaits an asynchronous (cancellable) action for each element in the async-enumerable sequence, then invokes and awaits an asynchronous (cancellable) action upon graceful or exceptional termination of the async-enumerable sequence.
         /// This method can be used for debugging, logging, etc. of query behavior by intercepting the message stream to run arbitrary actions for messages on the pipeline.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="onNext">Action to invoke and await for each element in the observable sequence while supporting cancellation.</param>
-        /// <param name="onError">Action to invoke and await upon exceptional termination of the observable sequence while supporting cancellation.</param>
-        /// <param name="onCompleted">Action to invoke and await upon graceful termination of the observable sequence while supporting cancellation.</param>
+        /// <param name="onNext">Action to invoke and await for each element in the async-enumerable sequence while supporting cancellation.</param>
+        /// <param name="onError">Action to invoke and await upon exceptional termination of the async-enumerable sequence while supporting cancellation.</param>
+        /// <param name="onCompleted">Action to invoke and await upon graceful termination of the async-enumerable sequence while supporting cancellation.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is null.</exception>
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Task> onNext, Func<Exception, CancellationToken, Task> onError, Func<CancellationToken, Task> onCompleted)
